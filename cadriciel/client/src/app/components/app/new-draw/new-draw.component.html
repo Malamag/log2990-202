@@ -1,0 +1,21 @@
+<div class="form-container">
+    <h1>Nouveau dessin</h1>
+
+    <div class="drawForm">
+        <form [formGroup]="newDrawForm"> <!--TODO: ng submit function-->
+            <mat-form-field>
+                <label for="width">Largeur (px)</label>
+                <input matInput type="text">
+            </mat-form-field>
+            <mat-form-field>
+                <label for="height">Hauteur (px)</label>
+                <input matInput type="text">
+            </mat-form-field>
+            <mat-form-field>
+                <label for="backColor">Couleur d'arrière-plan</label>
+                <input matInput type="text"> <!--TODO: Besoin d'un color picker-->
+            </mat-form-field>
+        </form>
+        <button mat-raised-button color="primary">C'est parti!</button>
+    </div>
+</div>
