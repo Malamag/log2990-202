@@ -4,18 +4,20 @@
     <div class="drawForm">
         <form [formGroup]="newDrawForm"> <!--TODO: ng submit function-->
             <mat-form-field>
-                <label for="width">Largeur (px)</label>
+                <mat-label>Largeur (px)</mat-label>
                 <input matInput type="text">
             </mat-form-field>
             <mat-form-field>
-                <label for="height">Hauteur (px)</label>
+                <mat-label>Hauteur (px)</mat-label>
                 <input matInput type="text">
             </mat-form-field>
             <mat-form-field>
-                <label for="backColor">Couleur d'arrière-plan</label>
+                <mat-label>Couleur d'arrière-plan</mat-label>
                 <input matInput type="text"> <!--TODO: Besoin d'un color picker-->
             </mat-form-field>
         </form>
         <button mat-raised-button color="primary">C'est parti!</button>
     </div>
 </div>
+
+
