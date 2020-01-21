@@ -19,7 +19,8 @@
                 <input matInput type="text" formControlName="canvColor"> <!--TODO: Besoin d'un color picker-->
             </mat-form-field>
             
-            <button mat-raised-button color="primary" type="submit">C'est parti!</button>
+            <button mat-raised-button color="primary" 
+            type="submit" [disabled]="newDrawForm.invalid">C'est parti!</button>
         </form>
     </div>
 </div>

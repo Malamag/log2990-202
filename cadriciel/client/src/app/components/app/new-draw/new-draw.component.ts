@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { CanvasBuilderService } from '../../../services/services/drawing/canvas-builder.service';
 
 
 @Component({
@@ -11,7 +12,8 @@ export class NewDrawComponent implements OnInit {
 
   newDrawForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+              private canvasBuilder: CanvasBuilderService) { }
 
   ngOnInit() {
     this.initForm();
@@ -19,8 +21,8 @@ export class NewDrawComponent implements OnInit {
 
   initForm() {
     this.newDrawForm = this.formBuilder.group({
-      canvWidth: [''], // TODO: ajouter validators
-      canvHeight: [''],
+      canvWidth: ['', this.canvasBuilder.isNumberValidator()], // TODO: ajouter validators
+      canvHeight: ['', this.canvasBuilder.isNumberValidator()],
       canvColor: ['']
     });
   }
