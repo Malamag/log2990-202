@@ -14,6 +14,7 @@ export class NewDrawComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.initForm();
   }
 
   initForm() {
@@ -22,6 +23,10 @@ export class NewDrawComponent implements OnInit {
       canvHeight: [''],
       canvColor: ['']
     });
+  }
+
+  onSubmit() {
+    console.log(this.newDrawForm.value);
   }
 
 }

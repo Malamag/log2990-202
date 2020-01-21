@@ -2,21 +2,25 @@
     <h1>Nouveau dessin</h1>
 
     <div class="drawForm">
-        <form [formGroup]="newDrawForm"> <!--TODO: ng submit function-->
+        <form [formGroup]="newDrawForm" (ngSubmit)="onSubmit()"> <!--TODO: ng submit function-->
+
             <mat-form-field>
-                <mat-label>Largeur (px)</mat-label>
-                <input matInput type="text">
+                <mat-label for="canvWidth">Largeur (px)</mat-label>
+                <input matInput type="text" formControlName="canvWidth">
             </mat-form-field>
+
             <mat-form-field>
-                <mat-label>Hauteur (px)</mat-label>
-                <input matInput type="text">
+                <mat-label for="canvHeight">Hauteur (px)</mat-label>
+                <input matInput type="text" formControlName="canvHeight">
             </mat-form-field>
+
             <mat-form-field>
-                <mat-label>Couleur d'arrière-plan</mat-label>
-                <input matInput type="text"> <!--TODO: Besoin d'un color picker-->
+                <mat-label for="canvColor">Couleur d'arrière-plan</mat-label>
+                <input matInput type="text" formControlName="canvColor"> <!--TODO: Besoin d'un color picker-->
             </mat-form-field>
+            
+            <button mat-raised-button color="primary" type="submit">C'est parti!</button>
         </form>
-        <button mat-raised-button color="primary">C'est parti!</button>
     </div>
 </div>
 

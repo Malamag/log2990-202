@@ -8,4 +8,16 @@ export class CanvasBuilderService {
 
 
   constructor() { }
+
+  setDefaultSize() {
+
+  }
+
+  numberValidation() {
+
+  }
+
+  isNumberValidator() {
+    
+  }
 }
