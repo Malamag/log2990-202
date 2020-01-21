@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormControl, ValidatorFn } from '@angular/forms';
+import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 //import { Canvas } from '../../../models/Canvas.model';
 
 @Injectable({
@@ -9,7 +9,7 @@ export class CanvasBuilderService {
 
   defWidth: number;
   defHeight: number;
-  readonly hexaRegExp: string = "";
+  readonly hexaRegExp: RegExp = new RegExp("/[a-fA-F0-9]{8,}");
 
   constructor() {}
 
@@ -19,12 +19,11 @@ export class CanvasBuilderService {
     this.defHeight = window.innerHeight; // Ici on set pour le full window
   }
 
-  numberValidation(size: FormControl): {[key: string]:boolean} | null {
+  numberValidation(size: FormControl): {[key: string]: boolean} | null {
     if(size.value != undefined && isNaN(size.value)) { //comme dans les notes de cours...
       return {"isNumber" : true}; // demander si c'est ok de faire ça
     }
     return null;
-
   }
 
   isNumberValidator(): ValidatorFn{
@@ -32,13 +31,13 @@ export class CanvasBuilderService {
   }
 
   hexaColorValidation(hexColor: FormControl): {[key: string]: boolean} | null {
-    if(hexColor.value != undefined) {
+    if(hexColor.value != undefined && Validators.pattern(this.hexaRegExp)) { // pattern checks for regular expression validity
       return {"isHexaColor" : true};
     }
     return null;
   }
 
-  isHexaColorValidator() {
-
+  isHexaColorValidator(): ValidatorFn {
+    return this.hexaColorValidation;
   }
 }

@@ -23,7 +23,7 @@ export class NewDrawComponent implements OnInit {
     this.newDrawForm = this.formBuilder.group({
       canvWidth: ['', this.canvasBuilder.isNumberValidator()], // TODO: ajouter validators
       canvHeight: ['', this.canvasBuilder.isNumberValidator()],
-      canvColor: ['']
+      canvColor: ['', this.canvasBuilder.isHexaColorValidator()]
     });
   }
 
