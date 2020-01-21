@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup} from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
+
 
 @Component({
   selector: 'app-new-draw',
@@ -10,9 +11,17 @@ export class NewDrawComponent implements OnInit {
 
   newDrawForm: FormGroup;
 
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+  }
+
+  initForm() {
+    this.newDrawForm = this.formBuilder.group({
+      canvWidth: [''], // TODO: ajouter validators
+      canvHeight: [''],
+      canvColor: ['']
+    });
   }
 
 }

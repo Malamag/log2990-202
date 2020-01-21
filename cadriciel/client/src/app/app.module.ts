@@ -8,6 +8,8 @@ import { AppComponent } from './components/app/app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NewDrawComponent } from './components/app/new-draw/new-draw.component';
 
+import { CanvasBuilderService } from './services/services/drawing/canvas-builder.service';
+
 /*import material*/
 import {
     MatFormFieldModule,
@@ -31,7 +33,7 @@ import {
         MatInputModule,
         MatButtonModule
     ],
-    providers: [],
+    providers: [CanvasBuilderService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
