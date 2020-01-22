@@ -1,13 +1,30 @@
-.drawForm, h1  {
+.drawForm >* {
     display: flex;
     flex-direction: column;
-    width: 20%;
-    
-    
-    margin: auto;
 }
 
+h1 {
+    text-align: center;
+}
 
 .form-container {
-    margin-top: 10%;
+    padding: 25px;
+    position: relative;
+    
+    width: 20%;
+   
+    border-style: solid;
+    border-color: lightgray;
+    border-radius: 15px;
+    border-width: thin; 
+    
+    margin: auto; /*Centrer l'élément dans la page*/
+    margin-top: 7%;
+
+}
+
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 20px;
+    }
 }

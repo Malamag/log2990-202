@@ -11,12 +11,17 @@ import { CanvasBuilderService } from '../../../services/services/drawing/canvas-
 export class NewDrawComponent implements OnInit {
 
   newDrawForm: FormGroup;
+  width: number;
+  height: number;
 
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService) { }
 
   ngOnInit() {
     this.initForm();
+    this.canvasBuilder.setDefaultSize();
+    this.height = this.canvasBuilder.defHeight;
+    this.width = this.canvasBuilder.defWidth;
   }
 
   initForm() {

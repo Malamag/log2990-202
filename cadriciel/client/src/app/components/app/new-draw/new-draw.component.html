@@ -1,4 +1,5 @@
 <div class="form-container">
+    
     <h1>Nouveau dessin</h1>
 
     <div class="drawForm">
@@ -6,16 +7,16 @@
 
             <mat-form-field>
                 <mat-label for="canvWidth">Largeur (px)</mat-label>
-                <input matInput type="text" formControlName="canvWidth">
+                <input matInput type="text" formControlName="canvWidth" [value]="width">
             </mat-form-field>
 
             <mat-form-field>
                 <mat-label for="canvHeight">Hauteur (px)</mat-label>
-                <input matInput type="text" formControlName="canvHeight">
+                <input matInput type="text" formControlName="canvHeight" [value]="height">
             </mat-form-field>
 
             <mat-form-field>
-                <mat-label for="canvColor">Couleur d'arrière-plan</mat-label>
+                <mat-label for="canvColor">Couleur (hex)</mat-label>
                 <input matInput type="text" formControlName="canvColor"> <!--TODO: Besoin d'un color picker-->
             </mat-form-field>
             
@@ -23,6 +24,7 @@
             type="submit" [disabled]="newDrawForm.invalid">C'est parti!</button>
         </form>
     </div>
+
 </div>
 
 

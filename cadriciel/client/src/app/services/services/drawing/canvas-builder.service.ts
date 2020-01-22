@@ -9,7 +9,6 @@ export class CanvasBuilderService {
 
   defWidth: number;
   defHeight: number;
-  readonly regExHexa: RegExp = /[0-9a-fA-F]{6}/;
 
   constructor() {}
 
@@ -31,7 +30,7 @@ export class CanvasBuilderService {
   }
 
   hexaColorValidation(hexColor: FormControl): {[key: string]: boolean} | null {
-    const regEx = new RegExp(/[a-fA-F0-9]{6}/);
+    const regEx = new RegExp(/^[a-fA-F0-9]{6}$/);
     if(hexColor != undefined && !regEx.test(hexColor.value)) { // pattern checks for regular expression validity
       return {"isHexaColor" : true};
     }
