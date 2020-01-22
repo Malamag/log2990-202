@@ -1,28 +1,28 @@
+@import url('https://fonts.googleapis.com/css?family=Architects+Daughter&display=swap');
+
 #buttonContainer{
     width: auto;
     height: auto;
-    
     position: absolute;
     top: 50%;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%,-50%);
 }
-
 button{
     width: 100%;
     position: relative;
     height: 100%;
-
-    
-    
 }
 
-
 div#buttonContainer > div{
-    
     float: left;
     margin: 50px;
-    
+}
+
+#title{
+    text-align: center; 
+    font-size: 90px;
+    font-family: 'Architects Daughter', cursive;
 }
 
