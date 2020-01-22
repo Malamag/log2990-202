@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, ValidatorFn } from '@angular/forms';
 //import { Canvas } from '../../../models/Canvas.model';
 
 @Injectable({
@@ -9,7 +9,7 @@ export class CanvasBuilderService {
 
   defWidth: number;
   defHeight: number;
-  readonly hexaRegExp: RegExp = new RegExp("/[a-fA-F0-9]{8,}");
+  readonly regExHexa: RegExp = /[0-9a-fA-F]{6}/;
 
   constructor() {}
 
@@ -31,7 +31,8 @@ export class CanvasBuilderService {
   }
 
   hexaColorValidation(hexColor: FormControl): {[key: string]: boolean} | null {
-    if(hexColor.value != undefined && Validators.pattern(this.hexaRegExp)) { // pattern checks for regular expression validity
+    const regEx = new RegExp(/[a-fA-F0-9]{6}/);
+    if(hexColor != undefined && !regEx.test(hexColor.value)) { // pattern checks for regular expression validity
       return {"isHexaColor" : true};
     }
     return null;
