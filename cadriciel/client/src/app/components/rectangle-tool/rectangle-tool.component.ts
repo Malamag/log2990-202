@@ -24,8 +24,8 @@ export class RectangleToolComponent implements OnInit{
   
   
   getInitialPoints(event: MouseEvent){
-    this.X1 = event.clientX
-    this.Y1 = event.clientY
+    this.X1 = event.offsetX
+    this.Y1 = event.offsetY
    
   }
 
@@ -37,14 +37,13 @@ export class RectangleToolComponent implements OnInit{
   }
   getEndPoints(event: MouseEvent){
 
-    this.X2= event.clientX;
-    this.Y2= event.clientY;
+    this.X2= event.offsetX;
+    this.Y2= event.offsetY;
   }
   drawRectangle(event:MouseEvent){
     this.getEndPoints(event);
-    
-      this.getRectAttributes();
-      this.createRectangle()
+    this.getRectAttributes();
+    this.createRectangle()
 
   }
   createRectangle(){
@@ -52,8 +51,8 @@ export class RectangleToolComponent implements OnInit{
       
       rectangle.setAttribute("height", Math.abs(this.height).toString());
       rectangle.setAttribute("width", Math.abs(this.width).toString());
-      rectangle.setAttribute("X", this.X1.toString());
-      rectangle.setAttribute("Y", this.Y1.toString());
+      /*rectangle.setAttribute("X", this.X1.toString());
+      rectangle.setAttribute("Y", this.Y1.toString());*/
       rectangle.setAttribute("fill", "transparent");
       rectangle.setAttribute("stroke", "black");
       rectangle.setAttribute("stroke-width", "5");

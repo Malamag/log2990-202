@@ -1,7 +1,6 @@
-<div class="draw" (click)="getInitialPoints($event)" (mousemove) = "getEndPoints($event)" (onmouseup) = "getEndPoints($event)" (mouseup) = "drawRectangle($event)">
-    <svg #svgRef class="svgContainer"  xmlns="http://www.w3.org/2000/svg" width="100%" fill ="transparent" stroke= "black" stroke-width= "5">
+<div class="draw" (click)="getInitialPoints($event)" (mousedown)= drawRectangle($event) (mouseup) = "drawRectangle($event)">
+    <svg #svgRef class="svgContainer"  xmlns="http://www.w3.org/2000/svg" width="100%"  fill ="transparent" stroke= "black" stroke-width= "5">
     <!--Here goes inner svg-->
-       <!-- <rect  id = "draw-frame" width ="1500" height = "200" stroke = "black" stroke-width= "5"/> -->
     </svg>
 </div>
 <p> X; {{X1}}, Y: {{Y1}}, height: {{height}}, width{{width}}</p>
