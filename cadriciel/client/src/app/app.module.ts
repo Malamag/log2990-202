@@ -13,9 +13,11 @@ import { CanvasBuilderService } from './services/services/drawing/canvas-builder
 /*import material*/
 import {
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatDialogModule
     
  } from '@angular/material';
+
  import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
@@ -31,7 +33,8 @@ import {
         FormsModule,
         MatFormFieldModule,
         MatInputModule,
-        MatButtonModule
+        MatButtonModule,
+        MatDialogModule
     ],
     providers: [CanvasBuilderService],
     bootstrap: [AppComponent],
