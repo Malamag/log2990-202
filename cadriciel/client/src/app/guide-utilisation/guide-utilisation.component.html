@@ -1,12 +1,43 @@
-<div id="modal-content-wrapper">
-    <header id="modal-header">
-        <h1 id="modal-title">Wassup</h1>
-    </header>
-    <section id="modal-body">
-        <p>bruhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh</p>
-    </section>
-    <footer id="modal-footer">
-        <button mat-raised-button id="modal-action-button" (click)="actionFunction()">Action</button>
-        <button mat-raised-button id="modal-cancel-button" (click)="closeModal()">Go back</button>
-    </footer>
-</div>
+<div><header id="modal-header">
+    <h1 id="guide-title">Guide d'utilisation</h1>
+    <button mat-raised-button id="modal-quit-button" (click)="closeModal()">X</button>
+  </header></div>
+
+<section>
+    <nav>
+      <ul>
+        <li><a href="#">Bienvenue</a></li>
+        <li><a href="#">Outils</a></li>
+        <li><a href="#">Fichiers</a></li>
+      </ul>
+    </nav>
+    
+    <article>
+      <h2>Bienvenue</h2>
+      <p>
+        Yooo on écrit des gros paragraphes ici.
+        </p><p>
+        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
+        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
+        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
+        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
+        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
+        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
+        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
+        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
+        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
+        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
+        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
+        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
+      </p>
+      <div>        
+        <button mat-raised-button id="previous-button" (click)="previousPage()">Précédent</button>
+        <button mat-raised-button id="next-button" (click)="nextPage()">Suivant</button>
+      </div>
+    </article>
+  </section>
+  
+  <footer>
+    <p>Footer</p>
+  </footer>
+  

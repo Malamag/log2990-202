@@ -14,10 +14,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 // import utilisation guide
 import { GuideUtilisationComponent as GuideComponent } from './guide-utilisation/guide-utilisation.component';
+import { TopBarGuideComponent } from './guide-utilisation/top-bar-guide/top-bar-guide.component';
+import { LeftBarGuideComponent } from './guide-utilisation/left-bar-guide/left-bar-guide.component';
 
 
 @NgModule({
-    declarations: [AppComponent, GuideUtilisationComponent],
+    declarations: [AppComponent, GuideUtilisationComponent, TopBarGuideComponent, LeftBarGuideComponent],
     imports: [BrowserModule, HttpClientModule,
         //AppRoutingModule, ?not important?
         BrowserAnimationsModule,
