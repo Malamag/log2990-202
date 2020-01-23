@@ -1,0 +1,33 @@
+<div mat-dialog-content class="form-container">
+    
+    <h1>Nouveau dessin</h1>
+
+    <div mat-dialog-content class="drawForm">
+        <form [formGroup]="newDrawForm" (ngSubmit)="onSubmit()"> <!--TODO: ng submit function-->
+
+            <mat-form-field>
+                <mat-label for="canvWidth">Largeur (px)</mat-label>
+                <input matInput type="text" formControlName="canvWidth" [value]="width">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label for="canvHeight">Hauteur (px)</mat-label>
+                <input matInput type="text" formControlName="canvHeight" [value]="height">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label for="canvColor">Couleur (hex)</mat-label>
+                <input matInput type="text" formControlName="canvColor" value="ffffff">
+            </mat-form-field>
+
+            <div mat-dialog-actions>
+                <button mat-raised-button color="primary" 
+                type="submit" [disabled]="newDrawForm.invalid">C'est parti!</button>
+                <button mat-button (click)="closeWindow()">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
