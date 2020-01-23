@@ -1,16 +1,39 @@
 <div class = "drawWindow">
     <mat-toolbar class ="topToolBar">
-        <button class= "guideButton" matTooltip = "guide">
+        <button mat-mini-fab class= "guideButton" matTooltip = "guide">
             <mat-icon >help</mat-icon>
         </button>
-        <button class="newDrawButton" matTooltip= "nouveau dessin">
+        <button mat-mini-fab class="newDrawButton" matTooltip= "nouveau dessin">
             <mat-icon>add</mat-icon>
         </button>
-        <button class="gallerieButton" matTooltip= "gallerie">
+        <button mat-mini-fab class="gallerieButton" matTooltip= "gallerie">
             <mat-icon> camera </mat-icon>
         </button>
-        <button class="exitButton" matTooltip = "quitter">
+        <button mat-mini-fab class="exitButton" matTooltip = "quitter">
             <mat-icon> close </mat-icon>
         </button>
     </mat-toolbar>
+    <div mat-sidenav-container>
+        <mat-sidenav class= "drawingTools" mode="side" opened >
+            <button mat-mini-fab class="colorChangerButton" matTooltip= "changer de couleur">
+                <img src="../../../assets/images/exclude.png"> 
+             </button>
+             <br>
+             <button mat-mini-fab class="calligraphy" matTooltip= "plume">
+                <img src="../../../assets/images/calligraphie.png"> 
+             </button>
+             <br>
+             <button mat-mini-fab class="pencil" matTooltip= "crayon">
+                <img src="../../../assets/images/pencil.png"> 
+             </button>
+             <br>
+             <button mat-mini-fab class="rectangle" matTooltip= "crayon">
+                <img src="../../../assets/images/pencil.png"> 
+             </button>
+            
+        </mat-sidenav>
+        <mat-sidenav mode="side" opened>
+
+        </mat-sidenav>
+    </div>
 </div>
