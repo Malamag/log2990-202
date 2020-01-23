@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CanvasBuilderService } from '../../../services/services/drawing/canvas-builder.service';
 
 
+
 @Component({
   selector: 'app-new-draw',
   templateUrl: './new-draw.component.html',
@@ -14,8 +15,10 @@ export class NewDrawComponent implements OnInit {
   width: number;
   height: number;
 
+
   constructor(private formBuilder: FormBuilder,
-              private canvasBuilder: CanvasBuilderService) { }
+              private canvasBuilder: CanvasBuilderService
+              ) { }
 
   ngOnInit() {
     this.initForm();
@@ -28,12 +31,19 @@ export class NewDrawComponent implements OnInit {
     this.newDrawForm = this.formBuilder.group({
       canvWidth: ['', [this.canvasBuilder.isNumberValidator(), Validators.min(1)]], // TODO: ajouter validators
       canvHeight: ['', [this.canvasBuilder.isNumberValidator(), Validators.min(1)]],
-      canvColor: ['', this.canvasBuilder.isHexaColorValidator()]
+      canvColor: ['', Validators.pattern(/^[a-fA-F0-9]{6}$/)]
     });
   }
 
   onSubmit() {
-    console.log(this.newDrawForm.value);
+    const values = this.newDrawForm.value;
+    
+    const newDraw = this.canvasBuilder.makeNewCanvas(
+      values['canvWidth'], 
+      values['canvHeight'], 
+      values['canvColor']
+    );
+    console.log(newDraw);
   }
 
 }

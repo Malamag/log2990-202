@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormControl, ValidatorFn } from '@angular/forms';
+import { Canvas } from '../../../models/Canvas.model';
 //import { Canvas } from '../../../models/Canvas.model';
 
 @Injectable({
@@ -9,6 +10,7 @@ export class CanvasBuilderService {
 
   defWidth: number;
   defHeight: number;
+  defColor: string;
 
   constructor() {}
 
@@ -29,15 +31,23 @@ export class CanvasBuilderService {
     return this.numberValidation;
   }
 
-  hexaColorValidation(hexColor: FormControl): {[key: string]: boolean} | null {
-    const regEx = new RegExp(/^[a-fA-F0-9]{6}$/);
-    if(hexColor != undefined && !regEx.test(hexColor.value)) { // pattern checks for regular expression validity
-      return {"isHexaColor" : true};
+  makeNewCanvas(widthInput: string, heightInput: string, colorInput: string) {
+    if(widthInput != ""){
+      this.defWidth  = +widthInput; // le + devant un attribut de type string le convertit en nombre
     }
-    return null;
-  }
 
-  isHexaColorValidator(): ValidatorFn {
-    return this.hexaColorValidation;
+    if(heightInput != ""){
+      this.defHeight= +heightInput;
+    }
+
+    if(colorInput != "") {
+      this.defColor = colorInput;
+    } else {
+      this.defColor = "ffffff";
+    }
+  
+    this.defColor = '#' + this.defColor; // concat pour donner un attribut css valide
+
+    return new Canvas(this.defWidth, this.defHeight, this.defColor);
   }
 }
