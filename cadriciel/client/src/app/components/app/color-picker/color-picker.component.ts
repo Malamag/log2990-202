@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-//import { MatSliderModule } from '@angular/material/slider';
-//import { Input } from '@angular/core';
-
 
 @Component({
     selector: 'app-color-picker',
@@ -44,10 +41,7 @@ export class ColorPickerComponent {
     squareWidth : number;
     squareHeigth : number;
 
-    //slider attribut
-    value : number = 0;
-
-    constructor(/*private matslider: MatSliderModule*/) {}
+    constructor() {}
 
     ngOnInit() {
 
@@ -264,15 +258,34 @@ export class ColorPickerComponent {
         return { 'color': this.secondaryColor};
     }
 
+    // change primary alpha when primary slide change
     primaryAlphaChange(event : any) : void {
-        //this.opacity = this.value;
         this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
-
     }
 
+    // change secondary alpha when secondary slide change
     secondaryAlphaChange(event : any) : void {
-        this.opacity = this.value;
         this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.secondaryAlpha + ' )';
     }
 
+    // swap color
+    swapPrimarySecondary() : void {
+        let tempColor : string = this.primaryColor;
+        let tempR : string = this.primaryR;
+        let tempG : string = this.primaryG;
+        let tempB : string = this.primaryB;
+        let tempAlpha : number = this.primaryAlpha;
+
+        this.primaryColor = this.secondaryColor;
+        this.primaryR = this.secondaryR;
+        this.primaryG = this.secondaryG;
+        this.primaryB = this.secondaryB;
+        this.primaryAlpha = this.secondaryAlpha;
+
+        this.secondaryColor = tempColor;
+        this.secondaryR = tempR;
+        this.secondaryG = tempG;
+        this.secondaryB = tempB;
+        this.secondaryAlpha = tempAlpha;
+    }
 }
