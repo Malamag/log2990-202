@@ -167,6 +167,20 @@ export class ColorPickerComponent {
         }
     }
 
+    setPrimaryColor( r : number, g : number, b : number ) {
+        this.primaryColor = 'rgba( ' + r + ', ' + g + ', ' + b + ', ' + this.primaryAlpha + ' )';
+        this.primaryR = '' + r;
+        this.primaryG = '' + g;
+        this.primaryB = '' + b;
+    }
+
+    setSecondaryColor ( r : number, g : number, b : number ) {
+        this.secondaryColor = 'rgba( ' + r + ', ' + g + ', ' + b + ', ' + this.secondaryAlpha + ' )' ;
+        this.secondaryR = '' + r;
+        this.secondaryG = '' + g;
+        this.secondaryB = '' + b;
+    }
+
     // select the function to use when color picker is clicked;
     colorSelector( event : MouseEvent ) : void {
         
@@ -183,17 +197,13 @@ export class ColorPickerComponent {
              
             this.drawColorSquare();
             if ( event.button === 0 ) {
-                this.primaryColor = 'rgba( ' + rgbData.data[0] + ', ' + rgbData.data[1] + ', ' + rgbData.data[2] + ', ' + this.primaryAlpha + ' )';
-                this.primaryR = '' + rgbData.data[0];
-                this.primaryG = '' + rgbData.data[1];
-                this.primaryB = '' + rgbData.data[2];
+                this.setPrimaryColor( rgbData.data[0], rgbData.data[1], rgbData.data[2] );
+                //TODO : draw color
             }
-            else if ( event.button === 1) {
+            else if ( event.button === 2 ) {
                 //TODO : if condition not working???pop-up on right click??
-                this.secondaryColor = 'rgba( ' + rgbData.data[0] + ', ' + rgbData.data[1] + ', ' + rgbData.data[2] + ', ' + this.secondaryAlpha + ' )' ;
-                this.secondaryR = '' + rgbData.data[0];
-                this.secondaryG = '' + rgbData.data[1];
-                this.secondaryB = '' + rgbData.data[2];
+                this.setSecondaryColor ( rgbData.data[0], rgbData.data[1], rgbData.data[2] );
+                //TODO : draw color
             }
         }
         
