@@ -22,13 +22,17 @@ export class SvgDrawComponent implements OnInit {
 
     let isARect : boolean = false;
 
-    let _svg = undefined;
-    _svg = document.getElementById("canvas");
-    if(_svg){
+    let _svg : HTMLElement | null = document.getElementById("canvas");
+    //_svg = document.getElementById("canvas");
+
+    if(_svg != null){
+
+      let _svgBox : ClientRect = _svg.getBoundingClientRect();
+
       window.addEventListener("mousemove", function(e){
 
-        currentX = e.offsetX;
-        currentY = e.offsetY;
+        currentX = e.x - _svgBox.left;
+        currentY = e.y - _svgBox.top;
 
         if(mouseDown){
           currentPath.push(new Point(currentX, currentY));
@@ -38,10 +42,10 @@ export class SvgDrawComponent implements OnInit {
         }
       });
       _svg.addEventListener("mousedown", function(e){
-        console.log("-----CLICKED-----");
+        console.log("-----CLICKED INSIDE-----");
         mouseDown = true;
-        currentX = e.offsetX;
-        currentY = e.offsetY;
+        currentX = e.x - _svgBox.left;
+        currentY = e.y - _svgBox.top;
         currentPath.push(new Point(currentX,currentY));
         currentPath.push(new Point(currentX,currentY));
         let d : string = "";
@@ -49,7 +53,7 @@ export class SvgDrawComponent implements OnInit {
           this.getElementsByTagName("g")[1].innerHTML = d;
       });
       window.addEventListener("mousedown", function(e){
-        console.log("-----CLICKED-----");
+        console.log("-----CLICKED OUTSIDE-----");
         mouseDown = true;
       });
       window.addEventListener("mouseup", function(e){
