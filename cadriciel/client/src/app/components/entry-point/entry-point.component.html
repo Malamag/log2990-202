@@ -1,34 +1,16 @@
 
 <h1 id="title">PolyDessin 🖉</h1>
 <div id="buttonContainer">
-    <div>
+
+    <div *ngFor="let func of functionality">
         <button mat-button>
-         <mat-icon>add_circle</mat-icon>
+         <mat-icon>{{func.icon}}</mat-icon>
             <br>
-         <span class="buttonText">Créer un nouveau dessin</span>
+         <span class="buttonText">{{func.name}}</span>
      </button>
-    </div>
-    <div>
-        <button mat-button>
-            <mat-icon>camera</mat-icon>
-            <br>
-            <span class="buttonText">Ouvrir la galerie de dessins disponibles sur le serveur</span>
-        </button>
-    </div>
-    <div>
-        <button mat-button>
-            <mat-icon>menu_book</mat-icon>
-            <br>
-            <span class="buttonText">Afficher le guide d'utilisation de l'application</span>
-        </button>
-    </div>
-    <div>
-        <button mat-button disabled>
-            <mat-icon>arrow_forward</mat-icon>
-            <br>
-            <span class="buttonText">Continuer un dessin</span>
-        </button>
     </div>
 </div>
 
 <div class="footer"><p>© Équipe-202 </p></div>
+
+
