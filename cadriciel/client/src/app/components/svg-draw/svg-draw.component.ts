@@ -24,6 +24,7 @@ export class SvgDrawComponent implements OnInit {
 
     let _svg : HTMLElement | null = document.getElementById("canvas");
     //_svg = document.getElementById("canvas");
+    let _workingSpace : HTMLElement | null = document.getElementById("working-space");
 
     if(_svg != null){
 
@@ -31,8 +32,8 @@ export class SvgDrawComponent implements OnInit {
 
       window.addEventListener("mousemove", function(e){
 
-        currentX = e.x - _svgBox.left;
-        currentY = e.y - _svgBox.top;
+        currentX = e.x - _svgBox.left + (_workingSpace? _workingSpace.scrollLeft : 0);
+        currentY = e.y - _svgBox.top + (_workingSpace? _workingSpace.scrollTop : 0);
 
         if(mouseDown){
           currentPath.push(new Point(currentX, currentY));
@@ -41,20 +42,16 @@ export class SvgDrawComponent implements OnInit {
           document.getElementsByTagName("g")[1].innerHTML = d;
         }
       });
-      _svg.addEventListener("mousedown", function(e){
+      window.addEventListener("mousedown", function(e){
         console.log("-----CLICKED INSIDE-----");
         mouseDown = true;
-        currentX = e.x - _svgBox.left;
-        currentY = e.y - _svgBox.top;
+        currentX = e.x - _svgBox.left + (_workingSpace? _workingSpace.scrollLeft : 0);
+        currentY = e.y - _svgBox.top + (_workingSpace? _workingSpace.scrollTop : 0);
         currentPath.push(new Point(currentX,currentY));
         currentPath.push(new Point(currentX,currentY));
         let d : string = "";
           d+= isARect? new Rectangle(currentPath).draw() : new CrayonStroke(currentPath).draw();
-          this.getElementsByTagName("g")[1].innerHTML = d;
-      });
-      window.addEventListener("mousedown", function(e){
-        console.log("-----CLICKED OUTSIDE-----");
-        mouseDown = true;
+          document.getElementsByTagName("g")[1].innerHTML = d;
       });
       window.addEventListener("mouseup", function(e){
         console.log("-----RELEASED-----");
