@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormControl, ValidatorFn } from '@angular/forms';
 import { Canvas } from '../../../models/Canvas.model';
+
 //import { Canvas } from '../../../models/Canvas.model';
 
 @Injectable({
@@ -21,11 +22,15 @@ export class CanvasBuilderService {
   }
 
   numberValidation(size: FormControl): {[key: string]: boolean} | null {
-    if(size.value != undefined && isNaN(size.value)) { //comme dans les notes de cours...
+    const userInput: any = size.value; //size.value returns a string
+    if(userInput != undefined && (isNaN(userInput) || userInput.includes('.'))) { //avoids float entries
+      
       return {"isNumber" : true}; // demander si c'est ok de faire ça
     }
     return null;
   }
+  
+
 
   isNumberValidator(): ValidatorFn{
     return this.numberValidation;
