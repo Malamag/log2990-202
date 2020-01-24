@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar,MatSnackBarConfig} from '@angular/material';
+import { MatSnackBar, MatSnackBarConfig} from '@angular/material';
 @Component({
   selector: 'app-entry-point',
   templateUrl: './entry-point.component.html',
@@ -11,11 +11,11 @@ export class EntryPointComponent implements OnInit {
   ngOnInit() {
     this.open();
   }
-  
+
   open() {
-    let config = new MatSnackBarConfig();
-    config.duration=2500;
-    this.snackBar.open("Bienvenue sur PolyDessin !",undefined,config);
+    const config = new MatSnackBarConfig();
+    config.duration = 2500;
+    this.snackBar.open('Bienvenue sur PolyDessin !', undefined, config);
   }
-  
+
 }
