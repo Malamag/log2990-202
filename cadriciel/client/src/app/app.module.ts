@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './components/app/app.component';
 import { ColorPickerComponent } from './components/app/color-picker/color-picker.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -14,6 +16,9 @@ import { ColorPickerComponent } from './components/app/color-picker/color-picker
         BrowserModule, 
         HttpClientModule, 
         BrowserAnimationsModule,
+        MatSliderModule,
+        FormsModule,
+        ReactiveFormsModule,
         RouterModule.forRoot([
             { path: '', component: ColorPickerComponent}
         ])],

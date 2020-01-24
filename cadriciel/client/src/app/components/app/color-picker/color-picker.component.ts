@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+//import { MatSliderModule } from '@angular/material/slider';
 //import { Input } from '@angular/core';
 
 
@@ -21,7 +22,15 @@ export class ColorPickerComponent {
     opacity : number;
     currentHue : number;
     primaryColor : string;
+    primaryR : string;
+    primaryG : string;
+    primaryB : string;
+    primaryAlpha : number;
     secondaryColor : string;
+    secondaryR : string;
+    secondaryG : string;
+    secondaryB : string;
+    secondaryAlpha : number;
     //Hue color circle attribut (c*name)
     cX : number;
     cY : number;
@@ -35,7 +44,10 @@ export class ColorPickerComponent {
     squareWidth : number;
     squareHeigth : number;
 
-    constructor() {}
+    //slider attribut
+    value : number = 0;
+
+    constructor(/*private matslider: MatSliderModule*/) {}
 
     ngOnInit() {
 
@@ -73,8 +85,16 @@ export class ColorPickerComponent {
 
         this.opacity = 1.0; // default opacity
         this.currentHue = 0; // default hue
-        this.primaryColor = 'hsla(255,100%,50%,0.5)';
-        this.secondaryColor = 'hsla(55,100%,50%,0.5)';
+        this.primaryColor = 'rgba(255,0,0,1)';
+        this.primaryR = '255';
+        this.primaryG = '0';
+        this.primaryB = '0';
+        this.primaryAlpha = 1.0;
+        this.secondaryColor = 'rgba(0,0,0,0.5)';
+        this.secondaryR = '0';
+        this.secondaryG = '0';
+        this.secondaryB = '0';
+        this.secondaryAlpha = 1.0;
         this.cColors = [];
          //this 360 hue in hsl color
          let nColor : number = 360; 
@@ -153,9 +173,6 @@ export class ColorPickerComponent {
         }
     }
 
-    drawPrimaryColor() : void {
-        
-    }
     // select the function to use when color picker is clicked;
     colorSelector( event : MouseEvent ) : void {
         
@@ -171,12 +188,18 @@ export class ColorPickerComponent {
             this.currentHue = this.rgbtoHue( rgbData.data[0], rgbData.data[1], rgbData.data[2] );
              
             this.drawColorSquare();
-            let newColor : string = 'rgba( ' + rgbData.data[0] + ', ' + rgbData.data[1] + ', ' + rgbData.data[2] + ', ' + this.opacity + ' )';
             if ( event.button === 0 ) {
-                this.primaryColor = newColor ;
+                this.primaryColor = 'rgba( ' + rgbData.data[0] + ', ' + rgbData.data[1] + ', ' + rgbData.data[2] + ', ' + this.primaryAlpha + ' )';
+                this.primaryR = '' + rgbData.data[0];
+                this.primaryG = '' + rgbData.data[1];
+                this.primaryB = '' + rgbData.data[2];
             }
-            else if ( event.button === 2) {
-                this.secondaryColor = newColor ;
+            else if ( event.button === 1) {
+                //TODO : if condition not working???pop-up on right click??
+                this.secondaryColor = 'rgba( ' + rgbData.data[0] + ', ' + rgbData.data[1] + ', ' + rgbData.data[2] + ', ' + this.secondaryAlpha + ' )' ;
+                this.secondaryR = '' + rgbData.data[0];
+                this.secondaryG = '' + rgbData.data[1];
+                this.secondaryB = '' + rgbData.data[2];
             }
         }
         
@@ -239,5 +262,17 @@ export class ColorPickerComponent {
     }
     get myStyle2(): any {
         return { 'color': this.secondaryColor};
-   }
+    }
+
+    primaryAlphaChange(event : any) : void {
+        //this.opacity = this.value;
+        this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
+
+    }
+
+    secondaryAlphaChange(event : any) : void {
+        this.opacity = this.value;
+        this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.secondaryAlpha + ' )';
+    }
+
 }

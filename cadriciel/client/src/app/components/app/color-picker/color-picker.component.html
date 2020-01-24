@@ -1,5 +1,7 @@
 <!-- TODO : property binding? need to garantie square shape-->
 <canvas id="color-picker" height="200" width="200" (click)="colorSelector($event)">
 </canvas>
+<mat-slider min="0" max="1" step="0.01" [(ngModel)]="primaryAlpha" (change)="primaryAlphaChange($event)"></mat-slider>
+<mat-slider min="0" max="1" step="0.01" [(ngModel)]="secondaryAlpha" (change)="secondaryAlphaChange($event)"></mat-slider>
 <p><font [ngStyle]="myStyle1">allo</font></p>
 <p><font [ngStyle]="myStyle2">allo</font></p>
