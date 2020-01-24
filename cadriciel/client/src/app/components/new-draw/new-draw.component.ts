@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CanvasBuilderService } from '../../services/services/drawing/canvas-builder.service';
-// import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, /*MAT_DIALOG_DATA*/ } from '@angular/material';
 // import { dataInterface } from './dataInterface';
 
 @Component({
@@ -17,7 +17,7 @@ export class NewDrawComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
-              /*public matDialog: MatDialogRef<NewDrawComponent>,
+              public matDialog: MatDialogRef<NewDrawComponent>,/*
               @Inject(MAT_DIALOG_DATA) public data: dataInterface*/
               ) { }
 
@@ -46,9 +46,10 @@ export class NewDrawComponent implements OnInit {
     );
     console.log(newDraw);
   }
+  
 
   closeWindow() {
-    // this.matDialog.close();
+    this.matDialog.close();
 
   }
 
