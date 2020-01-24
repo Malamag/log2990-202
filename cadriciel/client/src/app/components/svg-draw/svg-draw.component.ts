@@ -25,7 +25,7 @@ export class SvgDrawComponent implements OnInit {
     let _svg = undefined;
     _svg = document.getElementById("canvas");
     if(_svg){
-      _svg.addEventListener("mousemove", function(e){
+      window.addEventListener("mousemove", function(e){
 
         currentX = e.offsetX;
         currentY = e.offsetY;
@@ -34,7 +34,7 @@ export class SvgDrawComponent implements OnInit {
           currentPath.push(new Point(currentX, currentY));
           let d : string = "";
           d+= isARect? new Rectangle(currentPath).draw() : new CrayonStroke(currentPath).draw();
-          this.getElementsByTagName("g")[1].innerHTML = d;
+          document.getElementsByTagName("g")[1].innerHTML = d;
         }
       });
       _svg.addEventListener("mousedown", function(e){
@@ -48,7 +48,11 @@ export class SvgDrawComponent implements OnInit {
           d+= isARect? new Rectangle(currentPath).draw() : new CrayonStroke(currentPath).draw();
           this.getElementsByTagName("g")[1].innerHTML = d;
       });
-      _svg.addEventListener("mouseup", function(e){
+      window.addEventListener("mousedown", function(e){
+        console.log("-----CLICKED-----");
+        mouseDown = true;
+      });
+      window.addEventListener("mouseup", function(e){
         console.log("-----RELEASED-----");
         mouseDown = false;
         drawing.push(isARect? new Rectangle(currentPath) : new CrayonStroke(currentPath));
@@ -57,8 +61,8 @@ export class SvgDrawComponent implements OnInit {
         drawing.forEach(element => {
           d+= element.draw();
         });
-        this.getElementsByTagName("g")[0].innerHTML = d;
-        this.getElementsByTagName("g")[1].innerHTML = "";
+        document.getElementsByTagName("g")[0].innerHTML = d;
+        document.getElementsByTagName("g")[1].innerHTML = "";
         isARect = !isARect;
       });
     }
@@ -91,7 +95,6 @@ class CrayonStroke extends DrawingObject{
   }
 
   draw(){
-    console.log(this.path);
 
     let s = "<path d=\"";
     s+= `M ${this.path[0].x} ${this.path[0].y} `;
@@ -111,7 +114,6 @@ class Rectangle extends DrawingObject{
   }
 
   draw(){
-    console.log(this.path);
 
     let w = this.path[this.path.length-1].x - this.path[0].x;
     let h = this.path[this.path.length-1].y - this.path[0].y;
