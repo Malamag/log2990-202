@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NewDrawComponent } from './new-draw.component';
+import { MatDialogModule, MatFormFieldModule, MatInputModule, MatButtonModule} from '@angular/material';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('NewDrawComponent', () => {
   let component: NewDrawComponent;
@@ -8,7 +11,16 @@ describe('NewDrawComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewDrawComponent ]
+      declarations: [ NewDrawComponent ],
+      imports: [ 
+        MatDialogModule, 
+        MatFormFieldModule, 
+        ReactiveFormsModule, 
+        FormsModule, 
+        BrowserAnimationsModule,
+        MatInputModule,
+        MatButtonModule
+      ]
     })
     .compileComponents();
   }));
