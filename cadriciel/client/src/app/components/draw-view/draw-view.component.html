@@ -1,39 +1,47 @@
 <div class = "drawWindow">
     <mat-toolbar class ="topToolBar">
-        <button mat-mini-fab class= "guideButton" matTooltip = "guide">
+        <button mat-mini-fab color="primary" class= "guideButton" matTooltip = "guide">
             <mat-icon >help</mat-icon>
         </button>
-        <button mat-mini-fab class="newDrawButton" matTooltip= "nouveau dessin">
+        <button mat-mini-fab color="primary" class="newDrawButton" matTooltip= "nouveau dessin">
             <mat-icon>add</mat-icon>
         </button>
-        <button mat-mini-fab class="gallerieButton" matTooltip= "gallerie">
+        <button mat-mini-fab color="primary" class="gallerieButton" matTooltip= "gallerie">
             <mat-icon> camera </mat-icon>
         </button>
-        <button mat-mini-fab class="exitButton" matTooltip = "quitter">
+        <button mat-mini-fab color="primary" class="exitButton" matTooltip = "quitter">
             <mat-icon> close </mat-icon>
         </button>
     </mat-toolbar>
-    <div mat-sidenav-container>
-        <mat-sidenav class= "drawingTools" mode="side" opened >
-            <button mat-mini-fab class="colorChangerButton" matTooltip= "changer de couleur">
+    <div class="windowSplited">
+        <div class= "drawingTools">
+            <button mat-mini-fab color="primary" class="colorChangerButton" matTooltip= "changer de couleur" matTooltipPosition = "after">
                 <img src="../../../assets/images/exclude.png"> 
              </button>
              <br>
-             <button mat-mini-fab class="calligraphy" matTooltip= "plume">
+             <button mat-mini-fab  color="primary" class="calligraphy" matTooltip= "plume" matTooltipPosition = "after">
                 <img src="../../../assets/images/calligraphie.png"> 
              </button>
              <br>
-             <button mat-mini-fab class="pencil" matTooltip= "crayon">
+             <button mat-mini-fab color="primary" class="pencil" matTooltip= "crayon" matTooltipPosition = "after">
                 <img src="../../../assets/images/pencil.png"> 
              </button>
              <br>
-             <button mat-mini-fab class="rectangle" matTooltip= "crayon">
-                <img src="../../../assets/images/pencil.png"> 
+             <button mat-mini-fab color="primary" class="rectangle" matTooltip= "rectangle" matTooltipPosition = "after">
+                <img src="../../../assets/images/frame.png"> 
              </button>
             
-        </mat-sidenav>
-        <mat-sidenav mode="side" opened>
+        </div>
+        
+        <div #expendedOptions class="expendedOptions">
+            <!-- here goes the inner HTML created by the typescript -->
+        </div>
+        <div class ="workSpace">
+            <svg class="svgContainer" id="mainFrame" xmlns="http://www.w3.org/2000/svg" width="100%" fill ="transparent" stroke= "black" stroke-width= "5">
+                <!--Here goes inner svg-->
+                
+            </svg>
+        </div>
 
-        </mat-sidenav>
     </div>
 </div>

@@ -1,7 +1,10 @@
+.topToolBar{
+    background-color: darkblue;
+}
 .topToolBar > *{
     margin-right: 10px;
 }
-.calligraphy{
+/*.calligraphy{
     margin-bottom: 10px;
 }
 .colorChangerButton{
@@ -9,4 +12,20 @@
 }
 .pencil{
     margin-bottom: 10px;
+}*/
+.drawingTools{
+    width: 4%;
+    border-right: thick;;
+    border-color: black;
+    background-color:darkblue;
+    height: 100%
 }
+
+.drawingTools > *{
+    margin-bottom: 10px;
+}
+.expendedOptions{
+    width : 10%
+
+}
+

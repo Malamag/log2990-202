@@ -8,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DrawViewComponent implements OnInit {
 
+  width: number;
+  height: number;
   constructor() { }
 
   ngOnInit() {
+    this.width=500;
+    this.height= 500;
   }
 
 }
