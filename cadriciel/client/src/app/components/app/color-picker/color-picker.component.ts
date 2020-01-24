@@ -73,8 +73,8 @@ export class ColorPickerComponent {
 
         this.opacity = 1.0; // default opacity
         this.currentHue = 0; // default hue
-        this.primaryColor = '0x000000';
-        this.secondaryColor = '0xffffff';
+        this.primaryColor = 'hsla(255,100%,50%,0.5)';
+        this.secondaryColor = 'hsla(55,100%,50%,0.5)';
         this.cColors = [];
          //this 360 hue in hsl color
          let nColor : number = 360; 
@@ -153,24 +153,55 @@ export class ColorPickerComponent {
         }
     }
 
+    drawPrimaryColor() : void {
+        
+    }
     // select the function to use when color picker is clicked;
     colorSelector( event : MouseEvent ) : void {
         
         let x : number = event.offsetX - this.cX;
         let y : number = event.offsetY - this.cY;
 
-        let upperRadiusSquare :number = Math.pow( this.cAvgRadius + this.cStrokeWidth / 2, 2 );
-        let lowerRadiusSquare : number = Math.pow( this.cAvgRadius - this.cStrokeWidth / 2, 2 );
-        let radiusSquare : number = Math.pow( x, 2 ) + Math.pow( y, 2 );
-
+        
+        //window.alert(event.button);
         //window.alert('x : ' + event.offsetX + ' y : ' + event.offsetY + ' r2 : ' + radiusSquare + ' ru : ' + upperRadiusSquare + ' rl : ' + lowerRadiusSquare );
-        if (radiusSquare <= upperRadiusSquare && radiusSquare >= lowerRadiusSquare){
+        if ( this.isInCircle( x, y) || this.isInSquare( event.offsetX, event.offsetY ) ) {
             // get rgb data of a 1x1 square
             let rgbData : ImageData = this.ctx.getImageData( event.offsetX, event.offsetY, 1, 1 );
             this.currentHue = this.rgbtoHue( rgbData.data[0], rgbData.data[1], rgbData.data[2] );
              
             this.drawColorSquare();
+            let newColor : string = 'rgba( ' + rgbData.data[0] + ', ' + rgbData.data[1] + ', ' + rgbData.data[2] + ', ' + this.opacity + ' )';
+            if ( event.button === 0 ) {
+                this.primaryColor = newColor ;
+            }
+            else if ( event.button === 2) {
+                this.secondaryColor = newColor ;
+            }
         }
+        
+    }
+
+    // return if coordinate are in circle color selector
+    isInCircle( x : number, y : number ) : boolean {
+
+        let upperRadiusSquare :number = Math.pow( this.cAvgRadius + this.cStrokeWidth / 2, 2 );
+        let lowerRadiusSquare : number = Math.pow( this.cAvgRadius - this.cStrokeWidth / 2, 2 );
+        let radiusSquare : number = Math.pow( x, 2 ) + Math.pow( y, 2 );
+        
+        return ( radiusSquare <= upperRadiusSquare && radiusSquare >= lowerRadiusSquare );
+    }
+
+    // return if coordinate are in square selector
+    isInSquare( x : number, y : number ) : boolean {
+        
+        let lowerX : number = this.sqrTopLeftX;
+        let upperX : number = this.sqrTopLeftX + this.squareWidth;
+
+        let lowerY : number = this.sqrTopLeftY;
+        let upperY : number = this.sqrTopLeftY + this.squareHeigth;
+     
+        return (( x <= upperX ) && ( x >= lowerX) && ( y <= upperY ) && (y >= lowerY ) );
     }
 
     // convert rbg to h value of hsl.
@@ -202,4 +233,11 @@ export class ColorPickerComponent {
         return hue;
     }
     
+    //temp style
+    get myStyle1(): any {
+         return { 'color': this.primaryColor};
+    }
+    get myStyle2(): any {
+        return { 'color': this.secondaryColor};
+   }
 }
