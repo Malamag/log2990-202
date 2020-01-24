@@ -18,7 +18,10 @@ export class ColorPickerComponent {
     canvasBgColor : string; 
 
     //Golbal color attribut
-    Opacity : number;
+    opacity : number;
+    currentHue : number;
+    primaryColor : string;
+    secondaryColor : string;
     //Hue color circle attribut (c*name)
     cX : number;
     cY : number;
@@ -29,20 +32,31 @@ export class ColorPickerComponent {
     //Saturation, luminosity square attribut (sqr*name)
     sqrTopLeftX : number;
     sqrTopLeftY : number;
+    squareWidth : number;
+    squareHeigth : number;
 
     constructor() {}
 
     ngOnInit() {
 
+        // canvas parm init
         this.canvasBgColor = 'lightgrey';
-        this.canvasHeigth = 200;//temp
+        this.canvasHeigth = 200;//temp need to be a square
         this.canvasWidth = 200;//temp
         this.canvasId = 'color-picker';//temp
-        this.Opacity = 1.0; // default opacity
+        
+        // circle parm init
         this.cStrokeWidth = this.canvasWidth / 10; 
         this.cAvgRadius = ( this.canvasWidth - this.cStrokeWidth ) / 2;
         this.cX = this.canvasWidth / 2;
         this.cY = this.canvasHeigth / 2;
+
+        // square parm init
+         // square is center on canvas
+        this.sqrTopLeftX = this.canvasWidth / 4 ;
+        this.sqrTopLeftY = this.canvasHeigth / 4;
+        this.squareWidth = this.canvasWidth / 2;
+        this.squareHeigth = this.canvasHeigth / 2;
 
         this.canvas = document.getElementById( this.canvasId );
         if ( this.canvas.getContext ){
@@ -57,12 +71,16 @@ export class ColorPickerComponent {
     //init all color in HSLA format (H, S = 100%, L = 50%, A = Opacity)
     initColors() : void {
 
+        this.opacity = 1.0; // default opacity
+        this.currentHue = 0; // default hue
+        this.primaryColor = '0x000000';
+        this.secondaryColor = '0xffffff';
         this.cColors = [];
          //this 360 hue in hsl color
          let nColor : number = 360; 
          // setting hue break point at 15 hue => 24 color total for gradient use 
          for(let i : number = 0; i < nColor; i+=15){
-             this.cColors.push('hsla( ' + i + ', 100%, 50%, ' + this.Opacity + ')');
+             this.cColors.push('hsla( ' + i + ', 100%, 50%, ' + this.opacity + ')');
          }
         
     }
@@ -124,22 +142,64 @@ export class ColorPickerComponent {
     // draw the saturation and luminosity color square selector
     drawColorSquare() : void {
 
-        let squareWidth : number = this.canvasWidth / 2;
-        let squareHeigth : number = this.canvasHeigth / 2;
+        for ( let i : number = 0; i < this.squareWidth; ++i ) {
+            for ( let j : number = 0; j < this.squareHeigth; ++j ) {
 
-        // square is center on canvas
-        // top left corner
-        let topLeftX : number = this.canvasWidth / 4;
-        let topLeftY : number = this.canvasHeigth / 4;
-        
-        for ( let i : number = 0; i < squareWidth; ++i ) {
-            for ( let j : number = 0; j < squareHeigth; ++j ) {
-
-                let s = ((i/squareWidth)*100)+'%';
-                let l = ((j/squareHeigth)*100)+'%' ;
-                this.ctx.fillStyle = 'hsla( 0, ' + s + ', ' + l + ', ' + this.Opacity + ' )';
-                this.ctx.fillRect(topLeftX + i, topLeftY + j,1, 1);//fill a 1x1 square
+                let s = ((i/this.squareWidth)*100)+'%';
+                let l = ((j/this.squareHeigth)*100)+'%' ;
+                this.ctx.fillStyle = 'hsla( ' + this.currentHue + ', ' + s + ', ' + l + ', ' + this.opacity + ' )';
+                this.ctx.fillRect(this.sqrTopLeftX + i, this.sqrTopLeftY + j,1, 1);//fill a 1x1 square
             }
         }
     }
+
+    // select the function to use when color picker is clicked;
+    colorSelector( event : MouseEvent ) : void {
+        
+        let x : number = event.offsetX - this.cX;
+        let y : number = event.offsetY - this.cY;
+
+        let upperRadiusSquare :number = Math.pow( this.cAvgRadius + this.cStrokeWidth / 2, 2 );
+        let lowerRadiusSquare : number = Math.pow( this.cAvgRadius - this.cStrokeWidth / 2, 2 );
+        let radiusSquare : number = Math.pow( x, 2 ) + Math.pow( y, 2 );
+
+        //window.alert('x : ' + event.offsetX + ' y : ' + event.offsetY + ' r2 : ' + radiusSquare + ' ru : ' + upperRadiusSquare + ' rl : ' + lowerRadiusSquare );
+        if (radiusSquare <= upperRadiusSquare && radiusSquare >= lowerRadiusSquare){
+            // get rgb data of a 1x1 square
+            let rgbData : ImageData = this.ctx.getImageData( event.offsetX, event.offsetY, 1, 1 );
+            this.currentHue = this.rgbtoHue( rgbData.data[0], rgbData.data[1], rgbData.data[2] );
+             
+            this.drawColorSquare();
+        }
+    }
+
+    // convert rbg to h value of hsl.
+    rgbtoHue( r : number, g : number, b : number ) : number {
+        // scale dowon rgb value to a range of [ 0 , 1 ] from [ 0 , 255 ]
+        let primeR : number = r / 255;
+        let primeG : number = g / 255;
+        let primeB : number = b / 255;
+
+        // getting min/max and delta value of primes
+        let max : number = Math.max( primeR, primeG, primeB );
+        let min : number = Math.min( primeR, primeG, primeB );
+        let delta : number = max - min;
+
+        // math conversion formula base on max prime
+        if ( max === primeR ) {
+            return ( 60 * ( ( primeG - primeB ) / delta % 6 ) );
+        }
+        else if ( max === primeG ) {
+            return ( 60 * ( ( primeB - primeR ) / delta + 2 ) );
+        }
+        else {
+            return ( 60 * ( ( primeR - primeG ) / delta + 4 ) );
+        }
+    }
+
+    rgbToHsl( r : number, g : number, b : number ) : number {
+        let hue : number = this.rgbtoHue( r, g, b );
+        return hue;
+    }
+    
 }
