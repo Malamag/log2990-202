@@ -15,7 +15,7 @@ export class EntryPointComponent implements OnInit {
   open() {
     let config = new MatSnackBarConfig();
     config.duration=2500;
-    this.snackBar.open("Bienvenue sur PolyDessin !",undefined,config);
+    this.snackBar.open("Bienvenue !",undefined,config);
   }
   
 }

@@ -9,9 +9,11 @@
     margin-right: -50%;
     transform: translate(-50%,-50%);
 }
+
+
+
 button{
     width: 100%;
-    position: relative;
     height: 100%;
 }
 
@@ -33,3 +35,27 @@ div#buttonContainer > div{
     width: 100%;
     text-align: right;
   }
+
+  @media (max-width: 750px) {
+
+    #title {
+        font-size: 10vw;
+    }
+
+    .footer{
+        font-size: 3vw;
+    }
+
+    div#buttonContainer > div{
+        margin: 25px;
+    }
+
+    br { display: none; }
+
+}
+
+@media (max-width: 650px) {
+    #title {
+        font-size: 8vw;
+    }
+}
