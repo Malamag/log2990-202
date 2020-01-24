@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { MatDialog,} from '@angular/material/dialog';
-import { ModalWindowService } from '../../modal-window.service';
+import { ModalWindowService } from '../../services/modal-window/modal-window.service';
 
 
 @Component({

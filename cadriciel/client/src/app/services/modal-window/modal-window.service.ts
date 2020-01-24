@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { GuideUtilisationComponent } from './guide-utilisation/guide-utilisation.component';
+import { GuideUtilisationComponent } from '../../components/guide-utilisation/guide-utilisation.component';
 
 @Injectable({
   providedIn: 'root'

@@ -2,7 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './components/app/app.component';
-import { GuideUtilisationComponent } from './guide-utilisation/guide-utilisation.component';
+import { GuideUtilisationComponent } from '../app/components/guide-utilisation/guide-utilisation.component';
 
 //import { AppRoutingModule } from '../app-routing.module'; ?not important?
 
@@ -13,13 +13,11 @@ import { MatButtonModule } from '@angular/material/button';
 // Adds dialogs -> for modal window
 import { MatDialogModule } from '@angular/material/dialog';
 // import utilisation guide
-import { GuideUtilisationComponent as GuideComponent } from './guide-utilisation/guide-utilisation.component';
-import { TopBarGuideComponent } from './guide-utilisation/top-bar-guide/top-bar-guide.component';
-import { LeftBarGuideComponent } from './guide-utilisation/left-bar-guide/left-bar-guide.component';
+import { GuideUtilisationComponent as GuideComponent } from './components/guide-utilisation/guide-utilisation.component';
 
 
 @NgModule({
-    declarations: [AppComponent, GuideUtilisationComponent, TopBarGuideComponent, LeftBarGuideComponent],
+    declarations: [AppComponent, GuideUtilisationComponent],
     imports: [BrowserModule, HttpClientModule,
         //AppRoutingModule, ?not important?
         BrowserAnimationsModule,
