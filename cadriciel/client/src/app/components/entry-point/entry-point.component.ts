@@ -16,12 +16,12 @@ export class EntryPointComponent implements OnInit {
   winService: ModalWindowService;
 
   constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {
-    
+    this.winService = new ModalWindowService(this.dialog);
   }
 
   ngOnInit() {
     this.onOpen(); // opens snackbar at the bottom of the page
-    this.winService = new ModalWindowService(this.dialog);
+    
   }
   
   onOpen() {

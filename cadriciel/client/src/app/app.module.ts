@@ -42,6 +42,7 @@ import {
     ],
     providers: [CanvasBuilderService, ModalWindowService],
     bootstrap: [AppComponent],
+    entryComponents: [NewDrawComponent]
     
 })
 export class AppModule {}
