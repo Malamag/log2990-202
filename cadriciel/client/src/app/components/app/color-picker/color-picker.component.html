@@ -1,21 +1,22 @@
 <!-- TODO : property binding? need to garantie square shape-->
     <section style="background-color: lightgray;width: 165px;">
+        
         <table>
             <tr>
-                <td style="display: block;">
-                    <label>Red</label>
-                    <input type="text" maxlength="3" placeholder="0...255">
-                    <label>Green</label>
-                    <input type="text" maxlength="3" placeholder="0...255">
-                    <label>Blue</label>
-                    <input type="text" maxlength="3" placeholder="0...255">
+                <td class="leftInput" style="display: block;">
+                    <label><font color="red">Red</font></label>
+                    <input type="text" maxlength="3" placeholder="0...255" [(ngModel)]="RedLeftInput" (keyup)="onRedLeftInput($event)" [ngStyle]="myInputStylesRL">
+                    <label><font color="green">Green</font></label>
+                    <input type="text" maxlength="3" placeholder="0...255" [(ngModel)]="GreenLeftInput" (keyup)="onGreenLeftInput($event)" [ngStyle]="myInputStylesGL">
+                    <label><font color="blue">Blue</font></label>
+                    <input type="text" maxlength="3" placeholder="0...255" [(ngModel)]="BlueLeftInput" (keyup)="onBlueLeftInput($event)" [ngStyle]="myInputStylesBL">
                     <label>Saturation</label>
-                    <input type="text" maxlength="3" placeholder="0...100">
+                    <input type="text" maxlength="3" placeholder="0...100" [(ngModel)]="SaturationLeftInput" (keyup)="onSaturationLeftInput($event)">
                     <label>Lightness</label>
-                    <input type="text" maxlength="3" placeholder="0...100">
+                    <input type="text" maxlength="3" placeholder="0...100" [(ngModel)]="LightnessLeftInput" (keyup)="onLightnessLeftInput($event)">
                     <label>Hex </label>
                     <input type="text" maxlength="8" placeholder="0x...">
-                    <input type="range" min="0" step="0.01" max="1" [(ngModel)]="primaryAlpha" (change)="primaryAlphaChange($event)">
+                    <input type="range" min="0" step="0.01" max="1" [(ngModel)]="primaryAlpha" (change)="primaryAlphaChange()">
                     <button (click)="swapPrimarySecondary()">Swap</button>
                     
                 </td>
@@ -23,20 +24,20 @@
                     <canvas id="color-picker" height="100" width="100" (mousedown)="colorSelector($event)">
                     </canvas>
                 </td>        
-                <td>
-                    <label>Red</label>
-                    <input type="text" maxlength="3" placeholder="0...255">
-                    <label>Green</label>
-                    <input type="text" maxlength="3" placeholder="0...255">
-                    <label>Blue</label>
-                    <input type="text" maxlength="3" placeholder="0...255">
+                <td class="rightInput" style="display: block;">
+                    <label><font color="red">Red</font></label>
+                    <input type="text" maxlength="3" placeholder="0...255"  [(ngModel)]="RedRightInput" (keyup)="onRedRightInput($event)" [ngStyle]="myInputStylesRR">
+                    <label><font color="green">Green</font></label>
+                    <input type="text" maxlength="3" placeholder="0...255" [(ngModel)]="GreenRightInput" (keyup)="onGreenRightInput($event)" [ngStyle]="myInputStylesGR">
+                    <label><font color="blue">Blue</font></label>
+                    <input type="text" maxlength="3" placeholder="0...255" [(ngModel)]="BlueRightInput" (keyup)="onBlueRightInput($event)" [ngStyle]="myInputStylesBR">
                     <label>Saturation</label>
-                    <input type="text" maxlength="3" placeholder="0...100">
+                    <input type="text" maxlength="3" placeholder="0...100" [(ngModel)]="SaturationRightInput" (keyup)="onSaturationRightInput($event)">
                     <label>Lightness</label>
-                    <input type="text" maxlength="3" placeholder="0...100">
+                    <input type="text" maxlength="3" placeholder="0...100" [(ngModel)]="LightnessRightInput" (keyup)="onLightnessRightInput($event)">
                     <label>Hex </label>
                     <input type="text" maxlength="6" placeholder="0x...">
-                    <input type="range" min="0" step="0.01" max="1" [(ngModel)]="secondaryAlpha" (change)="secondaryAlphaChange($event)">
+                    <input type="range" min="0" step="0.01" max="1" [(ngModel)]="secondaryAlpha" (change)="secondaryAlphaChange(event)">
                     <button (click)="swapPrimarySecondary()">Swap</button>
                 </td>
         </table>
