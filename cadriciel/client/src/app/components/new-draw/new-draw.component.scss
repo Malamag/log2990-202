@@ -1,6 +1,7 @@
 .drawForm >* {
     display: flex;
     flex-direction: column;
+    overflow-y: hidden;
 }
 
 h1 {
@@ -8,18 +9,7 @@ h1 {
 }
 
 .form-container {
-    padding: 25px;
-    width: 20%;
-    background-color: white;
    
-    border-style: solid;
-    border-color: lightgray;
-    border-radius: 15px;
-    border-width: thin; 
-    
-    margin: auto; /*Centrer l'élément dans la page*/
-    margin-top: 7%;
-
 }
 
 @media only screen and (max-width: 600px) {

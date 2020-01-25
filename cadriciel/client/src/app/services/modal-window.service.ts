@@ -12,10 +12,11 @@ export class ModalWindowService {
   // Construct a modal window depending of the desired component
   constructor(public dialog: MatDialog, public modalComponent:String) {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
+    dialogConfig.disableClose = false;
+    dialogConfig.hasBackdrop = true;
     dialogConfig.id = "ModalWindow";
-    dialogConfig.height = '100%';
-    dialogConfig.width = '99%';
+    dialogConfig.height = 'auto';
+    dialogConfig.width = 'auto';
     if (modalComponent == "guide") {
       this.dialog.open(NewDrawComponent, dialogConfig);
     }
