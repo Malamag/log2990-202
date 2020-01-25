@@ -18,12 +18,15 @@
                 <input matInput type="text" formControlName="canvColor" [value]="color">
             </mat-form-field>
 
-            <div >
-                <button mat-raised-button color="primary" 
-                type="submit" [disabled]="newDrawForm.invalid">C'est parti!</button>
-                <button mat-button (click)="closeWindow()">Cancel</button>
-            </div>
+            
+            <button mat-raised-button color="primary" 
+            type="submit" [disabled]="newDrawForm.invalid">C'est parti!</button>
+            
         </form>
+        <div>
+            <button mat-button (click)="closeModalForm()">Cancel</button>
+        </div>
+        
     </div>
 
 </div>

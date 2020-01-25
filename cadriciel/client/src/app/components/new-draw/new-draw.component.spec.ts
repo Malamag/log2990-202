@@ -19,7 +19,8 @@ describe('NewDrawComponent', () => {
         FormsModule, 
         BrowserAnimationsModule,
         MatInputModule,
-        MatButtonModule
+        MatButtonModule,
+        MatDialogModule
       ]
     })
     .compileComponents();

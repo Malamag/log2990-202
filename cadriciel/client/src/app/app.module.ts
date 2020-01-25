@@ -9,7 +9,7 @@ import { EntryPointComponent } from './components/entry-point/entry-point.compon
 import { NewDrawComponent } from './components/new-draw/new-draw.component';
 
 import { CanvasBuilderService } from './services/services/drawing/canvas-builder.service';
-
+import { ModalWindowService } from './services/modal-window.service';
 
 /*import material*/
 import {
@@ -40,7 +40,7 @@ import {
         MatIconModule,
         MatSnackBarModule
     ],
-    providers: [CanvasBuilderService],
+    providers: [CanvasBuilderService, ModalWindowService],
     bootstrap: [AppComponent],
     entryComponents:[NewDrawComponent]
 })

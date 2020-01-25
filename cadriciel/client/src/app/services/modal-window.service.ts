@@ -26,5 +26,9 @@ export class ModalWindowService {
   openWindow(component: ComponentType<any>) { // opens any modal window given as argument (by component type)
     this.dialog.open(component, this.dialogConfig);
   }
+
+  closeWindow() {
+    this.dialog.closeAll();
+  }
 }
 

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CanvasBuilderService } from '../../services/services/drawing/canvas-builder.service';
-import { MatDialogRef, /*MAT_DIALOG_DATA*/ } from '@angular/material';
-// import { dataInterface } from './dataInterface';
+import { ModalWindowService } from 'src/app/services/modal-window.service';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-new-draw',
@@ -12,6 +12,7 @@ import { MatDialogRef, /*MAT_DIALOG_DATA*/ } from '@angular/material';
 export class NewDrawComponent implements OnInit {
 
   newDrawForm: FormGroup;
+  winService: ModalWindowService;
   
   width: number;
   height: number;
@@ -19,9 +20,9 @@ export class NewDrawComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
-              public matDialog: MatDialogRef<NewDrawComponent>,/*
-              @Inject(MAT_DIALOG_DATA) public data: dataInterface*/
-              ) { }
+              public dialog: MatDialog) {
+      this.winService = new ModalWindowService(dialog);          
+   }
 
   ngOnInit() {
     this.initForm();
@@ -30,8 +31,6 @@ export class NewDrawComponent implements OnInit {
     this.color = this.canvasBuilder.getDefColor();
   }
 
-
-
   initForm() {
     this.newDrawForm = this.formBuilder.group({
       canvWidth: ['', Validators.pattern(/^\d+$/)], // accepts only positive integers
@@ -39,8 +38,6 @@ export class NewDrawComponent implements OnInit {
       canvColor: ['', Validators.pattern(/^[a-fA-F0-9]{6}$/)]
     });
   }
-
-
 
   onSubmit() {
     const values = this.newDrawForm.value;
@@ -51,12 +48,11 @@ export class NewDrawComponent implements OnInit {
       values.canvColor
     );
     console.log(newDraw);
+    this.closeModalForm();
   }
   
-
-  closeWindow() {
-    this.matDialog.close();
-
+  closeModalForm() {
+    
   }
 
 }

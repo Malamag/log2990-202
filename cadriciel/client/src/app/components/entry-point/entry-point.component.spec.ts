@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EntryPointComponent } from './entry-point.component';
-import { MatFormFieldModule, MatIconModule, MatSnackBarModule, MatButtonModule } from '@angular/material';
+import { MatFormFieldModule, MatIconModule, MatSnackBarModule, MatButtonModule, MatDialogModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
@@ -18,7 +18,8 @@ describe('EntryPointComponent', () => {
         MatIconModule, 
         MatSnackBarModule, 
         BrowserAnimationsModule, 
-        MatButtonModule
+        MatButtonModule,
+        MatDialogModule
       ]
     })
     .compileComponents();
