@@ -3,7 +3,7 @@
 <div id="buttonContainer">
 
     <div *ngFor="let func of functionality">
-        <button mat-button>
+        <button (click)="openModalForm()"mat-button>
          <mat-icon>{{func.icon}}</mat-icon>
             <br>
          <span class="buttonText">{{func.name}}</span>

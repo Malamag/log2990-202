@@ -1,8 +1,6 @@
-<div mat-dialog-content class="form-container">
-    
+<div  class="form-container">
     <h1>Nouveau dessin</h1>
-
-    <div mat-dialog-content class="drawForm">
+    <div  class="drawForm">
         <form [formGroup]="newDrawForm" (ngSubmit)="onSubmit()"> <!--TODO: ng submit function-->
 
             <mat-form-field>
@@ -20,7 +18,7 @@
                 <input matInput type="text" formControlName="canvColor" [value]="color">
             </mat-form-field>
 
-            <div mat-dialog-actions>
+            <div >
                 <button mat-raised-button color="primary" 
                 type="submit" [disabled]="newDrawForm.invalid">C'est parti!</button>
                 <button mat-button (click)="closeWindow()">Cancel</button>

@@ -42,5 +42,6 @@ import {
     ],
     providers: [CanvasBuilderService],
     bootstrap: [AppComponent],
+    entryComponents:[NewDrawComponent]
 })
 export class AppModule {}

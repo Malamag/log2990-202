@@ -25,6 +25,6 @@ export const functionality = [
         shortcutName: "Continuer",
         shortDescription:"text goes here",
         description: "text goes here",
-        icon :"arrow_forward",  
+        icon :"arrow_forward", 
       },
   ];

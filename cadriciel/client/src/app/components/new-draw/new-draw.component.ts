@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CanvasBuilderService } from '../../services/services/drawing/canvas-builder.service';
 
-
 @Component({
   selector: 'app-new-draw',
   templateUrl: './new-draw.component.html',
@@ -48,9 +47,10 @@ export class NewDrawComponent implements OnInit {
     );
     console.log(newDraw);
   }
+  
 
   closeWindow() {
-    // this.matDialog.close();
+    //this.matDialog.close();
 
   }
 
