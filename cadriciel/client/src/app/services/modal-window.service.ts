@@ -12,8 +12,9 @@ import { ComponentType } from '@angular/cdk/portal';
 export class ModalWindowService {
   // Construct a modal window depending of the desired component
   dialogConfig: MatDialogConfig;
+  
 
-  constructor(public dialog: MatDialog) {
+  constructor(private dialog: MatDialog) {
     this.dialogConfig = new MatDialogConfig();
     this.dialogConfig.disableClose = false;
     this.dialogConfig.hasBackdrop = true;
@@ -21,6 +22,7 @@ export class ModalWindowService {
     this.dialogConfig.height = 'auto';
     this.dialogConfig.width = 'auto';
 
+    
   }
 
   openWindow(component: ComponentType<any>) { // opens any modal window given as argument (by component type)

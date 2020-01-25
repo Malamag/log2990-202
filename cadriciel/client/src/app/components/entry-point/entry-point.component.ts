@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar,MatSnackBarConfig} from '@angular/material';
+import { MatSnackBar,MatSnackBarConfig, MatDialog} from '@angular/material';
 import { functionality } from '../../functionality';
-import { MatDialog} from '@angular/material/dialog';
+
 import { ModalWindowService } from "../../services/modal-window.service";
 import { NewDrawComponent } from '../new-draw/new-draw.component';
 
@@ -15,12 +15,13 @@ export class EntryPointComponent implements OnInit {
   functionality = functionality
   winService: ModalWindowService;
 
-  constructor(private snackBar: MatSnackBar, public dialog:MatDialog) {
-    this.winService = new ModalWindowService(dialog);
+  constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {
+    
   }
 
   ngOnInit() {
-    this.onOpen(); // opens snakbar at the bottom of the page
+    this.onOpen(); // opens snackbar at the bottom of the page
+    this.winService = new ModalWindowService(this.dialog);
   }
   
   onOpen() {

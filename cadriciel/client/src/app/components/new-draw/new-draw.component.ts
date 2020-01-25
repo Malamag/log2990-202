@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CanvasBuilderService } from '../../services/services/drawing/canvas-builder.service';
 import { ModalWindowService } from 'src/app/services/modal-window.service';
-import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-new-draw',
@@ -12,16 +11,14 @@ import { MatDialog } from '@angular/material';
 export class NewDrawComponent implements OnInit {
 
   newDrawForm: FormGroup;
-  winService: ModalWindowService;
-  
   width: number;
   height: number;
   color: string;
 
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
-              public dialog: MatDialog) {
-      this.winService = new ModalWindowService(dialog);          
+              private winService: ModalWindowService) {
+               
    }
 
   ngOnInit() {
@@ -52,7 +49,7 @@ export class NewDrawComponent implements OnInit {
   }
   
   closeModalForm() {
-    
+    this.winService.closeWindow();
   }
 
 }
