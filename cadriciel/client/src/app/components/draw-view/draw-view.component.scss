@@ -4,28 +4,32 @@
 .topToolBar > *{
     margin-right: 10px;
 }
-/*.calligraphy{
-    margin-bottom: 10px;
-}
-.colorChangerButton{
-    margin-bottom: 10px;
-}
-.pencil{
-    margin-bottom: 10px;
-}*/
 .drawingTools{
-    width: 4%;
+    width: 5%;
     border-right: thick;;
     border-color: black;
-    background-color:darkblue;
-    height: 100%
+    padding-bottom: 5px; 
 }
 
-.drawingTools > *{
-    margin-bottom: 10px;
-}
 .expendedOptions{
     width : 10%
 
 }
+.svgElem{
+    position:relative;
+    object-position: right;
+}
 
+mat-sidenav{
+    width: 7vh;
+    background-color: darkblue;
+    height :100%
+}
+.windowSplitted{
+    height : 100%;
+}
+mat-sidenav-container{
+    background-color: grey;
+
+
+}
