@@ -21,6 +21,7 @@ export class ColorPickerComponent {
     currentLightness : number;
     primaryColor : string;
     primaryR : string;
+    primaryRt : number = 0;
     primaryG : string;
     primaryB : string;
     primaryAlpha : number;
@@ -56,8 +57,8 @@ export class ColorPickerComponent {
 
         // canvas parm init
         this.canvasBgColor = 'lightgrey';
-        this.canvasHeigth = 200;//temp need to be a square
-        this.canvasWidth = 200;//temp
+        this.canvasHeigth = 100;//temp need to be a square
+        this.canvasWidth = 100;//temp
         this.canvasId = 'color-picker';//temp
         
         // circle parm init
@@ -226,13 +227,13 @@ export class ColorPickerComponent {
         this.ctx.beginPath();
         
         this.ctx.fillStyle = this.primaryColor;
-        this.ctx.moveTo( ( this.canvasWidth * 0.2 ), ( this.canvasHeigth * 0.98 ) );
-        this.ctx.arcTo( ( this.canvasWidth * 0.02 ), ( this.canvasHeigth * 0.95 ) 
-                        , ( this.canvasWidth * 0.02 ), ( this.canvasHeigth * 0.75 ) , ( this.canvasWidth * 0.2 ) );
-        this.ctx.lineTo( ( this.canvasWidth * 0.02 ), ( this.canvasHeigth * 0.98 ) );
-        this.ctx.lineTo( ( this.canvasWidth * 0.2 ), ( this.canvasHeigth * 0.98 )  );
+        this.ctx.moveTo( ( this.canvasWidth * 0.1 ), ( this.canvasHeigth * 0.95 ) );
+        this.ctx.arcTo( ( this.canvasWidth * 0.05 ), ( this.canvasHeigth * 0.95 ) 
+                        , ( this.canvasWidth * 0.05 ), ( this.canvasHeigth * 0.75 ) , ( this.canvasWidth * 0.15 ) );
+        this.ctx.lineTo( ( this.canvasWidth * 0.05 ), ( this.canvasHeigth * 0.95 ) );
+        this.ctx.lineTo( ( this.canvasWidth * 0.1 ), ( this.canvasHeigth * 0.95 )  );
         this.ctx.strokeStyle = this.canvasBgColor;
-        this.ctx.lineWidth = this.canvasWidth * 0.1;
+        this.ctx.lineWidth = this.canvasWidth * 0.05;
         this.ctx.stroke();
         
         this.ctx.closePath();
@@ -245,13 +246,13 @@ export class ColorPickerComponent {
         this.ctx.beginPath();
         
         this.ctx.fillStyle = this.secondaryColor;
-        this.ctx.moveTo( ( this.canvasWidth * 0.80 ), ( this.canvasHeigth * 0.98 ) );
-        this.ctx.arcTo( ( this.canvasWidth * 0.98 ), ( this.canvasHeigth * 0.95 ) 
-                        , ( this.canvasWidth * 0.98 ), ( this.canvasHeigth * 0.75 ) , ( this.canvasWidth * 0.2 ) );
-        this.ctx.lineTo( ( this.canvasWidth * 0.98 ), ( this.canvasHeigth * 0.98 ) );
-        this.ctx.lineTo( ( this.canvasWidth * 0.80 ), ( this.canvasHeigth * 0.98 )  );
+        this.ctx.moveTo( ( this.canvasWidth * 0.80 ), ( this.canvasHeigth * 0.95 ) );
+        this.ctx.arcTo( ( this.canvasWidth * 0.95 ), ( this.canvasHeigth * 0.95 ) 
+                        , ( this.canvasWidth * 0.95 ), ( this.canvasHeigth * 0.70 ) , ( this.canvasWidth * 0.15 ) );
+        this.ctx.lineTo( ( this.canvasWidth * 0.95 ), ( this.canvasHeigth * 0.95 ) );
+        this.ctx.lineTo( ( this.canvasWidth * 0.9 ), ( this.canvasHeigth * 0.95 )  );
         this.ctx.strokeStyle = this.canvasBgColor;
-        this.ctx.lineWidth = this.canvasWidth * 0.1;
+        this.ctx.lineWidth = this.canvasWidth * 0.05;
         this.ctx.stroke();
         
         this.ctx.closePath();

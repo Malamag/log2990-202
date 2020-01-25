@@ -1,9 +1,49 @@
 <!-- TODO : property binding? need to garantie square shape-->
-<div id="myDiv">
-<mat-slider min="0" max="1" step="0.01" vertical="true" [(ngModel)]="primaryAlpha" (change)="primaryAlphaChange($event)"></mat-slider>
-<canvas id="color-picker" height="200" width="200" (mousedown)="colorSelector($event)">
-</canvas>
-<mat-slider min="0" max="1" step="0.01" vertical="true" [(ngModel)]="secondaryAlpha" width="10px" (change)="secondaryAlphaChange($event)"></mat-slider>
-
-<button (click)="swapPrimarySecondary()" >swap</button>
-</div>
+    <section style="background-color: lightgray;width: 165px;">
+        <table>
+            <tr>
+                <td style="display: block;">
+                    <label>Red</label>
+                    <input type="text" maxlength="3" placeholder="0...255">
+                    <label>Green</label>
+                    <input type="text" maxlength="3" placeholder="0...255">
+                    <label>Blue</label>
+                    <input type="text" maxlength="3" placeholder="0...255">
+                    <label>Saturation</label>
+                    <input type="text" maxlength="3" placeholder="0...100">
+                    <label>Lightness</label>
+                    <input type="text" maxlength="3" placeholder="0...100">
+                    <label>Hex </label>
+                    <input type="text" maxlength="8" placeholder="0x...">
+                    <input type="range" min="0" step="0.01" max="1" [(ngModel)]="primaryAlpha" (change)="primaryAlphaChange($event)">
+                    <button (click)="swapPrimarySecondary()">Swap</button>
+                    
+                </td>
+                <td>
+                    <canvas id="color-picker" height="100" width="100" (mousedown)="colorSelector($event)">
+                    </canvas>
+                </td>        
+                <td>
+                    <label>Red</label>
+                    <input type="text" maxlength="3" placeholder="0...255">
+                    <label>Green</label>
+                    <input type="text" maxlength="3" placeholder="0...255">
+                    <label>Blue</label>
+                    <input type="text" maxlength="3" placeholder="0...255">
+                    <label>Saturation</label>
+                    <input type="text" maxlength="3" placeholder="0...100">
+                    <label>Lightness</label>
+                    <input type="text" maxlength="3" placeholder="0...100">
+                    <label>Hex </label>
+                    <input type="text" maxlength="6" placeholder="0x...">
+                    <input type="range" min="0" step="0.01" max="1" [(ngModel)]="secondaryAlpha" (change)="secondaryAlphaChange($event)">
+                    <button (click)="swapPrimarySecondary()">Swap</button>
+                </td>
+        </table>
+    </section>
+    <!--<section>
+        <mat-slider min="0" max="1" step="0.01"  vertical="false"  [(ngModel)]="primaryAlpha" width="10px" (change)="primaryAlphaChange($event)"></mat-slider>
+        <mat-slider min="0" max="1" step="0.01"  vertical="false"
+        [(ngModel)]="secondaryAlpha" invert="true" (change)="secondaryAlphaChange($event)"></mat-slider>
+    </section>-->
+    

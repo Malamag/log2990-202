@@ -6,8 +6,12 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './components/app/app.component';
 import { ColorPickerComponent } from './components/app/color-picker/color-picker.component';
-import { MatSliderModule } from '@angular/material/slider';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TextFieldModule } from '@angular/cdk/text-field';
+import { MatCardModule } from '@angular/material/card'; 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSliderModule } from '@angular/material/slider';
 
 
 @NgModule({
@@ -16,9 +20,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         BrowserModule, 
         HttpClientModule, 
         BrowserAnimationsModule,
-        MatSliderModule,
         FormsModule,
         ReactiveFormsModule,
+        TextFieldModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatSliderModule,
         RouterModule.forRoot([
             { path: '', component: ColorPickerComponent}
         ])],
