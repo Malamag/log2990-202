@@ -6,3 +6,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+/*
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$polydessin-primary: mat-palette($mat-deep-orange);
+$polydessin-accent:  mat-palette($mat-blue, A200, A100, A400);
+
+
+$polydessin-warn:    mat-palette($mat-red);
+
+
+$polydessin-theme: mat-dark-theme($polydessin-primary, $polydessin-accent, $polydessin-warn);
+
+@include angular-material-theme($polydessin-theme);
+*/
