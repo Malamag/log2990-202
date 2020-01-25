@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CanvasBuilderService } from '../../services/services/drawing/canvas-builder.service';
-// import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-// import { dataInterface } from './dataInterface';
+
 
 @Component({
   selector: 'app-new-draw',
@@ -12,36 +11,39 @@ import { CanvasBuilderService } from '../../services/services/drawing/canvas-bui
 export class NewDrawComponent implements OnInit {
 
   newDrawForm: FormGroup;
+  
   width: number;
   height: number;
+  color: string;
 
   constructor(private formBuilder: FormBuilder,
-              private canvasBuilder: CanvasBuilderService,
-              /*public matDialog: MatDialogRef<NewDrawComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: dataInterface*/
-              ) { }
+              private canvasBuilder: CanvasBuilderService) { }
 
   ngOnInit() {
     this.initForm();
-    this.canvasBuilder.setDefaultSize();
-    this.height = this.canvasBuilder.defHeight;
-    this.width = this.canvasBuilder.defWidth;
+    this.width = this.canvasBuilder.getDefWidth();
+    this.height = this.canvasBuilder.getDefHeight();
+    this.color = this.canvasBuilder.getDefColor();
   }
+
+
 
   initForm() {
     this.newDrawForm = this.formBuilder.group({
-      canvWidth: ['', [this.canvasBuilder.isNumberValidator(), Validators.min(1)]], // TODO: ajouter validators
-      canvHeight: ['', [this.canvasBuilder.isNumberValidator(), Validators.min(1)]],
+      canvWidth: ['', Validators.pattern(/^\d+$/)], // accepts only positive integers
+      canvHeight: ['', Validators.pattern(/^\d+$/)], 
       canvColor: ['', Validators.pattern(/^[a-fA-F0-9]{6}$/)]
     });
   }
 
+
+
   onSubmit() {
     const values = this.newDrawForm.value;
 
-    const newDraw = this.canvasBuilder.makeNewCanvas(
-      values.canvWidth,
-      values.canvHeight,
+    const newDraw = this.canvasBuilder.getCanvasFromForm(
+      +values.canvWidth,
+      +values.canvHeight,
       values.canvColor
     );
     console.log(newDraw);
