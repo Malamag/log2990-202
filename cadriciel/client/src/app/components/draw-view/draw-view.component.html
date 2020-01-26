@@ -9,28 +9,29 @@
         </div>
         
     </mat-toolbar>
-    <mat-sidenav-container class="windowSplited">
-        <mat-sidenav mode ="side" [(opened)] = "toolsSideNav" height = "100%" disableClose>
+    <mat-sidenav-container class="firstSplit">
+        <mat-sidenav class= "toolsSideBar" mode ="side" opened height = "100%" disableClose fixedInViewPort>
             <div class= "drawingTools" *ngFor="let func of functionality; index as id">
                 <div *ngIf = "id >= 5">
-                    <button mat-mini-fab color="primary" matTooltip={{func.name}} matTooltipPosition = "after">
+                    <button mat-mini-fab color="primary" matTooltip={{func.name}} matTooltipPosition = "after" (click)= "openToolOptions = !openToolOptions">
                         <img src={{func.icon}}> 
                     </button>    
                 </div>
             </div>
         </mat-sidenav>
         
-        <div #expendedOptions class="expendedOptions">
-            <!-- here goes the inner HTML created by the typescript -->
-        </div>
-        <mat-sidenav-content>
+        <mat-sidenav class ="expendedOptions" mode ="side" position ="end" role="navigation" [opened] = openToolOptions>
 
+        </mat-sidenav>
+        <mat-sidenav-content role="region" psition="end">
+            
+            
             <div class ="workSpace">
                 <svg version="1.1" class="svgElem"
                 baseProfile="full"
                 [style.width]= width  [style.height]= height
                 xmlns="http://www.w3.org/2000/svg">
-                    <!--Here goes inner svg-->
+                    <!--Here goes inner svg -->
                     <rect width= "100%" height= "100%" fill= "white"/>
                     
                 </svg>

@@ -7,14 +7,14 @@ import {functionality} from '../../functionality'
 })
 export class DrawViewComponent implements OnInit {
   functionality = functionality
-  toolsSideNav = true;
+  openToolOptions: boolean = false;
   width: number;
   height: number;
   constructor() { }
 
   ngOnInit() {
-    this.width= 500;
-    this.height= 500;
+    this.width= 2000;
+    this.height= 1000;
     
   }
 

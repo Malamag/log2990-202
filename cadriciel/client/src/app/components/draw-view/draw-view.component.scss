@@ -12,25 +12,24 @@
 }
 
 .expendedOptions{
-    width : 10%
-
+    width : 10%;
+    background-color:darkblue;
 }
 .svgElem{
     position:relative;
-    object-position: right;
 }
 
-mat-sidenav{
+.toolsSideBar{
     width: 8vh;
     background-color: darkblue;
     height :100%
 }
-.windowSplitted{
-    height : 100%;
-}
-mat-sidenav-container{
+
+mat-sidenav-content{
     background-color: grey;
-    height:100%
+    height:100%;
+    
      
 }
+
 
