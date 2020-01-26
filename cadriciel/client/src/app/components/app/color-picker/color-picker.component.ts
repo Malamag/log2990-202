@@ -131,7 +131,7 @@ export class ColorPickerComponent {
         // there is 360 hue in hsl color
         let nColor : number = 360; 
         // setting hue break point at 15 hue => 24 color total for gradient use 
-        for(let i : number = 0; i < nColor; i+=15){
+        for(let i : number = 0; i < nColor; i+=20){
             this.cColors.push('hsla( ' + i + ', ' + this.currentSaturation + '%, ' + this.currentLightness + '%, 1 )');
         }
         
