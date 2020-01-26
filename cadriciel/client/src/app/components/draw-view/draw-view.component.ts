@@ -10,6 +10,7 @@ export class DrawViewComponent implements OnInit {
   openToolOptions: boolean = false;
   width: number;
   height: number;
+  selectedTool: string;
   constructor() { }
 
   ngOnInit() {
@@ -17,5 +18,8 @@ export class DrawViewComponent implements OnInit {
     this.height= 1000;
     
   }
-
+  buttonAction(name:string){
+    this.openToolOptions= !this.openToolOptions;
+    this.selectedTool= name;
+  }
 }

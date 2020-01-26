@@ -13,14 +13,16 @@
         <mat-sidenav class= "toolsSideBar" mode ="side" opened height = "100%" disableClose fixedInViewPort>
             <div class= "drawingTools" *ngFor="let func of functionality; index as id">
                 <div *ngIf = "id >= 5">
-                    <button mat-mini-fab color="primary" matTooltip={{func.name}} matTooltipPosition = "after" (click)= "openToolOptions = !openToolOptions">
+                    <button mat-mini-fab color="primary" matTooltip={{func.name}} matTooltipPosition = "after" (click)= "buttonAction(func.name)">
                         <img src={{func.icon}}> 
                     </button>    
                 </div>
             </div>
         </mat-sidenav>
         
+        
         <mat-sidenav class ="expendedOptions" mode ="side" position ="end" role="navigation" [opened] = openToolOptions>
+            <h1>  {{selectedTool}}</h1>
 
         </mat-sidenav>
         <mat-sidenav-content role="region" psition="end">
