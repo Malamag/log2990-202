@@ -29,6 +29,9 @@ export class ColorPickerComponent {
     secondaryG : string;
     secondaryB : string;
     secondaryAlpha : number;
+    primarySelect : any = true;
+    currentColorSelect : string = 'Primary';
+    currentAlpha : number;
     //Hue color circle attribut (c*name)
     cX : number;
     cY : number;
@@ -51,11 +54,11 @@ export class ColorPickerComponent {
     cursorLineWidth : number;
 
     //input style
-    RedLeftInput : string = '';
-    BlueLeftInput : string = '';
-    GreenLeftInput : string = '';
-    SaturationLeftInput : string = '';
-    LightnessLeftInput : string = '';
+    RedLeftInput : string = '255';
+    BlueLeftInput : string = '255';
+    GreenLeftInput : string = '255';
+    SaturationLeftInput : string = '100';
+    LightnessLeftInput : string = '50';
     RedRightInput : string = '';
     BlueRightInput : string = '';
     GreenRightInput : string = '';
@@ -67,9 +70,9 @@ export class ColorPickerComponent {
     ngOnInit() {
 
         // canvas parm init
-        this.canvasBgColor = 'lightgrey';
-        this.canvasHeigth = 100;//temp need to be a square
-        this.canvasWidth = 100;//temp
+        this.canvasBgColor = 'white';
+        this.canvasHeigth = 50;//temp need to be a square
+        this.canvasWidth = 50;//temp
         this.canvasId = 'color-picker';//temp
         
         // circle parm init
@@ -136,14 +139,14 @@ export class ColorPickerComponent {
 
     //Draw the canvas background color
     drawCanvasBg() : void {
-        let gradient = this.ctx.createRadialGradient(80, 50, 40, 80, 50, 100);
+        /*let gradient = this.ctx.createRadialGradient(80, 50, 40, 80, 50, 100);
         gradient.addColorStop(0, "lightcyan");
         gradient.addColorStop(1, "lightgrey");
         this.ctx.fillStyle = gradient;
-        this.ctx.fillRect( 0, 0, this.canvasWidth, this.canvasHeigth );
-        /*this.ctx.clearRect( 0, 0, this.canvasWidth, this.canvasHeigth );
-        this.ctx.fillStyle = this.canvasBgColor;
         this.ctx.fillRect( 0, 0, this.canvasWidth, this.canvasHeigth );*/
+        this.ctx.clearRect( 0, 0, this.canvasWidth, this.canvasHeigth );
+        this.ctx.fillStyle = this.canvasBgColor;
+        this.ctx.fillRect( 0, 0, this.canvasWidth, this.canvasHeigth );
     }
 
     //Draw the hue color circle selector 
@@ -210,12 +213,12 @@ export class ColorPickerComponent {
 
     // draw the saturation and lightness color square selector
     drawColorSquare() : void {
+        let factor = 100 / this.squareWidth // TODO : magic value 100 is basic square value
+        for ( let i : number = 0; i < this.squareWidth; i += 1 / factor ) {
+            for ( let j : number = 0; j < this.squareHeigth; j += 1 / factor ) {
 
-        for ( let i : number = 0; i < this.squareWidth; ++i ) {
-            for ( let j : number = 0; j < this.squareHeigth; ++j ) {
-
-                let s = ((i/this.squareWidth)*100)+'%';
-                let l = ((j/this.squareHeigth)*100)+'%' ;
+                let s = Math.round( ( ( i / this.squareWidth ) * 100 ) ) + '%';
+                let l = Math.round( ( ( j / this.squareHeigth ) * 100 ) ) + '%' ;
                 this.ctx.fillStyle = 'hsla( ' + this.currentHue + ', ' + s + ', ' + l + ', 1 )';
                 this.ctx.fillRect(this.sqrTopLeftX + i, this.sqrTopLeftY + j, 1, 1);//fill a 1x1 square
             }
@@ -243,9 +246,9 @@ export class ColorPickerComponent {
         // TODO : magic number?
         this.ctx.beginPath();
         
-        let gradient = this.ctx.createRadialGradient(80, 50, 40, 80, 50, 100);
-        gradient.addColorStop(0, "lightcyan");
-        gradient.addColorStop(1, "lightgrey");
+        //let gradient = this.ctx.createRadialGradient(80, 50, 40, 80, 50, 100);
+        //gradient.addColorStop(0, "lightcyan");
+        //gradient.addColorStop(1, "lightgrey");
         
         this.ctx.fillStyle = this.primaryColor;
         this.ctx.moveTo( ( this.canvasWidth * 0.1 ), ( this.canvasHeigth * 0.95 ) );
@@ -253,7 +256,7 @@ export class ColorPickerComponent {
                         , ( this.canvasWidth * 0.05 ), ( this.canvasHeigth * 0.75 ) , ( this.canvasWidth * 0.14 ) );
         this.ctx.lineTo( ( this.canvasWidth * 0.05 ), ( this.canvasHeigth * 0.95 ) );
         this.ctx.lineTo( ( this.canvasWidth * 0.1 ), ( this.canvasHeigth * 0.95 )  );
-        this.ctx.strokeStyle = gradient;
+        this.ctx.strokeStyle = this.canvasBgColor;
         this.ctx.lineWidth = this.canvasWidth * 0.05;
         this.ctx.stroke();
         
@@ -266,16 +269,16 @@ export class ColorPickerComponent {
         // TODO : magic number?
         this.ctx.beginPath();
         
-        let gradient = this.ctx.createRadialGradient(80, 50, 40, 80, 50, 100);
-        gradient.addColorStop(0, "lightcyan");
-        gradient.addColorStop(1, "lightgrey");
+        //let gradient = this.ctx.createRadialGradient(80, 50, 40, 80, 50, 100);
+        //gradient.addColorStop(0, "lightcyan");
+        //gradient.addColorStop(1, "lightgrey");
         this.ctx.fillStyle = this.secondaryColor;
         this.ctx.moveTo( ( this.canvasWidth * 0.90 ), ( this.canvasHeigth * 0.95 ) );
         this.ctx.arcTo( ( this.canvasWidth * 0.95 ), ( this.canvasHeigth * 0.95 ) 
                         , ( this.canvasWidth * 0.95 ), ( this.canvasHeigth * 0.75 ) , ( this.canvasWidth * 0.14 ) );
         this.ctx.lineTo( ( this.canvasWidth * 0.95 ), ( this.canvasHeigth * 0.95 ) );
         this.ctx.lineTo( ( this.canvasWidth * 0.9 ), ( this.canvasHeigth * 0.95 )  );
-        this.ctx.strokeStyle = gradient;
+        this.ctx.strokeStyle = this.canvasBgColor;
         this.ctx.lineWidth = this.canvasWidth * 0.05;
         this.ctx.stroke();
         
@@ -327,7 +330,7 @@ export class ColorPickerComponent {
             this.drawColorCircleCursor();
 
             this.drawColorSquare();
-            this.drawColorSquareCursor();
+            //this.drawColorSquareCursor();
 
             if ( event.button === 0 ) {
                 this.setPrimaryColor( rgbData.data[0], rgbData.data[1], rgbData.data[2] );
@@ -340,6 +343,7 @@ export class ColorPickerComponent {
             }
             this.drawPrimaryColor();
             this.drawSecondaryColor();
+            this.refreshDisplay();
         }
         
     }
@@ -470,48 +474,124 @@ export class ColorPickerComponent {
         this.currentSaturation = ( saturation * 100 );
     }
     
+    swapInputDisplay(event : any) {
+        if ( event.srcElement.checked ) {
+            this.primarySelect = true;
+        }
+        else {
+            this.primarySelect = false;
+        }
+        this.refreshDisplay();
+    }
+    refreshDisplay() : void {
+        if ( this.primarySelect ) {
+            this.RedLeftInput = this.primaryR;
+            this.GreenLeftInput = this.primaryG;
+            this.BlueLeftInput = this.primaryB;
+            this.rgbToHsl( parseFloat( this.primaryR ), parseFloat( this.primaryG ), parseFloat( this.primaryB ) );
+            this.currentColorSelect = 'Primary';
+        }
+        else {
+            this.RedLeftInput = this.secondaryR;
+            this.GreenLeftInput = this.secondaryG;
+            this.BlueLeftInput = this.secondaryB;
+            this.rgbToHsl( parseFloat( this.secondaryR ), parseFloat( this.secondaryG ), parseFloat( this.secondaryB ) );
+            this.currentColorSelect = 'Secondary';
+        }
+        this.SaturationLeftInput = '' + Math.round( this.currentSaturation );
+        this.LightnessLeftInput = '' + Math.round( this.currentLightness );
+    }
     // Red left input change
-    onRedLeftInput(event : KeyboardEvent) {
-        //TODO : condition fail proof
-        this.primaryR = this.RedLeftInput
-        //TODO redraw function
-        this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
-        this.rgbToHsl( parseFloat( this.primaryR ), parseFloat( this.primaryG ), parseFloat( this.primaryB ) );
-        this.drawCanvasBg();
-        this.drawColorCircle();
-        this.drawColorCircleCursor();
-        this.drawColorSquare();
-        this.drawColorSquareCursor();
-        this.drawPrimaryColor();
-        this.drawSecondaryColor();
+    onRedLeftInput() {
+        if ( this.primarySelect ) {
+            //TODO : condition fail proof
+            this.primaryR = this.RedLeftInput
+            //TODO redraw function
+            this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
+            this.rgbToHsl( parseFloat( this.primaryR ), parseFloat( this.primaryG ), parseFloat( this.primaryB ) );
+            this.drawCanvasBg();
+            this.drawColorCircle();
+            this.drawColorCircleCursor();
+            this.drawColorSquare();
+            //this.drawColorSquareCursor();
+            this.drawPrimaryColor();
+            this.drawSecondaryColor();
+        }
+        else{
+            //TODO : condition fail proof
+            this.secondaryR = this.RedLeftInput
+            //TODO redraw function
+            this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.primaryAlpha + ' )';
+            this.rgbToHsl( parseFloat( this.secondaryR ), parseFloat( this.secondaryG ), parseFloat( this.secondaryB ) );
+            this.drawCanvasBg();
+            this.drawColorCircle();
+            this.drawColorCircleCursor();
+            this.drawColorSquare();
+            //this.drawColorSquareCursor();
+            this.drawPrimaryColor();
+            this.drawSecondaryColor();
+        }
     }
-    onGreenLeftInput(event : KeyboardEvent) {
-        //TODO : condition fail proof
-        this.primaryG = this.GreenLeftInput
-        //TODO redraw function
-        this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
-        this.rgbToHsl( parseFloat( this.primaryR ), parseFloat( this.primaryG ), parseFloat( this.primaryB ) );
-        this.drawCanvasBg();
-        this.drawColorCircle();
-        this.drawColorCircleCursor();
-        this.drawColorSquare();
-        this.drawColorSquareCursor();
-        this.drawPrimaryColor();
-        this.drawSecondaryColor();
+    onGreenLeftInput() {
+        if ( this.primarySelect ) {
+            //TODO : condition fail proof
+            this.primaryG = this.GreenLeftInput
+            //TODO redraw function
+            this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
+            this.rgbToHsl( parseFloat( this.primaryR ), parseFloat( this.primaryG ), parseFloat( this.primaryB ) );
+            this.drawCanvasBg();
+            this.drawColorCircle();
+            this.drawColorCircleCursor();
+            this.drawColorSquare();
+            //this.drawColorSquareCursor();
+            this.drawPrimaryColor();
+            this.drawSecondaryColor();
+        }
+        else {
+            //TODO : condition fail proof
+            this.secondaryG = this.GreenLeftInput
+            //TODO redraw function
+            this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.primaryAlpha + ' )';
+            this.rgbToHsl( parseFloat( this.secondaryR ), parseFloat( this.secondaryG ), parseFloat( this.secondaryB ) );
+            this.drawCanvasBg();
+            this.drawColorCircle();
+            this.drawColorCircleCursor();
+            this.drawColorSquare();
+            //this.drawColorSquareCursor();
+            this.drawPrimaryColor();
+            this.drawSecondaryColor();
+        }
+       
     }
-    onBlueLeftInput(event : KeyboardEvent) {
-        //TODO : condition fail proof
-        this.primaryB = this.BlueLeftInput
-        //TODO redraw function
-        this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
-        this.rgbToHsl( parseFloat( this.primaryR ), parseFloat( this.primaryG ), parseFloat( this.primaryB ) );
-        this.drawCanvasBg();
-        this.drawColorCircle();
-        this.drawColorCircleCursor();
-        this.drawColorSquare();
-        this.drawColorSquareCursor();
-        this.drawPrimaryColor();
-        this.drawSecondaryColor();
+    onBlueLeftInput() {
+        if ( this.primarySelect ) {
+            //TODO : condition fail proof
+            this.primaryB = this.BlueLeftInput
+            //TODO redraw function
+            this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
+            this.rgbToHsl( parseFloat( this.primaryR ), parseFloat( this.primaryG ), parseFloat( this.primaryB ) );
+            this.drawCanvasBg();
+            this.drawColorCircle();
+            this.drawColorCircleCursor();
+            this.drawColorSquare();
+            //this.drawColorSquareCursor();
+            this.drawPrimaryColor();
+            this.drawSecondaryColor();
+        }
+        else {
+            //TODO : condition fail proof
+            this.secondaryB = this.GreenLeftInput
+            //TODO redraw function
+            this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.primaryAlpha + ' )';
+            this.rgbToHsl( parseFloat( this.secondaryR ), parseFloat( this.secondaryG ), parseFloat( this.secondaryB ) );
+            this.drawCanvasBg();
+            this.drawColorCircle();
+            this.drawColorCircleCursor();
+            this.drawColorSquare();
+            //this.drawColorSquareCursor();
+            this.drawPrimaryColor();
+            this.drawSecondaryColor();
+        }
     }
     onRedRightInput(event : KeyboardEvent) {
         //TODO : condition fail proof
@@ -528,16 +608,17 @@ export class ColorPickerComponent {
         this.drawSecondaryColor();
     }
     onGreenRightInput(event : KeyboardEvent) {
+        
         //TODO : condition fail proof
         this.secondaryG = this.GreenRightInput
         //TODO redraw function
         this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.primaryAlpha + ' )';
         this.rgbToHsl( parseFloat( this.secondaryR ), parseFloat( this.secondaryG ), parseFloat( this.secondaryB ) );
-        this.drawCanvasBg();
+        //this.drawCanvasBg();
         this.drawColorCircle();
         this.drawColorCircleCursor();
         this.drawColorSquare();
-        this.drawColorSquareCursor();
+        //this.drawColorSquareCursor();
         this.drawPrimaryColor();
         this.drawSecondaryColor();
     }
@@ -555,32 +636,65 @@ export class ColorPickerComponent {
         this.drawPrimaryColor();
         this.drawSecondaryColor();
     }
-    onSaturationLeftInput(event : KeyboardEvent) {
-       //TODO : condition fail proof
-        this.currentSaturation = parseFloat( this.SaturationLeftInput );
-        
-        //TODO : hsl to rgb
-        //TODO redraw function
-        this.drawCanvasBg();
-        this.drawColorCircle();
-        this.drawColorCircleCursor();
-        this.drawColorSquare();
-        this.drawColorSquareCursor();
-        this.drawPrimaryColor();
-        this.drawSecondaryColor();
+    onSaturationLeftInput() {
+        if ( this.primarySelect ) {
+            //TODO : condition fail proof
+            this.currentSaturation = parseFloat( this.SaturationLeftInput );
+            
+            //TODO : hsl to rgb
+            //TODO redraw function
+            //this.drawCanvasBg();
+            //this.drawColorCircle();
+            //this.drawColorCircleCursor();
+            //this.drawColorSquare();
+            //this.drawColorSquareCursor();
+            this.drawPrimaryColor();
+            //this.drawSecondaryColor();
+        }
+        else{
+            //TODO : condition fail proof
+            this.currentSaturation = parseFloat( this.SaturationRightInput );
+            
+            //TODO : hsl to rgb
+            //TODO redraw function
+            //this.drawCanvasBg();
+            //this.drawColorCircle();
+            //this.drawColorCircleCursor();
+            //this.drawColorSquare();
+            //this.drawColorSquareCursor();
+            //this.drawPrimaryColor();
+            this.drawSecondaryColor();
+        }
     }
-    onLightnessLeftInput(event : KeyboardEvent) {
-        //TODO : condition fail proof
-        this.currentLightness = parseFloat( this.LightnessLeftInput );
-        //TODO : hsl to rgb
-        //TODO redraw function
-        this.drawCanvasBg();
-        this.drawColorCircle();
-        this.drawColorCircleCursor();
-        this.drawColorSquare();
-        this.drawColorSquareCursor();
-        this.drawPrimaryColor();
-        this.drawSecondaryColor();
+    onLightnessLeftInput() {
+        if ( this.primarySelect ) {
+            //TODO : condition fail proof
+            this.currentLightness = parseFloat( this.LightnessLeftInput );
+            //TODO : hsl to rgb
+            //TODO redraw function
+            
+            //this.drawCanvasBg();
+            //this.drawColorCircle();
+            //this.drawColorCircleCursor();
+            //this.drawColorSquare();
+            //this.drawColorSquareCursor();
+            this.drawPrimaryColor();
+            //this.drawSecondaryColor();
+        }
+        else{
+            //TODO : condition fail proof
+            this.currentLightness = parseFloat( this.LightnessRightInput );
+            //TODO : hsl to rgb
+            //TODO redraw function
+            //this.drawCanvasBg();
+            //this.drawColorCircle();
+            //this.drawColorCircleCursor();
+            //this.drawColorSquare();
+            //this.drawColorSquareCursor();
+            //this.drawPrimaryColor();
+            this.drawSecondaryColor();
+        }
+        
     }
     onSaturationRightInput(event : KeyboardEvent) {
         //TODO : condition fail proof
@@ -611,7 +725,7 @@ export class ColorPickerComponent {
     }
     //temp style TODO move to CSS?
     get myInputStylesRL(): any {
-        return { 'background': 'linear-gradient(to right, red, orange, yellow)', 
+        return {'background': 'linear-gradient(to right, red, orange, yellow)', 
                 '-webkit-background-clip': 'text',
                 '-webkit-text-fill-color': 'transparent'};
     }
@@ -640,13 +754,40 @@ export class ColorPickerComponent {
                 '-webkit-background-clip': 'text',
                 '-webkit-text-fill-color': 'transparent'};
     }
-    
+    get myInputStylesL(): any {
+        return {'background': 'linear-gradient(to right, black, white)', 
+                '-webkit-background-clip': 'text',
+                '-webkit-text-fill-color': 'transparent'};
+    }
+    get myInputStylesS(): any {
+        return {'background': 'linear-gradient(to right, black, white)', 
+                '-webkit-background-clip': 'text',
+                '-webkit-text-fill-color': 'transparent'};
+    }
+    get myInputStylesO(): any {
+        return {'background': 'linear-gradient(to right, black, white)', 
+                '-webkit-background-clip': 'text',
+                '-webkit-text-fill-color': 'transparent'};
+    }
+    get myInputStylesHex(): any {
+        return {'background': 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)', 
+                '-webkit-background-clip': 'text',
+                '-webkit-text-fill-color': 'transparent'};
+    }
     
 
     // change primary alpha when primary slide change
     primaryAlphaChange() : void {
-        this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
-        this.drawPrimaryColor();
+        if ( this.primarySelect ) {
+            this.primaryAlpha = this.currentAlpha;
+            this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
+            this.drawPrimaryColor();
+        }
+        else {
+            this.secondaryAlpha = this.currentAlpha;
+            this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.secondaryAlpha + ' )';
+            this.drawSecondaryColor();
+        }
     }
 
     // change secondary alpha when secondary slide change

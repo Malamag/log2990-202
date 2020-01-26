@@ -1,5 +1,5 @@
 <!-- TODO : property binding? need to garantie square shape-->
-    <section style="background-color: lightgray;width: 165px;">
+    <!--<section style="background-color: lightgray;width: 165px;">
         
         <table>
             <tr>
@@ -42,6 +42,45 @@
                 </td>
         </table>
     </section>
+-->
+<section style="background-color: lightgray;width: 55px;">
+        
+    <table>
+        <tr>
+            
+            <td>
+                <canvas id="color-picker" height="50" width="50" (mousedown)="colorSelector($event)">
+                </canvas>
+            </td>  
+            
+            <tr class="leftInput" style="display: inlane-block;">
+                <label class="switch">
+                    <input type="checkbox" checked (click)="swapInputDisplay($event)">
+                    <span class="slider round" (click)="swapPrimarySecondary"></span>
+                </label>
+                <label (click)=(swapPrimarySecondary())>&nbsp;&nbsp;&nbsp;&nbsp;{{currentColorSelect}}</label>
+            </tr>
+            <tr>
+                <label>Hex &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0x</label>
+                <input type="text" maxlength="6" placeholder="ffffff"style="border-bottom: 1px solid black;"[ngStyle]="myInputStylesHex">
+                <label><font color="red">Red&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{RedLeftInput}}</font></label>
+                <input type="range" min="0" step="1" max="255" [(ngModel)]="RedLeftInput" (change)="onRedLeftInput($event)" [ngStyle]="myInputStylesRL">
+                <label><font color="green">Green&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{GreenLeftInput}}</font></label>
+                <input type="range" min="0" step="1" max="255" [(ngModel)]="GreenLeftInput" (change)="onGreenLeftInput($event)" [ngStyle]="myInputStylesGL">
+                <label><font color="blue">Blue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{BlueLeftInput}}</font></label>
+                <input type="range" min="0" step="1" max="255" [(ngModel)]="BlueLeftInput" (change)="onBlueLeftInput($event)" [ngStyle]="myInputStylesBL">
+                <label>Saturation&nbsp;&nbsp;{{SaturationLeftInput}}%</label>
+                <input type="range" min="0" step="1" max="100" [(ngModel)]="SaturationLeftInput" (change)="onSaturationLeftInput($event)" [ngStyle]="myInputStylesL">
+                <label>Lightness&nbsp;&nbsp;&nbsp;&nbsp;{{LightnessLeftInput}}%</label>
+                <input type="range" min="0" step="1" max="100" [(ngModel)]="LightnessLeftInput" (change)="onLightnessLeftInput($event)" [ngStyle]="myInputStylesS">
+                <label>Opacity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{currentAlpha}}</label>
+                <input type="range" min="0" step="0.01" max="1" [(ngModel)]="currentAlpha" (change)="primaryAlphaChange()" [ngStyle]="myInputStylesO">
+                <button (click)="swapPrimarySecondary()">Swap</button>
+                
+            </tr>
+              
+    </table>
+</section>
     <!--<section>
         <mat-slider min="0" max="1" step="0.01"  vertical="false"  [(ngModel)]="primaryAlpha" width="10px" (change)="primaryAlphaChange($event)"></mat-slider>
         <mat-slider min="0" max="1" step="0.01"  vertical="false"
