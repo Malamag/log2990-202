@@ -35,10 +35,21 @@ export const functionality = [
         icon :"close",  
     },
     {
+        name: "sélectionner",
+        shortcutName:"sélectionner",
+        shortDescription:"text goes here",
+        description: "text goes here",
+        /* source: <div>Icons made by <a href="https://www.flaticon.com/authors/those-icons" 
+        title="Those Icons">Those Icons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>*/
+        icon: "../../../assets/images/cursor.png",
+    },
+    {
         name : "crayon",
         shortcutName: "crayon",
         shortDescription:"text goes here",
         description: "text goes here",
+        /* source: <div>Icons made by <a href="https://www.flaticon.com/authors/those-icons" 
+        title="Those Icons">Those Icons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> */
         icon :"../../../assets/images/pencil.png",  
     },
     {
@@ -46,6 +57,8 @@ export const functionality = [
         shortcutName:"rectangle",
         shortDescription:"text goes here",
         description: "text goes here",
+        /* source: <div>Icons made by <a href="https://www.flaticon.com/authors/google" 
+        title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>*/
         icon: "../../../assets/images/frame.png"
     },
     {
@@ -53,6 +66,8 @@ export const functionality = [
         shortcutName:"plume",
         shortDescription:"text goes here",
         description: "text goes here",
+        /*source: <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" 
+        title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>*/ 
         icon: "../../../assets/images/calligraphie.png",
     },
     {
@@ -60,7 +75,88 @@ export const functionality = [
         shortcutName:"outil couleur",
         shortDescription:"text goes here",
         description: "text goes here",
+        /* source: <div>Icons made by <a href="https://www.flaticon.com/authors/freepik"
+         title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>*/
         icon: "../../../assets/images/exclude.png",
+    },
+
+    {
+        name: "élipse",
+        shortcutName:"élipse",
+        shortDescription:"text goes here",
+        description: "text goes here",
+        /* source:uIcons made by <a href="https://www.flaticon.com/authors/freepik"
+        title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
+        icon: "../../../assets/images/oval.png",
+    },
+
+    {
+        name: "ligne",
+        shortcutName:"ligne",
+        shortDescription:"text goes here",
+        description: "text goes here",
+        /* source : Icons made by <a href="https://www.flaticon.com/authors/google"
+        title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/ 
+        icon: "../../../assets/images/graph.png",
+    },
+
+    {
+        name: "chemin",
+        shortcutName:"chemin",
+        shortDescription:"text goes here",
+        description: "text goes here",
+        /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik" 
+        title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
+        icon: "../../../assets/images/timeline.png",
+    },
+
+    {
+        name: "pinceau",
+        shortcutName:"pinceau",
+        shortDescription:"text goes here",
+        description: "text goes here",
+        /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik" 
+        title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
+        icon: "../../../assets/images/edit-tools.png",
+    },
+
+    {
+        name: "efface",
+        shortcutName:"efface",
+        shortDescription:"text goes here",
+        description: "text goes here",
+        /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik"
+         title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
+        icon: "../../../assets/images/eraser.png",
+    },
+
+    {
+        name: "polygone",
+        shortcutName:"polygone",
+        shortDescription:"text goes here",
+        description: "text goes here",
+        /* source: Icons made by <a href="https://www.flaticon.com/authors/retinaicons"
+         title="Retinaicons">Retinaicons</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
+        icon: "../../../assets/images/hexagon.png",
+    },
+    {
+        name: "pipette",
+        shortcutName:"pipette",
+        shortDescription:"text goes here",
+        description: "text goes here",
+        /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik"
+         title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
+        icon: "../../../assets/images/lab.png",
+    },
+
+    {
+        name: "Aérosol",
+        shortcutName:"Aérosol",
+        shortDescription:"text goes here",
+        description: "text goes here",
+        /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik"
+         title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
+        icon: "../../../assets/images/spray.png",
     },
     
 ];
