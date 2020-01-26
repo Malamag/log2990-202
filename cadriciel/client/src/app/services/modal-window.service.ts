@@ -22,7 +22,7 @@ export class ModalWindowService {
     this.dialogConfig.height = 'auto';
     this.dialogConfig.width = 'auto';
 
-    
+    this.dialogConfig.restoreFocus = false; 
   }
 
   openWindow(component: ComponentType<any>) { // opens any modal window given as argument (by component type)
