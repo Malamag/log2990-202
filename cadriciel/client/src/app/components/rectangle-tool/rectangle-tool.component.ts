@@ -47,7 +47,7 @@ export class RectangleToolComponent implements OnInit{
 
   }
   createRectangle(){
-      const rectangle = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+      const rectangle = this.renderer.createElement( "rect", "http://www.w3.org/2000/svg" )
       
       rectangle.setAttribute("height", Math.abs(this.height).toString());
       rectangle.setAttribute("width", Math.abs(this.width).toString());
