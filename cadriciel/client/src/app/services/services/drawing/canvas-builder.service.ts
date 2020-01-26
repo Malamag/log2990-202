@@ -11,9 +11,16 @@ import { Subject } from 'rxjs';
 })
 export class CanvasBuilderService {
 
+  defWidht: number;
+  defHeight: number;
+
   newCanvas: Canvas;
   canvSubject = new Subject<Canvas>(); // using rxjs to emit the created canvas to another component
 
+  constructor() {
+    this.defWidht = this.getDefWidth();
+    this.defHeight = this.getDefHeight();
+  }
 
   getDefWidth(): number {
     return window.innerWidth;
@@ -31,11 +38,11 @@ export class CanvasBuilderService {
   getCanvasFromForm(widthInput: number, heightInput: number, colorInput: string): Canvas {
 
     if (widthInput === 0) { // a 0 value means no input by the user
-      widthInput = this.getDefWidth();
+      widthInput = this.defWidht;
     }
 
     if (heightInput === 0) {
-      heightInput = this.getDefHeight();
+      heightInput = this.defHeight;
     }
 
     if (colorInput === '') {
