@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import {functionality} from '../../functionality'
 @Component({
   selector: 'app-draw-view',
@@ -11,6 +11,8 @@ export class DrawViewComponent implements OnInit {
   width: number;
   height: number;
   selectedTool: string;
+  @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
+  renderer: Renderer2
   constructor() { }
 
   ngOnInit() {
@@ -22,4 +24,5 @@ export class DrawViewComponent implements OnInit {
     this.openToolOptions= !this.openToolOptions;
     this.selectedTool= name;
   }
+
 }
