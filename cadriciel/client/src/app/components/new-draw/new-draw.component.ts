@@ -30,8 +30,8 @@ export class NewDrawComponent implements OnInit {
 
   initForm() {
     this.newDrawForm = this.formBuilder.group({
-      canvWidth: ['', Validators.pattern(/^\d+$/)], // accepts only positive integers
-      canvHeight: ['', Validators.pattern(/^\d+$/)], 
+      canvWidth: ['', [Validators.pattern(/^\d+$/), Validators.min(1)]], // accepts only positive integers
+      canvHeight: ['', [Validators.pattern(/^\d+$/), Validators.min(1)]], 
       canvColor: ['', Validators.pattern(/^[a-fA-F0-9]{6}$/)]
     });
   }
