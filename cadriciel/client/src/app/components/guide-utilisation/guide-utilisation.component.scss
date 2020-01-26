@@ -8,52 +8,67 @@ article {
 
 nav,article{
   height: 80vh;
+  overflow-y: auto;
 }
-
-/* Clear floats after the columns */
+/*
 section:after {
     content: "";
     display: table;
     clear: both;
 }
-nav {
+*/
+
+#guideLinkBar {
     float: left;
     width: 20%;
     background: rgb(205, 205, 205);
 }
-  
-@media (max-width: 700px) {
+/*
+@media (max-width: 300px) {
     nav, article {
       width: 100%;
       height: auto;
     }
 }
-
+*/
 *{
     box-sizing: border-box;
 }
 
-#modal-quit-button {
+#guideQuitButton {
   float: right;
   background-color: red;
 }
 
-#guide-title {
+#guideTitle {
   float: left;
 }
-#modal-header {
+
+#guideHeader {
   overflow: hidden;
-  background-color: #6681a5;
+  background-color: #4d7fc2;
   padding-left: 10px;
 }
 
-li {
-  list-style-type: none;
+.guide-selection-button {
+  width: 100%;
+  background-color: rgb(205, 205, 205);
+  border-radius: 0px;
+  text-align: left;
 }
 
-#previous-button{
+#previousButton{
   float: left;
 }
-#next-button{
+#nextButton{
   float: right;
 }
+
+button:hover {
+  background-color: rgb(150, 150, 150);
+}
+/*
+button:active {
+  background-color: rgb(150, 150, 150);
+}
+*/

@@ -6,16 +6,15 @@ import { GuideUtilisationComponent } from '../../components/guide-utilisation/gu
   providedIn: 'root'
 })
 
-
-
 export class ModalWindowService {
+
   // Construct a modal window depending of the desired component
   constructor(public dialog: MatDialog, public modalComponent:String) {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.id = "ModalWindow";
-    dialogConfig.height = '100%';
-    dialogConfig.width = '99%';
+    dialogConfig.disableClose = false;
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.id = "modalWindow";
+    dialogConfig.minWidth = '500px';
     if (modalComponent == "guide") {
       this.dialog.open(GuideUtilisationComponent, dialogConfig);
     }

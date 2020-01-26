@@ -1,18 +1,36 @@
-<div><header id="modal-header">
-    <h1 id="guide-title">Guide d'utilisation</h1>
-    <button mat-raised-button id="modal-quit-button" (click)="closeModal()">X</button>
-  </header></div>
+<div><header id="guideHeader">
+    <h1 id="guideTitle">Guide d'utilisation</h1>
+    <button mat-raised-button id="guideQuitButton" (click)="closeModal()">X</button>
+  </header>
+</div>
 
-<section>
-    <nav>
-      <ul>
-        <li><a href="#">Bienvenue</a></li>
-        <li><a href="#">Outils</a></li>
-        <li><a href="#">Fichiers</a></li>
-      </ul>
+<section id = 'guideSection'>
+    <nav id = 'guideLinkBar'>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
+        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
+        
     </nav>
     
-    <article>
+    <article id = 'guideContent'>
       <h2>Bienvenue</h2>
       <p>
         Yooo on écrit des gros paragraphes ici.
@@ -31,13 +49,9 @@
         Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
       </p>
       <div>        
-        <button mat-raised-button id="previous-button" (click)="previousPage()">Précédent</button>
-        <button mat-raised-button id="next-button" (click)="nextPage()">Suivant</button>
+        <button mat-raised-button id="previousButton" (click)="previousPage()">Précédent</button>
+        <button mat-raised-button id="nextButton" (click)="nextPage()">Suivant</button>
       </div>
     </article>
   </section>
-  
-  <footer>
-    <p>Footer</p>
-  </footer>
   
