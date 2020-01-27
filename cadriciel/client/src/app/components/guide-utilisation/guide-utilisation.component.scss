@@ -57,6 +57,10 @@ section:after {
   text-align: left;
 }
 
+.toolButton {
+  display: none;
+}
+
 #previousButton{
   float: left;
 }
@@ -67,8 +71,4 @@ section:after {
 button:hover {
   background-color: rgb(150, 150, 150);
 }
-/*
-button:active {
-  background-color: rgb(150, 150, 150);
-}
-*/
+

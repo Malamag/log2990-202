@@ -3,31 +3,27 @@
     <button mat-raised-button id="guideQuitButton" (click)="closeModal()">X</button>
   </header>
 </div>
-
 <section id = 'guideSection'>
+
     <nav id = 'guideLinkBar'>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Outils</button>
-        <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Fichiers</button>
-        
+      <!-- Makes a Welcome button -->
+      <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
+      <div *ngFor = "let func of functionality; index as id">
+        <!-- Make buttons for all main menu options (except utilisation guide) -->
+        <div *ngIf = "id < 2">
+          <button mat-raised-button class="guide-selection-button" (click)="previousPage()">{{func.shortcutName}}</button>
+        </div>
+        <div *ngIf = "id == 3">
+          <button mat-raised-button class="guide-selection-button" (click)="previousPage()">{{func.shortcutName}}</button>
+          <button mat-raised-button id="{{func.shortcutName}}" class="guide-selection-button" (click)="toolsListButton()">Outils</button>
+        </div>
+        <!-- Make buttons for all tools: functionality #7 to end -->
+        <div >
+          <div *ngIf = "id > 5" >
+            <button mat-raised-button class="guide-selection-button toolButton" (click)="previousPage()">{{func.shortcutName}} </button>
+          </div>
+        </div>
+      </div>
     </nav>
     
     <article id = 'guideContent'>
