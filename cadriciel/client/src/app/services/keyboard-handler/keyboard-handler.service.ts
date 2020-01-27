@@ -10,10 +10,8 @@ export class KeyboardHandlerService {
   ctrlDown:boolean
   shiftDown:boolean;
   observers:any[];
-  old:KeyboardEvent;
 
   constructor() {
-
     this.keyString = "";
     this.keyCode = -1;
     this.observers = [];
@@ -25,23 +23,19 @@ export class KeyboardHandlerService {
 
   updateObservers(){
     this.observers.forEach(element => {
-      element.update();
+      element.update(this);
     });
   }
 
   logkey(e:KeyboardEvent){
-    if(this.old != e){
-      this.keyString = e.key;
-      this.keyCode = e.keyCode;
-      this.ctrlDown = e.ctrlKey;
-      this.shiftDown = e.shiftKey;
-      this.updateObservers();
-    }
+    this.keyString = e.key;
+    this.keyCode = e.keyCode;
+    this.ctrlDown = e.ctrlKey;
+    this.shiftDown = e.shiftKey;
+    this.updateObservers();
   }
 
   reset(e:KeyboardEvent){
-    this.old = e;
-
     if(e.keyCode == 17){
       this.ctrlDown = false;
     }

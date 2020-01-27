@@ -8,27 +8,25 @@ export class DrawToolService {
 
   keyboard:KeyboardHandlerService;
 
-  constructor(keyboard:KeyboardHandlerService) { 
-
-    this.keyboard = keyboard;
+  constructor() { 
 
   }
 
   CreatePencil(_svg:HTMLElement | null,_workingSpace:HTMLElement | null, mouseX:number, mouseY:number,selected:boolean, width:number, primary_color:number){
-    return new PencilTool(this.keyboard,_svg,_workingSpace,mouseX,mouseY,selected,width,primary_color);
+    return new PencilTool(_svg,_workingSpace,mouseX,mouseY,selected,width,primary_color);
   }
 
   CreateRectangle(_svg:HTMLElement | null,_workingSpace:HTMLElement | null, mouseX:number, mouseY:number,selected:boolean, width:number, primary_color:number, secondary_color:number){
-    return new RectangleTool(this.keyboard,_svg,_workingSpace,mouseX,mouseY,selected,width,primary_color,secondary_color);
+    return new RectangleTool(_svg,_workingSpace,mouseX,mouseY,selected,width,primary_color,secondary_color);
   }
 
   CreateLine(_svg:HTMLElement | null,_workingSpace:HTMLElement | null, mouseX:number, mouseY:number,selected:boolean, width:number, primary_color:number,showJunctions:boolean){
-    return new LineTool(this.keyboard,_svg,_workingSpace,mouseX,mouseY,selected,width,primary_color, showJunctions);
+    return new LineTool(_svg,_workingSpace,mouseX,mouseY,selected,width,primary_color, showJunctions);
   }
 }
 
 abstract class Observer{
-  abstract update():void;
+  abstract update(keyboard:KeyboardHandlerService):void;
 }
 
 class Point{
@@ -41,12 +39,12 @@ class Point{
 }
 
 abstract class DrawingTool extends Observer{
-  keyboard:KeyboardHandlerService;
   _svg:HTMLElement | null;
   _workingSpace:HTMLElement | null;
   _svgBox:ClientRect;
   startedInsideWorkSpace:boolean;
   isDown:boolean;
+  clickedInside:boolean;
   currentX:number;
   currentY:number;
   currentPath:Point[];
@@ -56,11 +54,9 @@ abstract class DrawingTool extends Observer{
   width:number;
   primary_color:number;
 
-  constructor(keyboard:KeyboardHandlerService,_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number){
+  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number){
     
     super();
-
-    this.keyboard = keyboard;
     
     this._svg = _svg;
     this._workingSpace = _workingSpace
@@ -69,6 +65,7 @@ abstract class DrawingTool extends Observer{
     }
     this.startedInsideWorkSpace = false;
     this.isDown = false;
+    this.clickedInside = false;
     this.mouseX = mouseX;
     this.mouseY = mouseY;
     this.selected = selected;
@@ -85,26 +82,11 @@ abstract class DrawingTool extends Observer{
 
 class PencilTool extends DrawingTool{
 
-  keyboard:KeyboardHandlerService;
-  _svg:HTMLElement | null;
-  _workingSpace:HTMLElement | null;
-  _svgBox:ClientRect;
-  startedInsideWorkSpace:boolean;
-  isDown:boolean;
-  currentX:number;
-  currentY:number;
-  currentPath:Point[];
-  mouseX:number;
-  mouseY:number;
-  selected:boolean;
-  width:number;
-  primary_color:number;
-
-  constructor(keyboard:KeyboardHandlerService,_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number){
-    super(keyboard,_svg, _workingSpace, mouseX, mouseY,selected,width,primary_color);
+  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number){
+    super(_svg, _workingSpace, mouseX, mouseY,selected,width,primary_color);
   }
 
-  update(){
+  update(keyboard:KeyboardHandlerService){
     console.log("update on pencil");
   }
 
@@ -124,9 +106,11 @@ class PencilTool extends DrawingTool{
       this.currentPath.push(new Point(this.currentX,this.currentY));
       let d : string = "";
       d+= this.createPath(this.currentPath);
+      /*
       if(this._svg){
-        this._svg.getElementsByTagName("g")[1].innerHTML = d;
-      }
+        
+      }*/
+      document.getElementsByName("in-progress")[0].innerHTML = d;
     }
   }
   up(){
@@ -136,8 +120,8 @@ class PencilTool extends DrawingTool{
       this.isDown = false;
       let d : string = "";
       d+= this.createPath(this.currentPath);
-      document.getElementsByTagName("g")[0].innerHTML += d;
-      document.getElementsByTagName("g")[1].innerHTML = "";
+      document.getElementsByName("drawing")[0].innerHTML += "<g name=\"pencil-stroke\">" + d + "</g>";
+      document.getElementsByName("in-progress")[0].innerHTML = "";
       this.currentPath = [];
     }
   }
@@ -151,7 +135,7 @@ class PencilTool extends DrawingTool{
         this.currentPath.push(new Point(this.currentX, this.currentY));
         let d : string = "";
         d+= this.createPath(this.currentPath);
-        document.getElementsByTagName("g")[1].innerHTML = d;
+        document.getElementsByName("in-progress")[0].innerHTML = d;
       }
     }
   }
@@ -175,34 +159,24 @@ class PencilTool extends DrawingTool{
 }
 
 class RectangleTool extends DrawingTool{
-  keyboard:KeyboardHandlerService;
-  _svg:HTMLElement | null;
-  _workingSpace:HTMLElement | null;
-  _svgBox:ClientRect;
-  startedInsideWorkSpace:boolean;
-  isDown:boolean;
-  currentX:number;
-  currentY:number;
-  currentPath:Point[];
-  mouseX:number;
-  mouseY:number;
-  selected:boolean;
-  width:number;
-  primary_color:number;
   secondary_color:number;
+  isSquare:boolean;
 
-  constructor(keyboard:KeyboardHandlerService,_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number,secondary_color:number){
-    super(keyboard,_svg, _workingSpace, mouseX, mouseY,selected,width,primary_color);
+  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number,secondary_color:number){
+    super(_svg,_workingSpace, mouseX, mouseY,selected,width,primary_color);
     this.secondary_color = secondary_color;
+    this.isSquare = false;
   }
 
-  update(){
+  update(keyboard:KeyboardHandlerService){
     console.log("update on rectangle");
+
+    this.isSquare = keyboard.shiftDown;
 
     if(this.isDown){
       let d : string = "";
       d+= this.createPath(this.currentPath);
-      document.getElementsByTagName("g")[1].innerHTML = d;
+      document.getElementsByName("in-progress")[0].innerHTML = d;
     }
   }
 
@@ -222,9 +196,11 @@ class RectangleTool extends DrawingTool{
       this.currentPath.push(new Point(this.currentX,this.currentY));
       let d : string = "";
       d+= this.createPath(this.currentPath);
+      /*
       if(this._svg){
-        this._svg.getElementsByTagName("g")[1].innerHTML = d;
-      }
+        
+      }*/
+      document.getElementsByName("in-progress")[0].innerHTML = d;
     }
   }
   up(){
@@ -234,8 +210,8 @@ class RectangleTool extends DrawingTool{
       this.isDown = false;
       let d : string = "";
       d+= this.createPath(this.currentPath);
-      document.getElementsByTagName("g")[0].innerHTML += d;
-      document.getElementsByTagName("g")[1].innerHTML = "";
+      document.getElementsByName("drawing")[0].innerHTML += d;
+      document.getElementsByName("in-progress")[0].innerHTML = "";
       this.currentPath = [];
     }
   }
@@ -249,16 +225,12 @@ class RectangleTool extends DrawingTool{
         this.currentPath.push(new Point(this.currentX, this.currentY));
         let d : string = "";
         d+= this.createPath(this.currentPath);
-        document.getElementsByTagName("g")[1].innerHTML = d;
+        document.getElementsByName("in-progress")[0].innerHTML = d;
       }
     }
   }
   doubleClick(){
-    //mouse doubleClick with pencil in hand
-    this.down();
-    this.up();
-    this.down();
-    this.up();
+    //mouse doubleClick with rectangle in hand
   }
   createPath(p:Point[]){
 
@@ -273,7 +245,7 @@ class RectangleTool extends DrawingTool{
     let startX = w > 0 ? p[0].x : p[p.length-1].x;
     let startY = h > 0 ? p[0].y : p[p.length-1].y;
 
-    if(this.keyboard.shiftDown){
+    if(this.isSquare){
       let smallest = Math.abs(w) < Math.abs(h)? Math.abs(w) : Math.abs(h);
       w = smallest * Math.sign(w);
       h = smallest * Math.sign(h);
@@ -281,35 +253,25 @@ class RectangleTool extends DrawingTool{
       startX = w > 0 ? p[0].x : p[0].x - smallest;
       startY = h > 0 ? p[0].y : p[0].y - smallest;
     }
-    
-    let _s = `<rect x=\"${startX}\" y=\"${startY}\" width=\"${Math.abs(w)}\" height=\"${Math.abs(h)}\" fill="blue"/>`;
+    let _s = "<g name = \"rectangle\">";
+    _s += `<rect x=\"${startX}\" y=\"${startY}\" width=\"${Math.abs(w)}\" height=\"${Math.abs(h)}\" fill="blue"/>`;
+    _s+= "</g>"
+    if(w == 0 || h == 0){
+      _s = "";
+    }
     return _s;
   }
 }
 
 class LineTool extends DrawingTool{
-  keyboard:KeyboardHandlerService;
-  _svg:HTMLElement | null;
-  _workingSpace:HTMLElement | null;
-  _svgBox:ClientRect;
-  startedInsideWorkSpace:boolean;
-  isDown:boolean;
-  currentX:number;
-  currentY:number;
-  currentPath:Point[];
-  mouseX:number;
-  mouseY:number;
-  selected:boolean;
-  width:number;
-  primary_color:number;
   showJunctions:boolean;
 
-  constructor(keyboard:KeyboardHandlerService,_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number, showJunctions:boolean){
-    super(keyboard,_svg, _workingSpace, mouseX, mouseY,selected,width,primary_color);
+  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number, showJunctions:boolean){
+    super(_svg,_workingSpace, mouseX, mouseY,selected,width,primary_color);
     this.showJunctions = showJunctions;
   }
 
-  update(){
+  update(keyboard:KeyboardHandlerService){
     console.log("update on line");
   }
 
@@ -317,7 +279,7 @@ class LineTool extends DrawingTool{
     //mouse down with line in hand
 
     if(this.mouseX - this._svgBox.left + (this._workingSpace? this._workingSpace.scrollLeft : 0) >= this._svgBox.left && this.mouseY - this._svgBox.top + (this._workingSpace? this._workingSpace.scrollTop : 0) >= this._svgBox.top){
-      
+      this.clickedInside = true;
       console.log("-----CLICKED WITH LINE-----");
       this.currentX = this.mouseX - this._svgBox.left + (this._workingSpace? this._workingSpace.scrollLeft : 0);
       this.currentY = this.mouseY - this._svgBox.top + (this._workingSpace? this._workingSpace.scrollTop : 0);
@@ -332,13 +294,19 @@ class LineTool extends DrawingTool{
         });
       }
 
+      /*
       if(this._svg){
-        this._svg.getElementsByTagName("g")[1].innerHTML = d;
-      }
+        
+      }*/
+
+      document.getElementsByName("in-progress")[0].innerHTML = d;
+
       console.log(this.currentPath);
 
       this.isDown = true;
 
+    }else{
+      this.clickedInside = false;
     }
   }
   up(){
@@ -366,37 +334,45 @@ class LineTool extends DrawingTool{
         });
       }
 
-      document.getElementsByTagName("g")[1].innerHTML = d;
+      document.getElementsByName("in-progress")[0].innerHTML = d;
     }
   }
   doubleClick(){
     //mouse doubleClick with line in hand
       console.log("DOUBLE CLICK LINE");
-      this.isDown = false;
+      if(this.currentPath.length > 1){
+        if(this.clickedInside){
 
-      this.currentPath.pop();
-
-      let deltaX : number = Math.abs(this.currentPath[this.currentPath.length-1].x - this.currentPath[0].x);
-      let deltaY : number = Math.abs(this.currentPath[this.currentPath.length-1].y - this.currentPath[0].y);
-
-      let d : string = "";
-
-      if(deltaX <= 3 || deltaY <= 3){
-        this.currentPath[this.currentPath.length -1] = this.currentPath[0];
+          this.isDown = false;
+  
+        if(this.currentPath.length > 2){
+          this.currentPath.pop();
+        }
+  
+        let deltaX : number = Math.abs(this.currentPath[this.currentPath.length-1].x - this.currentPath[0].x);
+        let deltaY : number = Math.abs(this.currentPath[this.currentPath.length-1].y - this.currentPath[0].y);
+  
+        let d : string = "";
+  
+        if(deltaX <= 3 || deltaY <= 3){
+          this.currentPath[this.currentPath.length -1] = this.currentPath[0];
+        }
+  
+        d+= this.createPath(this.currentPath);
+  
+        if(this.showJunctions){
+          this.currentPath.forEach(element => {
+            d+=`<circle cx=\"${element.x}\" cy=\"${element.y}\" r=\"3\" stroke=\"black\" stroke-width=\"0\" fill=\"red\" />`;
+          });
+        }
+  
+  
+        document.getElementsByName("drawing")[0].innerHTML += "<g name=\"line-segments\">" + d + "</g>";
+        document.getElementsByName("in-progress")[0].innerHTML = "";
+        this.currentPath = [];
+  
+        }
       }
-
-      d+= this.createPath(this.currentPath);
-
-      if(this.showJunctions){
-        this.currentPath.forEach(element => {
-          d+=`<circle cx=\"${element.x}\" cy=\"${element.y}\" r=\"3\" stroke=\"black\" stroke-width=\"0\" fill=\"red\" />`;
-        });
-      }
-
-
-      document.getElementsByTagName("g")[0].innerHTML += d;
-      document.getElementsByTagName("g")[1].innerHTML = "";
-      this.currentPath = [];
     
   }
   createPath(p:Point[]){
