@@ -45,6 +45,7 @@ export class NewDrawComponent implements OnInit {
       values.canvColor
     );
     console.log(newDraw);
+    this.canvasBuilder.emitCanvas();
     this.closeModalForm();
   }
   
