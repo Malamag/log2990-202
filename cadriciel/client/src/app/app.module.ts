@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './components/app/app.component';
 import { EntryPointComponent } from './components/entry-point/entry-point.component';
 import { NewDrawComponent } from './components/new-draw/new-draw.component';
+import { DrawViewComponent } from './components/draw-view/draw-view.component';
 
 import { CanvasBuilderService } from './services/services/drawing/canvas-builder.service';
 import { ModalWindowService } from './services/modal-window.service';
@@ -18,14 +19,19 @@ import {
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatSliderModule,
+    MatTooltipModule
 } from '@angular/material';
 
 @NgModule({
     declarations: [
         AppComponent,
         NewDrawComponent,
-        EntryPointComponent
+        EntryPointComponent,
+        DrawViewComponent
     ],
     imports: [
         BrowserModule,
@@ -38,7 +44,11 @@ import {
         MatButtonModule,
         MatDialogModule,
         MatIconModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatSliderModule,
+        MatTooltipModule
     ],
     providers: [CanvasBuilderService, ModalWindowService],
     bootstrap: [AppComponent],

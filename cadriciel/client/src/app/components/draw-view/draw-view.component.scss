@@ -1,0 +1,36 @@
+.topToolBar{
+    background-color: lightblue;
+}
+.topToolBar > *{
+    margin-right: 10px;
+}
+.drawingTools{
+    width: 5%;
+    border-right: thick;
+
+    padding-bottom: 5px; 
+    margin-left: 8px;
+}
+
+.expendedOptions{
+    width : 25%;
+    background-color:lightblue;
+}
+.svgElem{
+    position:relative;
+}
+
+.toolsSideBar{
+    width: 8vh;
+    background-color: lightblue;
+    height :100%
+}
+
+mat-sidenav-content{
+    background-color: grey;
+    height:100%;
+    
+     
+}
+
+
