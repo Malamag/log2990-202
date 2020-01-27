@@ -1,6 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DrawViewComponent } from './draw-view.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { 
+  MatTooltipModule, 
+  MatToolbarModule, 
+  MatIconModule,
+  MatSidenavModule,
+  MatSliderModule} from '@angular/material';
 
 describe('DrawViewComponent', () => {
   let component: DrawViewComponent;
@@ -8,7 +14,15 @@ describe('DrawViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DrawViewComponent ]
+      declarations: [ DrawViewComponent ],
+      imports: [
+        MatToolbarModule, 
+        MatTooltipModule, 
+        MatIconModule, 
+        MatSidenavModule, 
+        MatSliderModule,
+        BrowserAnimationsModule
+      ]
     })
     .compileComponents();
   }));

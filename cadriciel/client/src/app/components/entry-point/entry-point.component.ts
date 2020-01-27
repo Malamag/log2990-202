@@ -12,7 +12,7 @@ import { NewDrawComponent } from '../new-draw/new-draw.component';
   
 })
 export class EntryPointComponent implements OnInit {
-  functionality = functionality
+  functionality = functionality;
   winService: ModalWindowService;
 
   constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {
@@ -21,7 +21,6 @@ export class EntryPointComponent implements OnInit {
 
   ngOnInit() {
     this.onOpen(); // opens snackbar at the bottom of the page
-    
   }
   
   onOpen() {

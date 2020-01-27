@@ -1,5 +1,8 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import {functionality} from '../../functionality'
+
+
+
 @Component({
   selector: 'app-draw-view',
   templateUrl: './draw-view.component.html',
