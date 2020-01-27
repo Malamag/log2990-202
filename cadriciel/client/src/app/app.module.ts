@@ -11,6 +11,7 @@ import { DrawViewComponent } from './components/draw-view/draw-view.component';
 
 import { CanvasBuilderService } from './services/services/drawing/canvas-builder.service';
 import { ModalWindowService } from './services/modal-window.service';
+import { RouterModule } from '@angular/router';
 
 /*import material*/
 import {
@@ -26,6 +27,10 @@ import {
     MatTooltipModule
 } from '@angular/material';
 
+const appRoutes = [
+    {path: "vueDessin", component: DrawViewComponent},
+    {path: "entree", component: EntryPointComponent}
+]
 @NgModule({
     declarations: [
         AppComponent,
@@ -48,7 +53,8 @@ import {
         MatSidenavModule,
         MatToolbarModule,
         MatSliderModule,
-        MatTooltipModule
+        MatTooltipModule,
+        RouterModule.forRoot(appRoutes)
     ],
     providers: [CanvasBuilderService, ModalWindowService],
     bootstrap: [AppComponent],

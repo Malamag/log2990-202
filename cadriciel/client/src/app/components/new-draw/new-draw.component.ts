@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CanvasBuilderService } from '../../services/services/drawing/canvas-builder.service';
 import { ModalWindowService } from 'src/app/services/modal-window.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-draw',
@@ -17,7 +18,8 @@ export class NewDrawComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
-              private winService: ModalWindowService) {
+              private winService: ModalWindowService,
+              private router: Router) {
                
    }
 
@@ -47,6 +49,7 @@ export class NewDrawComponent implements OnInit {
     console.log(newDraw);
     this.canvasBuilder.emitCanvas();
     this.closeModalForm();
+    this.router.navigate(["/vueDessin"]);
   }
   
   closeModalForm() {
