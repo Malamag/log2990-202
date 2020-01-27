@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DrawViewComponent } from './components/draw-view/draw-view.component';
 import { EntryPointComponent } from './components/entry-point/entry-point.component';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
-const appRoutes = [
-  {path: "vueDessin", component: DrawViewComponent},
-  {path: "entree", component: EntryPointComponent}
+
+const appRoutes: Routes = [
+  {path: '', component: EntryPointComponent},
+  {path: "vue", component: DrawViewComponent}
 ];
 
 @NgModule({
@@ -14,6 +15,7 @@ const appRoutes = [
   imports: [
     CommonModule,
     RouterModule.forRoot(appRoutes)
-  ]
+  ],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }

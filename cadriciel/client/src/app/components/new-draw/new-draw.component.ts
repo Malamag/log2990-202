@@ -49,7 +49,7 @@ export class NewDrawComponent implements OnInit {
     console.log(newDraw);
     this.canvasBuilder.emitCanvas();
     this.closeModalForm();
-    this.router.navigate(["/vueDessin"]);
+    this.router.navigate(["/vue"]);
   }
   
   closeModalForm() {
