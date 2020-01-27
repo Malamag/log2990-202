@@ -26,7 +26,7 @@
             <hr>
             <div [ngSwitch]= "selectedTool">
                 <div *ngSwitchCase = " 'rectangle' ">
-                    <label> largeur du contour </label>
+                    <label> Epaisseur du trait de contour </label>
                     <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
                     <label> type de tracé </label>
                     <button> miter-clip</button>
@@ -35,11 +35,9 @@
                     <button> bevel </button>
                     <button> round</button>
                     <br>
-                    <label> opacit. du contour </label>
-                    <mat-slider min ="0" max="100" value="0"></mat-slider><br>
                 </div>
                 <div *ngSwitchCase = " 'élipse' ">
-                    <label> largeurDuContour </label>
+                    <label> Epaisseur du trait de contour </label>
                     <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
                     <label> type de tracé </label>
                     <button> miter-clip</button>
@@ -48,6 +46,45 @@
                     <button> bevel </button>
                     <button> round</button>
                 </div>
+                <div *ngSwitchCase = " 'polygone' ">
+                    <label> Epaisseur du trait de contour </label>
+                    <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
+                    <label> type de tracé </label>
+                    <button> miter-clip</button>
+                    <button> miter </button>
+                    <button> arc </button>
+                    <button> bevel </button>
+                    <button> round</button> <br>
+                    <label> Nombre de côté du polygonne</label>
+                    <mat-slider min= "3" max = "12" value ="3"> </mat-slider><br>
+                </div>
+                <!-- for the line-->
+                <div *ngSwitchCase = " 'polygone' ">
+                    <label> Epaisseur du trait de contour </label>
+                    <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
+                    <label> type de tracé </label>
+                    <button> miter-clip</button>
+                    <button> miter </button>
+                    <button> arc </button>
+                    <button> bevel </button>
+                    <button> round</button> <br>
+                    <label> Nombre de côté du polygonne</label>
+                    <mat-slider min= "3" max = "12" value ="3"> </mat-slider><br>
+                </div>
+                    <!-- -->
+                <div *ngSwitchCase = " 'polygone' ">
+                    <label> Epaisseur du trait de contour </label>
+                    <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
+                    <label> type de tracé </label>
+                    <button> miter-clip</button>
+                    <button> miter </button>
+                    <button> arc </button>
+                    <button> bevel </button>
+                    <button> round</button> <br>
+                    <label> Nombre de côté du polygonne</label>
+                    <mat-slider min= "3" max = "12" value ="3"> </mat-slider><br>
+                </div>
+                <!-- to continue the rest of the tools-->
             </div>
         </mat-sidenav>
     
