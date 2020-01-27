@@ -22,11 +22,33 @@
         </mat-sidenav>
         
         <mat-sidenav #toolsOptionsRef class ="expendedOptions" mode ="side" position ="end" role="navigation" [opened] = openToolOptions>
-            <h1>  {{selectedTool}}</h1>
+            <h1> {{selectedTool}} </h1>
             <hr>
-            <label> largeurDuContour </label>
-            <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider>
-            
+            <div [ngSwitch]= "selectedTool">
+                <div *ngSwitchCase = " 'rectangle' ">
+                    <label> largeur du contour </label>
+                    <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
+                    <label> type de tracé </label>
+                    <button> miter-clip</button>
+                    <button> miter </button>
+                    <button> arc </button>
+                    <button> bevel </button>
+                    <button> round</button>
+                    <br>
+                    <label> opacit. du contour </label>
+                    <mat-slider min ="0" max="100" value="0"></mat-slider><br>
+                </div>
+                <div *ngSwitchCase = " 'élipse' ">
+                    <label> largeurDuContour </label>
+                    <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
+                    <label> type de tracé </label>
+                    <button> miter-clip</button>
+                    <button> miter </button>
+                    <button> arc </button>
+                    <button> bevel </button>
+                    <button> round</button>
+                </div>
+            </div>
         </mat-sidenav>
     
         <mat-sidenav-content role="region" psition="end">
