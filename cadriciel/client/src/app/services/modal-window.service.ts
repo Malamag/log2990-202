@@ -18,7 +18,7 @@ export class ModalWindowService {
     this.dialogConfig = new MatDialogConfig();
     this.dialogConfig.disableClose = false;
     this.dialogConfig.hasBackdrop = true;
-
+    this.dialogConfig.id = "modalWindow";
     this.dialogConfig.height = 'auto';
     this.dialogConfig.width = 'auto';
 

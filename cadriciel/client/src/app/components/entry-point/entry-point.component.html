@@ -3,8 +3,15 @@
     <div id="buttonContainer">
     
         <div *ngFor="let func of functionality; index as id">
-            <div *ngIf= "id < 4">
+            <div *ngIf= "id < 4 && id != 2">
                 <button (click)="openModalForm()"mat-button>
+                <mat-icon>{{func.icon}}</mat-icon>
+                    <br>
+                <span class="buttonText">{{func.name}}</span>
+                </button>
+            </div>
+            <div *ngIf= "id == 2">
+                <button (click)="openModalGuide()"mat-button>
                 <mat-icon>{{func.icon}}</mat-icon>
                     <br>
                 <span class="buttonText">{{func.name}}</span>

@@ -4,6 +4,7 @@ import { functionality } from '../../functionality';
 
 import { ModalWindowService } from "../../services/modal-window.service";
 import { NewDrawComponent } from '../new-draw/new-draw.component';
+import { GuideUtilisationComponent } from '../guide-utilisation/guide-utilisation.component'
 
 @Component({
   selector: 'app-entry-point',
@@ -33,6 +34,9 @@ export class EntryPointComponent implements OnInit {
     this.winService.openWindow(NewDrawComponent);
   }
 
+  openModalGuide() {
+    this.winService.openWindow(GuideUtilisationComponent);
+  }
 
   
 }
