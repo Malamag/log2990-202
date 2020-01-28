@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CanvasBuilderService } from '../../services/services/drawing/canvas-builder.service';
 import { ModalWindowService } from 'src/app/services/modal-window.service';
 import { Router } from '@angular/router';
+import { Canvas } from '../../models/Canvas.model';
 
 @Component({
   selector: 'app-new-draw',
@@ -15,6 +16,7 @@ export class NewDrawComponent implements OnInit {
   width: number;
   height: number;
   color: string;
+  canvas: Canvas;
 
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
@@ -41,12 +43,7 @@ export class NewDrawComponent implements OnInit {
   onSubmit() {
     const values = this.newDrawForm.value;
 
-    const newDraw = this.canvasBuilder.getCanvasFromForm(
-      +values.canvWidth,
-      +values.canvHeight,
-      values.canvColor
-    );
-    console.log(newDraw);
+    this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight,values.canvColor);
     this.canvasBuilder.emitCanvas();
     this.closeModalForm();
     this.router.navigate(["/vue"]);

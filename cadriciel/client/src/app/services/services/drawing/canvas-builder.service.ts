@@ -35,7 +35,7 @@ export class CanvasBuilderService {
     return DEFCOLOR;
   }
 
-  getCanvasFromForm(widthInput: number, heightInput: number, colorInput: string): Canvas {
+  setCanvasFromForm(widthInput: number, heightInput: number, colorInput: string): Canvas {
 
     if (widthInput === 0) { // a 0 value means no input by the user
       widthInput = this.defWidht;
@@ -50,7 +50,8 @@ export class CanvasBuilderService {
     }
 
     colorInput = '#' + colorInput;
-    return new Canvas(widthInput, heightInput, colorInput);
+    this.newCanvas= new Canvas(widthInput, heightInput, colorInput);
+
   }
 
   getCanvSubscription() {
