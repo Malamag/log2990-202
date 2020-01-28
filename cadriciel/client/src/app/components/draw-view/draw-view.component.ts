@@ -16,8 +16,8 @@ export class DrawViewComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.width= 500;
-    this.height= 500;
+    this.width= 1500;
+    this.height= 1500;
     
   }
   buttonAction(name:string){
