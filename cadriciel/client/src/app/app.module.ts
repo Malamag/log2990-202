@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './components/app/app.component';
 import { GuideUtilisationComponent } from '../app/components/guide-utilisation/guide-utilisation.component';
-
 //import { AppRoutingModule } from '../app-routing.module'; ?not important?
 
 //Adds browser animations for modal window opening
@@ -21,9 +20,9 @@ import { GuideUtilisationComponent as GuideComponent } from './components/guide-
         //AppRoutingModule, ?not important?
         BrowserAnimationsModule,
         MatButtonModule,
-        MatDialogModule],
+        MatDialogModule,],
     providers: [],
     bootstrap: [AppComponent],
-    entryComponents: [GuideComponent] 
+    entryComponents: [GuideComponent], 
 })
 export class AppModule {}

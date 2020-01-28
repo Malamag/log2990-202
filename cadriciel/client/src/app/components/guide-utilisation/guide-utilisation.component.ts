@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 ////////////////////////
 import { MatDialogRef } from '@angular/material/dialog';
-import { guideFunctionality } from './../../guideFunctionality';
+import { guideFunctionality } from '../../guideFunctionality';
 
 @Component({
   selector: 'app-guide-utilisation',
@@ -16,9 +16,16 @@ export class GuideUtilisationComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<GuideUtilisationComponent>) { }
 
   ngOnInit() {
-    const button = document.getElementById('Bienvenue');
-    if (button)
+
+    this.dialogRef.updateSize('80vw', '80vh');
+
+    let button = document.getElementById('Outils');
+    //let but: HTMLElement | null = document.querySelector('#Outils');
+    //but!.style.backgroundColor = 'rgb(' + [150,150,150].join(',') + ')';
+    if (button){
       this.activatedButton = button;
+      button.style.backgroundColor = 'rgb(' + [150,150,150].join(',') + ')';
+    }
   }
 
   closeModal() {
@@ -33,10 +40,10 @@ export class GuideUtilisationComponent implements OnInit {
       if (tool) {
         if (tool.style.display == "block") {
           tool.style.display = "none";
-          //tool.style.backgroundColor = 'grey';
         }
-        else
-        tool.style.display = "block";
+        else {
+          tool.style.display = "block";
+        }        
       }
     }   
   }

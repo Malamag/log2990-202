@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { MatDialog} from '@angular/material/dialog';
-import { ModalWindowService } from '../../services/modal-window/modal-window.service';
-
+import { ModalWindowService } from "../../services/modal-window/modal-window.service";
+import { GuideUtilisationComponent } from '../guide-utilisation/guide-utilisation.component'
 
 @Component({
     selector: 'app-root',
@@ -14,11 +14,13 @@ import { ModalWindowService } from '../../services/modal-window/modal-window.ser
 export class AppComponent {
     readonly title: string = 'LOG2990';
     message = new BehaviorSubject<string>('');
+    winService: ModalWindowService;
 
-    constructor(public dialog: MatDialog) {            
+    constructor(public dialog: MatDialog,) {    
+      this.winService = new ModalWindowService(this.dialog);        
     }    
 
     openModalGuide() {
-      new ModalWindowService(this.dialog, "guide");
+      this.winService.openWindow(GuideUtilisationComponent);
     }
 }
