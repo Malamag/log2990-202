@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DrawViewComponent } from './draw-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 import { 
   MatTooltipModule, 
   MatToolbarModule, 
@@ -21,7 +22,8 @@ describe('DrawViewComponent', () => {
         MatIconModule, 
         MatSidenavModule, 
         MatSliderModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        RouterModule
       ]
     })
     .compileComponents();

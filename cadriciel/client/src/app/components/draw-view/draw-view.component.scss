@@ -1,6 +1,6 @@
-.topToolBar{
+/*.topToolBar{
     background-color: lightblue;
-}
+}*/
 .topToolBar > *{
     margin-right: 10px;
 }
@@ -14,7 +14,7 @@
 
 .expendedOptions{
     width : 25%;
-    background-color:lightblue;
+    //background-color:lightblue;
 }
 .svgElem{
     position:relative;
@@ -22,12 +22,12 @@
 
 .toolsSideBar{
     width: 8vh;
-    background-color: lightblue;
+   // background-color: lightblue;
     height :100%
 }
 
 mat-sidenav-content{
-    background-color: grey;
+   // background-color: grey;
     height:100%;
     
      

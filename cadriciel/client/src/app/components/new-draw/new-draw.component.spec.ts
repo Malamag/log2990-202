@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { NewDrawComponent } from './new-draw.component';
 import { MatDialogModule, MatFormFieldModule, MatInputModule, MatButtonModule} from '@angular/material';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -20,7 +20,8 @@ describe('NewDrawComponent', () => {
         BrowserAnimationsModule,
         MatInputModule,
         MatButtonModule,
-        MatDialogModule
+        MatDialogModule,
+        RouterTestingModule
       ]
     })
     .compileComponents();

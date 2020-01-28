@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 ////////////////////////
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material';
 import { guideFunctionality } from '../../guideFunctionality';
 
 @Component({

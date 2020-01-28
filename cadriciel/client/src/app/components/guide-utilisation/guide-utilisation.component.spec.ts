@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GuideUtilisationComponent } from './guide-utilisation.component';
+import { MatDialogModule } from '@angular/material';
 
 describe('GuideUtilisationComponent', () => {
   let component: GuideUtilisationComponent;
@@ -8,7 +9,8 @@ describe('GuideUtilisationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GuideUtilisationComponent ]
+      declarations: [ GuideUtilisationComponent ],
+      imports: [ MatDialogModule ]
     })
     .compileComponents();
   }));

@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, Renderer2, OnDestroy } from '
 import {functionality} from '../../functionality'
 import { CanvasBuilderService } from '../../services/services/drawing/canvas-builder.service';
 import { Canvas } from '../../models/Canvas.model';
-import {  Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-draw-view',

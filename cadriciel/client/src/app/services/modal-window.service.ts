@@ -7,8 +7,6 @@ import { ComponentType } from '@angular/cdk/portal';
   providedIn: 'root'
 })
 
-
-
 export class ModalWindowService {
   // Construct a modal window depending of the desired component
   dialogConfig: MatDialogConfig;
