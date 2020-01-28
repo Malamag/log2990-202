@@ -55,6 +55,10 @@ export class CanvasBuilderService {
   }
 
   getCanvSubscription() {
+    if (this.newCanvas == undefined) {
+      this.newCanvas = new Canvas(this.getDefWidth(), this.getDefHeight(), this.getDefColor());
+    }
+    
     return this.canvSubject.subscribe((canvas: Canvas) => {
       this.newCanvas = canvas;
     });

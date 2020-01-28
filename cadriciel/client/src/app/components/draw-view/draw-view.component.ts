@@ -27,6 +27,7 @@ export class DrawViewComponent implements OnInit, OnDestroy {
   constructor(private canvBuildService: CanvasBuilderService) { }
 
   ngOnInit() {
+
     this.canvasSubscr = this.canvBuildService.getCanvSubscription();
     this.canvas = this.canvBuildService.newCanvas; // use this element to get newly generated canvas data
     this.canvBuildService.emitCanvas();    
