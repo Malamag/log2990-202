@@ -52,12 +52,12 @@ section:after {
 
 .guide-selection-button {
   width: 100%;
-  background-color: rgb(205, 205, 205);
+  background-color: rgb(200, 200, 200);
   border-radius: 0px;
   text-align: left;
 }
 
-.toolButton {
+.toolButtons {
   display: none;
 }
 
@@ -71,4 +71,18 @@ section:after {
 button:hover {
   background-color: rgb(150, 150, 150);
 }
+/*
+button:focus {
+  background-color: rgb(150, 150, 150);
+}
+*/
+#Bienvenue {
+  background-color: rgb(150, 150, 150);
+}
 
+#Outils {
+  width: 100%;
+  background-color: rgb(180, 180, 180);
+  border-radius: 0px;
+  text-align: left;
+}

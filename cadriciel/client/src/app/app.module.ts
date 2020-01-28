@@ -15,7 +15,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 // import utilisation guide
 import { GuideUtilisationComponent as GuideComponent } from './components/guide-utilisation/guide-utilisation.component';
 
-
 @NgModule({
     declarations: [AppComponent, GuideUtilisationComponent],
     imports: [BrowserModule, HttpClientModule,

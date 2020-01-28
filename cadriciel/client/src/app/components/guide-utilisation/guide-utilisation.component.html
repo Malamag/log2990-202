@@ -4,50 +4,36 @@
   </header>
 </div>
 <section id = 'guideSection'>
-
-    <nav id = 'guideLinkBar'>
-      <!-- Makes a Welcome button -->
-      <button mat-raised-button class="guide-selection-button" (click)="previousPage()">Bienvenue</button>
-      <div *ngFor = "let func of functionality; index as id">
-        <!-- Make buttons for all main menu options (except utilisation guide) -->
-        <div *ngIf = "id < 2">
-          <button mat-raised-button class="guide-selection-button" (click)="previousPage()">{{func.shortcutName}}</button>
-        </div>
-        <div *ngIf = "id == 3">
-          <button mat-raised-button class="guide-selection-button" (click)="previousPage()">{{func.shortcutName}}</button>
-          <button mat-raised-button id="{{func.shortcutName}}" class="guide-selection-button" (click)="toolsListButton()">Outils</button>
-        </div>
-        <!-- Make buttons for all tools: functionality #7 to end -->
-        <div >
-          <div *ngIf = "id > 5" >
-            <button mat-raised-button class="guide-selection-button toolButton" (click)="previousPage()">{{func.shortcutName}} </button>
-          </div>
-        </div>
+  <nav id = 'guideLinkBar'>
+    <!-- Makes a Welcome button -->
+    <div *ngFor = "let func of guideFunctionality; index as i">
+      <!-- Make buttons for all main menu options (except utilisation guide) -->
+      <div *ngIf = "i < 3">
+        <button mat-raised-button id="{{func.shortcutName}}" class="guide-selection-button" (click)="selectionButton(func)">{{func.shortcutName}}</button>
       </div>
-    </nav>
+      <div *ngIf = "i == 3">
+        <button mat-raised-button id="{{func.shortcutName}}" class="guide-selection-button" (click)="selectionButton(func)">{{func.shortcutName}}</button>
+        <button mat-raised-button id="Outils" (click)="toolsListButton()">Outils</button>
+      </div>
+      <!-- Make buttons for all tools: functionality #6 to end -->
+      <div *ngIf = "i > 3" >
+        <button mat-raised-button id="{{func.shortcutName}}" class="guide-selection-button toolButtons" (click)="selectionButton(func)">{{func.shortcutName}}</button>
+      </div>
+    </div>
+  </nav>
     
-    <article id = 'guideContent'>
-      <h2>Bienvenue</h2>
-      <p>
-        Yooo on écrit des gros paragraphes ici.
-        </p><p>
-        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
-        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
-        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
-        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
-        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
-        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
-        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
-        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
-        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
-        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
-        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
-        Blablablablablablablabla Blablablablablablablabla Blablablablablablablabla blablablablabla
-      </p>
-      <div>        
-        <button mat-raised-button id="previousButton" (click)="previousPage()">Précédent</button>
-        <button mat-raised-button id="nextButton" (click)="nextPage()">Suivant</button>
-      </div>
-    </article>
-  </section>
+  <article id = 'guideContent'>
+    <h2 id="title">Bienvenue</h2>
+    <p id="shortDescription">
+      text goes here
+    </p>
+    <p id="description">
+      text goes here
+    </p>
+    <div>        
+      <button mat-raised-button id="previousButton" (click)="previousPage()">Précédent</button>
+      <button mat-raised-button id="nextButton" (click)="nextPage()">Suivant</button>
+    </div>
+  </article>
+</section>
   

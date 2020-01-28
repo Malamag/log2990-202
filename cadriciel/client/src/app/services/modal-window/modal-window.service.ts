@@ -14,7 +14,7 @@ export class ModalWindowService {
     dialogConfig.disableClose = false;
     dialogConfig.hasBackdrop = true;
     dialogConfig.id = "modalWindow";
-    dialogConfig.minWidth = '500px';
+    dialogConfig.autoFocus = false;
     if (modalComponent == "guide") {
       this.dialog.open(GuideUtilisationComponent, dialogConfig);
     }
