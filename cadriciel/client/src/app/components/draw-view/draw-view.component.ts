@@ -16,6 +16,7 @@ export class DrawViewComponent implements OnInit, OnDestroy {
   width: number;
   height: number;
   selectedTool: string;
+  backColor: string;
 
   canvas: Canvas;
   canvasSubscr: Subscription;
@@ -26,11 +27,13 @@ export class DrawViewComponent implements OnInit, OnDestroy {
   constructor(private canvBuildService: CanvasBuilderService) { }
 
   ngOnInit() {
-    this.width= 2000;
-    this.height= 1000;
     this.canvasSubscr = this.canvBuildService.getCanvSubscription();
     this.canvas = this.canvBuildService.newCanvas; // use this element to get newly generated canvas data
     this.canvBuildService.emitCanvas();    
+
+    this.width = this.canvas.canvasWidth;
+    this.height = this.canvas.canvasHeight;
+    this.backColor = this.canvas.canvasColor;
   }
 
   ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus
