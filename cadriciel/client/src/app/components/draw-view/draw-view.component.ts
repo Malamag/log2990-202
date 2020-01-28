@@ -21,7 +21,14 @@ export class DrawViewComponent implements OnInit {
     
   }
   buttonAction(name:string){
-    this.openToolOptions= !this.openToolOptions;
+    if(this.selectedTool!= undefined){
+      if(this.selectedTool === name){
+        this.openToolOptions= !this.openToolOptions;
+      }
+      else{this.openToolOptions = true;}  
+    }
+    else{this.openToolOptions = true;}
+    
     this.selectedTool= name;
   }
 
