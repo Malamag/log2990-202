@@ -48,12 +48,14 @@ export class SvgDrawComponent implements OnInit {
 
     let drawing_service : DrawToolService = new DrawToolService();
     let pencil = drawing_service.CreatePencil(_svg,_workingSpace,0,0,false,10,10);
-    let rect = drawing_service.CreateRectangle(_svg,_workingSpace,0,0,true,10,10,15);
+    let rect = drawing_service.CreateRectangle(_svg,_workingSpace,0,0,false,10,10,15);
     let line = drawing_service.CreateLine(_svg,_workingSpace,0,0,false,10,10,true);
+    let brush = drawing_service.CreateBrush(_svg,_workingSpace,0,0,true,10,10);
 
     tools.push(pencil);
     tools.push(rect);
     tools.push(line);
+    tools.push(brush);
 
     tools.forEach(element => {
       test.addObserver(element);
