@@ -10,13 +10,13 @@ import { IndexService } from '../../services/index/index.service';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-    readonly title: string = 'LOG3900';
-    message = new BehaviorSubject<string>('');
+    //readonly title: string = 'LOG3900';
+    //message = new BehaviorSubject<string>('');
 
-    constructor(private basicService: IndexService) {
-        this.basicService
+    constructor(/*private basicService: IndexService*/) {
+        /*this.basicService
             .basicGet()
             .pipe(map((message: Message) => `${message.title} ${message.body}`))
-            .subscribe(this.message);
+            .subscribe(this.message);*/
     }
 }
