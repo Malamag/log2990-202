@@ -32,18 +32,44 @@ export class EntryPointComponent implements OnInit {
     this.snackBar.open("Bienvenue !",undefined,config);
   }
 
-  openModalForm(){
+  
+
+  openUserManual(){
+    //this.router.navigate([{outlets: {entryPoint:['guide']}}]);
+    this.winService.openWindow(GuideUtilisationComponent);
+    this.router.navigate([{outlets: {guideUtilisation:['test']}}]);
+  }
+
+  openCreateNew(){
     this.winService.openWindow(NewDrawComponent);
   }
 
-  openModalGuide() {
-    this.winService.openWindow(GuideUtilisationComponent);
+  execute(shortcutName:string){
+    switch(shortcutName) { 
+      case "Créer": { 
+        this.openCreateNew();
+         break; 
+      } 
+      case "Ouvrir": { 
+        //statements; 
+        break; 
+     } 
+     case "Afficher": { 
+       this.openUserManual();
+      break; 
+    } 
+      case "Continuer": { 
+    //statements; 
+    break; 
+   } 
+    default: { 
+       //statements; 
+     break; 
+      } 
+   } 
+
   }
 
-  openGuide(){
-    this.router.navigate([{outlets: {entryPoint:['guide']}}]);
-    this.openModalGuide();
-    
-  }
+  
   
 }
