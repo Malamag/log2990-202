@@ -8,10 +8,13 @@ import { AppComponent } from './components/app/app.component';
 import { EntryPointComponent } from './components/entry-point/entry-point.component';
 import { NewDrawComponent } from './components/new-draw/new-draw.component';
 import { DrawViewComponent } from './components/draw-view/draw-view.component';
+import { GuideUtilisationComponent } from '../app/components/guide-utilisation/guide-utilisation.component';
 
 
 import { CanvasBuilderService } from './services/services/drawing/canvas-builder.service';
 import { ModalWindowService } from './services/modal-window.service';
+
+import { AppRoutingModule } from './app-routing.module';
 
 /*import material*/
 import {
@@ -27,12 +30,14 @@ import {
     MatTooltipModule
 } from '@angular/material';
 
+
 @NgModule({
     declarations: [
         AppComponent,
         NewDrawComponent,
         EntryPointComponent,
-        DrawViewComponent
+        DrawViewComponent,
+        GuideUtilisationComponent
     ],
     imports: [
         BrowserModule,
@@ -49,11 +54,12 @@ import {
         MatSidenavModule,
         MatToolbarModule,
         MatSliderModule,
-        MatTooltipModule
+        MatTooltipModule,
+        AppRoutingModule
     ],
     providers: [CanvasBuilderService, ModalWindowService],
     bootstrap: [AppComponent],
-    entryComponents: [NewDrawComponent]
+    entryComponents: [NewDrawComponent, GuideUtilisationComponent]
     
 })
 export class AppModule {}

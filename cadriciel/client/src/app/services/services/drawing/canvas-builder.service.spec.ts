@@ -15,17 +15,29 @@ describe('CanvasBuilderService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should create a canvas from form data', () => {
+  it('should create a valid canvas from form data', () => {
     const CANVAS: Canvas = new Canvas(50, 50, '#ffffff');
-    const NEWCANV = service.getCanvasFromForm(50, 50, 'ffffff');
-    expect(CANVAS).toEqual(NEWCANV);
+    service.setCanvasFromForm(50, 50, 'ffffff');
+    expect(service.newCanvas).toEqual(CANVAS);
   });
 
-  /*it('should get default size if no inputs', () => {
-    const DEFW = service.getDefWidth();
-    const DEFH = service.getDefHeight();
+  it('should return positive integers as default sizes', () => {
+    const W = service.getDefWidth();
+    const H = service.getDefHeight();
 
-  });*/
+    expect(W).toBeGreaterThan(0);
+    expect(W.toString()).toMatch(/^\d+$/);
 
+    expect(H).toBeGreaterThan(0);
+    expect(H.toString()).toMatch(/^\d+$/);
+  });
+
+  it('should return a valid default color (white, ffffff)', () => {
+    expect(service.getDefColor()).toEqual('ffffff');
+  });
+
+  it('should return a valid subscription without form data', () => {
+    
+  });
 
 });

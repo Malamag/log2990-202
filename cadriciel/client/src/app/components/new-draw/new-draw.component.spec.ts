@@ -1,9 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { NewDrawComponent } from './new-draw.component';
 import { MatDialogModule, MatFormFieldModule, MatInputModule, MatButtonModule} from '@angular/material';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
 
 describe('NewDrawComponent', () => {
   let component: NewDrawComponent;
@@ -20,8 +21,13 @@ describe('NewDrawComponent', () => {
         BrowserAnimationsModule,
         MatInputModule,
         MatButtonModule,
-        MatDialogModule
-      ]
+        MatDialogModule,
+        RouterTestingModule
+      ],
+      providers: [{provide: Router, useClass: class {
+          navigate = jasmine.createSpy("navigate");
+        }
+      }]
     })
     .compileComponents();
   }));
@@ -35,4 +41,19 @@ describe('NewDrawComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+
+  /**
+   * https://www.arroyolabs.com/2017/04/angular-2-unit-test-mocks-stubs/
+   */
+  it("should navigate to draw view on submit", () => {
+    let router = fixture.debugElement.injector.get(Router);
+    component.onSubmit();
+    expect(router.navigate).toHaveBeenCalledWith(["/vue"]);
+  });
+
+  
+
+
+
 });

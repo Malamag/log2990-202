@@ -1,18 +1,27 @@
-
-<h1 id="title">PolyDessin 🖉</h1>
-<div id="buttonContainer">
-
-    <div *ngFor="let func of functionality; index as id">
-        <div *ngIf= "id < 4">
-            <button (click)="openModalForm()"mat-button>
-            <mat-icon>{{func.icon}}</mat-icon>
-                <br>
-            <span class="buttonText">{{func.name}}</span>
-            </button>
+<div id="entryPage">
+    <h1 id="title">PolyDessin 🖉</h1>
+    <div id="buttonContainer">
+    
+        <div *ngFor="let func of functionality; index as id">
+            <div *ngIf= "id < 4 && id != 2">
+                <button (click)="openModalForm()"mat-button>
+                <mat-icon>{{func.icon}}</mat-icon>
+                    <br>
+                <span class="buttonText">{{func.name}}</span>
+                </button>
+            </div>
+            <div *ngIf= "id == 2">
+                <button (click)="openModalGuide()"mat-button>
+                <mat-icon>{{func.icon}}</mat-icon>
+                    <br>
+                <span class="buttonText">{{func.name}}</span>
+                </button>
+            </div>
         </div>
     </div>
+    
+    <div class="footer"><p>© Équipe-202 </p></div>
 </div>
 
-<div class="footer"><p>© Équipe-202 </p></div>
 
 

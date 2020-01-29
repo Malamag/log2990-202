@@ -7,13 +7,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
-/*
+
 @import '~@angular/material/theming';
 
 @include mat-core();
 
-$polydessin-primary: mat-palette($mat-pink);
-$polydessin-accent:  mat-palette($mat-blue, A500, A100, A400);
+// Custom theme for Polydessin, baptised "Dark Licorice"+
+$polydessin-primary: mat-palette($mat-light-blue);
+$polydessin-accent:  mat-palette($mat-pink, A500, A100, A400);
 
 
 $polydessin-warn:    mat-palette($mat-red);
@@ -22,4 +23,4 @@ $polydessin-warn:    mat-palette($mat-red);
 $polydessin-theme: mat-dark-theme($polydessin-primary, $polydessin-accent, $polydessin-warn);
 
 @include angular-material-theme($polydessin-theme);
-*/
+
