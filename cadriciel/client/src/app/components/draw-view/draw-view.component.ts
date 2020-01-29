@@ -19,13 +19,23 @@ export class DrawViewComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.width= 2000;
-    this.height= 1000;
+    this.width= 1500;
+    this.height= 1500;
     
   }
   buttonAction(name:string){
-    this.openToolOptions= !this.openToolOptions;
+    if(name === "pipette" || name === "sélectionner" || name ==="défaire" || name === "refaire"){this.openToolOptions = false;}
+    else if(this.selectedTool!= undefined){
+      if(this.selectedTool === name){
+        this.openToolOptions= !this.openToolOptions;
+      }
+      else{this.openToolOptions = true;}  
+    }
+    else{this.openToolOptions = true;}
+
+   
     this.selectedTool= name;
+    
   }
 
 }

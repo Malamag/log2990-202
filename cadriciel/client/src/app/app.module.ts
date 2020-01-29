@@ -9,6 +9,7 @@ import { EntryPointComponent } from './components/entry-point/entry-point.compon
 import { NewDrawComponent } from './components/new-draw/new-draw.component';
 import { DrawViewComponent } from './components/draw-view/draw-view.component';
 
+
 import { CanvasBuilderService } from './services/services/drawing/canvas-builder.service';
 import { ModalWindowService } from './services/modal-window.service';
 
