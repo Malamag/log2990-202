@@ -4,7 +4,6 @@ import { DrawViewComponent } from './draw-view.component';
 import {functionality} from '../../functionality'
 
 describe('DrawViewComponent', () => {
-  let func = functionality;
   let component: DrawViewComponent;
   let fixture: ComponentFixture<DrawViewComponent>;
 
@@ -19,7 +18,6 @@ describe('DrawViewComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DrawViewComponent);
     component = fixture.componentInstance;
-    component.functionality = func;
     fixture.detectChanges();
   });
 
