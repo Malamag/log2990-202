@@ -159,42 +159,4 @@ export const functionality = [
         icon: "../../../assets/images/spray.png",
     },
     
-    {
-        name: "texte",
-        shortcutName:"texte",
-        shortDescription:"text goes here",
-        description: "text goes here",
-        /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik"
-         title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
-        icon: "../../../assets/images/text.png",
-    },
-
-    {
-        name: "étampe",
-        shortcutName:"étampe",
-        shortDescription:"text goes here",
-        description: "text goes here",
-        /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 
-        title="Flaticon"> www.flaticon.com</a>*/
-        icon: "../../../assets/images/stamp.png",
-    },
-    {
-        name: "défaire",
-        shortcutName:"défaire",
-        shortDescription:"text goes here",
-        description: "text goes here",
-        /* Source:Icons made by <a href="https://www.flaticon.com/authors/xnimrodx" 
-        title="xnimrodx">xnimrodx</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>*/
-        icon: "../../../assets/images/undo.png",
-    },
-
-    {
-        name: "refaire",
-        shortcutName:"refaire",
-        shortDescription:"text goes here",
-        description: "text goes here",
-        /* source:Icons made by <a href="https://www.flaticon.com/authors/xnimrodx" 
-        title="xnimrodx">xnimrodx</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
-        icon: "../../../assets/images/redo.png",
-    },
 ];

@@ -1,7 +1,6 @@
-$bg-color:lightblue;
-.topToolBar{
-    background-color: $bg-color;
-}
+/*.topToolBar{
+    background-color: lightblue;
+}*/
 .topToolBar > *{
     margin-right: 10px;
 }
@@ -15,7 +14,7 @@ $bg-color:lightblue;
 
 .expendedOptions{
     width : 25%;
-    background-color:$bg-color;
+    //background-color:lightblue;
 }
 .svgElem{
     position:relative;
@@ -23,17 +22,15 @@ $bg-color:lightblue;
 
 .toolsSideBar{
     width: 8vh;
-    background-color: $bg-color;
+   // background-color: lightblue;
     height :100%
 }
-/*
-mat-sidenav-container {
-   
-    padding-left: 8vh;
-}*/
+
 mat-sidenav-content{
-    background-color: grey;
-    height: 91vh;
+   // background-color: grey;
+    height:100%;
+    
+     
 }
 
 

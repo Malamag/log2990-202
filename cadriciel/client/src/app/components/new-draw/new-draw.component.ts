@@ -36,17 +36,17 @@ export class NewDrawComponent implements OnInit {
     this.newDrawForm = this.formBuilder.group({
       canvWidth: ['', [Validators.pattern(/^\d+$/), Validators.min(1)]], // accepts only positive integers
       canvHeight: ['', [Validators.pattern(/^\d+$/), Validators.min(1)]], 
-      canvColor: ['', Validators.pattern(/^[a-fA-F0-9]{6}$/)] // only accepts 6-chars strings made of hex characters
+      canvColor: ['', Validators.pattern(/^[a-fA-F0-9]{6}$/)]
     });
   }
 
   onSubmit() {
     const values = this.newDrawForm.value;
 
-    this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight, values.canvColor);
+    this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight,values.canvColor);
     this.canvasBuilder.emitCanvas();
     this.closeModalForm();
-    this.router.navigate(["/vue"]); // path stated in app-routing.module.ts
+    this.router.navigate(["/vue"]);
   }
   
   closeModalForm() {

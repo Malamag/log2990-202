@@ -53,6 +53,7 @@ section:after {
 .guide-selection-button {
   width: 100%;
   background-color: rgb(200, 200, 200);
+  color : black;
   border-radius: 0px;
   text-align: left;
 }
@@ -77,9 +78,20 @@ button:focus {
 }
 */
 
-#Outils {
+/* #Outils {
   width: 100%;
   background-color: rgb(180, 180, 180);
   border-radius: 0px;
   text-align: left;
+} */
+
+
+.selected{
+  font-weight: 900;
+  color: black;
+}
+
+.notSelected{
+  font-weight: lighter;
+  color:grey;
 }

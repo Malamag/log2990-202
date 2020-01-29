@@ -1,39 +1,39 @@
-<div><header id="guideHeader">
+<div>
+  <header id="guideHeader">
     <h1 id="guideTitle">Guide d'utilisation</h1>
     <button mat-raised-button id="guideQuitButton" (click)="closeModal()">X</button>
   </header>
 </div>
-<section id = 'guideSection'>
-  <nav id = 'guideLinkBar'>
+<section>
+  <nav id='guideLinkBar'>
     <!-- Makes a Welcome button -->
-    <div *ngFor = "let gFunc of guideFunctionality; index as i">
+    <div *ngFor="let gFunc of guideFunctionality; index as i">
       <!-- Make buttons for all main menu options (except utilisation guide) -->
-      <div *ngIf = "i < 3">
-        <button mat-raised-button id="{{gFunc.shortcutName}}" class="guide-selection-button" (click)="selectionButton(gfunc)">{{gFunc.shortcutName}}</button>
+      <div *ngIf="i < 3">
+        <button mat-raised-button class="guide-selection-button"
+          (click)="isSelected = !isSelected">{{gFunc.shortcutName}}</button>
       </div>
-      <div *ngIf = "i == 3">
-        <button mat-raised-button id="{{gFunc.shortcutName}}" class="guide-selection-button" (click)="selectionButton(gfunc)">{{gFunc.shortcutName}}</button>
-        <button mat-raised-button id="Outils" (click)="toolsListButton()">Outils</button>
+      <div *ngIf="i == 3">
+        <button mat-raised-button class="guide-selection-button"
+          (click)="isSelected = !isSelected">{{gFunc.shortcutName}}</button>
+        <button  (click)="showTools=!showTools; isSelected=!isSelected" [ngClass]="(isSelected)?'selected':'notSelected'" mat-raised-button class="guide-selection-button"  >Outils</button>
       </div>
       <!-- Make buttons for all tools: functionality #6 to end -->
-      <div *ngIf = "i > 3" >
-        <button mat-raised-button id="{{gFunc.shortcutName}}" class="guide-selection-button toolButtons" (click)="selectionButton(gfunc)">{{gFunc.shortcutName}}</button>
+
+      <div *ngIf="showTools">
+        <div *ngIf="i > 3">
+          <button (click)="isSelected=!isSelected" [ngClass]="(isSelected)?'selected':'notSelected'"  mat-raised-button class="guide-selection-button"
+            >{{gFunc.shortcutName}}</button>
+        </div>
       </div>
     </div>
   </nav>
-    
-  <article id = 'guideContent'>
-    <h2 id="title">Bienvenue</h2>
-    <p id="shortDescription">
-      text goes here
-    </p>
-    <p id="description">
-      text goes here
-    </p>
-    <div>        
+
+  <article id='guideContent'>
+    <router-outlet name="guideUtilisation"></router-outlet>
+    <div>
       <button mat-raised-button id="previousButton" (click)="previousPage()">Précédent</button>
       <button mat-raised-button id="nextButton" (click)="nextPage()">Suivant</button>
     </div>
   </article>
 </section>
-  

@@ -1,21 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 
-////////////////////////
+import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material';
 import { guideFunctionality } from '../../guideFunctionality';
+
+
+
 
 @Component({
   selector: 'app-guide-utilisation',
   templateUrl: './guide-utilisation.component.html',
-  styleUrls: ['./guide-utilisation.component.scss']
+  styleUrls: ['./guide-utilisation.component.scss'],
 })
 export class GuideUtilisationComponent implements OnInit {
+  showTools: boolean = false;
+  isSelected: boolean=false;
+  selectedColor = 'dark';
+  unselectedColor = 'lightgrey';
   guideFunctionality = guideFunctionality;
   activatedButton: HTMLElement;
 
-  constructor(public dialogRef: MatDialogRef<GuideUtilisationComponent>) { }
+  
 
+  constructor(public dialogRef: MatDialogRef<GuideUtilisationComponent>, private router: Router) { }
+  
+
+  
   ngOnInit() {
+
     
     this.dialogRef.updateSize('80vw', '80vh');
 
@@ -26,13 +38,51 @@ export class GuideUtilisationComponent implements OnInit {
       this.activatedButton = button;
       button.style.backgroundColor = 'rgb(' + [150,150,150].join(',') + ')';
     }
+    this.router.navigate([{outlets: {guideUtilisation:['test']}}]);
   }
 
   closeModal() {
     this.dialogRef.close();
   }
+  
+  
 
-  toolsListButton(){
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* toolsListButton(){
     const tools = document.getElementsByClassName('toolButtons');
     var i;
     for (i = 0; i < tools.length; i++) {
@@ -116,7 +166,7 @@ selectionButton(buttonId:any) {
   }
 
 
-}
+} */
 /*
   welcomeButton(){
     const button = document.getElementById('Bienvenue');

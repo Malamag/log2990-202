@@ -10,7 +10,6 @@ import { NewDrawComponent } from './components/new-draw/new-draw.component';
 import { DrawViewComponent } from './components/draw-view/draw-view.component';
 import { GuideUtilisationComponent } from '../app/components/guide-utilisation/guide-utilisation.component';
 
-
 import { CanvasBuilderService } from './services/services/drawing/canvas-builder.service';
 import { ModalWindowService } from './services/modal-window.service';
 
@@ -29,6 +28,7 @@ import {
     MatSliderModule,
     MatTooltipModule
 } from '@angular/material';
+import { GuideContentComponent } from './guide-content/guide-content.component';
 
 
 @NgModule({
@@ -37,7 +37,8 @@ import {
         NewDrawComponent,
         EntryPointComponent,
         DrawViewComponent,
-        GuideUtilisationComponent
+        GuideUtilisationComponent,
+        GuideContentComponent
     ],
     imports: [
         BrowserModule,

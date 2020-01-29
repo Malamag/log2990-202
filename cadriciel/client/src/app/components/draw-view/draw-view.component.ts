@@ -42,18 +42,8 @@ export class DrawViewComponent implements OnInit, OnDestroy {
   }
 
   buttonAction(name:string){
-    if(name === "pipette" || name === "sélectionner" || name ==="défaire" || name === "refaire"){this.openToolOptions = false;}
-    else if(this.selectedTool!= undefined){
-      if(this.selectedTool === name){
-        this.openToolOptions= !this.openToolOptions;
-      }
-      else{this.openToolOptions = true;}  
-    }
-    else{this.openToolOptions = true;}
-
-   
+    this.openToolOptions= !this.openToolOptions;
     this.selectedTool= name;
-    
   }
 
 
