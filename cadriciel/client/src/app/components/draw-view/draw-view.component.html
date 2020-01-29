@@ -111,40 +111,50 @@
                 <!-- for the text -->
                 <div *ngSwitchCase = " 'texte' ">
                     <label> Police de texte </label>
-                    <input type="text" value="2"> px <br>
+                    <select>
+                        <option>arial</option>
+                        <option> times new Roman</option>
+                    </select> <br>
                     <label> taille de la police</label>
-                    <!-- here I will have  a selector-->
+                    <input type="text" valeur="10">
                     <br>
                     <label> Mutateur</label> <br>
-                    <!-- Icons made by <a href="https://www.flaticon.com/authors/google"
+                    <!-- source: Icons made by <a href="https://www.flaticon.com/authors/google"
                          title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
                     <button> 
                         <img src ="../../../assets/images/bold.png">
                     </button>
-                    <!-- Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" 
+                    <!-- source: Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" 
                         title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
                     <button> 
                         <img src="../../../assets/images/italics.png">
                     </button>
                     <br>
-                    <label> Alignement</label>
+                    <label> Alignement</label> <br>
                     <!-- Replace the text with the images-->
-                    <button>gauche </button>
-                    <button> centre </button>
-                    <button> droite </button>
+                    <!-- source: Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" 
+                        title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
+                    <button>
+                        <img src="../../../assets/images/left-align.png">    
+                    </button>
+                    <!--source: Icons made by <a href="https://www.flaticon.com/authors/bqlqn"
+                         title="bqlqn">bqlqn</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
+                    <button> 
+                        <img src="../../../assets/images/align-center.png">    
+                    </button>
+                    <!--source: Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" 
+                        title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
+                    <button> 
+                        <img src="../../../assets/images/right-align.png">  
+                    </button>
                 </div>
                 <!-- for the color-picker-->
                 <div *ngSwitchCase = " 'choisir couleur' ">
                     <!-- here goes the component of Maxime-->
                 </div>
-                <!-- here goes the region defenition but I am not sure to understand it
-                <div *ngSwitchCase = " 'choisir couleur' ">
-                    <!-- here goes the component of Maxime
-                </div>
-            -->
-                <!-- for the stamp to change the name once added to functionality.ts-->
-                <div *ngSwitch = "'choisir couleur'">
-                    <label> facteur de mise à l'échelle de l'étampe</label>
+               
+                <div *ngSwitchCase = "'étampe'">
+                    <label> facteur de mise à l'échelle de l'étampe </label>
                     <mat-slider min= "0" max = "1" value ="0.5"> </mat-slider><br>
                     <label> Angle d'orientation de l'étampe</label>
                     <input type = "text" value= "90"> degré <br>

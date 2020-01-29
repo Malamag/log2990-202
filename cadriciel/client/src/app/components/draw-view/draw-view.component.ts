@@ -21,15 +21,18 @@ export class DrawViewComponent implements OnInit {
     
   }
   buttonAction(name:string){
-    if(this.selectedTool!= undefined){
+    if(name === "pipette" || name === "sélectionner" || name ==="défaire" || name === "refaire"){this.openToolOptions = false;}
+    else if(this.selectedTool!= undefined){
       if(this.selectedTool === name){
         this.openToolOptions= !this.openToolOptions;
       }
       else{this.openToolOptions = true;}  
     }
     else{this.openToolOptions = true;}
-    
+
+   
     this.selectedTool= name;
+    
   }
 
 }
