@@ -4,6 +4,13 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome on test",
+            "url": "http://localhost:9876",
+            "webRoot": "${workspaceFolder}/cadriciel/client"
+        },
     
         {
             "type": "chrome",
