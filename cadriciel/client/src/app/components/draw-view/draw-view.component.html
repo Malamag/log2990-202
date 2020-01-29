@@ -3,8 +3,8 @@
     <mat-toolbar class ="topToolBar">
         <div *ngFor = "let func of functionality; index as id">
             <div *ngIf = "id < 5">
-                <button mat-mini-fab color= "primary" matTooltip ={{func.name}}>
-                    <mat-icon> {{func.icon}}</mat-icon>
+                <button class="topBtn" mat-mini-fab color= "primary" matTooltip ={{func.name}}>
+                    <mat-icon class="topIcon"> {{func.icon}}</mat-icon>
                 </button>
             </div>
         </div>
@@ -16,8 +16,8 @@
         <mat-sidenav class= "toolsSideBar" mode ="side" opened height = "100%" disableClose fixedInViewPort>
             <div class= "drawingTools" *ngFor="let func of functionality; index as id">
                 <div *ngIf = "id >= 5">
-                    <button mat-mini-fab color="primary" matTooltip={{func.name}} matTooltipPosition = "after" (click)= "buttonAction(func.name) ">
-                        <img src={{func.icon}}> 
+                    <button class="toolBtn" mat-icon-button color="primary" matTooltip={{func.name}} matTooltipPosition = "after" (click)= "buttonAction(func.name) ">
+                        <img src={{func.icon}} class="toolIcon"> 
                     </button>    
                 </div>
             </div>
@@ -70,8 +70,8 @@
                     <label> Epaisseur du trait </label>
                     <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
                     <label> texture du trait </label>
-                    <!-- we must have five buttons with five different textures
-                    the following buttons are not good -->
+                    <!--we must have five buttons with five different textures
+                    the following buttons are not good-->
                     <button> miter-clip</button>
                     <button> miter </button>
                     <button> arc </button>
@@ -165,7 +165,7 @@
             </div>
         </mat-sidenav>
     
-        <mat-sidenav-content role="region" psition="end">
+        <mat-sidenav-content role="region" position="end">
             
             
             <div class ="workSpace">

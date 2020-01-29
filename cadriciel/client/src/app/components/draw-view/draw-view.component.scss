@@ -1,6 +1,7 @@
-$bg-color:lightblue;
+//$bg-color:lightblue;
 .topToolBar{
-    background-color: $bg-color;
+ //   background-color: $bg-color;
+    height: 59px;
 }
 .topToolBar > *{
     margin-right: 10px;
@@ -10,21 +11,23 @@ $bg-color:lightblue;
     border-right: thick;
 
     padding-bottom: 5px; 
-    margin-left: 8px;
+    margin-left: 12px;
 }
 
 .expendedOptions{
     width : 25%;
-    background-color:$bg-color;
+    //background-color:$bg-color;
 }
 .svgElem{
     position:relative;
 }
 
 .toolsSideBar{
-    width: 8vh;
-    background-color: $bg-color;
-    height :100%
+    width: 7vh;
+  //  background-color: $bg-color;
+    height : auto;
+    
+    
 }
 /*
 mat-sidenav-container {
@@ -32,9 +35,24 @@ mat-sidenav-container {
     padding-left: 8vh;
 }*/
 mat-sidenav-content{
-    background-color: grey;
+   // background-color: grey;
     height: 91vh;
 }
+
+.toolIcon {
+    height: 18px;
+    width: 18px;
+    position: relative;
+    top: -10px;
+    filter: invert(100%);
+}
+
+.toolBtn {
+    height: 20px;
+    width: 20px;
+    
+}
+
 
 
 
