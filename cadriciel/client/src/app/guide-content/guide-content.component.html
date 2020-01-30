@@ -1,29 +1,12 @@
 <article id='guideContent'>
 
-  <div *ngFor="let func of functionality.bienvenue">
+  <div *ngFor="let func of functionality">
     <div *ngIf="(func.isSelected === 'true')">
-      <h2 id="title">{{func.name}}</h2>
+      <h2 id="title">{{func.name}} </h2>
+      <p id="shortDescription">
+        {{func.shortDescription}}</p>
       <p id="description">
-        {{func.description}}
-      </p>
-    </div>
-  </div>
-
-  <div *ngFor="let func of functionality.menu">
-    <div *ngIf="(func.isSelected === 'true')">
-      <h2 id="title">{{func.name}}</h2>
-      <p id="description">
-        {{func.description}}
-      </p>
-    </div>
-  </div>
-
-  <div *ngFor="let func of functionality.outils">
-    <div *ngIf="(func.isSelected === 'true')">
-      <h2 id="title">{{func.name}}</h2>
-      <p id="description">
-        {{func.description}}
-      </p>
+        {{func.description}}</p>
     </div>
   </div>
   <div>

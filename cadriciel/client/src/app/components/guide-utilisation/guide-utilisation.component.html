@@ -4,41 +4,32 @@
     <button mat-raised-button id="guideQuitButton" (click)="closeModal()">X</button>
   </header>
 </div>
+
 <section>
-  <nav id='guideLinkBar'>
-    
-    
-    <!-- Welcome button -->
-    <div *ngFor="let func of functionality.bienvenue;">
-      <button mat-raised-button class="guide-selection-button" (click)="markAsSelected(func.shortcutName)" [ngClass]="(func.isSelected === 'true') ? 'selected':'notSelected'" >{{func.shortcutName}}</button>
+  <nav id='guideLinkBar'>  
+
+    <!-- Welcome and Menu button -->
+    <div *ngFor="let func of functionality;">
+      <button *ngIf = "func.type == 'Bienvenue' || func.type == 'Menu'" 
+        mat-raised-button class="guide-selection-button" (click)="markAsSelected(func.shortcutName)" [ngClass]="(func.isSelected === 'true') ? 'selected':'notSelected'" >{{func.shortcutName}}</button>
     </div>
-
-    <!-- Menu button -->
-    <div *ngFor="let func of functionality.menu;">
-      <div *ngIf="func.shortcutName != 'Afficher'">
-        <button mat-raised-button class="guide-selection-button"
-          (click)="markAsSelected(func.shortcutName)" [ngClass]="(func.isSelected === 'true') ? 'selected':'notSelected'">{{func.name}}</button>
-      </div>
-
-    </div>
-
 
     <!-- Display tool button -->
     <button 
       mat-raised-button class="guide-selection-button" (click) = "showTools=!showTools" [ngClass]="(showTools === true) ? 'selected':'notSelected'">Outils</button>
 
-
     <!-- Tools button -->
     <div *ngIf="showTools">
-      <div *ngFor="let func of functionality.outils;">
-        <button   mat-raised-button
+      <div *ngFor="let func of functionality;">
+        <button *ngIf="func.type == 'Outils'"  mat-raised-button
           class="guide-selection-button" (click)="markAsSelected(func.shortcutName)" [ngClass]="(func.isSelected === 'true') ? 'selected':'notSelected'">{{func.shortcutName}}</button>
       </div>
     </div>
+    
   </nav>
 
-  <article id='guideContent'>
-    <app-guide-content></app-guide-content>
-    
-  </article>
+  <div id='guideContent'>
+    <app-guide-content></app-guide-content> 
+  </div>
+  
 </section>

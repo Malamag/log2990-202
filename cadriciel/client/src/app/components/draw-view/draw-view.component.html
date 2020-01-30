@@ -2,7 +2,7 @@
 
     <mat-toolbar class ="topToolBar">
         <div *ngFor = "let func of functionality; index as id">
-            <div *ngIf = "id < 5">
+            <div *ngIf = "func.type == 'Menu'">
                 <button mat-mini-fab color= "primary" matTooltip ={{func.name}}>
                     <mat-icon> {{func.icon}}</mat-icon>
                 </button>
@@ -13,7 +13,7 @@
     <mat-sidenav-container class="firstSplit">
         <mat-sidenav class= "toolsSideBar" mode ="side" opened height = "100%" disableClose fixedInViewPort>
             <div class= "drawingTools" *ngFor="let func of functionality; index as id">
-                <div *ngIf = "id >= 5">
+                <div *ngIf = "func.type == 'Outils'">
                     <button mat-mini-fab color="primary" matTooltip={{func.name}} matTooltipPosition = "after" (click)= "buttonAction(func.name) ">
                         <img src={{func.icon}}> 
                     </button>    

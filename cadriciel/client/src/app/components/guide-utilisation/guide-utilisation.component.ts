@@ -19,45 +19,21 @@ export class GuideUtilisationComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<GuideUtilisationComponent>) { }
   
-  
-  
   ngOnInit() {
-
-    
-    this.dialogRef.updateSize('80vw', '80vh');
-    
-    let button = document.getElementById('Outils');
-    
-    if (button){
-      this.activatedButton = button;
-      button.style.backgroundColor = 'rgb(' + [150,150,150].join(',') + ')';
-    }
-    
   }
 
   closeModal() {
     this.dialogRef.close();
-    }
-
-
-
-
-    markAsSelected(sName:string){
-
-      functionality.bienvenue.forEach(function (button) {
-        button.shortcutName === sName ?button.isSelected = "true": button.isSelected = "false";
-      }); 
-      functionality.menu.forEach(function (button) {
-
-        button.shortcutName === sName ?button.isSelected = "true": button.isSelected = "false";
-      }); 
-      functionality.outils.forEach(function (button) {
-        button.shortcutName === sName ?button.isSelected = "true": button.isSelected = "false";
-        
-      }); 
-    }
-    
   }
+
+  markAsSelected(sName:string){
+
+    functionality.forEach(function (button) {
+      button.shortcutName === sName ?button.isSelected = "true": button.isSelected = "false";
+    }); 
+  }
+
+}
   
   
 

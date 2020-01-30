@@ -1,38 +1,23 @@
-article {
-    float: left;
-    padding: 20px;
-    width: 80%;
-    background-color: #f1f1f1;
-    overflow: hidden;
+*{
+  box-sizing: border-box;
 }
 
-nav,article{
+#guideLinkBar, #guideContent {
+  float: left;
   height: 80vh;
-  overflow-y: auto;
+  overflow-y: auto;  
 }
-/*
-section:after {
-    content: "";
-    display: table;
-    clear: both;
+
+#guideContent {
+    padding: 20px;
+    width: 60vw;
+    background-color: #f1f1f1;
 }
-*/
 
 #guideLinkBar {
-    float: left;
-    width: 20%;
-    background: rgb(205, 205, 205);
-}
-/*
-@media (max-width: 300px) {
-    nav, article {
-      width: 100%;
-      height: auto;
-    }
-}
-*/
-*{
-    box-sizing: border-box;
+    width: 20vw;
+    max-width: 200px;
+    background-color: rgb(200, 200, 200);
 }
 
 #guideQuitButton {
@@ -56,23 +41,23 @@ section:after {
   border-radius: 0px;
   text-align: left;
   font-weight: lighter;
-  color:grey;
-}
-
-.toolButtons {
-  display: none;
-}
-
-#previousButton{
-  float: left;
-}
-#nextButton{
-  float: right;
+  color:black;
 }
 
 button:hover {
   background-color: rgb(150, 150, 150);
 }
+
+.selected{
+  font-weight: 900;
+  //color: black;
+}
+
+.notSelected{
+  font-weight: lighter;
+  //color:rgb(60, 60, 60);
+}
+
 /*
 button:focus {
   background-color: rgb(150, 150, 150);
@@ -86,13 +71,11 @@ button:focus {
   text-align: left;
 } */
 
-
-.selected{
-  font-weight: 900;
-  color: black;
+/*
+@media (max-width: 300px) {
+    nav, article {
+      width: 100%;
+      height: auto;
+    }
 }
-
-.notSelected{
-  font-weight: lighter;
-  color:grey;
-}
+*/

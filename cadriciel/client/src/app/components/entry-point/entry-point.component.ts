@@ -52,7 +52,7 @@ export class EntryPointComponent implements OnInit {
         //statements; 
         break; 
      } 
-     case "Afficher": { 
+     case "Guide": { 
        this.openUserManual();
       break; 
     } 

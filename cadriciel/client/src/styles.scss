@@ -24,3 +24,8 @@ $polydessin-theme: mat-dark-theme($polydessin-primary, $polydessin-accent, $poly
 
 @include angular-material-theme($polydessin-theme);
 
+#modalWindow {
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+}
