@@ -2,6 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DrawViewComponent } from './draw-view.component';
 import {functionality} from '../../functionality'
+import { MatToolbarModule, MatIconModule, MatTooltipModule, MatButtonModule, MatSidenavModule, MatSliderModule, MatSelectModule } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('DrawViewComponent', () => {
   let component: DrawViewComponent;
@@ -10,7 +14,9 @@ describe('DrawViewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ DrawViewComponent ],
-      imports:[functionality]
+      providers :[{provide :functionality}],
+      imports:[ MatToolbarModule, MatIconModule,MatTooltipModule, MatButtonModule,
+        MatSidenavModule, MatSliderModule, MatSelectModule, BrowserModule, HttpClientModule, BrowserAnimationsModule]
     })
     .compileComponents();
   }));
@@ -37,7 +43,7 @@ describe('DrawViewComponent', () => {
     expect(component.openToolOptions).toBe(true);
   });
 
-  it('OpenToolOptions should be true as selectedTool value is undefined', () => {
+  it('OpenToolOptions should be true as selectedTool value is deferent from the name', () => {
     component.selectedTool= "rectangle";
     const name: string = "crayon";
     component.buttonAction(name);
@@ -45,6 +51,7 @@ describe('DrawViewComponent', () => {
   });
 
   it('OpenToolOptions should be false with the name is the same as selectedTool', () => {
+    component = new DrawViewComponent();
     const name: string = "crayon";
     component.selectedTool = name;
     component.buttonAction(name);
