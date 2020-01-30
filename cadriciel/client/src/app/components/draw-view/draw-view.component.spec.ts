@@ -50,10 +50,10 @@ describe('DrawViewComponent', () => {
     expect(component.openToolOptions).toBe(true);
   });
 
-  it('OpenToolOptions should be false with the name is the same as selectedTool', () => {
+  it('OpenToolOptions should be false as the button action function had been called twice for the same tool', () => {
     component = new DrawViewComponent();
     const name: string = "crayon";
-    component.selectedTool = name;
+    component.buttonAction(name);
     component.buttonAction(name);
     expect(component.openToolOptions).toBe(false);
   });
