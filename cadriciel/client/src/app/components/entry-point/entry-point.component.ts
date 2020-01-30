@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar,MatSnackBarConfig, MatDialog} from '@angular/material';
 import { functionality } from '../../functionality';
-import { Router } from '@angular/router';
 import { ModalWindowService } from "../../services/modal-window.service";
 import { NewDrawComponent } from '../new-draw/new-draw.component';
 import { GuideUtilisationComponent } from '../guide-utilisation/guide-utilisation.component'
@@ -18,7 +17,7 @@ export class EntryPointComponent implements OnInit {
   functionality = functionality;
   winService: ModalWindowService;
 
-  constructor(private snackBar: MatSnackBar, private dialog: MatDialog, private router: Router) {
+  constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {
     this.winService = new ModalWindowService(this.dialog);
   }
 
@@ -35,9 +34,8 @@ export class EntryPointComponent implements OnInit {
   
 
   openUserManual(){
-    //this.router.navigate([{outlets: {entryPoint:['guide']}}]);
+   
     this.winService.openWindow(GuideUtilisationComponent);
-    this.router.navigate([{outlets: {guideUtilisation:['test']}}]);
   }
 
   openCreateNew(){

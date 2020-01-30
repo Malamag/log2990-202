@@ -6,9 +6,9 @@ export const functionality = {
             name: "Bienvenue",
             shortcutName: "Bienvenue",
             shortDescription: "text goes here",
-            description: "text goes here",
+            description: "Message de bienvenue",
             icon: "nothing",
-            isSelected: "false",
+            isSelected: "true",
         }],
 
     menu: [
@@ -16,15 +16,15 @@ export const functionality = {
             name: "Créer un nouveau dessin",
             shortcutName: "Créer",
             shortDescription:"text goes here",
-            description: "text goes here",
+            description: "pour creer des dessins",
             icon :"add_circle", 
             isSelected: "false",
           },
           {
-              name: "Ouvrir la galerie de dessins disponibles sur le serveur",
+              name: "Ouvrir la galerie de dessins disponibles",
               shortcutName: "Ouvrir",
               shortDescription:"gallerie",
-              description: "text goes here",
+              description: "pour aller chercher des dessins sur le serveur",
               icon :"camera",  
               isSelected: "false",
           },
@@ -40,7 +40,7 @@ export const functionality = {
               name: "Continuer un dessin",
               shortcutName: "Continuer",
               shortDescription:"text goes here",
-              description: "text goes here",
+              description: "pour continuer un dessin",
               icon :"arrow_forward",
               isSelected: "false",  
           },
@@ -52,7 +52,7 @@ export const functionality = {
             name: "Sélectionner",
             shortcutName: "Sélectionner",
             shortDescription: "text goes here",
-            description: "text goes here",
+            description: "text goes here1",
             /* source: <div>Icons made by <a href="https://www.flaticon.com/authors/those-icons" 
             title="Those Icons">Those Icons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>*/
             icon: "../../../assets/images/cursor.png",
@@ -62,7 +62,7 @@ export const functionality = {
             name: "Crayon",
             shortcutName: "Crayon",
             shortDescription: "text goes here",
-            description: "text goes here",
+            description: "text goes here2",
             /* source: <div>Icons made by <a href="https://www.flaticon.com/authors/those-icons" 
             title="Those Icons">Those Icons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> */
             icon: "../../../assets/images/pencil.png",
@@ -72,7 +72,7 @@ export const functionality = {
             name: "Rectangle",
             shortcutName: "Rectangle",
             shortDescription: "text goes here",
-            description: "text goes here",
+            description: "text goes here3",
             /* source: <div>Icons made by <a href="https://www.flaticon.com/authors/google" 
             title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>*/
             icon: "../../../assets/images/frame.png",
@@ -82,7 +82,7 @@ export const functionality = {
             name: "Plume",
             shortcutName: "Plume",
             shortDescription: "text goes here",
-            description: "text goes here",
+            description: "text goes here4",
             /*source: <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" 
             title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>*/
             icon: "../../../assets/images/calligraphie.png",
@@ -92,7 +92,7 @@ export const functionality = {
             name: "Choisir couleur",
             shortcutName: "Outil couleur",
             shortDescription: "text goes here",
-            description: "text goes here",
+            description: "text goes here5",
             /* source: <div>Icons made by <a href="https://www.flaticon.com/authors/freepik"
              title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>*/
             icon: "../../../assets/images/exclude.png",
@@ -103,7 +103,7 @@ export const functionality = {
             name: "Élipse",
             shortcutName: "Élipse",
             shortDescription: "text goes here",
-            description: "text goes here",
+            description: "text goes here6",
             /* source:uIcons made by <a href="https://www.flaticon.com/authors/freepik"
             title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
             icon: "../../../assets/images/oval.png",
@@ -114,7 +114,7 @@ export const functionality = {
             name: "Ligne",
             shortcutName: "Ligne",
             shortDescription: "text goes here",
-            description: "text goes here",
+            description: "text goes here7",
             /* source : Icons made by <a href="https://www.flaticon.com/authors/google"
             title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
             icon: "../../../assets/images/graph.png",
@@ -125,7 +125,7 @@ export const functionality = {
             name: "Chemin",
             shortcutName: "Chemin",
             shortDescription: "text goes here",
-            description: "text goes here",
+            description: "text goes here8",
             /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik" 
             title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
             icon: "../../../assets/images/timeline.png",
@@ -136,7 +136,7 @@ export const functionality = {
             name: "Pinceau",
             shortcutName: "Pinceau",
             shortDescription: "text goes here",
-            description: "text goes here",
+            description: "text goes here9",
             /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik" 
             title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
             icon: "../../../assets/images/edit-tools.png",
@@ -147,7 +147,7 @@ export const functionality = {
             name: "Efface",
             shortcutName: "Efface",
             shortDescription: "text goes here",
-            description: "text goes here",
+            description: "text goes here10",
             /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik"
              title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
             icon: "../../../assets/images/eraser.png",

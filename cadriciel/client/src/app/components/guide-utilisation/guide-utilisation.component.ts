@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
-import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material';
 import { functionality } from '../../functionality';
 
@@ -14,22 +12,20 @@ import { functionality } from '../../functionality';
 })
 export class GuideUtilisationComponent implements OnInit {
   showTools: boolean = false;
-  selectedColor = 'dark';
-  unselectedColor = 'lightgrey';
   functionality = functionality;
   activatedButton: HTMLElement;
 
   
 
-  constructor(public dialogRef: MatDialogRef<GuideUtilisationComponent>, private router: Router) { }
+  constructor(public dialogRef: MatDialogRef<GuideUtilisationComponent>) { }
   
-
+  
   
   ngOnInit() {
 
     
     this.dialogRef.updateSize('80vw', '80vh');
-    this.dialogRef.disableClose = true;
+    
     let button = document.getElementById('Outils');
     
     if (button){
@@ -41,25 +37,26 @@ export class GuideUtilisationComponent implements OnInit {
 
   closeModal() {
     this.dialogRef.close();
-    this.router.navigate([""]);
     }
 
 
 
 
-    markAsSelected(name:string){
-      
+    markAsSelected(sName:string){
+
+      functionality.bienvenue.forEach(function (button) {
+        button.shortcutName === sName ?button.isSelected = "true": button.isSelected = "false";
+      }); 
       functionality.menu.forEach(function (button) {
+
+        button.shortcutName === sName ?button.isSelected = "true": button.isSelected = "false";
+      }); 
+      functionality.outils.forEach(function (button) {
+        button.shortcutName === sName ?button.isSelected = "true": button.isSelected = "false";
         
-        if(button.shortcutName == name){
-          button.isSelected = "true";
-        }
-        else{
-          button.isSelected = "false";
-        }
-        console.log("button name : "+button.name + " isSelected : "+button.isSelected)
       }); 
     }
+    
   }
   
   

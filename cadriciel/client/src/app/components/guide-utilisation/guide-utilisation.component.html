@@ -9,38 +9,36 @@
     
     
     <!-- Welcome button -->
-    <div *ngFor="let gFunc of functionality.bienvenue;">
-      <button mat-raised-button class="guide-selection-button" >{{gFunc.shortcutName}}</button>
+    <div *ngFor="let func of functionality.bienvenue;">
+      <button mat-raised-button class="guide-selection-button" (click)="markAsSelected(func.shortcutName)" [ngClass]="(func.isSelected === 'true') ? 'selected':'notSelected'" >{{func.shortcutName}}</button>
     </div>
 
     <!-- Menu button -->
-    <div *ngFor="let gFunc of functionality.menu;">
-      <div *ngIf="gFunc.shortcutName != 'Afficher'">
+    <div *ngFor="let func of functionality.menu;">
+      <div *ngIf="func.shortcutName != 'Afficher'">
         <button mat-raised-button class="guide-selection-button"
-          (click)="markAsSelected(gFunc.shortcutName)" [ngClass]="(gFunc.isSelected) ? 'selected':'notSelected'">{{gFunc.shortcutName}}</button>
+          (click)="markAsSelected(func.shortcutName)" [ngClass]="(func.isSelected === 'true') ? 'selected':'notSelected'">{{func.name}}</button>
       </div>
+
     </div>
 
 
     <!-- Display tool button -->
     <button 
-      mat-raised-button class="guide-selection-button">Outils</button>
+      mat-raised-button class="guide-selection-button" (click) = "showTools=!showTools" [ngClass]="(showTools === true) ? 'selected':'notSelected'">Outils</button>
 
 
     <!-- Tools button -->
     <div *ngIf="showTools">
-      <div *ngFor="let gFunc of functionality.outils;">
+      <div *ngFor="let func of functionality.outils;">
         <button   mat-raised-button
-          class="guide-selection-button">{{gFunc.shortcutName}}</button>
+          class="guide-selection-button" (click)="markAsSelected(func.shortcutName)" [ngClass]="(func.isSelected === 'true') ? 'selected':'notSelected'">{{func.shortcutName}}</button>
       </div>
     </div>
   </nav>
 
   <article id='guideContent'>
-    <router-outlet name="guideUtilisation"></router-outlet>
-    <div>
-      <button mat-raised-button id="previousButton" (click)="previousPage()">Précédent</button>
-      <button mat-raised-button id="nextButton" (click)="nextPage()">Suivant</button>
-    </div>
+    <app-guide-content></app-guide-content>
+    
   </article>
 </section>

@@ -1,11 +1,33 @@
-<article id = 'guideContent'>
-    <h2 id="title">Bienvenue</h2>
-    <p id="shortDescription">
-      text goes here
-    </p>
-    <p id="description">
-      text goes here
-    </p>
-  </article>
-    
-    
+<article id='guideContent'>
+
+  <div *ngFor="let func of functionality.bienvenue">
+    <div *ngIf="(func.isSelected === 'true')">
+      <h2 id="title">{{func.name}}</h2>
+      <p id="description">
+        {{func.description}}
+      </p>
+    </div>
+  </div>
+
+  <div *ngFor="let func of functionality.menu">
+    <div *ngIf="(func.isSelected === 'true')">
+      <h2 id="title">{{func.name}}</h2>
+      <p id="description">
+        {{func.description}}
+      </p>
+    </div>
+  </div>
+
+  <div *ngFor="let func of functionality.outils">
+    <div *ngIf="(func.isSelected === 'true')">
+      <h2 id="title">{{func.name}}</h2>
+      <p id="description">
+        {{func.description}}
+      </p>
+    </div>
+  </div>
+  <div>
+    <button mat-raised-button id="previousButton" (click)="previousPage()">Précédent</button>
+    <button mat-raised-button id="nextButton" (click)="nextPage()" >Suivant</button>
+  </div>
+</article>
