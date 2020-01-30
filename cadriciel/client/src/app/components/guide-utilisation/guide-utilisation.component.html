@@ -9,15 +9,15 @@
     <div *ngFor = "let gFunc of guideFunctionality; index as i">
       <!-- Make buttons for all main menu options (except utilisation guide) -->
       <div *ngIf = "i < 3">
-        <button mat-raised-button id="{{gFunc.shortcutName}}" class="guide-selection-button" (click)="selectionButton(gfunc)">{{gFunc.shortcutName}}</button>
+        <button mat-raised-button id="{{gFunc.shortcutName}}" class="guide-selection-button" (click)="selectionButton(gFunc)">{{gFunc.shortcutName}}</button>
       </div>
       <div *ngIf = "i == 3">
-        <button mat-raised-button id="{{gFunc.shortcutName}}" class="guide-selection-button" (click)="selectionButton(gfunc)">{{gFunc.shortcutName}}</button>
+        <button mat-raised-button id="{{gFunc.shortcutName}}" class="guide-selection-button" (click)="selectionButton(gFunc)">{{gFunc.shortcutName}}</button>
         <button mat-raised-button id="Outils" (click)="toolsListButton()">Outils</button>
       </div>
       <!-- Make buttons for all tools: functionality #6 to end -->
       <div *ngIf = "i > 3" >
-        <button mat-raised-button id="{{gFunc.shortcutName}}" class="guide-selection-button toolButtons" (click)="selectionButton(gfunc)">{{gFunc.shortcutName}}</button>
+        <button mat-raised-button id="{{gFunc.shortcutName}}" class="guide-selection-button toolButtons" (click)="selectionButton(gFunc)">{{gFunc.shortcutName}}</button>
       </div>
     </div>
   </nav>
