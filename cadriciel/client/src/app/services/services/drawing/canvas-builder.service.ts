@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable} from '@angular/core';
 
 import { Canvas } from '../../../models/Canvas.model';
 
 import { Subject } from 'rxjs';
+
 
 // import { Canvas } from '../../../models/Canvas.model';
 
@@ -21,13 +22,15 @@ export class CanvasBuilderService {
     this.defWidht = this.getDefWidth();
     this.defHeight = this.getDefHeight();
   }
-
+  
   getDefWidth(): number {
-    return window.innerWidth;
+    const DIV = 1.042; // permet d'égaliser avec les dimensions de l'espace de travail
+    return Math.round(window.innerWidth/DIV); //évite d'avoir des fractions de pixels
   }
 
   getDefHeight(): number {
-    return window.innerHeight;
+    const DIV = 1.11; // idem, mais pour la hauteur
+    return Math.round(window.innerHeight/DIV);
   }
 
   getDefColor(): string {

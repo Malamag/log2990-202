@@ -1,17 +1,17 @@
 
 .topToolBar{
-    height: 59px;  //risque d'être changé pour un %
+    height: 9vh;  //risque d'être changé pour un %
 }
 
 .topToolBar > *{
-    margin-right: 10px;
+    margin-right: 1px;
 }
 .drawingTools{
     width: 5%;
     border-right: thick;
 
     padding-bottom: 5px; 
-    margin-left: 12px;
+    margin-left: 10px;
 }
 
 .expendedOptions{
@@ -22,7 +22,7 @@
 }
 
 .toolsSideBar{
-    width: 7vh;
+    width: 4vw;
     height : auto;
 }
 
@@ -33,20 +33,21 @@ mat-sidenav-content{
 .toolIcon {
     height: 18px;
     width: 18px;
+    
     position: relative; // alignement des icônes avec les boutons respectifs
-    top: -10px; 
+    top: -3px; 
 
     filter: invert(100%); // inversion des couleurs afin d'obtenir des icônes blancs
 }
 
 .toolBtn {
-    height: 20px;
-    width: 20px;
+    height: 35px;
+    width: 35px;
 }
 
-/*.toolBtn:focus {
-    //background-color: rgb(51, 48, 92); //à voir après réorganisation, boutons pas assez gros
-}*/
+.toolBtn:focus {
+    background-color: palevioletred; 
+}
 
 
 
