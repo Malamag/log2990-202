@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+/*import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Message } from '../../../../../common/communication/message';
-import { IndexService } from '../../services/index/index.service';
+import { IndexService } from '../../services/index/index.service';*/
 
 @Component({
     selector: 'app-root',
