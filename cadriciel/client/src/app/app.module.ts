@@ -29,6 +29,7 @@ import {
     MatSliderModule,
     MatTooltipModule
 } from '@angular/material';
+import { DrawViewService } from './services/services/drawing/draw-view.service';
 
 
 @NgModule({
@@ -57,7 +58,7 @@ import {
         MatTooltipModule,
         AppRoutingModule
     ],
-    providers: [CanvasBuilderService, ModalWindowService],
+    providers: [CanvasBuilderService, ModalWindowService, DrawViewService],
     bootstrap: [AppComponent],
     entryComponents: [NewDrawComponent, GuideUtilisationComponent]
     

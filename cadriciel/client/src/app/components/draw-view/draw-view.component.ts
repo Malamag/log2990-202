@@ -3,6 +3,8 @@ import {functionality} from '../../functionality'
 import { CanvasBuilderService } from '../../services/services/drawing/canvas-builder.service';
 import { Canvas } from '../../models/Canvas.model';
 import { Subscription } from 'rxjs';
+import { ModalWindowService } from 'src/app/services/modal-window.service';
+import { NewDrawComponent } from '../new-draw/new-draw.component';
 
 @Component({
   selector: 'app-draw-view',
@@ -24,7 +26,8 @@ export class DrawViewComponent implements OnInit, OnDestroy {
   @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
   renderer: Renderer2
 
-  constructor(private canvBuildService: CanvasBuilderService) { }
+  constructor(private canvBuildService: CanvasBuilderService,
+              private winService: ModalWindowService) { }
 
   ngOnInit() {
 
@@ -56,6 +59,9 @@ export class DrawViewComponent implements OnInit, OnDestroy {
     
   }
 
+  openContext() {
+    this.winService.openWindow(NewDrawComponent);
+  }
 
 
 }
