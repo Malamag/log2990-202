@@ -45,8 +45,9 @@ mat-sidenav-content{
     width: 35px;
 }
 
-.toolBtn:focus {
-    background-color: palevioletred; 
+.toolBtn:focus { // le bouton vire au rose après avoir été cliqué
+    background-color: rgb(255, 34, 107); 
+    
 }
 
 
