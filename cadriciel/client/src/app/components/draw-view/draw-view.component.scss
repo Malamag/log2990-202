@@ -11,7 +11,8 @@
     border-right: thick;
 
     padding-bottom: 5px; 
-    margin-left: 10px;
+    
+    margin-left: 15%;
 }
 
 .expendedOptions{
@@ -43,12 +44,13 @@ mat-sidenav-content{
 .toolBtn {
     height: 35px;
     width: 35px;
-}
-
-.toolBtn:focus { // le bouton vire au rose après avoir été cliqué
-    background-color: rgb(255, 34, 107); 
     
 }
+
+/*.toolBtn:focus { // le bouton vire au rose après avoir été cliqué
+    background-color: rgb(255, 34, 107); 
+    
+}*/
 
 
 
