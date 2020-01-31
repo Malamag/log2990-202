@@ -19,7 +19,6 @@ export class BrushService extends DrawingTool {
     //mouse down with brush in hand
     if(this.mouseX + (this._workingSpace? this._workingSpace.scrollLeft : 0) >= this._svgBox.left && this.mouseY + (this._workingSpace? this._workingSpace.scrollTop : 0) >= this._svgBox.top){
       this.startedInsideWorkSpace = true;
-      console.log("yes");
     }else{
       this.startedInsideWorkSpace = false;
     }

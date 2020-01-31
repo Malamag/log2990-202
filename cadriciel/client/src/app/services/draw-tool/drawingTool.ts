@@ -1,7 +1,7 @@
-import { Observer } from './observer';
+import {InputObserver } from './input-observer';
 import { Point } from './point';
 
-export abstract class DrawingTool extends Observer{
+export abstract class DrawingTool extends InputObserver{
     _svg:HTMLElement | null;
     _workingSpace:HTMLElement | null;
     _svgBox:ClientRect;

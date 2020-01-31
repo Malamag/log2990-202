@@ -1,6 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { DrawToolService } from 'src/app/services/draw-tool/draw-tool.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
+import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
 
 @Component({
   selector: 'app-svg-draw',
@@ -39,7 +40,7 @@ export class SvgDrawComponent implements OnInit {
       console.log(s);*/
     });
 
-    let isDoubleClick : boolean = false;
+    //let isDoubleClick : boolean = false;
 
     let _svg : HTMLElement | null = document.getElementById("canvas");
 
@@ -56,6 +57,8 @@ export class SvgDrawComponent implements OnInit {
     let line = drawing_service.CreateLine(_svg,_workingSpace,0,0,false,10,color1,true);
     let brush = drawing_service.CreateBrush(_svg,_workingSpace,0,0,true,10,color1);
 
+    let testMouse = new MouseHandlerService(_svg, _workingSpace);
+
     tools.push(pencil);
     tools.push(rect);
     tools.push(line);
@@ -63,27 +66,31 @@ export class SvgDrawComponent implements OnInit {
 
     tools.forEach(element => {
       test.addObserver(element);
+      testMouse.addObserver(element);
     });
 
     if(_svg != null){
 
       window.addEventListener("mousemove", function(e){
 
+        testMouse.move(e);
+        /*
         tools.forEach(element => {
           if(element.selected){
             element.mouseX = e.x;
             element.mouseY = e.y;
             element.move();
           }
-        });
+        });*/
 
       });
       window.addEventListener("mousedown", function(e){
+        testMouse.down(e);
 
+        /*
         isDoubleClick = false;
         setTimeout(()=>{
             if(!isDoubleClick){
-              console.log("single click");
                 tools.forEach(element => {
                   if(element.selected){
                     element.mouseX = e.x;
@@ -92,14 +99,16 @@ export class SvgDrawComponent implements OnInit {
                   }
               });
             }
-         },100)
+         },100)*/
 
       });
       window.addEventListener("mouseup", function(e){
 
+        testMouse.up(e);
+
+        /*
         setTimeout(()=>{
           if(!isDoubleClick){
-            console.log("up");
             tools.forEach(element => {
               if(element.selected){
                 element.mouseX = e.x;
@@ -108,21 +117,20 @@ export class SvgDrawComponent implements OnInit {
               }
             });
           }
-       },101)
+       },101)*/
 
       });
       window.addEventListener("dblclick",function(e){
 
-        isDoubleClick = true;
+        /*isDoubleClick = true;
 
-        console.log("dblclick");
         tools.forEach(element => {
           if(element.selected){
             element.mouseX = e.x;
             element.mouseY = e.y;
             element.doubleClick();
           }
-        });
+        });*/
       });
     }
   }
