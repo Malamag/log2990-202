@@ -10,7 +10,12 @@
             "request": "launch",
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:4200",
-            "webRoot": "${workspaceFolder}/cadriciel/client"
+            "webRoot": "${workspaceFolder}/cadriciel/client",
+            "skipFiles": [
+                "${workspaceFolder}/cadriciel/client/node_modules/**/*.js",
+                "${workspaceFolder}cadriciel/client/lib/**/*.js",
+                "${workspaceFolder}/**/*.html"
+              ]
         }
     ]
 }

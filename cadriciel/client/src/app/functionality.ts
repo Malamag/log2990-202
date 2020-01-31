@@ -1,3 +1,6 @@
+import { NewDrawComponent } from './components/new-draw/new-draw.component';
+import { GuideUtilisationComponent } from './components/guide-utilisation/guide-utilisation.component';
+
 export const functionality = [
     //{
       //  name: "défaire",
@@ -23,7 +26,8 @@ export const functionality = [
       shortcutName: "Créer",
       shortDescription:"text goes here",
       description: "text goes here",
-      icon :"add_circle",  
+      icon :"add_circle",
+      calledComponent: NewDrawComponent  
     },
     {
         name: "Ouvrir la galerie de dessins disponibles sur le serveur",
@@ -38,6 +42,7 @@ export const functionality = [
         shortDescription:"text goes here",
         description: "text goes here",
         icon :"menu_book",  
+        calledComponent: GuideUtilisationComponent
     },
     {
         name: "Continuer un dessin",

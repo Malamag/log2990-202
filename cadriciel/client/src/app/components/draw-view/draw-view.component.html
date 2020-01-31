@@ -3,7 +3,7 @@
     <mat-toolbar class ="topToolBar">
         <div *ngFor = "let func of functionality; index as id">
             <div *ngIf = "id < 5">
-                <button class="topBtn" mat-mini-fab color= "primary" matTooltip ={{func.name}} (click)="openContext()">
+                <button class="topBtn" mat-mini-fab color= "primary" matTooltip ={{func.name}} (click)="openContext(func.calledComponent)">
                     <mat-icon class="topIcon"> {{func.icon}}</mat-icon>
                 </button>
             </div>
