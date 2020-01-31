@@ -33,18 +33,18 @@ mat-sidenav-content{
 }
 
 .toolIcon {
-    height: 18px;
-    width: 18px;
+    height: 3vh;
+    width: 3vh;
     
     position: relative; // alignement des icônes avec les boutons respectifs
-    top: -3px; 
+    
 
     filter: invert(100%); // inversion des couleurs afin d'obtenir des icônes blancs
 }
 
 .toolBtn {
-    height: 35px;
-    width: 35px;
+    height: 5vh;
+    width: 5vh;
     
 }
 
