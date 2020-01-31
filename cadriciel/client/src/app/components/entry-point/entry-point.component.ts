@@ -26,7 +26,7 @@ export class EntryPointComponent implements OnInit {
   
   onOpen() {
     let config = new MatSnackBarConfig();
-    config.duration=2500;
+    config.duration = 2500; // temps de visibilité de la barre de bienvenue (ms)
     this.snackBar.open("Bienvenue !",undefined,config);
   }
 

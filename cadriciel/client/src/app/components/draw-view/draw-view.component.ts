@@ -2,8 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/co
 import {functionality} from '../../functionality'
 import { ModalWindowService } from 'src/app/services/modal-window.service';
 import { ComponentType } from '@angular/cdk/portal';
-import { NewDrawComponent } from '../new-draw/new-draw.component';
-import { DrawViewService } from 'src/app/services/services/drawing/draw-view.service';
+
 
 @Component({
   selector: 'app-draw-view',
@@ -20,8 +19,7 @@ export class DrawViewComponent implements OnInit {
   @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
   renderer: Renderer2
 
-  constructor(private winService: ModalWindowService,
-              private dViewService: DrawViewService) { }
+  constructor(private winService: ModalWindowService) { }
 
   ngOnInit() {
   }
@@ -45,10 +43,7 @@ export class DrawViewComponent implements OnInit {
 
   openContext(cmp: ComponentType<any>) {
     this.winService.openWindow(cmp);
-    if (cmp.name === NewDrawComponent.name) { // Vérifier s'il s'agit d'un component pour créer un nouveau dessin
-      this.dViewService.newDrawOnView();
-    }
   }
   
-
+  
 }
