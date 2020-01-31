@@ -1,58 +1,69 @@
-<!-- TODO : property binding? need to garantie square shape-->
-    <!--<section style="background-color: lightgray;width: 165px;">
-        
-        <table>
-            <tr>
-                <td class="leftInput" style="display: block;">
-                    <label><font color="red">Red</font></label>
-                    <input type="text" maxlength="3" placeholder="0...255" [(ngModel)]="RedLeftInput" (keyup)="onRedLeftInput($event)" [ngStyle]="myInputStylesRL">
-                    <label><font color="green">Green</font></label>
-                    <input type="text" maxlength="3" placeholder="0...255" [(ngModel)]="GreenLeftInput" (keyup)="onGreenLeftInput($event)" [ngStyle]="myInputStylesGL">
-                    <label><font color="blue">Blue</font></label>
-                    <input type="text" maxlength="3" placeholder="0...255" [(ngModel)]="BlueLeftInput" (keyup)="onBlueLeftInput($event)" [ngStyle]="myInputStylesBL">
-                    <label>Saturation</label>
-                    <input type="text" maxlength="3" placeholder="0...100" [(ngModel)]="SaturationLeftInput" (keyup)="onSaturationLeftInput($event)">
-                    <label>Lightness</label>
-                    <input type="text" maxlength="3" placeholder="0...100" [(ngModel)]="LightnessLeftInput" (keyup)="onLightnessLeftInput($event)">
-                    <label>Hex </label>
-                    <input type="text" maxlength="8" placeholder="0x...">
-                    <input type="range" min="0" step="0.01" max="1" [(ngModel)]="primaryAlpha" (change)="primaryAlphaChange()">
-                    <button (click)="swapPrimarySecondary()">Swap</button>
-                    
-                </td>
-                <td>
-                    <canvas id="color-picker" height="100" width="100" (mousedown)="colorSelector($event)">
-                    </canvas>
-                </td>        
-                <td class="rightInput" style="display: block;">
-                    <label><font color="red">Red</font></label>
-                    <input type="text" maxlength="3" placeholder="0...255"  [(ngModel)]="RedRightInput" (keyup)="onRedRightInput($event)" [ngStyle]="myInputStylesRR">
-                    <label><font color="green">Green</font></label>
-                    <input type="text" maxlength="3" placeholder="0...255" [(ngModel)]="GreenRightInput" (keyup)="onGreenRightInput($event)" [ngStyle]="myInputStylesGR">
-                    <label><font color="blue">Blue</font></label>
-                    <input type="text" maxlength="3" placeholder="0...255" [(ngModel)]="BlueRightInput" (keyup)="onBlueRightInput($event)" [ngStyle]="myInputStylesBR">
-                    <label>Saturation</label>
-                    <input type="text" maxlength="3" placeholder="0...100" [(ngModel)]="SaturationRightInput" (keyup)="onSaturationRightInput($event)">
-                    <label>Lightness</label>
-                    <input type="text" maxlength="3" placeholder="0...100" [(ngModel)]="LightnessRightInput" (keyup)="onLightnessRightInput($event)">
-                    <label>Hex </label>
-                    <input type="text" maxlength="6" placeholder="0x...">
-                    <input type="range" min="0" step="0.01" max="1" [(ngModel)]="secondaryAlpha" (change)="secondaryAlphaChange(event)">
-                    <button (click)="swapPrimarySecondary()">Swap</button>
-                </td>
-        </table>
-    </section>
--->
-<section style="background-color: lightgray;width: 55px;">
+<!-- todo binding-->
+<section style="background-color: lightgray;width: 255px;">
         
     <table>
         <tr>
             
             <td>
-                <canvas id="color-picker" height="50" width="50" (mousedown)="colorSelector($event)">
+                <canvas id="color-picker" height="200" width="200" (mousedown)="colorSelector($event)">
                 </canvas>
+                <svg height="200" width="200" >
+                    <defs>
+                        <clipPath id="clip">
+                            <rect x="0" y="0" width="200" height="200"></rect>
+                        </clipPath>
+                        <linearGradient id="grad1" x1="50%" y1="0%" x2="00%" y2="00%">
+                            <stop offset="0%" style="stop-color:rgb( 255, 0, 0 );stop-opacity: 1;"[ngStyle]="gradientStyles"></stop>
+                            <stop offset="100%" style="stop-color:rgb( 255, 0, 0 );stop-opacity: 0;"[ngStyle]="gradientStyles"></stop>
+                        </linearGradient>
+                        <linearGradient id="gradS" x1="00%" y1="50%" x2="0%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb( 255, 0, 0 );stop-opacity: 1;"[ngStyle]="gradientStyles2"></stop>
+                            <stop offset="100%" style="stop-color:rgb( 255, 0, 0 );stop-opacity: 0;"[ngStyle]="gradientStyles2"></stop>
+                        </linearGradient>
+                        <linearGradient id="gradP" x1="00%" y1="50%" x2="0%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb( 255, 0, 0 );stop-opacity: 1;"[ngStyle]="gradientStylesP"></stop>
+                            <stop offset="100%" style="stop-color:rgb( 255, 0, 0 );stop-opacity: 0;"[ngStyle]="gradientStylesP"></stop>
+                        </linearGradient>
+                        <linearGradient id="grad2" x1="0%" y1="100%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:rgb( 255, 255, 255 );stop-opacity: 1;"></stop>
+                            <stop offset="50%" style="stop-color:rgb( 255, 255, 255 );stop-opacity: 0;"></stop>
+                        </linearGradient>
+                        <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:rgb( 0, 0, 0 );stop-opacity: 1;"></stop>
+                            <stop offset="50%" style="stop-color:rgb( 0, 0, 0 );stop-opacity: 0;"></stop>
+                        </linearGradient> 
+                        <linearGradient id="colorCircle" x1="100%" y1="0%" x2="0%" y2="0%">
+                            <stop offset="0%" style="stop-color:hsl( 0, 100%, 50% );stop-opacity: 1;"></stop>
+                            <stop offset="5%" style="stop-color:hsl( 30, 100%, 50% );stop-opacity: 1;"></stop>                    
+                            <stop offset="20%" style="stop-color:hsl( 60, 100%, 50% );stop-opacity: 1;"></stop>                     
+                            <stop offset="40%" style="stop-color:hsl( 90, 100%, 50% );stop-opacity: 1;"></stop>                    
+                            <stop offset="60%" style="stop-color:hsl( 120, 100%, 50% );stop-opacity: 1;"></stop>                    
+                            <stop offset="90%" style="stop-color:hsl( 150, 100%, 50% );stop-opacity: 1;"></stop>                
+                            <stop offset="100%" style="stop-color:hsl( 180, 100%, 50% );stop-opacity: 1;"></stop>
+                        </linearGradient>
+                        <linearGradient id="colorCircle2" x1="0%" y1="2%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:hsl( 180, 100%, 50% );stop-opacity: 1;"></stop>
+                            <stop offset="10%" style="stop-color:hsl( 210, 100%, 50% );stop-opacity: 1;"></stop>
+                            <stop offset="20%" style="stop-color:hsl( 240, 100%, 50% );stop-opacity: 1;"></stop>
+                            <stop offset="50%" style="stop-color:hsl( 270, 100%, 50% );stop-opacity: 1;"></stop>
+                            <stop offset="70%" style="stop-color:hsl( 300, 100%, 50% );stop-opacity: 1;"></stop>
+                            <stop offset="90%" style="stop-color:hsl( 330, 100%, 50% );stop-opacity: 1;"></stop>
+                            <stop offset="100%" style="stop-color:hsl( 360, 100%, 50% );stop-opacity: 1;"></stop>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="60,50 60,150 160,100" style="fill: url(#grad1);stroke:black;stroke-width:1" [ngStyle]="svgStyles"></polygon>
+                    <polygon points="60,50 60,150 160,100" style="fill: url(#grad2);stroke:black;stroke-width:1" [ngStyle]="svgStyles"></polygon>
+                    <polygon points="60,50 60,150 160,100" style="fill: url(#grad3);stroke:black;stroke-width:1" [ngStyle]="svgStyles" (mousedown)="TrisvgCursor($event)"></polygon>
+                    <path d="M100 100 m -90 0 a90 90 0 1 0 180 0" stroke="url(#colorCircle)" stroke-width="10" fill="none"></path>
+                    <path d="M100 100 m 90 0 a90 90 0 1 0 -180 0" stroke="url(#colorCircle2)" stroke-width="10" fill="none"></path>
+                    <circle cx=100 cy=100 r=90 stroke-width="10" stroke="white" style="stroke-opacity: .1;" fill="none" clip-path="url(#clip)" (mousedown)="colorSelector2($event)"></circle>
+                    <ellipse cx="190" cy="100" rx="6" ry="2" stroke-width="1" stroke="black" fill="none" [ngStyle]="svgStyles"></ellipse>-->
+                    <polygon points="0,180 00,150 10,170 30,190 50,200 20,200" style="fill: url(#gradP);stroke:black;stroke-width:1"></polygon>
+                    <polygon points="200,180 200,150 190,170 170,190 150,200 180,200" style="fill: url(#gradS);stroke:black;stroke-width:1"></polygon>
+                    <circle cx="100" cy="100" r=5 stroke-width="1" stroke="white"  fill="none" [ngStyle]="cursorStyles"></circle>
+                </svg>
             </td>  
-            
+        </tr>
             <tr class="leftInput" style="display: inlane-block;">
                 <label class="switch">
                     <input type="checkbox" checked (click)="swapInputDisplay($event)">
@@ -81,6 +92,7 @@
               
     </table>
 </section>
+
     <!--<section>
         <mat-slider min="0" max="1" step="0.01"  vertical="false"  [(ngModel)]="primaryAlpha" width="10px" (change)="primaryAlphaChange($event)"></mat-slider>
         <mat-slider min="0" max="1" step="0.01"  vertical="false"

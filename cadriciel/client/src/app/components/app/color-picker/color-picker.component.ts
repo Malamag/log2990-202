@@ -65,14 +65,18 @@ export class ColorPickerComponent {
     SaturationRightInput : string = '';
     LightnessRightInput : string = '';
 
+    mytranslation :string;
+    mycx : number = 0;
+    mycy : number = 0;
+
     constructor() {}
 
     ngOnInit() {
 
         // canvas parm init
         this.canvasBgColor = 'white';
-        this.canvasHeigth = 50;//temp need to be a square
-        this.canvasWidth = 50;//temp
+        this.canvasHeigth = 200;//temp need to be a square
+        this.canvasWidth = 200;//temp
         this.canvasId = 'color-picker';//temp
         
         // circle parm init
@@ -97,6 +101,10 @@ export class ColorPickerComponent {
         this.sqrCursorWidth = 4;
         this.cursorLineWidth = 1;
 
+        this.mytranslation = 'translate(100px,100px) rotate(' + this.currentHue + 'deg) translate(-100px,-100px)';
+        //for(let i=0;i<1000;i++){}
+        //this.mytranslation = 'rotate(45deg)';
+        //this.mytranslation = 'translate(-100,100)';
         this.canvas = document.getElementById( this.canvasId );
         if ( this.canvas.getContext ){
             this.ctx = this.canvas.getContext( '2d' );
@@ -213,16 +221,39 @@ export class ColorPickerComponent {
 
     // draw the saturation and lightness color square selector
     drawColorSquare() : void {
+        let LeftAlign = this.canvasWidth * 0.05;
+        this.ctx.translate( this.canvasWidth / 2, this.canvasHeigth / 2 );
+        this.ctx.rotate( this.currentHue * Math.PI / 180 );
+        this.ctx.translate( -this.canvasWidth / 2, -this.canvasHeigth / 2 );
         let factor = 100 / this.squareWidth // TODO : magic value 100 is basic square value
+        let s : string = '0%';
+        let l : string = '0%';
         for ( let i : number = 0; i < this.squareWidth; i += 1 / factor ) {
+            
             for ( let j : number = 0; j < this.squareHeigth; j += 1 / factor ) {
-
-                let s = Math.round( ( ( i / this.squareWidth ) * 100 ) ) + '%';
-                let l = Math.round( ( ( j / this.squareHeigth ) * 100 ) ) + '%' ;
-                this.ctx.fillStyle = 'hsla( ' + this.currentHue + ', ' + s + ', ' + l + ', 1 )';
-                this.ctx.fillRect(this.sqrTopLeftX + i, this.sqrTopLeftY + j, 1, 1);//fill a 1x1 square
-            }
+                if ( (j > ( i / 2) ) && ( j <= this.squareHeigth / 2 ) || ( j < ( this.squareHeigth - i / 2 ) && ( j > ( this.squareHeigth / 2 ) ) ) ){
+                    s = Math.round( ( ( i / this.squareWidth ) * 100 ) ) + '%';
+                    l = Math.round( ( ( j / this.squareHeigth ) * 100 ) ) + '%' ;
+                    this.ctx.fillStyle = 'hsla( ' + this.currentHue + ', ' + s + ', ' + l + ', 1 )';
+                    this.ctx.fillRect( ( this.sqrTopLeftX + i +  LeftAlign)
+                                        , this.sqrTopLeftY + j, 3, 3);//fill a 1x1 square 
+                }    
+            }  
         }
+        this.ctx.beginPath();
+
+        this.ctx.strokeStyle = "black";
+        this.ctx.lineWidth = 2;
+        this.ctx.moveTo( ( this.sqrTopLeftX + LeftAlign - 1), this.sqrTopLeftY - 1);
+        this.ctx.lineTo( ( this.sqrTopLeftX + LeftAlign - 1), ( this.sqrTopLeftY + this.squareHeigth + 1) ); 
+        this.ctx.lineTo( ( this.sqrTopLeftX + this.squareWidth + LeftAlign + 3 ),  ( this.sqrTopLeftY + ( this.squareHeigth / 2 ) + 2 ) );
+        this.ctx.lineTo( ( this.sqrTopLeftX + LeftAlign ), this.sqrTopLeftY );
+        this.ctx.stroke();
+
+        this.ctx.closePath();
+        this.ctx.translate( this.canvasWidth / 2, this.canvasHeigth / 2 );
+        this.ctx.rotate( -this.currentHue * Math.PI / 180 );
+        this.ctx.translate( -this.canvasWidth / 2, -this.canvasHeigth / 2 );
     }
 
     // draw a cursor on color square picker
@@ -311,6 +342,40 @@ export class ColorPickerComponent {
         this.LightnessRightInput = '' + Math.round( this.currentLightness ) + '%';
     }
 
+    colorSelector2( event : MouseEvent ) : void {
+        
+        let radiusX : number = event.offsetX - 95;
+        let radiusY : number = event.offsetY - 95;
+        let radius : number = Math.sqrt( Math.pow( radiusX, 2) + Math.pow( radiusY, 2) );
+        let theta : number = Math.acos( radiusX / radius);
+        let Hue : number = 0;
+        if ( radiusY >= 0 ){
+            Hue = 180 / Math.PI * theta;
+        }
+        else{
+            Hue = 360 - 180 / Math.PI * theta;
+        }
+
+        this.currentHue = Math.round(Hue);
+
+        let color = this.hslToRgb(Hue);
+        if ( event.button === 0 ) {
+            this.setPrimaryColor( color[0], color[1], color[2] );
+            
+        }
+        else if ( event.button === 2 ) {
+            //TODO : pop-up on right click??
+            this.setSecondaryColor ( color[0], color[1], color[2] );
+            
+        }
+    }
+    TrisvgCursor(event : MouseEvent) : void {
+        this.currentSaturation = event.offsetX ;
+        this.currentLightness = event.offsetY;
+        this.LightnessLeftInput = event.offsetY + "%";
+        this.SaturationLeftInput = event.offsetX + "%";
+        
+    }
     // select the function to use when color picker is clicked;
     colorSelector( event : MouseEvent ) : void {
         
@@ -318,14 +383,13 @@ export class ColorPickerComponent {
         let radiusY : number = event.offsetY - this.cY;
 
         
-        if ( ( this.isInCircle( radiusX, radiusY ) || this.isInSquare( event.offsetX, event.offsetY ) )
+        if (true || ( this.isInCircle( radiusX, radiusY ) || this.isInSquare( event.offsetX, event.offsetY ) )
                 && this.isNotCircleCursor( event.offsetX, event.offsetY ) 
                 && this.isNotSquareCursor( event.offsetX, event.offsetY ) ) {
             // get rgb data of a 1x1 square
             let rgbData : ImageData = this.ctx.getImageData( event.offsetX, event.offsetY, 10, 10 );
             this.rgbToHsl( rgbData.data[0], rgbData.data[1], rgbData.data[2] ); 
             this.drawCanvasBg();
-
             this.drawColorCircle();
             this.drawColorCircleCursor();
 
@@ -394,6 +458,54 @@ export class ColorPickerComponent {
         return ( !( ( x <= upperX ) && ( x >= lowerX) && ( y <= upperY ) && ( y >= lowerY ) ) );
     }
 
+    //
+    hslToRgb( H : number = 0, S : number = 1, L : number = 0.5 ): number[] {
+        let C : number = ( 1 - Math.abs( 2 * L - 1 ) ) * S;
+        let X : number = C * ( 1 - Math.abs( H / 60  % 2 - 1 ) );
+        let m : number = L - C / 2;
+
+        let R : number = 0;
+        let G : number = 0;
+        let B : number = 0;
+
+        if ( ( 0 <= H ) && ( H < 60 ) ) {
+            R = C;
+            G = X;
+            B = 0;
+        }
+        else if ( ( 60 <= H ) && ( H < 120 ) ) {
+            R = X;
+            G = C;
+            B = 0;
+        }
+        else if ( ( 120 <= H ) && ( H < 180 ) ) {
+            R = 0;
+            G = C;
+            B = X;
+        }
+        else if ( ( 180 <= H ) && ( H < 240 ) ) {
+            R = 0;
+            G = X;
+            B = C;
+        }
+        else if ( ( 240 <= H ) && ( H < 300 ) ) {
+            R = X;
+            G = 0;
+            B = C;
+        }
+        else if ( ( 300 <= H ) && ( H < 360 ) ) {
+            R = C;
+            G = 0;
+            B = X;
+        }
+            
+        let rgb : number[] = [];
+        rgb[0] = Math.round( ( R + m ) * 255 );
+        rgb[1] = Math.round( ( G + m ) * 255 );
+        rgb[2] = Math.round( ( B + m ) * 255 );
+        
+        return rgb;
+    }
     // convert rbg to h value of hsl.
     rgbtoHue( r : number, g : number, b : number ) : number {
         // scale dowon rgb value to a range of [ 0 , 1 ] from [ 0 , 255 ]
@@ -774,7 +886,22 @@ export class ColorPickerComponent {
                 '-webkit-background-clip': 'text',
                 '-webkit-text-fill-color': 'transparent'};
     }
-    
+    get svgStyles(): any {
+        //return { 'fill': this.primaryColor,'stroke':'black','stroke-width':1};
+        return { 'transform' : 'translate(100px,100px) rotate(' + this.currentHue + 'deg) translate(-100px,-100px)'};
+    }
+    get gradientStyles(): any{
+        return { 'stop-color': 'hsl( ' + this.currentHue + ', 100%, 50% )' };
+    }
+    get gradientStylesP(): any{
+        return { 'stop-color': this.primaryColor };
+    }
+    get gradientStyles2(): any{
+        return { 'stop-color': this.secondaryColor };
+    }
+    get cursorStyles(): any{
+        return { 'cx' : this.mycx, "cy": this.mycy };
+    }
 
     // change primary alpha when primary slide change
     primaryAlphaChange() : void {
