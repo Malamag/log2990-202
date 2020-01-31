@@ -1,8 +1,5 @@
-import { Component, OnInit, ElementRef, ViewChild, Renderer2, OnDestroy } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import {functionality} from '../../functionality'
-import { CanvasBuilderService } from '../../services/services/drawing/canvas-builder.service';
-import { Canvas } from '../../models/Canvas.model';
-import { Subscription } from 'rxjs';
 import { ModalWindowService } from 'src/app/services/modal-window.service';
 import { ComponentType } from '@angular/cdk/portal';
 import { NewDrawComponent } from '../new-draw/new-draw.component';
@@ -13,42 +10,22 @@ import { DrawViewService } from 'src/app/services/services/drawing/draw-view.ser
   templateUrl: './draw-view.component.html',
   styleUrls: ['./draw-view.component.scss']
 })
-export class DrawViewComponent implements OnInit, OnDestroy {
+export class DrawViewComponent implements OnInit {
   functionality = functionality
 
   openToolOptions: boolean = false;
-  width: number;
-  height: number;
+  
   selectedTool: string;
-  backColor: string;
-
-  canvas: Canvas;
-  canvasSubscr: Subscription;
 
   @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
   renderer: Renderer2
 
-  constructor(private canvBuildService: CanvasBuilderService,
-              private winService: ModalWindowService,
+  constructor(private winService: ModalWindowService,
               private dViewService: DrawViewService) { }
 
   ngOnInit() {
-
-    this.canvasSubscr = this.canvBuildService.getCanvSubscription();
-    this.canvas = this.canvBuildService.newCanvas; // use this element to get newly generated canvas data
-    this.canvBuildService.emitCanvas();    
-    this.initParams();
   }
 
-  ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus
-    this.canvasSubscr.unsubscribe();
-  }
-
-  initParams() {
-    this.width = this.canvas.canvasWidth;
-    this.height = this.canvas.canvasHeight;
-    this.backColor = this.canvas.canvasColor;
-  }
 
     /**Cette fonction peut à la limite être mise dans un service... */
   buttonAction(name:string){

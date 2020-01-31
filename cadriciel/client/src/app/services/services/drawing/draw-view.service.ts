@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanvasBuilderService } from '../../services/drawing/canvas-builder.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +9,7 @@ export class DrawViewService {
   width: number;
   color: string;
 
-  constructor(private canvasBuilder: CanvasBuilderService) { }
-
+  constructor() { }
 
   newDrawOnView() {
   }
