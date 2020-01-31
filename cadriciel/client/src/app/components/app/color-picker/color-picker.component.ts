@@ -7,24 +7,17 @@ import { Component } from '@angular/core';
 })
 export class ColorPickerComponent {
     
-    //canvas attribut
-    canvas : any; // canvas
-    ctx : any; // context
-    canvasId : string;
-    canvasHeigth : number;
-    canvasWidth : number;
-    canvasBgColor : string; 
 
     //Golbal color attribut
-    currentHue : number;
-    currentSaturation : number;
-    currentLightness : number;
-    primaryColor : string;
+    currentHue : number = 0;
+    currentSaturation : number = 100;
+    currentLightness : number = 50;
+    primaryColor : string = 'rgba(255, 0, 0, 1 )';
     primaryR : string;
     primaryG : string;
     primaryB : string;
     primaryAlpha : number = 1;
-    secondaryColor : string;
+    secondaryColor : string = 'rgba(255, 0, 0, 1 )';;
     secondaryR : string;
     secondaryG : string;
     secondaryB : string;
@@ -32,26 +25,6 @@ export class ColorPickerComponent {
     primarySelect : any = true;
     currentColorSelect : string = 'Primary';
     currentAlpha : number;
-    //Hue color circle attribut (c*name)
-    cX : number;
-    cY : number;
-    cAvgRadius : number;
-    cStrokeWidth : number;
-    cColors : string[];
-
-    //Saturation, lightness square attribut (sqr*name)
-    sqrTopLeftX : number;
-    sqrTopLeftY : number;
-    squareWidth : number;
-    squareHeigth : number;
-    //cursor attribut
-    cCursorTopLeftX : number;
-    cCursorTopLeftY : number;
-    cCursorWidth : number;
-    sqrCursorTopLeftX : number;
-    sqrCursorTopLeftY : number;
-    sqrCursorWidth : number;
-    cursorLineWidth : number;
 
     //input style
     RedLeftInput : string = '255';
@@ -59,263 +32,14 @@ export class ColorPickerComponent {
     GreenLeftInput : string = '255';
     SaturationLeftInput : string = '100';
     LightnessLeftInput : string = '50';
-    RedRightInput : string = '';
-    BlueRightInput : string = '';
-    GreenRightInput : string = '';
-    SaturationRightInput : string = '';
-    LightnessRightInput : string = '';
 
-    mytranslation :string;
     mycx : number = 100;
     mycy : number = 50;
-
+    mytranslation :string;
+    
     constructor() {}
 
-    ngOnInit() {
-
-        // canvas parm init
-        this.canvasBgColor = 'white';
-        this.canvasHeigth = 0;//temp need to be a square
-        this.canvasWidth = 0;//temp
-        this.canvasId = 'color-picker';//temp
-        
-        // circle parm init
-        this.cStrokeWidth = this.canvasWidth / 10; 
-        this.cAvgRadius = ( this.canvasWidth - this.cStrokeWidth ) / 2;
-        this.cX = this.canvasWidth / 2;
-        this.cY = this.canvasHeigth / 2;
-
-        // square parm init
-         // square is center on canvas
-        this.sqrTopLeftX = this.canvasWidth / 4 ;
-        this.sqrTopLeftY = this.canvasHeigth / 4;
-        this.squareWidth = this.canvasWidth / 2;
-        this.squareHeigth = this.canvasHeigth / 2;
-
-        // cursor parm init
-        this.cCursorTopLeftX = 0;
-        this.cCursorTopLeftY = 0;
-        this.cCursorWidth = 4;
-        this.sqrCursorTopLeftX = 0;
-        this.sqrCursorTopLeftY = 0;
-        this.sqrCursorWidth = 4;
-        this.cursorLineWidth = 1;
-
-        this.mytranslation = 'translate(100px,100px) rotate(' + this.currentHue + 'deg) translate(-100px,-100px)';
-        //for(let i=0;i<1000;i++){}
-        //this.mytranslation = 'rotate(45deg)';
-        //this.mytranslation = 'translate(-100,100)';
-        this.canvas = document.getElementById( this.canvasId );
-        if ( this.canvas.getContext ){
-            this.ctx = this.canvas.getContext( '2d' );
-            this.drawCanvasBg();
-            this.initColors();
-            this.drawColorCircle();
-            this.drawColorSquare();
-            this.drawPrimaryColor();
-            this.drawSecondaryColor();
-        }
-    }
-
-    //init all color in HSLA format (H, S = 100%, L = 50%, A = Alpah)
-    initColors() : void {
-
-        
-        this.currentHue = 0; // default hue
-        this.currentSaturation = 100; 
-        this.currentLightness = 50;
-        this.primaryColor = 'rgba(255,0,0,1)';
-        this.primaryR = '255';
-        this.primaryG = '0';
-        this.primaryB = '0';
-        this.primaryAlpha = 1.0;
-        this.secondaryColor = 'rgba(0,0,0,1)';
-        this.secondaryR = '0';
-        this.secondaryG = '0';
-        this.secondaryB = '0';
-        this.secondaryAlpha = 1.0;
-        this.cColors = [];
-
-        // there is 360 hue in hsl color
-        let nColor : number = 360; 
-        // setting hue break point at 15 hue => 24 color total for gradient use 
-        for(let i : number = 0; i < nColor; i+=20){
-            this.cColors.push('hsla( ' + i + ', ' + this.currentSaturation + '%, ' + this.currentLightness + '%, 1 )');
-        }
-        
-    }
-
-    //Draw the canvas background color
-    drawCanvasBg() : void {
-        /*let gradient = this.ctx.createRadialGradient(80, 50, 40, 80, 50, 100);
-        gradient.addColorStop(0, "lightcyan");
-        gradient.addColorStop(1, "lightgrey");
-        this.ctx.fillStyle = gradient;
-        this.ctx.fillRect( 0, 0, this.canvasWidth, this.canvasHeigth );*/
-        this.ctx.clearRect( 0, 0, this.canvasWidth, this.canvasHeigth );
-        this.ctx.fillStyle = this.canvasBgColor;
-        this.ctx.fillRect( 0, 0, this.canvasWidth, this.canvasHeigth );
-    }
-
-    //Draw the hue color circle selector 
-    drawColorCircle() : void {
-        
-        // lenght of the arc in rad
-        let partLenght : number = ( 2 * Math.PI ) / this.cColors.length;
-        // position of the starting / ending location of a arc in rad
-        let arcStartPos : number = 0;
-        let arcEndPos : number = partLenght;
-        // gradient to draw
-        let gradient : any = null;
-        // starting color of a gradient
-        let startColor : string = '';
-        // ending color of a gradient
-        let endColor : string = '';
-
-        for ( let i : number = 0; i < this.cColors.length; ++i) {
-            
-            startColor = this.cColors[i];
-            endColor = this.cColors[ ( i + 1 ) % this.cColors.length];
-
-            // x start / end of the next arc to draw
-            let xStart : number = this.cX + Math.cos( arcStartPos ) * this.cAvgRadius;
-            let xEnd : number = this.cX + Math.cos( arcEndPos ) * this.cAvgRadius;
-
-            // y start / end of the next arc to draw
-            let yStart : number = this.cY + Math.sin( arcStartPos ) * this.cAvgRadius;
-            let yEnd : number = this.cY + Math.sin( arcEndPos) * this.cAvgRadius;
-
-            this.ctx.beginPath();
-
-            gradient = this.ctx.createLinearGradient( xStart, yStart, xEnd, yEnd );
-            gradient.addColorStop( 0, startColor );
-            gradient.addColorStop( 1, endColor );
-
-            this.ctx.strokeStyle = gradient;
-            this.ctx.arc( this.cX, this.cY, this.cAvgRadius, arcStartPos, arcEndPos );
-            this.ctx.lineWidth = this.cStrokeWidth;
-            this.ctx.stroke();
-
-            this.ctx.closePath();
-
-            arcStartPos = arcEndPos;
-            arcEndPos += partLenght;
-        }
-   
-    }
-
-    // draw a basic cursor on color circle TODO : cursor ui
-    drawColorCircleCursor() : void {
-        this.cCursorTopLeftX =  this.cX + Math.cos( ( this.currentHue * (Math.PI / 180) ) ) * this.cAvgRadius;
-        this.cCursorTopLeftY =  this.cY + Math.sin( ( this.currentHue * (Math.PI / 180) ) ) * this.cAvgRadius;
-     
-        this.ctx.beginPath()
-
-        this.ctx.strokeStyle = 'black';
-        this.ctx.lineWidth = this.cursorLineWidth;
-        this.ctx.rect( this.cCursorTopLeftX - ( this.cCursorWidth / 2 ), this.cCursorTopLeftY - ( this.cCursorWidth / 2 ), this.cCursorWidth, this.cCursorWidth);// temp TODO ::
-        this.ctx.stroke();
-
-        this.ctx.closePath();
-    }
-
-    // draw the saturation and lightness color square selector
-    drawColorSquare() : void {
-        let LeftAlign = this.canvasWidth * 0.05;
-        this.ctx.translate( this.canvasWidth / 2, this.canvasHeigth / 2 );
-        this.ctx.rotate( this.currentHue * Math.PI / 180 );
-        this.ctx.translate( -this.canvasWidth / 2, -this.canvasHeigth / 2 );
-        let factor = 100 / this.squareWidth // TODO : magic value 100 is basic square value
-        let s : string = '0%';
-        let l : string = '0%';
-        for ( let i : number = 0; i < this.squareWidth; i += 1 / factor ) {
-            
-            for ( let j : number = 0; j < this.squareHeigth; j += 1 / factor ) {
-                if ( (j > ( i / 2) ) && ( j <= this.squareHeigth / 2 ) || ( j < ( this.squareHeigth - i / 2 ) && ( j > ( this.squareHeigth / 2 ) ) ) ){
-                    s = Math.round( ( ( i / this.squareWidth ) * 100 ) ) + '%';
-                    l = Math.round( ( ( j / this.squareHeigth ) * 100 ) ) + '%' ;
-                    this.ctx.fillStyle = 'hsla( ' + this.currentHue + ', ' + s + ', ' + l + ', 1 )';
-                    this.ctx.fillRect( ( this.sqrTopLeftX + i +  LeftAlign)
-                                        , this.sqrTopLeftY + j, 3, 3);//fill a 1x1 square 
-                }    
-            }  
-        }
-        this.ctx.beginPath();
-
-        this.ctx.strokeStyle = "black";
-        this.ctx.lineWidth = 2;
-        this.ctx.moveTo( ( this.sqrTopLeftX + LeftAlign - 1), this.sqrTopLeftY - 1);
-        this.ctx.lineTo( ( this.sqrTopLeftX + LeftAlign - 1), ( this.sqrTopLeftY + this.squareHeigth + 1) ); 
-        this.ctx.lineTo( ( this.sqrTopLeftX + this.squareWidth + LeftAlign + 3 ),  ( this.sqrTopLeftY + ( this.squareHeigth / 2 ) + 2 ) );
-        this.ctx.lineTo( ( this.sqrTopLeftX + LeftAlign ), this.sqrTopLeftY );
-        this.ctx.stroke();
-
-        this.ctx.closePath();
-        this.ctx.translate( this.canvasWidth / 2, this.canvasHeigth / 2 );
-        this.ctx.rotate( -this.currentHue * Math.PI / 180 );
-        this.ctx.translate( -this.canvasWidth / 2, -this.canvasHeigth / 2 );
-    }
-
-    // draw a cursor on color square picker
-    drawColorSquareCursor() : void {
-        this.sqrCursorTopLeftX = this.sqrTopLeftX + this.currentSaturation;
-        this.sqrCursorTopLeftY = this.sqrTopLeftY + this.currentLightness;
-
-        this.ctx.beginPath()
-
-        this.ctx.strokeStyle = 'white';
-        this.ctx.lineWidth = this.cursorLineWidth;
-        this.ctx.rect( this.sqrCursorTopLeftX - ( this.sqrCursorWidth / 2 ), this.sqrCursorTopLeftY - ( this.sqrCursorWidth / 2 ), this.sqrCursorWidth, this.sqrCursorWidth);// temp TODO ::
-        this.ctx.stroke();
-
-        this.ctx.closePath();
-
-    }
-
-    // draw Primary color
-    drawPrimaryColor() : void {
-        // TODO : magic number?
-        this.ctx.beginPath();
-        
-        //let gradient = this.ctx.createRadialGradient(80, 50, 40, 80, 50, 100);
-        //gradient.addColorStop(0, "lightcyan");
-        //gradient.addColorStop(1, "lightgrey");
-        
-        this.ctx.fillStyle = this.primaryColor;
-        this.ctx.moveTo( ( this.canvasWidth * 0.1 ), ( this.canvasHeigth * 0.95 ) );
-        this.ctx.arcTo( ( this.canvasWidth * 0.05 ), ( this.canvasHeigth * 0.95 ) 
-                        , ( this.canvasWidth * 0.05 ), ( this.canvasHeigth * 0.75 ) , ( this.canvasWidth * 0.14 ) );
-        this.ctx.lineTo( ( this.canvasWidth * 0.05 ), ( this.canvasHeigth * 0.95 ) );
-        this.ctx.lineTo( ( this.canvasWidth * 0.1 ), ( this.canvasHeigth * 0.95 )  );
-        this.ctx.strokeStyle = this.canvasBgColor;
-        this.ctx.lineWidth = this.canvasWidth * 0.05;
-        this.ctx.stroke();
-        
-        this.ctx.closePath();
-        this.ctx.fill();
-    }
-
-    // draw Secondary color
-    drawSecondaryColor() : void {
-        // TODO : magic number?
-        this.ctx.beginPath();
-        
-        //let gradient = this.ctx.createRadialGradient(80, 50, 40, 80, 50, 100);
-        //gradient.addColorStop(0, "lightcyan");
-        //gradient.addColorStop(1, "lightgrey");
-        this.ctx.fillStyle = this.secondaryColor;
-        this.ctx.moveTo( ( this.canvasWidth * 0.90 ), ( this.canvasHeigth * 0.95 ) );
-        this.ctx.arcTo( ( this.canvasWidth * 0.95 ), ( this.canvasHeigth * 0.95 ) 
-                        , ( this.canvasWidth * 0.95 ), ( this.canvasHeigth * 0.75 ) , ( this.canvasWidth * 0.14 ) );
-        this.ctx.lineTo( ( this.canvasWidth * 0.95 ), ( this.canvasHeigth * 0.95 ) );
-        this.ctx.lineTo( ( this.canvasWidth * 0.9 ), ( this.canvasHeigth * 0.95 )  );
-        this.ctx.strokeStyle = this.canvasBgColor;
-        this.ctx.lineWidth = this.canvasWidth * 0.05;
-        this.ctx.stroke();
-        
-        this.ctx.closePath();
-        this.ctx.fill();
-    }
+    ngOnInit() {}
 
     setPrimaryColor( r : number, g : number, b : number ) {
         this.primaryColor = 'rgba( ' + r + ', ' + g + ', ' + b + ', ' + this.primaryAlpha + ' )';
@@ -327,20 +51,18 @@ export class ColorPickerComponent {
         this.BlueLeftInput = this.primaryB;
         this.SaturationLeftInput = '' + Math.round( this.currentSaturation ) + '%';
         this.LightnessLeftInput = '' + Math.round( this.currentLightness ) + '%';
-        window.alert(r + ' ' + g + ' ' + b + ' ' + this.primaryAlpha   );
     }
-
 
     setSecondaryColor ( r : number, g : number, b : number ) {
         this.secondaryColor = 'rgba( ' + r + ', ' + g + ', ' + b + ', ' + this.secondaryAlpha + ' )' ;
         this.secondaryR = '' + r;
         this.secondaryG = '' + g;
         this.secondaryB = '' + b;
-        this.RedRightInput = this.secondaryR;
-        this.GreenRightInput = this.secondaryG;
-        this.BlueRightInput = this.secondaryB;
-        this.SaturationRightInput = '' + Math.round( this.currentSaturation ) + '%';
-        this.LightnessRightInput = '' + Math.round( this.currentLightness ) + '%';
+        this.RedLeftInput = this.secondaryR;
+        this.GreenLeftInput = this.secondaryG;
+        this.BlueLeftInput = this.secondaryB;
+        this.SaturationLeftInput = '' + Math.round( this.currentSaturation ) + '%';
+        this.LightnessLeftInput = '' + Math.round( this.currentLightness ) + '%';
     }
 
     colorSelector2( event : MouseEvent ) : void {
@@ -390,87 +112,6 @@ export class ColorPickerComponent {
             
         }
         
-    }
-    // select the function to use when color picker is clicked;
-    colorSelector( event : MouseEvent ) : void {
-        
-        let radiusX : number = event.offsetX - this.cX;
-        let radiusY : number = event.offsetY - this.cY;
-
-        
-        if (true || ( this.isInCircle( radiusX, radiusY ) || this.isInSquare( event.offsetX, event.offsetY ) )
-                && this.isNotCircleCursor( event.offsetX, event.offsetY ) 
-                && this.isNotSquareCursor( event.offsetX, event.offsetY ) ) {
-            // get rgb data of a 1x1 square
-            let rgbData : ImageData = this.ctx.getImageData( event.offsetX, event.offsetY, 10, 10 );
-            this.rgbToHsl( rgbData.data[0], rgbData.data[1], rgbData.data[2] ); 
-            this.drawCanvasBg();
-            this.drawColorCircle();
-            this.drawColorCircleCursor();
-
-            this.drawColorSquare();
-            //this.drawColorSquareCursor();
-
-            if ( event.button === 0 ) {
-                this.setPrimaryColor( rgbData.data[0], rgbData.data[1], rgbData.data[2] );
-                
-            }
-            else if ( event.button === 2 ) {
-                //TODO : pop-up on right click??
-                this.setSecondaryColor ( rgbData.data[0], rgbData.data[1], rgbData.data[2] );
-                
-            }
-            this.drawPrimaryColor();
-            this.drawSecondaryColor();
-            this.refreshDisplay();
-        }
-        
-    }
-
-    // return if coordinate are in circle color selector
-    isInCircle( x : number, y : number ) : boolean {
-
-        let upperRadiusSquare :number = Math.pow( this.cAvgRadius + this.cStrokeWidth / 2, 2 );
-        let lowerRadiusSquare : number = Math.pow( this.cAvgRadius - this.cStrokeWidth / 2, 2 );
-        let radiusSquare : number = Math.pow( x, 2 ) + Math.pow( y, 2 );
-        
-        return ( radiusSquare <= upperRadiusSquare && radiusSquare >= lowerRadiusSquare );
-    }
-
-    // return if coordinate are in square selector
-    isInSquare( x : number, y : number ) : boolean {
-        
-        let lowerX : number = this.sqrTopLeftX;
-        let upperX : number = this.sqrTopLeftX + this.squareWidth;
-
-        let lowerY : number = this.sqrTopLeftY;
-        let upperY : number = this.sqrTopLeftY + this.squareHeigth;
-     
-        return ( ( x <= upperX ) && ( x >= lowerX) && ( y <= upperY ) && (y >= lowerY ) );
-    }
-    
-    // return if coordinate are in square selector
-    isNotCircleCursor( x : number, y : number ) : boolean {
-        // TODO : check
-        let lowerX : number = this.cCursorTopLeftX - 2 * this.cursorLineWidth - 1;
-        let upperX : number = this.cCursorTopLeftX + this.cCursorWidth + this.cursorLineWidth;
-
-        let lowerY : number = this.cCursorTopLeftY - 2 * this.cursorLineWidth - 1;
-        let upperY : number = this.cCursorTopLeftY + this.cCursorWidth +  this.cursorLineWidth;
-        //window.alert(' x: ' + x + ' y: '  + y + ' ly: '  + lowerX + ' ux: '  + upperX + ' ly: '  + lowerY + ' uy: ' + upperY);
-        return ( !( ( x <= upperX ) && ( x >= lowerX) && ( y <= upperY ) && ( y >= lowerY ) ) );
-    }
-
-    // return if coordinate are in square selector
-    isNotSquareCursor( x : number, y : number ) : boolean {
-        // TODO : check
-        let lowerX : number = this.sqrCursorTopLeftX - 2 * this.cursorLineWidth - 2;
-        let upperX : number = this.sqrCursorTopLeftX + this.sqrCursorWidth;
-
-        let lowerY : number = this.sqrCursorTopLeftY - 2 * this.cursorLineWidth - 2;
-        let upperY : number = this.sqrCursorTopLeftY + this.sqrCursorWidth;
-        //window.alert(' x: ' + x + ' y: '  + y + ' ly: '  + lowerX + ' ux: '  + upperX + ' ly: '  + lowerY + ' uy: ' + upperY);
-        return ( !( ( x <= upperX ) && ( x >= lowerX) && ( y <= upperY ) && ( y >= lowerY ) ) );
     }
 
     //
@@ -636,13 +277,6 @@ export class ColorPickerComponent {
             //TODO redraw function
             this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
             this.rgbToHsl( parseFloat( this.primaryR ), parseFloat( this.primaryG ), parseFloat( this.primaryB ) );
-            this.drawCanvasBg();
-            this.drawColorCircle();
-            this.drawColorCircleCursor();
-            this.drawColorSquare();
-            //this.drawColorSquareCursor();
-            this.drawPrimaryColor();
-            this.drawSecondaryColor();
         }
         else{
             //TODO : condition fail proof
@@ -650,13 +284,6 @@ export class ColorPickerComponent {
             //TODO redraw function
             this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.primaryAlpha + ' )';
             this.rgbToHsl( parseFloat( this.secondaryR ), parseFloat( this.secondaryG ), parseFloat( this.secondaryB ) );
-            this.drawCanvasBg();
-            this.drawColorCircle();
-            this.drawColorCircleCursor();
-            this.drawColorSquare();
-            //this.drawColorSquareCursor();
-            this.drawPrimaryColor();
-            this.drawSecondaryColor();
         }
     }
     onGreenLeftInput() {
@@ -666,13 +293,6 @@ export class ColorPickerComponent {
             //TODO redraw function
             this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
             this.rgbToHsl( parseFloat( this.primaryR ), parseFloat( this.primaryG ), parseFloat( this.primaryB ) );
-            this.drawCanvasBg();
-            this.drawColorCircle();
-            this.drawColorCircleCursor();
-            this.drawColorSquare();
-            //this.drawColorSquareCursor();
-            this.drawPrimaryColor();
-            this.drawSecondaryColor();
         }
         else {
             //TODO : condition fail proof
@@ -680,13 +300,6 @@ export class ColorPickerComponent {
             //TODO redraw function
             this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.primaryAlpha + ' )';
             this.rgbToHsl( parseFloat( this.secondaryR ), parseFloat( this.secondaryG ), parseFloat( this.secondaryB ) );
-            this.drawCanvasBg();
-            this.drawColorCircle();
-            this.drawColorCircleCursor();
-            this.drawColorSquare();
-            //this.drawColorSquareCursor();
-            this.drawPrimaryColor();
-            this.drawSecondaryColor();
         }
        
     }
@@ -697,13 +310,6 @@ export class ColorPickerComponent {
             //TODO redraw function
             this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
             this.rgbToHsl( parseFloat( this.primaryR ), parseFloat( this.primaryG ), parseFloat( this.primaryB ) );
-            this.drawCanvasBg();
-            this.drawColorCircle();
-            this.drawColorCircleCursor();
-            this.drawColorSquare();
-            //this.drawColorSquareCursor();
-            this.drawPrimaryColor();
-            this.drawSecondaryColor();
         }
         else {
             //TODO : condition fail proof
@@ -711,57 +317,7 @@ export class ColorPickerComponent {
             //TODO redraw function
             this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.primaryAlpha + ' )';
             this.rgbToHsl( parseFloat( this.secondaryR ), parseFloat( this.secondaryG ), parseFloat( this.secondaryB ) );
-            this.drawCanvasBg();
-            this.drawColorCircle();
-            this.drawColorCircleCursor();
-            this.drawColorSquare();
-            //this.drawColorSquareCursor();
-            this.drawPrimaryColor();
-            this.drawSecondaryColor();
         }
-    }
-    onRedRightInput(event : KeyboardEvent) {
-        //TODO : condition fail proof
-        this.secondaryR = this.RedRightInput
-        //TODO redraw function
-        this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.primaryAlpha + ' )';
-        this.rgbToHsl( parseFloat( this.secondaryR ), parseFloat( this.secondaryG ), parseFloat( this.secondaryB ) );
-        this.drawCanvasBg();
-        this.drawColorCircle();
-        this.drawColorCircleCursor();
-        this.drawColorSquare();
-        this.drawColorSquareCursor();
-        this.drawPrimaryColor();
-        this.drawSecondaryColor();
-    }
-    onGreenRightInput(event : KeyboardEvent) {
-        
-        //TODO : condition fail proof
-        this.secondaryG = this.GreenRightInput
-        //TODO redraw function
-        this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.primaryAlpha + ' )';
-        this.rgbToHsl( parseFloat( this.secondaryR ), parseFloat( this.secondaryG ), parseFloat( this.secondaryB ) );
-        //this.drawCanvasBg();
-        this.drawColorCircle();
-        this.drawColorCircleCursor();
-        this.drawColorSquare();
-        //this.drawColorSquareCursor();
-        this.drawPrimaryColor();
-        this.drawSecondaryColor();
-    }
-    onBlueRightInput(event : KeyboardEvent) {
-        //TODO : condition fail proof
-        this.secondaryG = this.GreenRightInput
-        //TODO redraw function
-        this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.primaryAlpha + ' )';
-        this.rgbToHsl( parseFloat( this.secondaryR ), parseFloat( this.secondaryG ), parseFloat( this.secondaryB ) );
-        this.drawCanvasBg();
-        this.drawColorCircle();
-        this.drawColorCircleCursor();
-        this.drawColorSquare();
-        this.drawColorSquareCursor();
-        this.drawPrimaryColor();
-        this.drawSecondaryColor();
     }
     onSaturationLeftInput() {
         if ( this.primarySelect ) {
@@ -770,13 +326,6 @@ export class ColorPickerComponent {
             
             //TODO : hsl to rgb
             //TODO redraw function
-            //this.drawCanvasBg();
-            //this.drawColorCircle();
-            //this.drawColorCircleCursor();
-            //this.drawColorSquare();
-            //this.drawColorSquareCursor();
-            this.drawPrimaryColor();
-            //this.drawSecondaryColor();
         }
         else{
             //TODO : condition fail proof
@@ -784,13 +333,6 @@ export class ColorPickerComponent {
             
             //TODO : hsl to rgb
             //TODO redraw function
-            //this.drawCanvasBg();
-            //this.drawColorCircle();
-            //this.drawColorCircleCursor();
-            //this.drawColorSquare();
-            //this.drawColorSquareCursor();
-            //this.drawPrimaryColor();
-            this.drawSecondaryColor();
         }
     }
     onLightnessLeftInput() {
@@ -799,56 +341,14 @@ export class ColorPickerComponent {
             this.currentLightness = parseFloat( this.LightnessLeftInput );
             //TODO : hsl to rgb
             //TODO redraw function
-            
-            //this.drawCanvasBg();
-            //this.drawColorCircle();
-            //this.drawColorCircleCursor();
-            //this.drawColorSquare();
-            //this.drawColorSquareCursor();
-            this.drawPrimaryColor();
-            //this.drawSecondaryColor();
         }
         else{
             //TODO : condition fail proof
             this.currentLightness = parseFloat( this.LightnessRightInput );
             //TODO : hsl to rgb
             //TODO redraw function
-            //this.drawCanvasBg();
-            //this.drawColorCircle();
-            //this.drawColorCircleCursor();
-            //this.drawColorSquare();
-            //this.drawColorSquareCursor();
-            //this.drawPrimaryColor();
-            this.drawSecondaryColor();
         }
         
-    }
-    onSaturationRightInput(event : KeyboardEvent) {
-        //TODO : condition fail proof
-        this.currentSaturation = parseFloat( this.SaturationRightInput );
-        
-        //TODO : hsl to rgb
-        //TODO redraw function
-        this.drawCanvasBg();
-        this.drawColorCircle();
-        this.drawColorCircleCursor();
-        this.drawColorSquare();
-        this.drawColorSquareCursor();
-        this.drawPrimaryColor();
-        this.drawSecondaryColor();
-    }
-    onLightnessRightInput(event : KeyboardEvent) {
-        //TODO : condition fail proof
-        this.currentLightness = parseFloat( this.LightnessRightInput );
-        //TODO : hsl to rgb
-        //TODO redraw function
-        this.drawCanvasBg();
-        this.drawColorCircle();
-        this.drawColorCircleCursor();
-        this.drawColorSquare();
-        this.drawColorSquareCursor();
-        this.drawPrimaryColor();
-        this.drawSecondaryColor();
     }
     //temp style TODO move to CSS?
     get myInputStylesRL(): any {
@@ -923,19 +423,16 @@ export class ColorPickerComponent {
         if ( this.primarySelect ) {
             this.primaryAlpha = this.currentAlpha;
             this.primaryColor = 'rgba( ' + this.primaryR + ', ' + this.primaryG + ', ' + this.primaryB + ', ' + this.primaryAlpha + ' )';
-            this.drawPrimaryColor();
         }
         else {
             this.secondaryAlpha = this.currentAlpha;
             this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.secondaryAlpha + ' )';
-            this.drawSecondaryColor();
         }
     }
 
     // change secondary alpha when secondary slide change
     secondaryAlphaChange() : void {
         this.secondaryColor = 'rgba( ' + this.secondaryR + ', ' + this.secondaryG + ', ' + this.secondaryB + ', ' + this.secondaryAlpha + ' )';
-        this.drawSecondaryColor();
     }
 
     // swap color
@@ -957,28 +454,5 @@ export class ColorPickerComponent {
         this.secondaryG = tempG;
         this.secondaryB = tempB;
         this.secondaryAlpha = tempAlpha;
-
-        let buffer : string = this.RedLeftInput;
-        this.RedLeftInput = this.RedRightInput;
-        this.RedRightInput = buffer;
-
-        buffer = this.GreenLeftInput;
-        this.GreenLeftInput = this.GreenRightInput;
-        this.GreenRightInput = buffer;
-
-        buffer = this.BlueLeftInput;
-        this.BlueLeftInput = this.BlueRightInput;
-        this.BlueRightInput = buffer;
-
-        buffer = this.SaturationLeftInput;
-        this.SaturationLeftInput = this.SaturationRightInput;
-        this.SaturationRightInput = buffer;
-
-        buffer = this.LightnessLeftInput;
-        this.LightnessLeftInput = this.LightnessRightInput;
-        this.LightnessRightInput = buffer;
-
-        this.drawPrimaryColor();
-        this.drawSecondaryColor();
     }
 }

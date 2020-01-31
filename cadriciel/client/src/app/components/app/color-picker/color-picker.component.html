@@ -1,9 +1,7 @@
 <!-- todo binding-->
-<section style="background-color: lightgray;width: 255px;">
-        
+<section>
     <table>
-        <tr>
-            
+        <tr>          
             <td>
                 <!--<canvas id="color-picker" height="200" width="200" (mousedown)="colorSelector($event)">
                 </canvas>-->
@@ -100,6 +98,7 @@
                     <span class="slider round" (click)="swapPrimarySecondary"></span>
                 </label>
                 <label (click)=(swapPrimarySecondary())>&nbsp;&nbsp;&nbsp;&nbsp;{{currentColorSelect}}</label>
+                <button (click)="swapPrimarySecondary()">Swap</button>
             </tr>
             <tr>
                 <label>Hex &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0x</label>
@@ -116,7 +115,6 @@
                 <input type="range" min="0" step="1" max="100" [(ngModel)]="LightnessLeftInput" (change)="onLightnessLeftInput($event)" [ngStyle]="myInputStylesS">
                 <label>Opacity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{currentAlpha}}</label>
                 <input type="range" min="0" step="0.01" max="1" [(ngModel)]="currentAlpha" (change)="primaryAlphaChange()" [ngStyle]="myInputStylesO">
-                <button (click)="swapPrimarySecondary()">Swap</button>
             </tr>    
     </table>
 </section>
