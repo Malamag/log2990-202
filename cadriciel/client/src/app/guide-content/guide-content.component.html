@@ -10,7 +10,7 @@
     </div>
   </div>
   <div>
-    <button mat-raised-button id="previousButton" (click)="previousPage()">Précédent</button>
-    <button mat-raised-button id="nextButton" (click)="nextPage()" >Suivant</button>
+    <button mat-raised-button id="previousButton" (click)="previousPage()" [ngClass]="(functionality[0].isSelected === 'true') ? 'hiddenButton':'shownButton'" >Précédent</button>
+    <button mat-raised-button id="nextButton" (click)="nextPage()" [ngClass]="(functionality[functionality.length-1].isSelected === 'true') ? 'hiddenButton':'shownButton'">Suivant</button>
   </div>
 </article>
