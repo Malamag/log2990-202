@@ -1,7 +1,7 @@
-import { Observer } from './observer';
+import {InputObserver } from './input-observer';
 import { Point } from './point';
 
-export abstract class DrawingTool extends Observer{
+export abstract class DrawingTool extends InputObserver{
     _svg:HTMLElement | null;
     _workingSpace:HTMLElement | null;
     _svgBox:ClientRect;
@@ -16,6 +16,12 @@ export abstract class DrawingTool extends Observer{
     selected:boolean;
     width:number;
     primary_color:string;
+
+    abstract down(position:Point, insideWorkspace?:boolean):void;
+    abstract up(position:Point):void;
+    abstract move(position:Point):void;
+    abstract doubleClick(position:Point, insideWorkspace?:boolean):void;
+    abstract createPath(path:Point[], doubleClickCheck?:boolean):void;
   
     constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:string){
       

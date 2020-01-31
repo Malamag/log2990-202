@@ -15,70 +15,47 @@ export class BrushService extends DrawingTool {
   update(keyboard:KeyboardHandlerService){
   }
 
-  down(){
+  down(position:Point){
     //mouse down with brush in hand
-    if(this.mouseX + (this._workingSpace? this._workingSpace.scrollLeft : 0) >= this._svgBox.left && this.mouseY + (this._workingSpace? this._workingSpace.scrollTop : 0) >= this._svgBox.top){
-      this.startedInsideWorkSpace = true;
-      console.log("yes");
-    }else{
-      this.startedInsideWorkSpace = false;
-    }
-    if(this.startedInsideWorkSpace){
-      console.log("-----CLICKED WITH BRUSH-----");
-      this.isDown = true;
-      this.currentX = this.mouseX - this._svgBox.left + (this._workingSpace? this._workingSpace.scrollLeft : 0);
-      this.currentY = this.mouseY - this._svgBox.top + (this._workingSpace? this._workingSpace.scrollTop : 0);
-      this.currentPath.push(new Point(this.currentX,this.currentY));
-      this.currentPath.push(new Point(this.currentX,this.currentY));
+    this.isDown = true;
+
+    this.currentPath.push(position);
+    this.currentPath.push(position);
+
+    let d : string = "";
+    d+= this.createPath(this.currentPath);
+    document.getElementsByName("in-progress")[0].innerHTML = d;
+  }
+  up(position:Point){
+    //mouse up with brush in hand
+    this.isDown = false;
+
+    let d : string = "";
+    d+= this.createPath(this.currentPath);
+
+    document.getElementsByName("drawing")[0].innerHTML += "<g name=\"brush-stroke\">" + d + "</g>";
+    document.getElementsByName("in-progress")[0].innerHTML = "";
+
+    this.currentPath = [];
+  }
+  move(position:Point){
+    //mouse move with brush in hand
+    if(this.isDown){
+      let xDelta = this.currentPath[this.currentPath.length-1].x;
+      let yDelta = this.currentPath[this.currentPath.length-1].y;
+      if(xDelta != this.currentX || yDelta != this.currentY){
+        this.currentPath.push(position);
+      }
+
       let d : string = "";
       d+= this.createPath(this.currentPath);
-      /*
-      if(this._svg){
-        
-      }*/
       document.getElementsByName("in-progress")[0].innerHTML = d;
     }
   }
-  up(){
-    //mouse up with brush in hand
-    if(this.startedInsideWorkSpace){
-      console.log("-----RELEASED BRUSH-----");
-      this.isDown = false;
-      let d : string = "";
-      d+= this.createPath(this.currentPath);
-      document.getElementsByName("drawing")[0].innerHTML += "<g name=\"brush-stroke\">" + d + "</g>";
-      document.getElementsByName("in-progress")[0].innerHTML = "";
-      this.currentPath = [];
-    }
-  }
-  move(){
-    //mouse move with brush in hand
-    if(this.startedInsideWorkSpace){
-      this.currentX = this.mouseX - this._svgBox.left + (this._workingSpace? this._workingSpace.scrollLeft : 0);
-      this.currentY = this.mouseY - this._svgBox.top + (this._workingSpace? this._workingSpace.scrollTop : 0);
-
-      if(this.isDown){
-        if(this.currentPath[this.currentPath.length-1].x != this.currentX || this.currentPath[this.currentPath.length-1].y != this.currentY){
-          this.currentPath.push(new Point(this.currentX, this.currentY));
-        }
-
-       // if(this.currentPath[this.currentPath.length-1].x == this.currentPath[this.currentPath.length-2].x || this.currentPath[this.currentPath.length-1].y == this.currentPath[this.currentPath.length-2].y){
-         // this.currentPath[this.currentPath.length-2] = this.currentPath[this.currentPath.length-1];
-         // this.currentPath.pop();
-        //}
-
-        let d : string = "";
-        d+= this.createPath(this.currentPath);
-        document.getElementsByName("in-progress")[0].innerHTML = d;
-      }
-    }
-  }
-  doubleClick(){
-    //mouse doubleClick with brush in hand
+  doubleClick(position:Point){
+    //mouse doubleClick with brush in hand (nothing happens)
   }
   createPath(p:Point[]){
-
-    //p = this.Wrap(p,40);
 
     let width = 75;
     let scale = width/((100/0.5) / (100/width));
@@ -96,16 +73,5 @@ export class BrushService extends DrawingTool {
       s+="\" stroke=\"#" + this.primary_color + "\" stroke-width=\""+(width-(width*scale)/2)+"\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" filter=\"url(#displacementFilter)\"/>";
 
     return s;
-  }
-
-  Wrap(p:Point[], width:number){
-
-    let wrap : Point[] = [];
-
-    p.forEach(element => {
-      
-    });
-  
-    return wrap;
   }
 }

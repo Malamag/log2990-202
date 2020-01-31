@@ -28,56 +28,42 @@ export class RectangleService extends DrawingTool {
     }
   }
 
-  down(){
+  down(position:Point){
     //mouse down with pencil in hand
-    if(this.mouseX - this._svgBox.left + (this._workingSpace? this._workingSpace.scrollLeft : 0) >= this._svgBox.left && this.mouseY - this._svgBox.top + (this._workingSpace? this._workingSpace.scrollTop : 0) >= this._svgBox.top){
-      this.startedInsideWorkSpace = true;
-    }else{
-      this.startedInsideWorkSpace = false;
-    }
-    if(this.startedInsideWorkSpace){
-      console.log("-----CLICKED WITH RECTANGLE-----");
-      this.isDown = true;
-      this.currentX = this.mouseX - this._svgBox.left + (this._workingSpace? this._workingSpace.scrollLeft : 0);
-      this.currentY = this.mouseY - this._svgBox.top + (this._workingSpace? this._workingSpace.scrollTop : 0);
-      this.currentPath.push(new Point(this.currentX,this.currentY));
-      this.currentPath.push(new Point(this.currentX,this.currentY));
+    this.isDown = true;
+
+    this.currentPath.push(position);
+    this.currentPath.push(position);
+
+    let d : string = "";
+    d+= this.createPath(this.currentPath);
+
+    document.getElementsByName("in-progress")[0].innerHTML = d;
+  }
+  up(position:Point){
+    //mouse up with pencil in hand
+    this.isDown = false;
+
+    let d : string = "";
+    d+= this.createPath(this.currentPath);
+
+    document.getElementsByName("drawing")[0].innerHTML += d;
+    document.getElementsByName("in-progress")[0].innerHTML = "";
+
+    this.currentPath = [];
+  }
+  move(position:Point){
+    //mouse move with pencil in hand
+    if(this.isDown){
+      this.currentPath.push(position);
+
       let d : string = "";
       d+= this.createPath(this.currentPath);
-      /*
-      if(this._svg){
-        
-      }*/
+      
       document.getElementsByName("in-progress")[0].innerHTML = d;
     }
   }
-  up(){
-    //mouse up with pencil in hand
-    if(this.startedInsideWorkSpace){
-      console.log("-----RELEASED RECTANGLE-----");
-      this.isDown = false;
-      let d : string = "";
-      d+= this.createPath(this.currentPath);
-      document.getElementsByName("drawing")[0].innerHTML += d;
-      document.getElementsByName("in-progress")[0].innerHTML = "";
-      this.currentPath = [];
-    }
-  }
-  move(){
-    //mouse move with pencil in hand
-    if(this.startedInsideWorkSpace){
-      this.currentX = this.mouseX - this._svgBox.left + (this._workingSpace? this._workingSpace.scrollLeft : 0);
-      this.currentY = this.mouseY - this._svgBox.top + (this._workingSpace? this._workingSpace.scrollTop : 0);
-
-      if(this.isDown){
-        this.currentPath.push(new Point(this.currentX, this.currentY));
-        let d : string = "";
-        d+= this.createPath(this.currentPath);
-        document.getElementsByName("in-progress")[0].innerHTML = d;
-      }
-    }
-  }
-  doubleClick(){
+  doubleClick(position:Point){
     //mouse doubleClick with rectangle in hand
   }
   createPath(p:Point[]){

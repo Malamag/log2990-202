@@ -53,50 +53,33 @@ export class LineService extends DrawingTool {
     }
   }
 
-  down(){
-    //mouse down with line in hand
+  down(position:Point, mouseInsideWorkspace:boolean){
 
+    this.clickedInside = mouseInsideWorkspace;
+    console.log(position);
+    this.currentPath.push(position);
+    console.log(this.currentPath);
+    let d : string = "";
 
+    d+= this.createPath(this.currentPath,false);
 
-    if(this.mouseX - this._svgBox.left + (this._workingSpace? this._workingSpace.scrollLeft : 0) >= this._svgBox.left && this.mouseY - this._svgBox.top + (this._workingSpace? this._workingSpace.scrollTop : 0) >= this._svgBox.top){
-      this.clickedInside = true;
-      console.log("-----CLICKED WITH LINE-----");
-      this.currentX = this.mouseX - this._svgBox.left + (this._workingSpace? this._workingSpace.scrollLeft : 0);
-      this.currentY = this.mouseY - this._svgBox.top + (this._workingSpace? this._workingSpace.scrollTop : 0);
-      this.currentPath.push(new Point(this.currentX,this.currentY));
-      let d : string = "";
+    document.getElementsByName("in-progress")[0].innerHTML = d;
 
-      d+= this.createPath(this.currentPath,false);
-
-      /*
-      if(this._svg){
-        
-      }*/
-
-      document.getElementsByName("in-progress")[0].innerHTML = d;
-
-      console.log(this.currentPath);
-
-      this.isDown = true;
-
-    }else{
-      this.clickedInside = false;
-    }
+    this.isDown = true;
   }
-  up(){
+  up(position:Point){
+    console.log("up line");
     //mouse up with line in hand
   }
-  move(){
+  move(position:Point){
     //mouse move with line in hand
+    console.log("move line");
 
     if(this.isDown){
-      this.currentX = this.mouseX - this._svgBox.left + (this._workingSpace? this._workingSpace.scrollLeft : 0);
-      this.currentY = this.mouseY - this._svgBox.top + (this._workingSpace? this._workingSpace.scrollTop : 0);
-  
       if(this.currentPath.length < 2){
-        this.currentPath.push(new Point(this.currentX, this.currentY));
+        this.currentPath.push(position);
       }else{
-        this.currentPath[this.currentPath.length-1] = new Point(this.currentX, this.currentY);
+        this.currentPath[this.currentPath.length-1] = position;
       }
        
       let d : string = "";
@@ -105,32 +88,28 @@ export class LineService extends DrawingTool {
       document.getElementsByName("in-progress")[0].innerHTML = d;
     }
   }
-  doubleClick(){
+  doubleClick(position:Point, mouseInsideWorkspace:boolean){
     //mouse doubleClick with line in hand
+    if(this.currentPath.length > 1){
+      if(mouseInsideWorkspace){
 
-      console.log("DOUBLE CLICK LINE");
-      if(this.currentPath.length > 1){
-        if(this.clickedInside){
-
-          this.isDown = false;
+        this.isDown = false;
   
         if(this.currentPath.length >= 2){
           this.currentPath.pop();
         }
   
         let d : string = "";
-  
         d+= this.createPath(this.currentPath, true);
-  
   
         document.getElementsByName("drawing")[0].innerHTML += "<g name=\"line-segments\">" + d + "</g>";
         document.getElementsByName("in-progress")[0].innerHTML = "";
+
         this.currentPath = [];
+
         this.forcedAngle = false;
-  
-        }
       }
-    
+    }
   }
   createPath(p:Point[], wasDoubleClick:boolean){
 
