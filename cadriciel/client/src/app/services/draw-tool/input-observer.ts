@@ -6,9 +6,9 @@ export abstract class InputObserver{
     abstract update(keyboard:KeyboardHandlerService):void;
 
     //Mouse
-    abstract down(position:Point):void;
+    abstract down(position:Point, insideWorkspace?:boolean):void;
     abstract up(position:Point):void;
     abstract move(position:Point):void;
-    abstract doubleClick(position:Point):void;
+    abstract doubleClick(position:Point,insideWorkspace?:boolean):void;
     abstract selected:boolean;
 }

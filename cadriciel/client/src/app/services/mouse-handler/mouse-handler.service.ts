@@ -9,15 +9,16 @@ export class MouseHandlerService {
 
   mouseWindowPosition:Point;
   mouseCanvasPosition:Point;
-  mouseInsideWorkspace:Boolean;
+  startedInsideWorkspace:boolean;
+  insideWorkspace:boolean;
   svgCanvas:HTMLElement | null;
   workingSpace:HTMLElement | null;
   svgBox:ClientRect;
   observers:InputObserver[];
 
   numberOfClicks:number;
-  upFromSingleClick:boolean;
   isFirstClick:boolean;
+  upFromDoubleClick:boolean;
 
   constructor(svgCanvas:HTMLElement | null, workingSpace:HTMLElement | null) {
 
@@ -32,11 +33,12 @@ export class MouseHandlerService {
 
     this.mouseWindowPosition = new Point(0,0);
     this.mouseCanvasPosition = this.windowToCanvas(this.mouseWindowPosition);
-    this.mouseInsideWorkspace = this.checkIfValidClick(this.mouseCanvasPosition);
+    this.startedInsideWorkspace = this.validPoint(this.mouseCanvasPosition);
+    this.insideWorkspace = this.validPoint(this.mouseCanvasPosition);
 
     this.numberOfClicks = 0;
     this.isFirstClick = true;
-    this.upFromSingleClick = false;
+    this.upFromDoubleClick = false;
   }
 
   windowToCanvas(windowPosition:Point){
@@ -45,11 +47,11 @@ export class MouseHandlerService {
     return new Point(canvasX, canvasY);
   }
 
-  checkIfValidClick(clickedPoint:Point){
-    return (clickedPoint.x >= this.svgBox.left) && (clickedPoint.y >= this.svgBox.top);
+  validPoint(clickedPoint:Point){
+    return (clickedPoint.x + this.svgBox.left >= this.svgBox.left) && (clickedPoint.y + this.svgBox.top >= this.svgBox.top);
   }
 
-  addObserver(newObserver:any){
+  addObserver(newObserver:InputObserver){
     this.observers.push(newObserver);
   }
 
@@ -60,32 +62,41 @@ export class MouseHandlerService {
 
   down(e:MouseEvent){
     this.updatePosition(e.x,e.y);
+    this.startedInsideWorkspace = this.validPoint(this.mouseCanvasPosition);
+    this.insideWorkspace = this.validPoint(this.mouseCanvasPosition);
+
+    if(this.startedInsideWorkspace){
+      this.callObserverDown();
+    }
+  }
+  up(e:MouseEvent){
+    this.updatePosition(e.x,e.y);
+
+    this.insideWorkspace = this.validPoint(this.mouseCanvasPosition);
+
+    if(this.startedInsideWorkspace){
+      this.callObserverUp();
+      this.startedInsideWorkspace = false;
+    }
+
     this.numberOfClicks++;
+
     if(this.isFirstClick){
       this.isFirstClick = false;
       setTimeout(() => {
-        if(this.numberOfClicks == 1){
-          this.callObserverDown();
-          this.upFromSingleClick = true;
-        }else{
+        if(this.numberOfClicks > 1){
           this.callObserverDoubleClick();
-          this.upFromSingleClick = false;
         }
         this.numberOfClicks = 0;
         this.isFirstClick = true;
       }, 200);
     }
   }
-  up(e:MouseEvent){
-    this.updatePosition(e.x,e.y);
-    setTimeout(() => {
-      if(this.upFromSingleClick){
-        this.callObserverUp();
-      }
-    }, 201);
-  }
   move(e:MouseEvent){
     this.updatePosition(e.x,e.y);
+
+    this.insideWorkspace = this.validPoint(this.mouseCanvasPosition);
+
     this.callObserverMove();
   }
 
@@ -102,7 +113,7 @@ export class MouseHandlerService {
     //console.log("DOWN");
     this.observers.forEach(element => {
       if(element.selected){
-        element.down(this.mouseCanvasPosition);
+        element.down(this.mouseCanvasPosition,this.insideWorkspace);
       }
     });
   }
@@ -120,7 +131,7 @@ export class MouseHandlerService {
     //console.log("DOUBLECLICK");
     this.observers.forEach(element => {
       if(element.selected){
-        element.doubleClick(this.mouseCanvasPosition);
+        element.doubleClick(this.mouseCanvasPosition,this.insideWorkspace);
       }
     });
   }

@@ -16,6 +16,12 @@ export abstract class DrawingTool extends InputObserver{
     selected:boolean;
     width:number;
     primary_color:string;
+
+    abstract down(position:Point, insideWorkspace?:boolean):void;
+    abstract up(position:Point):void;
+    abstract move(position:Point):void;
+    abstract doubleClick(position:Point, insideWorkspace?:boolean):void;
+    abstract createPath(path:Point[], doubleClickCheck?:boolean):void;
   
     constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:string){
       

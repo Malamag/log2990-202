@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { InputObserver } from '../draw-tool/input-observer';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class KeyboardHandlerService {
   keyCode:number;
   ctrlDown:boolean
   shiftDown:boolean;
-  observers:any[];
+  observers:InputObserver[];
 
   constructor() {
     this.keyString = "";
@@ -17,7 +18,7 @@ export class KeyboardHandlerService {
     this.observers = [];
   }
 
-  addObserver(newObserver:any){
+  addObserver(newObserver:InputObserver){
     this.observers.push(newObserver);
   }
 
