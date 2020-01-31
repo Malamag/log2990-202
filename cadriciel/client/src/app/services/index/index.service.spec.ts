@@ -1,11 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+/*import { HttpClient } from '@angular/common/http';
 import { inject, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { Message } from '../../../../../common/communication/message';
 import { IndexService } from './index.service';
 import SpyObj = jasmine.SpyObj;
 
-describe('IndexService', () => {
+/*describe('IndexService', () => {
     let httpClientSpy: SpyObj<HttpClient>;
 
     beforeEach(() => {
@@ -33,3 +33,4 @@ describe('IndexService', () => {
         expect(httpClientSpy.get.calls.count()).toBe(1, 'one call');
     }));
 });
+*/

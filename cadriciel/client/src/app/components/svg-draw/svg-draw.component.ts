@@ -17,27 +17,28 @@ export class SvgDrawComponent implements OnInit {
 
     window.addEventListener("keydown", function(e){
       test.logkey(e);
+      /*
       let s = "";
       if(test.ctrlDown)
       s+= "CTRL + ";
       if(test.shiftDown)
       s+= "SHIFT + ";
       s+= test.keyString;
-      console.log(s);
+      console.log(s);*/
     });
 
     window.addEventListener("keyup", function(e){
       test.reset(e);
+      /*
       let s = "";
       if(test.ctrlDown)
       s+= "CTRL + ";
       if(test.shiftDown)
       s+= "SHIFT + ";
       s+= test.keyString;
-      console.log(s);
+      console.log(s);*/
     });
 
-    let isSingleClick : boolean = true;
     let isDoubleClick : boolean = false;
 
     let _svg : HTMLElement | null = document.getElementById("canvas");
@@ -46,11 +47,14 @@ export class SvgDrawComponent implements OnInit {
 
     let tools : any[] = [];
 
+    let color1 = "1167B1";
+    let color2 = "FF781F";
+
     let drawing_service : DrawToolService = new DrawToolService();
-    let pencil = drawing_service.CreatePencil(_svg,_workingSpace,0,0,false,10,10);
-    let rect = drawing_service.CreateRectangle(_svg,_workingSpace,0,0,false,10,10,15);
-    let line = drawing_service.CreateLine(_svg,_workingSpace,0,0,false,10,10,true);
-    let brush = drawing_service.CreateBrush(_svg,_workingSpace,0,0,true,10,10);
+    let pencil = drawing_service.CreatePencil(_svg,_workingSpace,0,0,false,10,color1);
+    let rect = drawing_service.CreateRectangle(_svg,_workingSpace,0,0,false,10,color1,color2);
+    let line = drawing_service.CreateLine(_svg,_workingSpace,0,0,false,10,color1,true);
+    let brush = drawing_service.CreateBrush(_svg,_workingSpace,0,0,true,10,color1);
 
     tools.push(pencil);
     tools.push(rect);
@@ -76,10 +80,9 @@ export class SvgDrawComponent implements OnInit {
       });
       window.addEventListener("mousedown", function(e){
 
-        isSingleClick = true;
         isDoubleClick = false;
         setTimeout(()=>{
-            if(isSingleClick){
+            if(!isDoubleClick){
               console.log("single click");
                 tools.forEach(element => {
                   if(element.selected){
@@ -110,7 +113,6 @@ export class SvgDrawComponent implements OnInit {
       });
       window.addEventListener("dblclick",function(e){
 
-        isSingleClick = false;
         isDoubleClick = true;
 
         console.log("dblclick");

@@ -9,22 +9,22 @@ export class DrawToolService {
   keyboard:KeyboardHandlerService;
 
   constructor() { 
-
+    //_ -> private
   }
 
-  CreatePencil(_svg:HTMLElement | null,_workingSpace:HTMLElement | null, mouseX:number, mouseY:number,selected:boolean, width:number, primary_color:number){
+  CreatePencil(_svg:HTMLElement | null,_workingSpace:HTMLElement | null, mouseX:number, mouseY:number,selected:boolean, width:number, primary_color:string){
     return new PencilTool(_svg,_workingSpace,mouseX,mouseY,selected,width,primary_color);
   }
 
-  CreateRectangle(_svg:HTMLElement | null,_workingSpace:HTMLElement | null, mouseX:number, mouseY:number,selected:boolean, width:number, primary_color:number, secondary_color:number){
+  CreateRectangle(_svg:HTMLElement | null,_workingSpace:HTMLElement | null, mouseX:number, mouseY:number,selected:boolean, width:number, primary_color:string, secondary_color:string){
     return new RectangleTool(_svg,_workingSpace,mouseX,mouseY,selected,width,primary_color,secondary_color);
   }
 
-  CreateLine(_svg:HTMLElement | null,_workingSpace:HTMLElement | null, mouseX:number, mouseY:number,selected:boolean, width:number, primary_color:number,showJunctions:boolean){
+  CreateLine(_svg:HTMLElement | null,_workingSpace:HTMLElement | null, mouseX:number, mouseY:number,selected:boolean, width:number, primary_color:string,showJunctions:boolean){
     return new LineTool(_svg,_workingSpace,mouseX,mouseY,selected,width,primary_color, showJunctions);
   }
 
-  CreateBrush(_svg:HTMLElement | null,_workingSpace:HTMLElement | null, mouseX:number, mouseY:number,selected:boolean, width:number, primary_color:number){
+  CreateBrush(_svg:HTMLElement | null,_workingSpace:HTMLElement | null, mouseX:number, mouseY:number,selected:boolean, width:number, primary_color:string){
     return new BrushTool(_svg,_workingSpace,mouseX,mouseY,selected,width,primary_color);
   }
 }
@@ -56,9 +56,9 @@ abstract class DrawingTool extends Observer{
   mouseY:number;
   selected:boolean;
   width:number;
-  primary_color:number;
+  primary_color:string;
 
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number){
+  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:string){
     
     super();
     
@@ -86,12 +86,11 @@ abstract class DrawingTool extends Observer{
 
 class PencilTool extends DrawingTool{
 
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number){
+  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:string){
     super(_svg, _workingSpace, mouseX, mouseY,selected,width,primary_color);
   }
 
   update(keyboard:KeyboardHandlerService){
-    console.log("update on pencil");
   }
 
   down(){
@@ -145,10 +144,6 @@ class PencilTool extends DrawingTool{
   }
   doubleClick(){
     //mouse doubleClick with pencil in hand
-    this.down();
-    this.up();
-    this.down();
-    this.up();
   }
   createPath(p:Point[]){
     let s = "<path d=\"";
@@ -156,24 +151,23 @@ class PencilTool extends DrawingTool{
     for(let i = 1; i < p.length;i++){
       s+= `L ${p[i].x} ${p[i].y} `;
     }
-    s+="\" stroke=\"red\" stroke-width=\"10\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />";
+    s+="\" stroke=\"#"+ this.primary_color +"\" stroke-width=\"10\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />";
   
     return s;
   }
 }
 
 class RectangleTool extends DrawingTool{
-  secondary_color:number;
+  secondary_color:string;
   isSquare:boolean;
 
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number,secondary_color:number){
+  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:string,secondary_color:string){
     super(_svg,_workingSpace, mouseX, mouseY,selected,width,primary_color);
     this.secondary_color = secondary_color;
     this.isSquare = false;
   }
 
   update(keyboard:KeyboardHandlerService){
-    console.log("update on rectangle");
 
     this.isSquare = keyboard.shiftDown;
 
@@ -258,7 +252,7 @@ class RectangleTool extends DrawingTool{
       startY = h > 0 ? p[0].y : p[0].y - smallest;
     }
     let _s = "<g name = \"rectangle\">";
-    _s += `<rect x=\"${startX}\" y=\"${startY}\" width=\"${Math.abs(w)}\" height=\"${Math.abs(h)}\" fill="blue"/>`;
+    _s += `<rect x=\"${startX}\" y=\"${startY}\" width=\"${Math.abs(w)}\" height=\"${Math.abs(h)}\" fill="#${this.primary_color}" stroke-width="3" stroke="#${this.secondary_color}"/>`;
     _s+= "</g>"
     if(w == 0 || h == 0){
       _s = "";
@@ -269,18 +263,54 @@ class RectangleTool extends DrawingTool{
 
 class LineTool extends DrawingTool{
   showJunctions:boolean;
+  forcedAngle:boolean;
 
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number, showJunctions:boolean){
+  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:string, showJunctions:boolean){
     super(_svg,_workingSpace, mouseX, mouseY,selected,width,primary_color);
     this.showJunctions = showJunctions;
+    this.forcedAngle = false;
   }
 
   update(keyboard:KeyboardHandlerService){
-    console.log("update on line");
+
+    if(this.currentPath.length >= 2){
+
+      if((this.forcedAngle != keyboard.shiftDown) && this.isDown){
+        this.forcedAngle = keyboard.shiftDown;
+        console.log("redraw with forced");
+        let d : string = "";
+        d+= this.createPath(this.currentPath,false);
+        document.getElementsByName("in-progress")[0].innerHTML = d;
+      }
+    }
+
+
+
+    if(keyboard.keyCode == 8){
+      if(this.currentPath.length > 2){
+        this.currentPath[this.currentPath.length-2] = this.currentPath[this.currentPath.length-1];
+        this.currentPath.pop();
+
+        console.log("delete");
+
+        let d : string = "";
+        d+= this.createPath(this.currentPath,false);
+        document.getElementsByName("in-progress")[0].innerHTML = d;
+      }
+    }
+
+    if(keyboard.keyCode == 27){
+
+      this.isDown = false;
+      document.getElementsByName("in-progress")[0].innerHTML = "";
+      this.currentPath = [];
+    }
   }
 
   down(){
     //mouse down with line in hand
+
+
 
     if(this.mouseX - this._svgBox.left + (this._workingSpace? this._workingSpace.scrollLeft : 0) >= this._svgBox.left && this.mouseY - this._svgBox.top + (this._workingSpace? this._workingSpace.scrollTop : 0) >= this._svgBox.top){
       this.clickedInside = true;
@@ -290,13 +320,7 @@ class LineTool extends DrawingTool{
       this.currentPath.push(new Point(this.currentX,this.currentY));
       let d : string = "";
 
-      d+= this.createPath(this.currentPath);
-
-      if(this.showJunctions){
-        this.currentPath.forEach(element => {
-          d+=`<circle cx=\"${element.x}\" cy=\"${element.y}\" r=\"3\" stroke=\"black\" stroke-width=\"0\" fill=\"red\" />`;
-        });
-      }
+      d+= this.createPath(this.currentPath,false);
 
       /*
       if(this._svg){
@@ -330,63 +354,123 @@ class LineTool extends DrawingTool{
       }
        
       let d : string = "";
-      d+= this.createPath(this.currentPath);
-
-      if(this.showJunctions){
-        this.currentPath.forEach(element => {
-          d+=`<circle cx=\"${element.x}\" cy=\"${element.y}\" r=\"3\" stroke=\"black\" stroke-width=\"0\" fill=\"red\" />`;
-        });
-      }
+      d+= this.createPath(this.currentPath,false);
 
       document.getElementsByName("in-progress")[0].innerHTML = d;
     }
   }
   doubleClick(){
     //mouse doubleClick with line in hand
+
       console.log("DOUBLE CLICK LINE");
       if(this.currentPath.length > 1){
         if(this.clickedInside){
 
           this.isDown = false;
   
-        if(this.currentPath.length > 2){
+        if(this.currentPath.length >= 2){
           this.currentPath.pop();
         }
   
-        let deltaX : number = Math.abs(this.currentPath[this.currentPath.length-1].x - this.currentPath[0].x);
-        let deltaY : number = Math.abs(this.currentPath[this.currentPath.length-1].y - this.currentPath[0].y);
-  
         let d : string = "";
   
-        if(deltaX <= 3 || deltaY <= 3){
-          this.currentPath[this.currentPath.length -1] = this.currentPath[0];
-        }
-  
-        d+= this.createPath(this.currentPath);
-  
-        if(this.showJunctions){
-          this.currentPath.forEach(element => {
-            d+=`<circle cx=\"${element.x}\" cy=\"${element.y}\" r=\"3\" stroke=\"black\" stroke-width=\"0\" fill=\"red\" />`;
-          });
-        }
+        d+= this.createPath(this.currentPath, true);
   
   
         document.getElementsByName("drawing")[0].innerHTML += "<g name=\"line-segments\">" + d + "</g>";
         document.getElementsByName("in-progress")[0].innerHTML = "";
         this.currentPath = [];
+        this.forcedAngle = false;
   
         }
       }
     
   }
-  createPath(p:Point[]){
+  createPath(p:Point[], wasDoubleClick:boolean){
+
+    if(this.forcedAngle){
+
+      let x1 = p[p.length-2].x;
+      let y1 = p[p.length-2].y;
+
+      let x2 = p[p.length-1].x;
+      let y2 = p[p.length-1].y;
+
+      let xDelta = x2-x1;
+      let yDelta= y2-y1;
+
+      let angle = Math.atan(Math.abs(yDelta)/Math.abs(xDelta));
+      angle = 360 * angle/(2*Math.PI);
+
+      if(xDelta<0){
+        angle = 180-angle;
+      }
+      if(yDelta>0){
+        angle =360-angle;
+      }
+
+      angle = 45*(Math.round(angle/45));
+      if(angle == 360){
+        angle = 0;
+      }
+
+      if(angle == 180 || angle == 0){
+        yDelta = 0;
+      }
+
+      if(angle == 90 || angle == 270){
+        xDelta = 0;
+      }
+
+      if(angle == 45 || angle == 135){
+        yDelta = -Math.abs(xDelta);
+      }
+
+      if(angle == 225 || angle == 315){
+        yDelta = Math.abs(xDelta);
+      }
+
+      p[p.length-1] = new Point(x1 + xDelta, y1 + yDelta);
+    }else{
+      p[p.length-1] = new Point(this.currentX, this.currentY);
+    }
+
+    if(wasDoubleClick){
+      let dist = Math.sqrt(Math.pow(p[p.length-1].x - p[0].x,2) + Math.pow(p[p.length-1].y - p[0].y,2));
+
+      if(dist <= Math.sqrt(Math.pow(3,2) + Math.pow(3,2))){
+        p[p.length -1] = p[0];
+      }
+    }
+
+    let closeIt : boolean = false;
+
+    if(wasDoubleClick){
+      let dist = Math.sqrt(Math.pow(p[p.length-1].x - p[0].x,2) + Math.pow(p[p.length-1].y - p[0].y,2));
+
+      if(dist <= Math.sqrt(Math.pow(3,2) + Math.pow(3,2))){
+        closeIt = true;
+        //p[p.length -1] = p[0];
+      }
+    }
 
     let s = "<path d=\"";
     s+= `M ${p[0].x} ${p[0].y} `;
-    for(let i = 1; i < p.length;i++){
+    for(let i = 1; i < p.length - (closeIt? 1 : 0);i++){
       s+= `L ${p[i].x} ${p[i].y} `;
     }
-    s+="\" stroke=\"red\" stroke-width=\"1\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />";
+
+    if(closeIt){
+      s+= "Z";
+    }
+
+    s+="\" stroke=\"#" + this.primary_color + "\" stroke-width=\"1\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />";
+
+    if(this.showJunctions){
+      for(let i = 0; i < p.length - (closeIt? 1 : 0);i++){
+        s+=`<circle cx=\"${p[i].x}\" cy=\"${p[i].y}\" r=\"3\" stroke=\"black\" stroke-width=\"0\" fill=\"#${this.primary_color}\" />`;
+      }
+    }
   
     return s;
   }
@@ -394,12 +478,11 @@ class LineTool extends DrawingTool{
 
 class BrushTool extends DrawingTool{
   
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:number){
+  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:string){
     super(_svg, _workingSpace, mouseX, mouseY,selected,width,primary_color);
   }
 
   update(keyboard:KeyboardHandlerService){
-    console.log("update on brush");
   }
 
   down(){
@@ -462,28 +545,25 @@ class BrushTool extends DrawingTool{
   }
   doubleClick(){
     //mouse doubleClick with brush in hand
-    this.down();
-    this.up();
-    this.down();
-    this.up();
   }
   createPath(p:Point[]){
 
     //p = this.Wrap(p,40);
 
-    let s = "<filter id=\"blurMe\" filterUnits=\"userSpaceOnUse\"><feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"10\"/></filter>";
-    //let s = "<filter id=\"displacementFilter\" x=\"-100%\" y=\"-100%\" width=\"200%\" height=\"200%\" filterUnits=\"userSpaceOnUse\"><feTurbulence type=\"turbulence\" baseFrequency=\"0.05\"numOctaves=\"2\" result=\"turbulence\"/><feDisplacementMap in2=\"turbulence\" in=\"SourceGraphic\"scale=\"50\" xChannelSelector=\"B\" yChannelSelector=\"R\"/></filter>";
+    let width = 75;
+    let scale = width/((100/0.5) / (100/width));
+    let octave = scale/(width/10) * 0.5;
 
+    //let s = "<filter id=\"blurMe\" filterUnits=\"userSpaceOnUse\"><feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"5\"/></filter>";
+    let s = "<filter id=\"displacementFilter\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\" filterUnits=\"userSpaceOnUse\"><feTurbulence type=\"turbulence\" baseFrequency=\""+octave+"\"numOctaves=\"2\" result=\"turbulence\"/><feDisplacementMap in2=\"turbulence\" in=\"SourceGraphic\"scale=\""+(width*scale)+"\" xChannelSelector=\"R\" yChannelSelector=\"G\" result=\"first\"/><feOffset in=\"first\" dx=\""+((-width*scale)/4)+"\" dy=\""+((-width*scale)/4)+"\" /></filter>";
     s += "<path d=\"";
-      s+= `M ${p[0].x-0/4} ${p[0].y-0/4} `;
+      s+= `M ${p[0].x} ${p[0].y} `;
 
       for(let i = 1; i < p.length;i++){
-
-
-        s+= `L ${p[i].x-0/4} ${p[i].y-0/4} `;
+        s+= `L ${p[i].x} ${p[i].y} `;
       }
 
-      s+="\" stroke=\"red\" stroke-width=\"10\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" filter=\"url(#blurMe)\" />";
+      s+="\" stroke=\"#" + this.primary_color + "\" stroke-width=\""+(width-(width*scale)/2)+"\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" filter=\"url(#displacementFilter)\"/>";
 
     return s;
   }
