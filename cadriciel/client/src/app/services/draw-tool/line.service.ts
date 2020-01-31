@@ -10,9 +10,10 @@ export class LineService extends DrawingTool {
 
   showJunctions:boolean;
   forcedAngle:boolean;
+  currentPos:Point;
 
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:string, showJunctions:boolean){
-    super(_svg,_workingSpace, mouseX, mouseY,selected,width,primary_color);
+  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string, showJunctions:boolean){
+    super(_svg,_workingSpace,selected,width,primary_color);
     this.showJunctions = showJunctions;
     this.forcedAngle = false;
   }
@@ -56,9 +57,13 @@ export class LineService extends DrawingTool {
   down(position:Point, mouseInsideWorkspace:boolean){
 
     this.clickedInside = mouseInsideWorkspace;
-    console.log(position);
-    this.currentPath.push(position);
-    console.log(this.currentPath);
+    let x = position.x;
+    let y = position.y;
+
+    this.currentPos = position;
+
+    this.currentPath.push(new Point(x,y));
+    console.log(mouseInsideWorkspace);
     let d : string = "";
 
     d+= this.createPath(this.currentPath,false);
@@ -76,6 +81,9 @@ export class LineService extends DrawingTool {
     console.log("move line");
 
     if(this.isDown){
+
+      this.currentPos = position;
+
       if(this.currentPath.length < 2){
         this.currentPath.push(position);
       }else{
@@ -96,6 +104,8 @@ export class LineService extends DrawingTool {
         this.isDown = false;
   
         if(this.currentPath.length >= 2){
+          //Down is called twice before we get here
+          this.currentPath.pop();
           this.currentPath.pop();
         }
   
@@ -157,7 +167,7 @@ export class LineService extends DrawingTool {
 
       p[p.length-1] = new Point(x1 + xDelta, y1 + yDelta);
     }else{
-      p[p.length-1] = new Point(this.currentX, this.currentY);
+      p[p.length-1] = this.currentPos;
     }
 
     if(wasDoubleClick){

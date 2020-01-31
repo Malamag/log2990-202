@@ -8,11 +8,7 @@ export abstract class DrawingTool extends InputObserver{
     startedInsideWorkSpace:boolean;
     isDown:boolean;
     clickedInside:boolean;
-    currentX:number;
-    currentY:number;
     currentPath:Point[];
-    mouseX:number;
-    mouseY:number;
     selected:boolean;
     width:number;
     primary_color:string;
@@ -23,7 +19,7 @@ export abstract class DrawingTool extends InputObserver{
     abstract doubleClick(position:Point, insideWorkspace?:boolean):void;
     abstract createPath(path:Point[], doubleClickCheck?:boolean):void;
   
-    constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:string){
+    constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string){
       
       super();
       
@@ -35,14 +31,9 @@ export abstract class DrawingTool extends InputObserver{
       this.startedInsideWorkSpace = false;
       this.isDown = false;
       this.clickedInside = false;
-      this.mouseX = mouseX;
-      this.mouseY = mouseY;
       this.selected = selected;
       this.width = width;
       this.primary_color = primary_color;
-  
-      this.currentX = mouseX;
-      this.currentY = mouseY;
   
       this.currentPath = [];
     }
