@@ -23,12 +23,12 @@ export class ColorPickerComponent {
     primaryR : string;
     primaryG : string;
     primaryB : string;
-    primaryAlpha : number;
+    primaryAlpha : number = 1;
     secondaryColor : string;
     secondaryR : string;
     secondaryG : string;
     secondaryB : string;
-    secondaryAlpha : number;
+    secondaryAlpha : number = 1;
     primarySelect : any = true;
     currentColorSelect : string = 'Primary';
     currentAlpha : number;
@@ -66,8 +66,8 @@ export class ColorPickerComponent {
     LightnessRightInput : string = '';
 
     mytranslation :string;
-    mycx : number = 0;
-    mycy : number = 0;
+    mycx : number = 100;
+    mycy : number = 50;
 
     constructor() {}
 
@@ -75,8 +75,8 @@ export class ColorPickerComponent {
 
         // canvas parm init
         this.canvasBgColor = 'white';
-        this.canvasHeigth = 200;//temp need to be a square
-        this.canvasWidth = 200;//temp
+        this.canvasHeigth = 0;//temp need to be a square
+        this.canvasWidth = 0;//temp
         this.canvasId = 'color-picker';//temp
         
         // circle parm init
@@ -327,6 +327,7 @@ export class ColorPickerComponent {
         this.BlueLeftInput = this.primaryB;
         this.SaturationLeftInput = '' + Math.round( this.currentSaturation ) + '%';
         this.LightnessLeftInput = '' + Math.round( this.currentLightness ) + '%';
+        window.alert(r + ' ' + g + ' ' + b + ' ' + this.primaryAlpha   );
     }
 
 
@@ -357,8 +358,10 @@ export class ColorPickerComponent {
         }
 
         this.currentHue = Math.round(Hue);
-
+        this.currentLightness = 50;
+        this.currentSaturation = 100;
         let color = this.hslToRgb(Hue);
+        
         if ( event.button === 0 ) {
             this.setPrimaryColor( color[0], color[1], color[2] );
             
@@ -372,8 +375,20 @@ export class ColorPickerComponent {
     TrisvgCursor(event : MouseEvent) : void {
         this.currentSaturation = event.offsetX ;
         this.currentLightness = event.offsetY;
-        this.LightnessLeftInput = event.offsetY + "%";
-        this.SaturationLeftInput = event.offsetX + "%";
+        this.mycy = event.offsetY;
+        this.mycx = event.offsetX;
+        this.LightnessLeftInput = event.offsetY + "";
+        this.SaturationLeftInput = event.offsetX + "";
+        let color : number[] = this.hslToRgb(this.currentHue, this.currentSaturation / 100, this.currentLightness /100 );
+        if ( event.button === 0 ) {
+            this.setPrimaryColor( color[0], color[1], color[2] );
+            
+        }
+        else if ( event.button === 2 ) {
+            //TODO : pop-up on right click??
+            this.setSecondaryColor ( color[0], color[1], color[2] );
+            
+        }
         
     }
     // select the function to use when color picker is clicked;
@@ -900,7 +915,7 @@ export class ColorPickerComponent {
         return { 'stop-color': this.secondaryColor };
     }
     get cursorStyles(): any{
-        return { 'cx' : this.mycx, "cy": this.mycy };
+        return { 'transform' : 'translate(100px,100px)  rotate(' + this.currentHue + 'deg) translate(-100px,-100px) translate(' + this.mycx + 'px,' + this.mycy + 'px)'};
     }
 
     // change primary alpha when primary slide change
