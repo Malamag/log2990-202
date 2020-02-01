@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { CanvasBuilderService } from '../../services/services/drawing/canvas-builder.service';
 import { ModalWindowService } from 'src/app/services/modal-window.service';
 import { Router } from '@angular/router';
-import { Canvas } from '../../models/Canvas.model';
 
 @Component({
   selector: 'app-new-draw',
@@ -16,7 +15,6 @@ export class NewDrawComponent implements OnInit {
   width: number;
   height: number;
   color: string;
-  canvas: Canvas;
 
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
@@ -34,9 +32,9 @@ export class NewDrawComponent implements OnInit {
 
   initForm() {
     this.newDrawForm = this.formBuilder.group({
-      canvWidth: ['', [Validators.pattern(/^\d+$/), Validators.min(1)]], // accepts only positive integers
-      canvHeight: ['', [Validators.pattern(/^\d+$/), Validators.min(1)]], 
-      canvColor: ['', Validators.pattern(/^[a-fA-F0-9]{6}$/)] // only accepts 6-chars strings made of hex characters
+      'canvWidth':  new FormControl('', [Validators.pattern(/^\d+$/), Validators.min(1)]), // accepts only positive integers
+      'canvHeight': new FormControl('', [Validators.pattern(/^\d+$/), Validators.min(1)]), 
+      'canvColor': new FormControl('', Validators.pattern(/^[a-fA-F0-9]{6}$/)), // only accepts 6-chars strings made of hex characters
     });
   }
 
@@ -51,6 +49,18 @@ export class NewDrawComponent implements OnInit {
   
   closeModalForm() {
     this.winService.closeWindow();
+  }
+
+  get canvHeight() {
+    return this.newDrawForm.get('canvHeight');
+  }
+
+  get canvWidth() {
+    return this.newDrawForm.get('canvWidth');
+  }
+
+  get canvColor() {
+    return this.newDrawForm.get('canvColor');
   }
 
 }

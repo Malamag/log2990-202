@@ -5,7 +5,6 @@ import { MatToolbarModule, MatIconModule, MatTooltipModule, MatButtonModule, Mat
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { CanvasBuilderService } from 'src/app/services/services/drawing/canvas-builder.service';
 
 describe('DrawViewComponent', () => {
   let component: DrawViewComponent;
@@ -51,8 +50,6 @@ describe('DrawViewComponent', () => {
   });
 
   it('OpenToolOptions should be false as the button action function had been called twice for the same tool', () => {
-    let service = new CanvasBuilderService();
-    component = new DrawViewComponent(service);
     const name: string = "crayon";
     component.buttonAction(name);
     component.buttonAction(name);

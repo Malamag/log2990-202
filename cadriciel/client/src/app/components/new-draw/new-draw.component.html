@@ -6,6 +6,7 @@
             <mat-form-field>
                 <mat-label for="canvWidth">Largeur (px)</mat-label>
                 <input matInput type="text" formControlName="canvWidth" [value]="width">
+                
             </mat-form-field>
 
             <mat-form-field>
@@ -18,7 +19,13 @@
                 <input matInput type="text" formControlName="canvColor" [value]="color">
             </mat-form-field>
 
-            
+            <p *ngIf="(canvWidth && canvWidth.invalid) || 
+            (canvHeight && canvHeight.invalid)" class="warnMessage"> <!--Cas géré si canv* est null-->
+                Veuillez entrer un entier positif
+            </p> 
+            <p *ngIf="canvColor && canvColor.invalid" class="warnMessage">
+                Valeur hexadécimale invalide!
+            </p>
             <button mat-raised-button color="primary" 
             type="submit" [disabled]="newDrawForm.invalid">C'est parti!</button>
             
