@@ -5,9 +5,11 @@ import { EntryPointComponent } from './components/entry-point/entry-point.compon
 import { RouterModule, Routes } from '@angular/router';
 
 
+
+
 const appRoutes: Routes = [
   {path: '', component: EntryPointComponent},
-  {path: "vue", component: DrawViewComponent}
+  {path: "vue", component: DrawViewComponent},
 ];
 
 @NgModule({
