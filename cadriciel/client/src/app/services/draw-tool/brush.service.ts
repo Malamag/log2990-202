@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { Point } from './point';
 import { PencilService } from './pencil.service';
 
@@ -7,8 +7,9 @@ import { PencilService } from './pencil.service';
 })
 export class BrushService extends PencilService {
 
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string){
-    super(_svg, _workingSpace,selected,width,primary_color);
+  constructor(svg:HTMLElement | null, workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string, renderer: Renderer2, 
+    inProgressRef:ElementRef, doneRef:ElementRef){
+    super(svg, workingSpace,selected,width,primary_color, renderer, inProgressRef, doneRef);
   }
 
   createPath(p:Point[]){

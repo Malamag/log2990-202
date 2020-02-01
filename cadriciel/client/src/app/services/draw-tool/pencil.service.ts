@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -8,8 +8,9 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 })
 export class PencilService extends DrawingTool {
 
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string){
-    super(_svg, _workingSpace,selected,width,primary_color);
+  constructor(svg:HTMLElement | null, workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string, renderer: Renderer2, 
+    inProgressRef:ElementRef, doneRef:ElementRef){
+    super(svg, workingSpace,selected,width,primary_color, renderer, inProgressRef, doneRef);
   }
 
   update(keyboard:KeyboardHandlerService){
