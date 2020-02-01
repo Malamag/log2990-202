@@ -1,10 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
-import {menuItems, toolsItems, welcomeItem} from '../../functionality';
+import {menuItems, toolsItems, welcomeItem} from '../../functionality'
 import { ModalWindowService } from 'src/app/services/modal-window.service';
 import { ComponentType } from '@angular/cdk/portal';
-
-
-//import {functionality} from '../../functionality'
 
 
 @Component({
@@ -15,7 +12,7 @@ import { ComponentType } from '@angular/cdk/portal';
 export class DrawViewComponent implements OnInit {
   funcMenu = menuItems;
   funcTools = toolsItems;
-  funcWelcom = welcomeItem;
+  funcWelcome = welcomeItem;
 
   openToolOptions: boolean = false;
   
@@ -32,8 +29,18 @@ export class DrawViewComponent implements OnInit {
 
     /**Cette fonction peut à la limite être mise dans un service... */
   buttonAction(name:string){
-    this.openToolOptions= !this.openToolOptions;
+    if(name === "pipette" || name === "sélectionner" || name ==="défaire" || name === "refaire"){this.openToolOptions = false;}
+    else if(this.selectedTool!= undefined){
+      if(this.selectedTool === name){
+        this.openToolOptions= !this.openToolOptions;
+      }
+      else{this.openToolOptions = true;}  
+    }
+    else{this.openToolOptions = true;}
+
+   
     this.selectedTool= name;
+    
   }
 
   openContext(cmp: ComponentType<any>) {

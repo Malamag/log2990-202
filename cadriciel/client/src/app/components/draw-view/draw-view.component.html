@@ -25,7 +25,7 @@
             <h1>  {{selectedTool}}</h1>
             <hr>
             <div [ngSwitch]= "selectedTool">
-                <div *ngSwitchCase = " 'rectangle' ">
+                <div *ngSwitchCase = " 'Rectangle' ">
                     <label> Epaisseur du trait de contour </label>
                     <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
                     <label> type de tracé </label>
@@ -36,7 +36,7 @@
                     <button> round</button>
                     <br>
                 </div>
-                <div *ngSwitchCase = " 'élipse' ">
+                <div *ngSwitchCase = " 'Élipse' ">
                     <label> Epaisseur du trait de contour </label>
                     <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
                     <label> type de tracé </label>
@@ -46,7 +46,7 @@
                     <button> bevel </button>
                     <button> round</button>
                 </div>
-                <div *ngSwitchCase = " 'polygone' ">
+                <div *ngSwitchCase = " 'Polygone' ">
                     <label> Epaisseur du trait de contour </label>
                     <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
                     <label> type de tracé </label>
@@ -59,12 +59,12 @@
                     <mat-slider min= "3" max = "12" value ="3"> </mat-slider><br>
                 </div>
                 <!-- for the prencil-->
-                <div *ngSwitchCase = " 'crayon' ">
+                <div *ngSwitchCase = " 'Crayon' ">
                     <label> Epaisseur du trait </label>
                     <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
                 </div>
                 <!-- for the brush -->
-                <div *ngSwitchCase = " 'pinceau' ">
+                <div *ngSwitchCase = " 'Pinceau' ">
                     <label> Epaisseur du trait </label>
                     <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
                     <label> texture du trait </label>
@@ -77,7 +77,7 @@
                     <button> round</button> <br>
                 </div>
                 <!-- for the calligraphy-->
-                <div *ngSwitchCase = " 'plume' ">
+                <div *ngSwitchCase = " 'Plume' ">
                     <label> longueur de la ligne</label>
                     <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
                     <label> Angle d'orientation </label>
@@ -92,7 +92,7 @@
                     <input type= "text" value = "1"> <br>
                 </div>
                 <!-- for the line -->
-                <div *ngSwitchCase = " 'ligne' ">
+                <div *ngSwitchCase = " 'Ligne' ">
                     <label> type de jonction </label>
                     <button> normal</button>
                     <button> avec point</button> <br><br>
@@ -102,12 +102,12 @@
                     <input type= "text" value ="3"> px <br>
                 </div>
                 <!-- for the eraser -->
-                <div *ngSwitchCase = " 'efface' ">
+                <div *ngSwitchCase = " 'Efface' ">
                     <label> Taille de l'efface </label>
                     <input type="text" value="2"> px <br>
                 </div>
                 <!-- for the text -->
-                <div *ngSwitchCase = " 'texte' ">
+                <div *ngSwitchCase = " 'Texte' ">
                     <label> Police de texte </label>
                     <select>
                         <option>arial</option>
