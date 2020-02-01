@@ -10,7 +10,7 @@
     width: 5%;
     border-right: thick;
 
-    padding-bottom: 5px; 
+    padding-bottom: 1vh; 
     
     margin-left: 15%;
 }
@@ -18,6 +18,7 @@
 .expendedOptions{
     width : 25%;
 }
+
 .svgElem{
     position:relative;
 }
@@ -45,6 +46,7 @@ mat-sidenav-content{
 .toolBtn {
     height: 5vh;
     width: 5vh;
+    margin-left:50%; // Éléments centrés
     
 }
 

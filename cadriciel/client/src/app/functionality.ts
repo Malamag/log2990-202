@@ -62,28 +62,32 @@ import { UserManualComponent } from './components/user-manual/user-manual.compon
             icon: "../../../assets/images/pencil.png",
         },
         {
-            name: "Rectangle",
-            shortcutName: "Rectangle",
+            name: "Pinceau",
+            shortcutName: "Pinceau",
             shortDescription: "text goes here",
-            description: "text goes here3",
-            icon: "../../../assets/images/frame.png",
-
+            description: "text goes here9",
+            icon: "../../../assets/images/edit-tools.png",
         },
         {
-            type: "Outils",
             name: "Plume",
             shortcutName: "Plume",
             shortDescription: "text goes here",
             description: "text goes here4",
             icon: "../../../assets/images/calligraphie.png",
         },
-       
         {
-            name: "Élipse",
-            shortcutName: "Élipse",
+            name: "Aérosol",
+            shortcutName: "Aérosol",
             shortDescription: "text goes here",
-            description: "text goes here6",
-            icon: "../../../assets/images/oval.png",
+            description: "text goes here",
+            icon: "../../../assets/images/spray.png",
+        },
+        {
+            name: "Efface",
+            shortcutName: "Efface",
+            shortDescription: "text goes here",
+            description: "text goes here10",
+            icon: "../../../assets/images/eraser.png",
         },
         {
             name: "Ligne",
@@ -93,25 +97,19 @@ import { UserManualComponent } from './components/user-manual/user-manual.compon
             icon: "../../../assets/images/graph.png",
         },
         {
-            name: "Chemin",
-            shortcutName: "Chemin",
+            name: "Rectangle",
+            shortcutName: "Rectangle",
             shortDescription: "text goes here",
-            description: "text goes here8",
-            icon: "../../../assets/images/timeline.png",
+            description: "text goes here3",
+            icon: "../../../assets/images/frame.png",
+
         },
         {
-            name: "Pinceau",
-            shortcutName: "Pinceau",
+            name: "Élipse",
+            shortcutName: "Élipse",
             shortDescription: "text goes here",
-            description: "text goes here9",
-            icon: "../../../assets/images/edit-tools.png",
-        },
-        {
-            name: "Efface",
-            shortcutName: "Efface",
-            shortDescription: "text goes here",
-            description: "text goes here10",
-            icon: "../../../assets/images/eraser.png",
+            description: "text goes here6",
+            icon: "../../../assets/images/oval.png",
         },
         {
             name: "Polygone",
@@ -127,14 +125,26 @@ import { UserManualComponent } from './components/user-manual/user-manual.compon
             description: "text goes here",
             icon: "../../../assets/images/lab.png",
         },
-        {
-            name: "Aérosol",
-            shortcutName: "Aérosol",
-            shortDescription: "text goes here",
-            description: "text goes here",
-            icon: "../../../assets/images/spray.png",
-        },
 
+        {
+            name: "Texte",
+            shortcutName:"Texte",
+            shortDescription:"text goes here",
+            description: "text goes here",
+            /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik"
+             title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
+            icon: "../../../assets/images/text.png",
+        },
+    
+        {
+            name: "Étampe",
+            shortcutName:"Étampe",
+            shortDescription:"text goes here",
+            description: "text goes here",
+            /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 
+            title="Flaticon"> www.flaticon.com</a>*/
+            icon: "../../../assets/images/stamp.png",
+        },
         {
             name: "Choisir couleur",
             shortcutName: "Outil couleur",
@@ -142,7 +152,6 @@ import { UserManualComponent } from './components/user-manual/user-manual.compon
             description: "text goes here5",
             icon: "../../../assets/images/exclude.png",
         },
-
     ];
 
 

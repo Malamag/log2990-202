@@ -1,5 +1,5 @@
 <div class = "drawWindow">
-
+    <!--Cette portion de code peut causer problème. On ne peut appeler qu'une seule fonction, openContext-->
     <mat-toolbar class ="topToolBar">
         <div *ngFor = "let func of funcMenu; index as id">
             <div>
@@ -8,7 +8,7 @@
                 </button>
             </div>
         </div>
-        
+    <!--**************************************************--> 
     </mat-toolbar>
     <mat-sidenav-container class="firstSplit">
         <mat-sidenav class= "toolsSideBar" mode ="side" opened height = "100%" disableClose fixedInViewPort>
@@ -151,7 +151,7 @@
                     <!-- here goes the component of Maxime-->
                 </div>
                
-                <div *ngSwitchCase = "'étampe'">
+                <div *ngSwitchCase = "'Étampe'">
                     <label> facteur de mise à l'échelle de l'étampe </label>
                     <mat-slider min= "0" max = "1" value ="0.5"> </mat-slider><br>
                     <label> Angle d'orientation de l'étampe</label>
