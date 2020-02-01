@@ -5,8 +5,6 @@ import { Canvas } from '../../../models/Canvas.model';
 import { Subject } from 'rxjs';
 
 
-// import { Canvas } from '../../../models/Canvas.model';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -18,10 +16,7 @@ export class CanvasBuilderService {
   newCanvas: Canvas;
   canvSubject = new Subject<Canvas>(); // using rxjs to emit the created canvas to another component
 
-  constructor() {
-    this.defWidht = this.getDefWidth();
-    this.defHeight = this.getDefHeight();
-  }
+  constructor() { }
   
   getDefWidth(): number {
     const DIV = 1.042; // permet d'égaliser avec les dimensions de l'espace de travail
@@ -39,22 +34,8 @@ export class CanvasBuilderService {
   }
 
   setCanvasFromForm(widthInput: number, heightInput: number, colorInput: string) {
-
-    if (widthInput === 0) { // a 0 value means no input by the user
-      widthInput = this.defWidht;
-    }
-
-    if (heightInput === 0) {
-      heightInput = this.defHeight;
-    }
-
-    if (colorInput === '') {
-      colorInput = this.getDefColor();
-    }
-
     colorInput = '#' + colorInput;
     this.newCanvas= new Canvas(widthInput, heightInput, colorInput);
-
   }
 
   getDefCanvas() {
