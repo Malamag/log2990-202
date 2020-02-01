@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2, OnDestroy } from '@angular/core';
-import {functionality} from '../../functionality'
+//import {functionality} from '../../functionality'
 import { CanvasBuilderService } from '../../services/services/drawing/canvas-builder.service';
 import { Canvas } from '../../models/Canvas.model';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./draw-view.component.scss']
 })
 export class DrawViewComponent implements OnInit, OnDestroy {
-  functionality = functionality
+  //functionality = functionality
 
   openToolOptions: boolean = false;
   width: number;

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-//import { NewDrawComponent } from '../components/new-draw/new-draw.component';
 import { ComponentType } from '@angular/cdk/portal';
 
 @Injectable({

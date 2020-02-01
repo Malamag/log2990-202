@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GuideContentComponent } from './guide-content.component';
+import { UserManualContentComponent } from './user-manual-content.component';
 
-describe('GuideContentComponent', () => {
-  let component: GuideContentComponent;
-  let fixture: ComponentFixture<GuideContentComponent>;
+describe('UserManualContentComponent', () => {
+  let component: UserManualContentComponent;
+  let fixture: ComponentFixture<UserManualContentComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GuideContentComponent ]
+      declarations: [ UserManualContentComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GuideContentComponent);
+    fixture = TestBed.createComponent(UserManualContentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
