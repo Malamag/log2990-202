@@ -52,10 +52,10 @@ export class SvgDrawComponent implements OnInit {
     let color2 = "FF781F";
 
     let drawing_service : DrawToolService = new DrawToolService();
-    let pencil = drawing_service.CreatePencil(_svg,_workingSpace,0,0,false,10,color1);
-    let rect = drawing_service.CreateRectangle(_svg,_workingSpace,0,0,false,10,color1,color2);
-    let line = drawing_service.CreateLine(_svg,_workingSpace,0,0,true,10,color1,true);
-    let brush = drawing_service.CreateBrush(_svg,_workingSpace,0,0,false,10,color1);
+    let pencil = drawing_service.CreatePencil(_svg,_workingSpace,false,10,color1);
+    let rect = drawing_service.CreateRectangle(_svg,_workingSpace,false,10,color1,color2);
+    let line = drawing_service.CreateLine(_svg,_workingSpace,false,10,color1,true);
+    let brush = drawing_service.CreateBrush(_svg,_workingSpace,true,10,color1);
 
     let testMouse = new MouseHandlerService(_svg, _workingSpace);
 

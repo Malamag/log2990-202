@@ -8,8 +8,8 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 })
 export class PencilService extends DrawingTool {
 
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:string){
-    super(_svg, _workingSpace, mouseX, mouseY,selected,width,primary_color);
+  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string){
+    super(_svg, _workingSpace,selected,width,primary_color);
   }
 
   update(keyboard:KeyboardHandlerService){

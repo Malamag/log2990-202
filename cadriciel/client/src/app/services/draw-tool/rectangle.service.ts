@@ -11,8 +11,8 @@ export class RectangleService extends DrawingTool {
   secondary_color:string;
   isSquare:boolean;
 
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,mouseX:number,mouseY:number,selected:boolean, width:number, primary_color:string,secondary_color:string){
-    super(_svg,_workingSpace, mouseX, mouseY,selected,width,primary_color);
+  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string,secondary_color:string){
+    super(_svg,_workingSpace,selected,width,primary_color);
     this.secondary_color = secondary_color;
     this.isSquare = false;
   }
