@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar,MatSnackBarConfig, MatDialog} from '@angular/material';
-import { functionality } from '../../functionality';
-
+import { menuItems } from '../../functionality';
 import { ModalWindowService } from "../../services/modal-window.service";
 import { NewDrawComponent } from '../new-draw/new-draw.component';
-import { GuideUtilisationComponent } from '../guide-utilisation/guide-utilisation.component'
+import { UserManualComponent } from '../user-manual/user-manual.component';
+
+
 
 @Component({
   selector: 'app-entry-point',
@@ -13,7 +14,7 @@ import { GuideUtilisationComponent } from '../guide-utilisation/guide-utilisatio
   
 })
 export class EntryPointComponent implements OnInit {
-  functionality = functionality;
+  menuItems = menuItems;
   winService: ModalWindowService;
 
   constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {
@@ -30,13 +31,43 @@ export class EntryPointComponent implements OnInit {
     this.snackBar.open("Bienvenue !",undefined,config);
   }
 
-  openModalForm(){
+  
+
+  openUserManual(){
+   
+    this.winService.openWindow(UserManualComponent);
+  }
+
+  openCreateNew(){
     this.winService.openWindow(NewDrawComponent);
   }
 
-  openModalGuide() {
-    this.winService.openWindow(GuideUtilisationComponent);
+  execute(shortcutName:string){
+    switch(shortcutName) { 
+      case "Créer": { 
+        this.openCreateNew();
+         break; 
+      } 
+      case "Ouvrir": { 
+        //statements; 
+        break; 
+     } 
+     case "Guide": { 
+       this.openUserManual();
+      break; 
+    } 
+      case "Continuer": { 
+    //statements; 
+    break; 
+   } 
+    default: { 
+       //statements; 
+     break; 
+      } 
+   } 
+
   }
 
+  
   
 }

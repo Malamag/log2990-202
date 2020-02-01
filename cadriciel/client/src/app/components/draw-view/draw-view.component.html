@@ -1,8 +1,8 @@
 <div class = "drawWindow">
 
     <mat-toolbar class ="topToolBar">
-        <div *ngFor = "let func of functionality; index as id">
-            <div *ngIf = "id < 5">
+        <div *ngFor = "let func of funcMenu; index as id">
+            <div>
                 <button class="topBtn" mat-mini-fab color= "primary" matTooltip ={{func.name}} (click)="openContext(func.calledComponent)">
                     <mat-icon class="topIcon"> {{func.icon}}</mat-icon>
                 </button>
@@ -10,12 +10,10 @@
         </div>
         
     </mat-toolbar>
-    
     <mat-sidenav-container class="firstSplit">
-        
         <mat-sidenav class= "toolsSideBar" mode ="side" opened height = "100%" disableClose fixedInViewPort>
-            <div class= "drawingTools" *ngFor="let func of functionality; index as id">
-                <div *ngIf = "id >= 5">
+            <div class= "drawingTools" *ngFor="let func of funcTools; index as id">
+                <div>
                     <button class="toolBtn" mat-icon-button color="primary" matTooltip={{func.name}} matTooltipPosition = "after" (click)= "buttonAction(func.name) ">
                         <img src={{func.icon}} class="toolIcon"> 
                     </button>    
@@ -24,7 +22,7 @@
         </mat-sidenav>
         
         <mat-sidenav #toolsOptionsRef class ="expendedOptions" mode ="side" position ="end" role="navigation" [opened] = openToolOptions>
-            <h1> {{selectedTool}} </h1>
+            <h1>  {{selectedTool}}</h1>
             <hr>
             <div [ngSwitch]= "selectedTool">
                 <div *ngSwitchCase = " 'rectangle' ">

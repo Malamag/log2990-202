@@ -41,10 +41,10 @@ export class NewDrawComponent implements OnInit {
   onSubmit() {
     const values = this.newDrawForm.value;
 
-    this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight, values.canvColor);
+    this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight,values.canvColor);
     this.canvasBuilder.emitCanvas();
     this.closeModalForm();
-    this.router.navigate(["/vue"]); // path stated in app-routing.module.ts
+    this.router.navigate(["/vue"]);
   }
   
   closeModalForm() {

@@ -8,8 +8,8 @@ import { AppComponent } from './components/app/app.component';
 import { EntryPointComponent } from './components/entry-point/entry-point.component';
 import { NewDrawComponent } from './components/new-draw/new-draw.component';
 import { DrawViewComponent } from './components/draw-view/draw-view.component';
-import { GuideUtilisationComponent } from '../app/components/guide-utilisation/guide-utilisation.component';
-
+import { UserManualComponent } from './components/user-manual/user-manual.component';
+import { UserManualContentComponent } from './components/user-manual-content/user-manual-content.component';
 import { CanvasBuilderService } from './services/services/drawing/canvas-builder.service';
 import { ModalWindowService } from './services/modal-window.service';
 
@@ -31,14 +31,16 @@ import {
 import { BoardComponent } from './components/draw-view/board/board.component';
 
 
+
 @NgModule({
     declarations: [
         AppComponent,
         NewDrawComponent,
         EntryPointComponent,
         DrawViewComponent,
-        GuideUtilisationComponent,
-        BoardComponent
+        BoardComponent,
+        UserManualComponent,
+        UserManualContentComponent,
     ],
     imports: [
         BrowserModule,
@@ -60,7 +62,7 @@ import { BoardComponent } from './components/draw-view/board/board.component';
     ],
     providers: [CanvasBuilderService, ModalWindowService],
     bootstrap: [AppComponent],
-    entryComponents: [NewDrawComponent, GuideUtilisationComponent]
+    entryComponents: [NewDrawComponent, UserManualComponent]
     
 })
 export class AppModule {}

@@ -1,22 +1,22 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GuideUtilisationComponent } from './guide-utilisation.component';
+import { UserManualComponent } from './user-manual.component';
 import { MatDialogModule } from '@angular/material';
 
-describe('GuideUtilisationComponent', () => {
-  let component: GuideUtilisationComponent;
-  let fixture: ComponentFixture<GuideUtilisationComponent>;
+describe('UserManualComponent', () => {
+  let component: UserManualComponent;
+  let fixture: ComponentFixture<UserManualComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GuideUtilisationComponent ],
+      declarations: [ UserManualComponent ],
       imports: [ MatDialogModule ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GuideUtilisationComponent);
+    fixture = TestBed.createComponent(UserManualComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
