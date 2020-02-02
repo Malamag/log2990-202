@@ -1,1 +1,29 @@
-<p>color-form works!</p>
+<mat-form-field>
+    <mat-label>Rouge</mat-label>
+    <input matInput type="text" [(ngModel)]="cData.RedSliderInput" (change)="onRGBSliderInput($event)">
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>Vert</mat-label>
+    <input matInput type="text" [(ngModel)]="cData.GreenSliderInput" (change)="onRGBSliderInput($event)">
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>Bleu</mat-label>
+    <input matInput type="text" [(ngModel)]="cData.BlueSliderInput" (change)="onRGBSliderInput($event)">
+</mat-form-field>
+
+
+<div>
+    <mat-label>Saturation</mat-label>
+</div>
+<mat-slider thumbLabel type="range" min="0" step="1" max="100" [(ngModel)]="cData.SaturationSliderInput" (change)="onSLSliderInput($event)"></mat-slider>
+
+<div>
+    <mat-label>Luminance</mat-label>
+</div>
+<mat-slider thumbLabel type="range" min="0" step="1" max="100" [(ngModel)]="cData.LightnessSliderInput" (change)="onSLSliderInput($event)"></mat-slider>
+<div>
+    <mat-label>Opacité</mat-label>
+</div>
+<mat-slider thumbLabel type="range" min="0" step="1" max="100" [(ngModel)]="cData.OpacitySliderInput" (change)="sliderAlphaChange()"></mat-slider>

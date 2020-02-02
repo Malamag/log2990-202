@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {colorData} from '../color-data';
+import { ColorPickingService } from 'src/app/services/services/colorPicker/color-picking.service';
 
 @Component({
   selector: 'app-color-form',
@@ -6,10 +8,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./color-form.component.scss']
 })
 export class ColorFormComponent implements OnInit {
-
-  constructor() { }
+  cData = colorData;
+  constructor(private colorPicking: ColorPickingService) { }
 
   ngOnInit() {
   }
+      // Red left input change
+  onRGBSliderInput() : void { 
+    this.colorPicking.onRGBSliderInput();
+  }
+
+  onSLSliderInput() : void { 
+    this.colorPicking.onSLSliderInput();
+  }
+
+  sliderAlphaChange() : void {
+    this.colorPicking.sliderAlphaChange();
+}
 
 }
