@@ -117,20 +117,7 @@ input:checked + .slider:before {
     justify-content: flex-end;
   }
 
-.frontSection{
-    background-image: linear-gradient(to bottom, Black,
-    lightcyan );
-    border-radius: 8px;
-    width: 225px;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-}
-.backSection{
-    background-image: linear-gradient(to left, beige,
-    brown );
-    border-radius: 40px;
-    width: 245px;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-}
+
 .colorSlider {
     width: 80px;
 }
