@@ -1,15 +1,7 @@
 <div class = "drawWindow">
     <!--Cette portion de code peut causer problème. On ne peut appeler qu'une seule fonction, openContext-->
-    <mat-toolbar class ="topToolBar">
-        <div *ngFor = "let func of funcMenu; index as id">
-            <div>
-                <button class="topBtn" mat-mini-fab color= "primary" matTooltip ={{func.name}} (click)="openContext(func.calledComponent)">
-                    <mat-icon class="topIcon"> {{func.icon}}</mat-icon>
-                </button>
-            </div>
-        </div>
-    <!--**************************************************--> 
-    </mat-toolbar>
+    <app-option-bar></app-option-bar>
+    
     <mat-sidenav-container class="firstSplit">
         <mat-sidenav class= "toolsSideBar" mode ="side" opened height = "100%" disableClose fixedInViewPort>
             <div class= "drawingTools" *ngFor="let func of funcTools; index as id">

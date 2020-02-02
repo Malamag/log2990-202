@@ -29,6 +29,7 @@ import {
     MatTooltipModule
 } from '@angular/material';
 import { BoardComponent } from './components/draw-view/board/board.component';
+import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
 
 
 
@@ -41,6 +42,7 @@ import { BoardComponent } from './components/draw-view/board/board.component';
         BoardComponent,
         UserManualComponent,
         UserManualContentComponent,
+        OptionBarComponent,
     ],
     imports: [
         BrowserModule,
@@ -62,7 +64,7 @@ import { BoardComponent } from './components/draw-view/board/board.component';
     ],
     providers: [CanvasBuilderService, ModalWindowService],
     bootstrap: [AppComponent],
-    entryComponents: [NewDrawComponent, UserManualComponent]
+    entryComponents: [NewDrawComponent, UserManualComponent, OptionBarComponent] // components added dynamically
     
 })
 export class AppModule {}

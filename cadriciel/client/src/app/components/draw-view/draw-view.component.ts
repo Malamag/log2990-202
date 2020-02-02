@@ -1,8 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
-import {menuItems, toolsItems, welcomeItem} from '../../functionality'
-import { ModalWindowService } from 'src/app/services/modal-window.service';
-import { ComponentType } from '@angular/cdk/portal';
-
+import { toolsItems, welcomeItem} from '../../functionality'
 
 @Component({
   selector: 'app-draw-view',
@@ -10,7 +7,6 @@ import { ComponentType } from '@angular/cdk/portal';
   styleUrls: ['./draw-view.component.scss']
 })
 export class DrawViewComponent implements OnInit {
-  funcMenu = menuItems;
   funcTools = toolsItems;
   funcWelcome = welcomeItem;
 
@@ -21,11 +17,10 @@ export class DrawViewComponent implements OnInit {
   @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
   renderer: Renderer2
 
-  constructor(private winService: ModalWindowService) { }
+  constructor() { }
 
   ngOnInit() {
   }
-
 
     /**Cette fonction peut à la limite être mise dans un service... */
   buttonAction(name:string){
@@ -43,9 +38,5 @@ export class DrawViewComponent implements OnInit {
     
   }
 
-  openContext(cmp: ComponentType<any>) {
-    this.winService.openWindow(cmp);
-  }
-  
   
 }

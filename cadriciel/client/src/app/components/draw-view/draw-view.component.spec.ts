@@ -1,10 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DrawViewComponent } from './draw-view.component';
-import {functionality} from '../../functionality'
+import {menuItems, toolsItems, welcomeItem} from '../../functionality'
 import { MatToolbarModule, MatIconModule, MatTooltipModule, MatButtonModule, MatSidenavModule, MatSliderModule, MatSelectModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { OptionBarComponent } from './option-bar/option-bar.component';
 
 describe('DrawViewComponent', () => {
   let component: DrawViewComponent;
@@ -12,8 +13,8 @@ describe('DrawViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DrawViewComponent ],
-      providers :[{provide :functionality}],
+      declarations: [ DrawViewComponent, OptionBarComponent ],
+      providers :[{provide :menuItems, toolsItems, welcomeItem}],
       imports:[ MatToolbarModule, MatIconModule,MatTooltipModule, MatButtonModule,
         MatSidenavModule, MatSliderModule, MatSelectModule, BrowserModule, HttpClientModule, BrowserAnimationsModule]
     })

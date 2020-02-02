@@ -1,6 +1,3 @@
-import { NewDrawComponent } from './components/new-draw/new-draw.component';
-import { UserManualComponent } from './components/user-manual/user-manual.component';
-
     export const welcomeItem = [
         {
             name: "Bienvenue",
@@ -18,8 +15,7 @@ import { UserManualComponent } from './components/user-manual/user-manual.compon
             shortcutName: "Créer",
             shortDescription: "pour creer des dessins",
             description: "text goes here",
-            icon: "add_circle",
-            calledComponent: NewDrawComponent
+            icon: "add_circle"
         },
         {
             name: "Ouvrir la galerie de dessins",
@@ -33,8 +29,7 @@ import { UserManualComponent } from './components/user-manual/user-manual.compon
             shortcutName: "Guide",
             shortDescription: "text goes here",
             description: "text goes here",
-            icon: "menu_book",
-            calledComponent: UserManualComponent
+            icon: "menu_book"
         },
         {
             name: "Continuer un dessin",
