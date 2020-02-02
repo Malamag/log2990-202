@@ -33,6 +33,7 @@ import {
 } from '@angular/material';
 import { BoardComponent } from './components/draw-view/board/board.component';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
+import { ColorFormComponent } from './components/color-picker/color-form/color-form.component';
 
 
 
@@ -46,7 +47,8 @@ import { OptionBarComponent } from './components/draw-view/option-bar/option-bar
         UserManualComponent,
         UserManualContentComponent,
         OptionBarComponent,
-        ColorPickerComponent
+        ColorPickerComponent,
+        ColorFormComponent
     ],
     imports: [
         BrowserModule,
