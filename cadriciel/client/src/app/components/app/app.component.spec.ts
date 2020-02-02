@@ -4,8 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { IndexService } from '../../services/index/index.service';
 import { AppComponent } from './app.component';
-import SpyObj = jasmine.SpyObj;
-*/
+import SpyObj = jasmine.SpyObj;*/
+
 describe('AppComponent', () => {
     /*let indexServiceSpy: SpyObj<IndexService>;
 

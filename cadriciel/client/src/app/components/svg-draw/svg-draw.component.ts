@@ -31,7 +31,7 @@ export class SvgDrawComponent implements OnInit {
     //Create all the tools
     let pencil = ToolCreator.CreatePencil(false,10,color1,67);
     let rect = ToolCreator.CreateRectangle(false,3,color1,color2, 2,49);
-    let line = ToolCreator.CreateLine(true,7,color1,false,15,76);
+    let line = ToolCreator.CreateLine(true,7,color1,true,15,76);
     let brush = ToolCreator.CreateBrush(false,10,color1, 1,87);
 
     //Fill the toolbox
