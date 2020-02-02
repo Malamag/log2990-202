@@ -11,11 +11,10 @@ export class KeyboardHandlerService {
   ctrlDown:boolean
   shiftDown:boolean;
   observers:InputObserver[];
-
   constructor() {
     this.keyString = "";
     this.keyCode = -1;
-    this.observers = [];
+    this.observers =[];
   }
 
   addObserver(newObserver:InputObserver){
