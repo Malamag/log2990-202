@@ -1,18 +1,19 @@
 <form [formGroup]="colorForm" (ngSubmit)="onSubmit()">
-    <mat-form-field>
+    <mat-form-field class="formField">
         <mat-label for="red">Rouge</mat-label>
-        <input matInput type="text" formControlName="red" (change)="onRGBSliderInput($event)" [value]="cData.RedSliderInput">
+        <input matInput type="text" formControlName="red" (change)="onRGBSliderInput($event)" [value]="cData.redHexInput">
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="formField">
         <mat-label>Vert</mat-label>
-        <input matInput type="text" formControlName="green" (change)="onRGBSliderInput($event)" [value]="cData.GreenSliderInput">
+        <input matInput type="text" formControlName="green" (change)="onRGBSliderInput($event)" [value]="cData.greenHexInput">
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="formField">
         <mat-label>Bleu</mat-label>
-        <input matInput type="text" formControlName="blue" (change)="onRGBSliderInput($event)" [value]="cData.BlueSliderInput">
+        <input matInput type="text" formControlName="blue" (change)="onRGBSliderInput($event)" [value]="cData.blueHexInput">
     </mat-form-field>
+    <button mat-button (click)="onSubmit()">set</button>
 </form>
 
 <!--Individual sliders modifying other attributes-->

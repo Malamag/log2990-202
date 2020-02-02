@@ -3,8 +3,6 @@ import {colorData} from '../color-data';
 import { ColorPickingService } from 'src/app/services/services/colorPicker/color-picking.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-
-
 @Component({
   selector: 'app-color-form',
   templateUrl: './color-form.component.html',
@@ -29,9 +27,9 @@ export class ColorFormComponent implements OnInit {
     });
 
     this.colorForm.setValue({
-      red: this.cData.RedSliderInput,
-      green: this.cData.GreenSliderInput,
-      blue: this.cData.BlueSliderInput
+      red: this.cData.redHexInput,
+      green: this.cData.greenHexInput,
+      blue: this.cData.blueHexInput
     });
   }
       // Red left input change
@@ -49,6 +47,8 @@ export class ColorFormComponent implements OnInit {
 
   onSubmit(): void {
     //hex values
+    const values = this.colorForm.value;
+    this.cData.hexColorInput= values.red + values.green + values.blue;
     //update
   }
 
