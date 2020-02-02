@@ -29,7 +29,7 @@
 
             <svg id="palette">
                 <circle *ngFor="let attr of paletteArray" class="paletteElem"
-                [style.cx]=attr.cx cy="10" r="10" [style.fill]=attr.color (click)="updateColor(attr.color)"></circle>
+                [style.cx]=attr.cx cy="12" r="12" [style.fill]=attr.color (click)="updateColor(attr.color)"></circle>
             </svg>
 
             <button mat-raised-button color="primary" 

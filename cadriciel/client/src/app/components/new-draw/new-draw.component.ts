@@ -57,7 +57,7 @@ export class NewDrawComponent implements OnInit {
     this.winService.closeWindow();
   }
 
-  get canvHeight() {
+  get canvHeight() { // basic accessors to get individual input validity in html
     return this.newDrawForm.get('canvHeight');
   }
 

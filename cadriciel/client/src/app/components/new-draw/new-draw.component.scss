@@ -22,11 +22,18 @@ h1 {
     font-size: 12px;
     color: rgb(255, 46, 46);
     position: absolute;
-    top: 75%;
+    top: 77%;
 }
 
 #palette {
-    height: 20px;
-    
+    height: 28px;
+    width: 240px;
+    position: relative;
+    margin-bottom: 5%;
+}
+
+.paletteElem {
+    display: flex;
+    flex-direction: row;
 }
 
