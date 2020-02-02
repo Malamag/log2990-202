@@ -97,23 +97,23 @@
     <tr>
         
         <td>
-            <label id="hexInput">Hex &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</label>
-            <input type="text" maxlength="6" [(ngModel)]="cData.hexColorInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onHexColorInput($event)"[ngStyle]="myInputStylesHex">
-            <label><font color="red">cData.Red&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{cData.RedSliderInput}}</font></label>
-            <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.RedSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesRL">
-            <input type="text" maxlength="2" [(ngModel)]="cData.redHexInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onRedHexInput($event)" [ngStyle]="myInputStylesRL">
-            <label><font color="green">cData.Green&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{cData.GreenSliderInput}}</font></label>
-            <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.GreenSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesGL">
-            <input type="text" maxlength="2" [(ngModel)]="cData.greenHexInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onGreenHexInput($event)" [ngStyle]="myInputStylesGL">
-            <label><font color="blue">cData.Blue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{cData.BlueSliderInput}}</font></label>
-            <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.BlueSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesBL">
-            <input type="text" maxlength="2" [(ngModel)]="cData.blueHexInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onBlueHexInput($event)" [ngStyle]="myInputStylesBL">
-            <label>cData.Saturation&nbsp;&nbsp;{{cData.SaturationSliderInput}}%</label>
-            <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.SaturationSliderInput" (change)="onSLSliderInput($event)" [ngStyle]="myInputStylesL">
-            <label>cData.Lightness&nbsp;&nbsp;&nbsp;&nbsp;{{cData.LightnessSliderInput}}%</label>
-            <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.LightnessSliderInput" (change)="onSLSliderInput($event)" [ngStyle]="myInputStylesS">
-            <label>cData.Opacity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{cData.OpacitySliderInput}}%</label>
-            <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.OpacitySliderInput" (change)="sliderAlphaChange()" [ngStyle]="myInputStylesO">
+            <label id="hexInput">Hex#</label>
+            <input matInput type="text" maxlength="6" [(ngModel)]="cData.hexColorInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onHexColorInput($event)">
+            <label><font color="red">cData.Red{{cData.RedSliderInput}}</font></label>
+            <mat-slider class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.RedSliderInput" (change)="onRGBSliderInput($event)"></mat-slider>
+            <input type="text" maxlength="2" [(ngModel)]="cData.redHexInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onRedHexInput($event)">
+            <label><font color="green">cData.Green{{cData.GreenSliderInput}}</font></label>
+            <mat-slider class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.GreenSliderInput" (change)="onRGBSliderInput($event)"></mat-slider>
+            <input type="text" maxlength="2" [(ngModel)]="cData.greenHexInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onGreenHexInput($event)">
+            <label><font color="blue">cData.Blue{{cData.BlueSliderInput}}</font></label>
+            <mat-slider class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.BlueSliderInput" (change)="onRGBSliderInput($event)"></mat-slider>
+            <input type="text" maxlength="2" [(ngModel)]="cData.blueHexInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onBlueHexInput($event)">
+            <label>cData.Saturation{{cData.SaturationSliderInput}}%</label>
+            <mat-slider class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.SaturationSliderInput" (change)="onSLSliderInput($event)"></mat-slider>
+            <label>cData.Lightness{{cData.LightnessSliderInput}}%</label>
+            <mat-slider class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.LightnessSliderInput" (change)="onSLSliderInput($event)"></mat-slider>
+            <label>cData.Opacity{{cData.OpacitySliderInput}}%</label>
+            <mat-slider class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.OpacitySliderInput" (change)="sliderAlphaChange()"></mat-slider>
         </td>
         <!--<td>
             <svg>
