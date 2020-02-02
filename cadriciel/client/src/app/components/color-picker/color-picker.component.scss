@@ -1,0 +1,251 @@
+tr {
+    max-height: 75px;
+    font-size: 0px;
+}
+td {
+    font-size: 0px;
+    
+}
+
+button {
+    font-size: 5px;
+    left: 15%;
+    text-align: center;
+    position: relative;
+    border-radius: 5px;
+    background-color: whitesmoke;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+
+label {
+    font-size: 10px;
+    float: left;
+    width: 100px;
+  
+    font-weight: bold;
+}
+input {
+    width: 40px;
+    height: 10px;
+    font-size: 10px;
+    border: none;
+    //border-bottom: 1px solid black;
+    display: block;
+}
+svg {
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
+canvas {
+    opacity: 1;
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 10px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 10px;
+    width: 10px;
+    left: 0px;
+    bottom: 0px;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider{
+    background-color: rgb(90, 156, 156);
+}
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX( 30px );
+    -ms-transform: translateX( 30px );
+    transform: translateX( 30px );
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.leftInput input {
+    background-image: linear-gradient(to right, lightgrey,
+    rgb(214, 223, 213) );
+}
+.rightInput input {
+    background-image: linear-gradient(to right,
+    rgb(221, 245, 245), lightcyan);
+}
+.flex-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+.frontSection{
+    background-image: linear-gradient(to bottom, Black,
+    lightcyan );
+    border-radius: 8px;
+    width: 225px;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+.backSection{
+    background-image: linear-gradient(to left, beige,
+    brown );
+    border-radius: 40px;
+    width: 245px;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+.colorSlider {
+    width: 80px;
+}
+//-------------------
+//form https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background: #3071a9;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
+  }
+  
+  input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #367ebd;
+  }
+  
+  input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background: rgb(252, 249, 249);
+    border-radius: 1.3px;
+    //border: 0.2px solid #010101;
+  }
+  
+  input[type=range]::-ms-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    border-width: 16px 0;
+    color: transparent;
+  }
+  input[type=range]::-ms-fill-lower {
+    background: #2a6495;
+    border: 0.2px solid #010101;
+    border-radius: 2.6px;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  }
+  input[type=range]:focus::-ms-fill-lower {
+    background: #3071a9;
+  }
+  input[type=range]::-ms-fill-upper {
+    background: #3071a9;
+    border: 0.2px solid #010101;
+    border-radius: 2.6px;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  }
+  input[type=range]:focus::-ms-fill-upper {
+    background: #367ebd;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: 1px solid #000000;
+    height: 36px;
+    width: 16px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+    margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; /* Add cool effects to your sliders! */
+  }
+  
+  /* All the same stuff for Firefox */
+  input[type=range]::-moz-range-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    //border: 1px solid #000000;
+    height: 10px;
+    width: 2px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+  }
+  
+  /* All the same stuff for IE */
+  input[type=range]::-ms-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 36px;
+    width: 16px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+  }
+  //----------------
+  .mat-slider.mat-slider-horizontal .mat-slider-wrapper {
+  width: 20%;
+  bottom: 30px;
+  }
+.mat-slider.mat-slider-horizontal .mat-slider-track-wrapper {
+  height: 3px;
+  border-radius: 10px;
+    
+}
+.mat-slider.mat-slider-horizontal .mat-slider-track-background,
+.mat-slider.mat-slider-horizontal .mat-slider-track-fill {
+  width: 30px;
+  height: 100%;
+
+}
+.mat-slider.mat-slider-horizontal .mat-slider-track-fill {
+  background-color: white;
+}
+.mat-accent .mat-slider-thumb {
+  height: 19px;
+  width: 15px;
+  background-color: white;
+  border: solid 2px gray;
+  
+}
+.mat-slider-min-value:not(.mat-slider-thumb-label-showing) .mat-slider-thumb {
+  background-color: white;
+}

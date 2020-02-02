@@ -8,10 +8,13 @@ import { AppComponent } from './components/app/app.component';
 import { EntryPointComponent } from './components/entry-point/entry-point.component';
 import { NewDrawComponent } from './components/new-draw/new-draw.component';
 import { DrawViewComponent } from './components/draw-view/draw-view.component';
+import { ColorPickerComponent} from './components/color-picker/color-picker.component'
 import { UserManualComponent } from './components/user-manual/user-manual.component';
 import { UserManualContentComponent } from './components/user-manual-content/user-manual-content.component';
 import { CanvasBuilderService } from './services/services/drawing/canvas-builder.service';
 import { ModalWindowService } from './services/modal-window.service';
+import { ColorPickingService } from './services/services/colorPicker/color-picking.service';
+import { ColorConvertingService } from './services/services/colorPicker/color-converting.service';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -43,6 +46,7 @@ import { OptionBarComponent } from './components/draw-view/option-bar/option-bar
         UserManualComponent,
         UserManualContentComponent,
         OptionBarComponent,
+        ColorPickerComponent
     ],
     imports: [
         BrowserModule,
@@ -62,7 +66,13 @@ import { OptionBarComponent } from './components/draw-view/option-bar/option-bar
         MatTooltipModule,
         AppRoutingModule
     ],
-    providers: [CanvasBuilderService, ModalWindowService],
+    providers: [
+        CanvasBuilderService, 
+        ModalWindowService,
+        ColorConvertingService,
+        ColorPickingService
+    ],
+
     bootstrap: [AppComponent],
     entryComponents: [NewDrawComponent, UserManualComponent, OptionBarComponent] // components added dynamically
     
