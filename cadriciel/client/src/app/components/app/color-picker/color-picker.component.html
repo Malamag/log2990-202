@@ -97,7 +97,7 @@
         <tr>
             
             <td>
-                <label>Hex &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</label>
+                <label id="hexInput">Hex &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</label>
                 <input type="text" maxlength="6" [(ngModel)]="cData.hexColorInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onHexColorInput($event)"[ngStyle]="myInputStylesHex">
                 <label><font color="red">cData.Red&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{cData.RedSliderInput}}</font></label>
                 <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.RedSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesRL">

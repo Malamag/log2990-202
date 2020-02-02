@@ -6,6 +6,7 @@ import { colorData } from '../../components/app/color-picker/color-data';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ColorPickingService {
   cData = colorData; // Interface for Color data
 
@@ -17,6 +18,7 @@ export class ColorPickingService {
   setSecondaryColor ( r : number, g : number, b : number ) {
     this.cData.secondaryColor = 'rgba( ' + r + ', ' + g + ', ' + b + ', ' + this.cData.secondaryAlpha + ' )' ;
   }
+
   slCursor(x: number, y:number) {
     this.cData.SaturationSliderInput = x;
     this.cData.LightnessSliderInput = y;

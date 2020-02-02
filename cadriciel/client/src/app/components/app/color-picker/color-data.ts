@@ -22,8 +22,8 @@ export const colorData = {
     LightnessSliderInput : 50,
     OpacitySliderInput : 100,
 
-    mycx : 100, //Déplacés dans colpickingservice
+    mycx : 100,
     mycy : 50,
 
-    mytranslation :""
+    mytranslation : ""
 }
