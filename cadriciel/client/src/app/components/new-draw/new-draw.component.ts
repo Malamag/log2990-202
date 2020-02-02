@@ -4,18 +4,20 @@ import { CanvasBuilderService } from '../../services/services/drawing/canvas-bui
 import { ModalWindowService } from 'src/app/services/modal-window.service';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-new-draw',
   templateUrl: './new-draw.component.html',
   styleUrls: ['./new-draw.component.scss']
 })
 export class NewDrawComponent implements OnInit {
+  paletteArray = this.canvasBuilder.getPalleteAttributes();
 
   newDrawForm: FormGroup;
   width: number;
   height: number;
   color: string;
-
+  
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
               private winService: ModalWindowService,
@@ -65,6 +67,11 @@ export class NewDrawComponent implements OnInit {
 
   get canvColor() {
     return this.newDrawForm.get('canvColor');
+  }
+
+  updateColor(newColor: string) {
+    this.color = newColor.slice(1); // removes the '#'
+    this.newDrawForm.patchValue({canvColor: this.color}); // updates value for form
   }
 
 }

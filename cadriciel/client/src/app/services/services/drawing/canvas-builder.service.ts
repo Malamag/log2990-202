@@ -3,6 +3,7 @@ import { Injectable} from '@angular/core';
 import { Canvas } from '../../../models/Canvas.model';
 
 import { Subject } from 'rxjs';
+import { colorCircles } from '../../../palette';
 
 
 @Injectable({
@@ -44,6 +45,17 @@ export class CanvasBuilderService {
 
   emitCanvas() {
     return this.canvSubject.next(this.newCanvas);
+  }
+
+  getPalleteAttributes() {
+    const CENTERX = 30; // Centre cx, defines spaces between color palette dots
+    let space = CENTERX;
+    for(let i = 0; i < colorCircles.length; ++i){
+    
+      colorCircles[i].cx = space; // modifies palette array containing only 0 values
+      space += CENTERX;
+    }
+    return colorCircles;
   }
 
 }
