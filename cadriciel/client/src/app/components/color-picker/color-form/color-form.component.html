@@ -1,19 +1,21 @@
-<mat-form-field>
-    <mat-label>Rouge</mat-label>
-    <input matInput type="text" [(ngModel)]="cData.RedSliderInput" (change)="onRGBSliderInput($event)">
-</mat-form-field>
+<form [formGroup]="colorForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <mat-label for="red">Rouge</mat-label>
+        <input matInput type="text" formControlName="red" (change)="onRGBSliderInput($event)" [value]="cData.RedSliderInput">
+    </mat-form-field>
 
-<mat-form-field>
-    <mat-label>Vert</mat-label>
-    <input matInput type="text" [(ngModel)]="cData.GreenSliderInput" (change)="onRGBSliderInput($event)">
-</mat-form-field>
+    <mat-form-field>
+        <mat-label>Vert</mat-label>
+        <input matInput type="text" formControlName="green" (change)="onRGBSliderInput($event)" [value]="cData.GreenSliderInput">
+    </mat-form-field>
 
-<mat-form-field>
-    <mat-label>Bleu</mat-label>
-    <input matInput type="text" [(ngModel)]="cData.BlueSliderInput" (change)="onRGBSliderInput($event)">
-</mat-form-field>
+    <mat-form-field>
+        <mat-label>Bleu</mat-label>
+        <input matInput type="text" formControlName="blue" (change)="onRGBSliderInput($event)" [value]="cData.BlueSliderInput">
+    </mat-form-field>
+</form>
 
-
+<!--Individual sliders modifying other attributes-->
 <div>
     <mat-label>Saturation</mat-label>
 </div>
