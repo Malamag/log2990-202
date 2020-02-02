@@ -90,30 +90,42 @@
                 <input id="colorCheckBox" type="checkbox" checked (click)="swapInputDisplay($event)">
                 <span class="slider round" (click)="swapPrimarySecondary()"></span>
             </label>
-            <label (click)=(swapPrimarySecondary())>&nbsp;&nbsp;&nbsp;&nbsp;{{cData.currentColorSelect}}</label>
+            <label (click)=(swapPrimarySecondary())>{{cData.currentColorSelect}}</label>
             <button (click)="swapPrimarySecondary()">Swap</button>
         </td>
     </tr>
     <tr>
         
         <td>
-            <label id="hexInput">Hex#</label>
-            <input matInput type="text" maxlength="6" [(ngModel)]="cData.hexColorInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onHexColorInput($event)">
-            <label><font color="red">cData.Red{{cData.RedSliderInput}}</font></label>
-            <mat-slider class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.RedSliderInput" (change)="onRGBSliderInput($event)"></mat-slider>
-            <input type="text" maxlength="2" [(ngModel)]="cData.redHexInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onRedHexInput($event)">
-            <label><font color="green">cData.Green{{cData.GreenSliderInput}}</font></label>
-            <mat-slider class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.GreenSliderInput" (change)="onRGBSliderInput($event)"></mat-slider>
-            <input type="text" maxlength="2" [(ngModel)]="cData.greenHexInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onGreenHexInput($event)">
-            <label><font color="blue">cData.Blue{{cData.BlueSliderInput}}</font></label>
-            <mat-slider class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.BlueSliderInput" (change)="onRGBSliderInput($event)"></mat-slider>
-            <input type="text" maxlength="2" [(ngModel)]="cData.blueHexInput" placeholder="ffffff"style="border-bottom: 1px solid black;"(input)="onBlueHexInput($event)">
-            <label>cData.Saturation{{cData.SaturationSliderInput}}%</label>
-            <mat-slider class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.SaturationSliderInput" (change)="onSLSliderInput($event)"></mat-slider>
-            <label>cData.Lightness{{cData.LightnessSliderInput}}%</label>
-            <mat-slider class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.LightnessSliderInput" (change)="onSLSliderInput($event)"></mat-slider>
-            <label>cData.Opacity{{cData.OpacitySliderInput}}%</label>
-            <mat-slider class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.OpacitySliderInput" (change)="sliderAlphaChange()"></mat-slider>
+            <div>
+                <div>
+                    <mat-label>R</mat-label>
+                </div>
+                <mat-slider thumbLabel type="range" min="0" step="1" max="255" [(ngModel)]="cData.RedSliderInput" (change)="onRGBSliderInput($event)"></mat-slider>
+
+                <div>
+                    <mat-label>G</mat-label>
+                </div>
+                <mat-slider thumbLabel type="range" min="0" step="1" max="255" [(ngModel)]="cData.GreenSliderInput" (change)="onRGBSliderInput($event)"></mat-slider>
+
+                <div>
+                    <mat-label>B</mat-label>
+                </div>
+                <mat-slider thumbLabel type="range" min="0" step="1" max="255" [(ngModel)]="cData.BlueSliderInput" (change)="onRGBSliderInput($event)"></mat-slider>
+            </div>
+            <div>
+                <mat-label>Saturation</mat-label>
+            </div>
+            <mat-slider thumbLabel type="range" min="0" step="1" max="100" [(ngModel)]="cData.SaturationSliderInput" (change)="onSLSliderInput($event)"></mat-slider>
+
+            <div>
+                <mat-label>Luminance</mat-label>
+            </div>
+            <mat-slider thumbLabel type="range" min="0" step="1" max="100" [(ngModel)]="cData.LightnessSliderInput" (change)="onSLSliderInput($event)"></mat-slider>
+            <div>
+                <mat-label>Opacité</mat-label>
+            </div>
+            <mat-slider thumbLabel type="range" min="0" step="1" max="100" [(ngModel)]="cData.OpacitySliderInput" (change)="sliderAlphaChange()"></mat-slider>
         </td>
         <!--<td>
             <svg>

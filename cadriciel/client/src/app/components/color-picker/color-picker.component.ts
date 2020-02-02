@@ -60,59 +60,8 @@ export class ColorPickerComponent {
     onSLSliderInput() : void { 
         this.colorPicking.onSLSliderInput();
     }
-    //temp style TODO move to CSS?
-    get myInputStylesRL(): any {
-        return {'background': 'linear-gradient(to right, red, orange, yellow)', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-    get myInputStylesBL(): any {
-        return { 'background': 'linear-gradient(to right, blue, purple, pink)', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-    get myInputStylesGL(): any {
-        return { 'background': 'linear-gradient(to right, darkgreen, green, cyan)', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-    get myInputStylesRR(): any {
-        return { 'background': 'linear-gradient(to right, red, orange, yellow)', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-    get myInputStylesBR(): any {
-        return { 'background': 'linear-gradient(to right, blue, purple, pink)', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-    get myInputStylesGR(): any {
-        return { 'background': 'linear-gradient(to right, darkgreen, green, cyan)', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-    get myInputStylesL(): any {
-        return {'background': 'linear-gradient(to right, black, white)', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-    get myInputStylesS(): any {
-        return {'background': 'linear-gradient(to right, black, white)', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-    get myInputStylesO(): any {
-        return {'background': 'linear-gradient(to right, black, white)', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-    get myInputStylesHex(): any {
-        return {'background': 'linear-gradient(to right, red, crimson, darkgreen, green, blue, indigo , darkblue)', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
+ 
     get svgStyles(): any {
-        //return { 'fill': this.primaryColor,'stroke':'black','stroke-width':1};
         return { 'transform' : 'translate(100px,100px) rotate(' + this.cData.currentHue + 'deg) translate(-100px,-100px)'};
     }
     get gradientStyles(): any{
