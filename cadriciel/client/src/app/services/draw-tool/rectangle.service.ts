@@ -1,4 +1,4 @@
-import { Injectable, /*ElementRef, Renderer2*/ } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -10,12 +10,13 @@ export class RectangleService extends DrawingTool {
 
   secondary_color:string;
   isSquare:boolean;
+  renderMode:number;
 
-  constructor(svg:HTMLElement | null, workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string,secondary_color:string,/* renderer: Renderer2, 
-    inProgressRef:ElementRef, doneRef:ElementRef*/){
-    super(svg,workingSpace,selected,width,primary_color, /*renderer, inProgressRef, doneRef*/);
+  constructor(selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number){
+    super(selected,width,primary_color,shortcut);
     this.secondary_color = secondary_color;
     this.isSquare = false;
+    this.renderMode = renderMode;
   }
 
   update(keyboard:KeyboardHandlerService){
@@ -23,59 +24,52 @@ export class RectangleService extends DrawingTool {
     this.isSquare = keyboard.shiftDown;
 
     if(this.isDown){
-      let d : string = "";
-      d+= this.createPath(this.currentPath);
-      document.getElementsByName("in-progress")[0].innerHTML = d;
+      this.updateProgress();
     }
   }
 
   down(position:Point){
-    //mouse down with pencil in hand
+    //mouse down with rectangle in hand
+
+    this.ignoreNextUp = false;
+
     this.isDown = true;
 
     this.currentPath.push(position);
     this.currentPath.push(position);
 
-    let d : string = "";
-    d+= this.createPath(this.currentPath);
-
-    document.getElementsByName("in-progress")[0].innerHTML = d;
+    this.updateProgress();
   }
   up(position:Point){
-    //mouse up with pencil in hand
-    this.isDown = false;
+    //mouse up with rectangle in hand
+    
+    if(!this.ignoreNextUp){
+      this.isDown = false;
 
-    let d : string = "";
-    d+= this.createPath(this.currentPath);
-
-    document.getElementsByName("drawing")[0].innerHTML += d;
-    document.getElementsByName("in-progress")[0].innerHTML = "";
-
-    this.currentPath = [];
+      this.updateDrawing();
+    }
   }
   move(position:Point){
-    //mouse move with pencil in hand
+    //mouse move with rectangle in hand
+
     if(this.isDown){
       this.currentPath.push(position);
-
-      let d : string = "";
-      d+= this.createPath(this.currentPath);
       
-      document.getElementsByName("in-progress")[0].innerHTML = d;
+      this.updateProgress();
     }
   }
   doubleClick(position:Point){
-    //mouse doubleClick with rectangle in hand
+    //mouse doubleClick with rectangle in hand -> nothing happens
   }
   createPath(p:Point[]){
 
-    /*let p1x = p[0].x;
+    let p1x = p[0].x;
     let p1y = p[0].y;
     let p2x = p[p.length-1].x;
-    let p2y = p[p.length-1].y;*/
+    let p2y = p[p.length-1].y;
 
-    let w = this.computeWidth(p)
-    let h = this.computeHeight(p)
+    let w = p2x - p1x;
+    let h = p2y - p1y;
     
     let startX = w > 0 ? p[0].x : p[p.length-1].x;
     let startY = h > 0 ? p[0].y : p[p.length-1].y;
@@ -89,33 +83,15 @@ export class RectangleService extends DrawingTool {
       startY = h > 0 ? p[0].y : p[0].y - smallest;
     }
     let _s = "<g name = \"rectangle\">";
-    _s += `<rect x=\"${startX}\" y=\"${startY}\" width=\"${Math.abs(w)}\" height=\"${Math.abs(h)}\" fill="#${this.primary_color}" stroke-width="3" stroke="#${this.secondary_color}"/>`;
+
+    let stroke = (this.renderMode == 0 || this.renderMode == 2) ? `#${this.secondary_color}` : "none";
+    let fill = (this.renderMode == 1 || this.renderMode == 2)?  `#${this.primary_color}`: "none";
+
+    _s += `<rect x=\"${startX}\" y=\"${startY}\" width=\"${Math.abs(w)}\" height=\"${Math.abs(h)}\" fill="${fill}" stroke-width="${this.width}" stroke="${stroke}"/>`;
     _s+= "</g>"
     if(w == 0 || h == 0){
       _s = "";
     }
     return _s;
   }
-
-  computeWidth(p: Point[]){
-    let p1x = p[0].x;
-    let p2x = p[p.length-1].x;
-    let w = p2x - p1x;
-    return w;
-  }
-
-  computeHeight(p:Point[]){
-    let p1y = p[0].y;
-    let p2y = p[p.length-1].y;
-    let h = p2y - p1y;
-    return h;
-  }
-  /*chooseStartingPoint(w:number, h: number, p:Point[]){
-    let ret: number[] = [];
-    let startX = w > 0 ? p[0].x : p[p.length-1].x;
-    let startY = h > 0 ? p[0].y : p[p.length-1].y;
-    ret.push(startX);
-    ret.push(startY);
-    return ret;
-  }*/
 }

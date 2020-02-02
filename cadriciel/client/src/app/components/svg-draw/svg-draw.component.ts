@@ -1,7 +1,8 @@
 import { Component, OnInit} from '@angular/core';
-import { DrawToolService } from 'src/app/services/draw-tool/draw-tool.service';
+import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
+import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
 
 @Component({
   selector: 'app-svg-draw',
@@ -9,71 +10,60 @@ import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handle
   styleUrls: ['./svg-draw.component.scss']
 })
 export class SvgDrawComponent implements OnInit {
-  
 
   constructor() { }
 
   ngOnInit() {
-    
-    let test : KeyboardHandlerService = new KeyboardHandlerService();
 
-    window.addEventListener("keydown", function(e){
-      test.logkey(e);
-      
-    });
-
-    window.addEventListener("keyup", function(e){
-      test.reset(e);
-     
-    });
-
-    
-
+    //mouseHandler will need these references to evaluate clicks
     let svg : HTMLElement | null = document.getElementById("canvas");
-
     let workingSpace : HTMLElement | null = document.getElementById("working-space");
 
-    let tools : any[] = [];
+    let keyboardHandler : KeyboardHandlerService = new KeyboardHandlerService();
+    let mouseHandler = new MouseHandlerService(svg, workingSpace);
 
+    let toolBox : DrawingTool[] = [];
+
+    //Mockup values for testing
     let color1 = "1167B1";
     let color2 = "FF781F";
 
-    let drawing_service : DrawToolService = new DrawToolService();
-    let pencil = drawing_service.CreatePencil(svg,workingSpace,false,10,color1);
-    let rect = drawing_service.CreateRectangle(svg,workingSpace,false,10,color1,color2);
-    let line = drawing_service.CreateLine(svg,workingSpace,true,10,color1,true);
-    let brush = drawing_service.CreateBrush(svg,workingSpace,false,10,color1);
+    //Create all the tools
+    let pencil = ToolCreator.CreatePencil(false,10,color1,67);
+    let rect = ToolCreator.CreateRectangle(false,3,color1,color2, 2,49);
+    let line = ToolCreator.CreateLine(true,7,color1,false,15,76);
+    let brush = ToolCreator.CreateBrush(false,10,color1, 1,87);
 
-    let testMouse = new MouseHandlerService(svg, workingSpace);
+    //Fill the toolbox
+    toolBox.push(pencil);
+    toolBox.push(rect);
+    toolBox.push(line);
+    toolBox.push(brush);
 
-    tools.push(pencil);
-    tools.push(rect);
-    tools.push(line);
-    tools.push(brush);
-
-    tools.forEach(element => {
-      test.addObserver(element);
-      testMouse.addObserver(element);
+    //Subscribe each tool to keyboard and mouse
+    toolBox.forEach(element => {
+      keyboardHandler.addToolObserver(element);
+      mouseHandler.addObserver(element);
     });
 
-    if(svg != null){
+    //Mouse listeners
+    window.addEventListener("mousemove", function(e){
+      mouseHandler.move(e);
+    });
+    window.addEventListener("mousedown", function(e){
+      mouseHandler.down(e);
+    });
+    window.addEventListener("mouseup", function(e){
+      mouseHandler.up(e);
+    });
 
-      window.addEventListener("mousemove", function(e){
+    //Keyboard listeners
+    window.addEventListener("keydown", function(e){
+      keyboardHandler.logkey(e);
+    });
+    window.addEventListener("keyup", function(e){
+      keyboardHandler.reset(e);
+    });
 
-        testMouse.move(e);
-        
-      });
-      window.addEventListener("mousedown", function(e){
-        testMouse.down(e);
-
-
-      });
-      window.addEventListener("mouseup", function(e){
-
-        testMouse.up(e);
-
-      });
-      
-    }
   }
 }

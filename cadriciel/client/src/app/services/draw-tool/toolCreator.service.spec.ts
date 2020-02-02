@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MouseHandlerService } from './mouse-handler.service';
+import { ToolCreator } from './toolCreator';
 
-describe('MouseHandlerService', () => {
+describe('DrawPencilService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MouseHandlerService = TestBed.get(MouseHandlerService);
+    const service: ToolCreator = TestBed.get(ToolCreator);
     expect(service).toBeTruthy();
   });
 });
