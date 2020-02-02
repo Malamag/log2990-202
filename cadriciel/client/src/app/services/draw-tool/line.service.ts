@@ -125,48 +125,7 @@ export class LineService extends DrawingTool {
   createPath(p:Point[], wasDoubleClick:boolean){
 
     if(this.forcedAngle){
-
-      let x1 = p[p.length-2].x;
-      let y1 = p[p.length-2].y;
-
-      let x2 = p[p.length-1].x;
-      let y2 = p[p.length-1].y;
-
-      let xDelta = x2-x1;
-      let yDelta= y2-y1;
-
-      let angle = Math.atan(Math.abs(yDelta)/Math.abs(xDelta));
-      angle = 360 * angle/(2*Math.PI);
-
-      if(xDelta<0){
-        angle = 180-angle;
-      }
-      if(yDelta>0){
-        angle =360-angle;
-      }
-
-      angle = 45*(Math.round(angle/45));
-      if(angle == 360){
-        angle = 0;
-      }
-
-      if(angle == 180 || angle == 0){
-        yDelta = 0;
-      }
-
-      if(angle == 90 || angle == 270){
-        xDelta = 0;
-      }
-
-      if(angle == 45 || angle == 135){
-        yDelta = -Math.abs(xDelta);
-      }
-
-      if(angle == 225 || angle == 315){
-        yDelta = Math.abs(xDelta);
-      }
-
-      p[p.length-1] = new Point(x1 + xDelta, y1 + yDelta);
+      p[p.length-1] = this.computeLastPoint(p);
     }else{
       p[p.length-1] = this.currentPos;
     }
@@ -178,15 +137,12 @@ export class LineService extends DrawingTool {
         p[p.length -1] = p[0];
       }
     }
-
     let closeIt : boolean = false;
-
     if(wasDoubleClick){
       let dist = Math.sqrt(Math.pow(p[p.length-1].x - p[0].x,2) + Math.pow(p[p.length-1].y - p[0].y,2));
 
       if(dist <= Math.sqrt(Math.pow(3,2) + Math.pow(3,2))){
         closeIt = true;
-        //p[p.length -1] = p[0];
       }
     }
 
@@ -210,4 +166,47 @@ export class LineService extends DrawingTool {
   
     return s;
   }
+  computeLastPoint(p:Point[]){
+    let x1 = p[p.length-2].x;
+    let y1 = p[p.length-2].y;
+
+    let x2 = p[p.length-1].x;
+    let y2 = p[p.length-1].y;
+
+    let xDelta = x2-x1;
+    let yDelta= y2-y1;
+
+    let angle = Math.atan(Math.abs(yDelta)/Math.abs(xDelta));
+    angle = 360 * angle/(2*Math.PI);
+
+    if(xDelta<0){
+      angle = 180-angle;
+    }
+    if(yDelta>0){
+      angle =360-angle;
+    }
+
+    angle = 45*(Math.round(angle/45));
+    if(angle == 360){
+      angle = 0;
+    }
+
+    if(angle == 180 || angle == 0){
+      yDelta = 0;
+    }
+
+    if(angle == 90 || angle == 270){
+      xDelta = 0;
+    }
+
+    if(angle == 45 || angle == 135){
+      yDelta = -Math.abs(xDelta);
+    }
+
+    if(angle == 225 || angle == 315){
+      yDelta = Math.abs(xDelta);
+    }
+    return new Point(x1 + xDelta, y1 + yDelta);
+  }
+
 }

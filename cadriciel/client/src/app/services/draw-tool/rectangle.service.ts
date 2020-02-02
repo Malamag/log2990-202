@@ -69,13 +69,13 @@ export class RectangleService extends DrawingTool {
   }
   createPath(p:Point[]){
 
-    let p1x = p[0].x;
+    /*let p1x = p[0].x;
     let p1y = p[0].y;
     let p2x = p[p.length-1].x;
-    let p2y = p[p.length-1].y;
+    let p2y = p[p.length-1].y;*/
 
-    let w = p2x - p1x;
-    let h = p2y - p1y;
+    let w = this.computeWidth(p)
+    let h = this.computeHeight(p)
     
     let startX = w > 0 ? p[0].x : p[p.length-1].x;
     let startY = h > 0 ? p[0].y : p[p.length-1].y;
@@ -96,4 +96,26 @@ export class RectangleService extends DrawingTool {
     }
     return _s;
   }
+
+  computeWidth(p: Point[]){
+    let p1x = p[0].x;
+    let p2x = p[p.length-1].x;
+    let w = p2x - p1x;
+    return w;
+  }
+
+  computeHeight(p:Point[]){
+    let p1y = p[0].y;
+    let p2y = p[p.length-1].y;
+    let h = p2y - p1y;
+    return h;
+  }
+  /*chooseStartingPoint(w:number, h: number, p:Point[]){
+    let ret: number[] = [];
+    let startX = w > 0 ? p[0].x : p[p.length-1].x;
+    let startY = h > 0 ? p[0].y : p[p.length-1].y;
+    ret.push(startX);
+    ret.push(startY);
+    return ret;
+  }*/
 }
