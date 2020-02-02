@@ -97,22 +97,24 @@
     <tr>
         
         <td>
-            <div>
-                <div>
-                    <mat-label>R</mat-label>
-                </div>
-                <mat-slider thumbLabel type="range" min="0" step="1" max="255" [(ngModel)]="cData.RedSliderInput" (change)="onRGBSliderInput($event)"></mat-slider>
+            
+            
+            <mat-form-field>
+                <mat-label>Rouge</mat-label>
+                <input matInput type="text" [(ngModel)]="cData.RedSliderInput" (change)="onRGBSliderInput($event)">
+            </mat-form-field>
 
-                <div>
-                    <mat-label>G</mat-label>
-                </div>
-                <mat-slider thumbLabel type="range" min="0" step="1" max="255" [(ngModel)]="cData.GreenSliderInput" (change)="onRGBSliderInput($event)"></mat-slider>
+            <mat-form-field>
+                <mat-label>Vert</mat-label>
+                <input matInput type="text" [(ngModel)]="cData.GreenSliderInput" (change)="onRGBSliderInput($event)">
+            </mat-form-field>
 
-                <div>
-                    <mat-label>B</mat-label>
-                </div>
-                <mat-slider thumbLabel type="range" min="0" step="1" max="255" [(ngModel)]="cData.BlueSliderInput" (change)="onRGBSliderInput($event)"></mat-slider>
-            </div>
+            <mat-form-field>
+                <mat-label>Bleu</mat-label>
+                <input matInput type="text" [(ngModel)]="cData.GreenSliderInput" (change)="onRGBSliderInput($event)">
+            </mat-form-field>
+
+            
             <div>
                 <mat-label>Saturation</mat-label>
             </div>
