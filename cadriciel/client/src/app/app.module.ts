@@ -12,7 +12,9 @@ import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatCardModule } from '@angular/material/card'; 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSliderModule } from '@angular/material/slider';
-
+import {ColorPickingService} from './services/services/color-picking.service';
+import { ColorConvertingService } from './services/services/color-converting.service';
+import { ColorSliderService } from './services/services/color-slider.service';
 
 @NgModule({
     declarations: [AppComponent, ColorPickerComponent],
@@ -27,9 +29,9 @@ import { MatSliderModule } from '@angular/material/slider';
         MatFormFieldModule,
         MatSliderModule,
         RouterModule.forRoot([
-            { path: '', component: ColorPickerComponent}
+            { path: '', component: ColorPickerComponent} //pas besoin
         ])],
-    providers: [],
+    providers: [ColorPickingService, ColorConvertingService, ColorSliderService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

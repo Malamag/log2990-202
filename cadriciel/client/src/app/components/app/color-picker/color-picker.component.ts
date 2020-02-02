@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-
+import { ColorPickingService } from '../../../services/services/color-picking.service';
+import { ColorConvertingService } from 'src/app/services/services/color-converting.service';
 @Component({
     selector: 'app-color-picker',
     templateUrl: './color-picker.component.html',
@@ -32,11 +33,13 @@ export class ColorPickerComponent {
     LightnessSliderInput : number = 50;
     OpacitySliderInput : number = 100;
 
-    mycx : number = 100;
+    mycx : number = 100; //Déplacés dans colpickingservice
     mycy : number = 50;
+
     mytranslation :string;
     
-    constructor() {}
+    constructor(private colorPicking: ColorPickingService,
+                private colorConvert: ColorConvertingService) {}
 
     ngOnInit() {}
 
@@ -47,26 +50,27 @@ export class ColorPickerComponent {
     setSecondaryColor ( r : number, g : number, b : number ) {
         this.secondaryColor = 'rgba( ' + r + ', ' + g + ', ' + b + ', ' + this.secondaryAlpha + ' )' ;
     }
-    setColor( button : number, color : number[] ) {
+    
+    setColor( button : number, color : number[] ) { // DONE
         if ( button === 0 ) {
-            this.primaryColor = '#' + this.rgbaToHex( color[0] )+ this.rgbaToHex( color[1] ) + this.rgbaToHex( color[2] ) + this.rgbaToHex( this.primaryAlpha * 255);
+            this.primaryColor = '#' + this.colorConvert.rgbaToHex( color[0] )+ this.colorConvert.rgbaToHex( color[1] ) + this.colorConvert.rgbaToHex( color[2] ) + this.colorConvert.rgbaToHex( this.primaryAlpha * 255);
             document.getElementById("colorCheckBox").checked = true;
             this.primarySelect = true; 
             this.currentColorSelect = 'Primary';
         }
         else if ( button === 2 ) {
             //TODO : pop-up on right click??
-            this.secondaryColor = '#' + this.rgbaToHex( color[0] )+ this.rgbaToHex( color[1] ) + this.rgbaToHex( color[2] ) + this.rgbaToHex( this.secondaryAlpha * 255);
+            this.secondaryColor = '#' + this.colorConvert.rgbaToHex( color[0] )+ this.colorConvert.rgbaToHex( color[1] ) + this.colorConvert.rgbaToHex( color[2] ) + this.colorConvert.rgbaToHex( this.secondaryAlpha * 255);
             document.getElementById("colorCheckBox").checked = false;
             this.primarySelect = false; 
             this.currentColorSelect = 'Secondary';
         }
-        this.hexColorInput = this.rgbaToHex( color[0] )+ this.rgbaToHex( color[1] ) + this.rgbaToHex( color[2] )//only 6 char or needed for view
+        this.hexColorInput = this.colorConvert.rgbaToHex( color[0] )+ this.colorConvert.rgbaToHex( color[1] ) + this.colorConvert.rgbaToHex( color[2] );//only 6 char or needed for view
         this.RedSliderInput = color[0];
         this.GreenSliderInput = color[1];
         this.BlueSliderInput = color[2];
     }
-    hueSelector( event : MouseEvent ) : void {
+    hueSelector( event : MouseEvent ) : void { //DONE
         
         let radiusX : number = event.offsetX - 95;
         let radiusY : number = event.offsetY - 95;
@@ -83,205 +87,23 @@ export class ColorPickerComponent {
         this.currentHue = Math.round(Hue);
         this.currentLightness = 50;
         this.currentSaturation = 100;
-        this.setColor( event.button, this.hslToRgb(Hue) ) ;
+        this.setColor( event.button, this.colorConvert.hslToRgb(Hue) ) ;
         
     }
     slSelector(event : MouseEvent) : void {
         this.setSLCursor( event.offsetX, event.offsetY );
         this.LightnessSliderInput = event.offsetY;
         this.SaturationSliderInput = event.offsetX;
-        this.setColor( event.button, this.hslToRgb( this.currentHue, event.offsetX / 100, event.offsetY /100 ) );
+        this.setColor( event.button, this.colorConvert.hslToRgb( this.currentHue, event.offsetX / 100, event.offsetY /100 ) );
         
     }
-    setSLCursor( x : number, y : number): void {
+    setSLCursor( x : number, y : number): void { //DONE
         this.mycx = x;
         this.mycy = y;
     }
-    //
-    hslToRgb( H : number = 0, S : number = 1, L : number = 0.5 ): number[] {
-        let C : number = ( 1 - Math.abs( 2 * L - 1 ) ) * S;
-        let X : number = C * ( 1 - Math.abs( H / 60  % 2 - 1 ) );
-        let m : number = L - C / 2;
-
-        let R : number = 0;
-        let G : number = 0;
-        let B : number = 0;
-
-        if ( ( 0 <= H ) && ( H < 60 ) ) {
-            R = C;
-            G = X;
-            B = 0;
-        }
-        else if ( ( 60 <= H ) && ( H < 120 ) ) {
-            R = X;
-            G = C;
-            B = 0;
-        }
-        else if ( ( 120 <= H ) && ( H < 180 ) ) {
-            R = 0;
-            G = C;
-            B = X;
-        }
-        else if ( ( 180 <= H ) && ( H < 240 ) ) {
-            R = 0;
-            G = X;
-            B = C;
-        }
-        else if ( ( 240 <= H ) && ( H < 300 ) ) {
-            R = X;
-            G = 0;
-            B = C;
-        }
-        else if ( ( 300 <= H ) && ( H < 360 ) ) {
-            R = C;
-            G = 0;
-            B = X;
-        }
-            
-        let rgb : number[] = [];
-        rgb[0] = Math.round( ( R + m ) * 255 );
-        rgb[1] = Math.round( ( G + m ) * 255 );
-        rgb[2] = Math.round( ( B + m ) * 255 );
-        
-        return rgb;
-    }
     // convert rbg to h value of hsl.
-    rgbtoHue( r : number, g : number, b : number ) : number {
-        // scale dowon rgb value to a range of [ 0 , 1 ] from [ 0 , 255 ]
-        let primeR : number = r / 255;
-        let primeG : number = g / 255;
-        let primeB : number = b / 255;
 
-        // getting min/max and delta value of primes
-        let max : number = Math.max( primeR, primeG, primeB );
-        let min : number = Math.min( primeR, primeG, primeB );
-        let delta : number = max - min;
 
-        let hue : number = 0;
-        // math conversion formula base on max prime
-    
-        if ( delta === 0 ){
-            hue =0;
-        }
-        else if ( max === primeR ) {
-            hue = ( 60 * ( ( ( primeG - primeB ) / delta ) % 6 ) );
-        }
-        else if ( max === primeG ) {
-            hue = ( 60 * ( ( primeB - primeR ) / delta + 2 ) );
-        }
-        else if ( max === primeB ) {
-            hue = ( 60 * ( ( primeR - primeG ) / delta + 4 ) );
-        }
-        // make sure hue is in [ 0 , 360 ] degree 
-        if ( hue < 0 ) {
-            hue = 360 + hue;
-        }
-        return hue;
-    }
-
-    rgbToHsl( r : number, g : number, b : number ) : number[] {
-        // scale dowon rgb value to a range of [ 0 , 1 ] from [ 0 , 255 ]
-        let primeR : number = r / 255;
-        let primeG : number = g / 255;
-        let primeB : number = b / 255;
-
-        // getting min/max and delta value of primes
-        let max : number = Math.max( primeR, primeG, primeB );
-        let min : number = Math.min( primeR, primeG, primeB );
-        let delta : number = max - min;
-
-        let hue : number = 0;
-        let saturation : number = 0;
-        let lightness : number = 0;
-        // math conversion formula base on max prime
-        
-        if ( delta ) {
-            if ( max === primeR ) {
-                hue = ( 60 * ( ( ( primeG - primeB ) / delta ) % 6 ) );
-            }
-            else if ( max === primeG ) {
-                hue = ( 60 * ( ( primeB - primeR ) / delta + 2 ) );
-            }
-            else if ( max === primeB ) {
-                hue = ( 60 * ( ( primeR - primeG ) / delta + 4 ) );
-            }
-        }
-        
-        // make sure hue is in [ 0 , 360 ] degree 
-        if ( hue < 0 ) {
-            hue = 360 + hue;
-        }
-        
-        //this.currentHue = hue;
-
-        lightness = ( max + min ) / 2;
-        
-        if ( delta ) {
-            saturation = delta / ( 1 - Math.abs( ( 2 * lightness ) - 1 ) );
-        }
-
-        let hsl : number[] = [];
-        hsl[0] = hue;
-        hsl[1] = saturation;
-        hsl[2] = lightness;
-        
-        return hsl;
-    }
-    
-    rgbaToHex( r : number = 0, g : number = 0, b  : number = 0 , a : number = this.currentAlpha) : string {
-        let hex : string = '' ;
-        let bits : number[] = [];
-        bits[0] = r >> 4;
-        bits[1] = r & 0xf;
-        
-        for (let i = 0; i < 2; i++) {
-            if (bits[i] > 9) {
-                hex += String.fromCharCode(bits[i] + 55);
-            }
-            else {
-                hex += '' + bits[i];
-            }
-        }    
-        return hex;
-    }
-
-    hexToRgba( hex : string ) : number[] {
-        let colorBits : string = hex;
-        // check if first char is a # and remove it
-        if (hex.charCodeAt(0) ===  35 ) {
-            colorBits = hex.substring(1 , hex.length);
-        } 
-        let ascii0 : number = 48;
-        let asciiA : number = 65;
-        let asciia : number = 97;
-        let rgba : number[] = [];
-        let buffer : number[] = [];
-        for ( let i : number = 0; i < colorBits.length; i++ ) {
-            buffer[i] = colorBits.charCodeAt(i);
-            if ( buffer[i] >= asciia ) {
-                buffer[i] -= asciia - 10;//hex letter start at 10 
-            }
-            else if ( buffer[i] >= asciiA ){
-                buffer[i] -=  asciiA - 10;
-            }
-            else {
-                buffer[i] -= ascii0;
-            }
-        }
-        for ( let j : number = 0; j < buffer.length / 2; j++) {
-            rgba[j] = ( buffer[j * 2] << 4 ) | ( buffer[j * 2 + 1]);
-        }
-        if ( colorBits.length <= 6 ) {
-            rgba[3] = -1;
-        }
-        if ( colorBits.length <= 4 ) {
-            rgba[2] = -1;
-        }
-        if ( colorBits.length <= 2 ) {
-            rgba[1] = -1;
-        }
-        return rgba;
-    }
     swapInputDisplay(event : any) {
         if ( event.srcElement.checked ) {
             this.primarySelect = true;
@@ -291,6 +113,7 @@ export class ColorPickerComponent {
         }
         this.refreshDisplay();
     }
+
     refreshDisplay() : void {
         let color : string = '' ;
     
@@ -305,55 +128,57 @@ export class ColorPickerComponent {
         this.hexColorInput = color.substring(1,6);
         this.updateSliderField( color );
     }
-    onHexColorInput() : void {
+
+    onHexColorInput() : void { //unmoved
         if (this.hexColorInput.length === 6) {
             this.updateSliderField( this.hexColorInput );
             if ( this.primarySelect ) {
-                this.primaryColor = '#' + this.hexColorInput + this.rgbaToHex( this.primaryAlpha * 255 );
+                this.primaryColor = '#' + this.hexColorInput + this.colorConvert.rgbaToHex( this.primaryAlpha * 255 );
             }
             else {
-                this.secondaryColor = '#' + this.hexColorInput + this.rgbaToHex( this.secondaryAlpha * 255 );
+                this.secondaryColor = '#' + this.hexColorInput + this.colorConvert.rgbaToHex( this.secondaryAlpha * 255 );
             }
         }
     }
-    onRedHexInput() : void {
+
+    onRedHexInput() : void { //unmoved
         if (this.redHexInput.length === 2) {
             if ( this.primarySelect ) {
-                this.primaryColor = '#' + this.redHexInput + this.hexColorInput.substring( 2, 6 ) + this.rgbaToHex( this.primaryAlpha * 255 );
+                this.primaryColor = '#' + this.redHexInput + this.hexColorInput.substring( 2, 6 ) + this.colorConvert.rgbaToHex( this.primaryAlpha * 255 );
                 this.updateSliderField( this.primaryColor );
             }
             else {
-                this.primaryColor = '#' + this.redHexInput + this.hexColorInput.substring( 2, 6 ) + this.rgbaToHex( this.secondaryAlpha * 255 );
+                this.primaryColor = '#' + this.redHexInput + this.hexColorInput.substring( 2, 6 ) + this.colorConvert.rgbaToHex( this.secondaryAlpha * 255 );
                 this.updateSliderField( this.secondaryColor );
             }
         }
     }
-    onGreenHexInput() : void {
+    onGreenHexInput() : void { //unmoved
         if (this.greenHexInput.length === 2) {
             if ( this.primarySelect ) {
-                this.primaryColor = '#' + this.hexColorInput.substring( 0, 2 ) + this.greenHexInput + this.hexColorInput.substring( 4, 6 )  + this.rgbaToHex( this.primaryAlpha * 255 );
+                this.primaryColor = '#' + this.hexColorInput.substring( 0, 2 ) + this.greenHexInput + this.hexColorInput.substring( 4, 6 )  + this.colorConvert.rgbaToHex( this.primaryAlpha * 255 );
                 this.updateSliderField( this.primaryColor );
             }
             else {
-                this.primaryColor = '#' + this.hexColorInput.substring( 0, 2 ) + this.greenHexInput + this.hexColorInput.substring( 4, 6 ) + this.rgbaToHex( this.secondaryAlpha * 255 );
+                this.primaryColor = '#' + this.hexColorInput.substring( 0, 2 ) + this.greenHexInput + this.hexColorInput.substring( 4, 6 ) + this.colorConvert.rgbaToHex( this.secondaryAlpha * 255 );
                 this.updateSliderField( this.secondaryColor );
             }
         }
     }
-    onBlueHexInput() : void {
+    onBlueHexInput() : void { //unmoved
         if (this.blueHexInput.length === 2) {
             if ( this.primarySelect ) {
-                this.primaryColor = '#' + this.hexColorInput.substring( 0, 4 ) + this.blueHexInput + this.rgbaToHex( this.primaryAlpha * 255 );
+                this.primaryColor = '#' + this.hexColorInput.substring( 0, 4 ) + this.blueHexInput + this.colorConvert.rgbaToHex( this.primaryAlpha * 255 );
                 this.updateSliderField( this.primaryColor );
             }
             else {
-                this.primaryColor = '#' + this.hexColorInput.substring( 0, 4 ) + this.blueHexInput + this.rgbaToHex( this.secondaryAlpha * 255 );
+                this.primaryColor = '#' + this.hexColorInput.substring( 0, 4 ) + this.blueHexInput + this.colorConvert.rgbaToHex( this.secondaryAlpha * 255 );
                 this.updateSliderField( this.secondaryColor );
             }
         }
     }
-    updateSliderField( color : string) : void {
-        let rgba : number[] = this.hexToRgba( color );
+    updateSliderField( color : string) : void { //unmoved
+        let rgba : number[] = this.colorConvert.hexToRgba( color );
         this.RedSliderInput = rgba[0];
         this.GreenSliderInput = rgba[1];
         this.BlueSliderInput = rgba[2];
@@ -361,22 +186,22 @@ export class ColorPickerComponent {
             this.OpacitySliderInput = rgba[3] / 255 * 100;
         }
         
-        let hsl : number[] = this.rgbToHsl( this.RedSliderInput, this.GreenSliderInput, this.BlueSliderInput );
+        let hsl : number[] = this.colorConvert.rgbToHsl( this.RedSliderInput, this.GreenSliderInput, this.BlueSliderInput );
         this.currentHue = hsl[0];
         this.SaturationSliderInput = Math.round( hsl[1] * 100 );
         this.LightnessSliderInput = Math.round( hsl[2] * 100 );
     }
     // Red left input change
-    onRGBSliderInput() : void {
-        let hsl =this.rgbToHsl( this.RedSliderInput, this.GreenSliderInput, this.BlueSliderInput );
+    onRGBSliderInput() : void { //unmoved
+        let hsl =this.colorConvert.rgbToHsl( this.RedSliderInput, this.GreenSliderInput, this.BlueSliderInput );
         this.currentHue = hsl[0];
         this.SaturationSliderInput = Math.round( hsl[1] * 100 );
         this.LightnessSliderInput = Math.round( hsl[2] * 100 ); 
         this.slSliderRefresh();
     }
 
-    onSLSliderInput() : void {
-        let rgb = this.hslToRgb( this.currentHue, this.SaturationSliderInput / 100, this.LightnessSliderInput / 100);
+    onSLSliderInput() : void { //unmoved
+        let rgb = this.colorConvert.hslToRgb( this.currentHue, this.SaturationSliderInput / 100, this.LightnessSliderInput / 100);
         this.RedSliderInput = rgb[0];
         this.GreenSliderInput = rgb[1];
         this.BlueSliderInput = rgb[2];
@@ -464,11 +289,11 @@ export class ColorPickerComponent {
     sliderAlphaChange() : void {
         if ( this.primarySelect === true) {
             this.primaryAlpha = this.OpacitySliderInput / 100;
-            this.primaryColor = '#' + this.rgbaToHex( this.RedSliderInput ) + this.rgbaToHex( this.GreenSliderInput ) + this.rgbaToHex( this.BlueSliderInput ) + this.rgbaToHex( this.primaryAlpha * 255 );
+            this.primaryColor = '#' + this.colorConvert.rgbaToHex( this.RedSliderInput ) + this.colorConvert.rgbaToHex( this.GreenSliderInput ) + this.colorConvert.rgbaToHex( this.BlueSliderInput ) + this.colorConvert.rgbaToHex( this.primaryAlpha * 255 );
         }
         else {
             this.secondaryAlpha = this.OpacitySliderInput / 100;
-            this.primaryColor = '#' + this.rgbaToHex( this.RedSliderInput ) + this.rgbaToHex( this.GreenSliderInput ) + this.rgbaToHex( this.BlueSliderInput ) + this.rgbaToHex( this.primaryAlpha * 255 );
+            this.primaryColor = '#' + this.colorConvert.rgbaToHex( this.RedSliderInput ) + this.colorConvert.rgbaToHex( this.GreenSliderInput ) + this.colorConvert.rgbaToHex( this.BlueSliderInput ) + this.colorConvert.rgbaToHex( this.primaryAlpha * 255 );
         }
     }
     // swap color

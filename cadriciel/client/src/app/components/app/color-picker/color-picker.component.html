@@ -88,7 +88,7 @@
             <td class="leftInput" style="display: inlane-block;">
                 <label class="switch">
                     <input id="colorCheckBox" type="checkbox" checked (click)="swapInputDisplay($event)">
-                    <span class="slider round" (click)="swapPrimarySecondary"></span>
+                    <span class="slider round" (click)="swapPrimarySecondary()"></span>
                 </label>
                 <label (click)=(swapPrimarySecondary())>&nbsp;&nbsp;&nbsp;&nbsp;{{currentColorSelect}}</label>
                 <button (click)="swapPrimarySecondary()">Swap</button>
