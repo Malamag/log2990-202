@@ -74,7 +74,7 @@ import { OptionBarComponent } from './components/draw-view/option-bar/option-bar
     ],
 
     bootstrap: [AppComponent],
-    entryComponents: [NewDrawComponent, UserManualComponent, OptionBarComponent] // components added dynamically
+    entryComponents: [NewDrawComponent, UserManualComponent, OptionBarComponent, ColorPickerComponent] // components added dynamically
     
 })
 export class AppModule {}
