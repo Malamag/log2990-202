@@ -1,7 +1,8 @@
 import { Component, OnInit} from '@angular/core';
-import { DrawToolService } from 'src/app/services/draw-tool/draw-tool.service';
+import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
+import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
 
 @Component({
   selector: 'app-svg-draw',
@@ -14,124 +15,55 @@ export class SvgDrawComponent implements OnInit {
 
   ngOnInit() {
 
-    let test : KeyboardHandlerService = new KeyboardHandlerService();
+    //mouseHandler will need these references to evaluate clicks
+    let svg : HTMLElement | null = document.getElementById("canvas");
+    let workingSpace : HTMLElement | null = document.getElementById("working-space");
 
-    window.addEventListener("keydown", function(e){
-      test.logkey(e);
-      /*
-      let s = "";
-      if(test.ctrlDown)
-      s+= "CTRL + ";
-      if(test.shiftDown)
-      s+= "SHIFT + ";
-      s+= test.keyString;
-      console.log(s);*/
-    });
+    let keyboardHandler : KeyboardHandlerService = new KeyboardHandlerService();
+    let mouseHandler = new MouseHandlerService(svg, workingSpace);
 
-    window.addEventListener("keyup", function(e){
-      test.reset(e);
-      /*
-      let s = "";
-      if(test.ctrlDown)
-      s+= "CTRL + ";
-      if(test.shiftDown)
-      s+= "SHIFT + ";
-      s+= test.keyString;
-      console.log(s);*/
-    });
+    let toolBox : DrawingTool[] = [];
 
-    //let isDoubleClick : boolean = false;
-
-    let _svg : HTMLElement | null = document.getElementById("canvas");
-
-    let _workingSpace : HTMLElement | null = document.getElementById("working-space");
-
-    let tools : any[] = [];
-
+    //Mockup values for testing
     let color1 = "1167B1";
     let color2 = "FF781F";
 
-    let drawing_service : DrawToolService = new DrawToolService();
-    let pencil = drawing_service.CreatePencil(_svg,_workingSpace,false,10,color1);
-    let rect = drawing_service.CreateRectangle(_svg,_workingSpace,false,10,color1,color2);
-    let line = drawing_service.CreateLine(_svg,_workingSpace,false,10,color1,true);
-    let brush = drawing_service.CreateBrush(_svg,_workingSpace,true,10,color1);
+    //Create all the tools
+    let pencil = ToolCreator.CreatePencil(false,10,color1,67);
+    let rect = ToolCreator.CreateRectangle(false,3,color1,color2, 2,49);
+    let line = ToolCreator.CreateLine(true,7,color1,false,15,76);
+    let brush = ToolCreator.CreateBrush(false,10,color1, 1,87);
 
-    let testMouse = new MouseHandlerService(_svg, _workingSpace);
+    //Fill the toolbox
+    toolBox.push(pencil);
+    toolBox.push(rect);
+    toolBox.push(line);
+    toolBox.push(brush);
 
-    tools.push(pencil);
-    tools.push(rect);
-    tools.push(line);
-    tools.push(brush);
-
-    tools.forEach(element => {
-      test.addObserver(element);
-      testMouse.addObserver(element);
+    //Subscribe each tool to keyboard and mouse
+    toolBox.forEach(element => {
+      keyboardHandler.addToolObserver(element);
+      mouseHandler.addObserver(element);
     });
 
-    if(_svg != null){
+    //Mouse listeners
+    window.addEventListener("mousemove", function(e){
+      mouseHandler.move(e);
+    });
+    window.addEventListener("mousedown", function(e){
+      mouseHandler.down(e);
+    });
+    window.addEventListener("mouseup", function(e){
+      mouseHandler.up(e);
+    });
 
-      window.addEventListener("mousemove", function(e){
+    //Keyboard listeners
+    window.addEventListener("keydown", function(e){
+      keyboardHandler.logkey(e);
+    });
+    window.addEventListener("keyup", function(e){
+      keyboardHandler.reset(e);
+    });
 
-        testMouse.move(e);
-        /*
-        tools.forEach(element => {
-          if(element.selected){
-            element.mouseX = e.x;
-            element.mouseY = e.y;
-            element.move();
-          }
-        });*/
-
-      });
-      window.addEventListener("mousedown", function(e){
-        testMouse.down(e);
-
-        /*
-        isDoubleClick = false;
-        setTimeout(()=>{
-            if(!isDoubleClick){
-                tools.forEach(element => {
-                  if(element.selected){
-                    element.mouseX = e.x;
-                    element.mouseY = e.y;
-                    element.down();
-                  }
-              });
-            }
-         },100)*/
-
-      });
-      window.addEventListener("mouseup", function(e){
-
-        testMouse.up(e);
-
-        /*
-        setTimeout(()=>{
-          if(!isDoubleClick){
-            tools.forEach(element => {
-              if(element.selected){
-                element.mouseX = e.x;
-                element.mouseY = e.y;
-                element.up();
-              }
-            });
-          }
-       },101)*/
-
-      });
-      window.addEventListener("dblclick",function(e){
-
-        /*isDoubleClick = true;
-
-        tools.forEach(element => {
-          if(element.selected){
-            element.mouseX = e.x;
-            element.mouseY = e.y;
-            element.doubleClick();
-          }
-        });*/
-      });
-    }
   }
 }

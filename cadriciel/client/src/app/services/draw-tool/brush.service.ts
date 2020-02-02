@@ -7,27 +7,72 @@ import { PencilService } from './pencil.service';
 })
 export class BrushService extends PencilService {
 
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string){
-    super(_svg, _workingSpace,selected,width,primary_color);
+  textureNumber:number;
+
+  textures:{type:string, intensity:number, frequency:number}[];
+
+  constructor(selected:boolean, width:number, primary_color:string, textureNumber:number,shortcut:number){
+    super(selected,width,primary_color,shortcut);
+    this.textureNumber = textureNumber;
+
+    this.textures = [
+      {"type":"blured","intensity":5, "frequency":0},
+      {"type":"noise","intensity":0.5, "frequency":0.5},
+      {"type":"noise","intensity":0.3, "frequency":0.3},
+      {"type":"noise","intensity":0.9, "frequency":0.3},
+      {"type":"noise","intensity":0.3, "frequency":0.9}
+    ];
   }
 
   createPath(p:Point[]){
 
-    let width = 75;
-    let scale = width/((100/0.5) / (100/width));
-    let octave = scale/(width/10) * 0.5;
+    let width = 50;
+    let scale = this.textures[this.textureNumber].intensity;
+    let frequency = this.textures[this.textureNumber].intensity/(width/10) * this.textures[this.textureNumber].frequency;
+    
+    let s = "";
 
-    //let s = "<filter id=\"blurMe\" filterUnits=\"userSpaceOnUse\"><feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"5\"/></filter>";
-    let s = "<filter id=\"displacementFilter\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\" filterUnits=\"userSpaceOnUse\"><feTurbulence type=\"turbulence\" baseFrequency=\""+octave+"\"numOctaves=\"2\" result=\"turbulence\"/><feDisplacementMap in2=\"turbulence\" in=\"SourceGraphic\"scale=\""+(width*scale)+"\" xChannelSelector=\"R\" yChannelSelector=\"G\" result=\"first\"/><feOffset in=\"first\" dx=\""+((-width*scale)/4)+"\" dy=\""+((-width*scale)/4)+"\" /></filter>";
-    s += "<path d=\"";
-      s+= `M ${p[0].x} ${p[0].y} `;
+    if(this.textures[this.textureNumber].type == "blured"){
+      s = this.createBluredFilter(scale);
+    }else if(this.textures[this.textureNumber].type == "noise"){
+      scale = width/((100/this.textures[this.textureNumber].intensity) / (100/width));
+      s = this.createNoiseFilter(width, scale, frequency);
+      width = (width-(width*scale)/2);
+    }
 
-      for(let i = 1; i < p.length;i++){
-        s+= `L ${p[i].x} ${p[i].y} `;
-      }
+    s += '<path d="';
+    s += `M ${p[0].x} ${p[0].y} `;
 
-      s+="\" stroke=\"#" + this.primary_color + "\" stroke-width=\""+(width-(width*scale)/2)+"\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" filter=\"url(#displacementFilter)\"/>";
+    for(let i = 1; i < p.length;i++){
+      s+= `L ${p[i].x} ${p[i].y} `;
+    }
+
+    s+= `"stroke="#${this.primary_color}" stroke-width="${width}"`;
+    s+= 'fill="none" stroke-linecap="round" stroke-linejoin="round"';
+    s+= `filter="url(#${this.textures[this.textureNumber].type})"/>`;
 
     return s;
+  }
+
+  createBluredFilter(scale:number){
+
+    let filter = "";
+    filter+= '<filter id="blured" filterUnits="userSpaceOnUse">';
+    filter+= `<feGaussianBlur in="SourceGraphic" stdDeviation="${scale}"/>`
+    filter+= '</filter>';
+
+    return filter;
+  }
+
+  createNoiseFilter(width:number, scale:number, frequency:number){
+
+    let filter = "";
+    filter += '<filter id="noise" x="-100%" y="-100%" width="300%" height="300%" filterUnits="userSpaceOnUse">';
+    filter += `<feTurbulence type="turbulence" baseFrequency="${frequency}" numOctaves="2" result="turbulence"/>`;
+    filter += `<feDisplacementMap in2="turbulence" in="SourceGraphic" scale="${width*scale}" xChannelSelector="R" yChannelSelector="G" result="turbulence"/>`;
+    filter += `<feOffset in="turbulence" dx="${((-width*scale)/4)}" dy="${((-width*scale)/4)}"/>`;
+    filter += '</filter>';
+
+    return filter;
   }
 }

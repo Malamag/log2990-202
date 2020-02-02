@@ -9,13 +9,15 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 export class LineService extends DrawingTool {
 
   showJunctions:boolean;
+  junctionRadius:number;
   forcedAngle:boolean;
   currentPos:Point;
 
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string, showJunctions:boolean){
-    super(_svg,_workingSpace,selected,width,primary_color);
+  constructor(selected:boolean, width:number, primary_color:string, showJunctions:boolean, junctionWidth:number,shortcut:number){
+    super(selected,width,primary_color,shortcut);
     this.showJunctions = showJunctions;
     this.forcedAngle = false;
+    this.junctionRadius = junctionWidth/2;
   }
 
   update(keyboard:KeyboardHandlerService){
@@ -24,7 +26,6 @@ export class LineService extends DrawingTool {
 
       if((this.forcedAngle != keyboard.shiftDown) && this.isDown){
         this.forcedAngle = keyboard.shiftDown;
-        console.log("redraw with forced");
         let d : string = "";
         d+= this.createPath(this.currentPath,false);
         document.getElementsByName("in-progress")[0].innerHTML = d;
@@ -37,8 +38,6 @@ export class LineService extends DrawingTool {
       if(this.currentPath.length > 2){
         this.currentPath[this.currentPath.length-2] = this.currentPath[this.currentPath.length-1];
         this.currentPath.pop();
-
-        console.log("delete");
 
         let d : string = "";
         d+= this.createPath(this.currentPath,false);
@@ -56,6 +55,8 @@ export class LineService extends DrawingTool {
 
   down(position:Point, mouseInsideWorkspace:boolean){
 
+    this.ignoreNextUp = false;
+
     this.clickedInside = mouseInsideWorkspace;
     let x = position.x;
     let y = position.y;
@@ -63,7 +64,6 @@ export class LineService extends DrawingTool {
     this.currentPos = position;
 
     this.currentPath.push(new Point(x,y));
-    console.log(mouseInsideWorkspace);
     let d : string = "";
 
     d+= this.createPath(this.currentPath,false);
@@ -73,12 +73,10 @@ export class LineService extends DrawingTool {
     this.isDown = true;
   }
   up(position:Point){
-    console.log("up line");
     //mouse up with line in hand
   }
   move(position:Point){
     //mouse move with line in hand
-    console.log("move line");
 
     if(this.isDown){
 
@@ -199,11 +197,11 @@ export class LineService extends DrawingTool {
       s+= "Z";
     }
 
-    s+="\" stroke=\"#" + this.primary_color + "\" stroke-width=\"1\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />";
+    s+=`\" stroke="#${this.primary_color}" stroke-width="${this.width}" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />`;
 
     if(this.showJunctions){
       for(let i = 0; i < p.length - (closeIt? 1 : 0);i++){
-        s+=`<circle cx=\"${p[i].x}\" cy=\"${p[i].y}\" r=\"3\" stroke=\"black\" stroke-width=\"0\" fill=\"#${this.primary_color}\" />`;
+        s+=`<circle cx=\"${p[i].x}\" cy=\"${p[i].y}\" r="${this.junctionRadius}" stroke="none" fill=\"#${this.primary_color}\" />`;
       }
     }
   

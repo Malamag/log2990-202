@@ -10,22 +10,37 @@ export class KeyboardHandlerService {
   keyCode:number;
   ctrlDown:boolean
   shiftDown:boolean;
-  observers:InputObserver[];
+  toolObservers:InputObserver[];
+  toolshortcuts:number[];
+
+  //viewObservers:any[];
 
   constructor() {
     this.keyString = "";
     this.keyCode = -1;
-    this.observers = [];
+    this.toolObservers = [];
+    this.toolshortcuts = [];
   }
 
-  addObserver(newObserver:InputObserver){
-    this.observers.push(newObserver);
+  addToolObserver(newObserver:InputObserver){
+    this.toolObservers.push(newObserver);
+    this.toolshortcuts.push(newObserver.shortcut);
   }
 
-  updateObservers(){
-    this.observers.forEach(element => {
+  updateToolObservers(){
+    this.toolObservers.forEach(element => {
       element.update(this);
     });
+  }
+
+  checkForToolChange(){
+    if(this.toolshortcuts.includes(this.keyCode)){
+      this.toolObservers.forEach(element => {
+        element.cancel();
+        element.selected = false;
+      });
+      this.toolObservers[this.toolshortcuts.indexOf(this.keyCode)].selected = true;
+    }
   }
 
   logkey(e:KeyboardEvent){
@@ -33,7 +48,8 @@ export class KeyboardHandlerService {
     this.keyCode = e.keyCode;
     this.ctrlDown = e.ctrlKey;
     this.shiftDown = e.shiftKey;
-    this.updateObservers();
+    this.checkForToolChange();
+    this.updateToolObservers();
   }
 
   reset(e:KeyboardEvent){
@@ -45,7 +61,7 @@ export class KeyboardHandlerService {
     }
     this.keyString = "";
     this.keyCode = -1;
-    this.updateObservers();
+    this.updateToolObservers();
   }
 
 }

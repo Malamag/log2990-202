@@ -10,11 +10,13 @@ export class RectangleService extends DrawingTool {
 
   secondary_color:string;
   isSquare:boolean;
+  renderMode:number;
 
-  constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string,secondary_color:string){
-    super(_svg,_workingSpace,selected,width,primary_color);
+  constructor(selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number){
+    super(selected,width,primary_color,shortcut);
     this.secondary_color = secondary_color;
     this.isSquare = false;
+    this.renderMode = renderMode;
   }
 
   update(keyboard:KeyboardHandlerService){
@@ -22,49 +24,42 @@ export class RectangleService extends DrawingTool {
     this.isSquare = keyboard.shiftDown;
 
     if(this.isDown){
-      let d : string = "";
-      d+= this.createPath(this.currentPath);
-      document.getElementsByName("in-progress")[0].innerHTML = d;
+      this.updateProgress();
     }
   }
 
   down(position:Point){
-    //mouse down with pencil in hand
+    //mouse down with rectangle in hand
+
+    this.ignoreNextUp = false;
+
     this.isDown = true;
 
     this.currentPath.push(position);
     this.currentPath.push(position);
 
-    let d : string = "";
-    d+= this.createPath(this.currentPath);
-
-    document.getElementsByName("in-progress")[0].innerHTML = d;
+    this.updateProgress();
   }
   up(position:Point){
-    //mouse up with pencil in hand
-    this.isDown = false;
+    //mouse up with rectangle in hand
+    
+    if(!this.ignoreNextUp){
+      this.isDown = false;
 
-    let d : string = "";
-    d+= this.createPath(this.currentPath);
-
-    document.getElementsByName("drawing")[0].innerHTML += d;
-    document.getElementsByName("in-progress")[0].innerHTML = "";
-
-    this.currentPath = [];
+      this.updateDrawing();
+    }
   }
   move(position:Point){
-    //mouse move with pencil in hand
+    //mouse move with rectangle in hand
+
     if(this.isDown){
       this.currentPath.push(position);
-
-      let d : string = "";
-      d+= this.createPath(this.currentPath);
       
-      document.getElementsByName("in-progress")[0].innerHTML = d;
+      this.updateProgress();
     }
   }
   doubleClick(position:Point){
-    //mouse doubleClick with rectangle in hand
+    //mouse doubleClick with rectangle in hand -> nothing happens
   }
   createPath(p:Point[]){
 
@@ -88,7 +83,11 @@ export class RectangleService extends DrawingTool {
       startY = h > 0 ? p[0].y : p[0].y - smallest;
     }
     let _s = "<g name = \"rectangle\">";
-    _s += `<rect x=\"${startX}\" y=\"${startY}\" width=\"${Math.abs(w)}\" height=\"${Math.abs(h)}\" fill="#${this.primary_color}" stroke-width="3" stroke="#${this.secondary_color}"/>`;
+
+    let stroke = (this.renderMode == 0 || this.renderMode == 2) ? `#${this.secondary_color}` : "none";
+    let fill = (this.renderMode == 1 || this.renderMode == 2)?  `#${this.primary_color}`: "none";
+
+    _s += `<rect x=\"${startX}\" y=\"${startY}\" width=\"${Math.abs(w)}\" height=\"${Math.abs(h)}\" fill="${fill}" stroke-width="${this.width}" stroke="${stroke}"/>`;
     _s+= "</g>"
     if(w == 0 || h == 0){
       _s = "";

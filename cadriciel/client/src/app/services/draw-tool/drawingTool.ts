@@ -2,9 +2,6 @@ import {InputObserver } from './input-observer';
 import { Point } from './point';
 
 export abstract class DrawingTool extends InputObserver{
-    _svg:HTMLElement | null;
-    _workingSpace:HTMLElement | null;
-    _svgBox:ClientRect;
     startedInsideWorkSpace:boolean;
     isDown:boolean;
     clickedInside:boolean;
@@ -12,6 +9,8 @@ export abstract class DrawingTool extends InputObserver{
     selected:boolean;
     width:number;
     primary_color:string;
+    ignoreNextUp:boolean;
+
 
     abstract down(position:Point, insideWorkspace?:boolean):void;
     abstract up(position:Point):void;
@@ -19,15 +18,10 @@ export abstract class DrawingTool extends InputObserver{
     abstract doubleClick(position:Point, insideWorkspace?:boolean):void;
     abstract createPath(path:Point[], doubleClickCheck?:boolean):void;
   
-    constructor(_svg:HTMLElement | null, _workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string){
+    constructor(selected:boolean, width:number, primary_color:string,shortcut:number){
       
-      super();
-      
-      this._svg = _svg;
-      this._workingSpace = _workingSpace
-      if(_svg != null){
-        this._svgBox = _svg.getBoundingClientRect();
-      }
+      super(shortcut,selected);
+
       this.startedInsideWorkSpace = false;
       this.isDown = false;
       this.clickedInside = false;
@@ -35,6 +29,32 @@ export abstract class DrawingTool extends InputObserver{
       this.width = width;
       this.primary_color = primary_color;
   
+      this.currentPath = [];
+
+      this.ignoreNextUp = false;
+    }
+
+    cancel(){
+      this.currentPath = [];
+      this.ignoreNextUp = true;
+      this.isDown = false;
+      console.log("cancel");
+      document.getElementsByName("in-progress")[0].innerHTML = "";
+    }
+
+    updateProgress(){
+      let d : string = "";
+      d+= this.createPath(this.currentPath);
+      document.getElementsByName("in-progress")[0].innerHTML = d;
+    }
+
+    updateDrawing(){
+      let d : string = "";
+      d+= this.createPath(this.currentPath);
+
+      document.getElementsByName("drawing")[0].innerHTML += d;
+      document.getElementsByName("in-progress")[0].innerHTML = "";
+
       this.currentPath = [];
     }
   
