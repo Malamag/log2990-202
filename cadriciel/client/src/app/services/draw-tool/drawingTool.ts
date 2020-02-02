@@ -23,13 +23,13 @@ export abstract class DrawingTool extends InputObserver{
   abstract doubleClick(position:Point, insideWorkspace?:boolean):void;
   abstract createPath(path:Point[], doubleClickCheck?:boolean):void;
 
-  constructor(svg:HTMLElement | null, workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string, renderer: Renderer2, 
-    inProgressRef:ElementRef, doneRef:ElementRef){
+  constructor(svg:HTMLElement | null, workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string,/* renderer: Renderer2, 
+    inProgressRef:ElementRef, doneRef:ElementRef*/){
     
     super();
-    this.renderer= renderer;
+    /*this.renderer= renderer;
     this.inProgressElement = inProgressRef;
-    this.doneRef = doneRef;
+    this.doneRef = doneRef;*/
     this.svg = svg;
     this.workingSpace = workingSpace
     if(svg != null){

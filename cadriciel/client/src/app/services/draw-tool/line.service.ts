@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
+import { Injectable, /*ElementRef, Renderer2*/ } from '@angular/core';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -12,9 +12,9 @@ export class LineService extends DrawingTool {
   forcedAngle:boolean;
   currentPos:Point;
 
-  constructor(svg:HTMLElement | null, workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string, showJunctions:boolean, renderer: Renderer2, 
-    inProgressRef:ElementRef, doneRef:ElementRef){
-    super(svg,workingSpace,selected,width,primary_color, renderer, inProgressRef, doneRef);
+  constructor(svg:HTMLElement | null, workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string, showJunctions:boolean, /*renderer: Renderer2, 
+    inProgressRef:ElementRef, doneRef:ElementRef*/){
+    super(svg,workingSpace,selected,width,primary_color, /*renderer, inProgressRef, doneRef*/);
     this.showJunctions = showJunctions;
     this.forcedAngle = false;
   }

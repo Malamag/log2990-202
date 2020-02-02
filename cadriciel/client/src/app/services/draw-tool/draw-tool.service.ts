@@ -16,7 +16,7 @@ export class DrawToolService {
     //_ -> private
   }
 
-  CreatePencil(_svg:HTMLElement | null,_workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string){
+  CreatePencil(_svg:HTMLElement | null,_workingSpace:HTMLElement | null,selected:boolean, width:number, primary_color:string, ){
     return new PencilService(_svg,_workingSpace,selected,width,primary_color);
   }
 
