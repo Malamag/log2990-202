@@ -1,5 +1,6 @@
-import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2, HostListener } from '@angular/core';
 import { toolsItems, welcomeItem} from '../../functionality'
+import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 
 @Component({
   selector: 'app-draw-view',
@@ -13,12 +14,26 @@ export class DrawViewComponent implements OnInit {
   openToolOptions: boolean = false;
   
   selectedTool: string;
-
+  // I doubt if we can delete these two
   @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
   renderer: Renderer2
+  selectingToolsMap = new Map();
+  
+  constructor(private interactionService: InteractionService) {
+    this.selectingToolsMap.set('1', 'Rectangle');
+    this.selectingToolsMap.set('c', 'Crayon');
+    this.selectingToolsMap.set('w', 'Pinceau');
+    this.selectingToolsMap.set('l', 'Ligne');
+  }
 
-  constructor() { }
+  @HostListener('document: keydown', ['$event'])
+  updateBoard(event: KeyboardEvent){
+    this.interactionService.emitSelectedTool(this.selectingToolsMap.get(event.key));
+  }
 
+  getSlectedTool(name: string){
+    this.interactionService.emitSelectedTool(name);
+  }
   ngOnInit() {
   }
 
