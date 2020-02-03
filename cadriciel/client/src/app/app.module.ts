@@ -2,13 +2,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './components/app/app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RectangleToolComponent } from './components/rectangle-tool/rectangle-tool.component';
-
+import { SvgDrawComponent } from './components/svg-draw/svg-draw.component';
 
 @NgModule({
-    declarations: [AppComponent, RectangleToolComponent],
-    imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule],
+    declarations: [AppComponent, SvgDrawComponent],
+    imports: [BrowserModule, HttpClientModule],
     providers: [],
     bootstrap: [AppComponent],
     
