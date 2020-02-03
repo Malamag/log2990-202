@@ -53,9 +53,9 @@ export class ColorPickerComponent {
     }
 
     // Red left input change
-    onRGBSliderInput() : void { 
+    /*onRGBSliderInput() : void { 
         this.colorPicking.onRGBSliderInput();
-    }
+    }*/
 
     onSLSliderInput() : void { 
         this.colorPicking.onSLSliderInput();
@@ -74,7 +74,7 @@ export class ColorPickerComponent {
         return { 'stop-color': this.cData.secondaryColor };
     }
     get cursorStyles(): any{
-        return { 'transform' : 'translate(100px,100px)  rotate(' + this.cData.currentHue + 'deg) translate(-100px,-100px) translate(' + this.cData.mycx + 'px,' + this.cData.mycy + 'px)'};
+        return { 'transform' : 'translate(50px,50px)  rotate(' + this.cData.currentHue + 'deg) translate(-100px,-100px) translate(' + this.cData.mycx + 'px,' + this.cData.mycy + 'px)'};
     }
 
     // change primary alpha when primary slide change

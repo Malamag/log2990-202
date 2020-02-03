@@ -11,7 +11,7 @@ export class ColorPickingService {
   cData = colorData; // Interface for Color data
 
   constructor(private colorConvert: ColorConvertingService) { }
-  setPrimaryColor( r : number, g : number, b : number ) {
+  setPrimaryColor( r : number, g : number, b : number ) { // builds style string for svg element
     this.cData.primaryColor = 'rgba( ' + r + ', ' + g + ', ' + b + ', ' + this.cData.primaryAlpha + ' )';
   }
 
@@ -20,8 +20,8 @@ export class ColorPickingService {
   }
 
   slCursor(x: number, y:number) {
-    this.cData.SaturationSliderInput = x;
-    this.cData.LightnessSliderInput = y;
+    this.cData.mycx = x;
+    this.cData.mycy = y;
   }
 
   setColor( button : number, color : number[] ) {
@@ -46,7 +46,7 @@ export class ColorPickingService {
   }
   hueSelector( event : MouseEvent ) : void {
         
-    let radiusX : number = event.offsetX - 95;
+    let radiusX : number = event.offsetX - 95; // why?
     let radiusY : number = event.offsetY - 95;
     let radius : number = Math.sqrt( Math.pow( radiusX, 2) + Math.pow( radiusY, 2) );
     let theta : number = Math.acos( radiusX / radius);
@@ -84,7 +84,7 @@ export class ColorPickingService {
   }
 
   setSLCursor( x : number, y : number): void { //DONE
-    this.cData.mycx = x;
+    this.cData.mycx = x; // le curseur devient aligné quand on y soustrait 50, but why?
     this.cData.mycy = y;
   }
 
@@ -113,8 +113,9 @@ export class ColorPickingService {
     this.updateSliderField( color );
   }
 
-  onHexColorInput() : void { //unmoved
-    if (this.cData.hexColorInput.length === 6) {
+  onHexColorInput() : void {
+    const CHARNUM = 6; // number of characters permitted in hexadecimal string
+    if (this.cData.hexColorInput.length === CHARNUM) {
         this.updateSliderField( this.cData.hexColorInput );
         if ( this.cData.primarySelect ) {
             this.cData.primaryColor = '#' + this.cData.hexColorInput + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
@@ -125,7 +126,8 @@ export class ColorPickingService {
     }
   }
 
-  onRedHexInput() : void { //unmoved
+    // les méthodes onRedHexInput, onGreenHex... et onBlueHex font essentiellement la mm chose...
+  onRedHexInput() : void { 
       if (this.cData.redHexInput.length === 2) {
           if ( this.cData.primarySelect ) {
               this.cData.primaryColor = '#' + this.cData.redHexInput + this.cData.hexColorInput.substring( 2, 6 ) + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
@@ -179,13 +181,13 @@ export class ColorPickingService {
       this.cData.LightnessSliderInput = Math.round( hsl[2] * 100 );
   }
   // Red left input change
-  onRGBSliderInput() : void { //unmoved
+  /*onRGBSliderInput() : void { // RGB sliders may not be needed (see trello)
       let hsl =this.colorConvert.rgbToHsl( this.cData.RedSliderInput, this.cData.GreenSliderInput, this.cData.BlueSliderInput );
       this.cData.currentHue = hsl[0];
       this.cData.SaturationSliderInput = Math.round( hsl[1] * 100 );
       this.cData.LightnessSliderInput = Math.round( hsl[2] * 100 ); 
       this.slSliderRefresh();
-  }
+  }*/
 
   onSLSliderInput() : void { //unmoved
       let rgb = this.colorConvert.hslToRgb( this.cData.currentHue, this.cData.SaturationSliderInput / 100, this.cData.LightnessSliderInput / 100);
