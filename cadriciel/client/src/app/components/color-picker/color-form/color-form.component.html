@@ -18,15 +18,15 @@
 
 <!--Individual sliders modifying other attributes-->
 <div>
-    <mat-label>Saturation</mat-label>
+<mat-label>Saturation: {{cData.SaturationSliderInput}}</mat-label>
 </div>
 <mat-slider thumbLabel type="range" min="0" step="1" max="100" [(ngModel)]="cData.SaturationSliderInput" (change)="onSLSliderInput($event)"></mat-slider>
 
 <div>
-    <mat-label>Luminance</mat-label>
+<mat-label>Luminance: {{cData.LightnessSliderInput}}</mat-label>
 </div>
 <mat-slider thumbLabel type="range" min="0" step="1" max="100" [(ngModel)]="cData.LightnessSliderInput" (change)="onSLSliderInput($event)"></mat-slider>
 <div>
-    <mat-label>Opacité</mat-label>
+<mat-label>Opacité: {{cData.OpacitySliderInput}}</mat-label>
 </div>
 <mat-slider thumbLabel type="range" min="0" step="1" max="100" [(ngModel)]="cData.OpacitySliderInput" (change)="sliderAlphaChange()"></mat-slider>

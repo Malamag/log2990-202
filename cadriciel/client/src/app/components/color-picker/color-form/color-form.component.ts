@@ -55,6 +55,7 @@ export class ColorFormComponent implements OnInit {
     //update
     this.colorPicking.setColorsFromForm(this.cData.hexColorInput, this.cData.secondaryColor);
     this.colorPicking.emitColors();
+    this.colorPicking.refreshDisplay();
   }
 
 }
