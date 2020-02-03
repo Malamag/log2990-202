@@ -2,29 +2,20 @@ import {InputObserver } from './input-observer';
 import { Point } from './point';
 
 export abstract class DrawingTool extends InputObserver{
-    startedInsideWorkSpace:boolean;
     isDown:boolean;
-    clickedInside:boolean;
     currentPath:Point[];
     selected:boolean;
     width:number;
     primary_color:string;
     ignoreNextUp:boolean;
 
-
-    abstract down(position:Point, insideWorkspace?:boolean):void;
-    abstract up(position:Point):void;
-    abstract move(position:Point):void;
-    abstract doubleClick(position:Point, insideWorkspace?:boolean):void;
     abstract createPath(path:Point[], doubleClickCheck?:boolean):void;
   
     constructor(selected:boolean, width:number, primary_color:string,shortcut:number){
       
       super(shortcut,selected);
 
-      this.startedInsideWorkSpace = false;
       this.isDown = false;
-      this.clickedInside = false;
       this.selected = selected;
       this.width = width;
       this.primary_color = primary_color;
@@ -42,15 +33,15 @@ export abstract class DrawingTool extends InputObserver{
       document.getElementsByName("in-progress")[0].innerHTML = "";
     }
 
-    updateProgress(){
+    updateProgress(wasDoubleClick?:boolean){
       let d : string = "";
-      d+= this.createPath(this.currentPath);
+      d+= this.createPath(this.currentPath,wasDoubleClick);
       document.getElementsByName("in-progress")[0].innerHTML = d;
     }
 
-    updateDrawing(){
+    updateDrawing(wasDoubleClick?:boolean){
       let d : string = "";
-      d+= this.createPath(this.currentPath);
+      d+= this.createPath(this.currentPath,wasDoubleClick);
 
       document.getElementsByName("drawing")[0].innerHTML += d;
       document.getElementsByName("in-progress")[0].innerHTML = "";

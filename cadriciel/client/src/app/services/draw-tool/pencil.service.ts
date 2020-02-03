@@ -9,11 +9,13 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 export class PencilService extends DrawingTool {
 
   constructor(selected:boolean, width:number, primary_color:string,shortcut:number){
+    
     super(selected,width,primary_color,shortcut);
   }
 
   //updating on key change 
   update(keyboard:KeyboardHandlerService){
+    //keyboard has no effect on pencil
   }
 
   //mouse down with pencil in hand
@@ -68,7 +70,7 @@ export class PencilService extends DrawingTool {
   createPath(p:Point[]){
 
     //create a divider
-    let s = '<g name = "pencil-stroke">';
+    let s : string = '<g name = "pencil-stroke">';
 
     //start the path
     s += '<path d="';
@@ -84,6 +86,7 @@ export class PencilService extends DrawingTool {
     s+= 'fill="none"';
     s+= 'stroke-linecap="round"';
     s+= 'stroke-linejoin="round"/>';
+    //end the path
   
     //end the divider
     s+= "</g>";
