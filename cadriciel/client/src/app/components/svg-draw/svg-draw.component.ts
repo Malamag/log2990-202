@@ -26,7 +26,9 @@ export class SvgDrawComponent implements OnInit {
 
     //Mockup values for testing
     let color1 = "1167B1";
-    let color2 = "FF781F";
+    let color2 = "000000";
+
+    
 
     //Create all the tools
     let pencil = ToolCreator.CreatePencil(false,10,color1,67);
