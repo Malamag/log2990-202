@@ -49,7 +49,12 @@ export class ColorFormComponent implements OnInit {
     //hex values
     const values = this.colorForm.value;
     this.cData.hexColorInput= values.red + values.green + values.blue;
+    this.cData.RedSliderInput = values.red;
+    this.cData.GreenSliderInput = values.green;
+    this.cData.BlueSliderInput = values.blue;
     //update
+    this.colorPicking.setColorsFromForm(this.cData.hexColorInput, this.cData.secondaryColor);
+    this.colorPicking.emitColors();
   }
 
 }

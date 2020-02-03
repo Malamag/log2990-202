@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ColorConvertingService } from './color-converting.service';
 import { colorData } from '../../../components/color-picker/color-data';
-
+import { Subject } from 'rxjs';
+import {  ChoosenColors } from '../../../models/ChoosenColors.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,14 +11,29 @@ import { colorData } from '../../../components/color-picker/color-data';
 export class ColorPickingService {
   cData = colorData; // Interface for Color data
 
+  colors: ChoosenColors;
+  colorSubject = new Subject<ChoosenColors>(); // le constuire à qqpart
+
   constructor(private colorConvert: ColorConvertingService) { }
+
+  emitColors() { // observerved-observer design pattern
+    this.colorSubject.next(this.colors);
+  }
+
+  setColorsFromForm(primary: string, secondary: string) {
+    this.colors = new ChoosenColors(primary, secondary);
+  }
+
   setPrimaryColor( r : number, g : number, b : number ) { // builds style string for svg element
     this.cData.primaryColor = 'rgba( ' + r + ', ' + g + ', ' + b + ', ' + this.cData.primaryAlpha + ' )';
+    this.colors.primColor = this.cData.primaryColor;
   }
 
   setSecondaryColor ( r : number, g : number, b : number ) {
     this.cData.secondaryColor = 'rgba( ' + r + ', ' + g + ', ' + b + ', ' + this.cData.secondaryAlpha + ' )' ;
+    this.colors.secColor = this.cData.secondaryColor;
   }
+  
 
   slCursor(x: number, y:number) {
     this.cData.mycx = x;
@@ -181,13 +197,13 @@ export class ColorPickingService {
       this.cData.LightnessSliderInput = Math.round( hsl[2] * 100 );
   }
   // Red left input change
-  /*onRGBSliderInput() : void { // RGB sliders may not be needed (see trello)
+  onRGBSliderInput() : void { // RGB sliders may not be needed (see trello)
       let hsl =this.colorConvert.rgbToHsl( this.cData.RedSliderInput, this.cData.GreenSliderInput, this.cData.BlueSliderInput );
       this.cData.currentHue = hsl[0];
       this.cData.SaturationSliderInput = Math.round( hsl[1] * 100 );
       this.cData.LightnessSliderInput = Math.round( hsl[2] * 100 ); 
       this.slSliderRefresh();
-  }*/
+  }
 
   onSLSliderInput() : void { //unmoved
       let rgb = this.colorConvert.hslToRgb( this.cData.currentHue, this.cData.SaturationSliderInput / 100, this.cData.LightnessSliderInput / 100);

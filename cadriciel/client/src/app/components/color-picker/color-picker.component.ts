@@ -1,22 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ColorPickingService } from '../../services/services/colorPicker/color-picking.service';
 import { colorData } from './color-data';
+import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 
 @Component({
     selector: 'app-color-picker',
     templateUrl: './color-picker.component.html',
     styleUrls: [ './color-picker.component.scss']
 })
-export class ColorPickerComponent {
+export class ColorPickerComponent implements OnInit, OnDestroy {
     
     cData = colorData;
         
     constructor(private colorPicking: ColorPickingService) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.initColors();
+        this.colorPicking.emitColors();
+    }
+
+    initColors() {
+        const DEFAULT = "#ff0000"; // defining a default
+        this.colorPicking.colorSubject.subscribe(
+            (colors: ChoosenColors) => {
+                if(colors == undefined){
+                    colors = new ChoosenColors(DEFAULT, DEFAULT);
+                    console.log("default called");
+                }
+                this.cData.primaryColor = colors.primColor;
+                this.cData.secondaryColor = colors.secColor;
+                console.log("subscription called!");
+            }
+        );
+    }
+
+    ngOnDestroy() { // avoids staying subscribed to a non-existant object
+        this.colorPicking.colorSubject.unsubscribe();
+    }
 
     setColor( button : number, color : number[] ) { // DONE
        this.colorPicking.setColor(button, color)
+       
     }
 
     hueSelector( event : MouseEvent ) : void { //DONE
@@ -84,5 +108,6 @@ export class ColorPickerComponent {
     // swap color
     swapPrimarySecondary() : void {
         this.colorPicking.swapPrimarySecondary();
+        
     }
 }
