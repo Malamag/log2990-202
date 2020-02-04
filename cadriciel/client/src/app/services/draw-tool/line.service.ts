@@ -71,7 +71,10 @@ export class LineService extends DrawingTool {
     //save currentPosition for real time update when we go from forced to loose angle
     this.currentPos = position;
 
-    //save mouse position
+    //add the same point twice in case the mouse doesnt move on first point
+    if(this.currentPath.length == 0){
+      this.currentPath.push(position);
+    }
     this.currentPath.push(position);
     
     //update progress, it is not a double click

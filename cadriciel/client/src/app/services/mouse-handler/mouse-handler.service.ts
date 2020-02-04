@@ -44,6 +44,7 @@ export class MouseHandlerService {
   windowToCanvas(windowPosition:Point){
     let canvasX:number = windowPosition.x - this.svgBox.left + (this.workingSpace? this.workingSpace.scrollLeft : 0);
     let canvasY:number = windowPosition.y - this.svgBox.top + (this.workingSpace? this.workingSpace.scrollTop : 0);
+
     return new Point(canvasX, canvasY);
   }
 
