@@ -154,7 +154,7 @@ export class MouseHandlerService {
     //console.log("UP");
     this.observers.forEach(element => {
       if(element.selected){
-        element.up(this.mouseCanvasPosition);
+        element.up(this.mouseCanvasPosition,this.insideWorkspace);
       }
     });
   }

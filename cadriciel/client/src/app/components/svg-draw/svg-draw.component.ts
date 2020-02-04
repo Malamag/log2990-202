@@ -29,10 +29,12 @@ export class SvgDrawComponent implements OnInit {
     let color2 = "000000";
 
     //Create all the tools
-    let pencil = ToolCreator.CreatePencil(true,10,color1,67);
-    let rect = ToolCreator.CreateRectangle(false,3,color1,color2, 2,49);
-    let line = ToolCreator.CreateLine(false,7,color1,true,15,76);
-    let brush = ToolCreator.CreateBrush(false,10,color1, 4,87);
+    let tc = new ToolCreator(document.getElementsByName("in-progress")[0], document.getElementsByName("drawing")[0]);
+
+    let pencil = tc.CreatePencil(true,10,color1,67);
+    let rect = tc.CreateRectangle(false,3,color1,color2, 2,49);
+    let line = tc.CreateLine(false,3,color2,false,15,76);
+    let brush = tc.CreateBrush(false,50,color1, 4,87);
 
     //Fill the toolbox
     toolBox.push(pencil);

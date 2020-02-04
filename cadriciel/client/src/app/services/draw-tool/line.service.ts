@@ -13,9 +13,9 @@ export class LineService extends DrawingTool {
   forcedAngle:boolean;
   currentPos:Point;
 
-  constructor(selected:boolean, width:number, primary_color:string, showJunctions:boolean, junctionWidth:number,shortcut:number){
+  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string, showJunctions:boolean, junctionWidth:number,shortcut:number){
 
-    super(selected,width,primary_color,shortcut);
+    super(inProgess,drawing, selected,width,primary_color,shortcut);
 
     this.showJunctions = showJunctions;
     this.junctionRadius = junctionWidth/2;

@@ -9,7 +9,7 @@ export abstract class InputObserver{
 
     //Mouse
     abstract down(position:Point, insideWorkspace?:boolean):void;
-    abstract up(position:Point):void;
+    abstract up(position:Point, insideWorkspace?:boolean):void;
     abstract move(position:Point):void;
     abstract doubleClick(position:Point,insideWorkspace?:boolean):void;
     selected:boolean;

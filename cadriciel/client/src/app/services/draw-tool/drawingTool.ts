@@ -8,12 +8,17 @@ export abstract class DrawingTool extends InputObserver{
     width:number;
     primary_color:string;
     ignoreNextUp:boolean;
+    inProgress:HTMLElement;
+    drawing:HTMLElement;
 
     abstract createPath(path:Point[], doubleClickCheck?:boolean):void;
   
-    constructor(selected:boolean, width:number, primary_color:string,shortcut:number){
-      
+    constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number){
+
       super(shortcut,selected);
+
+      this.inProgress = inProgess;
+      this.drawing = drawing;
 
       this.width = width;
       this.primary_color = primary_color;
@@ -33,7 +38,7 @@ export abstract class DrawingTool extends InputObserver{
       //the tool should not affect the canvas
       this.isDown = false;
       //clear the progress renderer
-      document.getElementsByName("in-progress")[0].innerHTML = "";
+      this.inProgress.innerHTML = "";
     }
 
     //render the current progress
@@ -43,7 +48,7 @@ export abstract class DrawingTool extends InputObserver{
       let d : string = "";
       d+= this.createPath(this.currentPath,wasDoubleClick);
       //add it to the progress renderer
-      document.getElementsByName("in-progress")[0].innerHTML = d;
+      this.inProgress.innerHTML = d;
     }
 
     //add the progress to the main drawing
@@ -54,9 +59,9 @@ export abstract class DrawingTool extends InputObserver{
       d+= this.createPath(this.currentPath,wasDoubleClick);
 
       //add it to the main drawing
-      document.getElementsByName("drawing")[0].innerHTML += d;
+      this.drawing.innerHTML += d;
       //clear current progress
-      document.getElementsByName("in-progress")[0].innerHTML = "";
+      this.inProgress.innerHTML = "";
 
       this.currentPath = [];
     }

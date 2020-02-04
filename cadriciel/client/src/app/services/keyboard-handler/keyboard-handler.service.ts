@@ -13,8 +13,6 @@ export class KeyboardHandlerService {
   toolObservers:InputObserver[];
   toolshortcuts:number[];
 
-  //viewObservers:any[];
-
   constructor() {
     this.keyString = "";
     this.keyCode = -1;

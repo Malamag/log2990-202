@@ -12,9 +12,9 @@ export class RectangleService extends DrawingTool {
   isSquare:boolean;
   renderMode:number;
 
-  constructor(selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number){
+  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number){
 
-    super(selected,width,primary_color,shortcut);
+    super(inProgess, drawing, selected,width,primary_color,shortcut);
 
     this.secondary_color = secondary_color;
     this.renderMode = renderMode;
