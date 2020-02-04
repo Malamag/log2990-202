@@ -13,6 +13,8 @@ export abstract class InputObserver{
     abstract move(position:Point):void;
     abstract doubleClick(position:Point,insideWorkspace?:boolean):void;
     selected:boolean;
+    abstract goingOutsideCanvas(position:Point):void;
+    abstract goingInsideCanvas(position:Point):void;
 
     constructor(shortcut:number, selected:boolean){
         this.shortcut = shortcut;

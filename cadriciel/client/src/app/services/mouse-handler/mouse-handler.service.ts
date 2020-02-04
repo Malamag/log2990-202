@@ -48,7 +48,10 @@ export class MouseHandlerService {
   }
 
   validPoint(clickedPoint:Point){
-    return (clickedPoint.x + this.svgBox.left >= this.svgBox.left) && (clickedPoint.y + this.svgBox.top >= this.svgBox.top);
+    let validX:boolean = (clickedPoint.x + this.svgBox.left >= this.svgBox.left) && (clickedPoint.x + this.svgBox.left <= this.svgBox.right);
+    let validY:boolean = (clickedPoint.y + this.svgBox.top >= this.svgBox.top) && (clickedPoint.y + this.svgBox.top <= this.svgBox.bottom);
+
+    return validX && validY;
   }
 
   addObserver(newObserver:InputObserver){
@@ -95,9 +98,20 @@ export class MouseHandlerService {
   move(e:MouseEvent){
     this.updatePosition(e.x,e.y);
 
+    let wasInside:boolean = this.insideWorkspace;
     this.insideWorkspace = this.validPoint(this.mouseCanvasPosition);
 
-    this.callObserverMove();
+    if(this.insideWorkspace){
+      if(wasInside){
+        this.callObserverMove();
+      }else{
+        this.callObserverInsideCanvas()
+      }
+    }else{
+      if(wasInside){
+        this.callObserverOutsideCanvas();
+      }
+    }
   }
 
   callObserverMove(){
@@ -118,6 +132,24 @@ export class MouseHandlerService {
     });
   }
 
+  callObserverOutsideCanvas(){
+    //console.log("OutsideCanvas");
+    this.observers.forEach(element => {
+      if(element.selected){
+        element.goingOutsideCanvas(this.mouseCanvasPosition);
+      }
+    });
+  }
+
+  callObserverInsideCanvas(){
+    //console.log("InsideCanvas");
+    this.observers.forEach(element => {
+      if(element.selected){
+        element.goingInsideCanvas(this.mouseCanvasPosition);
+      }
+    });
+  }
+
   callObserverUp(){
     //console.log("UP");
     this.observers.forEach(element => {
@@ -132,6 +164,7 @@ export class MouseHandlerService {
     this.observers.forEach(element => {
       if(element.selected){
         element.doubleClick(this.mouseCanvasPosition,this.insideWorkspace);
+        console.log(this.insideWorkspace);
       }
     });
   }
