@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { Point } from './point';
 import { PencilService } from './pencil.service';
 
@@ -11,8 +11,8 @@ export class BrushService extends PencilService {
 
   textures:{type:string, intensity:number, frequency:number}[];
 
-  constructor(selected:boolean, width:number, primary_color:string, textureNumber:number,shortcut:number){
-    super(selected,width,primary_color,shortcut);
+  constructor(selected:boolean, width:number, primary_color:string, textureNumber:number,shortcut:number, inProgressRef: ElementRef, drawingRef: ElementRef, renderer: Renderer2){
+    super(selected,width,primary_color,shortcut, inProgressRef, drawingRef, renderer);
     this.textureNumber = textureNumber;
 
     this.textures = [

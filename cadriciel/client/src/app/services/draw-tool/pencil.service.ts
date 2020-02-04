@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -8,9 +8,9 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 })
 export class PencilService extends DrawingTool {
 
-  constructor(selected:boolean, width:number, primary_color:string,shortcut:number){
+  constructor(selected:boolean, width:number, primary_color:string,shortcut:number, inProgressRef: ElementRef, drawingRef: ElementRef, renderer: Renderer2){
     
-    super(selected,width,primary_color,shortcut);
+    super(selected,width,primary_color,shortcut, inProgressRef, drawingRef, renderer);
   }
 
   //updating on key change 

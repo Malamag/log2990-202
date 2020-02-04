@@ -1,8 +1,8 @@
 import { Component, OnInit} from '@angular/core';
-import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
+/*import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
-import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
+import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';*/
 
 @Component({
   selector: 'app-svg-draw',
@@ -16,11 +16,11 @@ export class SvgDrawComponent implements OnInit {
   ngOnInit() {
 
     //mouseHandler will need these references to evaluate clicks
-    let svg : HTMLElement | null = document.getElementById("canvas");
+    /*let svg : HTMLElement | null = document.getElementById("canvas");
     let workingSpace : HTMLElement | null = document.getElementById("working-space");
 
     let keyboardHandler : KeyboardHandlerService = new KeyboardHandlerService();
-    let mouseHandler = new MouseHandlerService(svg, workingSpace);
+    //let mouseHandler = new MouseHandlerService(svg, workingSpace);
 
     let toolBox : DrawingTool[] = [];
 
@@ -66,6 +66,6 @@ export class SvgDrawComponent implements OnInit {
     window.addEventListener("keyup", function(e){
       keyboardHandler.reset(e);
     });
-
+*/
   }
 }

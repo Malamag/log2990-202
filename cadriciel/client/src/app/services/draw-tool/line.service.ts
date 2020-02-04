@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef, Renderer2 } from '@angular/core';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -13,9 +13,9 @@ export class LineService extends DrawingTool {
   forcedAngle:boolean;
   currentPos:Point;
 
-  constructor(selected:boolean, width:number, primary_color:string, showJunctions:boolean, junctionWidth:number,shortcut:number){
+  constructor(selected:boolean, width:number, primary_color:string, showJunctions:boolean, junctionWidth:number,shortcut:number, inProgressRef: ElementRef, drawingRef: ElementRef, renderer: Renderer2){
 
-    super(selected,width,primary_color,shortcut);
+    super(selected,width,primary_color,shortcut, inProgressRef, drawingRef, renderer);
 
     this.showJunctions = showJunctions;
     this.junctionRadius = junctionWidth/2;

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, /*ElementRef*/ } from '@angular/core';
 import { Point } from '../draw-tool/point';
 import { InputObserver } from '../draw-tool/input-observer';
 

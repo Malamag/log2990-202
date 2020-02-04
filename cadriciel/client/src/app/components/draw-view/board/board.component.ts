@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, /*HostListener,*/ ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { Canvas } from 'src/app/models/Canvas.model';
 import { Subscription } from 'rxjs';
 import { CanvasBuilderService } from 'src/app/services/services/drawing/canvas-builder.service';
@@ -25,61 +25,37 @@ export class BoardComponent implements OnInit {
   color1 = "1167B1";
   color2 = "000000";
 
+  @ViewChild('inProgress', {static: false}) inProgressRef: ElementRef;
+  @ViewChild('drawing', {static: false}) drawingRef: ElementRef;
+ 
+
   // for the tools
-  pencil = ToolCreator.CreatePencil(false,10,this.color1,67);
-  rect = ToolCreator.CreateRectangle(false,3,this.color1,this.color2, 2,49);
-  line = ToolCreator.CreateLine(false,7,this.color1,true,15,76);
-  brush = ToolCreator.CreateBrush(false,10,this.color1, 1,87);
+  pencil = ToolCreator.CreatePencil(false,10,this.color1,67, this.inProgressRef, this.drawingRef, this.renderer);
+  rect = ToolCreator.CreateRectangle(false,3,this.color1,this.color2, 2,49, this.inProgressRef, this.drawingRef, this.renderer);
+  line = ToolCreator.CreateLine(false,7,this.color1,true,15,76, this.inProgressRef, this.drawingRef, this.renderer);
+  brush = ToolCreator.CreateBrush(false,10,this.color1, 1,87, this.inProgressRef, this.drawingRef, this.renderer);
 
-  // for the handlers
-  svg : HTMLElement | null = document.getElementById("canvas");
-  workingSpace : HTMLElement | null = document.getElementById("working-space");
   
-  keyboardHandler : KeyboardHandlerService = new KeyboardHandlerService();
-  mouseHandler = new MouseHandlerService(this.svg, this.workingSpace);
 
-  constructor(private canvBuildService: CanvasBuilderService, private interactionService: InteractionService) {
+
+  constructor(private canvBuildService: CanvasBuilderService, private interactionService: InteractionService, private renderer: Renderer2) {
+    
     this.toolsMap.set("Rectangle", this.rect);
     this.toolsMap.set("Crayon", this.pencil);
     this.toolsMap.set("Pinceau", this.brush);
     this.toolsMap.set("Ligne", this.line);
-    this.toolsMap.forEach(element => {
-      this.keyboardHandler.addToolObserver(element);
-      this.mouseHandler.addObserver(element);
-    });    
-  }
-  // mouse listeners
-  @HostListener('mousemove',['$event'])
-  onMousemove(event: MouseEvent){
-    this.mouseHandler.move(event);
   }
 
-  @HostListener('mousedown', ['$event'])
-  onMousedown(event: MouseEvent){
-    this.mouseHandler.down(event)
-  }
-
-  @HostListener("mouseUp", ['$event'])
-  onMouseUp(event: MouseEvent){
-    this.mouseHandler.up(event)
-  }
-
-  // keyboard listeners
-  @HostListener("keydown", ['$event'])
-  onKeyDown(event: KeyboardEvent){
-    this.keyboardHandler.logkey(event);
-  }
-
-  @HostListener("keyup", ['$event'])
-  onKeyUp(event: KeyboardEvent){
-    this.keyboardHandler.reset(event);
-  }
-
+  
+  //todo: Replace window with hose
   
   ngOnInit() {
     this.interactionService.$selectedTool.subscribe(tool =>{
       // pour gerer les cas derrreur ou il trouve pas loutil dans la map
       if(this.toolsMap.get(tool)){
+        this.toolsMap.forEach(element => {
+          element.selected = false;
+        });
         let selectedTool: DrawingTool =this.toolsMap.get(tool);
         selectedTool.selected= true;
         console.log(tool + " has been sellected")
@@ -87,7 +63,7 @@ export class BoardComponent implements OnInit {
     })
     this.initCanvas();
     this.canvBuildService.emitCanvas();
-   /* let svg : HTMLElement | null = document.getElementById("canvas");
+    let svg : HTMLElement | null = document.getElementById("canvas");
     let workingSpace : HTMLElement | null = document.getElementById("working-space");
 
     let keyboardHandler : KeyboardHandlerService = new KeyboardHandlerService();
@@ -107,13 +83,15 @@ export class BoardComponent implements OnInit {
     });
 
     //Keyboard listeners
+    
     window.addEventListener("keydown", function(e){
       keyboardHandler.logkey(e);
     });
     window.addEventListener("keyup", function(e){
       keyboardHandler.reset(e);
-    });*/
+    });
   }
+ 
 
   initCanvas() {
     this.canvasSubscr = this.canvBuildService.canvSubject.subscribe(
@@ -130,6 +108,7 @@ export class BoardComponent implements OnInit {
   
   ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus
     this.canvasSubscr.unsubscribe();
+    
   }
 
 }

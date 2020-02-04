@@ -1,7 +1,11 @@
 import {InputObserver } from './input-observer';
 import { Point } from './point';
+import { ElementRef, Renderer2 } from '@angular/core';
 
 export abstract class DrawingTool extends InputObserver{
+    inProgressRef: ElementRef;
+    drawingRef: ElementRef;
+    //renderer: Renderer2;
     isDown:boolean;
     currentPath:Point[];
     selected:boolean;
@@ -11,10 +15,12 @@ export abstract class DrawingTool extends InputObserver{
 
     abstract createPath(path:Point[], doubleClickCheck?:boolean):void;
   
-    constructor(selected:boolean, width:number, primary_color:string,shortcut:number){
+    constructor(selected:boolean, width:number, primary_color:string,shortcut:number, inProgressRef: ElementRef, drawingRef: ElementRef,private renderer: Renderer2){
       
       super(shortcut,selected);
-
+      this.inProgressRef = inProgressRef;
+      this.drawingRef = drawingRef; 
+      //this.renderer = renderer;
       this.isDown = false;
       this.selected = selected;
       this.width = width;
@@ -30,21 +36,25 @@ export abstract class DrawingTool extends InputObserver{
       this.ignoreNextUp = true;
       this.isDown = false;
       console.log("cancel");
-      document.getElementsByName("in-progress")[0].innerHTML = "";
+      this.renderer.appendChild(this.inProgressRef, " ");
+      //document.getElementsByName("in-progress")[0].innerHTML = "";
     }
 
     updateProgress(wasDoubleClick?:boolean){
       let d : string = "";
       d+= this.createPath(this.currentPath,wasDoubleClick);
-      document.getElementsByName("in-progress")[0].innerHTML = d;
+      this.renderer.appendChild(this.inProgressRef, d);
+      //document.getElementsByName("in-progress")[0].innerHTML = d;
     }
 
     updateDrawing(wasDoubleClick?:boolean){
       let d : string = "";
       d+= this.createPath(this.currentPath,wasDoubleClick);
 
-      document.getElementsByName("drawing")[0].innerHTML += d;
-      document.getElementsByName("in-progress")[0].innerHTML = "";
+      this.renderer.appendChild(this.drawingRef, d);
+      this.renderer.appendChild(this.inProgressRef, "");
+      //document.getElementsByName("drawing")[0].innerHTML += d;
+      //document.getElementsByName("in-progress")[0].innerHTML = "";
 
       this.currentPath = [];
     }
