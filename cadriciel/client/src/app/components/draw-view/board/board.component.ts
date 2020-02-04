@@ -18,12 +18,14 @@ export class BoardComponent implements OnInit {
   canvas: Canvas;
   canvasSubscr: Subscription;
 
+
   constructor(private canvBuildService: CanvasBuilderService) { }
 
   ngOnInit() {
     
     this.initCanvas();
-    this.canvBuildService.emitCanvas();    
+    this.canvBuildService.emitCanvas();   
+    this.canvBuildService.setOnGoing(document.getElementById('canvas'));   //devra être set à true dès l'usage d'un crayon
   }
 
   initCanvas() {

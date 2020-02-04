@@ -17,6 +17,8 @@ export class CanvasBuilderService {
   newCanvas: Canvas;
   canvSubject = new Subject<Canvas>(); // using rxjs to emit the created canvas to another component
 
+  onGoing: boolean;
+
   constructor() { }
   
   getDefWidth(): number {
@@ -34,12 +36,12 @@ export class CanvasBuilderService {
     return DEFCOLOR;
   }
 
-  setCanvasFromForm(widthInput: number, heightInput: number, colorInput: string) {
+  setCanvasFromForm(widthInput: number, heightInput: number, colorInput: string): void {
     colorInput = '#' + colorInput;
     this.newCanvas= new Canvas(widthInput, heightInput, colorInput);
   }
 
-  getDefCanvas() {
+  getDefCanvas(): Canvas {
     return new Canvas(this.getDefWidth(), this.getDefHeight(), this.getDefColor());
   }
 
@@ -56,6 +58,11 @@ export class CanvasBuilderService {
       space += CENTERX;
     }
     return colorCircles;
+  }
+
+  setOnGoing(element: HTMLElement | null): void {
+    const DEFAULT_ELEMS = 0; //can be changed
+    this.onGoing = (element !=null && element.childElementCount > DEFAULT_ELEMS);
   }
 
 }

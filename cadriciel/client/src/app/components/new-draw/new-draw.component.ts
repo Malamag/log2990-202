@@ -10,24 +10,29 @@ import { Router } from '@angular/router';
   templateUrl: './new-draw.component.html',
   styleUrls: ['./new-draw.component.scss']
 })
-export class NewDrawComponent implements OnInit {
+export class NewDrawComponent  implements OnInit  {
   paletteArray = this.canvasBuilder.getPalleteAttributes();
 
   newDrawForm: FormGroup;
   width: number;
   height: number;
   color: string;
-  
+
+  hasOnGoingDraw: boolean = false;
+  continue: boolean = true;
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
               private winService: ModalWindowService,
-              private router: Router) { }
+              private router: Router) {
+
+  }
 
   ngOnInit() {
     this.initForm();
     this.width = this.canvasBuilder.getDefWidth();
     this.height = this.canvasBuilder.getDefHeight();
     this.color = this.canvasBuilder.getDefColor();
+    
   }
 
   initForm() {
@@ -45,12 +50,19 @@ export class NewDrawComponent implements OnInit {
   }
 
   onSubmit() {
-    const values = this.newDrawForm.value;
+    if(this.canvasBuilder.onGoing){
+      this.continue = confirm("Un dessin es déjà en cours. Voulez-vous continuer?")
+    }
 
-    this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight,values.canvColor);
-    this.canvasBuilder.emitCanvas();
-    this.closeModalForm();
-    this.router.navigate(["/vue"]);
+    if(this.continue){
+      const values = this.newDrawForm.value;
+      this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight,values.canvColor);
+      this.canvasBuilder.emitCanvas();
+      this.closeModalForm();
+      this.router.navigate(["/vue"]);
+    }
+    
+
   }
   
   closeModalForm() {

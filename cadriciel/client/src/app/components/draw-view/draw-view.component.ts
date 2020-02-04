@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
-import { toolsItems, welcomeItem} from '../../functionality'
+import { toolsItems, welcomeItem} from '../../functionality';
 
 @Component({
   selector: 'app-draw-view',
@@ -15,12 +15,13 @@ export class DrawViewComponent implements OnInit {
   selectedTool: string;
 
   @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
-  renderer: Renderer2
+  renderer: Renderer2;
 
   constructor() { }
 
   ngOnInit() {
-  }
+    
+  }  
 
     /**Cette fonction peut à la limite être mise dans un service... */
   buttonAction(name:string){
