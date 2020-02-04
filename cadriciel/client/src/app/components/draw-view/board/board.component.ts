@@ -1,7 +1,7 @@
-import { Component, OnInit, /*HostListener,*/ ViewChild, ElementRef, /*Renderer2 */} from '@angular/core';
+import { Component, OnInit, /*HostListener,*/ ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { Canvas } from 'src/app/models/Canvas.model';
 import { Subscription } from 'rxjs';
-import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+import { CanvasBuilderService } from 'src/app/services/services/drawing/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import{ToolCreator} from '../../../services/draw-tool/toolCreator'
 import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
@@ -25,31 +25,38 @@ export class BoardComponent implements OnInit {
   color1 = "1167B1";
   color2 = "000000";
 
-  @ViewChild('inProgress', {static: false}) inProgressRef: ElementRef;
-  @ViewChild('drawing', {static: false}) drawingRef: ElementRef;
+  @ViewChild('in-progress', {static: false}) inProgressRef: ElementRef<HTMLElement>;
+  @ViewChild('drawing', {static: false}) drawingRef: ElementRef<HTMLElement>;
  
 
   // for the tools
-  pencil = ToolCreator.CreatePencil(false,10,this.color1,67, /*this.inProgressRef, this.drawingRef, this.renderer*/);
-  rect = ToolCreator.CreateRectangle(false,3,this.color1,this.color2, 2,49, /*this.inProgressRef, this.drawingRef, this.renderer*/);
-  line = ToolCreator.CreateLine(false,7,this.color1,true,15,76,/* this.inProgressRef, this.drawingRef, this.renderer*/);
-  brush = ToolCreator.CreateBrush(false,10,this.color1, 1,87, /*this.inProgressRef, this.drawingRef, this.renderer*/);
+
+  
 
   
 
 
-  constructor(private canvBuildService: CanvasBuilderService, private interactionService: InteractionService, /*private renderer: Renderer2*/) {
-    
-    this.toolsMap.set("Rectangle", this.rect);
-    this.toolsMap.set("Crayon", this.pencil);
-    this.toolsMap.set("Pinceau", this.brush);
-    this.toolsMap.set("Ligne", this.line);
+  constructor(private canvBuildService: CanvasBuilderService, private interactionService: InteractionService, private renderer: Renderer2) {
+
   }
 
   
   //todo: Replace window with hose
   
   ngOnInit() {
+
+    let tc:ToolCreator = new ToolCreator(document.getElementsByName("in-progress")[0], document.getElementsByName("drawing")[0]);
+
+    let pencil = tc.CreatePencil(false,10,this.color1,67);
+    let rect = tc.CreateRectangle(false,3,this.color1,this.color2, 2,49);
+    let line = tc.CreateLine(false,7,this.color1,true,15,76);
+    let brush = tc.CreateBrush(false,10,this.color1, 1,87);
+
+    this.toolsMap.set("Rectangle", rect);
+    this.toolsMap.set("Crayon", pencil);
+    this.toolsMap.set("Pinceau", brush);
+    this.toolsMap.set("Ligne", line);
+
     this.interactionService.$selectedTool.subscribe(tool =>{
       // pour gerer les cas derrreur ou il trouve pas loutil dans la map
       if(this.toolsMap.get(tool)){

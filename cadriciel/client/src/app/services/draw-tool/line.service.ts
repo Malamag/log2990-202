@@ -1,4 +1,4 @@
-import { Injectable, /*ElementRef, Renderer2*/ } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -13,9 +13,9 @@ export class LineService extends DrawingTool {
   forcedAngle:boolean;
   currentPos:Point;
 
-  constructor(selected:boolean, width:number, primary_color:string, showJunctions:boolean, junctionWidth:number,shortcut:number,/* inProgressRef: ElementRef, drawingRef: ElementRef, renderer: Renderer2*/){
+  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string, showJunctions:boolean, junctionWidth:number,shortcut:number){
 
-    super(selected,width,primary_color,shortcut, /*inProgressRef, drawingRef, renderer*/);
+    super(inProgess,drawing, selected,width,primary_color,shortcut);
 
     this.showJunctions = showJunctions;
     this.junctionRadius = junctionWidth/2;
@@ -71,7 +71,10 @@ export class LineService extends DrawingTool {
     //save currentPosition for real time update when we go from forced to loose angle
     this.currentPos = position;
 
-    //save mouse position
+    //add the same point twice in case the mouse doesnt move on first point
+    if(this.currentPath.length == 0){
+      this.currentPath.push(position);
+    }
     this.currentPath.push(position);
     
     //update progress, it is not a double click
@@ -109,32 +112,45 @@ export class LineService extends DrawingTool {
   //mouse doubleClick with line in hand
   doubleClick(position:Point, mouseInsideWorkspace:boolean){
 
-    //we need 4 or more points in path because origin (1) + current (1) + double click (2) = 4 is the minimum
-    if(this.currentPath.length >= 4){
+    //we can only end a line inside the canvas
+    if(mouseInsideWorkspace){
+      //we need 4 or more points in path because origin (1) + current (1) + double click (2) = 4 is the minimum
+      if(this.currentPath.length >= 4){
 
-      //only if double click is valid
-      if(mouseInsideWorkspace){
+        //only if double click is valid
+        if(mouseInsideWorkspace){
 
-        //the pencil should not affect the canvas
-        this.isDown = false;
+          //the pencil should not affect the canvas
+          this.isDown = false;
   
-        if(this.currentPath.length >= 2){
-          //Down is called twice before we get here -> remove the excess 2 points
-          this.currentPath.pop();
-          this.currentPath.pop();
+          if(this.currentPath.length >= 2){
+            //Down is called twice before we get here -> remove the excess 2 points
+            this.currentPath.pop();
+            this.currentPath.pop();
+          }
+  
+
+          //add everything to the canvas, it is a double click
+          this.updateDrawing(true);
+
+          //reset angle mode to default (loose)
+          this.forcedAngle = false;
         }
-  
-
-        //add everything to the canvas, it is a double click
-        this.updateDrawing(true);
-
-        //reset angle mode to default (loose)
-        this.forcedAngle = false;
+      }else{
+        //we have no points -> can't start a line with a double click
+        this.cancel();
       }
-    }else{
-      //we have no points -> can't start a line with a double click
-      this.cancel();
     }
+  }
+
+  //when we go from inside to outside the canvas
+  goingOutsideCanvas(position:Point){
+    //nothing happens since we don't want to end the preview
+  }
+
+  //when we go from outside to inside the canvas
+  goingInsideCanvas(position:Point){
+    //nothing happens since we keep updating the preview
   }
 
   //Creates an svg path that connects every points of currentPath

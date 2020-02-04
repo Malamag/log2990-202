@@ -1,4 +1,4 @@
-import { Injectable, /*ElementRef, Renderer2*/ } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -12,13 +12,14 @@ export class RectangleService extends DrawingTool {
   isSquare:boolean;
   renderMode:number;
 
-  constructor(selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number, /*inProgressRef: ElementRef, drawingRef: ElementRef, renderer: Renderer2*/){
+  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number){
 
-    super(selected,width,primary_color,shortcut, /*inProgressRef, drawingRef, renderer*/);
+    super(inProgess, drawing, selected,width,primary_color,shortcut);
 
     this.secondary_color = secondary_color;
-    this.isSquare = false;
     this.renderMode = renderMode;
+
+    this.isSquare = false;
   }
 
   //updating on key change
@@ -81,6 +82,16 @@ export class RectangleService extends DrawingTool {
     //since its down -> up -> down -> up -> doubleClick, nothing more happens for the renctangle
   }
 
+  //when we go from inside to outside the canvas
+  goingOutsideCanvas(){
+    //nothing happens since we might want to readjust the rectangle once back in
+  }
+
+  //when we go from outside to inside the canvas
+  goingInsideCanvas(){
+    //nothing happens since we just update the preview
+  }
+
   //Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
   createPath(p:Point[]){
 
@@ -126,6 +137,11 @@ export class RectangleService extends DrawingTool {
 
     //end the divider
     s += "</g>"
+
+    //can't have rectangle with 0 width or height
+    if(w == 0 || h == 0){
+      s = "";
+    }
 
     return s;
   }

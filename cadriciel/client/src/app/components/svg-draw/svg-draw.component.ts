@@ -1,8 +1,10 @@
+/*
+
 import { Component, OnInit} from '@angular/core';
-/*import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
+import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
-import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';*/
+import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
 
 @Component({
   selector: 'app-svg-draw',
@@ -16,11 +18,11 @@ export class SvgDrawComponent implements OnInit {
   ngOnInit() {
 
     //mouseHandler will need these references to evaluate clicks
-    /*let svg : HTMLElement | null = document.getElementById("canvas");
+    let svg : HTMLElement | null = document.getElementById("canvas");
     let workingSpace : HTMLElement | null = document.getElementById("working-space");
 
     let keyboardHandler : KeyboardHandlerService = new KeyboardHandlerService();
-    //let mouseHandler = new MouseHandlerService(svg, workingSpace);
+    let mouseHandler = new MouseHandlerService(svg, workingSpace);
 
     let toolBox : DrawingTool[] = [];
 
@@ -28,13 +30,13 @@ export class SvgDrawComponent implements OnInit {
     let color1 = "1167B1";
     let color2 = "000000";
 
-    
-
     //Create all the tools
-    let pencil = ToolCreator.CreatePencil(false,10,color1,67);
-    let rect = ToolCreator.CreateRectangle(false,3,color1,color2, 2,49);
-    let line = ToolCreator.CreateLine(true,7,color1,true,15,76);
-    let brush = ToolCreator.CreateBrush(false,10,color1, 1,87);
+    let tc = new ToolCreator(document.getElementsByName("in-progress")[0], document.getElementsByName("drawing")[0]);
+
+    let pencil = tc.CreatePencil(true,10,color1,67);
+    let rect = tc.CreateRectangle(false,3,color1,color2, 2,49);
+    let line = tc.CreateLine(false,3,color2,true,15,76);
+    let brush = tc.CreateBrush(false,50,color1, 4,87);
 
     //Fill the toolbox
     toolBox.push(pencil);
@@ -66,6 +68,8 @@ export class SvgDrawComponent implements OnInit {
     window.addEventListener("keyup", function(e){
       keyboardHandler.reset(e);
     });
-*/
+
   }
 }
+
+*/

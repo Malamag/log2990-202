@@ -15,23 +15,23 @@
         (click)="changeActivatedButton(i)">{{i.shortcutName}}</button>
     </div>
 
-    <button mat-raised-button id="outilButton">Fonctionalités</button>
-
     <div *ngFor="let i of menuItems;">
       <button mat-raised-button class="guide-selection-button"
-        [ngClass]="(activeButton === i)? 'selected':'notSelected'" (click)="changeActivatedButton(i)">
-        <mat-icon>{{i.icon}}</mat-icon> {{i.shortcutName}}
-      </button>
+        [ngClass]="(activeButton === i)? 'selected':'notSelected'"
+        (click)="changeActivatedButton(i)">{{i.shortcutName}}</button>
     </div>
 
     <!-- Display tool button -->
-    <button mat-raised-button id="outilButton">Outils</button>
+    <button mat-raised-button class="guide-selection-button" (click)="showTools=!showTools"
+      [ngClass]="showTools ? 'selected':'notSelected'">Outils</button>
 
     <!-- Tools button -->
-    <div *ngFor="let i of toolsItems;">
-      <button mat-raised-button class="guide-selection-button"
-        [ngClass]="(activeButton === i)? 'selected':'notSelected'" (click)="changeActivatedButton(i)">
-        <img src={{i.icon}}> {{i.shortcutName}}</button>
+    <div *ngIf="showTools">
+      <div *ngFor="let i of toolsItems;">
+        <button mat-raised-button class="guide-selection-button"
+          [ngClass]="(activeButton === i)? 'selected':'notSelected'"
+          (click)="changeActivatedButton(i)">{{i.shortcutName}}</button>
+      </div>
     </div>
 
   </nav>
@@ -41,10 +41,8 @@
   </div>
 
   <div>
-    <button mat-raised-button id="previousButton" [ngClass]="(activePrecedentButton)? 'shownButton':'hiddenButton'"
-      (click)="previousPage()">Précédent</button>
-    <button mat-raised-button id="nextButton" [ngClass]="(activeNextButton)? 'shownButton':'hiddenButton'"
-      (click)="nextPage()">Suivant</button>
+    <button mat-raised-button id="previousButton" (click)="previousPage()">Précédent</button>
+    <button mat-raised-button id="nextButton" (click)="nextPage()">Suivant</button>
   </div>
 
 </section>
