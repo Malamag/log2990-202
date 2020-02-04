@@ -4,31 +4,3 @@
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }*/
 
 // from https://stackoverflow.com/questions/58888180/angular-material-slider-scaling-issues
-.mat-slider.mat-slider-horizontal .mat-slider-wrapper {
-    width: 20%;
-    bottom: 30px;
-}
-.mat-slider.mat-slider-horizontal .mat-slider-track-wrapper {
-    height: 3px;
-    border-radius: 10px;
-    
-}
-.mat-slider.mat-slider-horizontal .mat-slider-track-background,
-.mat-slider.mat-slider-horizontal .mat-slider-track-fill {
-    width: 30px;
-    height: 100%;
-
-}
-.mat-slider.mat-slider-horizontal .mat-slider-track-fill {
-    background-color: white;
-}
-.mat-accent .mat-slider-thumb {
-    height: 19px;
-    width: 15px;
-    background-color: white;
-    border: solid 2px gray;
-    
-}
-.mat-slider-min-value:not(.mat-slider-thumb-label-showing) .mat-slider-thumb {
-    background-color: white;
-}
