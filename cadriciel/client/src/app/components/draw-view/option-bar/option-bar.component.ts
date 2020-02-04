@@ -3,6 +3,7 @@ import {menuItems} from '../../../functionality';
 import { ModalWindowService } from 'src/app/services/modal-window.service';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
+import { KeyboardHandlerService } from 'src/app/services/services/keyboard-handler/keyboard-handler.service';
 
 @Component({
   selector: 'app-option-bar',
@@ -11,12 +12,23 @@ import { UserManualComponent } from '../../user-manual/user-manual.component';
 })
 export class OptionBarComponent implements OnInit {
   funcMenu = menuItems;
-  constructor(private winService: ModalWindowService) { }
+  constructor(private winService: ModalWindowService) {
+    const O_KEY = 79; //keycode for letter o
 
-  ngOnInit() {
+    let kbHandler: KeyboardHandlerService = new KeyboardHandlerService();
+    window.addEventListener("keydown", function(e){ //adding shortcut for new draw form
+      kbHandler.logkey(e);
+
+      if(kbHandler.ctrlDown && kbHandler.keyCode === O_KEY) {
+        winService.openWindow(NewDrawComponent);
+      }
+    });
   }
 
-  
+  ngOnInit() {
+    
+  }
+
   openNewDrawForm(){
     this.winService.openWindow(NewDrawComponent);
   }

@@ -4,23 +4,13 @@ import { CanvasBuilderService } from '../../services/services/drawing/canvas-bui
 import { ModalWindowService } from 'src/app/services/modal-window.service';
 import { Router } from '@angular/router';
 
-import { ModalObserver } from './modal-observer';
-import { KeyboardHandlerService } from '../../services/services/keyboard-handler/keyboard-handler.service';
 
 @Component({
   selector: 'app-new-draw',
   templateUrl: './new-draw.component.html',
   styleUrls: ['./new-draw.component.scss']
 })
-export class NewDrawComponent extends ModalObserver implements OnInit  {
-
-  update(keyboard: KeyboardHandlerService): void {
-    throw new Error("Method not implemented.");
-  }
-  cancel(): void {
-    throw new Error("Method not implemented.");
-  }
-
+export class NewDrawComponent  implements OnInit  {
   paletteArray = this.canvasBuilder.getPalleteAttributes();
 
   newDrawForm: FormGroup;
@@ -32,7 +22,7 @@ export class NewDrawComponent extends ModalObserver implements OnInit  {
               private canvasBuilder: CanvasBuilderService,
               private winService: ModalWindowService,
               private router: Router) {
-    super();
+
   }
 
   ngOnInit() {
