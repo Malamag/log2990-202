@@ -17,9 +17,8 @@ export class OptionBarComponent implements OnInit {
 
     let kbHandler: KeyboardHandlerService = new KeyboardHandlerService();
     window.addEventListener("keydown", function(e){ //adding shortcut for new draw form
-      
-      e.preventDefault(); // overrides browser behavior 
-
+       
+      e.stopPropagation(); 
       kbHandler.logkey(e);
 
       if(kbHandler.ctrlDown && kbHandler.keyCode === O_KEY) {
