@@ -1,7 +1,7 @@
 import { Component, OnInit, /*HostListener,*/ ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { Canvas } from 'src/app/models/Canvas.model';
 import { Subscription } from 'rxjs';
-import { CanvasBuilderService } from 'src/app/services/services/drawing/canvas-builder.service';
+import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import{ToolCreator} from '../../../services/draw-tool/toolCreator'
 import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
