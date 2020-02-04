@@ -1,20 +1,16 @@
-<svg version="1.1" class="svgElem" id = "canvas"
-        baseProfile="full"
-        [style.width]= "width"  [style.height]= "height"
-        xmlns="http://www.w3.org/2000/svg" [style.background-color]="backColor">
-        <!--Here goes inner svg -->
-      
-                    
-</svg>
+<div id ="workingSpace" #workingSpace>
+        <svg  #canvas id ="canvas" version="1.1" class="svgElem"
+           baseProfile="full"
+                [style.width]= "width"  [style.height]= "height"
+                xmlns="http://www.w3.org/2000/svg">
+                <!--Here goes inner svg -->
+                <rect width= "100%" height= "100%" [style.fill]="backColor"/>
+                <g name = "filters"></g>
 
-<!--
-        *** Code taken directly from svg-draw ***
-
-        <svg id = "canvas" width = "500" height = "500">
-        <rect width="100%" height="100%" fill="lightgrey"/>
-        <g name = "filters"></g>
-        <g name = "drawing">
+                <g name = "drawing" #drawing>
     
-        </g>
-        <g name = "in-progress"></g>
-    </svg>-->
+                </g>
+                <g name = "in-progress" #inProgress></g>
+                        
+        </svg>
+</div>
