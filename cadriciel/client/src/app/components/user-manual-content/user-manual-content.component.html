@@ -3,8 +3,7 @@
     <div *ngFor="let i of welcomeItem">
         <div *ngIf="(activeButton === i)">
             <h2 id="title">{{i.name}} </h2>
-            <p id="shortDescription">
-                {{i.shortDescription}}</p>
+            <hr>
             <p id="description">
                 {{i.description}}</p>
         </div>
@@ -12,9 +11,9 @@
 
     <div *ngFor="let i of menuItems">
         <div *ngIf="(activeButton === i)">
-            <h2 id="title">{{i.name}} </h2>
-            <p id="shortDescription">
-                {{i.shortDescription}}</p>
+            <h2 id="title">{{i.name}} <mat-icon>{{i.icon}}</mat-icon>
+            </h2>
+            <hr>
             <p id="description">
                 {{i.description}}</p>
         </div>
@@ -22,11 +21,11 @@
 
     <div *ngFor="let i of toolsItems">
         <div *ngIf="(activeButton === i)">
-            <h2 id="title">{{i.name}} </h2>
-            <p id="shortDescription">
-                {{i.shortDescription}}</p>
+            <h2 id="title">{{i.name}} <img src={{i.icon}}> </h2>
+            <hr>
             <p id="description">
                 {{i.description}}</p>
+
         </div>
     </div>
 

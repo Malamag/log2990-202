@@ -44,6 +44,15 @@
   color:black;
 }
 
+#outilButton{
+  width: 100%;
+  background-color: rgb(133, 133, 133);
+  border-radius: 0px;
+  text-align: center;
+  font-weight: lighter;
+  color:black;
+}
+
 button:hover {
   background-color: rgb(150, 150, 150);
 }
@@ -79,3 +88,17 @@ button:focus {
     }
 }
 */
+.hiddenButton{
+  display: none;
+}
+
+
+.shownButton{
+  display: block;
+}
+#previousButton{
+  float: left;
+}
+#nextButton{
+  float: right;
+}
