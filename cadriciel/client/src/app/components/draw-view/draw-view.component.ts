@@ -39,7 +39,7 @@ export class DrawViewComponent implements OnInit {
 
     /**Cette fonction peut à la limite être mise dans un service... */
   buttonAction(name:string){
-    if(name === "pipette" || name === "sélectionner" || name ==="défaire" || name === "refaire"){this.openToolOptions = false;}
+    if(name === "Pipette" || name === "Sélectionner" || name ==="défaire" || name === "refaire"){this.openToolOptions = false;}
     else if(this.selectedTool!= undefined){
       if(this.selectedTool === name){
         this.openToolOptions= !this.openToolOptions;
