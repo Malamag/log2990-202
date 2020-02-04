@@ -15,7 +15,7 @@ export class DrawViewComponent implements OnInit {
   selectedTool: string;
 
   @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
-  renderer: Renderer2
+  renderer: Renderer2;
 
   constructor() { }
 

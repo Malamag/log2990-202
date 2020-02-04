@@ -17,6 +17,8 @@ export class NewDrawComponent  implements OnInit  {
   width: number;
   height: number;
   color: string;
+
+  hasOnGoingDraw: boolean = false;
   
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
@@ -30,6 +32,7 @@ export class NewDrawComponent  implements OnInit  {
     this.width = this.canvasBuilder.getDefWidth();
     this.height = this.canvasBuilder.getDefHeight();
     this.color = this.canvasBuilder.getDefColor();
+    
   }
 
   initForm() {

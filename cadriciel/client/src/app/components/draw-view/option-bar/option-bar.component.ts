@@ -4,6 +4,7 @@ import { ModalWindowService } from 'src/app/services/modal-window.service';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
 import { KeyboardHandlerService } from 'src/app/services/services/keyboard-handler/keyboard-handler.service';
+import { CanvasBuilderService } from 'src/app/services/services/drawing/canvas-builder.service';
 
 @Component({
   selector: 'app-option-bar',
@@ -12,13 +13,13 @@ import { KeyboardHandlerService } from 'src/app/services/services/keyboard-handl
 })
 export class OptionBarComponent implements OnInit {
   funcMenu = menuItems;
-  constructor(private winService: ModalWindowService) {
+  constructor(private winService: ModalWindowService,
+              private canvasBuilder: CanvasBuilderService) {
     const O_KEY = 79; //keycode for letter o
 
     let kbHandler: KeyboardHandlerService = new KeyboardHandlerService();
     window.addEventListener("keydown", function(e){ //adding shortcut for new draw form
        
-      e.stopPropagation(); 
       kbHandler.logkey(e);
 
       if(kbHandler.ctrlDown && kbHandler.keyCode === O_KEY) {
@@ -32,7 +33,11 @@ export class OptionBarComponent implements OnInit {
   }
 
   openNewDrawForm(){
-    this.winService.openWindow(NewDrawComponent);
+    if(this.canvasBuilder.onGoing) {
+      if(confirm("Un dessin est déjà en cours! voulez-vous continuer?")) {
+        this.winService.openWindow(NewDrawComponent);
+      }
+    }
   }
   
   openUserGuide() {
