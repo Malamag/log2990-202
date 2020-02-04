@@ -24,6 +24,9 @@ export const colorData = {
 
     mycx : 100,
     mycy : 50,
-
-    mytranslation : ""
+    isColorSelecting : false,
+    isOnColorPicker :  false,
+    isMouseup :  false,
+    mytranslation : "",
+    lastColor :  ['#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff','#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff']
 }

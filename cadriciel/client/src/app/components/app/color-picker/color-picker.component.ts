@@ -16,7 +16,7 @@ export class ColorPickerComponent {
     ngOnInit() {}
 
     setColor( button : number, color : number[] ) { // DONE
-       this.colorPicking.setColor(button, color)
+       this.colorPicking.setColor(color)
     }
 
     hueSelector( event : MouseEvent ) : void { //DONE
@@ -26,7 +26,45 @@ export class ColorPickerComponent {
     slSelector(event : MouseEvent) : void {
         this.colorPicking.slSelector(event);
     }
-
+    onMouseUp(): void{
+        this.colorPicking.onMouseUp();
+    }
+    onMouseDown(event : MouseEvent ): void{
+        this.colorPicking.onMouseDown(event);
+    }
+    onMouseDown2(event : MouseEvent ): void{
+        this.colorPicking.onMouseDown2(event);
+    }
+    firstLastColorSelect( event : MouseEvent ) : void {
+        this.colorPicking.firstLastColorSelect(event);
+    }
+    secondLastColorSelect( event : MouseEvent ) : void {
+        this.colorPicking.secondLastColorSelect(event);
+    }
+    thirdLastColorSelect( event : MouseEvent ) : void {
+        this.colorPicking.thirdLastColorSelect(event);
+    }
+    fourthLastColorSelect( event : MouseEvent ) : void {
+        this.colorPicking.fourthLastColorSelect(event);
+    }
+    fifthLastColorSelect( event : MouseEvent ) : void {
+        this.colorPicking.fifthLastColorSelect(event);
+    }
+    sixthLastColorSelect( event : MouseEvent ) : void {
+        this.colorPicking.sixthLastColorSelect(event);
+    }
+    seventhLastColorSelect( event : MouseEvent ) : void {
+        this.colorPicking.seventhLastColorSelect(event);
+    }
+    eighthLastColorSelect( event : MouseEvent ) : void {
+        this.colorPicking.eighthLastColorSelect(event);
+    }
+    ninethLastColorSelect( event : MouseEvent ) : void {
+        this.colorPicking.ninethLastColorSelect(event);
+    }
+    tenthLastColorSelect( event : MouseEvent ) : void {
+        this.colorPicking.tenthLastColorSelect(event);
+    }
     // convert rbg to h value of hsl.
     swapInputDisplay(event : any) {
         this.colorPicking.swapInputDisplay(event);
@@ -112,7 +150,6 @@ export class ColorPickerComponent {
                 '-webkit-text-fill-color': 'transparent'};
     }
     get svgStyles(): any {
-        //return { 'fill': this.primaryColor,'stroke':'black','stroke-width':1};
         return { 'transform' : 'translate(100px,100px) rotate(' + this.cData.currentHue + 'deg) translate(-100px,-100px)'};
     }
     get gradientStyles(): any{
@@ -125,37 +162,37 @@ export class ColorPickerComponent {
         return { 'stop-color': this.cData.secondaryColor };
     }
     get lastColor1 (): any {
-        return { 'fill': this.lastColor[0] };
+        return { 'fill': this.cData.lastColor[0] };
     }
     get lastColor2 (): any {
-        return { 'fill': this.lastColor[1] };
+        return { 'fill': this.cData.lastColor[1] };
     }
     get lastColor3 (): any {
-        return { 'fill': this.lastColor[2] };
+        return { 'fill': this.cData.lastColor[2] };
     }
     get lastColor4 (): any {
-        return { 'fill': this.lastColor[3] };
+        return { 'fill': this.cData.lastColor[3] };
     }
     get lastColor5 (): any {
-        return { 'fill': this.lastColor[4] };
+        return { 'fill': this.cData.lastColor[4] };
     }
     get lastColor6 (): any {
-        return { 'fill': this.lastColor[5] };
+        return { 'fill': this.cData.lastColor[5] };
     }
     get lastColor7 (): any {
-        return { 'fill': this.lastColor[6] };
+        return { 'fill': this.cData.lastColor[6] };
     }
     get lastColor8 (): any {
-        return { 'fill': this.lastColor[7] };
+        return { 'fill': this.cData.lastColor[7] };
     }
     get lastColor9 (): any {
-        return { 'fill': this.lastColor[8] };
+        return { 'fill': this.cData.lastColor[8] };
     }
     get lastColor10 (): any {
-        return { 'fill': this.lastColor[9] };
+        return { 'fill': this.cData.lastColor[9] };
     }
     get cursorStyles(): any{
-        return { 'transform' : 'translate(100px,100px)  rotate(' + this.cData.currentHue + 'deg) translate(-100px,-100px) translate(' + this.cData.mycx + 'px,' + this.cData.mycy + 'px)'};
+        return { 'transform' : 'translate(' + this.cData.mycx + 'px,' + this.cData.mycy + 'px)'};
     }
 
     // change primary alpha when primary slide change
