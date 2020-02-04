@@ -30,15 +30,15 @@ export class BoardComponent implements OnInit {
  
 
   // for the tools
-  pencil = ToolCreator.CreatePencil(false,10,this.color1,67, this.inProgressRef, this.drawingRef, this.renderer);
-  rect = ToolCreator.CreateRectangle(false,3,this.color1,this.color2, 2,49, this.inProgressRef, this.drawingRef, this.renderer);
-  line = ToolCreator.CreateLine(false,7,this.color1,true,15,76, this.inProgressRef, this.drawingRef, this.renderer);
-  brush = ToolCreator.CreateBrush(false,10,this.color1, 1,87, this.inProgressRef, this.drawingRef, this.renderer);
+  pencil = ToolCreator.CreatePencil(false,10,this.color1,67, /*this.inProgressRef, this.drawingRef, this.renderer*/);
+  rect = ToolCreator.CreateRectangle(false,3,this.color1,this.color2, 2,49, /*this.inProgressRef, this.drawingRef, this.renderer*/);
+  line = ToolCreator.CreateLine(false,7,this.color1,true,15,76,/* this.inProgressRef, this.drawingRef, this.renderer*/);
+  brush = ToolCreator.CreateBrush(false,10,this.color1, 1,87, /*this.inProgressRef, this.drawingRef, this.renderer*/);
 
   
 
 
-  constructor(private canvBuildService: CanvasBuilderService, private interactionService: InteractionService, private renderer: Renderer2) {
+  constructor(private canvBuildService: CanvasBuilderService, private interactionService: InteractionService, /*private renderer: Renderer2*/) {
     
     this.toolsMap.set("Rectangle", this.rect);
     this.toolsMap.set("Crayon", this.pencil);
