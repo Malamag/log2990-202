@@ -1,4 +1,4 @@
-import { Component, OnInit, /*HostListener,*/ ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, /*HostListener,*/ ViewChild, ElementRef, /*Renderer2 */} from '@angular/core';
 import { Canvas } from 'src/app/models/Canvas.model';
 import { Subscription } from 'rxjs';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
