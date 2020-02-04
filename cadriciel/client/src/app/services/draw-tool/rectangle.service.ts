@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
+import { Injectable, /*ElementRef, Renderer2*/ } from '@angular/core';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -12,9 +12,9 @@ export class RectangleService extends DrawingTool {
   isSquare:boolean;
   renderMode:number;
 
-  constructor(selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number, inProgressRef: ElementRef, drawingRef: ElementRef, renderer: Renderer2){
+  constructor(selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number, /*inProgressRef: ElementRef, drawingRef: ElementRef, renderer: Renderer2*/){
 
-    super(selected,width,primary_color,shortcut, inProgressRef, drawingRef, renderer);
+    super(selected,width,primary_color,shortcut, /*inProgressRef, drawingRef, renderer*/);
 
     this.secondary_color = secondary_color;
     this.isSquare = false;
