@@ -11,8 +11,7 @@ export class UserManualComponent implements OnInit {
   toolsItems = toolsItems;
   menuItems = menuItems;
   welcomeItem = welcomeItem;
-  activeNextButton: boolean = true;
-  activePrecedentButton: boolean = false;
+  showTools: boolean = false;
 
   func: Array<any> = welcomeItem.concat(menuItems, toolsItems);
   activeButton: any = this.welcomeItem[0];
@@ -20,6 +19,7 @@ export class UserManualComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<UserManualComponent>) { }
 
   ngOnInit() {
+
   }
 
   closeModal() {
@@ -28,28 +28,21 @@ export class UserManualComponent implements OnInit {
 
   changeActivatedButton(actualButton: any) {
     this.activeButton = actualButton;
-    this.activeButton === this.func[this.func.length - 1] ? this.activeNextButton = false : this.activeNextButton = true;
-    this.activeButton === this.func[0] ? this.activePrecedentButton = false : this.activePrecedentButton = true;
   }
 
   nextPage() {
-    this.activePrecedentButton = true;
     for (let i = this.func.length - 2; i >= 0; i--) {
-      if (this.func[i].shortcutName === this.activeButton.shortcutName)
+      if (this.func[i].shortcutName === this.activeButton.shortcutName) {
         this.activeButton = this.func[i + 1];
-      if (this.activeButton === this.func[this.func.length - 1])
-        this.activeNextButton = false;
+      }
     }
   }
 
   previousPage() {
-
-    this.activeNextButton = true;
     for (let i = 1; i < this.func.length; ++i) {
-      if (this.func[i].shortcutName === this.activeButton.shortcutName)
+      if (this.func[i].shortcutName === this.activeButton.shortcutName) {
         this.activeButton = this.func[i - 1];
-      if (this.activeButton === this.func[0])
-        this.activePrecedentButton = false;
+      }
     }
   }
 }

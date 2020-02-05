@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ColorPickingService } from '../../services/colorPicker/color-picking.service';
+import { ColorPickingService } from '../../services/services/colorPicker/color-picking.service';
 import { colorData } from './color-data';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 

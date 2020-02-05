@@ -1,9 +1,9 @@
 import { Injectable} from '@angular/core';
 
-import { Canvas } from '../../models/Canvas.model';
+import { Canvas } from '../../../models/Canvas.model';
 
 import { Subject } from 'rxjs';
-import { colorCircles } from '../../palette';
+import { colorCircles } from '../../../palette';
 
 
 @Injectable({

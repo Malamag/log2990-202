@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {colorData} from '../color-data';
-import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
+import { ColorPickingService } from 'src/app/services/services/colorPicker/color-picking.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
