@@ -40,6 +40,7 @@ export class ToolBoxComponent implements OnInit {
 
     /**Cette fonction peut à la limite être mise dans un service... */
   buttonAction(name:string){
+    this.interactionService.emitSelectedTool(name);
     if(name === "Pipette" || name === "Sélectionner" || name ==="défaire" || name === "refaire"){this.openToolOptions = false;}
     else if(this.selectedTool!= undefined){
       if(this.selectedTool === name){

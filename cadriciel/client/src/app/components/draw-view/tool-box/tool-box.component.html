@@ -1,6 +1,6 @@
 <div class= "drawingTools" *ngFor="let func of funcTools; index as id">
     <div>
-        <button class="toolBtn" mat-icon-button color="primary" matTooltip={{func.name}} matTooltipPosition = "after">
+        <button class="toolBtn" mat-icon-button color="primary" matTooltip={{func.name}} matTooltipPosition = "after" (click)="buttonAction(func.name)">
             <img src={{func.icon}} class="toolIcon"> 
         </button>    
     </div>
