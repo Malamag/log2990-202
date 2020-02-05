@@ -1,41 +1,57 @@
-.body{
+.body {
     margin: 0;
 }
 
 .container {
-
     display: grid;
-  
+
     grid-template-areas:
-    "header header header"
-    "nav content side";
-  
+        'header header header'
+        'nav content side';
+
     grid-template-columns: 20%;
     grid-template-rows: 10%;
     grid-gap: 0;
-  
-    height: 90vh;
-  }
 
-  header {
+    height: 90vh;
+}
+
+header {
     grid-area: header;
-    
-  }
-  
-  nav {
+}
+
+nav {
     grid-area: nav;
-    background-color: rgb(58, 58, 58);
-    margin-left:0;
-  }
-  
-  main{
-    background-color: rgb(92, 92, 92);
+    background-color: blue;
+   
+}
+
+main {
+    background-color: green;
     grid-area: content;
     overflow: scroll;
-  }
-  
-  aside {
-    
+}
+
+aside {
+    background-color: red;
     grid-area: side;
     margin-right: 0;
-  }
+}
+
+.wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    width: auto;
+}
+
+#colorPicker{
+  float:left; 
+}
+
+#toolBox{
+  float:left; 
+}
+#toolAttributes{
+  float:left; 
+} 
