@@ -3,7 +3,9 @@ import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
-
+import { Subscription} from 'rxjs';
+import { Canvas } from 'src/app/models/Canvas.model';
+import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 @Component({
   selector: 'app-svg-draw',
   templateUrl: './svg-draw.component.html',
@@ -11,7 +13,12 @@ import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
 })
 export class SvgDrawComponent implements OnInit {
 
-  constructor() { }
+  constructor(private canvBuilder: CanvasBuilderService) { }
+  canvas: Canvas;
+  canvasSubscr: Subscription;
+  width: number;
+  height: number;
+  backColor: string;
 
   ngOnInit() {
 
@@ -72,5 +79,24 @@ export class SvgDrawComponent implements OnInit {
       keyboardHandler.reset(e);
     });
 
+    this.initCanvas();
+
+  }
+  initCanvas() {
+    this.canvasSubscr = this.canvBuilder.canvSubject.subscribe(
+      (canvas: Canvas) => {
+        if(canvas === undefined || canvas === null) {
+          canvas = this.canvBuilder.getDefCanvas();
+        }
+        this.width = canvas.canvasWidth;
+        this.height= canvas.canvasHeight;
+        this.backColor = canvas.canvasColor;
+      }
+    );
+  }
+  
+  ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus
+    this.canvasSubscr.unsubscribe();
+    
   }
 }
