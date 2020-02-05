@@ -10,7 +10,7 @@ import { NewDrawComponent } from './components/new-draw/new-draw.component';
 import { DrawViewComponent } from './components/draw-view/draw-view.component';
 import { ColorPickerComponent} from './components/color-picker/color-picker.component'
 import { UserManualComponent } from './components/user-manual/user-manual.component';
-import { UserManualContentComponent } from './components/user-manual-content/user-manual-content.component';
+import { UserManualContentComponent } from './components/user-manual/user-manual-content/user-manual-content.component';
 import { CanvasBuilderService } from './services/drawing/canvas-builder.service';
 import { ModalWindowService } from './services/window-handler/modal-window.service';
 import { ColorPickingService } from './services/colorPicker/color-picking.service';
