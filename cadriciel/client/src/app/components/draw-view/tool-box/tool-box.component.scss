@@ -1,11 +1,11 @@
 
 .drawingTools{
-    width: 5%;
+    width: 20%;
     border-right: thick;
-
+    float: left;
     padding-bottom: 1vh; 
     
-    margin-left: 15%;
+    margin-left: 0;
 }
 
 
@@ -29,7 +29,7 @@
 .toolBtn {
     height: 5vh;
     width: 5vh;
-    margin-left:50%; // Éléments centrés
+    margin-left:0; // Éléments centrés
     
 }
 
