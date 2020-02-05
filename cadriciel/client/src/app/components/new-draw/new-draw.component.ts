@@ -62,6 +62,7 @@ export class NewDrawComponent  implements OnInit  {
       this.router.navigate(["/vue"]);
     }
     
+    
 
   }
   
