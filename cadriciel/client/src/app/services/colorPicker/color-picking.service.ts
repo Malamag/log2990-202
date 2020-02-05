@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ColorConvertingService } from './color-converting.service';
 import { colorData } from '../../components/color-picker/color-data';
 import { Subject } from 'rxjs';
-import {  ChoosenColors } from '../../models/ChoosenColors.model';
+import { ChoosenColors } from '../../models/ChoosenColors.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +55,8 @@ export class ColorPickingService {
     this.hexInputRefresh();
     if ( this.cData.isMouseup ) {
         this.updateLastColor( this.cData.hexColorInput );
+        this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
+        this.emitColors();
     }
   }
   hueSelector( event : MouseEvent ) : void {
@@ -221,6 +223,8 @@ export class ColorPickingService {
     this.cData.LightnessSliderInput = Math.round( hsl[2] * 100);
     this.setSLCursor( this.cData.SaturationSliderInput, this.cData.LightnessSliderInput );
     this.hexInputRefresh();
+    this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
+    this.emitColors();
 }
   swapInputDisplay(event : any) {
     if ( event.srcElement.checked ) {
