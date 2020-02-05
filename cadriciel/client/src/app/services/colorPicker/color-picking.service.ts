@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ColorConvertingService } from './color-converting.service';
-import { colorData } from '../../../components/color-picker/color-data';
+import { colorData } from '../../components/color-picker/color-data';
 import { Subject } from 'rxjs';
-import {  ChoosenColors } from '../../../models/ChoosenColors.model';
+import {  ChoosenColors } from '../../models/ChoosenColors.model';
 
 @Injectable({
   providedIn: 'root'

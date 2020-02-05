@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { CanvasBuilderService } from './canvas-builder.service';
-import { Canvas } from '../../../models/Canvas.model';
+import { Canvas } from '../../models/Canvas.model';
 
 describe('CanvasBuilderService', () => {
   let service: CanvasBuilderService;
