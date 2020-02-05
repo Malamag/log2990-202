@@ -2,8 +2,8 @@
     <!--Cette portion de code peut causer problème. On ne peut appeler qu'une seule fonction, openContext-->
     <app-option-bar ></app-option-bar>
     
-    <mat-sidenav-container class="firstSplit">
-        <mat-sidenav class= "toolsSideBar" mode ="side" opened height = "100%" disableClose fixedInViewPort>
+    <mat-sidenav-container class="firstSplit" [hasBackdrop]="false">
+        <mat-sidenav class= "toolsSideBar" mode="over" opened height = "100%" disableClose> 
             <div class= "drawingTools" *ngFor="let func of funcTools; index as id">
                 <div>
                     <button class="toolBtn" mat-icon-button color="primary" matTooltip={{func.name}} matTooltipPosition = "after" (click)= "buttonAction(func.name)" (click)="getSlectedTool(func.name)">
@@ -12,6 +12,7 @@
                 </div>
             </div>
         </mat-sidenav>
+    
         
         <mat-sidenav #toolsOptionsRef class ="expendedOptions" mode ="side" position ="end" role="navigation" [opened] = openToolOptions>
             <h1>  {{selectedTool}}</h1>

@@ -22,12 +22,11 @@ export class CanvasBuilderService {
   constructor() { }
   
   getDefWidth(): number {
-    const DIV = 1.042; // permet d'égaliser avec les dimensions de l'espace de travail
-    return Math.round(window.innerWidth/DIV); //évite d'avoir des fractions de pixels
+    return Math.round(window.innerWidth); //évite d'avoir des fractions de pixels
   }
 
   getDefHeight(): number {
-    const DIV = 1.11; // idem, mais pour la hauteur
+    const DIV = 1.11; // adjusts after the top bar size
     return Math.round(window.innerHeight/DIV);
   }
 
