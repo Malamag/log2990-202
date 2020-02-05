@@ -1,0 +1,44 @@
+
+.drawingTools{
+    width: 5%;
+    border-right: thick;
+
+    padding-bottom: 1vh; 
+    
+    margin-left: 15%;
+}
+
+
+.toolsSideBar{
+    width: 4vw;
+    height : auto;
+    
+}
+
+
+.toolIcon {
+    height: 3vh;
+    width: 3vh;
+    
+    position: relative; // alignement des icônes avec les boutons respectifs
+    
+
+    filter: invert(100%); // inversion des couleurs afin d'obtenir des icônes blancs
+}
+
+.toolBtn {
+    height: 5vh;
+    width: 5vh;
+    margin-left:50%; // Éléments centrés
+    
+}
+
+/*.toolBtn:focus { // le bouton vire au rose après avoir été cliqué
+    background-color: rgb(255, 34, 107); 
+    
+}*/
+
+
+
+
+

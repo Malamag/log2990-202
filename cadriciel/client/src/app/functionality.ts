@@ -46,7 +46,7 @@
             shortcutName: "Sélectionner",
             shortDescription: "text goes here",
             description: "text goes here1",
-            icon: "../../../assets/images/cursor.png",
+            icon: "../assets/images/cursor.png",
 
         },
         {
@@ -54,49 +54,49 @@
             shortcutName: "Crayon",
             shortDescription: "text goes here",
             description: "text goes here2",
-            icon: "../../../assets/images/pencil.png",
+            icon: "../assets/images/pencil.png",
         },
         {
             name: "Pinceau",
             shortcutName: "Pinceau",
             shortDescription: "text goes here",
             description: "text goes here9",
-            icon: "../../../assets/images/edit-tools.png",
+            icon: "../assets/images/edit-tools.png",
         },
         {
             name: "Plume",
             shortcutName: "Plume",
             shortDescription: "text goes here",
             description: "text goes here4",
-            icon: "../../../assets/images/calligraphie.png",
+            icon: "../assets/images/calligraphie.png",
         },
         {
             name: "Aérosol",
             shortcutName: "Aérosol",
             shortDescription: "text goes here",
             description: "text goes here",
-            icon: "../../../assets/images/spray.png",
+            icon: "../assets/images/spray.png",
         },
         {
             name: "Efface",
             shortcutName: "Efface",
             shortDescription: "text goes here",
             description: "text goes here10",
-            icon: "../../../assets/images/eraser.png",
+            icon: "../assets/images/eraser.png",
         },
         {
             name: "Ligne",
             shortcutName: "Ligne",
             shortDescription: "text goes here",
             description: "text goes here7",
-            icon: "../../../assets/images/graph.png",
+            icon: "../assets/images/graph.png",
         },
         {
             name: "Rectangle",
             shortcutName: "Rectangle",
             shortDescription: "text goes here",
             description: "text goes here3",
-            icon: "../../../assets/images/frame.png",
+            icon: "../assets/images/frame.png",
 
         },
         {
@@ -104,21 +104,21 @@
             shortcutName: "Élipse",
             shortDescription: "text goes here",
             description: "text goes here6",
-            icon: "../../../assets/images/oval.png",
+            icon: "../assets/images/oval.png",
         },
         {
             name: "Polygone",
             shortcutName: "Polygone",
             shortDescription: "text goes here",
             description: "text goes here",
-            icon: "../../../assets/images/hexagon.png",
+            icon: "../assets/images/hexagon.png",
         },
         {
             name: "Pipette",
             shortcutName: "Pipette",
             shortDescription: "text goes here",
             description: "text goes here",
-            icon: "../../../assets/images/lab.png",
+            icon: "../assets/images/lab.png",
         },
 
         {
@@ -128,7 +128,7 @@
             description: "text goes here",
             /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik"
              title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
-            icon: "../../../assets/images/text.png",
+            icon: "../assets/images/text.png",
         },
     
         {
