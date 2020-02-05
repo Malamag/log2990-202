@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ColorConvertingService } from './color-converting.service';
 import { colorData } from '../../components/color-picker/color-data';
-
+import { Subject } from 'rxjs';
+import {  ChoosenColors } from '../../models/ChoosenColors.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,18 @@ import { colorData } from '../../components/color-picker/color-data';
 export class ColorPickingService {
   cData = colorData; // Interface for Color data
 
+  colors: ChoosenColors;
+  colorSubject = new Subject<ChoosenColors>(); // le constuire à qqpart
+
   constructor(private colorConvert: ColorConvertingService) { }
+
+  emitColors() { // observerved-observer design pattern
+    this.colorSubject.next(this.colors);
+  }
+
+  setColorsFromForm(primary: string, secondary: string) {
+    this.colors = new ChoosenColors(primary, secondary);
+  }
   setPrimaryColor( r : number, g : number, b : number ) {
     this.cData.primaryColor = '#' + this.colorConvert.rgbaToHex( r )+ this.colorConvert.rgbaToHex( g ) + this.colorConvert.rgbaToHex( b ) + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255);
   }
@@ -231,7 +243,7 @@ export class ColorPickingService {
         this.cData.currentColorSelect = 'Secondary';
         color = this.cData.secondaryColor;
     }
-    this.cData.hexColorInput = color.substring(1,6);
+    this.cData.hexColorInput = color.substring(1,7);
     this.updateSliderField( color );
   }
 
@@ -257,7 +269,7 @@ export class ColorPickingService {
               this.updateSliderField( this.cData.primaryColor );
           }
           else {
-              this.cData.primaryColor = '#' + this.cData.redHexInput + this.cData.hexColorInput.substring( 2, 6 ) + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
+              this.cData.secondaryColor = '#' + this.cData.redHexInput + this.cData.hexColorInput.substring( 2, 6 ) + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
               this.updateSliderField( this.cData.secondaryColor );
           }
           this.cData.hexColorInput = this.cData.redHexInput + this.cData.hexColorInput.substring( 2, 6 );
@@ -271,7 +283,7 @@ export class ColorPickingService {
               this.updateSliderField( this.cData.primaryColor );
           }
           else {
-              this.cData.primaryColor = '#' + this.cData.hexColorInput.substring( 0, 2 ) + this.cData.greenHexInput + this.cData.hexColorInput.substring( 4, 6 ) + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
+              this.cData.secondaryColor = '#' + this.cData.hexColorInput.substring( 0, 2 ) + this.cData.greenHexInput + this.cData.hexColorInput.substring( 4, 6 ) + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
               this.updateSliderField( this.cData.secondaryColor );
           }
           this.cData.hexColorInput = this.cData.hexColorInput.substring( 0, 2 ) + this.cData.greenHexInput + this.cData.hexColorInput.substring( 4, 6 );
@@ -285,7 +297,7 @@ export class ColorPickingService {
               this.updateSliderField( this.cData.primaryColor );
           }
           else {
-              this.cData.primaryColor = '#' + this.cData.hexColorInput.substring( 0, 4 ) + this.cData.blueHexInput + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
+              this.cData.secondaryColor = '#' + this.cData.hexColorInput.substring( 0, 4 ) + this.cData.blueHexInput + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
               this.updateSliderField( this.cData.secondaryColor );
           }
       }
@@ -325,12 +337,12 @@ export class ColorPickingService {
   }
 
   slSliderRefresh() : void {
-      if ( this.cData.primarySelect === true ) {
+      if ( this.cData.primarySelect ) {
           this.setPrimaryColor( this.cData.RedSliderInput, this.cData.GreenSliderInput, this.cData.BlueSliderInput );
           this.updateLastColor( this.cData.primaryColor );
       }
       else{        
-          this.setPrimaryColor( this.cData.RedSliderInput, this.cData.GreenSliderInput, this.cData.BlueSliderInput );
+          this.setSecondaryColor( this.cData.RedSliderInput, this.cData.GreenSliderInput, this.cData.BlueSliderInput );
           this.updateLastColor( this.cData.secondaryColor );
       }
       this.setSLCursor( this.cData.SaturationSliderInput, this.cData.LightnessSliderInput );
@@ -354,5 +366,6 @@ export class ColorPickingService {
     }
   }
 
+  
 }
 
