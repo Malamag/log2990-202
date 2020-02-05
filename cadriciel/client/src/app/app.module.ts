@@ -34,6 +34,7 @@ import {
 import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
 import { ColorFormComponent } from './components/color-picker/color-form/color-form.component';
+import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.component';
 
 
 
@@ -48,7 +49,8 @@ import { ColorFormComponent } from './components/color-picker/color-form/color-f
         UserManualContentComponent,
         OptionBarComponent,
         ColorPickerComponent,
-        ColorFormComponent
+        ColorFormComponent,
+        ToolBoxComponent
     ],
     imports: [
         BrowserModule,
