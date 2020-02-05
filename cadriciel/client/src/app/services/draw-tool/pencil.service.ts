@@ -1,4 +1,4 @@
-import { Injectable, /*ElementRef, Renderer2 */} from '@angular/core';
+import { Injectable } from '@angular/core';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -8,9 +8,9 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 })
 export class PencilService extends DrawingTool {
 
-  constructor(selected:boolean, width:number, primary_color:string,shortcut:number, /*inProgressRef: ElementRef, drawingRef: ElementRef, renderer: Renderer2*/){
+  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number){
     
-    super(selected,width,primary_color,shortcut,/* inProgressRef, drawingRef, renderer*/);
+    super(inProgess, drawing, selected,width,primary_color,shortcut);
   }
 
   //updating on key change 
@@ -35,7 +35,7 @@ export class PencilService extends DrawingTool {
   }
 
   //mouse up with pencil in hand
-  up(position:Point){
+  up(position:Point, insideWorkspace:boolean){
 
     //in case we changed tool while the mouse was down
     if(!this.ignoreNextUp){
@@ -43,8 +43,11 @@ export class PencilService extends DrawingTool {
       //the pencil should not affect the canvas
       this.isDown = false;
 
-      //add everything to the canvas
-      this.updateDrawing();
+      //no path is created while outside the canvas
+      if(insideWorkspace){
+        //add everything to the canvas
+        this.updateDrawing();
+      }
     }
   }
 

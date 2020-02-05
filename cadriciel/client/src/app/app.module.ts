@@ -31,7 +31,7 @@ import {
     MatSliderModule,
     MatTooltipModule
 } from '@angular/material';
-import { BoardComponent } from './components/draw-view/board/board.component';
+import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
 import { ColorFormComponent } from './components/color-picker/color-form/color-form.component';
 
@@ -43,7 +43,7 @@ import { ColorFormComponent } from './components/color-picker/color-form/color-f
         NewDrawComponent,
         EntryPointComponent,
         DrawViewComponent,
-        BoardComponent,
+        SvgDrawComponent,
         UserManualComponent,
         UserManualContentComponent,
         OptionBarComponent,
