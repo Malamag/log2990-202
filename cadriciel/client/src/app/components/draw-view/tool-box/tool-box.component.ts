@@ -10,10 +10,6 @@ import { InteractionService } from 'src/app/services/service-interaction/interac
 export class ToolBoxComponent implements OnInit {
   funcTools = toolsItems;
   
-
-  openToolOptions: boolean = false;
-  
-  selectedTool: string;
   // I doubt if we can delete these two
   @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
   renderer: Renderer2
@@ -31,28 +27,12 @@ export class ToolBoxComponent implements OnInit {
     this.interactionService.emitSelectedTool(this.selectingToolsMap.get(event.key));
   }
 
-  getSlectedTool(name: string){
-    this.interactionService.emitSelectedTool(name);
-  }
   ngOnInit() {
     
   }  
 
-    /**Cette fonction peut à la limite être mise dans un service... */
-  buttonAction(name:string){
+  buttonAction(name:string){ // on click, emit the selected tool name
     this.interactionService.emitSelectedTool(name);
-    if(name === "Pipette" || name === "Sélectionner" || name ==="défaire" || name === "refaire"){this.openToolOptions = false;}
-    else if(this.selectedTool!= undefined){
-      if(this.selectedTool === name){
-        this.openToolOptions= !this.openToolOptions;
-      }
-      else{this.openToolOptions = true;}  
-    }
-    else{this.openToolOptions = true;}
-
-   
-    this.selectedTool= name;
-    
   }
 
   
