@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
@@ -11,7 +11,7 @@ import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.se
   templateUrl: './svg-draw.component.html',
   styleUrls: ['./svg-draw.component.scss']
 })
-export class SvgDrawComponent implements OnInit {
+export class SvgDrawComponent implements OnInit, OnDestroy {
 
   constructor(private canvBuilder: CanvasBuilderService) { }
   canvas: Canvas;
@@ -21,7 +21,7 @@ export class SvgDrawComponent implements OnInit {
   backColor: string;
 
   ngOnInit() {
-
+    this.initCanvas();
     //mouseHandler will need these references to evaluate clicks
     let svg : HTMLElement | null = document.getElementById("canvas");
     let workingSpace : HTMLElement | null = document.getElementById("working-space");
@@ -79,7 +79,7 @@ export class SvgDrawComponent implements OnInit {
       keyboardHandler.reset(e);
     });
 
-    this.initCanvas();
+    
 
   }
   initCanvas() {
@@ -93,6 +93,7 @@ export class SvgDrawComponent implements OnInit {
         this.backColor = canvas.canvasColor;
       }
     );
+    this.canvBuilder.emitCanvas();
   }
   
   ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus
