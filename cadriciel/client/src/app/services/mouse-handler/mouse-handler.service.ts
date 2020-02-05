@@ -27,9 +27,7 @@ export class MouseHandlerService {
     this.svgCanvas = svgCanvas;
     this.workingSpace = workingSpace;
 
-    if(this.svgCanvas != null){
-      this.svgBox = this.svgCanvas.getBoundingClientRect();
-    }
+    this.updateWindowSize();
 
     this.mouseWindowPosition = new Point(0,0);
     this.mouseCanvasPosition = this.windowToCanvas(this.mouseWindowPosition);
@@ -39,6 +37,12 @@ export class MouseHandlerService {
     this.numberOfClicks = 0;
     this.isFirstClick = true;
     this.upFromDoubleClick = false;
+  }
+
+  updateWindowSize(){
+    if(this.svgCanvas != null){
+      this.svgBox = this.svgCanvas.getBoundingClientRect();
+    }
   }
 
   windowToCanvas(windowPosition:Point){
