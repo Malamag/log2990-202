@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {menuItems} from '../../../functionality';
-import { ModalWindowService } from 'src/app/services/modal-window.service';
+import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';

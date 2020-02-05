@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CanvasBuilderService } from '../../services/drawing/canvas-builder.service';
-import { ModalWindowService } from 'src/app/services/modal-window.service';
+import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { Router } from '@angular/router';
 
 

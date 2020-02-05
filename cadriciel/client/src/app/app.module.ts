@@ -12,7 +12,7 @@ import { ColorPickerComponent} from './components/color-picker/color-picker.comp
 import { UserManualComponent } from './components/user-manual/user-manual.component';
 import { UserManualContentComponent } from './components/user-manual-content/user-manual-content.component';
 import { CanvasBuilderService } from './services/drawing/canvas-builder.service';
-import { ModalWindowService } from './services/modal-window.service';
+import { ModalWindowService } from './services/window-handler/modal-window.service';
 import { ColorPickingService } from './services/colorPicker/color-picking.service';
 import { ColorConvertingService } from './services/colorPicker/color-converting.service';
 

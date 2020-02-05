@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar,MatSnackBarConfig, MatDialog} from '@angular/material';
 import { menuItems } from '../../functionality';
-import { ModalWindowService } from "../../services/modal-window.service";
+import { ModalWindowService } from "../../services/window-handler/modal-window.service";
 import { NewDrawComponent } from '../new-draw/new-draw.component';
 import { UserManualComponent } from '../user-manual/user-manual.component';
 

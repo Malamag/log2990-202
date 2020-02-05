@@ -50,7 +50,7 @@ export class SvgDrawComponent implements OnInit {
 
     window.addEventListener("resize",function(){
       console.log("resize");
-      //mouseHandler.updateWindowSize();
+      //mouseHandler.updateWindowSize(); //?
     });
 
     //Mouse listeners

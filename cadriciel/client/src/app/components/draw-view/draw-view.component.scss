@@ -1,54 +1,41 @@
-
-.drawingTools{
-    width: 5%;
-    border-right: thick;
-
-    padding-bottom: 1vh; 
-    
-    margin-left: 15%;
+.body{
+    margin: 0;
 }
 
-.expendedOptions{
-    width : 25%;
-}
+.container {
 
-.svgElem{
-    position:relative;
-}
+    display: grid;
+  
+    grid-template-areas:
+    "header header header"
+    "nav content side";
+  
+    grid-template-columns: 20%;
+    grid-template-rows: 10%;
+    grid-gap: 0;
+  
+    height: 90vh;
+  }
 
-.toolsSideBar{
-    width: 4vw;
-    height : auto;
-    
-}
-
-mat-sidenav-content{
-    height: 91vh;
-}
-
-.toolIcon {
-    height: 3vh;
-    width: 3vh;
-    
-    position: relative; // alignement des icônes avec les boutons respectifs
-    
-
-    filter: invert(100%); // inversion des couleurs afin d'obtenir des icônes blancs
-}
-
-.toolBtn {
-    height: 5vh;
-    width: 5vh;
-    margin-left:50%; // Éléments centrés
-    
-}
-
-/*.toolBtn:focus { // le bouton vire au rose après avoir été cliqué
-    background-color: rgb(255, 34, 107); 
-    
-}*/
-
-
-
-
-
+  header {
+    grid-area: header;
+    background-color: red;
+  }
+  
+  nav {
+    grid-area: nav;
+    background-color: blue;
+    margin-left:0;
+  }
+  
+  main{
+    background-color: green;
+    grid-area: content;
+    overflow: scroll;
+  }
+  
+  aside {
+    background-color: red;
+    grid-area: side;
+    margin-right: 0;
+  }
