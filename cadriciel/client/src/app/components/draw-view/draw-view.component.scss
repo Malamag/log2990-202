@@ -22,18 +22,17 @@ header {
 
 nav {
     grid-area: nav;
-    background-color: blue;
+    background-color: rgb(56, 56, 56);
    
 }
 
 main {
-    background-color: green;
+    background-color: rgb(43, 43, 43);
     grid-area: content;
     overflow: scroll;
 }
 
 aside {
-    background-color: red;
     grid-area: side;
     margin-right: 0;
 }
