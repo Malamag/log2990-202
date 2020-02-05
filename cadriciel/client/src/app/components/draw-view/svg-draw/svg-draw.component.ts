@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy} from '@angular/core';
 import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
-import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
+import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
 import { Subscription} from 'rxjs';
 import { Canvas } from 'src/app/models/Canvas.model';
@@ -57,7 +57,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy {
 
     window.addEventListener("resize",function(){
       console.log("resize");
-      //mouseHandler.updateWindowSize(); //?
+      mouseHandler.updateWindowSize();
     });
 
     //Mouse listeners
