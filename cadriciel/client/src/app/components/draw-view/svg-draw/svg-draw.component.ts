@@ -95,6 +95,10 @@ export class SvgDrawComponent implements OnInit, OnDestroy {
     );
     this.canvBuilder.emitCanvas();
   }
+
+  ngAfterViewInit(){
+    window.dispatchEvent(new Event('resize'));
+  }
   
   ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus
     this.canvasSubscr.unsubscribe();
