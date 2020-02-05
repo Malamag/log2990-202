@@ -4,6 +4,7 @@ import { colorData } from '../../components/color-picker/color-data';
 import { Subject } from 'rxjs';
 import { ChoosenColors } from '../../models/ChoosenColors.model';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -250,24 +251,56 @@ export class ColorPickingService {
     this.cData.hexColorInput = color.substring(1,7);
     this.updateSliderField( color );
   }
-
-  onHexColorInput() : void { //unmoved
-    if (this.cData.hexColorInput.length === 6) {
-        this.updateSliderField( this.cData.hexColorInput );
-        if ( this.cData.primarySelect ) {
-            this.cData.primaryColor = '#' + this.cData.hexColorInput + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
+  validateHex(hexString : string) : any {
+    let hexOk : any = true;
+    let valideNubmer : any[] = [];
+    for(let i : number = 0; i < hexString.length; i++) {
+      for( let j: number = 0; j < this.cData.hexNumber.length; j++){
+        valideNubmer[i] = false;
+        if ( hexString[i] === this.cData.hexNumber[j] ){
+          valideNubmer[i] = true;
+          break;
         }
-        else {
-            this.cData.secondaryColor = '#' + this.cData.hexColorInput + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
-        }
-        this.cData.redHexInput = this.cData.hexColorInput.substring(0, 2);
-        this.cData.blueHexInput = this.cData.hexColorInput.substring(2, 4);
-        this.cData.greenHexInput = this.cData.hexColorInput.substring(4, 6);
+      }
     }
+    let badChar : string = '';
+    for( let z : number = 0; z < valideNubmer.length; z++){
+      if(!valideNubmer[z]){
+        badChar += hexString[z];
+        hexOk = false;
+      }
+    } 
+    if (!hexOk && hexString.length > 0){
+      if (badChar.length < 2){
+        window.alert( badChar + " n'est pas un chiffre hexadécimale valide!");
+      }
+      else{
+        window.alert( badChar + " ne sont pas des chiffres hexadécimale valide!");
+      }
+      
+    }
+    return hexOk;
+  }
+  onHexColorInput() : void { //unmoved
+      if ( this.cData.hexColorInput.length === 6) {
+        if( this.validateHex(this.cData.hexColorInput) ) {
+          this.updateSliderField( this.cData.hexColorInput );
+          if ( this.cData.primarySelect ) {
+              this.cData.primaryColor = '#' + this.cData.hexColorInput + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
+          }
+          else {
+              this.cData.secondaryColor = '#' + this.cData.hexColorInput + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
+          }
+          this.cData.redHexInput = this.cData.hexColorInput.substring(0, 2);
+          this.cData.greenHexInput = this.cData.hexColorInput.substring(2, 4);
+          this.cData.blueHexInput = this.cData.hexColorInput.substring(4, 6);
+        }
+      }
   }
 
   onRedHexInput() : void { //unmoved
-      if (this.cData.redHexInput.length === 2) {
+      if ( this.cData.redHexInput.length === 2) {
+        if ( this.validateHex(this.cData.redHexInput + this.cData.greenHexInput + this.cData.blueHexInput) ) {
           if ( this.cData.primarySelect ) {
               this.cData.primaryColor = '#' + this.cData.redHexInput + this.cData.hexColorInput.substring( 2, 6 ) + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
               this.updateSliderField( this.cData.primaryColor );
@@ -277,11 +310,13 @@ export class ColorPickingService {
               this.updateSliderField( this.cData.secondaryColor );
           }
           this.cData.hexColorInput = this.cData.redHexInput + this.cData.hexColorInput.substring( 2, 6 );
+        }
       }
   }
 
   onGreenHexInput() : void { //unmoved
       if (this.cData.greenHexInput.length === 2) {
+        if (this.validateHex(this.cData.redHexInput + this.cData.greenHexInput + this.cData.blueHexInput)){
           if ( this.cData.primarySelect ) {
               this.cData.primaryColor = '#' + this.cData.hexColorInput.substring( 0, 2 ) + this.cData.greenHexInput + this.cData.hexColorInput.substring( 4, 6 )  + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
               this.updateSliderField( this.cData.primaryColor );
@@ -291,11 +326,13 @@ export class ColorPickingService {
               this.updateSliderField( this.cData.secondaryColor );
           }
           this.cData.hexColorInput = this.cData.hexColorInput.substring( 0, 2 ) + this.cData.greenHexInput + this.cData.hexColorInput.substring( 4, 6 );
+        }
       }
   }
 
   onBlueHexInput() : void { //unmoved
       if (this.cData.blueHexInput.length === 2) {
+        if(this.validateHex(this.cData.redHexInput + this.cData.greenHexInput + this.cData.blueHexInput)){
           if ( this.cData.primarySelect ) {
               this.cData.primaryColor = '#' + this.cData.hexColorInput.substring( 0, 4 ) + this.cData.blueHexInput + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
               this.updateSliderField( this.cData.primaryColor );
@@ -304,6 +341,7 @@ export class ColorPickingService {
               this.cData.secondaryColor = '#' + this.cData.hexColorInput.substring( 0, 4 ) + this.cData.blueHexInput + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
               this.updateSliderField( this.cData.secondaryColor );
           }
+        }
       }
       this.cData.hexColorInput = this.cData.hexColorInput.substring( 0, 4 ) + this.cData.blueHexInput;
   }
