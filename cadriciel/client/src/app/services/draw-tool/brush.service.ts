@@ -32,6 +32,7 @@ export class BrushService extends PencilService {
   }
 
   updateAttributes(){
+    
     this.interaction.$toolsAttributes.subscribe(obj=>{
       if(obj)
         this.attr = new ToolsAttributes(obj.lineThickness, obj.texture)

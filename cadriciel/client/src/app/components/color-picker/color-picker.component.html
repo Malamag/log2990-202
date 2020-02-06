@@ -119,7 +119,8 @@
             </tr>
             <tr>
                 <td>
-                    <label class="namelabel"><font color="red">Rouge</font></label><label class="numberlabel"><font>{{cData.RedSliderInput}}</font></label>
+                    <app-color-form></app-color-form>
+                   <!-- <label class="namelabel"><font color="red">Rouge</font></label><label class="numberlabel"><font>{{cData.RedSliderInput}}</font></label>
                     <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.RedSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesRL">
                     <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.redHexInput" placeholder="ff"(input)="onRedHexInput($event)">
                     <label class="namelabel"><font color="green">Vert</font></label><label class="numberlabel"><font>{{cData.GreenSliderInput}}</font></label>
@@ -134,7 +135,7 @@
                     <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.LightnessSliderInput" (change)="onSLSliderInput($event)" [ngStyle]="myInputStylesS">
                     <label class="namelabel">Transparence</label><label class="numberlabel">{{cData.OpacitySliderInput}}%</label>
                     <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.OpacitySliderInput" (change)="sliderAlphaChange()" [ngStyle]="myInputStylesO">  
-                </td>
+                   --></td>
                 <td>
                     <svg height="24" width="30">
                         <polygon points="5,24 25,24 30,12 25,0 5,0" style="fill: rgb(81, 81, 129);stroke:black;stroke-width:1" (mousedown)="tenthLastColorSelect($event)" [ngStyle]="lastColor10"></polygon>

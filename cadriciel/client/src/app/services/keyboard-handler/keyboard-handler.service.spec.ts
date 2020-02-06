@@ -1,15 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-//import { InputObserver } from '../draw-tool/input-observer';
-
 import { KeyboardHandlerService } from './keyboard-handler.service';
 import { InputObserver } from '../draw-tool/input-observer';
 import { PencilService } from '../draw-tool/pencil.service';
+import { InteractionService } from '../service-interaction/interaction.service';
+
 
 describe('KeyboardHandlerService', () => {
   let service = new KeyboardHandlerService();
-  beforeEach(() => TestBed.configureTestingModule({
-    
-  }));
+  
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      
+    });
+  });
 
   it('should be created', () => {
     const service: KeyboardHandlerService = TestBed.get(KeyboardHandlerService);
@@ -22,7 +25,7 @@ describe('KeyboardHandlerService', () => {
     let draw = new HTMLElement();
     draw.innerHTML = "";
 
-    const observer: InputObserver = new PencilService(prog, draw, true,1,"blue", 2);
+    const observer: InputObserver = new PencilService(prog, draw, true,1,"blue", 2, new InteractionService());
     service.addToolObserver(observer);
     expect(service.toolObservers.length).toBe(1);
     expect(service.toolshortcuts.length).toBe(1);

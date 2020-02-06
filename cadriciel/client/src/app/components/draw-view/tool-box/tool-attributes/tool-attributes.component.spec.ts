@@ -2,8 +2,14 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ToolAttributesComponent } from './tool-attributes.component';
 import {ColorPickerComponent} from '../../../color-picker/color-picker.component';
-import { MatSliderModule } from '@angular/material';
-import { FormsModule } from '@angular/forms';
+import {  
+  MatFormFieldModule,
+  MatIconModule, 
+  MatToolbarModule,
+  MatSliderModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ColorFormComponent } from 'src/app/components/color-picker/color-form/color-form.component';
+
 
 describe('ToolAttributesComponent', () => {
   let component: ToolAttributesComponent;
@@ -11,8 +17,15 @@ describe('ToolAttributesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ToolAttributesComponent, ColorPickerComponent ],
-      imports: [MatSliderModule, FormsModule]
+      declarations: [ ToolAttributesComponent, ColorPickerComponent , ColorFormComponent],
+      imports: [
+        MatSliderModule, 
+        FormsModule,
+        MatIconModule, 
+        MatToolbarModule,
+        MatSliderModule,
+        ReactiveFormsModule,
+        MatFormFieldModule]
     })
     .compileComponents();
   }));

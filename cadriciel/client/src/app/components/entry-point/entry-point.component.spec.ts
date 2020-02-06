@@ -5,10 +5,10 @@ import { MatFormFieldModule, MatIconModule, MatSnackBarModule, MatButtonModule, 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
-
 describe('EntryPointComponent', () => {
   let component: EntryPointComponent;
   let fixture: ComponentFixture<EntryPointComponent>;
+ 
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -34,4 +34,26 @@ describe('EntryPointComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should call the new draw form on click', () => {
+    const NAME = "Créer";
+    const openForm = spyOn(component, "openCreateNew");
+    component.execute(NAME);
+    expect(openForm).toHaveBeenCalled();
+  });
+
+  it('should open the user guide on click', () => {
+    const NAME = "Guide";
+    const openGuide = spyOn(component, "openUserManual");
+    component.execute(NAME);
+    expect(openGuide).toHaveBeenCalled();
+  });
+
+  it('should open a snack bar on initialisation', () => {
+    const open = spyOn(component, "onOpen");
+    component.ngOnInit(); // initialisation of entry point
+    expect(open).toHaveBeenCalled();
+  });
+
+
 });

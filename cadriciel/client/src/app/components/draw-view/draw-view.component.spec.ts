@@ -5,15 +5,19 @@ import { OptionBarComponent } from './option-bar/option-bar.component';
 import { ToolBoxComponent } from './tool-box/tool-box.component';
 import { ToolAttributesComponent } from './tool-box/tool-attributes/tool-attributes.component';
 import { SvgDrawComponent } from './svg-draw/svg-draw.component';
+import { ColorFormComponent } from '../color-picker/color-form/color-form.component';
+
 import {
   MatButtonModule, 
   MatTooltipModule, 
   MatIconModule, 
   MatToolbarModule,
   MatSliderModule,
-  MatDialog} from '@angular/material';
+  MatDialog,
+  MatFormFieldModule} from '@angular/material';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 
 describe('DrawViewComponent', () => {
@@ -28,7 +32,8 @@ describe('DrawViewComponent', () => {
         ToolBoxComponent, 
         ToolAttributesComponent, 
         SvgDrawComponent,
-        ColorPickerComponent ],
+        ColorPickerComponent,
+      ColorFormComponent ],
       providers :[{provide :menuItems, toolsItems, welcomeItem},
                   {provide: MatDialog}],
       imports: [
@@ -37,7 +42,9 @@ describe('DrawViewComponent', () => {
         MatIconModule, 
         MatToolbarModule, 
         MatSliderModule,
-        FormsModule],
+        FormsModule,
+        MatFormFieldModule,
+        ReactiveFormsModule]
       
     })
     .compileComponents();

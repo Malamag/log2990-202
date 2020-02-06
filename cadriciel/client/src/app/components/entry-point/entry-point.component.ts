@@ -65,9 +65,6 @@ export class EntryPointComponent implements OnInit {
      break; 
       } 
    } 
-
   }
 
-  
-  
 }
