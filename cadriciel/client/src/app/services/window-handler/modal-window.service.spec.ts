@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ModalWindowService } from './modal-window.service';
-import { MatDialogModule } from '@angular/material';
+import { MatDialogModule, MatDialog } from '@angular/material';
 
 describe('ModalWindowService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    imports: [MatDialogModule]
+    imports: [MatDialogModule],
+    providers: [{provide: MatDialog}]
   }));
 
   it('should be created', () => {

@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ToolAttributesComponent } from './tool-attributes.component';
+import {ColorPickerComponent} from '../../../color-picker/color-picker.component';
+import { MatSliderModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
 
 describe('ToolAttributesComponent', () => {
   let component: ToolAttributesComponent;
@@ -8,7 +11,8 @@ describe('ToolAttributesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ToolAttributesComponent ]
+      declarations: [ ToolAttributesComponent, ColorPickerComponent ],
+      imports: [MatSliderModule, FormsModule]
     })
     .compileComponents();
   }));
