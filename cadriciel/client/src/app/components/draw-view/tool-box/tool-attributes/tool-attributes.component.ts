@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
+import { FormsAttribute } from 'src/app/services/attributes/attribute-form';
+import { LineAttributes } from 'src/app/services/attributes/line-attributes';
+import { ToolsAttributes } from 'src/app/services/attributes/tools-attribute';
 
 @Component({
   selector: 'app-tool-attributes',
@@ -8,8 +11,23 @@ import { InteractionService } from 'src/app/services/service-interaction/interac
 })
 export class ToolAttributesComponent implements OnInit, OnDestroy {
 
-  constructor(private interaction: InteractionService) { }
+  lineThickness: number;
+  texture: number;
+  numberCorners: number; // not done
+  plotType: number;
+  junction: boolean;
+  junctionRadius: number
+  constructor(private interaction: InteractionService) {
+    this.lineThickness = 0;
+    this.texture = 0;
+    this.numberCorners = 3;
+    this.plotType = 0;
+    this.junction = true;
+    this.junctionRadius = 5;
+  }
   selectedTool: String;
+
+  
 
   ngOnInit() {
     this.interaction.$selectedTool.subscribe( tool =>{
@@ -17,6 +35,19 @@ export class ToolAttributesComponent implements OnInit, OnDestroy {
     });
   }
 
+  updateForms(){
+    //const attr : FormsAttribute = new FormsAttribute 
+    this.interaction.emitFormsAttributes(new FormsAttribute(this.plotType, this.lineThickness, this.numberCorners))
+  }
+
+  updateLine(){
+    this.interaction.emitLineAttributes(new LineAttributes(this.junction, this.lineThickness, this.junctionRadius))
+  }
+
+  updateTools(){
+    this.interaction.emitToolsAttributes(new ToolsAttributes(this.lineThickness, this.texture));
+  }
+  
   ngOnDestroy() {
     
   }

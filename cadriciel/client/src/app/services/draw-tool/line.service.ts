@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
+import { InteractionService } from '../service-interaction/interaction.service';
+import { LineAttributes } from '../attributes/line-attributes';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +14,11 @@ export class LineService extends DrawingTool {
   junctionRadius:number;
   forcedAngle:boolean;
   currentPos:Point;
+  attr: LineAttributes
 
-  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string, showJunctions:boolean, junctionWidth:number,shortcut:number){
+  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string, showJunctions:boolean, junctionWidth:number,shortcut:number, interaction: InteractionService){
 
-    super(inProgess,drawing, selected,width,primary_color,shortcut);
+    super(inProgess,drawing, selected,width,primary_color,shortcut, interaction);
 
     this.showJunctions = showJunctions;
     this.junctionRadius = junctionWidth/2;
@@ -23,6 +26,12 @@ export class LineService extends DrawingTool {
     this.currentPos = new Point(0,0);
   }
 
+  updateAttributes(){
+    this.interaction.$lineAttributes.subscribe(obj=>{
+      this.attr = new LineAttributes(obj.junction, obj.lineThickness, obj.junctionDiameter)
+    })
+
+  }
   //updating on key change
   update(keyboard:KeyboardHandlerService){
 
@@ -156,6 +165,7 @@ export class LineService extends DrawingTool {
   //Creates an svg path that connects every points of currentPath
   //and adds svg circles on junctions if needed with the line attributes
   createPath(p:Point[], wasDoubleClick:boolean){
+    this.updateAttributes()
 
     //if we need to force an angle
     if(this.forcedAngle){
@@ -201,14 +211,14 @@ export class LineService extends DrawingTool {
 
     //set render attributes
     s+= `"stroke="#${this.primary_color}"`;
-    s+= `stroke-width="${this.width}"`;
+    s+= `stroke-width="${this.attr.lineThickness}"`;
     s+= 'fill="none"';
     s+= 'stroke-linecap="round"';
     s+= 'stroke-linejoin="round" />';
     //close the path
 
     //if we need to show the line junctions
-    if(this.showJunctions){
+    if(this.attr.junction){
       //for each point, add a circle on it (ignore the last one if the path is closed)
       for(let i = 0; i < p.length - (closeIt? 1 : 0);i++){
         //set render attributes for the svg circle

@@ -2,17 +2,24 @@ import { Injectable } from '@angular/core';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
+import { InteractionService } from '../service-interaction/interaction.service';
+import { ToolsAttributes } from '../attributes/tools-attribute';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PencilService extends DrawingTool {
+  attr: ToolsAttributes
 
-  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number){
+  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number, interaction: InteractionService){
     
-    super(inProgess, drawing, selected,width,primary_color,shortcut);
+    super(inProgess, drawing, selected,width,primary_color,shortcut, interaction);
   }
-
+  updateAttributes(){
+    this.interaction.$toolsAttributes.subscribe(obj=>{
+      this.attr = new ToolsAttributes(obj.lineThickness, obj.texture)
+    })
+  }
   //updating on key change 
   update(keyboard:KeyboardHandlerService){
     //keyboard has no effect on pencil
@@ -71,7 +78,7 @@ export class PencilService extends DrawingTool {
 
   //Creates an svg path that connects every points of currentPath with the pencil attributes
   createPath(p:Point[]){
-
+    this.updateAttributes()
     //create a divider
     let s : string = '<g name = "pencil-stroke">';
 
@@ -85,7 +92,7 @@ export class PencilService extends DrawingTool {
     }
     //set render attributes
     s+=`\" stroke="#${this.primary_color}"`;
-    s+= `stroke-width="${this.width}"`;
+    s+= `stroke-width="${this.attr.lineThickness}"`;
     s+= 'fill="none"';
     s+= 'stroke-linecap="round"';
     s+= 'stroke-linejoin="round"/>';
