@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserManualContentComponent } from './user-manual-content.component';
+import { MatIconModule} from '@angular/material';
 
 describe('UserManualContentComponent', () => {
   let component: UserManualContentComponent;
@@ -8,7 +9,8 @@ describe('UserManualContentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserManualContentComponent ]
+      declarations: [ UserManualContentComponent ],
+      imports: [ MatIconModule]
     })
     .compileComponents();
   }));
