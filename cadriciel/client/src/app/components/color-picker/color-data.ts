@@ -1,7 +1,5 @@
 export const colorData = {
     currentHue : 0,
-    currentSaturation : 100, // Valeurs par défaut lors de l'initialisation du color picker
-    currentLightness : 50,
     primaryColor : '#FF0000ff',
     primaryAlpha : 1,
     secondaryColor :'#FF0000ff',
@@ -15,12 +13,13 @@ export const colorData = {
     redHexInput : 'ff',
     greenHexInput : '00',
     blueHexInput : '00',
-    RedSliderInput : 255,
-    BlueSliderInput : 0,
-    GreenSliderInput : 0,
-    SaturationSliderInput : 100,
-    LightnessSliderInput : 50,
-    OpacitySliderInput : 100,
+    redSliderInput : 255,
+    blueSliderInput : 0,
+    greenSliderInput : 0,
+    saturationSliderInput : 100,
+    lightnessSliderInput : 50,
+    opacitySliderInput : 100,
+    checkboxSliderStatus : true,
 
     mycx : 100,
     mycy : 50,

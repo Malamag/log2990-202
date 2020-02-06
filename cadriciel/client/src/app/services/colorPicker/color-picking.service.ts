@@ -24,35 +24,28 @@ export class ColorPickingService {
   setColorsFromForm(primary: string, secondary: string) {
     this.colors = new ChoosenColors(primary, secondary);
   }
-  setPrimaryColor( r : number, g : number, b : number ) {
-    this.cData.primaryColor = '#' + this.colorConvert.rgbaToHex( r )+ this.colorConvert.rgbaToHex( g ) + this.colorConvert.rgbaToHex( b ) + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255);
-  }
-
-  setSecondaryColor ( r : number, g : number, b : number ) {
-    this.cData.secondaryColor = '#' + this.colorConvert.rgbaToHex( r )+ this.colorConvert.rgbaToHex( g ) + this.colorConvert.rgbaToHex( b ) + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255);
-  }
 
   slCursor(x: number, y:number) {
-    this.cData.SaturationSliderInput = x;
-    this.cData.LightnessSliderInput = y;
+    this.cData.saturationSliderInput = x;
+    this.cData.lightnessSliderInput = y;
   }
 
   setColor( color : number[] ) {
     if ( this.cData.primarySelect ) {
         this.cData.primaryColor = '#' + this.colorConvert.rgbaToHex( color[0] )+ this.colorConvert.rgbaToHex( color[1] ) + this.colorConvert.rgbaToHex( color[2] ) + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255);
-        //document.getElementById("colorCheckBox").checked = true;
+        this.cData.checkboxSliderStatus = true;
         this.cData.currentColorSelect = 'Primary';
     }
     else {
         //TODO : pop-up on right click??
         this.cData.secondaryColor = '#' + this.colorConvert.rgbaToHex( color[0] )+ this.colorConvert.rgbaToHex( color[1] ) + this.colorConvert.rgbaToHex( color[2] ) + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255);
-        //document.getElementById("colorCheckBox").checked = false; 
+        this.cData.checkboxSliderStatus = false; 
         this.cData.currentColorSelect = 'Secondary';
     }
     this.cData.hexColorInput = this.colorConvert.rgbaToHex( color[0] )+ this.colorConvert.rgbaToHex( color[1] ) + this.colorConvert.rgbaToHex( color[2] )//only 6 char or needed for view
-    this.cData.RedSliderInput = color[0];
-    this.cData.GreenSliderInput = color[1];
-    this.cData.BlueSliderInput = color[2];
+    this.cData.redSliderInput = color[0];
+    this.cData.greenSliderInput = color[1];
+    this.cData.blueSliderInput = color[2];
     this.hexInputRefresh();
     if ( this.cData.isMouseup ) {
         this.updateLastColor( this.cData.hexColorInput );
@@ -75,18 +68,16 @@ export class ColorPickingService {
         }
 
         this.cData.currentHue = Math.round(Hue);
-        this.cData.currentLightness = 50;
-        this.cData.currentSaturation = 100;
-        this.cData.SaturationSliderInput = 100;
-        this.cData.LightnessSliderInput = 50;
-        this.cData.OpacitySliderInput = 100;
+        this.cData.saturationSliderInput = 100;
+        this.cData.lightnessSliderInput = 50;
+        this.cData.opacitySliderInput = 100;
         if (this.cData.primarySelect ) {
-            this.cData.primaryAlpha = this.cData.OpacitySliderInput / 100;
+            this.cData.primaryAlpha = this.cData.opacitySliderInput / 100;
         }
         else {
-            this.cData.secondaryAlpha = this.cData.OpacitySliderInput / 100;
+            this.cData.secondaryAlpha = this.cData.opacitySliderInput / 100;
         }
-        this.setSLCursor( this.cData.SaturationSliderInput, this.cData.LightnessSliderInput );
+        this.setSLCursor( this.cData.saturationSliderInput, this.cData.lightnessSliderInput );
         this.setColor( this.colorConvert.hslToRgb(Hue) ) ;
         this.hexInputRefresh();
     }
@@ -120,9 +111,9 @@ export class ColorPickingService {
             y = 0;
         }
         this.setSLCursor( x, y );
-        this.cData.SaturationSliderInput = x;
-        this.cData.LightnessSliderInput = y;
-        this.setColor( this.colorConvert.hslToRgb(this.cData.currentHue, this.cData.SaturationSliderInput / 100, this.cData.LightnessSliderInput / 100 ) ) ;
+        this.cData.saturationSliderInput = x;
+        this.cData.lightnessSliderInput = y;
+        this.setColor( this.colorConvert.hslToRgb(this.cData.currentHue, this.cData.saturationSliderInput / 100, this.cData.lightnessSliderInput / 100 ) ) ;
     }  
   }
 
@@ -200,29 +191,29 @@ export class ColorPickingService {
   }
   lastColorSelector( button : number, lastColor : string ) : void {
     if ( button === 0 ) {
-        this.cData.primaryColor = lastColor;// + this.rgbaToHex( this.primaryAlpha * 255 );
-        //document.getElementById("colorCheckBox").checked = true;
+        this.cData.primaryColor = lastColor;
+        this.cData.checkboxSliderStatus = true;
         this.cData.primarySelect = true; 
         this.cData.currentColorSelect = 'Primary';
     }
     else if ( button === 2 ) {
         //TODO : pop-up on right click??
-        this.cData.secondaryColor = lastColor;//  + this.rgbaToHex( this.secondaryAlpha * 255 );
-        //document.getElementById("colorCheckBox").checked = false;
+        this.cData.secondaryColor = lastColor;
+        this.cData.checkboxSliderStatus = false;
         this.cData.primarySelect = false; 
         this.cData.currentColorSelect = 'Secondary';
     }
     this.cData.hexColorInput = lastColor.substring( 1, 7 );//only 6 char or needed for view
     let color : number[] = this.colorConvert.hexToRgba( lastColor.substring( 1, 9 ) );
-    this.cData.RedSliderInput = color[0];
-    this.cData.GreenSliderInput = color[1];
-    this.cData.BlueSliderInput = color[2];
-    this.cData.OpacitySliderInput = Math.round( color[3] / 255 * 100 );
+    this.cData.redSliderInput = color[0];
+    this.cData.greenSliderInput = color[1];
+    this.cData.blueSliderInput = color[2];
+    this.cData.opacitySliderInput = Math.round( color[3] / 255 * 100 );
     let hsl : number[] = this.colorConvert.rgbToHsl( color[0], color[1], color[2] );
     this.cData.currentHue = hsl[0];
-    this.cData.SaturationSliderInput = Math.round( hsl[1] * 100 );
-    this.cData.LightnessSliderInput = Math.round( hsl[2] * 100);
-    this.setSLCursor( this.cData.SaturationSliderInput, this.cData.LightnessSliderInput );
+    this.cData.saturationSliderInput = Math.round( hsl[1] * 100 );
+    this.cData.lightnessSliderInput = Math.round( hsl[2] * 100);
+    this.setSLCursor( this.cData.saturationSliderInput, this.cData.lightnessSliderInput );
     this.hexInputRefresh();
     this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
     this.emitColors();
@@ -348,66 +339,64 @@ export class ColorPickingService {
 
   updateSliderField( color : string) : void { //unmoved
       let rgba : number[] = this.colorConvert.hexToRgba( color );
-      this.cData.RedSliderInput = rgba[0];
-      this.cData.GreenSliderInput = rgba[1];
-      this.cData.BlueSliderInput = rgba[2];
+      this.cData.redSliderInput = rgba[0];
+      this.cData.greenSliderInput = rgba[1];
+      this.cData.blueSliderInput = rgba[2];
       if ( rgba[3] !== -1 ) {
-          this.cData.OpacitySliderInput = rgba[3] / 255 * 100;
+          this.cData.opacitySliderInput = rgba[3] / 255 * 100;
       }
       
-      let hsl : number[] = this.colorConvert.rgbToHsl( this.cData.RedSliderInput, this.cData.GreenSliderInput, this.cData.BlueSliderInput );
+      let hsl : number[] = this.colorConvert.rgbToHsl( this.cData.redSliderInput, this.cData.greenSliderInput, this.cData.blueSliderInput );
       this.cData.currentHue = hsl[0];
-      this.cData.SaturationSliderInput = Math.round( hsl[1] * 100 );
-      this.cData.LightnessSliderInput = Math.round( hsl[2] * 100 );
-      this.setSLCursor(this.cData.SaturationSliderInput, this.cData.LightnessSliderInput);
+      this.cData.saturationSliderInput = Math.round( hsl[1] * 100 );
+      this.cData.lightnessSliderInput = Math.round( hsl[2] * 100 );
+      this.setSLCursor(this.cData.saturationSliderInput, this.cData.lightnessSliderInput);
   }
   // Red left input change
   onRGBSliderInput() : void { //unmoved
-      let hsl =this.colorConvert.rgbToHsl( this.cData.RedSliderInput, this.cData.GreenSliderInput, this.cData.BlueSliderInput );
+      let hsl =this.colorConvert.rgbToHsl( this.cData.redSliderInput, this.cData.greenSliderInput, this.cData.blueSliderInput );
       this.cData.currentHue = hsl[0];
-      this.cData.SaturationSliderInput = Math.round( hsl[1] * 100 );
-      this.cData.LightnessSliderInput = Math.round( hsl[2] * 100 ); 
+      this.cData.saturationSliderInput = Math.round( hsl[1] * 100 );
+      this.cData.lightnessSliderInput = Math.round( hsl[2] * 100 ); 
       this.slSliderRefresh();
   }
 
   onSLSliderInput() : void { //unmoved
-      let rgb = this.colorConvert.hslToRgb( this.cData.currentHue, this.cData.SaturationSliderInput / 100, this.cData.LightnessSliderInput / 100);
-      this.cData.RedSliderInput = rgb[0];
-      this.cData.GreenSliderInput = rgb[1];
-      this.cData.BlueSliderInput = rgb[2];
+      let rgb = this.colorConvert.hslToRgb( this.cData.currentHue, this.cData.saturationSliderInput / 100, this.cData.lightnessSliderInput / 100);
+      this.cData.redSliderInput = rgb[0];
+      this.cData.greenSliderInput = rgb[1];
+      this.cData.blueSliderInput = rgb[2];
       this.slSliderRefresh();
   }
 
   slSliderRefresh() : void {
       if ( this.cData.primarySelect ) {
-          this.setPrimaryColor( this.cData.RedSliderInput, this.cData.GreenSliderInput, this.cData.BlueSliderInput );
+          this.cData.primaryColor = '#' + this.colorConvert.rgbaToHex( this.cData.redSliderInput )+ this.colorConvert.rgbaToHex( this.cData.greenSliderInput ) + this.colorConvert.rgbaToHex( this.cData.blueSliderInput ) + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255);
           this.updateLastColor( this.cData.primaryColor );
       }
       else{        
-          this.setSecondaryColor( this.cData.RedSliderInput, this.cData.GreenSliderInput, this.cData.BlueSliderInput );
-          this.updateLastColor( this.cData.secondaryColor );
+        this.cData.secondaryColor = '#' + this.colorConvert.rgbaToHex( this.cData.redSliderInput )+ this.colorConvert.rgbaToHex( this.cData.greenSliderInput ) + this.colorConvert.rgbaToHex( this.cData.blueSliderInput ) + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255);
+        this.updateLastColor( this.cData.secondaryColor );
       }
-      this.setSLCursor( this.cData.SaturationSliderInput, this.cData.LightnessSliderInput );
+      this.setSLCursor( this.cData.saturationSliderInput, this.cData.lightnessSliderInput );
       this.hexInputRefresh();
   }
 
   hexInputRefresh() : void {
-    this.cData.redHexInput = this.colorConvert.rgbaToHex( this.cData.RedSliderInput );
-    this.cData.greenHexInput = this.colorConvert.rgbaToHex( this.cData.GreenSliderInput );
-    this.cData.blueHexInput = this.colorConvert.rgbaToHex( this.cData.BlueSliderInput );
+    this.cData.redHexInput = this.colorConvert.rgbaToHex( this.cData.redSliderInput );
+    this.cData.greenHexInput = this.colorConvert.rgbaToHex( this.cData.greenSliderInput );
+    this.cData.blueHexInput = this.colorConvert.rgbaToHex( this.cData.blueSliderInput );
     this.cData.hexColorInput = this.cData.redHexInput + this.cData.greenHexInput + this.cData.blueHexInput;
   }
   sliderAlphaChange() : void {
     if ( this.cData.primarySelect === true) {
-        this.cData.primaryAlpha = this.cData.OpacitySliderInput / 100;
-        this.cData.primaryColor = '#' + this.colorConvert.rgbaToHex( this.cData.RedSliderInput ) + this.colorConvert.rgbaToHex( this.cData.GreenSliderInput ) + this.colorConvert.rgbaToHex( this.cData.BlueSliderInput ) + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
+        this.cData.primaryAlpha = this.cData.opacitySliderInput / 100;
+        this.cData.primaryColor = '#' + this.colorConvert.rgbaToHex( this.cData.redSliderInput ) + this.colorConvert.rgbaToHex( this.cData.greenSliderInput ) + this.colorConvert.rgbaToHex( this.cData.blueSliderInput ) + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
     }
     else {
-        this.cData.secondaryAlpha = this.cData.OpacitySliderInput / 100;
-        this.cData.secondaryColor = '#' + this.colorConvert.rgbaToHex( this.cData.RedSliderInput ) + this.colorConvert.rgbaToHex( this.cData.GreenSliderInput ) + this.colorConvert.rgbaToHex( this.cData.BlueSliderInput ) + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
+        this.cData.secondaryAlpha = this.cData.opacitySliderInput / 100;
+        this.cData.secondaryColor = '#' + this.colorConvert.rgbaToHex( this.cData.redSliderInput ) + this.colorConvert.rgbaToHex( this.cData.greenSliderInput ) + this.colorConvert.rgbaToHex( this.cData.blueSliderInput ) + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
     }
-  }
-
-  
+  }  
 }
 
