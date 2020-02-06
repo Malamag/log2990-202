@@ -10,14 +10,17 @@ import { ToolsAttributes } from '../attributes/tools-attribute';
 })
 export class PencilService extends DrawingTool {
   attr: ToolsAttributes
+  
 
   constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number, interaction: InteractionService){
     
     super(inProgess, drawing, selected,width,primary_color,shortcut, interaction);
+    this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
   }
   updateAttributes(){
     this.interaction.$toolsAttributes.subscribe(obj=>{
-      this.attr = new ToolsAttributes(obj.lineThickness, obj.texture)
+      if(obj)
+        this.attr = new ToolsAttributes(obj.lineThickness, obj.texture)
     })
   }
   //updating on key change 

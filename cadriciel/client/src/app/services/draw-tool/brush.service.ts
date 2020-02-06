@@ -10,6 +10,8 @@ import { ToolsAttributes } from '../attributes/tools-attribute';
 export class BrushService extends PencilService {
 
   textureNumber:number;
+  
+  
 
   textures:{type:string, intensity:number, frequency:number}[];
   attr: ToolsAttributes
@@ -18,7 +20,7 @@ export class BrushService extends PencilService {
     super(inProgess,drawing, selected,width,primary_color,shortcut, interaction);
     
     this.textureNumber = textureNumber;
-    
+    this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
     //values used as texture presets
     this.textures = [
       {"type":"blured","intensity":5, "frequency":0},
@@ -30,16 +32,11 @@ export class BrushService extends PencilService {
   }
 
   updateAttributes(){
-    const TEXTURE = 1;
-    const LINET = 25;
+    
     this.interaction.$toolsAttributes.subscribe(obj=>{
-      if(obj){
+      if(obj)
         this.attr = new ToolsAttributes(obj.lineThickness, obj.texture)
-      }else{
-        this.attr = new ToolsAttributes(LINET, TEXTURE);
-      }
-      
-    });
+    })
   }
 
   //Creates an svg path that connects every points of currentPath and creates a filter with the brush attributes

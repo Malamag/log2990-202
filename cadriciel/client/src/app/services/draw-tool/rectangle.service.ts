@@ -18,7 +18,7 @@ export class RectangleService extends DrawingTool {
   constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number, interaction:InteractionService){
 
     super(inProgess, drawing, selected,width,primary_color,shortcut, interaction);
-
+    this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS)
     this.secondary_color = secondary_color;
     this.renderMode = renderMode;
 
@@ -26,7 +26,8 @@ export class RectangleService extends DrawingTool {
   }
   updateAttributes(){
     this.interaction.$formsAttributes.subscribe(obj=>{
-      this.attr = new FormsAttribute(obj.plotType, obj.lineThickness, obj.numberOfCorners)
+      if(obj)
+        this.attr = new FormsAttribute(obj.plotType, obj.lineThickness, obj.numberOfCorners)
     });
   }
   //updating on key change
@@ -144,7 +145,7 @@ export class RectangleService extends DrawingTool {
       s += `fill="${fill}"`; 
     }
     else if (this.attr.plotType ===0){
-      s+=`fill ="white"`
+      s+=`fill ="transparent"`
     }
     if(this.attr.plotType ===0 ||this.attr.plotType ===2){
       s+= `stroke = "${stroke}"` 
