@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
@@ -11,7 +11,7 @@ import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.se
   templateUrl: './svg-draw.component.html',
   styleUrls: ['./svg-draw.component.scss']
 })
-export class SvgDrawComponent implements OnInit, OnDestroy {
+export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(private canvBuilder: CanvasBuilderService) { }
   canvas: Canvas;
@@ -19,6 +19,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy {
   width: number;
   height: number;
   backColor: string;
+
+  @ViewChild('frame', {static: false}) frameRef: ElementRef;
 
   ngOnInit() {
     this.initCanvas();
@@ -91,6 +93,9 @@ export class SvgDrawComponent implements OnInit, OnDestroy {
         this.width = canvas.canvasWidth;
         this.height= canvas.canvasHeight;
         this.backColor = canvas.canvasColor;
+        if(this.frameRef) {
+          this.frameRef.nativeElement.innerHTML = "";
+        }
       }
     );
     this.canvBuilder.emitCanvas();
@@ -98,6 +103,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy {
 
   ngAfterViewInit(){
     window.dispatchEvent(new Event('resize'));
+    
   }
   
   ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus
