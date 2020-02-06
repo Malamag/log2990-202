@@ -20,6 +20,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   width: number;
   height: number;
   backColor: string;
+
   toolsContainer = new Map();
 
   @ViewChild('frame', {static: false}) frameRef: ElementRef;
@@ -46,6 +47,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     let rect = tc.CreateRectangle(false,3,color1,color2, 2,49, this.interaction);
     let line = tc.CreateLine(false,3,color2,true,15,76, this.interaction);
     let brush = tc.CreateBrush(false,50,color1, 4,87, this.interaction);
+
     this.toolsContainer.set("Rectangle", rect)
     this.toolsContainer.set("Ligne", line)
     this.toolsContainer.set("Pinceau", brush)
@@ -83,6 +85,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     window.addEventListener("mousedown", function(e){
       mouseHandler.down(e);
+      
     });
     window.addEventListener("mouseup", function(e){
       mouseHandler.up(e);
@@ -95,10 +98,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     window.addEventListener("keyup", function(e){
       keyboardHandler.reset(e);
     });
-
-    
-
   }
+
   initCanvas() {
     this.canvasSubscr = this.canvBuilder.canvSubject.subscribe(
       (canvas: Canvas) => {
@@ -108,9 +109,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         this.width = canvas.canvasWidth;
         this.height= canvas.canvasHeight;
         this.backColor = canvas.canvasColor;
-        if(this.frameRef) {
-          this.frameRef.nativeElement.innerHTML = "";
-        }
+        this.canvBuilder.whipeDraw(this.frameRef);
       }
     );
     this.canvBuilder.emitCanvas();
@@ -125,4 +124,5 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     this.canvasSubscr.unsubscribe();
     
   }
+
 }

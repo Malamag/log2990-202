@@ -36,4 +36,6 @@ describe('NewDrawComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  //it('should ')
 });

@@ -18,8 +18,8 @@ export class NewDrawComponent  implements OnInit  {
   height: number;
   color: string;
 
-  hasOnGoingDraw: boolean = false;
-  continue: boolean = true;
+
+
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
               private winService: ModalWindowService,
@@ -49,21 +49,12 @@ export class NewDrawComponent  implements OnInit  {
     });
   }
 
-  onSubmit() {
-    if(this.canvasBuilder.onGoing){
-      this.continue = confirm("Un dessin es déjà en cours. Voulez-vous continuer?")
-    }
-
-    if(this.continue){
-      const values = this.newDrawForm.value;
-      this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight,values.canvColor);
-      this.canvasBuilder.emitCanvas();
-      this.closeModalForm();
-      this.router.navigate(["/vue"]);
-    }
-    
-    
-
+  onSubmit() {   
+    const values = this.newDrawForm.value;
+    this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight,values.canvColor);
+    this.canvasBuilder.emitCanvas();
+    this.closeModalForm();
+    this.router.navigate(["/vue"]);
   }
   
   closeModalForm() {
