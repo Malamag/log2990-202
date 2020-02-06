@@ -3,24 +3,20 @@ import { TestBed } from '@angular/core/testing';
 import { LineService } from './line.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 
+export class fakeInteractionService extends InteractionService{} 
 
 describe('LineService', () => {
-  let elem: HTMLElement;
-  let lineService: LineService;
-
   beforeEach(() => {
-    elem = new HTMLElement();
-    const iSpy = jasmine.createSpyObj("InteractionService", ["getValue"]);
     TestBed.configureTestingModule({
       providers: [
-        lineService,
+        LineService,
         {provide: String, useValue: ""},
         {provide: Boolean, useValue: true},
         {provide: Number, useValue: 0},
-        {provide: HTMLElement, useValue: elem},
-        {provide: InteractionService, useValue: iSpy}]
+        {provide: HTMLElement},
+        {provide: InteractionService, useValue: fakeInteractionService}]
     });
-    lineService = TestBed.get(LineService);
+
   });
   
 

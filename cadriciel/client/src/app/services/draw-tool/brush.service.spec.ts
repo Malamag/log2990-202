@@ -4,26 +4,25 @@ import { BrushService } from './brush.service';
 import { PencilService } from './pencil.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 
-class InteractionServiceStub { } 
+export class fakeInteractionService extends InteractionService { } 
 
 describe('BrushService', () => {
   let bService: BrushService;
   let pServiceSpy: jasmine.SpyObj<PencilService>;
   
-  let elem: HTMLElement;
 
   beforeEach(() => {
     
     const spy = jasmine.createSpyObj("PencilService", ["getValue"]);
-    elem = new HTMLElement();
     TestBed.configureTestingModule({
-      providers: [
-        bService,
-        {provide: PencilService, useValue: spy},
-        {provide: Boolean, useValue: true},
-        {provide: InteractionService, useValue: InteractionServiceStub},
-        {provide: Number, useValue: 0},
-        {provide: HTMLElement, useValue: elem}],
+      providers: 
+      [bService, PencilService,
+      {provide: PencilService, useValue: spy},
+      {provide: Boolean, useValue: true},
+      {provide: String, useValue: ""},
+      {provide: Number, useValue: 0},
+      {provide: HTMLElement},
+      {provide: InteractionService, useClass: fakeInteractionService}]
         
     });
     bService = TestBed.get(BrushService);
