@@ -55,6 +55,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         this.toolsContainer.forEach(element => {
           element.selected = false;
         });
+      } else{
+        toolName = "Crayon"
       }
         let selectedTool: DrawingTool =this.toolsContainer.get(toolName);
         selectedTool.selected= true;

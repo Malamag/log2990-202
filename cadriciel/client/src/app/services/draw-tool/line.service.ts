@@ -9,26 +9,27 @@ import { LineAttributes } from '../attributes/line-attributes';
   providedIn: 'root'
 })
 export class LineService extends DrawingTool {
-
   showJunctions:boolean;
   junctionRadius:number;
   forcedAngle:boolean;
   currentPos:Point;
   attr: LineAttributes
-
+  
   constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string, showJunctions:boolean, junctionWidth:number,shortcut:number, interaction: InteractionService){
 
     super(inProgess,drawing, selected,width,primary_color,shortcut, interaction);
-
+    this.attr = new LineAttributes(this.defaultValues.DEFAULTJUNCTION, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTJUNCTIONRADIUS)
     this.showJunctions = showJunctions;
     this.junctionRadius = junctionWidth/2;
     this.forcedAngle = false;
     this.currentPos = new Point(0,0);
+     
   }
 
   updateAttributes(){
     this.interaction.$lineAttributes.subscribe(obj=>{
-      this.attr = new LineAttributes(obj.junction, obj.lineThickness, obj.junctionDiameter)
+      if(obj)
+        this.attr = new LineAttributes(obj.junction, obj.lineThickness, obj.junctionDiameter)
     })
 
   }

@@ -1,6 +1,7 @@
 import {InputObserver } from './input-observer';
 import { Point } from './point';
 import { InteractionService } from '../service-interaction/interaction.service';
+import { DefaultAttributeValues } from '../attributes/default-values';
 
 export abstract class DrawingTool extends InputObserver{
     isDown:boolean;
@@ -12,6 +13,7 @@ export abstract class DrawingTool extends InputObserver{
     inProgress:HTMLElement;
     drawing:HTMLElement;
     interaction : InteractionService
+    defaultValues: DefaultAttributeValues
 
     abstract createPath(path:Point[], doubleClickCheck?:boolean):void;
   
@@ -29,6 +31,7 @@ export abstract class DrawingTool extends InputObserver{
       this.currentPath = [];
 
       this.ignoreNextUp = false;
+      this.defaultValues = new DefaultAttributeValues()
     }
     abstract updateAttributes():void
 
