@@ -18,10 +18,11 @@ export class ToolAttributesComponent implements OnInit, OnDestroy {
   junction: boolean;
   junctionRadius: number
   constructor(private interaction: InteractionService) {
-    this.lineThickness = 3;
+    // default values
+    this.lineThickness = 5;
     this.texture = 0;
     this.numberCorners = 3;
-    this.plotType = 0;
+    this.plotType = 2;
     this.junction = true;
     this.junctionRadius = 6;
   }
