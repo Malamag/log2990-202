@@ -11,6 +11,7 @@ import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 export class ColorPickerComponent implements OnInit, OnDestroy {
     
     cData = colorData;
+    
         
     constructor(private colorPicking: ColorPickingService) {}
 
@@ -25,11 +26,11 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
             (colors: ChoosenColors) => {
                 if(colors == undefined){
                     colors = new ChoosenColors(DEFAULT, DEFAULT);
-                    console.log("default called!");
+                    
                 }
                 this.cData.primaryColor = colors.primColor;
                 this.cData.secondaryColor = colors.secColor;
-                console.log("subscription called!");
+                
             }
         );
     }
