@@ -30,9 +30,16 @@ export class BrushService extends PencilService {
   }
 
   updateAttributes(){
+    const TEXTURE = 1;
+    const LINET = 25;
     this.interaction.$toolsAttributes.subscribe(obj=>{
-      this.attr = new ToolsAttributes(obj.lineThickness, obj.texture)
-    })
+      if(obj){
+        this.attr = new ToolsAttributes(obj.lineThickness, obj.texture)
+      }else{
+        this.attr = new ToolsAttributes(LINET, TEXTURE);
+      }
+      
+    });
   }
 
   //Creates an svg path that connects every points of currentPath and creates a filter with the brush attributes

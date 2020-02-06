@@ -1,13 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PencilService } from './pencil.service';
-import { Point } from './point';
+
 
 describe('PencilService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    providers: [{provide: HTMLElement},, {provide: Point}],
+  beforeEach(() => {
+
+    TestBed.configureTestingModule({
+    providers:[PencilService]
     
-  }));
+  });
+});
 
   it('should be created', () => {
     const service: PencilService = TestBed.get(PencilService);

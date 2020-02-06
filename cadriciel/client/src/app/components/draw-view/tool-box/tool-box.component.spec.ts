@@ -1,7 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ToolBoxComponent } from './tool-box.component';
-import { MatButtonModule, MatTooltipModule} from '@angular/material';
+import { 
+  MatButtonModule, 
+  MatTooltipModule, 
+  MatIconModule, 
+  MatToolbarModule,
+  MatSliderModule,
+  MatFormFieldModule} from '@angular/material';
 
 
 describe('ToolBoxComponent', () => {
@@ -11,7 +17,13 @@ describe('ToolBoxComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ToolBoxComponent ],
-      imports: [MatButtonModule, MatTooltipModule]
+      imports: [
+        MatButtonModule, 
+        MatTooltipModule,
+        MatIconModule, 
+        MatToolbarModule,
+        MatSliderModule,
+        MatFormFieldModule]
     })
     .compileComponents();
   }));
