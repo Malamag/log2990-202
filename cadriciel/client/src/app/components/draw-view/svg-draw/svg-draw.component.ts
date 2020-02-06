@@ -20,6 +20,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   width: number;
   height: number;
   backColor: string;
+  toolsContainer = new Map();
 
   @ViewChild('frame', {static: false}) frameRef: ElementRef;
 
@@ -45,6 +46,19 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     let rect = tc.CreateRectangle(false,3,color1,color2, 2,49, this.interaction);
     let line = tc.CreateLine(false,3,color2,true,15,76, this.interaction);
     let brush = tc.CreateBrush(false,50,color1, 4,87, this.interaction);
+    this.toolsContainer.set("Rectangle", rect)
+    this.toolsContainer.set("Ligne", line)
+    this.toolsContainer.set("Pinceau", brush)
+    this.toolsContainer.set("Crayon", pencil)
+    this.interaction.$selectedTool.subscribe(toolName=>{
+      if(this.toolsContainer.get(toolName)){
+        this.toolsContainer.forEach(element => {
+          element.selected = false;
+        });
+      }
+        let selectedTool: DrawingTool =this.toolsContainer.get(toolName);
+        selectedTool.selected= true;
+    })
 
     //Fill the toolbox
     toolBox.push(pencil);
