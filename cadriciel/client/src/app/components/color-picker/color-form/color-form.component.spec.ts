@@ -1,11 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ColorFormComponent } from './color-form.component';
-import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { 
   MatFormFieldModule,
   MatInputModule,
   MatSliderModule} from '@angular/material'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ColorFormComponent', () => {
   let component: ColorFormComponent;
@@ -14,8 +15,13 @@ describe('ColorFormComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ColorFormComponent ],
-      imports: [FormsModule, MatFormFieldModule, MatInputModule, MatSliderModule, ReactiveFormsModule],
-      providers: [{provide:FormBuilder}]
+      imports: [
+        FormsModule, 
+        MatFormFieldModule, 
+        MatInputModule, 
+        MatSliderModule, 
+        ReactiveFormsModule,
+        BrowserAnimationsModule]
     })
     .compileComponents();
   }));
