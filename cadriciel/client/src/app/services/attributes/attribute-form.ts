@@ -3,8 +3,8 @@ export class FormsAttribute{
     lineThickness: number
     numberOfCorners: number // only for the polygone
     constructor(plotType: number, lineThickness:number, numberOfCorners: number){
-        this.plotType = plotType
-        this.lineThickness =lineThickness
-        this.numberOfCorners =numberOfCorners
+        this.plotType = plotType;
+        this.lineThickness =lineThickness;
+        this.numberOfCorners =numberOfCorners;
     } 
 }
