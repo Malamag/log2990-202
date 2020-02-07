@@ -4,6 +4,7 @@ import { colorData } from '../../components/color-picker/color-data';
 import { Subject } from 'rxjs';
 import { ChoosenColors } from '../../models/ChoosenColors.model';
 
+
 /*-----------------------------Color valur table-----------------------------------------*
 * RGBA min/max value : R [0,255] , G [0,255] , B [0,255] , A [0,1]                       *
 * HSL  min/max value : H [0,360] , S [0,1] , L [0,1]                                     *
@@ -139,6 +140,18 @@ export class ColorPickingService {
   onContextMenu(event : MouseEvent) : void {
     event.preventDefault();
   }
+  onSwapSVGMouseOver() : void {
+    this.cData.swapStrokeStyle = 'yellow';
+  }
+  onSwapSVGMouseLeave() : void {
+    this.cData.swapStrokeStyle = 'white';
+  }
+  onSwapSVGMouseDown() : void {
+    this.cData.swapStrokeStyle = 'lightblue';
+  }
+  onSwapSVGMouseUp() : void {
+    this.cData.swapStrokeStyle = 'white';
+  }
   //Mouse up event function when mouse on a color selector
   colorSelectOnMouseUp(): void{
     if ( this.cData.isSLSelecting || this.cData.isHueSelecting) {
@@ -196,15 +209,16 @@ export class ColorPickingService {
   }
   //Update last color table with a new color
   updateLastColor( newColor : string ) : void {
-    let buffer : string[] =[];
-    for(let i = 1; i < this.cData.lastColorRects.length; i++ ) {
-        buffer.push( this.cData.lastColorRects[i].fill );
+    for(let i = 0; i < this.cData.lastColorRects.length; i++ ) {
+      if(this.cData.lastColorRects[i].fill === 'none'){
+        this.cData.lastColorRects[i].fill = newColor.substring( 0, 7 );
+        return;
+      }
     }
-    buffer.push( newColor.substring( 0, 7 ) );
-    //this.cData.lastColors = buffer;
-    for(let i = 1; i < this.cData.lastColorRects.length; i++ ) {
-      this.cData.lastColorRects[i].fill = buffer[i];
-  }
+    for(let i = 0; i < this.cData.lastColorRects.length - 1; i++ ) {
+      this.cData.lastColorRects[i].fill = this.cData.lastColorRects[i + 1].fill;
+    }
+    this.cData.lastColorRects[this.cData.lastColorRects.length - 1].fill = newColor.substring( 0, 7 );
   }
   lastColorSelector( event : MouseEvent, lastColor : string ) : void {
     if ( event.button === 0 ) {
@@ -264,7 +278,6 @@ export class ColorPickingService {
   //validate if char is hexadecimal. A window alert is send id invalide char are found
   validateHexInput(event : KeyboardEvent) : void {
     let hexOk : any = false;
-    
     for(let i : number = 0; i < this.cData.hexNumber.length; i++) {
         if ( event.which === this.cData.hexNumber[i] ){
           hexOk = true;

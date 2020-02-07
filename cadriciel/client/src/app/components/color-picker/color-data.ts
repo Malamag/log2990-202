@@ -27,18 +27,33 @@ export const colorData = {
     isHueSelecting : false,
     isSLSelecting : false,
     rectOffsetFill : 'none',
-    lastColors :  ['#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff','#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff'],
-    hexNumber : [48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,8],
-    lastColorRects : [
-        { x: 0, y: 0, fill:'#ffffff'},
-        { x: 40, y:0, fill:'#ffffff'},
-        { x: 80, y:0, fill:'#ffffff'},
-        { x: 120, y:0, fill:'#ffffff'},
-        { x: 160, y:0, fill:'#ffffff'},
-        { x: 0, y:20, fill:'#ffffff'},
-        { x: 40, y:20, fill:'#ffffff'},
-        { x: 80, y:20, fill:'#ffffff'},
-        { x: 120, y:20, fill:'#ffffff'},
-        { x: 160, y:20, fill:'#ffffff'}
-      ]
+    swapStrokeStyle : 'white',
+    //Ascii table number of hex 
+    hexNumber : [   48,//0
+                    49,//1
+                    50,//2
+                    51,//3
+                    52,//4
+                    53,//5
+                    54,//6
+                    55,//7
+                    56,//8
+                    57,//9
+                    65,//a
+                    66,//b
+                    67,//c
+                    68,//d
+                    69,//e
+                    70,//f
+                    8],//backspace
+    lastColorRects : [  { x: 0, y: 0, fill:'none'},
+                        { x: 40, y:0, fill:'none'},
+                        { x: 80, y:0, fill:'none'},
+                        { x: 120, y:0, fill:'none'},
+                        { x: 160, y:0, fill:'none'},
+                        { x: 0, y:20, fill:'none'},
+                        { x: 40, y:20, fill:'none'},
+                        { x: 80, y:20, fill:'none'},
+                        { x: 120, y:20, fill:'none'},
+                        { x: 160, y:20, fill:'none'}]
 }
