@@ -3,6 +3,7 @@ import { ColorConvertingService } from './color-converting.service';
 import { colorData } from '../../components/color-picker/color-data';
 import { Subject } from 'rxjs';
 import { ChoosenColors } from '../../models/ChoosenColors.model';
+import { CheckboxControlValueAccessor } from '@angular/forms';
 
 
 /*-----------------------------Color valur table-----------------------------------------*
@@ -226,12 +227,14 @@ export class ColorPickingService {
         this.cData.checkboxSliderStatus = true;
         this.cData.primarySelect = true; 
         this.cData.currentColorSelect = 'Primary';
+        this.cData.opacitySliderInput = this.cData.primaryAlpha * 100;
     }
     else if ( event.button === 2 ) {
         this.cData.secondaryColor = lastColor;
         this.cData.checkboxSliderStatus = false;
         this.cData.primarySelect = false; 
         this.cData.currentColorSelect = 'Secondary';
+        this.cData.opacitySliderInput = this.cData.secondaryAlpha * 100;
     }
     this.cData.hexColorInput = lastColor.substring( 1, 7 );//only 1 to 7 char are needed for view
     //RGBA value of last color for display
@@ -239,7 +242,8 @@ export class ColorPickingService {
     this.cData.redSliderInput = color[0];
     this.cData.greenSliderInput = color[1];
     this.cData.blueSliderInput = color[2];
-    this.cData.opacitySliderInput = Math.round( color[3] * 100 );
+    this.cData.opacitySliderInput;
+    window.alert(lastColor.substring( 1, 9 ));
     //HSL value of last color for display
     let hsl : number[] = this.colorConvert.rgbToHsl( color[0], color[1], color[2] );
     this.cData.currentHue = hsl[0];
@@ -251,8 +255,8 @@ export class ColorPickingService {
     this.emitColors();
   }
   //Change color display between primary and secondary
-  swapInputDisplay(event : any) {
-    if ( event.srcElement.checked ) {
+  swapInputDisplay(event : MouseEvent) {
+    if ( (event.srcElement as HTMLInputElement).checked ) {
         this.cData.primarySelect = true;
     }
     else {
@@ -394,11 +398,11 @@ export class ColorPickingService {
   //Refresh display following a slider input
   sliderInputDisplayRefresh() : void {
       if ( this.cData.primarySelect ) {
-          this.cData.primaryColor = '#' + this.colorConvert.alphaRGBToHex( this.cData.redSliderInput )+ this.colorConvert.alphaRGBToHex( this.cData.greenSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.blueSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
+          this.cData.primaryColor = '#' + this.colorConvert.rgbToHex( this.cData.redSliderInput )+ this.colorConvert.rgbToHex( this.cData.greenSliderInput ) + this.colorConvert.rgbToHex( this.cData.blueSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
           this.updateLastColor( this.cData.primaryColor );
       }
       else{        
-        this.cData.secondaryColor = '#' + this.colorConvert.alphaRGBToHex( this.cData.redSliderInput )+ this.colorConvert.alphaRGBToHex( this.cData.greenSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.blueSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
+        this.cData.secondaryColor = '#' + this.colorConvert.rgbToHex( this.cData.redSliderInput )+ this.colorConvert.rgbToHex( this.cData.greenSliderInput ) + this.colorConvert.rgbToHex( this.cData.blueSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
         this.updateLastColor( this.cData.secondaryColor );
       }
       this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
