@@ -243,7 +243,6 @@ export class ColorPickingService {
     this.cData.greenSliderInput = color[1];
     this.cData.blueSliderInput = color[2];
     this.cData.opacitySliderInput;
-    window.alert(lastColor.substring( 1, 9 ));
     //HSL value of last color for display
     let hsl : number[] = this.colorConvert.rgbToHsl( color[0], color[1], color[2] );
     this.cData.currentHue = hsl[0];
@@ -280,18 +279,62 @@ export class ColorPickingService {
     this.updateSliderField( color );
   }
   //validate if char is hexadecimal. A window alert is send id invalide char are found
-  validateHexInput(event : KeyboardEvent) : void {
+  validateHexInput(event : KeyboardEvent ) : void {
     if (!this.colorConvert.validateHex(event.which)){
       event.preventDefault();
+      return;
     }
+    this.cData.isValideInput = true;
+    
+  }
+  validateHexColorInput(event : KeyboardEvent ) : void {
+    this.cData.isValideInput = false;
+    if (event.which !== 8){
+      if (this.cData.hexColorInput.length === 6){
+        event.preventDefault();
+        return;
+      }
+    }
+    this.validateHexInput(event);
+  
+  }
+  validateRedHexInput(event : KeyboardEvent ) : void {
+    this.cData.isValideInput = false;
+    if (event.which !== 8){
+      if (this.cData.redHexInput.length === 2){
+        event.preventDefault();
+        return;
+      }
+    }
+    this.validateHexInput(event);
+  }
+  validateGreenHexInput(event : KeyboardEvent ) : void {
+    this.cData.isValideInput = false;
+    if (event.which !== 8){
+      if (this.cData.greenHexInput.length === 2){
+        event.preventDefault();
+        return;
+      }
+    }
+    this.validateHexInput(event);
+  }
+  validateBlueHexInput(event : KeyboardEvent ) : void {
+    this.cData.isValideInput = false;
+    if (event.which !== 8){
+      if (this.cData.blueHexInput.length === 2){
+        event.preventDefault();
+        return;
+      }
+    }
+    this.validateHexInput(event);
   }
   /**
   * Hex color text field input event function
   * Update display if valide value are input 
   **/
   onHexColorInput(event : KeyboardEvent) : void {
-    if ( this.cData.hexColorInput.length === 6) {
-        this.updateSliderField( this.cData.hexColorInput );
+    if ( (this.cData.hexColorInput.length === 6) && this.cData.isValideInput) {
+        this.updateSliderField( this.cData.hexColorInput);
         if ( this.cData.primarySelect ) {
             this.cData.primaryColor = '#' + this.cData.hexColorInput + this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
         }
@@ -308,7 +351,7 @@ export class ColorPickingService {
   * Update display if valide value are input 
   **/
   onRedHexInput() : void {
-      if ( this.cData.redHexInput.length === 2) {
+      if ( (this.cData.redHexInput.length === 2) && this.cData.isValideInput) {
           if ( this.cData.primarySelect ) {
               this.cData.primaryColor = '#' + this.cData.redHexInput + this.cData.hexColorInput.substring( 2, 6 ) + this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
               this.updateSliderField( this.cData.primaryColor );
@@ -325,7 +368,7 @@ export class ColorPickingService {
   * Update display if valide value are input 
   **/
   onGreenHexInput() : void { //unmoved
-      if (this.cData.greenHexInput.length === 2) {
+      if ((this.cData.greenHexInput.length === 2) && this.cData.isValideInput) {
           if ( this.cData.primarySelect ) {
               this.cData.primaryColor = '#' + this.cData.hexColorInput.substring( 0, 2 ) + this.cData.greenHexInput + this.cData.hexColorInput.substring( 4, 6 )  + this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
               this.updateSliderField( this.cData.primaryColor );
@@ -343,7 +386,7 @@ export class ColorPickingService {
   * Update display if valide value are input 
   **/
   onBlueHexInput() : void { //unmoved
-      if (this.cData.blueHexInput.length === 2) {
+      if ((this.cData.blueHexInput.length === 2) && this.cData.isValideInput) {
           if ( this.cData.primarySelect ) {
               this.cData.primaryColor = '#' + this.cData.hexColorInput.substring( 0, 4 ) + this.cData.blueHexInput + this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
               this.updateSliderField( this.cData.primaryColor );
@@ -374,6 +417,7 @@ export class ColorPickingService {
       this.cData.saturationSliderInput = Math.round( hsl[1] * 100 );
       this.cData.lightnessSliderInput = Math.round( hsl[2] * 100 );
       this.setSLCursor(this.cData.saturationSliderInput, this.cData.lightnessSliderInput);
+      this.updateLastColor(color);
       this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
       this.emitColors();
   }

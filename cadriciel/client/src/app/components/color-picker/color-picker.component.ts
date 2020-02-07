@@ -89,6 +89,18 @@ export class ColorPickerComponent implements OnInit {
     validateHexInput(event : KeyboardEvent) : void {
         this.colorPicking.validateHexInput(event);
     }
+    validateHexColorInput(event : KeyboardEvent) : void {
+        this.colorPicking.validateHexColorInput(event);
+    }
+    validateRedHexInput(event : KeyboardEvent) : void {
+        this.colorPicking.validateRedHexInput(event);
+    }
+    validateGreenHexInput(event : KeyboardEvent) : void {
+        this.colorPicking.validateGreenHexInput(event);
+    }
+    validateBlueHexInput(event : KeyboardEvent) : void {
+        this.colorPicking.validateBlueHexInput(event);
+    }
     onHexColorInput(event : any) : void { //unmoved
         this.colorPicking.onHexColorInput(event);
     }
