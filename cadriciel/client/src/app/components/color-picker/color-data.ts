@@ -51,9 +51,9 @@ export const colorData = {
                         { x: 80, y:0, fill:'none'},
                         { x: 120, y:0, fill:'none'},
                         { x: 160, y:0, fill:'none'},
-                        { x: 0, y:20, fill:'none'},
-                        { x: 40, y:20, fill:'none'},
-                        { x: 80, y:20, fill:'none'},
-                        { x: 120, y:20, fill:'none'},
-                        { x: 160, y:20, fill:'none'}]
+                        { x: 0, y:25, fill:'none'},
+                        { x: 40, y:25, fill:'none'},
+                        { x: 80, y:25, fill:'none'},
+                        { x: 120, y:25, fill:'none'},
+                        { x: 160, y:25, fill:'none'}]
 }

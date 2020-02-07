@@ -124,8 +124,8 @@
                 </td>
             </tr>
             <tr>
-                <svg height="40" width="200">
-                    <rect *ngFor="let rect of cData.lastColorRects" [style.x]="rect.x" [style.y]="rect.y" width="39" height="20" [style.fill]="rect.fill" (mousedown)="lastColorSelector($event,rect.fill)"></rect>
+                <svg height="50" width="200">
+                    <rect *ngFor="let rect of cData.lastColorRects" [style.x]="rect.x" [style.y]="rect.y" width="35" height="20" [style.fill]="rect.fill" (mousedown)="lastColorSelector($event,rect.fill)"></rect>
                 </svg> 
             </tr>
         <!--</section>

@@ -370,6 +370,8 @@ export class ColorPickingService {
       this.cData.saturationSliderInput = Math.round( hsl[1] * 100 );
       this.cData.lightnessSliderInput = Math.round( hsl[2] * 100 );
       this.setSLCursor(this.cData.saturationSliderInput, this.cData.lightnessSliderInput);
+      this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
+      this.emitColors();
   }
   // RBG slider input event function
   onRGBSliderInput() : void {
@@ -410,6 +412,8 @@ export class ColorPickingService {
     this.cData.greenHexInput = this.colorConvert.rgbToHex( this.cData.greenSliderInput );
     this.cData.blueHexInput = this.colorConvert.rgbToHex( this.cData.blueSliderInput );
     this.cData.hexColorInput = this.cData.redHexInput + this.cData.greenHexInput + this.cData.blueHexInput;
+    this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
+    this.emitColors();
   }
   /**
   * Opacity slider input event function
@@ -425,6 +429,8 @@ export class ColorPickingService {
         this.cData.secondaryAlpha = this.cData.opacitySliderInput / 100;
         this.cData.secondaryColor = '#' + this.colorConvert.alphaRGBToHex( this.cData.redSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.greenSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.blueSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
     }
+    this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
+    this.emitColors();
   }  
 }
 
