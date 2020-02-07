@@ -8,6 +8,7 @@ import { ColorPickingService } from '../colorPicker/color-picking.service';
 
 @Injectable({
   providedIn: 'root'
+  
 })
 export class ToolCreator {
 
