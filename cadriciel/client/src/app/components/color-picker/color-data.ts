@@ -21,12 +21,12 @@ export const colorData = {
     opacitySliderInput : 100,
     checkboxSliderStatus : true,
 
-    mycx : 100,
-    mycy : 50,
+    slCursorX : 100,
+    slCursorY : 50,
     isColorSelecting : false,
-    isOnColorPicker :  false,
-    isMouseup :  false,
-    mytranslation : "",
-    lastColor :  ['#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff','#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff'],
+    isHueSelecting : false,
+    isSLSelecting : false,
+    rectOffsetFill : 'none',
+    lastColors :  ['#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff','#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff'],
     hexNumber : ['a','b','c','d','e','f','A','B','C','D','E','F','0','1','2','3','4','5','6','7','8','9']
 }

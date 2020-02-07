@@ -48,14 +48,17 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
     slSelector(event : MouseEvent) : void {
         this.colorPicking.slSelector(event);
     }
-    onMouseUp(): void{
-        this.colorPicking.onMouseUp();
+    colorSelectOnMouseUp(): void{
+        this.colorPicking.colorSelectOnMouseUp();
     }
-    onMouseDown(event : MouseEvent ): void{
-        this.colorPicking.onMouseDown(event);
+    hueSelectorOnMouseDown(event : MouseEvent ): void{
+        this.colorPicking.hueSelectorOnMouseDown(event);
     }
-    onMouseDown2(event : MouseEvent ): void{
-        this.colorPicking.onMouseDown2(event);
+    selectorOnMouseLeave(event : MouseEvent): void{
+        this.colorPicking.selectorOnMouseLeave(event);
+    }
+    slSelectorOnMouseDown(event : MouseEvent ): void{
+        this.colorPicking.slSelectorOnMouseDown(event);
     }
     firstLastColorSelect( event : MouseEvent ) : void {
         this.colorPicking.firstLastColorSelect(event);
@@ -96,8 +99,8 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
         this.colorPicking.refreshDisplay();
     }
 
-    onHexColorInput() : void { //unmoved
-        this.colorPicking.onHexColorInput();
+    onHexColorInput(event : any) : void { //unmoved
+        this.colorPicking.onHexColorInput(event);
     }
 
     onRedHexInput() : void { //unmoved
@@ -174,39 +177,41 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
         return { 'stop-color': this.cData.secondaryColor };
     }
     get lastColor1 (): any {
-        return { 'fill': this.cData.lastColor[0] };
+        return { 'fill': this.cData.lastColors[0] };
     }
     get lastColor2 (): any {
-        return { 'fill': this.cData.lastColor[1] };
+        return { 'fill': this.cData.lastColors[1] };
     }
     get lastColor3 (): any {
-        return { 'fill': this.cData.lastColor[2] };
+        return { 'fill': this.cData.lastColors[2] };
     }
     get lastColor4 (): any {
-        return { 'fill': this.cData.lastColor[3] };
+        return { 'fill': this.cData.lastColors[3] };
     }
     get lastColor5 (): any {
-        return { 'fill': this.cData.lastColor[4] };
+        return { 'fill': this.cData.lastColors[4] };
     }
     get lastColor6 (): any {
-        return { 'fill': this.cData.lastColor[5] };
+        return { 'fill': this.cData.lastColors[5] };
     }
     get lastColor7 (): any {
-        return { 'fill': this.cData.lastColor[6] };
+        return { 'fill': this.cData.lastColors[6] };
     }
     get lastColor8 (): any {
-        return { 'fill': this.cData.lastColor[7] };
+        return { 'fill': this.cData.lastColors[7] };
     }
     get lastColor9 (): any {
-        return { 'fill': this.cData.lastColor[8] };
+        return { 'fill': this.cData.lastColors[8] };
     }
     get lastColor10 (): any {
-        return { 'fill': this.cData.lastColor[9] };
+        return { 'fill': this.cData.lastColors[9] };
     }
     get cursorStyles(): any{
-        return { 'transform' : 'translate(' + this.cData.mycx + 'px,' + this.cData.mycy + 'px)'};
+        return { 'transform' : 'translate(' + this.cData.slCursorX + 'px,' + this.cData.slCursorY + 'px)'};
     }
-
+    get rectOffsetBg(): any{
+        return { 'fill':this.cData.rectOffsetFill };
+    }
     // change primary alpha when primary slide change
     sliderAlphaChange() : void {
         this.colorPicking.sliderAlphaChange();
