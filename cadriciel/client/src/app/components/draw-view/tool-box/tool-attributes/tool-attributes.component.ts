@@ -16,25 +16,28 @@ export class ToolAttributesComponent implements OnInit, OnDestroy {
   numberCorners: number; // not done
   plotType: number;
   junction: boolean;
-  junctionRadius: number
-  constructor(private interaction: InteractionService) {
-    // default values
-    this.lineThickness = 5;
-    this.texture = 0;
-    this.numberCorners = 3;
-    this.plotType = 2;
-    this.junction = true;
-    this.junctionRadius = 6;
-  }
+  junctionRadius: number;
   selectedTool: String;
 
+  constructor(private interaction: InteractionService) {  }
   
 
   ngOnInit() {
-    
+    // default values
+    this.lineThickness = 5; //5px thick line
+    this.texture = 0; // blur texture
+
+    this.numberCorners = 3; // for polygon -- wait 'til sprint 2! 
+
+    this.plotType = 2; // type 2 --> filled with border
+    this.junction = true; // with junction dots of 6 px size
+    this.junctionRadius = 6;
     this.interaction.$selectedTool.subscribe( tool =>{
       this.selectedTool = tool;
     });
+    this.updateForms(); // emit all after init
+    this.updateLine();
+    this.updateTools();
   }
 
   updateForms(){
