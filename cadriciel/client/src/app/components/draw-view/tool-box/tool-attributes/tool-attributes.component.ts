@@ -35,6 +35,9 @@ export class ToolAttributesComponent implements OnInit, OnDestroy {
     this.interaction.$selectedTool.subscribe( tool =>{
       this.selectedTool = tool;
     });
+    this.updateForms(); // emit all after init
+    this.updateLine();
+    this.updateTools();
   }
 
   updateForms(){
