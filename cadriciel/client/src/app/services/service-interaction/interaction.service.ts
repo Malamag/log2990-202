@@ -20,6 +20,9 @@ export class InteractionService {
   private lineAttributes = new Subject<LineAttributes>()
   $lineAttributes = this.lineAttributes.asObservable()
 
+  private cancelTools = new Subject<boolean>()
+  $cancelToolsObs = this.cancelTools.asObservable()
+
   constructor() { }
 
   emitSelectedTool(tool: string){
@@ -36,5 +39,9 @@ export class InteractionService {
 
   emitToolsAttributes(attr: ToolsAttributes){
     this.toolsAttributes.next(attr)
+  }
+
+  emitCancel(sig:boolean){
+    this.cancelTools.next(sig)
   }
 }

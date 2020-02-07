@@ -137,8 +137,8 @@ export class RectangleService extends DrawingTool {
     let s : string = '<g name = "rectangle">';
 
     //get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
-    let stroke = (this.attr.plotType == 0 || this.attr.plotType == 2) ? `#${this.chosenColor.secColor}` : "none";
-    let fill = (this.attr.plotType == 1 || this.attr.plotType == 2) ? `#${this.chosenColor.primColor}`: "none";
+    let stroke = (this.attr.plotType == 0 || this.attr.plotType == 2) ? `${this.chosenColor.secColor}` : "none";
+    let fill = (this.attr.plotType == 1 || this.attr.plotType == 2) ? `${this.chosenColor.primColor}`: "none";
 
     //set render attributes for the svg rect
     s += `<rect x="${startX}" y="${startY}"`;

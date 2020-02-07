@@ -34,7 +34,6 @@ import {
 } from '@angular/material';
 import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
-import { ColorFormComponent } from './components/color-picker/color-form/color-form.component';
 import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.component';
 import { ToolAttributesComponent } from './components/draw-view/tool-box/tool-attributes/tool-attributes.component';
 
@@ -51,7 +50,6 @@ import { ToolAttributesComponent } from './components/draw-view/tool-box/tool-at
         UserManualContentComponent,
         OptionBarComponent,
         ColorPickerComponent,
-        ColorFormComponent,
         ToolBoxComponent,
         ToolAttributesComponent
     ],

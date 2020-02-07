@@ -55,6 +55,10 @@ export class NewDrawComponent  implements OnInit  {
     this.canvasBuilder.emitCanvas();
     this.closeModalForm();
     this.router.navigate(["/vue"]);
+
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 15);
   }
   
   closeModalForm() {

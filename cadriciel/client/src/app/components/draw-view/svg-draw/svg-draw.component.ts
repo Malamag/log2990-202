@@ -39,9 +39,6 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
     let keyboardHandler : KeyboardHandlerService = new KeyboardHandlerService();
     let mouseHandler = new MouseHandlerService(svg, workingSpace);
-
-    let toolBox : DrawingTool[] = [];
-
     //Mockup values for testing
     let color1 = "1167B1";
     let color2 = "000000";
@@ -59,21 +56,19 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     this.toolsContainer.set("Ligne", line);
     this.toolsContainer.set("Pinceau", brush);
     this.toolsContainer.set("Crayon", pencil);
+    this.interaction.$cancelToolsObs.subscribe(sig=>{
+      if(sig){
+          this.closeTools(this.toolsContainer)
+      }
+    })
     this.interaction.$selectedTool.subscribe(toolName=>{
       if(this.toolsContainer.get(toolName)){
-        this.toolsContainer.forEach(element => {
-          element.selected = false;
-        });
-      } else{
-        toolName = "Crayon"; // default tool
+        this.closeTools(this.toolsContainer);
+        this.toolsContainer.get(toolName).selected = true;
       }
-        let selectedTool: DrawingTool =this.toolsContainer.get(toolName);
-        selectedTool.selected= true;
     })
 
-    //Fill the toolbox
-   
-
+    
     //Subscribe each tool to keyboard and mouse
     this.toolsContainer.forEach(element => {
       keyboardHandler.addToolObserver(element);
@@ -104,6 +99,11 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     window.addEventListener("keyup", function(e){
       keyboardHandler.reset(e);
     });
+  }
+  closeTools(map: Map<string,DrawingTool>){
+    map.forEach(el=>{
+      el.selected = false;
+    })
   }
 
   initCanvas() {
