@@ -19,19 +19,19 @@ export class ToolAttributesComponent implements OnInit, OnDestroy {
   junctionRadius: number
   constructor(private interaction: InteractionService) {
     // default values
-    this.lineThickness = 5;
-    this.texture = 0;
-    this.numberCorners = 3;
-    this.plotType = 2;
-    this.junction = true;
-    this.junctionRadius = 6;
+    
   }
   selectedTool: String;
 
   
 
   ngOnInit() {
-    
+    this.lineThickness = 5;
+    this.texture = 0;
+    this.numberCorners = 3;
+    this.plotType = 2;
+    this.junction = true;
+    this.junctionRadius = 6;
     this.interaction.$selectedTool.subscribe( tool =>{
       this.selectedTool = tool;
     });
