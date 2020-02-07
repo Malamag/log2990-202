@@ -98,7 +98,7 @@ export class PencilService extends DrawingTool {
       s+= `L ${p[i].x} ${p[i].y} `;
     }
     //set render attributes
-    s+=`\" stroke="#${this.chosenColor.primColor}"`;
+    s+=`\" stroke="${this.chosenColor.primColor}"`;
     s+= `stroke-width="${this.attr.lineThickness}"`;
     s+= 'fill="none"';
     s+= 'stroke-linecap="round"';

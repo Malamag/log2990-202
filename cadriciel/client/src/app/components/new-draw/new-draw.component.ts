@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CanvasBuilderService } from '../../services/drawing/canvas-builder.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { Router } from '@angular/router';
+import { setTimeout } from 'timers';
 
 
 @Component({
@@ -55,6 +56,10 @@ export class NewDrawComponent  implements OnInit  {
     this.canvasBuilder.emitCanvas();
     this.closeModalForm();
     this.router.navigate(["/vue"]);
+
+    setTimeout(()=>{
+      window.dispatchEvent(new Event('resize'));
+    }, 15);
   }
   
   closeModalForm() {
