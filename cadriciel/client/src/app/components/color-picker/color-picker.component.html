@@ -3,7 +3,7 @@
         <section class="frontSection">
             <tr>   
                 <td>
-                    <svg height="200" width="200" (mouseup)="colorSelectOnMouseUp()" (mousemove)="selectorOnMouseLeave($event)">
+                    <svg height="200" width="200" (contextmenu)="onContextMenu($event)"(mouseup)="colorSelectOnMouseUp()" (mousemove)="selectorOnMouseLeave($event)">
                         <defs>
                             <clipPath id="clip">
                                 <rect x="0" y="0" width="200" height="200"></rect>
@@ -109,7 +109,7 @@
                         <rect x="29" y="0" width="42" height="20" style="fill-opacity: .1;" fill="black" (click)="swapPrimarySecondary()"></rect>
                     </svg><br/>
                     <label class="namelabel" >Hex </label><label class="numberlabel">#</label>
-                    <input class="hexInput" type="text" maxlength="6" [(ngModel)]="cData.hexColorInput" placeholder="ffffff" (input)="onHexColorInput($event)">
+                    <input class="hexInput" type="text" maxlength="6" [(ngModel)]="cData.hexColorInput" placeholder="ffffff" (keydown)="validateHexInput($event)"(keyup)="onHexColorInput()">
                 </td>
                 <td>
                     <svg height="24" width="30">
@@ -121,13 +121,13 @@
                 <td>
                     <label class="namelabel"><font color="red">Rouge</font></label><label class="numberlabel"><font>{{cData.redSliderInput}}</font></label>
                     <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.redSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesRL">
-                    <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.redHexInput" placeholder="ff"(input)="onredHexInput($event)">
+                    <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.redHexInput" placeholder="ff" (keydown)="validateHexInput($event)"(keyup)="onredHexInput()">
                     <label class="namelabel"><font color="green">Vert</font></label><label class="numberlabel"><font>{{cData.greenSliderInput}}</font></label>
                     <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.greenSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesGL">
-                    <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.greenHexInput" placeholder="ff"(input)="ongreenHexInput($event)">
+                    <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.greenHexInput" placeholder="ff"(keydown)="validateHexInput($event)"(keyup)="ongreenHexInput()">
                     <label class="namelabel"><font color="#054dc2">Bleu</font></label><label class="numberlabel"><font>{{cData.blueSliderInput}}</font></label>
                     <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.blueSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesBL">
-                    <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.blueHexInput" placeholder="ff"(input)="onBlueHexInput($event)">
+                    <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.blueHexInput" placeholder="ff"(keydown)="validateHexInput($event)"(keyup)="onBlueHexInput()">
                     <label class="namelabel">Saturation</label><label class="numberlabel">{{cData.saturationSliderInput}}%</label>
                     <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.saturationSliderInput" (change)="onSLSliderInput($event)" [ngStyle]="myInputStylesL">
                     <label class="namelabel">Luminosité</label><label class="numberlabel">{{cData.lightnessSliderInput}}%</label>

@@ -6,7 +6,8 @@ import {
   MatFormFieldModule,
   MatIconModule, 
   MatToolbarModule,
-  MatSliderModule } from '@angular/material';
+  MatSliderModule,
+  MatRadioModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ColorFormComponent } from 'src/app/components/color-picker/color-form/color-form.component';
 
@@ -25,7 +26,8 @@ describe('ToolAttributesComponent', () => {
         MatToolbarModule,
         MatSliderModule,
         ReactiveFormsModule,
-        MatFormFieldModule]
+        MatFormFieldModule,
+        MatRadioModule]
     })
     .compileComponents();
   }));

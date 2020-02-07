@@ -29,7 +29,8 @@ import {
     MatSidenavModule,
     MatToolbarModule,
     MatSliderModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatRadioModule
 } from '@angular/material';
 import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
@@ -70,6 +71,7 @@ import { ToolAttributesComponent } from './components/draw-view/tool-box/tool-at
         MatToolbarModule,
         MatSliderModule,
         MatTooltipModule,
+        MatRadioModule,
         AppRoutingModule
     ],
     providers: [

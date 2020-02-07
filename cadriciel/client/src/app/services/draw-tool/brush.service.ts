@@ -3,6 +3,8 @@ import { Point } from './point';
 import { PencilService } from './pencil.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { ToolsAttributes } from '../attributes/tools-attribute';
+import { ColorPickingService } from '../colorPicker/color-picking.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +17,9 @@ export class BrushService extends PencilService {
 
   textures:{type:string, intensity:number, frequency:number}[];
   attr: ToolsAttributes
-  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string, textureNumber:number,shortcut:number, interaction: InteractionService){
+  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string, textureNumber:number,shortcut:number, interaction: InteractionService, colorPick: ColorPickingService){
     
-    super(inProgess,drawing, selected,width,primary_color,shortcut, interaction);
+    super(inProgess,drawing, selected,width,primary_color,shortcut, interaction, colorPick);
     
     this.textureNumber = textureNumber;
     this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
@@ -41,6 +43,7 @@ export class BrushService extends PencilService {
 
   //Creates an svg path that connects every points of currentPath and creates a filter with the brush attributes
   createPath(p:Point[]){
+    this.updateColors()
     this.updateAttributes()
     //get parameters from the used texture
     let width = this.attr.lineThickness;
@@ -74,7 +77,7 @@ export class BrushService extends PencilService {
       s+= `L ${p[i].x} ${p[i].y} `;
     }
     //set render attributes
-    s+= `"stroke="#${this.primary_color}" stroke-width="${this.attr.lineThickness}"`;
+    s+= `"stroke="#${this.chosenColor.primColor}" stroke-width="${this.attr.lineThickness}"`;
     s+= 'fill="none" stroke-linecap="round" stroke-linejoin="round"';
     s+= `filter="url(#${uniqueID})"/>`;
     //end the path

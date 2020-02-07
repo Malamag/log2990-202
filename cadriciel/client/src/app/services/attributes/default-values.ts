@@ -5,6 +5,8 @@ export class DefaultAttributeValues{
     DEFAULTTEXTURE: number
     DEFAULTPLOTTYPE: number
     DEFAULTNUMBERCORNERS: number
+    DEFAULTPRIMARYCOLOR: string
+    DEFAULTSECONDARYCOLOR: string
 
     constructor(){
         this.DEFAULTJUNCTION = true;
@@ -13,5 +15,7 @@ export class DefaultAttributeValues{
         this.DEFAULTTEXTURE=0
         this.DEFAULTPLOTTYPE = 2
         this.DEFAULTNUMBERCORNERS = 3
+        this.DEFAULTPRIMARYCOLOR= "ff0000ff"
+        this.DEFAULTSECONDARYCOLOR= "000000"
     }
 }

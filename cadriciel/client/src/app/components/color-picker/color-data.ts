@@ -28,5 +28,5 @@ export const colorData = {
     isSLSelecting : false,
     rectOffsetFill : 'none',
     lastColors :  ['#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff','#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff'],
-    hexNumber : ['a','b','c','d','e','f','A','B','C','D','E','F','0','1','2','3','4','5','6','7','8','9']
+    hexNumber : [48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,8]
 }

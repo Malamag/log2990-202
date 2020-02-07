@@ -50,6 +50,9 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
     slSelector(event : MouseEvent) : void {
         this.colorPicking.slSelector(event);
     }
+    onContextMenu(event : MouseEvent) : void {
+        this.colorPicking.onContextMenu(event);
+    }
     colorSelectOnMouseUp(): void{
         this.colorPicking.colorSelectOnMouseUp();
     }
@@ -100,7 +103,9 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
     refreshDisplay() : void {
         this.colorPicking.refreshDisplay();
     }
-
+    validateHexInput(event : KeyboardEvent) : void {
+        this.colorPicking.validateHexInput(event);
+    }
     onHexColorInput(event : any) : void { //unmoved
         this.colorPicking.onHexColorInput(event);
     }

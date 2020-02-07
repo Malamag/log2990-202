@@ -7,6 +7,7 @@ import { Subscription} from 'rxjs';
 import { Canvas } from 'src/app/models/Canvas.model';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
+import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 
 @Component({
   selector: 'app-svg-draw',
@@ -15,7 +16,7 @@ import { InteractionService } from 'src/app/services/service-interaction/interac
 })
 export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor(private canvBuilder: CanvasBuilderService, private interaction: InteractionService, private renderer: Renderer2) { }
+  constructor(private canvBuilder: CanvasBuilderService, private interaction: InteractionService, private renderer: Renderer2, private colorPick: ColorPickingService) { }
   canvas: Canvas;
   canvasSubscr: Subscription;
   width: number;
@@ -48,35 +49,33 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     //Create all the tools
     let tc = new ToolCreator(document.getElementsByName("in-progress")[0], document.getElementsByName("drawing")[0]);
 
-    let pencil = tc.CreatePencil(true,10,color1,67, this.interaction);
-    let rect = tc.CreateRectangle(false,3,color1,color2, 2,49, this.interaction);
-    let line = tc.CreateLine(false,3,color2,true,15,76, this.interaction);
-    let brush = tc.CreateBrush(false,50,color1, 4,87, this.interaction);
+    let pencil = tc.CreatePencil(true,10,color1,67, this.interaction, this.colorPick);
+    let rect = tc.CreateRectangle(false,3,color1,color2, 2,49, this.interaction, this.colorPick);
+    let line = tc.CreateLine(false,3,color2,true,15,76, this.interaction, this.colorPick);
+    let brush = tc.CreateBrush(false,50,color1, 4,87, this.interaction, this.colorPick);
 
-    this.toolsContainer.set("Rectangle", rect)
-    this.toolsContainer.set("Ligne", line)
-    this.toolsContainer.set("Pinceau", brush)
-    this.toolsContainer.set("Crayon", pencil)
+
+    this.toolsContainer.set("Rectangle", rect);
+    this.toolsContainer.set("Ligne", line);
+    this.toolsContainer.set("Pinceau", brush);
+    this.toolsContainer.set("Crayon", pencil);
     this.interaction.$selectedTool.subscribe(toolName=>{
       if(this.toolsContainer.get(toolName)){
         this.toolsContainer.forEach(element => {
           element.selected = false;
         });
       } else{
-        toolName = "Crayon"
+        toolName = "Crayon"; // default tool
       }
         let selectedTool: DrawingTool =this.toolsContainer.get(toolName);
         selectedTool.selected= true;
     })
 
     //Fill the toolbox
-    toolBox.push(pencil);
-    toolBox.push(rect);
-    toolBox.push(line);
-    toolBox.push(brush);
+   
 
     //Subscribe each tool to keyboard and mouse
-    toolBox.forEach(element => {
+    this.toolsContainer.forEach(element => {
       keyboardHandler.addToolObserver(element);
       mouseHandler.addObserver(element);
     });

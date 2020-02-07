@@ -4,6 +4,7 @@ import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { FormsAttribute } from '../attributes/attribute-form';
+import { ColorPickingService } from '../colorPicker/color-picking.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,9 @@ export class RectangleService extends DrawingTool {
   renderMode:number;
   attr: FormsAttribute
 
-  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number, interaction:InteractionService){
+  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number, interaction:InteractionService, colorPick: ColorPickingService){
 
-    super(inProgess, drawing, selected,width,primary_color,shortcut, interaction);
+    super(inProgess, drawing, selected,width,primary_color,shortcut, interaction, colorPick);
     this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS)
     this.secondary_color = secondary_color;
     this.renderMode = renderMode;
@@ -102,6 +103,7 @@ export class RectangleService extends DrawingTool {
 
   //Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
   createPath(p:Point[]){
+    this.updateColors()
     this.updateAttributes()
     //first and last points
     let p1x = p[0].x;
@@ -134,23 +136,15 @@ export class RectangleService extends DrawingTool {
     let s : string = '<g name = "rectangle">';
 
     //get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
-    let stroke = (this.renderMode == 0 || this.renderMode == 2) ? `#${this.secondary_color}` : "none";
-    let fill = (this.renderMode == 1 || this.renderMode == 2) ? `#${this.primary_color}`: "none";
+    let stroke = (this.attr.plotType == 0 || this.attr.plotType == 2) ? `#${this.chosenColor.secColor}` : "none";
+    let fill = (this.attr.plotType == 1 || this.attr.plotType == 2) ? `#${this.chosenColor.primColor}`: "none";
 
     //set render attributes for the svg rect
     s += `<rect x="${startX}" y="${startY}"`;
     s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
 
-    if(this.attr.plotType === 1 || this.attr.plotType ===2){
-      s += `fill="${fill}"`; 
-    }
-    else if (this.attr.plotType ===0){
-      s+=`fill ="transparent"`
-    }
-    if(this.attr.plotType ===0 ||this.attr.plotType ===2){
-      s+= `stroke = "${stroke}"` 
-    }
-    s += `stroke-width="${this.width}"/>`;
+    s += `fill="${fill}"`;
+    s += `stroke-width="${this.width}" stroke="${stroke}"/>`;
 
     //end the divider
     s += "</g>"

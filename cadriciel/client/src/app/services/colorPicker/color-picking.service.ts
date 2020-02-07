@@ -136,6 +136,9 @@ export class ColorPickingService {
     this.cData.slCursorX = x;
     this.cData.slCursorY = y;
   }
+  onContextMenu(event : MouseEvent) : void {
+    event.preventDefault();
+  }
   //Mouse up event function when mouse on a color selector
   colorSelectOnMouseUp(): void{
     if ( this.cData.isSLSelecting || this.cData.isHueSelecting) {
@@ -288,55 +291,35 @@ export class ColorPickingService {
     this.updateSliderField( color );
   }
   //validate if char is hexadecimal. A window alert is send id invalide char are found
-  validateHex(hexString : string) : any {
-    let hexOk : any = true;
-    let valideNubmer : any[] = [];
-    for(let i : number = 0; i < hexString.length; i++) {
-      for( let j: number = 0; j < this.cData.hexNumber.length; j++){
-        valideNubmer[i] = false;
-        if ( hexString[i] === this.cData.hexNumber[j] ){
-          valideNubmer[i] = true;
+  validateHexInput(event : KeyboardEvent) : void {
+    let hexOk : any = false;
+    for(let i : number = 0; i < this.cData.hexNumber.length; i++) {
+        if ( event.which === this.cData.hexNumber[i] ){
+          hexOk = true;
           break;
         }
-      }
     }
-    let badChar : string = '';
-    for( let z : number = 0; z < valideNubmer.length; z++){
-      if(!valideNubmer[z]){
-        badChar += hexString[z];
-        hexOk = false;
-      }
-    } 
-    if (!hexOk && hexString.length > 0){
-      if (badChar.length === 1){
-        window.alert( badChar + " n'est pas un chiffre hexadécimale valide!");
-      }
-      else{
-        window.alert( badChar + " ne sont pas des chiffres hexadécimale valide!");
-      }
+    if (!hexOk){
+      event.preventDefault();
     }
-    return hexOk;
   }
   /**
   * Hex color text field input event function
   * Update display if valide value are input 
   **/
-  onHexColorInput(event : any) : void {
-    window.alert
-      if ( this.cData.hexColorInput.length === 6) {
-        if( this.validateHex(this.cData.hexColorInput) ) {
-          this.updateSliderField( this.cData.hexColorInput );
-          if ( this.cData.primarySelect ) {
-              this.cData.primaryColor = '#' + this.cData.hexColorInput + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
-          }
-          else {
-              this.cData.secondaryColor = '#' + this.cData.hexColorInput + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
-          }
-          this.cData.redHexInput = this.cData.hexColorInput.substring(0, 2);
-          this.cData.greenHexInput = this.cData.hexColorInput.substring(2, 4);
-          this.cData.blueHexInput = this.cData.hexColorInput.substring(4, 6);
+  onHexColorInput(event : KeyboardEvent) : void {
+    if ( this.cData.hexColorInput.length === 6) {
+        this.updateSliderField( this.cData.hexColorInput );
+        if ( this.cData.primarySelect ) {
+            this.cData.primaryColor = '#' + this.cData.hexColorInput + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
         }
-      }
+        else {
+            this.cData.secondaryColor = '#' + this.cData.hexColorInput + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
+        }
+        this.cData.redHexInput = this.cData.hexColorInput.substring(0, 2);
+        this.cData.greenHexInput = this.cData.hexColorInput.substring(2, 4);
+        this.cData.blueHexInput = this.cData.hexColorInput.substring(4, 6);
+    }
   }
   /**
   * Red hex text field input event function
@@ -344,7 +327,6 @@ export class ColorPickingService {
   **/
   onRedHexInput() : void {
       if ( this.cData.redHexInput.length === 2) {
-        if ( this.validateHex(this.cData.redHexInput + this.cData.greenHexInput + this.cData.blueHexInput) ) {
           if ( this.cData.primarySelect ) {
               this.cData.primaryColor = '#' + this.cData.redHexInput + this.cData.hexColorInput.substring( 2, 6 ) + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
               this.updateSliderField( this.cData.primaryColor );
@@ -354,7 +336,6 @@ export class ColorPickingService {
               this.updateSliderField( this.cData.secondaryColor );
           }
           this.cData.hexColorInput = this.cData.redHexInput + this.cData.hexColorInput.substring( 2, 6 );
-        }
       }
   }
   /**
@@ -363,7 +344,6 @@ export class ColorPickingService {
   **/
   onGreenHexInput() : void { //unmoved
       if (this.cData.greenHexInput.length === 2) {
-        if (this.validateHex(this.cData.redHexInput + this.cData.greenHexInput + this.cData.blueHexInput)){
           if ( this.cData.primarySelect ) {
               this.cData.primaryColor = '#' + this.cData.hexColorInput.substring( 0, 2 ) + this.cData.greenHexInput + this.cData.hexColorInput.substring( 4, 6 )  + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
               this.updateSliderField( this.cData.primaryColor );
@@ -373,7 +353,6 @@ export class ColorPickingService {
               this.updateSliderField( this.cData.secondaryColor );
           }
           this.cData.hexColorInput = this.cData.hexColorInput.substring( 0, 2 ) + this.cData.greenHexInput + this.cData.hexColorInput.substring( 4, 6 );
-        }
       }
   }
 
@@ -383,7 +362,6 @@ export class ColorPickingService {
   **/
   onBlueHexInput() : void { //unmoved
       if (this.cData.blueHexInput.length === 2) {
-        if(this.validateHex(this.cData.redHexInput + this.cData.greenHexInput + this.cData.blueHexInput)){
           if ( this.cData.primarySelect ) {
               this.cData.primaryColor = '#' + this.cData.hexColorInput.substring( 0, 4 ) + this.cData.blueHexInput + this.colorConvert.rgbaToHex( this.cData.primaryAlpha * 255 );
               this.updateSliderField( this.cData.primaryColor );
@@ -392,7 +370,6 @@ export class ColorPickingService {
               this.cData.secondaryColor = '#' + this.cData.hexColorInput.substring( 0, 4 ) + this.cData.blueHexInput + this.colorConvert.rgbaToHex( this.cData.secondaryAlpha * 255 );
               this.updateSliderField( this.cData.secondaryColor );
           }
-        }
       }
       this.cData.hexColorInput = this.cData.hexColorInput.substring( 0, 4 ) + this.cData.blueHexInput;
   }
