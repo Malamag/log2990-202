@@ -4,6 +4,8 @@ import { ModalWindowService } from 'src/app/services/window-handler/modal-window
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
+import { Subscription } from 'rxjs';
+import { Canvas } from 'src/app/models/Canvas.model';
 
 @Component({
   selector: 'app-option-bar',
@@ -12,6 +14,9 @@ import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboa
 })
 export class OptionBarComponent implements OnInit {
   funcMenu = menuItems;
+  canvasSub: Subscription;
+  currentCanvas: Canvas;
+
   constructor(private winService: ModalWindowService) {
     const O_KEY = 79; //keycode for letter o
 
@@ -29,13 +34,13 @@ export class OptionBarComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+        
   }
 
   openNewDrawForm(){
-
-    this.winService.openWindow(NewDrawComponent);
- 
+    if(confirm("Un dessin est déjà en cours. Voulez-vous continuer?")){
+      this.winService.openWindow(NewDrawComponent);
+    }
   }
   
   openUserGuide() {

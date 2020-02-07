@@ -6,6 +6,7 @@ import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
 import { Subscription} from 'rxjs';
 import { Canvas } from 'src/app/models/Canvas.model';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 @Component({
   selector: 'app-svg-draw',
   templateUrl: './svg-draw.component.html',
@@ -13,12 +14,14 @@ import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.se
 })
 export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor(private canvBuilder: CanvasBuilderService) { }
+  constructor(private canvBuilder: CanvasBuilderService, private interaction: InteractionService) { }
   canvas: Canvas;
   canvasSubscr: Subscription;
   width: number;
   height: number;
   backColor: string;
+
+  toolsContainer = new Map();
 
   @ViewChild('frame', {static: false}) frameRef: ElementRef;
 
@@ -40,10 +43,26 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     //Create all the tools
     let tc = new ToolCreator(document.getElementsByName("in-progress")[0], document.getElementsByName("drawing")[0]);
 
-    let pencil = tc.CreatePencil(true,10,color1,67);
-    let rect = tc.CreateRectangle(false,3,color1,color2, 2,49);
-    let line = tc.CreateLine(false,3,color2,true,15,76);
-    let brush = tc.CreateBrush(false,50,color1, 4,87);
+    let pencil = tc.CreatePencil(true,10,color1,67, this.interaction);
+    let rect = tc.CreateRectangle(false,3,color1,color2, 2,49, this.interaction);
+    let line = tc.CreateLine(false,3,color2,true,15,76, this.interaction);
+    let brush = tc.CreateBrush(false,50,color1, 4,87, this.interaction);
+
+    this.toolsContainer.set("Rectangle", rect)
+    this.toolsContainer.set("Ligne", line)
+    this.toolsContainer.set("Pinceau", brush)
+    this.toolsContainer.set("Crayon", pencil)
+    this.interaction.$selectedTool.subscribe(toolName=>{
+      if(this.toolsContainer.get(toolName)){
+        this.toolsContainer.forEach(element => {
+          element.selected = false;
+        });
+      } else{
+        toolName = "Crayon"
+      }
+        let selectedTool: DrawingTool =this.toolsContainer.get(toolName);
+        selectedTool.selected= true;
+    })
 
     //Fill the toolbox
     toolBox.push(pencil);
@@ -68,6 +87,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     window.addEventListener("mousedown", function(e){
       mouseHandler.down(e);
+      
     });
     window.addEventListener("mouseup", function(e){
       mouseHandler.up(e);
@@ -80,10 +100,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     window.addEventListener("keyup", function(e){
       keyboardHandler.reset(e);
     });
-
-    
-
   }
+
   initCanvas() {
     this.canvasSubscr = this.canvBuilder.canvSubject.subscribe(
       (canvas: Canvas) => {
@@ -93,9 +111,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         this.width = canvas.canvasWidth;
         this.height= canvas.canvasHeight;
         this.backColor = canvas.canvasColor;
-        if(this.frameRef) {
-          this.frameRef.nativeElement.innerHTML = "";
-        }
+        this.canvBuilder.whipeDraw(this.frameRef);
       }
     );
     this.canvBuilder.emitCanvas();
@@ -110,4 +126,5 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     this.canvasSubscr.unsubscribe();
     
   }
+
 }

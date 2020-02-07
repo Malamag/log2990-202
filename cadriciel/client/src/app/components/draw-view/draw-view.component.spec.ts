@@ -1,11 +1,24 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DrawViewComponent } from './draw-view.component';
 import {menuItems, toolsItems, welcomeItem} from '../../functionality'
-import { MatToolbarModule, MatIconModule, MatTooltipModule, MatButtonModule, MatSidenavModule, MatSliderModule, MatSelectModule } from '@angular/material';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
 import { OptionBarComponent } from './option-bar/option-bar.component';
+import { ToolBoxComponent } from './tool-box/tool-box.component';
+import { ToolAttributesComponent } from './tool-box/tool-attributes/tool-attributes.component';
+import { SvgDrawComponent } from './svg-draw/svg-draw.component';
+import { ColorFormComponent } from '../color-picker/color-form/color-form.component';
+
+import {
+  MatButtonModule, 
+  MatTooltipModule, 
+  MatIconModule, 
+  MatToolbarModule,
+  MatSliderModule,
+  MatDialog,
+  MatFormFieldModule} from '@angular/material';
+import { ColorPickerComponent } from '../color-picker/color-picker.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+
 
 describe('DrawViewComponent', () => {
   let component: DrawViewComponent;
@@ -13,10 +26,26 @@ describe('DrawViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DrawViewComponent, OptionBarComponent ],
-      providers :[{provide :menuItems, toolsItems, welcomeItem}],
-      imports:[ MatToolbarModule, MatIconModule,MatTooltipModule, MatButtonModule,
-        MatSidenavModule, MatSliderModule, MatSelectModule, BrowserModule, HttpClientModule, BrowserAnimationsModule]
+      declarations: [ 
+        DrawViewComponent, 
+        OptionBarComponent, 
+        ToolBoxComponent, 
+        ToolAttributesComponent, 
+        SvgDrawComponent,
+        ColorPickerComponent,
+      ColorFormComponent ],
+      providers :[{provide :menuItems, toolsItems, welcomeItem},
+                  {provide: MatDialog}],
+      imports: [
+        MatButtonModule, 
+        MatTooltipModule, 
+        MatIconModule, 
+        MatToolbarModule, 
+        MatSliderModule,
+        FormsModule,
+        MatFormFieldModule,
+        ReactiveFormsModule]
+      
     })
     .compileComponents();
   }));

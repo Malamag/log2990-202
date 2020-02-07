@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserManualComponent } from './user-manual.component';
-import { MatDialogModule } from '@angular/material';
+import { MatDialogModule, MatButtonModule, MatIconModule, MatDialogRef } from '@angular/material';
+import { UserManualContentComponent } from './user-manual-content/user-manual-content.component';
 
 describe('UserManualComponent', () => {
   let component: UserManualComponent;
@@ -9,8 +10,9 @@ describe('UserManualComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserManualComponent ],
-      imports: [ MatDialogModule ]
+      declarations: [ UserManualComponent, UserManualContentComponent ],
+      imports: [ MatDialogModule, MatButtonModule, MatIconModule ],
+      providers: [{provide: MatDialogRef}]
     })
     .compileComponents();
   }));

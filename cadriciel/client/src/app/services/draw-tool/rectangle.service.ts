@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
+import { InteractionService } from '../service-interaction/interaction.service';
+import { FormsAttribute } from '../attributes/attribute-form';
 
 @Injectable({
   providedIn: 'root'
@@ -11,17 +13,23 @@ export class RectangleService extends DrawingTool {
   secondary_color:string;
   isSquare:boolean;
   renderMode:number;
+  attr: FormsAttribute
 
-  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number){
+  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number, interaction:InteractionService){
 
-    super(inProgess, drawing, selected,width,primary_color,shortcut);
-
+    super(inProgess, drawing, selected,width,primary_color,shortcut, interaction);
+    this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS)
     this.secondary_color = secondary_color;
     this.renderMode = renderMode;
 
     this.isSquare = false;
   }
-
+  updateAttributes(){
+    this.interaction.$formsAttributes.subscribe(obj=>{
+      if(obj)
+        this.attr = new FormsAttribute(obj.plotType, obj.lineThickness, obj.numberOfCorners)
+    });
+  }
   //updating on key change
   update(keyboard:KeyboardHandlerService){
 
@@ -94,7 +102,7 @@ export class RectangleService extends DrawingTool {
 
   //Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
   createPath(p:Point[]){
-
+    this.updateAttributes()
     //first and last points
     let p1x = p[0].x;
     let p1y = p[0].y;
@@ -132,8 +140,17 @@ export class RectangleService extends DrawingTool {
     //set render attributes for the svg rect
     s += `<rect x="${startX}" y="${startY}"`;
     s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
-    s += `fill="${fill}"`;
-    s += `stroke-width="${this.width}" stroke="${stroke}"/>`;
+
+    if(this.attr.plotType === 1 || this.attr.plotType ===2){
+      s += `fill="${fill}"`; 
+    }
+    else if (this.attr.plotType ===0){
+      s+=`fill ="transparent"`
+    }
+    if(this.attr.plotType ===0 ||this.attr.plotType ===2){
+      s+= `stroke = "${stroke}"` 
+    }
+    s += `stroke-width="${this.width}"/>`;
 
     //end the divider
     s += "</g>"

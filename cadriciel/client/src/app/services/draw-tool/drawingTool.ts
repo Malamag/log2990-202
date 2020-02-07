@@ -1,5 +1,7 @@
 import {InputObserver } from './input-observer';
 import { Point } from './point';
+import { InteractionService } from '../service-interaction/interaction.service';
+import { DefaultAttributeValues } from '../attributes/default-values';
 
 export abstract class DrawingTool extends InputObserver{
     isDown:boolean;
@@ -10,13 +12,15 @@ export abstract class DrawingTool extends InputObserver{
     ignoreNextUp:boolean;
     inProgress:HTMLElement;
     drawing:HTMLElement;
+    interaction : InteractionService
+    defaultValues: DefaultAttributeValues
 
     abstract createPath(path:Point[], doubleClickCheck?:boolean):void;
   
-    constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number){
+    constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number, interaction: InteractionService){
 
       super(shortcut,selected);
-
+      this.interaction = interaction;
       this.inProgress = inProgess;
       this.drawing = drawing;
 
@@ -27,7 +31,9 @@ export abstract class DrawingTool extends InputObserver{
       this.currentPath = [];
 
       this.ignoreNextUp = false;
+      this.defaultValues = new DefaultAttributeValues()
     }
+    abstract updateAttributes():void
 
     //cancel the current progress
     cancel(){

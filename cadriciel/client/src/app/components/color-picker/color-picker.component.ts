@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ColorPickingService } from '../../services/colorPicker/color-picking.service';
 import { colorData } from './color-data';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-color-picker',
@@ -11,6 +12,7 @@ import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 export class ColorPickerComponent implements OnInit, OnDestroy {
     
     cData = colorData;
+    colorSubsc: Subscription;
         
     constructor(private colorPicking: ColorPickingService) {}
 
@@ -21,15 +23,15 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
 
     initColors() {
         const DEFAULT = "#ff0000"; // defining a default
-        this.colorPicking.colorSubject.subscribe(
+        this.colorSubsc = this.colorPicking.colorSubject.subscribe(
             (colors: ChoosenColors) => {
                 if(colors == undefined){
                     colors = new ChoosenColors(DEFAULT, DEFAULT);
-                    console.log("default called!");
+                    
                 }
                 this.cData.primaryColor = colors.primColor;
                 this.cData.secondaryColor = colors.secColor;
-                console.log("subscription called!");
+                
             }
         );
     }

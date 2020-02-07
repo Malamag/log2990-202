@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Point } from './point';
 import { PencilService } from './pencil.service';
+import { InteractionService } from '../service-interaction/interaction.service';
+import { ToolsAttributes } from '../attributes/tools-attribute';
 
 @Injectable({
   providedIn: 'root'
@@ -8,15 +10,17 @@ import { PencilService } from './pencil.service';
 export class BrushService extends PencilService {
 
   textureNumber:number;
+  
+  
 
   textures:{type:string, intensity:number, frequency:number}[];
-
-  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string, textureNumber:number,shortcut:number){
+  attr: ToolsAttributes
+  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string, textureNumber:number,shortcut:number, interaction: InteractionService){
     
-    super(inProgess,drawing, selected,width,primary_color,shortcut);
+    super(inProgess,drawing, selected,width,primary_color,shortcut, interaction);
     
     this.textureNumber = textureNumber;
-
+    this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
     //values used as texture presets
     this.textures = [
       {"type":"blured","intensity":5, "frequency":0},
@@ -27,15 +31,23 @@ export class BrushService extends PencilService {
     ];
   }
 
+  updateAttributes(){
+    
+    this.interaction.$toolsAttributes.subscribe(obj=>{
+      if(obj)
+        this.attr = new ToolsAttributes(obj.lineThickness, obj.texture)
+    })
+  }
+
   //Creates an svg path that connects every points of currentPath and creates a filter with the brush attributes
   createPath(p:Point[]){
-
+    this.updateAttributes()
     //get parameters from the used texture
-    let width = this.width;
-    let scale = this.textures[this.textureNumber].intensity;
+    let width = this.attr.lineThickness;
+    let scale = this.textures[this.attr.texture].intensity;
 
     //"normalize" the frequency to keep a constant render no mather the width or scale
-    let frequency = scale/(width/10) * this.textures[this.textureNumber].frequency;
+    let frequency = scale/(width/10) * this.textures[this.attr.texture].frequency;
 
     //create a divider
     let s = '<g name = "brush-stroke">';
@@ -44,9 +56,9 @@ export class BrushService extends PencilService {
     let uniqueID = new Date().getTime();
 
     //create the corresponding svg filter
-    if(this.textures[this.textureNumber].type == "blured"){
+    if(this.textures[this.attr.texture].type == "blured"){
       s +=  this.createBluredFilter(scale,uniqueID);
-    }else if(this.textures[this.textureNumber].type == "noise"){
+    }else if(this.textures[this.attr.texture].type == "noise"){
       //we use a displacement map so we need to resize the brush to keep the overall width
       scale = width/((100/scale) / (100/width));
       s += this.createNoiseFilter(width, scale, frequency,uniqueID);
@@ -62,7 +74,7 @@ export class BrushService extends PencilService {
       s+= `L ${p[i].x} ${p[i].y} `;
     }
     //set render attributes
-    s+= `"stroke="#${this.primary_color}" stroke-width="${width}"`;
+    s+= `"stroke="#${this.primary_color}" stroke-width="${this.attr.lineThickness}"`;
     s+= 'fill="none" stroke-linecap="round" stroke-linejoin="round"';
     s+= `filter="url(#${uniqueID})"/>`;
     //end the path

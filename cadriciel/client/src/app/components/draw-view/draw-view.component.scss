@@ -9,11 +9,12 @@
         'header header header'
         'nav content side';
 
-    grid-template-columns: 20%;
-    grid-template-rows: 10%;
+    grid-template-columns: 18%;
+    //grid-template-rows: 10%;
     grid-gap: 0;
 
-    height: 90vh;
+    height: 100vh;
+    width: 100%;
 }
 
 header {
@@ -28,7 +29,7 @@ nav {
 
 main {
     background-color: rgb(43, 43, 43);
-    grid-area: content;
+    //grid-area: content;
     overflow: scroll;
 }
 
@@ -40,7 +41,7 @@ aside {
 .wrapper {
     margin-left: auto;
     margin-right: auto;
-    height: auto;
+    
     width: auto;
 }
 
@@ -54,3 +55,4 @@ aside {
 #toolAttributes{
   float:left; 
 } 
+

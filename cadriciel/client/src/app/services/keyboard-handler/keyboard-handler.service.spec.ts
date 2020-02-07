@@ -1,15 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-//import { InputObserver } from '../draw-tool/input-observer';
-
 import { KeyboardHandlerService } from './keyboard-handler.service';
 import { InputObserver } from '../draw-tool/input-observer';
 import { PencilService } from '../draw-tool/pencil.service';
+import { InteractionService } from '../service-interaction/interaction.service';
+
 
 describe('KeyboardHandlerService', () => {
+  let service = new KeyboardHandlerService();
   
-  beforeEach(() => TestBed.configureTestingModule({
-    
-  }));
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      
+    });
+  });
 
   it('should be created', () => {
     const service: KeyboardHandlerService = TestBed.get(KeyboardHandlerService);
@@ -17,15 +20,19 @@ describe('KeyboardHandlerService', () => {
   });
 
   it("should add the observer", ()=>{
-    const service: KeyboardHandlerService = TestBed.get(KeyboardHandlerService);
-    const observer: InputObserver = new PencilService(true,1,"blue", 2);
+    let prog = new HTMLElement();
+    prog.innerHTML = "";
+    let draw = new HTMLElement();
+    draw.innerHTML = "";
+
+    const observer: InputObserver = new PencilService(prog, draw, true,1,"blue", 2, new InteractionService());
     service.addToolObserver(observer);
     expect(service.toolObservers.length).toBe(1);
     expect(service.toolshortcuts.length).toBe(1);
   })
 
   it("should get the key information and the observers must be updated and the change check is done", ()=>{
-    const service: KeyboardHandlerService = TestBed.get(KeyboardHandlerService);
+    
     const spyToolChange = spyOn(service, 'checkForToolChange');
     const spyUpdate = spyOn(service, 'updateToolObservers');
     let mockKey : KeyboardEvent = new KeyboardEvent("keydown",{
@@ -43,7 +50,7 @@ describe('KeyboardHandlerService', () => {
   });
 
   it('on reset the keyboard attributes are reseted and the tools have been updated',()=>{
-    const service: KeyboardHandlerService = TestBed.get(KeyboardHandlerService);
+    
     const spyUpdate = spyOn(service, 'updateToolObservers');
     let mockKey : KeyboardEvent = new KeyboardEvent("keyup",{
       key: "Shift",
