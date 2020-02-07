@@ -63,4 +63,11 @@ it('should hide nextButton on last page',() => {
   expect(button.hasAttributes('hidden')).toEqual(true);
 });
 
+it('should close modal window',() => {
+  let button = fixture.debugElement.nativeElement.querySelector('#quitButton'); //Find the quitButton in the DOM
+  const closeGuide = spyOn(component, "closeModal");
+  button.click();
+  expect(closeGuide).toHaveBeenCalled();
+});
+
 });

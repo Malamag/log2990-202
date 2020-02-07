@@ -37,5 +37,10 @@ describe('NewDrawComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  //it('should ')
+  it('should close modal window',() => {
+    let button = fixture.debugElement.nativeElement.querySelector('#quitButton'); //Find the quitButton in the DOM
+    const closeGuide = spyOn(component, "closeModalForm");
+    button.click();
+    expect(closeGuide).toHaveBeenCalled();
+  });
 });
