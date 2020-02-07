@@ -67,6 +67,18 @@ export class ColorPickerComponent implements OnInit {
     lastColorSelector( event : MouseEvent, lastColor : string ) : void {
         this.colorPicking.lastColorSelector(event,lastColor);
     }
+    onSwapSVGMouseOver() : void {
+        this.colorPicking.onSwapSVGMouseOver();
+    }
+    onSwapSVGMouseLeave() : void {
+        this.colorPicking.onSwapSVGMouseLeave();
+    }
+    onSwapSVGMouseDown() : void {
+        this.colorPicking.onSwapSVGMouseDown();
+    }
+    onSwapSVGMouseUp() : void {
+        this.colorPicking.onSwapSVGMouseUp();
+    }
     // convert rbg to h value of hsl.
     swapInputDisplay(event : any) {
         this.colorPicking.swapInputDisplay(event);
@@ -154,35 +166,8 @@ export class ColorPickerComponent implements OnInit {
     get gradientStylesS(): any{
         return { 'stop-color': this.cData.secondaryColor };
     }
-    get lastColor1 (): any {
-        return { 'fill': this.cData.lastColors[0] };
-    }
-    get lastColor2 (): any {
-        return { 'fill': this.cData.lastColors[1] };
-    }
-    get lastColor3 (): any {
-        return { 'fill': this.cData.lastColors[2] };
-    }
-    get lastColor4 (): any {
-        return { 'fill': this.cData.lastColors[3] };
-    }
-    get lastColor5 (): any {
-        return { 'fill': this.cData.lastColors[4] };
-    }
-    get lastColor6 (): any {
-        return { 'fill': this.cData.lastColors[5] };
-    }
-    get lastColor7 (): any {
-        return { 'fill': this.cData.lastColors[6] };
-    }
-    get lastColor8 (): any {
-        return { 'fill': this.cData.lastColors[7] };
-    }
-    get lastColor9 (): any {
-        return { 'fill': this.cData.lastColors[8] };
-    }
-    get lastColor10 (): any {
-        return { 'fill': this.cData.lastColors[9] };
+    get swapStyles(): any {
+        return { 'stroke' : this.cData.swapStrokeStyle, 'font-size' : 10, 'font-style' : 'italic'};
     }
     get cursorStyles(): any{
         return { 'transform' : 'translate(' + this.cData.slCursorX + 'px,' + this.cData.slCursorY + 'px)'};

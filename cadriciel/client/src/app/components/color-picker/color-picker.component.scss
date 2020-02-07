@@ -14,8 +14,18 @@ button {
     box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
 }
 
+.colortypelabel {
+  position: absolute;
+  font-size: 10px;
+  color: white;
+  width: 200px;
+  height: 20px;
+  font-weight: bold;
+  padding: 0px;
+}
 .namelabel {
     font-size: 9px;
+    color: white;
     float: left;
     width: 65px;
     height: 8px;
@@ -25,6 +35,7 @@ button {
 .numberlabel {
     font-size: 9px;
     float: left;
+    color: white;
     width: 30px;
     height: 8px;
     padding: 0px;
@@ -61,7 +72,7 @@ svg {
 
 .switch {
     position: relative;
-    display: inline-block;
+    display: block;
     width: 40px;
     height: 10px;
 }
@@ -90,8 +101,6 @@ svg {
     content: "";
     height: 10px;
     width: 10px;
-    left: 0px;
-    bottom: 0px;
     box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
     background-color: white;
     -webkit-transition: .4s;
@@ -173,7 +182,7 @@ input[type=range]::-webkit-slider-runnable-track {
 input[type=range]::-webkit-slider-thumb {
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   border: 1px solid #000000;
-  height: 10px;
+  height: 8px;
   width: 16px;
   border-radius: 3px;
   background: #ffffff;
