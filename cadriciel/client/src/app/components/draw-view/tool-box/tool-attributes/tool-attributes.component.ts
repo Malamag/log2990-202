@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { FormsAttribute } from 'src/app/services/attributes/attribute-form';
 import { LineAttributes } from 'src/app/services/attributes/line-attributes';
@@ -9,7 +9,7 @@ import { ToolsAttributes } from 'src/app/services/attributes/tools-attribute';
   templateUrl: './tool-attributes.component.html',
   styleUrls: ['./tool-attributes.component.scss']
 })
-export class ToolAttributesComponent implements OnInit, OnDestroy {
+export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   lineThickness: number;
   texture: number;
@@ -21,8 +21,8 @@ export class ToolAttributesComponent implements OnInit, OnDestroy {
 
   constructor(private interaction: InteractionService) {  }
   
-
-  ngOnInit() {
+  ngOnInit(){}
+  ngAfterViewInit() {
     // default values
     this.lineThickness = 5; //5px thick line
     this.texture = 0; // blur texture

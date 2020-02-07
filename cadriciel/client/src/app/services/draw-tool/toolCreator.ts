@@ -4,6 +4,7 @@ import { PencilService } from './pencil.service';
 import { LineService } from './line.service';
 import { BrushService } from './brush.service';
 import { InteractionService } from '../service-interaction/interaction.service';
+import { ColorPickingService } from '../colorPicker/color-picking.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,19 +19,19 @@ export class ToolCreator {
     this.drawing = drawing;
   }
 
-  CreatePencil(selected:boolean, width:number, primary_color:string,shortcut:number, interaction: InteractionService){
-    return new PencilService(this.inProgress, this.drawing, selected,width,primary_color,shortcut, interaction);
+  CreatePencil(selected:boolean, width:number, primary_color:string,shortcut:number, interaction: InteractionService, colorPick:ColorPickingService){
+    return new PencilService(this.inProgress, this.drawing, selected,width,primary_color,shortcut, interaction, colorPick);
   }
 
-  CreateRectangle(selected:boolean, width:number, primary_color:string, secondary_color:string,mode:number,shortcut:number, interaction: InteractionService){
-    return new RectangleService(this.inProgress, this.drawing, selected,width,primary_color,secondary_color,mode,shortcut, interaction);
+  CreateRectangle(selected:boolean, width:number, primary_color:string, secondary_color:string,mode:number,shortcut:number, interaction: InteractionService, colorPick: ColorPickingService){
+    return new RectangleService(this.inProgress, this.drawing, selected,width,primary_color,secondary_color,mode,shortcut, interaction, colorPick);
   }
 
-  CreateLine(selected:boolean, width:number, primary_color:string,showJunctions:boolean,junctionWidth:number,shortcut:number, interaction: InteractionService){
-    return new LineService(this.inProgress, this.drawing, selected,width,primary_color, showJunctions,junctionWidth,shortcut, interaction);
+  CreateLine(selected:boolean, width:number, primary_color:string,showJunctions:boolean,junctionWidth:number,shortcut:number, interaction: InteractionService, colorPick: ColorPickingService){
+    return new LineService(this.inProgress, this.drawing, selected,width,primary_color, showJunctions,junctionWidth,shortcut, interaction, colorPick);
   }
 
-  CreateBrush(selected:boolean, width:number, primary_color:string,textureNumber:number,shortcut:number, interaction: InteractionService){
-    return new BrushService(this.inProgress, this.drawing, selected,width,primary_color,textureNumber,shortcut, interaction);
+  CreateBrush(selected:boolean, width:number, primary_color:string,textureNumber:number,shortcut:number, interaction: InteractionService, colorPick: ColorPickingService){
+    return new BrushService(this.inProgress, this.drawing, selected,width,primary_color,textureNumber,shortcut, interaction, colorPick);
   }
 }

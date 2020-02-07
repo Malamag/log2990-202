@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, Renderer2} from '@angular/core';
 import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
@@ -7,6 +7,8 @@ import { Subscription} from 'rxjs';
 import { Canvas } from 'src/app/models/Canvas.model';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
+import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
+
 @Component({
   selector: 'app-svg-draw',
   templateUrl: './svg-draw.component.html',
@@ -14,7 +16,7 @@ import { InteractionService } from 'src/app/services/service-interaction/interac
 })
 export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor(private canvBuilder: CanvasBuilderService, private interaction: InteractionService) { }
+  constructor(private canvBuilder: CanvasBuilderService, private interaction: InteractionService, private renderer: Renderer2, private colorPick: ColorPickingService) { }
   canvas: Canvas;
   canvasSubscr: Subscription;
   width: number;
@@ -22,6 +24,10 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   backColor: string;
 
   toolsContainer = new Map();
+  workSpace: HTMLElement
+  svg: HTMLElement
+  inProgress: HTMLElement
+  drawing: HTMLElement
 
   @ViewChild('frame', {static: false}) frameRef: ElementRef;
 
@@ -43,10 +49,11 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     //Create all the tools
     let tc = new ToolCreator(document.getElementsByName("in-progress")[0], document.getElementsByName("drawing")[0]);
 
-    let pencil = tc.CreatePencil(true,10,color1,67, this.interaction);
-    let rect = tc.CreateRectangle(false,3,color1,color2, 2,49, this.interaction);
-    let line = tc.CreateLine(false,3,color2,true,15,76, this.interaction);
-    let brush = tc.CreateBrush(false,50,color1, 4,87, this.interaction);
+    let pencil = tc.CreatePencil(true,10,color1,67, this.interaction, this.colorPick);
+    let rect = tc.CreateRectangle(false,3,color1,color2, 2,49, this.interaction, this.colorPick);
+    let line = tc.CreateLine(false,3,color2,true,15,76, this.interaction, this.colorPick);
+    let brush = tc.CreateBrush(false,50,color1, 4,87, this.interaction, this.colorPick);
+
 
     this.toolsContainer.set("Rectangle", rect);
     this.toolsContainer.set("Ligne", line);
@@ -65,13 +72,10 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     })
 
     //Fill the toolbox
-    toolBox.push(pencil);
-    toolBox.push(rect);
-    toolBox.push(line);
-    toolBox.push(brush);
+   
 
     //Subscribe each tool to keyboard and mouse
-    toolBox.forEach(element => {
+    this.toolsContainer.forEach(element => {
       keyboardHandler.addToolObserver(element);
       mouseHandler.addObserver(element);
     });
@@ -118,7 +122,21 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    window.dispatchEvent(new Event('resize')); 
+    // the 
+    this.workSpace = this.renderer.createElement('div')
+    this.renderer.setAttribute(this.workSpace, 'width', this.width.toString())
+    this.renderer.setAttribute(this.workSpace, 'height', this.height.toString())
+    this.renderer.appendChild(this.frameRef.nativeElement, this.workSpace)
+
+    // the svg
+    this.svg= this.renderer.createElement('svg', 'http://www.w3.org/2000/svg')
+    this.renderer.setAttribute(this.svg, 'baseProfile', 'full')
+    this.renderer.setAttribute(this.svg, 'version', '1.1')
+    this.renderer.setAttribute(this.svg, 'width', '')
+    this.renderer.setAttribute(this.svg, 'height', '100%')
+    this.renderer.appendChild(this.workSpace, this.svg)
+
+    window.dispatchEvent(new Event('resize'));
     
   }
   

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ColorPickingService } from '../../services/colorPicker/color-picking.service';
 import { colorData } from './color-data';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
     templateUrl: './color-picker.component.html',
     styleUrls: [ './color-picker.component.scss']
 })
-export class ColorPickerComponent implements OnInit, OnDestroy {
+export class ColorPickerComponent implements OnInit {
     
     cData = colorData;
     colorSubsc: Subscription;
@@ -36,9 +36,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
         );
     }
 
-    ngOnDestroy() { // avoids staying subscribed to a non-existant object
-        this.colorPicking.colorSubject.unsubscribe();
-    }
+    
     setColor( button : number, color : number[] ) { // DONE
         this.colorPicking.setColor(color)
     }

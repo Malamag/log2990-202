@@ -2,6 +2,9 @@ import {InputObserver } from './input-observer';
 import { Point } from './point';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { DefaultAttributeValues } from '../attributes/default-values';
+import { ColorPickingService } from '../colorPicker/color-picking.service';
+import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { Subscription } from 'rxjs';
 
 export abstract class DrawingTool extends InputObserver{
     isDown:boolean;
@@ -14,10 +17,13 @@ export abstract class DrawingTool extends InputObserver{
     drawing:HTMLElement;
     interaction : InteractionService
     defaultValues: DefaultAttributeValues
+    colorPick: ColorPickingService
+    chosenColor: ChoosenColors
+    colorSub: Subscription
 
     abstract createPath(path:Point[], doubleClickCheck?:boolean):void;
   
-    constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number, interaction: InteractionService){
+    constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number, interaction: InteractionService, colorPick: ColorPickingService){
 
       super(shortcut,selected);
       this.interaction = interaction;
@@ -29,9 +35,23 @@ export abstract class DrawingTool extends InputObserver{
   
       this.isDown = false;
       this.currentPath = [];
+      this.colorPick =colorPick
 
       this.ignoreNextUp = false;
       this.defaultValues = new DefaultAttributeValues()
+      this.chosenColor= new ChoosenColors(this.defaultValues.DEFAULTPRIMARYCOLOR, this.defaultValues.DEFAULTSECONDARYCOLOR)
+    }
+
+    updateColors(){
+      this.colorSub= this.colorPick.colorSubject.subscribe(
+        (color: ChoosenColors)=>{
+          if(color){
+            this.chosenColor = new ChoosenColors(color.primColor, color.secColor)
+          }
+        }
+      )
+      this.colorPick.emitColors()
+
     }
     abstract updateAttributes():void
 

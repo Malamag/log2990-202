@@ -4,6 +4,7 @@ import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { ToolsAttributes } from '../attributes/tools-attribute';
+import { ColorPickingService } from '../colorPicker/color-picking.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,16 +13,19 @@ export class PencilService extends DrawingTool {
   attr: ToolsAttributes
   
 
-  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number, interaction: InteractionService){
+  constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number, interaction: InteractionService, colorPick: ColorPickingService){
     
-    super(inProgess, drawing, selected,width,primary_color,shortcut, interaction);
-    this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
+    super(inProgess, drawing, selected,width,primary_color,shortcut, interaction, colorPick);
+    //this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
+    this.updateColors()
+    this.updateAttributes()
   }
   updateAttributes(){
     this.interaction.$toolsAttributes.subscribe(obj=>{
       if(obj)
         this.attr = new ToolsAttributes(obj.lineThickness, obj.texture)
     })
+    this.colorPick.emitColors()
   }
   //updating on key change 
   update(keyboard:KeyboardHandlerService){
@@ -81,7 +85,7 @@ export class PencilService extends DrawingTool {
 
   //Creates an svg path that connects every points of currentPath with the pencil attributes
   createPath(p:Point[]){
-    this.updateAttributes()
+    
     //create a divider
     let s : string = '<g name = "pencil-stroke">';
 
@@ -94,7 +98,7 @@ export class PencilService extends DrawingTool {
       s+= `L ${p[i].x} ${p[i].y} `;
     }
     //set render attributes
-    s+=`\" stroke="#${this.primary_color}"`;
+    s+=`\" stroke="#${this.chosenColor.primColor}"`;
     s+= `stroke-width="${this.attr.lineThickness}"`;
     s+= 'fill="none"';
     s+= 'stroke-linecap="round"';
