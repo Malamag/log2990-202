@@ -9,7 +9,7 @@ import {
   MatSliderModule,
   MatRadioModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ColorFormComponent } from 'src/app/components/color-picker/color-form/color-form.component';
+
 
 
 describe('ToolAttributesComponent', () => {
@@ -18,7 +18,7 @@ describe('ToolAttributesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ToolAttributesComponent, ColorPickerComponent , ColorFormComponent],
+      declarations: [ ToolAttributesComponent, ColorPickerComponent],
       imports: [
         MatSliderModule, 
         FormsModule,
