@@ -12,7 +12,7 @@ export class UserManualComponent implements OnInit {
   menuItems = menuItems;
   welcomeItem = welcomeItem;
   activeNextButton: boolean = true;
-  activePrecedentButton: boolean = false;
+  activePreviousButton: boolean = false;
 
   func: Array<any> = welcomeItem.concat(menuItems, toolsItems);
   activeButton: any = this.welcomeItem[0];
@@ -29,11 +29,11 @@ export class UserManualComponent implements OnInit {
   changeActivatedButton(actualButton: any) {
     this.activeButton = actualButton;
     this.activeButton === this.func[this.func.length - 1] ? this.activeNextButton = false : this.activeNextButton = true;
-    this.activeButton === this.func[0] ? this.activePrecedentButton = false : this.activePrecedentButton = true;
+    this.activeButton === this.func[0] ? this.activePreviousButton = false : this.activePreviousButton = true;
   }
 
   nextPage() {
-    this.activePrecedentButton = true;
+    this.activePreviousButton = true;
     for (let i = this.func.length - 2; i >= 0; i--) {
       if (this.func[i].shortcutName === this.activeButton.shortcutName)
         this.activeButton = this.func[i + 1];
@@ -48,48 +48,7 @@ export class UserManualComponent implements OnInit {
       if (this.func[i].shortcutName === this.activeButton.shortcutName)
         this.activeButton = this.func[i - 1];
       if (this.activeButton === this.func[0])
-        this.activePrecedentButton = false;
+        this.activePreviousButton = false;
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -41,7 +41,7 @@
   </div>
 
   <div>
-    <button mat-raised-button id="previousButton" [ngClass]="(activePrecedentButton)? 'shownButton':'hiddenButton'"
+    <button mat-raised-button id="previousButton" [ngClass]="(activePreviousButton)? 'shownButton':'hiddenButton'"
       (click)="previousPage()">Précédent</button>
     <button mat-raised-button id="nextButton" [ngClass]="(activeNextButton)? 'shownButton':'hiddenButton'"
       (click)="nextPage()">Suivant</button>
