@@ -6,17 +6,19 @@
   float: left;
   height: 80vh;
   overflow-y: auto;  
+  overflow-x: hidden;
 }
 
 #guideContent {
     padding: 20px;
-    width: 60vw;
+    width: 70vw;
     background-color: #f1f1f1;
 }
 
 #guideLinkBar {
     width: 20vw;
     max-width: 200px;
+    min-width: 140px;
     background-color: rgb(200, 200, 200);
 }
 
@@ -67,6 +69,19 @@ button:hover {
   //color:rgb(60, 60, 60);
 }
 
+.hiddenButton{
+  display: none;
+}
+.shownButton{
+  display: block;
+}
+#previousButton{
+  float: left;
+}
+#nextButton{
+  float: right;
+}
+
 /*
 button:focus {
   background-color: rgb(150, 150, 150);
@@ -88,17 +103,3 @@ button:focus {
     }
 }
 */
-.hiddenButton{
-  display: none;
-}
-
-
-.shownButton{
-  display: block;
-}
-#previousButton{
-  float: left;
-}
-#nextButton{
-  float: right;
-}

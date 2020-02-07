@@ -43,7 +43,6 @@ export class UserManualComponent implements OnInit {
   }
 
   previousPage() {
-
     this.activeNextButton = true;
     for (let i = 1; i < this.func.length; ++i) {
       if (this.func[i].shortcutName === this.activeButton.shortcutName)
