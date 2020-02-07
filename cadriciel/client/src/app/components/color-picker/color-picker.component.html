@@ -78,7 +78,7 @@
                         <polygon points="182,98 182,102 185,104 195,104 198,102 198,98 195,97 185,97 " stroke-width="1" stroke="white" fill="none" [ngStyle]="svgStyles"></polygon>
                         <circle cx=100 cy=100 r=90 stroke-width="10" stroke="white" style="stroke-opacity: .1;" fill="none" clip-path="url(#clip)" (mouseleave)="selectorOnMouseLeave($event)"(mousedown)="hueSelectorOnMouseDown($event)"(mousemove)="hueSelector($event)"></circle>
                         <circle cx=50 cy=50 r=5 stroke-width="1" stroke="white"  fill="none"[ngStyle]="cursorStyles"></circle>
-                        <rect x="0" y="0" height="200" width="200" (mouseup)="colorSelectoOnMouseUp()" fill-opacity="0.1" (mousemove)="selectorOnMouseLeave($event)" [ngStyle]="rectOffsetBg"></rect>
+                        <rect x="0" y="0" height="200" width="200" (mouseup)="colorSelectOnMouseUp()" fill-opacity="0.1" (mousemove)="selectorOnMouseLeave($event)" [ngStyle]="rectOffsetBg"></rect>
                     </svg>
                 </td>  
                 <td >
