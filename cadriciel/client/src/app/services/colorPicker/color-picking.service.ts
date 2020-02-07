@@ -110,8 +110,8 @@ export class ColorPickingService {
   slSelector(event : MouseEvent) : void {
     if( this.cData.isSLSelecting) { 
         // -2 to offset to align mouse pointer and color cursor 
-        let x : number = event.offsetX - 2;
-        let y : number = event.offsetY - 2;
+        let x : number = event.offsetX - 50;
+        let y : number = event.offsetY - 50;
         //SL square is 100x100 so we want offset value to remain between [0,100]
         if ( x > 100 ) {
             x = 100;
@@ -197,52 +197,23 @@ export class ColorPickingService {
   //Update last color table with a new color
   updateLastColor( newColor : string ) : void {
     let buffer : string[] =[];
-    for(let i = 1; i < this.cData.lastColors.length; i++ ) {
-        buffer.push( this.cData.lastColors[i] );
+    for(let i = 1; i < this.cData.lastColorRects.length; i++ ) {
+        buffer.push( this.cData.lastColorRects[i].fill );
     }
     buffer.push( newColor.substring( 0, 7 ) );
-    this.cData.lastColors = buffer;
+    //this.cData.lastColors = buffer;
+    for(let i = 1; i < this.cData.lastColorRects.length; i++ ) {
+      this.cData.lastColorRects[i].fill = buffer[i];
   }
-  //Last colors select event base on their assign index in the lastcolors table
-  firstLastColorSelect( event : MouseEvent ) : void {
-    this.lastColorSelector( event.button, this.cData.lastColors[0] );
   }
-  secondLastColorSelect( event : MouseEvent ) : void {
-    this.lastColorSelector( event.button, this.cData.lastColors[1] );
-  }
-  thirdLastColorSelect( event : MouseEvent ) : void {
-    this.lastColorSelector( event.button, this.cData.lastColors[2] );
-  }
-  fourthLastColorSelect( event : MouseEvent ) : void {
-    this.lastColorSelector( event.button, this.cData.lastColors[3] );
-  }
-  fifthLastColorSelect( event : MouseEvent ) : void {
-    this.lastColorSelector( event.button, this.cData.lastColors[4] );
-  }
-  sixthLastColorSelect( event : MouseEvent ) : void {
-    this.lastColorSelector( event.button, this.cData.lastColors[5] );
-  }
-  seventhLastColorSelect( event : MouseEvent ) : void {
-    this.lastColorSelector( event.button, this.cData.lastColors[6] );
-  }
-  eighthLastColorSelect( event : MouseEvent ) : void {
-    this.lastColorSelector( event.button, this.cData.lastColors[7] );
-  }
-  ninethLastColorSelect( event : MouseEvent ) : void {
-    this.lastColorSelector( event.button, this.cData.lastColors[8] );
-  }
-  tenthLastColorSelect( event : MouseEvent ) : void {
-    this.lastColorSelector( event.button, this.cData.lastColors[9] );
-  }
-  lastColorSelector( button : number, lastColor : string ) : void {
-    if ( button === 0 ) {
+  lastColorSelector( event : MouseEvent, lastColor : string ) : void {
+    if ( event.button === 0 ) {
         this.cData.primaryColor = lastColor;
         this.cData.checkboxSliderStatus = true;
         this.cData.primarySelect = true; 
         this.cData.currentColorSelect = 'Primary';
     }
-    else if ( button === 2 ) {
-        //TODO : pop-up on right click??
+    else if ( event.button === 2 ) {
         this.cData.secondaryColor = lastColor;
         this.cData.checkboxSliderStatus = false;
         this.cData.primarySelect = false; 
@@ -293,6 +264,7 @@ export class ColorPickingService {
   //validate if char is hexadecimal. A window alert is send id invalide char are found
   validateHexInput(event : KeyboardEvent) : void {
     let hexOk : any = false;
+    
     for(let i : number = 0; i < this.cData.hexNumber.length; i++) {
         if ( event.which === this.cData.hexNumber[i] ){
           hexOk = true;

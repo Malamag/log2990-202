@@ -28,5 +28,17 @@ export const colorData = {
     isSLSelecting : false,
     rectOffsetFill : 'none',
     lastColors :  ['#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff','#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff'],
-    hexNumber : [48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,8]
+    hexNumber : [48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,8],
+    lastColorRects : [
+        { x: 0, y: 0, fill:'#ffffff'},
+        { x: 40, y:0, fill:'#ffffff'},
+        { x: 80, y:0, fill:'#ffffff'},
+        { x: 120, y:0, fill:'#ffffff'},
+        { x: 160, y:0, fill:'#ffffff'},
+        { x: 0, y:20, fill:'#ffffff'},
+        { x: 40, y:20, fill:'#ffffff'},
+        { x: 80, y:20, fill:'#ffffff'},
+        { x: 120, y:20, fill:'#ffffff'},
+        { x: 160, y:20, fill:'#ffffff'}
+      ]
 }
