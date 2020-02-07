@@ -3,14 +3,14 @@
     <div *ngSwitchCase = " 'Rectangle' " (mouseleave) ="updateForms()">
         <label> Epaisseur du trait de contour </label>
         <mat-slider min= "1" max= "15" [(ngModel)] = "lineThickness"  ></mat-slider> <br>
-        <label> type de tracé </label> <br>
+        <label> Type de tracé </label> <br>
         <button (click) = "plotType = 0"> Contour</button> <br>
         <button (click) = "plotType= 1"> plein </button> <br>
         <button (click) = "plotType =2"> plein et avec contour</button>
         <br>
     </div>
     <div *ngSwitchCase = " 'Élipse' " (mouseleave) ="updateForms()">
-        <label> Epaisseur du trait de contour </label>
+        <label> Trait de contour (px) </label>
         <mat-slider min= "1" max= "15" [(ngModel)] = "lineThickness"  ></mat-slider> <br>
         <label> type de tracé </label> <br>
         <button (click) = "plotType = 0"> Contour</button> <br>
@@ -18,26 +18,26 @@
         <button (click) = "plotType =2"> plein et avec contour</button>
     </div>
     <div *ngSwitchCase = " 'Polygone' " (mouseleave) ="updateForms()">
-        <label> Epaisseur du trait de contour </label>
+        <label> Trait de contour (px) </label>
         <label> Epaisseur du trait de contour </label>
         <mat-slider min= "1" max= "15" [(ngModel)] = "lineThickness"  ></mat-slider> <br>
-        <label> type de tracé </label> <br>
+        <label> Type de tracé </label> <br>
         <button (click) = "plotType = 0"> Contour</button> <br>
         <button (click) = "plotType= 1"> plein </button> <br>
         <button (click) = "plotType =2"> plein et avec contour</button>
-        <label> Nombre de côté du polygonne</label>
+        <label> Nombre de côtés</label>
         <mat-slider min= "3" max = "12" [(ngModel)] = "numberCorners"> </mat-slider><br>
     </div>
     <!-- for the prencil-->
     <div *ngSwitchCase = " 'Crayon' "(mouseleave) ="updateTools()">
-        <label> Epaisseur du trait </label>
+        <label> Épaisseur du trait </label>
         <mat-slider min= "1" max= "15" [(ngModel)] ="lineThickness" ></mat-slider> <br>
     </div>
     <!-- for the brush -->
     <div *ngSwitchCase = " 'Pinceau' " (mouseleave) ="updateTools()">
-        <label> Epaisseur du trait </label>
+        <label> Épaisseur du trait </label>
         <mat-slider min= "1" max= "15" [(ngModel)] ="lineThickness" ></mat-slider> <br>
-        <label> texture du trait </label> <br>
+        <label> Texture </label> <br>
         <!--we must have five buttons with five different textures
         the following buttons are not good to check with Alex-->
         <button (click) = "texture = 0"> blured</button>
@@ -48,7 +48,7 @@
     </div>
     <!-- for the calligraphy-->
     <div *ngSwitchCase = " 'Plume' ">
-        <label> longueur de la ligne</label>
+        <label> Longueur de la ligne</label>
         <mat-slider min= "0" max= "15" value= "1.5" ></mat-slider> <br>
         <label> Angle d'orientation </label>
         <mat-slider min= "0" max = "180" value ="3"> </mat-slider><br>
@@ -56,24 +56,24 @@
 
     <!-- for the aerosol-->
     <div *ngSwitchCase = " 'Aérosol' ">
-        <label> Nombre d'émission par seconde </label>
+        <label> Nombre d'émissions/sec </label>
         <input type="text" value= "1.5"> <br><br>
         <label> Diamètre du jet </label>
         <input type= "text" value = "1"> <br>
     </div>
     <!-- for the line -->
     <div *ngSwitchCase = " 'Ligne' " (mouseleave) ="updateLine()">
-        <label> type de jonction </label>
+        <label> Type de jonction </label>
         <button (click) = "junction = false"> normal</button>
         <button (click)= "junction = true"> avec point</button> <br><br>
-        <label> Epaisseur du trait </label>
+        <label> Épaisseur du trait </label>
         <mat-slider min= "0" max= "15" [(ngModel)] ="lineThickness" ></mat-slider> <br>
-        <label> Diamètre des points de jonction</label>
+        <label> Points de jonction (px)</label>
         <mat-slider min= "1" max= "15" [(ngModel)] ="junctionDiameter" ></mat-slider> <br>
     </div>
     <!-- for the eraser -->
     <div *ngSwitchCase = " 'Efface' ">
-        <label> Taille de l'efface </label>
+        <label> Taille (px) </label>
         <input type="text" value="2"> px <br>
     </div>
     <!-- for the text -->
