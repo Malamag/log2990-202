@@ -77,7 +77,7 @@ export class BrushService extends PencilService {
       s+= `L ${p[i].x} ${p[i].y} `;
     }
     //set render attributes
-    s+= `"stroke="#${this.chosenColor.primColor}" stroke-width="${this.attr.lineThickness}"`;
+    s+= `"stroke="${this.chosenColor.primColor}" stroke-width="${this.attr.lineThickness}"`;
     s+= 'fill="none" stroke-linecap="round" stroke-linejoin="round"';
     s+= `filter="url(#${uniqueID})"/>`;
     //end the path

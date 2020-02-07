@@ -6,6 +6,7 @@ import { UserManualComponent } from '../../user-manual/user-manual.component';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { Subscription } from 'rxjs';
 import { Canvas } from 'src/app/models/Canvas.model';
+import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 
 @Component({
   selector: 'app-option-bar',
@@ -17,7 +18,7 @@ export class OptionBarComponent implements OnInit {
   canvasSub: Subscription;
   currentCanvas: Canvas;
 
-  constructor(private winService: ModalWindowService) {
+  constructor(private winService: ModalWindowService, private interaction:InteractionService) {
     const O_KEY = 79; //keycode for letter o
 
     let kbHandler: KeyboardHandlerService = new KeyboardHandlerService();
@@ -46,5 +47,7 @@ export class OptionBarComponent implements OnInit {
   openUserGuide() {
     this.winService.openWindow(UserManualComponent)
   }
-
+  sendSigKill(){
+    this.interaction.emitCancel(true)
+  }
 }

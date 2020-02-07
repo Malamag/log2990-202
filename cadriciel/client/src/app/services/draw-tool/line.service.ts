@@ -25,6 +25,7 @@ export class LineService extends DrawingTool {
     this.forcedAngle = false;
     this.currentPos = new Point(0,0);
     this.updateAttributes()
+    this.updateColors();
      
   }
 
@@ -214,7 +215,7 @@ export class LineService extends DrawingTool {
     }
 
     //set render attributes
-    s+= `"stroke="#${this.chosenColor.primColor}"`;
+    s+= `"stroke="${this.chosenColor.primColor}"`;
     s+= `stroke-width="${this.attr.lineThickness}"`;
     s+= 'fill="none"';
     s+= 'stroke-linecap="round"';

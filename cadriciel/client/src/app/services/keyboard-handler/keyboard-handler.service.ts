@@ -48,7 +48,7 @@ export class KeyboardHandlerService {
     this.keyCode = e.keyCode;
     this.ctrlDown = e.ctrlKey;
     this.shiftDown = e.shiftKey;
-    this.checkForToolChange();
+    //this.checkForToolChange();
     this.updateToolObservers();
   }
 

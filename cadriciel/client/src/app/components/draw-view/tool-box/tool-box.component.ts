@@ -15,6 +15,7 @@ export class ToolBoxComponent implements OnInit {
   renderer: Renderer2
   selectingToolsMap = new Map();
   
+  
   constructor(private interactionService: InteractionService) {
     this.selectingToolsMap.set('1', 'Rectangle');
     this.selectingToolsMap.set('c', 'Crayon');
@@ -36,7 +37,7 @@ export class ToolBoxComponent implements OnInit {
   buttonAction(name:string){ // on click, emit the selected tool name
     this.interactionService.emitSelectedTool(name);
   }
-
+  
   
 }
 

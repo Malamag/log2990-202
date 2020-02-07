@@ -18,8 +18,10 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
   junction: boolean;
   junctionRadius: number;
   selectedTool: String;
-
-  constructor(private interaction: InteractionService) {  }
+  tools:string[]=[]
+  constructor(private interaction: InteractionService) {
+    this.tools= ['Rectangle', 'Ligne', 'Pinceau', 'Crayon','Choisir couleur']
+  }
   
   ngOnInit(){}
   ngAfterViewInit() {
@@ -32,9 +34,17 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
     this.plotType = 2; // type 2 --> filled with border
     this.junction = true; // with junction dots of 6 px size
     this.junctionRadius = 6;
+
     this.interaction.$selectedTool.subscribe( tool =>{
-      this.selectedTool = tool;
+      let toolExist:boolean = false
+      this.tools.forEach(el=>{
+        if(el===tool)
+          toolExist= true
+      })
+      if(toolExist)
+        this.selectedTool = tool;
     });
+
     this.updateForms(); // emit all after init
     this.updateLine();
     this.updateTools();
