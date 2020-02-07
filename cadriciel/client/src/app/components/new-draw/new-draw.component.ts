@@ -58,7 +58,7 @@ export class NewDrawComponent  implements OnInit  {
 
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
-    }, 15);
+    }, 15); // waits for the canvas to be created
   }
   
   closeModalForm() {
