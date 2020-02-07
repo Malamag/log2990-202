@@ -20,9 +20,10 @@ export class BrushService extends PencilService {
   constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string, textureNumber:number,shortcut:number, interaction: InteractionService, colorPick: ColorPickingService){
     
     super(inProgess,drawing, selected,width,primary_color,shortcut, interaction, colorPick);
-    
+    this.updateColors()
+    this.updateAttributes()
     this.textureNumber = textureNumber;
-    this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
+    //this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
     //values used as texture presets
     this.textures = [
       {"type":"blured","intensity":5, "frequency":0},
@@ -43,8 +44,7 @@ export class BrushService extends PencilService {
 
   //Creates an svg path that connects every points of currentPath and creates a filter with the brush attributes
   createPath(p:Point[]){
-    this.updateColors()
-    this.updateAttributes()
+    
     //get parameters from the used texture
     let width = this.attr.lineThickness;
     let scale = this.textures[this.attr.texture].intensity;

@@ -17,13 +17,14 @@ export class LineService extends DrawingTool {
   attr: LineAttributes
   
   constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string, showJunctions:boolean, junctionWidth:number,shortcut:number, interaction: InteractionService, colorPick: ColorPickingService){
-
+    console.log("yeet")
     super(inProgess,drawing, selected,width,primary_color,shortcut, interaction, colorPick);
-    this.attr = new LineAttributes(this.defaultValues.DEFAULTJUNCTION, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTJUNCTIONRADIUS)
+    //this.attr = new LineAttributes(this.defaultValues.DEFAULTJUNCTION, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTJUNCTIONRADIUS)
     this.showJunctions = showJunctions;
     this.junctionRadius = junctionWidth/2;
     this.forcedAngle = false;
     this.currentPos = new Point(0,0);
+    this.updateAttributes()
      
   }
 
@@ -46,6 +47,7 @@ export class LineService extends DrawingTool {
 
       //update progress, it is not a double click
       this.updateProgress(false);
+      this.updateColors()
     }
 
     //backspace -- WE SHOULD PROBABLY USE A MAP INSTEAD --
@@ -168,9 +170,7 @@ export class LineService extends DrawingTool {
   //Creates an svg path that connects every points of currentPath
   //and adds svg circles on junctions if needed with the line attributes
   createPath(p:Point[], wasDoubleClick:boolean){
-    this.updateColors()
-    this.updateAttributes()
-
+    
     //if we need to force an angle
     if(this.forcedAngle){
       p[p.length-1] = this.pointAtForcedAngle(p[p.length-2],p[p.length-1]);

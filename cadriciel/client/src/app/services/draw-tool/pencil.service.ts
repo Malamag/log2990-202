@@ -16,7 +16,9 @@ export class PencilService extends DrawingTool {
   constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number, interaction: InteractionService, colorPick: ColorPickingService){
     
     super(inProgess, drawing, selected,width,primary_color,shortcut, interaction, colorPick);
-    this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
+    //this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
+    this.updateColors()
+    this.updateAttributes()
   }
   updateAttributes(){
     this.interaction.$toolsAttributes.subscribe(obj=>{
@@ -83,8 +85,7 @@ export class PencilService extends DrawingTool {
 
   //Creates an svg path that connects every points of currentPath with the pencil attributes
   createPath(p:Point[]){
-    this.updateColors()
-    this.updateAttributes()
+    
     //create a divider
     let s : string = '<g name = "pencil-stroke">';
 

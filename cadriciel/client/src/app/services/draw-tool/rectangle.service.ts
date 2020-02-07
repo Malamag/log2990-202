@@ -19,11 +19,13 @@ export class RectangleService extends DrawingTool {
   constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number, interaction:InteractionService, colorPick: ColorPickingService){
 
     super(inProgess, drawing, selected,width,primary_color,shortcut, interaction, colorPick);
-    this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS)
+    //this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS)
     this.secondary_color = secondary_color;
     this.renderMode = renderMode;
 
     this.isSquare = false;
+    this.updateColors()
+    this.updateAttributes()
   }
   updateAttributes(){
     this.interaction.$formsAttributes.subscribe(obj=>{
@@ -103,8 +105,7 @@ export class RectangleService extends DrawingTool {
 
   //Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
   createPath(p:Point[]){
-    this.updateColors()
-    this.updateAttributes()
+    
     //first and last points
     let p1x = p[0].x;
     let p1y = p[0].y;
