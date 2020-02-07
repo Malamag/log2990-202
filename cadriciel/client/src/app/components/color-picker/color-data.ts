@@ -26,6 +26,7 @@ export const colorData = {
     isColorSelecting : false,
     isHueSelecting : false,
     isSLSelecting : false,
+    isValideInput : false,
     rectOffsetFill : 'none',
     swapStrokeStyle : 'white',
     //Ascii table number of hex 

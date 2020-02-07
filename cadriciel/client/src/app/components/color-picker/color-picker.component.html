@@ -105,16 +105,16 @@
             <tr>
                 <td>
                     <label class="namelabel" >Hex </label><label class="numberlabel">#</label>
-                    <input class="hexInput" type="text" maxlength="6" [(ngModel)]="cData.hexColorInput" placeholder="ffffff" (keydown)="validateHexInput($event)"(keyup)="onHexColorInput()">
+                    <input class="hexInput" type="text" maxlength="6" [(ngModel)]="cData.hexColorInput" placeholder="ffffff" (keydown)="validateHexColorInput($event)"(keyup)="onHexColorInput()">
                     <label class="namelabel"><font color="red">Rouge</font></label><label class="numberlabel"><font>{{cData.redSliderInput}}</font></label>
                     <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.redSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesRL">
-                    <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.redHexInput" placeholder="ff" (keydown)="validateHexInput($event)"(keyup)="onRedHexInput()">
+                    <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.redHexInput" placeholder="ff" (keydown)="validateRedHexInput($event)"(keyup)="onRedHexInput()">
                     <label class="namelabel"><font color="green">Vert</font></label><label class="numberlabel"><font>{{cData.greenSliderInput}}</font></label>
                     <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.greenSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesGL">
-                    <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.greenHexInput" placeholder="ff"(keydown)="validateHexInput($event)"(keyup)="onGreenHexInput()">
+                    <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.greenHexInput" placeholder="ff"(keydown)="validateGreenHexInput($event)"(keyup)="onGreenHexInput()">
                     <label class="namelabel"><font color="#054dc2">Bleu</font></label><label class="numberlabel"><font>{{cData.blueSliderInput}}</font></label>
                     <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.blueSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesBL">
-                    <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.blueHexInput" placeholder="ff"(keydown)="validateHexInput($event)"(keyup)="onBlueHexInput()">
+                    <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.blueHexInput" placeholder="ff"(keydown)="validateBlueHexInput($event)"(keyup)="onBlueHexInput()">
                     <label class="namelabel">Saturation</label><label class="numberlabel">{{cData.saturationSliderInput}}%</label>
                     <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.saturationSliderInput" (change)="onSLSliderInput($event)" [ngStyle]="myInputStylesL">
                     <label class="namelabel">Luminosité</label><label class="numberlabel">{{cData.lightnessSliderInput}}%</label>
