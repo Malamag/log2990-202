@@ -14,7 +14,8 @@ import {
   MatToolbarModule,
   MatSliderModule,
   MatDialog,
-  MatFormFieldModule} from '@angular/material';
+  MatFormFieldModule,
+  MatRadioModule} from '@angular/material';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -44,7 +45,8 @@ describe('DrawViewComponent', () => {
         MatSliderModule,
         FormsModule,
         MatFormFieldModule,
-        ReactiveFormsModule]
+        ReactiveFormsModule,
+        MatRadioModule]
       
     })
     .compileComponents();

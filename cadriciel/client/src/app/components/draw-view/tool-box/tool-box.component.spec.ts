@@ -7,7 +7,8 @@ import {
   MatIconModule, 
   MatToolbarModule,
   MatSliderModule,
-  MatFormFieldModule} from '@angular/material';
+  MatFormFieldModule,
+  MatRadioModule} from '@angular/material';
 
 
 describe('ToolBoxComponent', () => {
@@ -23,7 +24,8 @@ describe('ToolBoxComponent', () => {
         MatIconModule, 
         MatToolbarModule,
         MatSliderModule,
-        MatFormFieldModule]
+        MatFormFieldModule,
+        MatRadioModule]
     })
     .compileComponents();
   }));
