@@ -24,7 +24,9 @@ export class ToolBoxComponent implements OnInit {
 
   @HostListener('document: keydown', ['$event'])
   updateBoard(event: KeyboardEvent){
-    this.interactionService.emitSelectedTool(this.selectingToolsMap.get(event.key));
+    if(this.selectingToolsMap.has(event.key)){
+      this.interactionService.emitSelectedTool(this.selectingToolsMap.get(event.key));
+    }
   }
 
   ngOnInit() {
