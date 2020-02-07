@@ -1,21 +1,28 @@
 <p *ngIf="selectedTool != 'Choisir couleur'"> {{selectedTool}}</p>
 <div [ngSwitch]= "selectedTool">
     <div *ngSwitchCase = " 'Rectangle' " (mouseleave) ="updateForms()">
-        <label> Epaisseur du trait de contour </label>
+        <label> Epaisseur du contour (px) </label>
         <mat-slider min= "1" max= "15" [(ngModel)] = "lineThickness"  ></mat-slider> <br>
+        
         <label> Type de tracé </label> <br>
-        <button (click) = "plotType = 0"> Contour</button> <br>
-        <button (click) = "plotType= 1"> plein </button> <br>
-        <button (click) = "plotType =2"> plein et avec contour</button>
+        <mat-radio-group> <br>
+            <mat-radio-button  (click) = "plotType =2"> Plein avec contour</mat-radio-button> <br><br>
+            <mat-radio-button [value]="plotType" (click) = "plotType = 0"> Contour</mat-radio-button> <br><br>
+            <mat-radio-button [value]="plotType" (click) = "plotType= 1"> Plein </mat-radio-button> <br>
+        </mat-radio-group>
         <br>
+
     </div>
     <div *ngSwitchCase = " 'Élipse' " (mouseleave) ="updateForms()">
         <label> Trait de contour (px) </label>
         <mat-slider min= "1" max= "15" [(ngModel)] = "lineThickness"  ></mat-slider> <br>
-        <label> type de tracé </label> <br>
-        <button (click) = "plotType = 0"> Contour</button> <br>
-        <button (click) = "plotType= 1"> plein </button> <br>
-        <button (click) = "plotType =2"> plein et avec contour</button>
+        <label> Type de tracé </label> <br>
+        <mat-radio-group>
+            <mat-radio-button  (click) = "plotType = 0"> Contour</mat-radio-button> <br>
+            <mat-radio-button value = "1" (click) = "plotType= 1"> Plein </mat-radio-button> <br>
+            <mat-radio-button value = "2" (click) = "plotType =2"> Plein et avec contour</mat-radio-button>
+        </mat-radio-group>
+        
     </div>
     <div *ngSwitchCase = " 'Polygone' " (mouseleave) ="updateForms()">
         <label> Trait de contour (px) </label>
@@ -37,14 +44,15 @@
     <div *ngSwitchCase = " 'Pinceau' " (mouseleave) ="updateTools()">
         <label> Épaisseur du trait </label>
         <mat-slider min= "1" max= "15" [(ngModel)] ="lineThickness" ></mat-slider> <br>
-        <label> Texture </label> <br>
-        <!--we must have five buttons with five different textures
-        the following buttons are not good to check with Alex-->
-        <button (click) = "texture = 0"> blured</button>
-        <button (click) ="texture = 1"> noise </button>
-        <button (click) = "texture = 2"> noise </button>
-        <button (click) = "texture =3"> noise </button>
-        <button (click) = "texture =4"> noise</button> <br>
+        <label> Texture </label> <br><br>
+        <mat-radio-group>
+            <mat-radio-button (click) = "texture = 0">Flou</mat-radio-button> <br><br>
+            <mat-radio-button [value]="texture" (click) ="texture = 1"> Bruit 1</mat-radio-button> <br><br>
+            <mat-radio-button [value]="texture" (click) = "texture = 2"> Bruit 2 </mat-radio-button> <br><br>
+            <mat-radio-button [value]="texture" (click) = "texture =3"> Bruit 3 </mat-radio-button> <br><br>
+            <mat-radio-button [value]="texture" (click) = "texture =4"> Bruit 4</mat-radio-button> <br><br>
+        </mat-radio-group>
+        
     </div>
     <!-- for the calligraphy-->
     <div *ngSwitchCase = " 'Plume' ">
@@ -63,13 +71,18 @@
     </div>
     <!-- for the line -->
     <div *ngSwitchCase = " 'Ligne' " (mouseleave) ="updateLine()">
-        <label> Type de jonction </label>
-        <button (click) = "junction = false"> normal</button>
-        <button (click)= "junction = true"> avec point</button> <br><br>
+        <label> Type de jonction </label> <br><br>
+        <mat-radio-group>
+            <mat-radio-button (click)= "junction = true"> Point</mat-radio-button>
+            <br><br>
+            <mat-radio-button [value]="junction.toString()" (click) = "junction = false"> Normal</mat-radio-button>
+            <br><br>
+        </mat-radio-group>
+        
         <label> Épaisseur du trait </label>
         <mat-slider min= "0" max= "15" [(ngModel)] ="lineThickness" ></mat-slider> <br>
         <label> Points de jonction (px)</label>
-        <mat-slider min= "1" max= "15" [(ngModel)] ="junctionDiameter" ></mat-slider> <br>
+        <mat-slider min= "5" max= "30" [(ngModel)] ="junctionDiameter" ></mat-slider> <br>
     </div>
     <!-- for the eraser -->
     <div *ngSwitchCase = " 'Efface' ">
