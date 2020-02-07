@@ -22,11 +22,12 @@ export class ColorPickerComponent implements OnInit {
     }
 
     initColors() {
-        const DEFAULT = "#ff0000"; // defining a default
+        const DEF_PRIM = '#000000ff';
+        const DEF_SEC = '#ff0000ff';
         this.colorSubsc = this.colorPicking.colorSubject.subscribe(
             (colors: ChoosenColors) => {
                 if(colors == undefined){
-                    colors = new ChoosenColors(DEFAULT, DEFAULT);
+                    colors = new ChoosenColors(DEF_PRIM, DEF_SEC);
                     
                 }
                 this.cData.primaryColor = colors.primColor;
@@ -37,7 +38,7 @@ export class ColorPickerComponent implements OnInit {
     }
 
     
-    setColor( button : number, color : number[] ) { // DONE
+    setColor(color : number[] ) { // DONE
         this.colorPicking.setColor(color)
     }
  
@@ -92,7 +93,7 @@ export class ColorPickerComponent implements OnInit {
         this.colorPicking.onBlueHexInput();
     }
 
-    // Red left input change
+   
     onRGBSliderInput() : void { 
         this.colorPicking.onRGBSliderInput();
     }
@@ -100,7 +101,7 @@ export class ColorPickerComponent implements OnInit {
     onSLSliderInput() : void { 
         this.colorPicking.onSLSliderInput();
     }
-    //temp style TODO move to CSS?
+    
     get myInputStylesRL(): any {
         return {'background': 'white', 
                 '-webkit-background-clip': 'text',

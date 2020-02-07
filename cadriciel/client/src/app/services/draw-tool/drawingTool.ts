@@ -43,16 +43,18 @@ export abstract class DrawingTool extends InputObserver{
     }
 
     updateColors(){
+      const DEF_PRIM = '#000000ff';
+      const DEF_SEC = '#ff0000ff';
       this.colorSub= this.colorPick.colorSubject.subscribe(
         (color: ChoosenColors)=>{
-          if(color){
-            this.chosenColor = new ChoosenColors(color.primColor, color.secColor)
+          if(color === undefined){
+            color = new ChoosenColors(DEF_PRIM, DEF_SEC);
           }
-        }
-      )
+          this.chosenColor = new ChoosenColors(color.primColor, color.secColor);
+        });
       this.colorPick.emitColors()
-
     }
+
     abstract updateAttributes():void
 
     //cancel the current progress
