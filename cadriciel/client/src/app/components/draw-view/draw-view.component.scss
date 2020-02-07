@@ -4,16 +4,11 @@
 
 .container {
     display: grid;
-
-    grid-template-areas:
-        'header header header'
-        'nav content side';
-
-    grid-template-columns: 20%;
-    grid-template-rows: 10%;
-    grid-gap: 0;
-
-    height: 90vh;
+    grid-template-columns: 0.5fr 1fr 1fr 1fr;
+    grid-template-rows: 0fr 1fr 0fr;
+    grid-template-areas: "header header header header" "nav content content content" "nav content content content";
+    width: 100vw;
+    height: 100vh;
 }
 
 header {
@@ -29,19 +24,17 @@ nav {
 main {
     background-color: rgb(43, 43, 43);
     grid-area: content;
-    overflow: scroll;
-}
 
-aside {
-    grid-area: side;
-    margin-right: 0;
+    overflow: scroll;
+    
 }
 
 .wrapper {
     margin-left: auto;
     margin-right: auto;
-    height: auto;
+    
     width: auto;
+    height: auto;
 }
 
 #colorPicker{
@@ -54,3 +47,4 @@ aside {
 #toolAttributes{
   float:left; 
 } 
+

@@ -156,13 +156,13 @@ export class ColorConvertingService {
 
   hexToRgba( hex : string ) : number[] {
     let colorBits : string = hex;
-    // check if first char is a # and remove it
+    // check if first char is a # (ascii code number is 35) and remove it
     if (hex.charCodeAt(0) ===  35 ) {
         colorBits = hex.substring(1 , hex.length);
     } 
-    let ascii0 : number = 48;
-    let asciiA : number = 65;
-    let asciia : number = 97;
+    let ascii0 : number = 48;// 0 ascii code number
+    let asciiA : number = 65;// A ascii code number
+    let asciia : number = 97;// a ascii code number
     let rgba : number[] = [];
     let buffer : number[] = [];
     for ( let i : number = 0; i < colorBits.length; i++ ) {
@@ -182,6 +182,10 @@ export class ColorConvertingService {
     }
     if ( colorBits.length <= 6 ) {
         rgba[3] = -1;
+    }
+    else {
+        //opacity for rgba is between [0,1] while for hex it's [0,255]
+        rgba[3] = rgba[3] / 255;
     }
     if ( colorBits.length <= 4 ) {
         rgba[2] = -1;

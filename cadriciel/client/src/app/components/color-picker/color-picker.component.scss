@@ -38,6 +38,7 @@ button {
     border-bottom: 1px solid black;
     display: block;
     background:linear-gradient(to right, white,snow);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -48,6 +49,7 @@ button {
     border-bottom: 1px solid black;
     display: block;
     background:linear-gradient(to right, white,snow);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }

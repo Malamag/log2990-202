@@ -1,4 +1,4 @@
-<p> {{selectedTool}}</p>
+<p *ngIf="selectedTool != 'Choisir couleur'"> {{selectedTool}}</p>
 <div [ngSwitch]= "selectedTool">
     <div *ngSwitchCase = " 'Rectangle' " (mouseleave) ="updateForms()">
         <label> Epaisseur du trait de contour </label>

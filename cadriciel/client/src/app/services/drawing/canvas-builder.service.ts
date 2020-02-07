@@ -1,4 +1,4 @@
-import { Injectable} from '@angular/core';
+import { Injectable, ElementRef} from '@angular/core';
 
 import { Canvas } from '../../models/Canvas.model';
 
@@ -22,11 +22,12 @@ export class CanvasBuilderService {
   constructor() { }
   
   getDefWidth(): number {
-    return Math.round(window.innerWidth); //évite d'avoir des fractions de pixels
+    const DIV = 1.25;
+    return Math.round(window.innerWidth / DIV); //évite d'avoir des fractions de pixels
   }
 
   getDefHeight(): number {
-    const DIV = 1.11; // adjusts after the top bar size
+    const DIV = 1.15; // adjusts after the top bar size
     return Math.round(window.innerHeight/DIV);
   }
 
@@ -37,7 +38,7 @@ export class CanvasBuilderService {
 
   setCanvasFromForm(widthInput: number, heightInput: number, colorInput: string): void {
     colorInput = '#' + colorInput;
-    this.newCanvas= new Canvas(widthInput, heightInput, colorInput);
+    this.newCanvas= new Canvas(widthInput, heightInput, colorInput); // a fresh draw is always clean
   }
 
   getDefCanvas(): Canvas {
@@ -59,9 +60,10 @@ export class CanvasBuilderService {
     return colorCircles;
   }
 
-  setOnGoing(element: HTMLElement | null): void {
-    const DEFAULT_ELEMS = 0; //can be changed
-    this.onGoing = (element !=null && element.childElementCount > DEFAULT_ELEMS);
+  whipeDraw(myDoodle: ElementRef) {
+    if(myDoodle){ // element is defined
+      myDoodle.nativeElement.innerHTML = "";
+    }
   }
 
 }
