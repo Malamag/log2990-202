@@ -1,9 +1,9 @@
 <table>
-    <section class="backSection">
-        <section class="frontSection">
+    <!--<section class="backSection">
+        <section class="frontSection">-->
             <tr>   
                 <td>
-                    <svg height="200" width="200" (contextmenu)="onContextMenu($event)"(mouseup)="colorSelectOnMouseUp()" (mousemove)="selectorOnMouseLeave($event)">
+                    <svg height="200" width="200"(contextmenu)="onContextMenu($event)"(mouseup)="colorSelectOnMouseUp()" (mousemove)="selectorOnMouseLeave($event)">
                         <defs>
                             <clipPath id="clip">
                                 <rect x="0" y="0" width="200" height="200"></rect>
@@ -82,16 +82,6 @@
                     </svg>
                 </td>  
                 <td >
-                    <svg height="200" width="30">
-                        <polygon points="5,24 25,24 30,12 25,0 5,0" style="fill: rgb(81, 81, 129);stroke:black;stroke-width:1" (mousedown)="firstLastColorSelect($event)" [ngStyle]="lastColor1"></polygon>
-                        <polygon points="5,49 25,49 30,37 25,25 5,25" style="fill: rgb(190, 36, 165);stroke:black;stroke-width:1" (mousedown)="secondLastColorSelect($event)" [ngStyle]="lastColor2"></polygon>
-                        <polygon points="5,74 25,75 30,62 25,50 5,50" style="fill: rgb(57, 190, 108);stroke:black;stroke-width:1" (mousedown)="thirdLastColorSelect($event)" [ngStyle]="lastColor3"></polygon>
-                        <polygon points="5,99 25,99 30,87 25,75 5,75" style="fill: rgb(194, 130, 34);stroke:black;stroke-width:1" (mousedown)="fourthLastColorSelect($event)" [ngStyle]="lastColor4"></polygon>
-                        <polygon points="5,124 25,124 30,112 25,100 5,100" style="fill: rgb(241, 236, 236);stroke:black;stroke-width:1" (mousedown)="fifthLastColorSelect($event)" [ngStyle]="lastColor5"></polygon>
-                        <polygon points="5,149 25,149 30,137 25,125 5,125" style="fill: rgb(241, 236, 236);stroke:black;stroke-width:1" (mousedown)="sixthLastColorSelect($event)" [ngStyle]="lastColor6"></polygon>
-                        <polygon points="5,174 25,174 30,162 25,150 5,150" style="fill: rgb(81, 81, 129);stroke:black;stroke-width:1" (mousedown)="seventhLastColorSelect($event)" [ngStyle]="lastColor7"></polygon>
-                        <polygon points="5,199 25,199 30,187 25,175 5,175" style="fill: rgb(190, 36, 165);stroke:black;stroke-width:1" (mousedown)="eighthLastColorSelect($event)" [ngStyle]="lastColor8"></polygon>
-                    </svg>
                 </td>
             </tr>
             <tr>
@@ -110,11 +100,6 @@
                     </svg><br/>
                     <label class="namelabel" >Hex </label><label class="numberlabel">#</label>
                     <input class="hexInput" type="text" maxlength="6" [(ngModel)]="cData.hexColorInput" placeholder="ffffff" (keydown)="validateHexInput($event)"(keyup)="onHexColorInput()">
-                </td>
-                <td>
-                    <svg height="24" width="30">
-                        <polygon points="5,24 25,24 30,12 25,0 5,0" style="fill: rgb(57, 190, 108);stroke:black;stroke-width:1" (mousedown)="ninethLastColorSelect($event)" [ngStyle]="lastColor9"></polygon>
-                    </svg>
                 </td>
             </tr>
             <tr>
@@ -135,12 +120,12 @@
                     <label class="namelabel">Transparence</label><label class="numberlabel">{{cData.opacitySliderInput}}%</label>
                     <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.opacitySliderInput" (change)="sliderAlphaChange()" [ngStyle]="myInputStylesO">  
                 </td>
-                <td>
-                    <svg height="24" width="30">
-                        <polygon points="5,24 25,24 30,12 25,0 5,0" style="fill: rgb(81, 81, 129);stroke:black;stroke-width:1" (mousedown)="tenthLastColorSelect($event)" [ngStyle]="lastColor10"></polygon>
-                    </svg>
-                </td>
             </tr>
-        </section>
-    </section>
+            <tr>
+                <svg height="40" width="200">
+                    <rect *ngFor="let rect of cData.lastColorRects" [style.x]="rect.x" [style.y]="rect.y" width="40" height="20" [style.fill]="rect.fill" (mousedown)="lastColorSelector($event,rect.fill)"></rect>
+                </svg> 
+            </tr>
+        <!--</section>
+    </section>-->
 </table> 

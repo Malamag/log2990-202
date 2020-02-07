@@ -65,41 +65,13 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
     slSelectorOnMouseDown(event : MouseEvent ): void{
         this.colorPicking.slSelectorOnMouseDown(event);
     }
-    firstLastColorSelect( event : MouseEvent ) : void {
-        this.colorPicking.firstLastColorSelect(event);
-    }
-    secondLastColorSelect( event : MouseEvent ) : void {
-        this.colorPicking.secondLastColorSelect(event);
-    }
-    thirdLastColorSelect( event : MouseEvent ) : void {
-        this.colorPicking.thirdLastColorSelect(event);
-    }
-    fourthLastColorSelect( event : MouseEvent ) : void {
-        this.colorPicking.fourthLastColorSelect(event);
-    }
-    fifthLastColorSelect( event : MouseEvent ) : void {
-        this.colorPicking.fifthLastColorSelect(event);
-    }
-    sixthLastColorSelect( event : MouseEvent ) : void {
-        this.colorPicking.sixthLastColorSelect(event);
-    }
-    seventhLastColorSelect( event : MouseEvent ) : void {
-        this.colorPicking.seventhLastColorSelect(event);
-    }
-    eighthLastColorSelect( event : MouseEvent ) : void {
-        this.colorPicking.eighthLastColorSelect(event);
-    }
-    ninethLastColorSelect( event : MouseEvent ) : void {
-        this.colorPicking.ninethLastColorSelect(event);
-    }
-    tenthLastColorSelect( event : MouseEvent ) : void {
-        this.colorPicking.tenthLastColorSelect(event);
+    lastColorSelector( event : MouseEvent, lastColor : string ) : void {
+        this.colorPicking.lastColorSelector(event,lastColor);
     }
     // convert rbg to h value of hsl.
     swapInputDisplay(event : any) {
         this.colorPicking.swapInputDisplay(event);
     }
-
     refreshDisplay() : void {
         this.colorPicking.refreshDisplay();
     }
