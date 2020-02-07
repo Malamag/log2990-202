@@ -1,7 +1,7 @@
 <div>
   <header id="guideHeader">
     <h1 id="guideTitle">Guide d'utilisation</h1>
-    <button mat-raised-button id="guideQuitButton" (click)="closeModal()">X</button>
+    <button mat-raised-button id="guideQuitButton" (click)="closeModal()">X</button> 
   </header>
 </div>
 
@@ -40,11 +40,11 @@
     <app-user-manual-content [activeButton]="activeButton"></app-user-manual-content>
   </div>
 
-  <div>
+  <footer>
     <button mat-raised-button id="previousButton" [ngClass]="(activePreviousButton)? 'shownButton':'hiddenButton'"
       (click)="previousPage()">Précédent</button>
     <button mat-raised-button id="nextButton" [ngClass]="(activeNextButton)? 'shownButton':'hiddenButton'"
       (click)="nextPage()">Suivant</button>
-  </div>
+  </footer>
 
 </section>

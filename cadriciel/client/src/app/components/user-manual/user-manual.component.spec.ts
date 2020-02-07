@@ -22,44 +22,44 @@ describe('UserManualComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
+  
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
  it('should have changed active button',() => {
-  let buttons = fixture.debugElement.nativeElement.querySelectorAll('.guide-selection-button');
-  const funcNumber = 5;
-  component.changeActivatedButton(component.func[funcNumber-2]);
-  buttons[funcNumber].click();
-  expect(component.activeButton).toEqual(component.func[funcNumber]);
+  const funcNumber = 5; //Arbitrary number for testing the selection buttons
+  let buttons = fixture.debugElement.nativeElement.querySelectorAll('.guide-selection-button'); //Find all guide selection buttons
+  component.changeActivatedButton(component.func[funcNumber-2]);  //Change active button for another arbitrary button
+  buttons[funcNumber].click();  //Simulate a click on the first arbitrary button
+  expect(component.activeButton).toEqual(component.func[funcNumber]); //Expect the active button to have changed to the button clicked
   });
 
  it('should stay at the same page at the last page when calling nextPage', () => {
-  const funcNumber = component.func.length-1;
-  component.changeActivatedButton(component.func[funcNumber]);
-  component.nextPage();
+  const funcNumber = component.func.length-1; //number of the last selection button
+  component.changeActivatedButton(component.func[funcNumber]);  //Change active button to the last selection button
+  component.nextPage(); //Try to go to the next page of the guide
   expect(component.activeButton).toEqual(component.func[funcNumber]);
 });
 
 it('should stay at the same page at the last page when calling previousPage', () => {
-  const funcNumber = 0;
-  component.changeActivatedButton(component.func[funcNumber]);
-  component.previousPage();
+  const funcNumber = 0; //number of the first selection button
+  component.changeActivatedButton(component.func[funcNumber]);  //Change active button to the first selection button
+  component.previousPage(); //Try to go to the previous page of the guide
   expect(component.activeButton).toEqual(component.func[funcNumber]);
 });
 
 it('should hide previousButton on first page',() => {
-  let button = fixture.debugElement.nativeElement.querySelector('#previousButton');
-  const funcNumber = 0;
-  component.changeActivatedButton(component.func[funcNumber]);
+  let button = fixture.debugElement.nativeElement.querySelector('#previousButton'); //Find the previousButton in the DOM
+  const funcNumber = 0; //number of the first selection button
+  component.changeActivatedButton(component.func[funcNumber]);  //Change active button to the first selection button
   expect(button.hasAttributes('hidden')).toEqual(true);
 });
 
 it('should hide nextButton on last page',() => {
-  let button = fixture.debugElement.nativeElement.querySelector('#nextButton');
-  const funcNumber = component.func.length-1;
-  component.changeActivatedButton(component.func[funcNumber]);
+  let button = fixture.debugElement.nativeElement.querySelector('#nextButton'); //Find the nextButton in the DOM
+  const funcNumber = component.func.length-1; //number of the last selection button
+  component.changeActivatedButton(component.func[funcNumber]);  //Change active button to the last selection button
   expect(button.hasAttributes('hidden')).toEqual(true);
 });
 
