@@ -136,6 +136,9 @@ export class ColorPickingService {
     this.cData.slCursorX = x;
     this.cData.slCursorY = y;
   }
+  onContextMenu(event : MouseEvent) : void {
+    event.preventDefault();
+  }
   //Mouse up event function when mouse on a color selector
   colorSelectOnMouseUp(): void{
     if ( this.cData.isSLSelecting || this.cData.isHueSelecting) {
