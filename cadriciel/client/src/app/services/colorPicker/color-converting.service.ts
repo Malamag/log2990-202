@@ -143,7 +143,7 @@ export class ColorConvertingService {
     let hexOk : Boolean = false;
     for(let i : number = 0; i < this.cData.hexNumber.length; i++) {
         if ( hex === this.cData.hexNumber[i] ){
-          hexOk = true;
+          hexOk = true;  
           break;
         }
     }
@@ -160,7 +160,6 @@ export class ColorConvertingService {
     if (colorBits.length % 2) {
         return rgba;
     }
-
     let ascii0 : number = 48;// 0 ascii code number
     let asciiA : number = 65;// A ascii code number
     let asciia : number = 97;// a ascii code number
@@ -168,14 +167,17 @@ export class ColorConvertingService {
     let buffer : number[] = [];
     for ( let i : number = 0; i < colorBits.length; i++ ) {
         //Return -1 on rbga if char is invalide
-        if(this.validateHex(colorBits.charCodeAt(i))){
+        if(colorBits.charCodeAt(i)>= asciia) {
+            buffer[i] = colorBits.charCodeAt(i) - (asciia - asciiA);
+        }
+        else{
+            buffer[i] = colorBits.charCodeAt(i);
+        }
+        if(!this.validateHex(buffer[i])){
             return rgba;
         }
-        buffer[i] = colorBits.charCodeAt(i);
-        if ( buffer[i] >= asciia ) {
-            buffer[i] -= asciia - 10;//hex letter start at 10 
-        }
-        else if ( buffer[i] >= asciiA ){
+        //hex letter start at 10
+        if ( buffer[i] >= asciiA ){
             buffer[i] -=  asciiA - 10;
         }
         else {

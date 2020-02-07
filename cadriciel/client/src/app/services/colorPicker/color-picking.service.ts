@@ -277,7 +277,7 @@ export class ColorPickingService {
   }
   //validate if char is hexadecimal. A window alert is send id invalide char are found
   validateHexInput(event : KeyboardEvent) : void {
-    if (this.colorConvert.validateHex(event.which)){
+    if (!this.colorConvert.validateHex(event.which)){
       event.preventDefault();
     }
   }
@@ -406,9 +406,9 @@ export class ColorPickingService {
   }
   //Refresh hex display following an input
   hexInputDisplayRefresh() : void {
-    this.cData.redHexInput = this.colorConvert.alphaRGBToHex( this.cData.redSliderInput );
-    this.cData.greenHexInput = this.colorConvert.alphaRGBToHex( this.cData.greenSliderInput );
-    this.cData.blueHexInput = this.colorConvert.alphaRGBToHex( this.cData.blueSliderInput );
+    this.cData.redHexInput = this.colorConvert.rgbToHex( this.cData.redSliderInput );
+    this.cData.greenHexInput = this.colorConvert.rgbToHex( this.cData.greenSliderInput );
+    this.cData.blueHexInput = this.colorConvert.rgbToHex( this.cData.blueSliderInput );
     this.cData.hexColorInput = this.cData.redHexInput + this.cData.greenHexInput + this.cData.blueHexInput;
   }
   /**
