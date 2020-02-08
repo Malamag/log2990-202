@@ -16,7 +16,7 @@ import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.
 })
 export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor(private canvBuilder: CanvasBuilderService, private interaction: InteractionService, private colorPick: ColorPickingService) { }
+  constructor(public canvBuilder: CanvasBuilderService, public interaction: InteractionService, public colorPick: ColorPickingService) { }
   canvas: Canvas;
   canvasSubscr: Subscription;
   width: number;
@@ -38,72 +38,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     })
   
     this.initCanvas();
-    /*
-    //mouseHandler will need these references to evaluate clicks
-    let svg : HTMLElement | null = document.getElementById("canvas");
-    let workingSpace : HTMLElement | null = document.getElementById("working-space");
-
-    let keyboardHandler : KeyboardHandlerService = new KeyboardHandlerService();
-    let mouseHandler = new MouseHandlerService(svg, workingSpace);
-    //Mockup values for testing
-    let color1 = "1167B1";
-    let color2 = "000000";
-
-    //Create all the tools
-    let tc = new ToolCreator(document.getElementsByName("in-progress")[0], document.getElementsByName("drawing")[0]);
-
-    let pencil = tc.CreatePencil(true,10,color1,67, this.interaction, this.colorPick);
-    let rect = tc.CreateRectangle(false,3,color1,color2, 2,49, this.interaction, this.colorPick);
-    let line = tc.CreateLine(false,3,color2,true,15,76, this.interaction, this.colorPick);
-    let brush = tc.CreateBrush(false,50,color1, 4,87, this.interaction, this.colorPick);
-
-
-    this.toolsContainer.set("Rectangle", rect);
-    this.toolsContainer.set("Ligne", line);
-    this.toolsContainer.set("Pinceau", brush);
-    this.toolsContainer.set("Crayon", pencil);
-    this.interaction.$cancelToolsObs.subscribe(sig=>{
-      if(sig){
-          this.closeTools(this.toolsContainer)
-      }
-    })
-    this.interaction.$selectedTool.subscribe(toolName=>{
-      if(this.toolsContainer.get(toolName)){
-        this.closeTools(this.toolsContainer);
-        this.toolsContainer.get(toolName).selected = true;
-      }
-    })
-
     
-    //Subscribe each tool to keyboard and mouse
-    this.toolsContainer.forEach(element => {
-      keyboardHandler.addToolObserver(element);
-      mouseHandler.addObserver(element);
-    });
-
-    window.addEventListener("resize",function(){
-      mouseHandler.updateWindowSize();
-    });
-
-    //Mouse listeners
-    window.addEventListener("mousemove", function(e){
-      mouseHandler.move(e);
-    });
-    window.addEventListener("mousedown", function(e){
-      mouseHandler.down(e);
-      
-    });
-    window.addEventListener("mouseup", function(e){
-      mouseHandler.up(e);
-    });
-
-    //Keyboard listeners
-    window.addEventListener("keydown", function(e){
-      keyboardHandler.logkey(e);
-    });
-    window.addEventListener("keyup", function(e){
-      keyboardHandler.reset(e);
-    });*/
   }
   closeTools(map: Map<string,DrawingTool>){
     map.forEach(el=>{
