@@ -22,15 +22,17 @@ export class RectangleService extends DrawingTool {
     //this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS)
     this.secondary_color = secondary_color;
     this.renderMode = renderMode;
-
+    this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS)
     this.isSquare = false;
     this.updateColors()
     this.updateAttributes()
   }
   updateAttributes(){
     this.interaction.$formsAttributes.subscribe(obj=>{
-      if(obj)
+      if(obj){
         this.attr = new FormsAttribute(obj.plotType, obj.lineThickness, obj.numberOfCorners)
+      }
+      
     });
   }
   //updating on key change

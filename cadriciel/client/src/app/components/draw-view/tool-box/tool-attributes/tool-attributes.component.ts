@@ -37,7 +37,6 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
   ngAfterViewInit() {
     // default values
     
-
     this.interaction.$selectedTool.subscribe( tool =>{
       let toolExist:boolean = false
       this.tools.forEach(el=>{

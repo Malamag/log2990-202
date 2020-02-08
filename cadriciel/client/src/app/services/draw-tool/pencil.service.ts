@@ -16,14 +16,15 @@ export class PencilService extends DrawingTool {
   constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,shortcut:number, interaction: InteractionService, colorPick: ColorPickingService){
     
     super(inProgess, drawing, selected,width,primary_color,shortcut, interaction, colorPick);
-    //this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
+    this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
     this.updateColors()
     this.updateAttributes()
   }
   updateAttributes(){
     this.interaction.$toolsAttributes.subscribe(obj=>{
-      if(obj)
+      if(obj){
         this.attr = new ToolsAttributes(obj.lineThickness, obj.texture)
+      }
     })
     this.colorPick.emitColors()
   }
