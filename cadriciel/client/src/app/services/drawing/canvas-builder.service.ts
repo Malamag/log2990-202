@@ -11,13 +11,8 @@ import { colorCircles } from '../../palette';
 })
 export class CanvasBuilderService {
 
-  defWidht: number;
-  defHeight: number;
-
   newCanvas: Canvas;
   canvSubject = new Subject<Canvas>(); // using rxjs to emit the created canvas to another component
-
-  onGoing: boolean;
 
   constructor() { }
   
@@ -45,8 +40,8 @@ export class CanvasBuilderService {
     return new Canvas(this.getDefWidth(), this.getDefHeight(), this.getDefColor());
   }
 
-  emitCanvas() {
-    return this.canvSubject.next(this.newCanvas);
+  emitCanvas(): void {
+    this.canvSubject.next(this.newCanvas);
   }
 
   getPalleteAttributes() {
@@ -60,7 +55,7 @@ export class CanvasBuilderService {
     return colorCircles;
   }
 
-  whipeDraw(myDoodle: ElementRef) {
+  whipeDraw(myDoodle: ElementRef | undefined): void {
     if(myDoodle){ // element is defined
       myDoodle.nativeElement.innerHTML = "";
     }

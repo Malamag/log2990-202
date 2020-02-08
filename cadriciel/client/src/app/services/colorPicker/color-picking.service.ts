@@ -3,7 +3,6 @@ import { ColorConvertingService } from './color-converting.service';
 import { colorData } from '../../components/color-picker/color-data';
 import { Subject } from 'rxjs';
 import { ChoosenColors } from '../../models/ChoosenColors.model';
-//import { CheckboxControlValueAccessor } from '@angular/forms';
 
 
 /*-----------------------------Color valur table-----------------------------------------*
