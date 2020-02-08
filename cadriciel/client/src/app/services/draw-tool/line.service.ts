@@ -16,7 +16,6 @@ export class LineService extends DrawingTool {
   attr: LineAttributes
   
   constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string, showJunctions:boolean, junctionWidth:number,shortcut:number, interaction: InteractionService, colorPick: ColorPickingService){
-    console.log("yeet")
     super(inProgess,drawing, selected,width,primary_color,shortcut, interaction, colorPick);
     //this.attr = new LineAttributes(this.defaultValues.DEFAULTJUNCTION, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTJUNCTIONRADIUS)
     this.showJunctions = showJunctions;
@@ -28,7 +27,6 @@ export class LineService extends DrawingTool {
   }
 
   updateAttributes(){
-    console.log("here");
     this.interaction.$lineAttributes.subscribe(obj=>{
       if(obj)
         this.attr = new LineAttributes(obj.junction, obj.lineThickness, obj.junctionDiameter)
