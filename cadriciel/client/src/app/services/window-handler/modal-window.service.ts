@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ComponentType } from '@angular/cdk/portal';
+import { NewDrawComponent } from 'src/app/components/new-draw/new-draw.component';
+import { UserManualComponent } from 'src/app/components/user-manual/user-manual.component';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +23,7 @@ export class ModalWindowService {
     this.dialogConfig.restoreFocus = false; 
   }
 
-  openWindow(component: ComponentType<any>) { // opens any modal window given as argument (by component type)
+  openWindow(component: ComponentType<NewDrawComponent|UserManualComponent>) { // Can open new draw form or user guide (for now)
     this.dialog.open(component, this.dialogConfig);
   }
 
