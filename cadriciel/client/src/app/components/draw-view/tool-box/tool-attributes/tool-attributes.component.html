@@ -70,12 +70,12 @@
         <input type= "text" value = "1"> <br>
     </div>
     <!-- for the line -->
-    <div *ngSwitchCase = " 'Ligne' " (mouseleave) ="updateLine()">
+    <div *ngSwitchCase = " 'Ligne' " (mouseleave)="updateLine()">
         <label> Type de jonction </label> <br><br>
         <mat-radio-group>
-            <mat-radio-button [value]="true" [checked]="true" (click)= "junction = true"> Point</mat-radio-button>
+            <mat-radio-button [value]="true" [checked]="junction"  (click)= "junction = true"> Point</mat-radio-button>
             <br><br>
-            <mat-radio-button [value]="false" (click) = "junction = false"> Normal</mat-radio-button>
+            <mat-radio-button  [checked]="!junction" (click) = "junction = false"> Normal</mat-radio-button>
             <br><br>
         </mat-radio-group>
         
