@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { KeyboardHandlerService } from './keyboard-handler.service';
-/*import { InputObserver } from '../draw-tool/input-observer';
+import { InputObserver } from '../draw-tool/input-observer';
 import { PencilService } from '../draw-tool/pencil.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
-import { ColorConvertingService } from '../colorPicker/color-converting.service';*/
+import { ColorConvertingService } from '../colorPicker/color-converting.service';
 
 
 describe('KeyboardHandlerService', () => {
@@ -21,7 +21,7 @@ describe('KeyboardHandlerService', () => {
     expect(service).toBeTruthy();
   });
 
-  /*it("should add the observer", ()=>{
+  it("should add the observer", ()=>{
     let prog = new HTMLElement();
     prog.innerHTML = "";
     let draw = new HTMLElement();
@@ -31,11 +31,11 @@ describe('KeyboardHandlerService', () => {
     service.addToolObserver(observer);
     expect(service.toolObservers.length).toBe(1);
     expect(service.toolshortcuts.length).toBe(1);
-  })*/
+  })
 
   it("should get the key information and the observers must be updated and the change check is done", ()=>{
     
-    const spyToolChange = spyOn(service, 'checkForToolChange');
+   
     const spyUpdate = spyOn(service, 'updateToolObservers');
     let mockKey : KeyboardEvent = new KeyboardEvent("keydown",{
       key: "Shift",
@@ -47,37 +47,43 @@ describe('KeyboardHandlerService', () => {
     // the reason why the keycode isnt tested is because the keyCode of the mockKey cant be initialised
     expect(service.ctrlDown).toBeFalsy();
     expect(service.shiftDown).toBeTruthy();
-    expect(spyToolChange).toHaveBeenCalled();
+    
     expect(spyUpdate).toHaveBeenCalled();
   });
 
   it('on reset the keyboard attributes are reseted and the tools have been updated',()=>{
     
     const spyUpdate = spyOn(service, 'updateToolObservers');
+    //let initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
     let mockKey : KeyboardEvent = new KeyboardEvent("keyup",{
       key: "Shift",
       ctrlKey: false,
       shiftKey: true,
-      code: '17',
+      //keyCode: 17,
     })
     service.logkey(mockKey);
     service.reset(mockKey);
     expect(service.keyString).toBe('');
     expect(service.keyCode).toBe(-1);
-    expect(service.ctrlDown).toBeFalsy();
+    //expect(service.ctrlDown).toBeFalsy();
     expect(service.shiftDown).toBeFalsy();
     expect(spyUpdate).toHaveBeenCalled();
   });
 
-  /*it('on update call the update fuction of the observers is called', ()=>{
+  it('on update call the update fuction of the observers is called', ()=>{
+    let prog = new HTMLElement();
+    prog.innerHTML = "";
+    let draw = new HTMLElement();
+    draw.innerHTML = "";
     const service: KeyboardHandlerService= new KeyboardHandlerService();
-    const observer: InputObserver = new PencilService(true,1,"blue", 2);
+    const observer: InputObserver = new PencilService(prog, draw, true,1,"blue", 2, new InteractionService(), new ColorPickingService(new ColorConvertingService()));
+    // to add the observer initialised to the KeyboardHandler object created
     service.addToolObserver(observer);
-    const observers = service.toolObservers;
-    const spyObj = spyOn(observers, 'update');
+    //const observers = service.toolObservers;
+    const spyObj = spyOn(observer,'update')
     service.updateToolObservers();
     expect(spyObj).toHaveBeenCalled();
-  });*/
+  })
   
   // one last test todo 
   /*it('on checkForToolChange the attribute selected for the corresponding tool is true',()=>{
