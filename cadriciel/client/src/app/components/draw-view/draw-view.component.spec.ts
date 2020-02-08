@@ -61,7 +61,7 @@ describe('DrawViewComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
+/*
   it('selectedToolShouldChange', () => {
     const name: string = "crayon";
     component.buttonAction(name);
@@ -110,5 +110,5 @@ describe('DrawViewComponent', () => {
     const name: string = "refaire";
     component.buttonAction(name);
     expect(component.openToolOptions).toBe(false);
-  });
+  });*/
 });

@@ -1,4 +1,5 @@
-import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 
 
 
@@ -10,14 +11,14 @@ import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/co
 export class DrawViewComponent implements OnInit {
 
   // I doubt if we can delete these two
-  @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
-  renderer: Renderer2
+  @ViewChild('WorkingSpace',{static:false}) workingSpaceRef: ElementRef 
  
   
-  constructor() {
+  constructor(private interaction:InteractionService) {
   }
 
   ngOnInit() {
+    this.interaction.emitRef(this.workingSpaceRef)
     
   }  
 

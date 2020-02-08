@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FormsAttribute } from '../attributes/attribute-form';
 import { ToolsAttributes } from '../attributes/tools-attribute';
@@ -23,6 +23,9 @@ export class InteractionService {
   private cancelTools = new Subject<boolean>()
   $cancelToolsObs = this.cancelTools.asObservable()
 
+  private ref= new Subject<ElementRef>()
+  $refObs= this.ref.asObservable()
+
   constructor() { }
 
   emitSelectedTool(tool: string){
@@ -43,5 +46,9 @@ export class InteractionService {
 
   emitCancel(sig:boolean){
     this.cancelTools.next(sig)
+  }
+  emitRef(el: ElementRef){
+    
+    this.ref.next(el)
   }
 }

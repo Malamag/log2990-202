@@ -1,11 +1,11 @@
 
-<svg id = "canvas" [style.width] = "width" [style.height] = "height" >
+<svg #canvas id = "canvas" [style.width] = "width" [style.height] = "height" >
   <rect  width="100%" height="100%" [style.fill]="backColor"/>
   <g name = "filters"></g>
   <g #frame name = "drawing">
 
   </g>
-  <g name = "in-progress"></g>
+  <g #inPrgress name = "in-progress"></g>
 </svg>
 <!--
 <div #frame [style.width.px] = "width" [style.height.px] = "height" [style.background-color] ="backColor">

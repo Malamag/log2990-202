@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, Renderer2} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
@@ -16,7 +16,7 @@ import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.
 })
 export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor(private canvBuilder: CanvasBuilderService, private interaction: InteractionService, private renderer: Renderer2, private colorPick: ColorPickingService) { }
+  constructor(private canvBuilder: CanvasBuilderService, private interaction: InteractionService, private colorPick: ColorPickingService) { }
   canvas: Canvas;
   canvasSubscr: Subscription;
   width: number;
@@ -24,14 +24,18 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   backColor: string;
 
   toolsContainer = new Map();
-  workSpace: HTMLElement
-  svg: HTMLElement
-  inProgress: HTMLElement
-  drawing: HTMLElement
+  workSpace: ElementRef
+  
+  @ViewChild('inPrgress', {static: false})inProgress: ElementRef
+  @ViewChild('canvas', {static:false})svg: ElementRef
 
   @ViewChild('frame', {static: false}) frameRef: ElementRef;
 
   ngOnInit() {
+    this.interaction.$refObs.subscribe(el=>{
+      this.workSpace = new ElementRef(el.nativeElement)
+      
+    })
     this.initCanvas();
     //mouseHandler will need these references to evaluate clicks
     let svg : HTMLElement | null = document.getElementById("canvas");
@@ -122,7 +126,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    // the 
+    /*// the 
     this.workSpace = this.renderer.createElement('div')
     this.renderer.setAttribute(this.workSpace, 'width', this.width.toString())
     this.renderer.setAttribute(this.workSpace, 'height', this.height.toString())
@@ -135,7 +139,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     this.renderer.setAttribute(this.svg, 'width', '')
     this.renderer.setAttribute(this.svg, 'height', '100%')
     this.renderer.appendChild(this.workSpace, this.svg)
-
+    */
     window.dispatchEvent(new Event('resize'));
     
   }
