@@ -16,7 +16,7 @@ export class ToolBoxComponent implements OnInit {
   selectingToolsMap = new Map();
   
   
-  constructor(private interactionService: InteractionService) {
+  constructor(public interactionService: InteractionService) {
     this.selectingToolsMap.set('1', 'Rectangle');
     this.selectingToolsMap.set('c', 'Crayon');
     this.selectingToolsMap.set('w', 'Pinceau');
@@ -26,7 +26,7 @@ export class ToolBoxComponent implements OnInit {
   @HostListener('document: keydown', ['$event'])
   updateBoard(event: KeyboardEvent){
     if(this.selectingToolsMap.has(event.key)){
-      this.interactionService.emitSelectedTool(this.selectingToolsMap.get(event.key));
+      this.buttonAction(this.selectingToolsMap.get(event.key))
     }
   }
 
