@@ -126,20 +126,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    /*// the 
-    this.workSpace = this.renderer.createElement('div')
-    this.renderer.setAttribute(this.workSpace, 'width', this.width.toString())
-    this.renderer.setAttribute(this.workSpace, 'height', this.height.toString())
-    this.renderer.appendChild(this.frameRef.nativeElement, this.workSpace)
-
-    // the svg
-    this.svg= this.renderer.createElement('svg', 'http://www.w3.org/2000/svg')
-    this.renderer.setAttribute(this.svg, 'baseProfile', 'full')
-    this.renderer.setAttribute(this.svg, 'version', '1.1')
-    this.renderer.setAttribute(this.svg, 'width', '')
-    this.renderer.setAttribute(this.svg, 'height', '100%')
-    this.renderer.appendChild(this.workSpace, this.svg)
-    */
+    
     window.dispatchEvent(new Event('resize'));
     
   }

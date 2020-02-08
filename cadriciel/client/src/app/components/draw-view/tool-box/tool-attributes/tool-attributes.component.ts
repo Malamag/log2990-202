@@ -19,7 +19,7 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
   junctionRadius: number;
   selectedTool: String;
   tools:string[]=[]
-  constructor(private interaction: InteractionService) {
+  constructor(public interaction: InteractionService) {
     this.tools= ['Rectangle', 'Ligne', 'Pinceau', 'Crayon','Choisir couleur']
   }
   
