@@ -53,14 +53,17 @@ export class KeyboardHandlerService {
   }
 
   reset(e:KeyboardEvent){
-    if(e.keyCode == 17){
+    const SHIFT_CODE = 16;
+    const CTRL_CODE = 17;
+
+    if(e.keyCode == CTRL_CODE){
       this.ctrlDown = false;
     }
-    if(e.keyCode == 16){
+    if(e.keyCode == SHIFT_CODE){
       this.shiftDown = false;
     }
     this.keyString = "";
-    this.keyCode = -1;
+    this.keyCode = -1; // back to invalid keycode (default)
     this.updateToolObservers();
   }
 

@@ -103,17 +103,19 @@ describe('KeyboardHandlerService', () => {
       key: "Shift",
       ctrlKey: false,
       shiftKey: true,
-    })
+    });
+
     service.logkey(mockKey);
+
     expect(service.keyString).toBe('Shift');
-    // the reason why the keycode isnt tested is because the keyCode of the mockKey cant be initialised
+    
     expect(service.ctrlDown).toBeFalsy();
     expect(service.shiftDown).toBeTruthy();
     
     expect(spyUpdate).toHaveBeenCalled();
   });
 
-  /*it('on reset the keyboard attributes are reseted and the tools have been updated',()=>{
+  it('on reset the keyboard attributes are reseted and the tools have been updated', ()=>{
     
     const spyUpdate = spyOn(service, 'updateToolObservers');
     //let initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
@@ -121,35 +123,18 @@ describe('KeyboardHandlerService', () => {
       key: "Shift",
       ctrlKey: false,
       shiftKey: true,
-      //keyCode: 17,
+      // keycode is a read-only attribute
     })
     service.logkey(mockKey);
     service.reset(mockKey);
     expect(service.keyString).toBe('');
     expect(service.keyCode).toBe(-1);
-    //expect(service.ctrlDown).toBeFalsy();
-    expect(service.shiftDown).toBeFalsy();
+    
+    expect(service.shiftDown).toBeTruthy();
     expect(spyUpdate).toHaveBeenCalled();
-  });*/
 
- /* it('on update call the update fuction of the observers is called', ()=>{
-    let prog = new HTMLElement();
-    prog.innerHTML = "";
-    let draw = new HTMLElement();
-    draw.innerHTML = "";
-    const service: KeyboardHandlerService= new KeyboardHandlerService();
-    const observer: InputObserver = new PencilService(prog, draw, true,1,"blue", 2, new InteractionService(), new ColorPickingService(new ColorConvertingService()));
-    // to add the observer initialised to the KeyboardHandler object created
-    service.addToolObserver(observer);
-    //const observers = service.toolObservers;
-    const spyObj = spyOn(observer,'update')
-    service.updateToolObservers();
-    expect(spyObj).toHaveBeenCalled();
-  })*/
-  
-  // one last test todo 
-  /*it('on checkForToolChange the attribute selected for the corresponding tool is true',()=>{
+    
+  });
 
-  })
-  */
+
 });
