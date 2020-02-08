@@ -49,7 +49,7 @@ describe('ToolBoxComponent', () => {
   })
 
   // this test fail I dont know why
-  it('should send name following a right keybard key', ()=>{
+  it('should call buttonAction following a good key from the keyboardEvent', ()=>{
     let component = TestBed.createComponent(ToolBoxComponent).componentInstance;
     let mockKey = new KeyboardEvent("keyup", {
       key:"1"
@@ -59,5 +59,14 @@ describe('ToolBoxComponent', () => {
     let spyObj = spyOn(component, 'buttonAction')
     expect(spyObj).toHaveBeenCalled()
   })
-    
+  it('should not call buttonAction',()=>{
+    let component = TestBed.createComponent(ToolBoxComponent).componentInstance;
+    let mockKey = new KeyboardEvent("keyup", {
+      key:"r"
+      
+    })
+    component.updateBoard(mockKey)
+    let spyObj = spyOn(component, 'buttonAction')
+    expect(spyObj).toHaveBeenCalledTimes(0)
+  })
 });
