@@ -110,14 +110,14 @@ describe('NewDrawComponent', () => {
     expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
 
-  it('should not accept null values in width',() => {
-    setInputValue('input[formControlName=canvWidth]','');  //Put a null value in the input of width
+  it('should not accept undefined values in width',() => {
+    setInputValue('input[formControlName=canvWidth]',undefined);  
     let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
     expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
 
-  it('should not accept null values in height',() => {
-    setInputValue('input[formControlName=canvHeight]','');  //Put a null value in the input of height
+  it('should not accept undefined values in height',() => {
+    setInputValue('input[formControlName=canvHeight]',undefined);  
     let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
     expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
