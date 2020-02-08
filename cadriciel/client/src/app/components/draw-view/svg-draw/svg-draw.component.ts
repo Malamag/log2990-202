@@ -24,19 +24,24 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   backColor: string;
 
   toolsContainer = new Map();
-  workSpace: ElementRef
+  
   
   @ViewChild('inPrgress', {static: false})inProgress: ElementRef
   @ViewChild('canvas', {static:false})svg: ElementRef
 
   @ViewChild('frame', {static: false}) frameRef: ElementRef;
+  workingSpace: HTMLElement
 
   ngOnInit() {
+    this.interaction.$refObs.subscribe(ref=>{
+      this.workingSpace =ref.nativeElement
+    })
     this.interaction.$refObs.subscribe(el=>{
       this.workSpace = new ElementRef(el.nativeElement)
       
     })
     this.initCanvas();
+    /*
     //mouseHandler will need these references to evaluate clicks
     let svg : HTMLElement | null = document.getElementById("canvas");
     let workingSpace : HTMLElement | null = document.getElementById("working-space");
@@ -80,7 +85,6 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     window.addEventListener("resize",function(){
-      console.log("resize");
       mouseHandler.updateWindowSize();
     });
 
@@ -102,7 +106,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     window.addEventListener("keyup", function(e){
       keyboardHandler.reset(e);
-    });
+    });*/
   }
   closeTools(map: Map<string,DrawingTool>){
     map.forEach(el=>{
@@ -126,20 +130,69 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    /*// the 
-    this.workSpace = this.renderer.createElement('div')
-    this.renderer.setAttribute(this.workSpace, 'width', this.width.toString())
-    this.renderer.setAttribute(this.workSpace, 'height', this.height.toString())
-    this.renderer.appendChild(this.frameRef.nativeElement, this.workSpace)
+    let svg : HTMLElement | null = this.svg.nativeElement
+  
+    let keyboardHandler : KeyboardHandlerService = new KeyboardHandlerService();
+    let mouseHandler = new MouseHandlerService(svg, this.workingSpace);
+    //Mockup values for testing
+    let color1 = "1167B1";
+    let color2 = "000000";
 
-    // the svg
-    this.svg= this.renderer.createElement('svg', 'http://www.w3.org/2000/svg')
-    this.renderer.setAttribute(this.svg, 'baseProfile', 'full')
-    this.renderer.setAttribute(this.svg, 'version', '1.1')
-    this.renderer.setAttribute(this.svg, 'width', '')
-    this.renderer.setAttribute(this.svg, 'height', '100%')
-    this.renderer.appendChild(this.workSpace, this.svg)
-    */
+    //Create all the tools
+    let tc = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
+
+    let pencil = tc.CreatePencil(true,10,color1,67, this.interaction, this.colorPick);
+    let rect = tc.CreateRectangle(false,3,color1,color2, 2,49, this.interaction, this.colorPick);
+    let line = tc.CreateLine(false,3,color2,true,15,76, this.interaction, this.colorPick);
+    let brush = tc.CreateBrush(false,50,color1, 4,87, this.interaction, this.colorPick);
+
+
+    this.toolsContainer.set("Rectangle", rect);
+    this.toolsContainer.set("Ligne", line);
+    this.toolsContainer.set("Pinceau", brush);
+    this.toolsContainer.set("Crayon", pencil);
+    this.interaction.$cancelToolsObs.subscribe(sig=>{
+      if(sig){
+          this.closeTools(this.toolsContainer)
+      }
+    })
+    this.interaction.$selectedTool.subscribe(toolName=>{
+      if(this.toolsContainer.get(toolName)){
+        this.closeTools(this.toolsContainer);
+        this.toolsContainer.get(toolName).selected = true;
+      }
+    })
+
+    
+    //Subscribe each tool to keyboard and mouse
+    this.toolsContainer.forEach(element => {
+      keyboardHandler.addToolObserver(element);
+      mouseHandler.addObserver(element);
+    });
+
+    window.addEventListener("resize",function(){
+      mouseHandler.updateWindowSize();
+    });
+
+    //Mouse listeners
+    window.addEventListener("mousemove", function(e){
+      mouseHandler.move(e);
+    });
+    window.addEventListener("mousedown", function(e){
+      mouseHandler.down(e);
+      
+    });
+    window.addEventListener("mouseup", function(e){
+      mouseHandler.up(e);
+    });
+
+    //Keyboard listeners
+    window.addEventListener("keydown", function(e){
+      keyboardHandler.logkey(e);
+    });
+    window.addEventListener("keyup", function(e){
+      keyboardHandler.reset(e);
+    });
     window.dispatchEvent(new Event('resize'));
     
   }

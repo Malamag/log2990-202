@@ -61,53 +61,14 @@ describe('DrawViewComponent', () => {
     expect(component).toBeTruthy();
   });
 
- /* it('selectedToolShouldChange', () => {
-    const name: string = "crayon";
-    component.buttonAction(name);
-    expect(component.selectedTool).toBe(name);
-  });
-
-  it('OpenToolOptions should be true as selectedTool value is undefined', () => {
-    const name: string = "crayon";
-    component.buttonAction(name);
-    expect(component.openToolOptions).toBe(true);
-  });
-
-  it('OpenToolOptions should be true as selectedTool value is deferent from the name', () => {
-    component.selectedTool= "rectangle";
-    const name: string = "crayon";
-    component.buttonAction(name);
-    expect(component.openToolOptions).toBe(true);
-  });
-
-  it('OpenToolOptions should be false as the button action function had been called twice for the same tool', () => {
-    const name: string = "crayon";
-    component.buttonAction(name);
-    component.buttonAction(name);
-    expect(component.openToolOptions).toBe(false);
-  });
-
-  it('OpenToolOptions should be false with selectedTool as sélectionner', () => {
-    const name: string = "sélectionner";
-    component.buttonAction(name);
-    expect(component.openToolOptions).toBe(false);
-  });
-
-  it('OpenToolOptions should be false with selectedTool as pipette', () => {
-    const name: string = "pipette";
-    component.buttonAction(name);
-    expect(component.openToolOptions).toBe(false);
-  });
-
-  it('OpenToolOptions should be false with selectedTool as défaire', () => {
-    const name: string = "défaire";
-    component.buttonAction(name);
-    expect(component.openToolOptions).toBe(false);
-  });
-
-  it('OpenToolOptions should be false as refaire', () => {
-    const name: string = "refaire";
-    component.buttonAction(name);
-    expect(component.openToolOptions).toBe(false);
-  });*/
+  it('should call dispatch the window',()=>{
+    let spyObj = spyOn(window, 'dispatchEvent');
+    component.adaptWindowSize();
+    expect(spyObj).toHaveBeenCalled()
+  })
+  it('After building the template the reference should be emiited by the observer', ()=>{
+    let objSpy = spyOn(component.interaction,'emitRef')
+    component.ngAfterViewInit()
+    expect(objSpy).toHaveBeenCalled()
+  })
 });

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 
 
@@ -8,19 +8,24 @@ import { InteractionService } from 'src/app/services/service-interaction/interac
   templateUrl: './draw-view.component.html',
   styleUrls: ['./draw-view.component.scss']
 })
-export class DrawViewComponent implements OnInit {
+export class DrawViewComponent implements OnInit, AfterViewInit {
+ 
 
   // I doubt if we can delete these two
-  @ViewChild('WorkingSpace',{static:false}) workingSpaceRef: ElementRef 
+  @ViewChild('workingSpace',{static:false}) workingSpaceRef: ElementRef 
  
   
-  constructor(private interaction:InteractionService) {
+  constructor(public interaction:InteractionService) {
   }
 
   ngOnInit() {
-    this.interaction.emitRef(this.workingSpaceRef)
+    //this.interaction.emitRef(this.workingSpaceRef)
     
-  } 
+  }
+  ngAfterViewInit() {
+    this.interaction.emitRef(this.workingSpaceRef)
+  }
+  
   
   adaptWindowSize() {
     window.dispatchEvent(new Event("resize"));

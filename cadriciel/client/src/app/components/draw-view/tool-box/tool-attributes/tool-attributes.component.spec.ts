@@ -41,4 +41,49 @@ describe('ToolAttributesComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit forms attributes', ()=>{
+    let spyObj = spyOn(component.interaction, 'emitFormsAttributes')
+    component.updateForms()
+    expect(spyObj).toHaveBeenCalled()
+  })
+
+  it('should emit line attributes',()=>{
+    let spyObj = spyOn(component.interaction, 'emitLineAttributes')
+    component.updateLine()
+    expect(spyObj).toHaveBeenCalled()
+  })
+
+  it('should emit tools attributes',()=>{
+    let spyObj = spyOn(component.interaction, 'emitToolsAttributes')
+    component.updateTools()
+    expect(spyObj).toHaveBeenCalled()
+  })
+
+  it('should dispatch the window', ()=>{
+    let spyObj = spyOn(window, 'dispatchEvent')
+    component.resize()
+    expect(spyObj).toHaveBeenCalled()
+  })
+
+  it('should set default values',()=>{
+    component.ngAfterViewInit()
+    expect(component.lineThickness).toBe(5)
+    expect(component.texture).toBe(0)
+    expect(component.numberCorners).toBe(3)
+    expect(component.plotType).toBe(2)
+    expect(component.junction).toBe(true)
+    expect(component.junctionRadius).toBe(6)
+  })
+  it('should call update functions',()=>{
+    let formsSpy = spyOn(component, 'updateForms')
+    let toolsSpy = spyOn(component, 'updateTools')
+    let lineSpy = spyOn(component, 'updateLine')
+    component.ngAfterViewInit()
+    expect(formsSpy).toHaveBeenCalled()
+    expect(toolsSpy).toHaveBeenCalled()
+    expect(lineSpy).toHaveBeenCalled()
+  })
+
+  
 });
