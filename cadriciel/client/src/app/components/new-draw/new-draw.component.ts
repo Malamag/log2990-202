@@ -19,7 +19,6 @@ export class NewDrawComponent  implements OnInit  {
   color: string;
 
 
-
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
               private winService: ModalWindowService,

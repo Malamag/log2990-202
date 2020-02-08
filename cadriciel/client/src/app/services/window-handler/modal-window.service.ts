@@ -27,8 +27,8 @@ export class ModalWindowService {
   }
 
   closeWindow() {
-    this.dialog.closeAll();
-    
+    this.dialog.closeAll();    
   }
+  
 }
 
