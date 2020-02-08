@@ -52,15 +52,22 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
 
   updateForms(){
     //const attr : FormsAttribute = new FormsAttribute 
-    this.interaction.emitFormsAttributes(new FormsAttribute(this.plotType, this.lineThickness, this.numberCorners))
+    this.interaction.emitFormsAttributes(new FormsAttribute(this.plotType, this.lineThickness, this.numberCorners));
+    
   }
 
   updateLine(){
-    this.interaction.emitLineAttributes(new LineAttributes(this.junction, this.lineThickness, this.junctionRadius))
+    this.interaction.emitLineAttributes(new LineAttributes(this.junction, this.lineThickness, this.junctionRadius));
+
   }
 
   updateTools(){
     this.interaction.emitToolsAttributes(new ToolsAttributes(this.lineThickness, this.texture));
+    
+  }
+
+  resize() {
+    window.dispatchEvent(new Event('resize'));
   }
   
   ngOnDestroy() {

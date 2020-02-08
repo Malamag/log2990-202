@@ -13,7 +13,7 @@ describe('LineService', () => {
         {provide: String, useValue: ""},
         {provide: Boolean, useValue: true},
         {provide: Number, useValue: 0},
-        {provide: HTMLElement},
+        {provide: HTMLElement, useValue:{}},
         {provide: InteractionService, useValue: fakeInteractionService}]
     });
 

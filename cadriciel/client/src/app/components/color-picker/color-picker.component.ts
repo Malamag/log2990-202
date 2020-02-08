@@ -22,11 +22,12 @@ export class ColorPickerComponent implements OnInit {
     }
 
     initColors() {
-        const DEFAULT = "#ff0000"; // defining a default
+        const DEF_PRIM = '#000000ff';
+        const DEF_SEC = '#ff0000ff';
         this.colorSubsc = this.colorPicking.colorSubject.subscribe(
             (colors: ChoosenColors) => {
                 if(colors == undefined){
-                    colors = new ChoosenColors(DEFAULT, DEFAULT);
+                    colors = new ChoosenColors(DEF_PRIM, DEF_SEC);
                     
                 }
                 this.cData.primaryColor = colors.primColor;
@@ -37,7 +38,7 @@ export class ColorPickerComponent implements OnInit {
     }
 
     
-    setColor( button : number, color : number[] ) { // DONE
+    setColor(color : number[] ) { // DONE
         this.colorPicking.setColor(color)
     }
  
@@ -66,6 +67,18 @@ export class ColorPickerComponent implements OnInit {
     lastColorSelector( event : MouseEvent, lastColor : string ) : void {
         this.colorPicking.lastColorSelector(event,lastColor);
     }
+    onSwapSVGMouseOver() : void {
+        this.colorPicking.onSwapSVGMouseOver();
+    }
+    onSwapSVGMouseLeave() : void {
+        this.colorPicking.onSwapSVGMouseLeave();
+    }
+    onSwapSVGMouseDown() : void {
+        this.colorPicking.onSwapSVGMouseDown();
+    }
+    onSwapSVGMouseUp() : void {
+        this.colorPicking.onSwapSVGMouseUp();
+    }
     // convert rbg to h value of hsl.
     swapInputDisplay(event : any) {
         this.colorPicking.swapInputDisplay(event);
@@ -75,6 +88,18 @@ export class ColorPickerComponent implements OnInit {
     }
     validateHexInput(event : KeyboardEvent) : void {
         this.colorPicking.validateHexInput(event);
+    }
+    validateHexColorInput(event : KeyboardEvent) : void {
+        this.colorPicking.validateHexColorInput(event);
+    }
+    validateRedHexInput(event : KeyboardEvent) : void {
+        this.colorPicking.validateRedHexInput(event);
+    }
+    validateGreenHexInput(event : KeyboardEvent) : void {
+        this.colorPicking.validateGreenHexInput(event);
+    }
+    validateBlueHexInput(event : KeyboardEvent) : void {
+        this.colorPicking.validateBlueHexInput(event);
     }
     onHexColorInput(event : any) : void { //unmoved
         this.colorPicking.onHexColorInput(event);
@@ -92,7 +117,7 @@ export class ColorPickerComponent implements OnInit {
         this.colorPicking.onBlueHexInput();
     }
 
-    // Red left input change
+   
     onRGBSliderInput() : void { 
         this.colorPicking.onRGBSliderInput();
     }
@@ -100,7 +125,7 @@ export class ColorPickerComponent implements OnInit {
     onSLSliderInput() : void { 
         this.colorPicking.onSLSliderInput();
     }
-    //temp style TODO move to CSS?
+    
     get myInputStylesRL(): any {
         return {'background': 'white', 
                 '-webkit-background-clip': 'text',
@@ -153,35 +178,8 @@ export class ColorPickerComponent implements OnInit {
     get gradientStylesS(): any{
         return { 'stop-color': this.cData.secondaryColor };
     }
-    get lastColor1 (): any {
-        return { 'fill': this.cData.lastColors[0] };
-    }
-    get lastColor2 (): any {
-        return { 'fill': this.cData.lastColors[1] };
-    }
-    get lastColor3 (): any {
-        return { 'fill': this.cData.lastColors[2] };
-    }
-    get lastColor4 (): any {
-        return { 'fill': this.cData.lastColors[3] };
-    }
-    get lastColor5 (): any {
-        return { 'fill': this.cData.lastColors[4] };
-    }
-    get lastColor6 (): any {
-        return { 'fill': this.cData.lastColors[5] };
-    }
-    get lastColor7 (): any {
-        return { 'fill': this.cData.lastColors[6] };
-    }
-    get lastColor8 (): any {
-        return { 'fill': this.cData.lastColors[7] };
-    }
-    get lastColor9 (): any {
-        return { 'fill': this.cData.lastColors[8] };
-    }
-    get lastColor10 (): any {
-        return { 'fill': this.cData.lastColors[9] };
+    get swapStyles(): any {
+        return { 'stroke' : this.cData.swapStrokeStyle, 'font-size' : 10, 'font-style' : 'italic'};
     }
     get cursorStyles(): any{
         return { 'transform' : 'translate(' + this.cData.slCursorX + 'px,' + this.cData.slCursorY + 'px)'};

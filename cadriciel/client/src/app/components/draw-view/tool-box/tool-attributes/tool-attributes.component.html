@@ -1,4 +1,4 @@
-<p> {{selectedTool}}</p>
+<p *ngIf="!'Choisir Couleur'"> {{selectedTool}}</p>
 <div [ngSwitch]= "selectedTool">
     <div *ngSwitchCase = " 'Rectangle' " (mouseleave) ="updateForms()">
         <label> Épaisseur du contour (px) </label>
@@ -131,7 +131,7 @@
     </div>
     
     <!-- for the color-picker-->
-    <div *ngSwitchCase = " 'Choisir couleur' ">
+    <div *ngSwitchCase = " 'Choisir couleur' "(mouseout)="resize()">
         <app-color-picker></app-color-picker>
     </div>
    

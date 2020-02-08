@@ -3,7 +3,7 @@
       <app-option-bar></app-option-bar>
     </header>
   
-    <nav class="wrapper">
+    <nav class="wrapper" (mouseleave)="adaptWindowSize()">
       <app-tool-box id="toolBox"></app-tool-box>
       <hr>
       <app-tool-attributes id="toolAttributes"></app-tool-attributes>

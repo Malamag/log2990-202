@@ -5,7 +5,7 @@ import { OptionBarComponent } from './option-bar/option-bar.component';
 import { ToolBoxComponent } from './tool-box/tool-box.component';
 import { ToolAttributesComponent } from './tool-box/tool-attributes/tool-attributes.component';
 import { SvgDrawComponent } from './svg-draw/svg-draw.component';
-import { ColorFormComponent } from '../color-picker/color-form/color-form.component';
+//import { ColorFormComponent } from '../color-picker/color-form/color-form.component';
 
 import {
   MatButtonModule, 
@@ -33,8 +33,7 @@ describe('DrawViewComponent', () => {
         ToolBoxComponent, 
         ToolAttributesComponent, 
         SvgDrawComponent,
-        ColorPickerComponent,
-      ColorFormComponent ],
+        ColorPickerComponent ],
       providers :[{provide :menuItems, toolsItems, welcomeItem},
                   {provide: MatDialog}],
       imports: [
@@ -61,8 +60,8 @@ describe('DrawViewComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-/*
-  it('selectedToolShouldChange', () => {
+
+ /* it('selectedToolShouldChange', () => {
     const name: string = "crayon";
     component.buttonAction(name);
     expect(component.selectedTool).toBe(name);

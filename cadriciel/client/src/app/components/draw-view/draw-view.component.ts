@@ -20,7 +20,11 @@ export class DrawViewComponent implements OnInit {
   ngOnInit() {
     this.interaction.emitRef(this.workingSpaceRef)
     
-  }  
+  } 
+  
+  adaptWindowSize() {
+    window.dispatchEvent(new Event("resize"));
+  }
 
     /**Cette fonction peut à la limite être mise dans un service... */
 
