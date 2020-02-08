@@ -11,7 +11,6 @@ import { ColorPickingService } from '../colorPicker/color-picking.service';
 })
 export class LineService extends DrawingTool {
   showJunctions:boolean;
-  junctionRadius:number;
   forcedAngle:boolean;
   currentPos:Point;
   attr: LineAttributes
@@ -21,7 +20,6 @@ export class LineService extends DrawingTool {
     super(inProgess,drawing, selected,width,primary_color,shortcut, interaction, colorPick);
     //this.attr = new LineAttributes(this.defaultValues.DEFAULTJUNCTION, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTJUNCTIONRADIUS)
     this.showJunctions = showJunctions;
-    this.junctionRadius = junctionWidth/2;
     this.forcedAngle = false;
     this.currentPos = new Point(0,0);
     this.updateAttributes()
@@ -228,7 +226,7 @@ export class LineService extends DrawingTool {
       for(let i = 0; i < p.length - (closeIt? 1 : 0);i++){
         //set render attributes for the svg circle
         s += `<circle cx="${p[i].x}" cy="${p[i].y}"`;
-        s += `r="${this.junctionRadius}"`;
+        s += `r="${this.attr.junctionDiameter/2}"`; // to get the radius
         s += 'stroke="none"';
         s += `fill="#${this.primary_color}"/>`;
       }

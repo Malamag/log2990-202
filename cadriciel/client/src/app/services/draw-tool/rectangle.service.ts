@@ -145,7 +145,7 @@ export class RectangleService extends DrawingTool {
     s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
 
     s += `fill="${fill}"`;
-    s += `stroke-width="${this.width}" stroke="${stroke}"/>`;
+    s += `stroke-width="${this.attr.lineThickness}" stroke="${stroke}"/>`;
 
     //end the divider
     s += "</g>"
