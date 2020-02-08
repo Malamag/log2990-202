@@ -21,11 +21,6 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
   tools:string[]=[]
   constructor(public interaction: InteractionService) {
     this.tools= ['Rectangle', 'Ligne', 'Pinceau', 'Crayon','Choisir couleur']
-  }
-  
-  ngOnInit(){}
-  ngAfterViewInit() {
-    // default values
     this.lineThickness = 5; //5px thick line
     this.texture = 0; // blur texture
 
@@ -34,6 +29,14 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
     this.plotType = 2; // type 2 --> filled with border
     this.junction = true; // with junction dots of 6 px size
     this.junctionRadius = 6;
+  }
+  
+  ngOnInit(){
+    
+  }
+  ngAfterViewInit() {
+    // default values
+    
 
     this.interaction.$selectedTool.subscribe( tool =>{
       let toolExist:boolean = false

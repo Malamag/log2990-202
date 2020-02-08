@@ -36,10 +36,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     this.interaction.$refObs.subscribe(ref=>{
       this.workingSpace =ref.nativeElement
     })
-    this.interaction.$refObs.subscribe(el=>{
-      this.workSpace = new ElementRef(el.nativeElement)
-      
-    })
+  
     this.initCanvas();
     /*
     //mouseHandler will need these references to evaluate clicks
@@ -134,7 +131,6 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   
     let keyboardHandler : KeyboardHandlerService = new KeyboardHandlerService();
     let mouseHandler = new MouseHandlerService(svg, this.workingSpace);
-    //Mockup values for testing
     let color1 = "1167B1";
     let color2 = "000000";
 
