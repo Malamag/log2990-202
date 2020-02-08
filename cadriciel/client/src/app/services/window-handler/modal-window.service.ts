@@ -20,6 +20,7 @@ export class ModalWindowService {
     this.dialogConfig.id = "modalWindow";
     this.dialogConfig.height = 'auto';
     this.dialogConfig.width = 'auto';
+    this.dialogConfig.maxWidth = '100vw';
     this.dialogConfig.restoreFocus = false; 
   }
 

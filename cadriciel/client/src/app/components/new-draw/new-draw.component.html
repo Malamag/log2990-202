@@ -6,7 +6,6 @@
             <mat-form-field>
                 <mat-label for="canvWidth">Largeur (px)</mat-label>
                 <input matInput type="text" formControlName="canvWidth" [value]="width">
-                
             </mat-form-field>
 
             <mat-form-field>
@@ -37,7 +36,7 @@
             
         </form>
         <div>
-            <button mat-button (click)="closeModalForm()">Cancel</button>
+            <button mat-button id="quitButton" (click)="closeModalForm()">Cancel</button>
         </div>
 
     </div>
