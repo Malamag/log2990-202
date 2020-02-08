@@ -8,22 +8,22 @@ import { LineAttributes } from '../attributes/line-attributes';
   providedIn: 'root'
 })
 export class InteractionService {
-  private selectedTool = new Subject<String>();
+  selectedTool = new Subject<String>();
   $selectedTool = this.selectedTool.asObservable();
 
-  private formsAttributes = new Subject<FormsAttribute>()
+  formsAttributes = new Subject<FormsAttribute>()
   $formsAttributes = this.formsAttributes.asObservable()
 
-  private toolsAttributes = new Subject<ToolsAttributes>()
+  toolsAttributes = new Subject<ToolsAttributes>()
   $toolsAttributes = this.toolsAttributes.asObservable()
 
-  private lineAttributes = new Subject<LineAttributes>()
+  lineAttributes = new Subject<LineAttributes>()
   $lineAttributes = this.lineAttributes.asObservable()
 
-  private cancelTools = new Subject<boolean>()
+  cancelTools = new Subject<boolean>()
   $cancelToolsObs = this.cancelTools.asObservable()
 
-  private ref= new Subject<ElementRef>()
+  ref= new Subject<ElementRef>()
   $refObs= this.ref.asObservable()
 
   constructor() { }
