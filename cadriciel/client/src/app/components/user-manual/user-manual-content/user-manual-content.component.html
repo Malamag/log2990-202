@@ -4,6 +4,8 @@
         <div *ngIf="(activeButton === i)">
             <h2 id="title">{{i.name}} </h2>
             <hr>
+            <p id="shortDescription">
+                {{i.shortDescription}}</p>
             <p id="description">
                 {{i.description}}</p>
         </div>
@@ -14,6 +16,8 @@
             <h2 id="title">{{i.name}} <mat-icon>{{i.icon}}</mat-icon>
             </h2>
             <hr>
+            <p id="shortDescription">
+                {{i.shortDescription}}</p>
             <p id="description">
                 {{i.description}}</p>
         </div>
@@ -23,6 +27,8 @@
         <div *ngIf="(activeButton === i)">
             <h2 id="title">{{i.name}} <img src={{i.icon}}> </h2>
             <hr>
+            <p id="shortDescription">
+                {{i.shortDescription}}</p>
             <p id="description">
                 {{i.description}}</p>
 

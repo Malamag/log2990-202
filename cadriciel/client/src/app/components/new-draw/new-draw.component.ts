@@ -17,8 +17,7 @@ export class NewDrawComponent  implements OnInit  {
   width: number;
   height: number;
   color: string;
-
-
+  
 
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
