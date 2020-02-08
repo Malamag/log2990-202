@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ToolCreator } from './toolCreator';
-/*import { RectangleService } from './rectangle.service';
+import { RectangleService } from './rectangle.service';
 import { PencilService } from './pencil.service';
 import { LineService } from './line.service';
-import { BrushService } from './brush.service';*/
+import { BrushService } from './brush.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
+import { ColorConvertingService } from '../colorPicker/color-converting.service';
+import {colorData} from 'src/app/components/color-picker/color-data';
+
 
 export class fakeCpService extends ColorPickingService {}
 export class fakeItService extends InteractionService {}
@@ -14,34 +17,69 @@ export class fakeItService extends InteractionService {}
 
 describe('ToolCreator', () => {
   //let elem: HTMLElement;
-  //let toolService: ToolCreator;
-/*
-  let penServiceSpy: jasmine.SpyObj<PencilService>;
-  let brushServiceSpy: jasmine.SpyObj<BrushService>;
-  let rectServiceSpy: jasmine.SpyObj<RectangleService>;
-  let lineServiceSpy: jasmine.SpyObj<LineService>;*/
+
+
+  let colorConvertingStub: ColorConvertingService;
+  let service: ToolCreator;
 
   beforeEach(() => {
-    /*const penSpy = jasmine.createSpy("PencilService");
+    const penSpy = jasmine.createSpy("PencilService");
     const rectSpy = jasmine.createSpy("RectangleService");
     const lineSpy = jasmine.createSpy("LineService");
-    const brushSpy = jasmine.createSpy("BrushService");*/
+    const brushSpy = jasmine.createSpy("BrushService");
     
+    colorConvertingStub = {
+      validateHSL:() => true,
+      validateHex:() => true,
+      rgbToHex:() => "",
+      hslToRgb:() => [],
+      hexToRgba:() => [],
+      validateRGB:() => true,
+      rgbToHsl:() => [],
+      cData: colorData,
+      alphaRGBToHex:() => ""
+    }
+   
     TestBed.configureTestingModule({
       providers: [
         ToolCreator,
-        {provide: HTMLElement, useValue: {}}
-        ]   
+        {provide: HTMLElement, useValue: {}},
+        {provide: PencilService, useValue: penSpy},
+        {provide: RectangleService, useValue: rectSpy},
+        {provide: BrushService, useValue: brushSpy},
+        {provide: LineService, useValue: lineSpy},
+        {provide: InteractionService, useValue: fakeItService},
+        {provide: ColorPickingService, useValue: fakeCpService},
+        {provide: ColorConvertingService, useValue: colorConvertingStub}]   
     });
-    
-    //elem = TestBed.get(HTMLElement);
-    //penServiceSpy = TestBed.get(PencilService);
+
+    service = TestBed.get(ToolCreator);
   });
     
 
   it('should be created', () => {
     const service: ToolCreator = TestBed.get(ToolCreator);
     expect(service).toBeTruthy();
+  });
+
+  it('should create a new pencil service', () => {
+    const pen = service.CreatePencil(true, 0, "", 0, new fakeItService(), new fakeCpService(colorConvertingStub));
+    expect(pen).toEqual(jasmine.any(PencilService)); // checks if object is if the right instance
+  });
+
+  it('should create a new brush service', () => {
+    const brush = service.CreateBrush(true, 0, "", 0,0,new fakeItService(), new fakeCpService(colorConvertingStub));
+    expect(brush).toEqual(jasmine.any(BrushService));
+  });
+
+  it('should create a new rectangle service', () => {
+    const rect = service.CreateRectangle(true, 0, "", "", 0, 0, new fakeItService(), new fakeCpService(colorConvertingStub));
+    expect(rect).toEqual(jasmine.any(RectangleService));
+  });
+
+  it('should create a new line service', () => {
+    const line = service.CreateLine(true, 0, "", true, 0 ,0,new fakeItService(), new fakeCpService(colorConvertingStub));
+    expect(line).toEqual(jasmine.any(LineService));
   });
 
   
