@@ -58,60 +58,78 @@ describe('NewDrawComponent', () => {
     //
   });
 
-  //DOESNT WORK :(
-  it('should not accept negative values in width',() => { 
-    //let input = fixture.debugElement.query(By.css('input[formControlName=canvWidth]')); //Find the input for width
-    //input.nativeElement.value = '3H5';
-    //component.newDrawForm.setValue({
-    //  canvWidth: '333',
-    //  canvHeight: '333',
-    //  canvColor: 'ffffff'
-    //});
-    component.width = -335;
+  it('should not accept negative values in width',() => {
+    setInputValue('input[formControlName=canvWidth]','-335'); //Put a random negative number in the input of width
     let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
-    //const submit = spyOn(component, "onSubmit");  //Spy on submit function
-    //submitButton.nativeElement.click();
-    //fixture.detectChanges();
-    //expect(component.newDrawForm.invalid).toBeTruthy();
-    expect(submitButton.nativeElement.disabled).toBeTruthy();
-    //expect(submit).not.toHaveBeenCalled();  //Look if function has been called with the help of the spy
-  });
+    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
+  });  
 
   it('should not accept negative values in height',() => {
-    //
+    setInputValue('input[formControlName=canvHeight]','-437');  //Put a random negative number in the input of height
+    let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
+    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
 
 
   it('should not accept character values in width',() => {
-    //
+    setInputValue('input[formControlName=canvWidth]','4h7');  //Put a random number with characters inside in the input of width
+    let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
+    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
 
   it('should not accept character values in height',() => {
-    //
+    setInputValue('input[formControlName=canvHeight]','4h7');  //Put a random number with characters inside in the input of height
+    let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
+    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
 
   it('should not accept null values in width',() => {
-    //
+    setInputValue('input[formControlName=canvWidth]','');  //Put a null value in the input of width
+    let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
+    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
 
   it('should not accept null values in height',() => {
-    //
+    setInputValue('input[formControlName=canvHeight]','');  //Put a null value in the input of height
+    let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
+    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
+  });
+
+  it('should not accept null values in color',() => {
+    setInputValue('input[formControlName=canvColor]','');  //Put a null value in the input of color
+    let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
+    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
 
   it('should not accept more than 6 characters in color',() => {
-    //
+    setInputValue('input[formControlName=canvColor]','fffffff');  //Put a 7 characters in the input of color
+    let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
+    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
 
   it('should not accept more than 20 characters in width',() => {
-    //
+    setInputValue('input[formControlName=canvWidth]','123456789012345678901');  //Put a 20 characters in the input of width
+    let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
+    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
 
   it('should not accept more than 20 characters in height',() => {
-    //
+    setInputValue('input[formControlName=canvheight]','123456789012345678901');  //Put a 20 characters in the input of height
+    let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
+    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
 
   it('should not accept other characters than hexadecimals in color',() => {
-    //
+    setInputValue('input[formControlName=canvColor]','fetkhf');  //Put random characters in color
+    let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
+    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
+
+  function setInputValue(name: string, value: string) {
+    let input = fixture.debugElement.query(By.css(name)).nativeElement;
+    input.value = value;
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+  }
 
 });

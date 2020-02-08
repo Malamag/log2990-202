@@ -18,10 +18,6 @@ export class UserManualContentComponent implements OnInit {
   ngOnInit() {
   }
 
-
-
-
-
 }
 
 
