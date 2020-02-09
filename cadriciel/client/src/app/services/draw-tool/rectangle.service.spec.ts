@@ -4,6 +4,7 @@ import { RectangleService } from './rectangle.service';
 import { Point } from './point';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
+import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 
 export class fakeInteractionService extends InteractionService{}
 
@@ -12,6 +13,8 @@ describe('RectangleService', () => {
   let kbServiceStub: any;
   let service: RectangleService;
   let ptA: Point;
+  let ptB: Point;
+  let ptArr: Point[];
 
   beforeEach(() => {
     kbServiceStub = {
@@ -20,6 +23,9 @@ describe('RectangleService', () => {
     }
 
     ptA = new Point(0,0); // using a point to test position functions
+    ptB = new Point(1,2);
+    ptArr = [ptA, ptB];
+
     TestBed.configureTestingModule({
     
       providers:[
@@ -72,8 +78,8 @@ describe('RectangleService', () => {
   });
 
   it('should update the progress on mouse down', ()=> {
-    service.down(ptA);
     const spy = spyOn(service, "updateProgress");
+    service.down(ptA);
     expect(spy).toHaveBeenCalled();
   });
 
@@ -84,12 +90,108 @@ describe('RectangleService', () => {
   });
 
   it('should create a valid rectangle svg from one point to another', ()=>{
-    const ptB = new Point(1,1);
-    let ptArr = [ptA, ptB];
-
-    const rect = service.createPath(ptArr);
+        const rect = service.createPath(ptArr);
     expect(rect).toContain("<rect");
   });
 
+  it('should create a rectangle of the correct dimensions from mouse move', ()=>{
+    const rect = service.createPath(ptArr);
+    const expWidth = `width="${ptB.x - ptA.x}"`;
+    const expHeigth = `height="${ptB.y - ptA.y}"`;
+
+    expect(rect).toContain(expWidth);
+    expect(rect).toContain(expHeigth);
+  });
+
+  it('should create a rectangle with the selected border thickness', ()=>{
+    const thick = 1;
+    service.attr.lineThickness = thick; // simulated border thickness
+    const rect = service.createPath(ptArr);
+    const expTick = `stroke-width="${thick}"`;
+    expect(rect).toContain(expTick);
+  });
+
+  it('should render a square on pressed shift key', ()=>{
+    const newArr = [new Point(0,0), new Point(1,1)]; // forcing a square
+    const fakeSquare = service.createPath(newArr);
+    
+    service.isSquare = true;
+    const square = service.createPath(ptArr); 
+
+    expect(square).toEqual(fakeSquare); 
+  });
+
+  it('should create a rectangle with corner at mouse start', ()=>{
+   
+    const rect = service.createPath(ptArr);
+
+    expect(rect).toContain(`x="${0}"`); 
+    expect(rect).toContain(`y="${0}"`);
+  });
+
+  it('should create a rectangle filled with the selected color', ()=>{
+    const color = '#ffffff';
+    service.chosenColor = new ChoosenColors(color, color); //both prim. and sec.
+
+    const rect = service.createPath(ptArr);
+    expect(rect).toContain(`fill="${color}"`);
+  });
+
+  it('should create a border of the selected secondary color', ()=> {
+    const prim = '#000000';
+    const sec = '#ffffff';
+
+    service.chosenColor = new ChoosenColors(prim, sec);
+    const rect = service.createPath(ptArr);
+    
+    expect(rect).toContain(`stroke="${sec}"`);
+  });
+
+  it('should create only an outlined rectangle on plottype = 0', () =>{
+    service.attr.plotType = 0; // init the plot type
+    const prim = '#000000';
+    const sec = '#ffffff';
+    service.chosenColor = new ChoosenColors(prim, sec);
+
+    const rect = service.createPath(ptArr);
+
+    expect(rect).toContain(`fill="${'none'}"`); // no color for fill
+
+    expect(rect).toContain(`stroke="${sec}"`); //secondary color for border fill
+  });
+
+  it('should create only a filled rectangle on plottype = 1', ()=>{
+    service.attr.plotType = 1; // init the plot type
+    const prim = '#000000';
+    const sec = '#ffffff';
+    service.chosenColor = new ChoosenColors(prim, sec);
+
+    const rect = service.createPath(ptArr);
+
+    expect(rect).toContain(`fill="${prim}"`); // primary color fill
+
+    expect(rect).toContain(`stroke="${'none'}"`);
+  });
+
+  it('should create a filled and outlined rectangle on plottype = 2', ()=>{
+    service.attr.plotType = 2; // init the plot type
+    const prim = '#000000';
+    const sec = '#ffffff';
+    service.chosenColor = new ChoosenColors(prim, sec);
+
+    const rect = service.createPath(ptArr);
+
+    expect(rect).toContain(`fill="${prim}"`); // no color for fill
+
+    expect(rect).toContain(`stroke="${sec}"`); //secondary color for border fill
+  });
+
+  it('should not create a rectange if the mouse didnt move', ()=>{
+    const newArr = [new Point(0,0), new Point(0,0)]; // no move
+
+    const rect = service.createPath(newArr);
+
+    expect(rect).toBe("");
+  });
 
 });
