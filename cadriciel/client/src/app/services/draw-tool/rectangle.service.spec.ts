@@ -46,6 +46,14 @@ describe('RectangleService', () => {
     expect(service).toBeTruthy();
   });
 
+  it('should set the attributes in the subscription', ()=> {
+    
+    let spyInteraction = spyOn(service.interaction.$formsAttributes,'subscribe');
+    service.updateAttributes();
+    expect(spyInteraction).toHaveBeenCalled();
+    
+  });
+
   it('should update progress on move', ()=>{
     const spy = spyOn(service, "updateProgress");
     service.down(ptA); // simulating a mouse down at given point
