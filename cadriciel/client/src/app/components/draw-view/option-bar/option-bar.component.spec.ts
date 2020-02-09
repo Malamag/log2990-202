@@ -31,4 +31,27 @@ describe('OptionBarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should react on a window event',()=>{
+    let spy = spyOn(window, 'addEventListener')
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it ('should open a modal window',()=>{
+    let spy = spyOn(component.winService,'openWindow')
+    component.openUserGuide()
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it('should emit a boolean using the observer',()=>{
+    let spy = spyOn(component.interaction,'emitCancel')
+    component.sendSigKill()
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it ('should open a modal window',()=>{
+    let spy = spyOn(component.winService,'openWindow')
+    component.openNewDrawForm()
+    expect(spy).toHaveBeenCalled()
+  })
 });

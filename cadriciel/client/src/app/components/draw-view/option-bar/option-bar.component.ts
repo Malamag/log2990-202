@@ -18,7 +18,7 @@ export class OptionBarComponent implements OnInit {
   canvasSub: Subscription;
   currentCanvas: Canvas;
 
-  constructor(private winService: ModalWindowService, private interaction:InteractionService) {
+  constructor(public winService: ModalWindowService, public interaction:InteractionService) {
     const O_KEY = 79; //keycode for letter o
 
     let kbHandler: KeyboardHandlerService = new KeyboardHandlerService();

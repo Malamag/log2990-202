@@ -7,9 +7,6 @@ import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
 import{Canvas} from '../../../models/Canvas.model'
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 
-
-
-
 const width = 67
 const height = 10
 const color='white'
@@ -53,7 +50,7 @@ describe('SvgDrawComponent', () => {
     expect(mapTest.get(name2).selected).toBeFalsy()
   })
 
-  it('the containers length should be greater than zer', ()=>{
+  it('the containers length should be greater than zero', ()=>{
     component.ngAfterViewInit()
     expect(component.toolsContainer.size).toBeGreaterThan(0)
   })
@@ -68,10 +65,32 @@ describe('SvgDrawComponent', () => {
     let canvasBuilderStub = new CanvasBuilderService()
     let canvas =new Canvas(width, height, color)
     canvasBuilderStub.newCanvas = canvas
+
     let componentStub = new SvgDrawComponent(canvasBuilderStub,component.interaction, component.colorPick)
     componentStub.initCanvas();
     expect(componentStub.width).toBe(canvas.canvasWidth)
     expect(componentStub.height).toBe(canvas.canvasHeight)
     expect(componentStub.backColor).toBe(canvas.canvasColor)
+    
+  })
+
+  it('should call initCanvas and the observable', ()=>{
+    let spyObj = spyOn(component, 'initCanvas')
+    let spyInteraction = spyOn(component.interaction.$refObs,'subscribe')
+    component.ngOnInit()
+    expect(spyObj).toHaveBeenCalled()
+    expect(spyInteraction).toHaveBeenCalled()
+  })
+
+  it('should unsubscribe',()=>{
+    let spyObj = spyOn(component.canvasSubscr,'unsubscribe')
+    component.ngOnDestroy()
+    expect(spyObj).toHaveBeenCalled
+  })
+
+  it('should call window addEventListener',()=>{
+    let spyWindow = spyOn(window,'addEventListener');
+    component.ngAfterViewInit()
+    expect(spyWindow).toHaveBeenCalledTimes(6)
   })
 });

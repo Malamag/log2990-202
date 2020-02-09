@@ -10,6 +10,8 @@ import {
   MatRadioModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
+
 
 
 describe('ToolAttributesComponent', () => {
@@ -19,6 +21,7 @@ describe('ToolAttributesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ToolAttributesComponent, ColorPickerComponent],
+      //providers:[{provide: InteractionService, useValue:interactionStub}],
       imports: [
         MatSliderModule, 
         FormsModule,
@@ -67,7 +70,7 @@ describe('ToolAttributesComponent', () => {
   })
 
   it('should set default values',()=>{
-    component.ngAfterViewInit()
+    //component.ngAfterViewInit()
     expect(component.lineThickness).toBe(5)
     expect(component.texture).toBe(0)
     expect(component.numberCorners).toBe(3)
@@ -85,5 +88,19 @@ describe('ToolAttributesComponent', () => {
     expect(lineSpy).toHaveBeenCalled()
   })
 
+  it('should select tool', ()=>{
+    component.interaction.emitSelectedTool("Rectangle")
+  
+    expect(component.selectedTool).toBe("Rectangle")
+  })
+
+  it('should not select tool',()=>{
+    let interactionStub = new InteractionService()
+    interactionStub.emitSelectedTool("Ellipse")
+    let componentStub = new ToolAttributesComponent(interactionStub)
+    componentStub.ngOnInit()
+  
+    expect(componentStub.selectedTool).toBe("Pencil")
+  })
   
 });

@@ -64,7 +64,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    //let svg : HTMLElement | null = this.svg.nativeElement
+    
   
     let keyboardHandler : KeyboardHandlerService = new KeyboardHandlerService();
     let mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);
