@@ -11,7 +11,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
-import { Observable } from 'rxjs';
+
 
 
 describe('ToolAttributesComponent', () => {
