@@ -19,7 +19,6 @@ export class RectangleService extends DrawingTool {
   constructor(inProgess:HTMLElement, drawing:HTMLElement, selected:boolean, width:number, primary_color:string,secondary_color:string, renderMode:number,shortcut:number, interaction:InteractionService, colorPick: ColorPickingService){
 
     super(inProgess, drawing, selected,width,primary_color,shortcut, interaction, colorPick);
-    //this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS)
     this.secondary_color = secondary_color;
     this.renderMode = renderMode;
     this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS)

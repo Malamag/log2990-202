@@ -52,12 +52,6 @@ describe('PencilService', () => {
     
   });
 
-  it('should emit the colors in attribute update', ()=>{
-    const spy = spyOn(service.colorPick, "emitColors");
-    service.updateAttributes();
-    expect(spy).toHaveBeenCalled();
-  });
-
   it('should update progress on mouse down', ()=>{
     const spy = spyOn(service, "updateProgress");
     service.down(ptA); // simulating a mouse down at given point
@@ -147,8 +141,9 @@ describe('PencilService', () => {
   });
   
   it('should have the choosen thickness', ()=>{
-    const path = service.createPath(ptArr);
     const thick = 25; // fake thickness used for this test's purpose
+    service.attr.lineThickness = thick
+    const path = service.createPath(ptArr);
     expect(path).toContain(`stroke-width="${thick}"`); // svg attribute along with its value
   });
 

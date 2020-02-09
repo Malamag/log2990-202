@@ -134,8 +134,9 @@ export class ColorPickerComponent implements OnInit {
     get myInputStylesBL(): any {
         return { 'background': 'white', 
                 '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
+                '-webkit-text-fill-color': 'transparent'}; 
     }
+
     get myInputStylesGL(): any {
         return { 'background': 'white', 
                 '-webkit-background-clip': 'text',
@@ -161,6 +162,7 @@ export class ColorPickerComponent implements OnInit {
                 '-webkit-background-clip': 'text',
                 '-webkit-text-fill-color': 'transparent'};
     }
+
     get myInputStylesArt(): any {
     return {'background': 'linear-gradient(to right, red, crimson, darkgreen, green, blue, indigo , darkblue)', 
             '-webkit-background-clip': 'text',
