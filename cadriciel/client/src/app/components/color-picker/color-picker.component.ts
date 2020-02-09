@@ -14,7 +14,7 @@ export class ColorPickerComponent implements OnInit {
     cData = colorData;
     colorSubsc: Subscription;
         
-    constructor(private colorPicking: ColorPickingService) {}
+    constructor(public colorPicking: ColorPickingService) {}
 
     ngOnInit() {
         this.initColors();
@@ -131,32 +131,13 @@ export class ColorPickerComponent implements OnInit {
                 '-webkit-background-clip': 'text',
                 '-webkit-text-fill-color': 'transparent'};
     }
-    get myInputStylesBL(): any {
-        return { 'background': 'white', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'}; 
-    }
-
-    get myInputStylesGL(): any {
-        return { 'background': 'white', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
+    
     get myInputStylesL(): any {
         return {'background': 'linear-gradient(to right, black, white)', 
                 '-webkit-background-clip': 'text',
                 '-webkit-text-fill-color': 'transparent'};
     }
-    get myInputStylesS(): any {
-        return {'background': 'linear-gradient(to right, black, white)', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-    get myInputStylesO(): any {
-        return {'background': 'linear-gradient(to right, black, white)', 
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
+   
     get myInputStylesHex(): any {
         return {'background': 'linear-gradient(to right, white,snow)', 
                 '-webkit-background-clip': 'text',
