@@ -16,7 +16,7 @@ import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.
 })
 export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor(public canvBuilder: CanvasBuilderService, public interaction: InteractionService, public colorPick: ColorPickingService) { }
+  constructor(private canvBuilder: CanvasBuilderService, public interaction: InteractionService, public colorPick: ColorPickingService) { }
   canvas: Canvas;
   canvasSubscr: Subscription;
   width: number;
@@ -64,10 +64,10 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    let svg : HTMLElement | null = this.svg.nativeElement
+    //let svg : HTMLElement | null = this.svg.nativeElement
   
     let keyboardHandler : KeyboardHandlerService = new KeyboardHandlerService();
-    let mouseHandler = new MouseHandlerService(svg, this.workingSpace);
+    let mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);
     let color1 = "1167B1";
     let color2 = "000000";
 
