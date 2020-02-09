@@ -98,7 +98,7 @@ describe('RectangleService', () => {
   });
 
   it('should create a valid rectangle svg from one point to another', ()=>{
-        const rect = service.createPath(ptArr);
+    const rect = service.createPath(ptArr);
     expect(rect).toContain("<rect");
   });
 
@@ -200,6 +200,12 @@ describe('RectangleService', () => {
     const rect = service.createPath(newArr);
 
     expect(rect).toBe("");
+  });
+
+  it('should be named rectangle', ()=>{
+    const path = service.createPath(ptArr);
+    const name = "rectangle";
+    expect(path).toContain(name);
   });
 
 });
