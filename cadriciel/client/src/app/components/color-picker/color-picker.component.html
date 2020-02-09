@@ -110,17 +110,17 @@
                     <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.redSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesRL">
                     <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.redHexInput" placeholder="ff" (keydown)="validateRedHexInput($event)"(keyup)="onRedHexInput()">
                     <label class="namelabel"><font color="green">Vert</font></label><label class="numberlabel"><font>{{cData.greenSliderInput}}</font></label>
-                    <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.greenSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesGL">
+                    <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.greenSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesRL">
                     <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.greenHexInput" placeholder="ff"(keydown)="validateGreenHexInput($event)"(keyup)="onGreenHexInput()">
                     <label class="namelabel"><font color="#054dc2">Bleu</font></label><label class="numberlabel"><font>{{cData.blueSliderInput}}</font></label>
-                    <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.blueSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesBL">
+                    <input class ="colorSlider" type="range" min="0" step="1" max="255" [(ngModel)]="cData.blueSliderInput" (change)="onRGBSliderInput($event)" [ngStyle]="myInputStylesRL">
                     <input class="rgbInput" type="text" maxlength="2" [(ngModel)]="cData.blueHexInput" placeholder="ff"(keydown)="validateBlueHexInput($event)"(keyup)="onBlueHexInput()">
                     <label class="namelabel">Saturation</label><label class="numberlabel">{{cData.saturationSliderInput}}%</label>
                     <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.saturationSliderInput" (change)="onSLSliderInput($event)" [ngStyle]="myInputStylesL">
                     <label class="namelabel">Luminosité</label><label class="numberlabel">{{cData.lightnessSliderInput}}%</label>
-                    <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.lightnessSliderInput" (change)="onSLSliderInput($event)" [ngStyle]="myInputStylesS">
+                    <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.lightnessSliderInput" (change)="onSLSliderInput($event)" [ngStyle]="myInputStylesL">
                     <label class="namelabel">Transparence</label><label class="numberlabel">{{cData.opacitySliderInput}}%</label>
-                    <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.opacitySliderInput" (change)="sliderAlphaChange()" [ngStyle]="myInputStylesO">  
+                    <input class ="colorSlider" type="range" min="0" step="1" max="100" [(ngModel)]="cData.opacitySliderInput" (change)="sliderAlphaChange()" [ngStyle]="myInputStylesL">  
                 </td>
             </tr>
             <tr>
