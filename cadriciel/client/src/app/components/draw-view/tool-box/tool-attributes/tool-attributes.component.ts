@@ -29,6 +29,7 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
     this.plotType = 2; // type 2 --> filled with border
     this.junction = true; // with junction dots of 6 px size
     this.junctionRadius = 6;
+    this.selectedTool = "Pencil"
   }
   
   ngOnInit(){

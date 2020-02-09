@@ -5,7 +5,6 @@ import { OptionBarComponent } from './option-bar/option-bar.component';
 import { ToolBoxComponent } from './tool-box/tool-box.component';
 import { ToolAttributesComponent } from './tool-box/tool-attributes/tool-attributes.component';
 import { SvgDrawComponent } from './svg-draw/svg-draw.component';
-//import { ColorFormComponent } from '../color-picker/color-form/color-form.component';
 
 import {
   MatButtonModule, 
@@ -69,6 +68,7 @@ describe('DrawViewComponent', () => {
   it('After building the template the reference should be emiited by the observer', ()=>{
     let objSpy = spyOn(component.interaction,'emitRef')
     component.ngAfterViewInit()
+    expect(component.workingSpaceRef).toBeDefined()
     expect(objSpy).toHaveBeenCalled()
   })
 });
