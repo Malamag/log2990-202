@@ -96,6 +96,41 @@ describe('BrushService', () => {
     expect(path).toContain(name);
   });
 
+  it('a filter of a unique id should be present on the brush stroke', ()=>{
+    const path = service.createPath(ptArr);
+    const filerId = new Date().getTime();
+    expect(path).toContain(`filter="url(#${filerId})"`);
+  });
+
+  it('should build a gaussian blur filter based on a given scale', () =>{
+    const SCALE = 1;
+    const ID = 0;
+    const filter = service.createBluredFilter(SCALE, ID);
+
+    expect(filter).toContain('<filter');
+    expect(filter).toContain('feGaussianBlur'); // filter name (svg)
+    
+    expect(filter).toContain(`stdDeviation="${SCALE}"`);//check for attribute application
+  
+  });
+
+  it('should build a noise filter with displacement', ()=>{
+    const W = 1;
+    const SCALE = 1;
+    const FREQ = 1;
+    const ID = 0;
+
+    const filter = service.createNoiseFilter(W, SCALE, FREQ, ID);
+    expect(filter).toContain('<filter');
+    
+    // turbulence filter attributes
+    expect(filter).toContain(`<feTurbulence type="turbulence" baseFrequency="${FREQ}" numOctaves="2" result="turbulence"/>`)
+    expect(filter).toContain(`scale="${W*SCALE}"`);
+    
+    // offset check, as set in brush.service.ts
+    expect(filter).toContain(`<feOffset in="turbulence" dx="${((-W*SCALE)/4)}" dy="${((-W*SCALE)/4)}"/>`)
+
+  });
 
 
 
