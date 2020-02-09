@@ -40,6 +40,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initCanvas();
     
   }
+
+  
   closeTools(map: Map<string,DrawingTool>){
     map.forEach(el=>{
       el.selected = false;

@@ -20,7 +20,7 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
   selectedTool: String;
   tools:string[]=[]
   constructor(public interaction: InteractionService) {
-    this.tools= ['Rectangle', 'Ligne', 'Pinceau', 'Crayon','Choisir couleur']
+    this.tools= ['Rectangle', 'Ligne', 'Pinceau', 'Crayon', 'Sélection de couleur']
     this.lineThickness = 5; //5px thick line
     this.texture = 0; // blur texture
 
@@ -32,11 +32,6 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
   }
   
   ngOnInit(){
-    
-  }
-  ngAfterViewInit() {
-    // default values
-    
     this.interaction.$selectedTool.subscribe( tool =>{
       let toolExist:boolean = false
       this.tools.forEach(el=>{
@@ -47,6 +42,12 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
         this.selectedTool = tool;
     });
 
+    
+    
+  }
+  ngAfterViewInit() {
+    // default values
+    
     this.updateForms(); // emit all after init
     this.updateLine();
     this.updateTools();
