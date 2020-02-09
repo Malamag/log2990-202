@@ -3,25 +3,17 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SvgDrawComponent } from './svg-draw.component';
 import { PencilService } from 'src/app/services/draw-tool/pencil.service';
 import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
-import { defer } from 'rxjs';
+
 import{Canvas} from '../../../models/Canvas.model'
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
-//import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
 
-export function fakeObsResponse<T>(data:T){
-  return defer(()=>Promise.resolve(data))
-}
+
+
+
 const width = 67
 const height = 10
 const color='white'
-const canvasBuilderStub={
- get(){
-   let fakeCanvasBuilder = new CanvasBuilderService()
-   let fakeCanvas = new Canvas(width, height, color)
-   fakeCanvasBuilder.newCanvas
-   return fakeObsResponse(fakeCanvas)
- } 
-}
+
 describe('SvgDrawComponent', () => {
   let component: SvgDrawComponent;
   let fixture: ComponentFixture<SvgDrawComponent>;
@@ -29,16 +21,17 @@ describe('SvgDrawComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ SvgDrawComponent ],
-      providers:[{provide:CanvasBuilderService, useValue:canvasBuilderStub}]
+      
     })
     .compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(async(async() => {
     fixture = TestBed.createComponent(SvgDrawComponent);
     component = fixture.componentInstance;
+    await fixture.whenStable()
     fixture.detectChanges();
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -71,5 +64,14 @@ describe('SvgDrawComponent', () => {
     expect(spyObj).toHaveBeenCalled()
   })
 
-  //it('')
+  it('should have the same parameters as the observer',()=>{
+    let canvasBuilderStub = new CanvasBuilderService()
+    let canvas =new Canvas(width, height, color)
+    canvasBuilderStub.newCanvas = canvas
+    let componentStub = new SvgDrawComponent(canvasBuilderStub,component.interaction, component.colorPick)
+    componentStub.initCanvas();
+    expect(componentStub.width).toBe(canvas.canvasWidth)
+    expect(componentStub.height).toBe(canvas.canvasHeight)
+    expect(componentStub.backColor).toBe(canvas.canvasColor)
+  })
 });
