@@ -77,7 +77,7 @@ export class MouseHandlerService {
       this.callObserverDown();
     }
   }
-
+  
   up(e:MouseEvent){
     this.updatePosition(e.x,e.y);
 
@@ -170,6 +170,7 @@ export class MouseHandlerService {
     this.observers.forEach(element => {
       if(element.selected){
         element.doubleClick(this.mouseCanvasPosition,this.insideWorkspace);
+       
       }
     });
   }

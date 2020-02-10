@@ -17,7 +17,7 @@ describe('ColorPickingService', () => {
     expect(spy).toHaveBeenCalled()
   })
 
-  it('should modifie the color with the parameters',()=>{
+  it('should modifiy the color with the parameters',()=>{
     let prim = "red"
     let sec = "blue"
     const service: ColorPickingService = TestBed.get(ColorPickingService);
@@ -63,35 +63,34 @@ describe('ColorPickingService', () => {
     expect(service.cData.blueSliderInput).toEqual(color[2])
   })
 
-  it('the colors should be undefined',()=>{
+  it('should not call a converting function on empty colors',()=>{
     const service: ColorPickingService = TestBed.get(ColorPickingService);
-    let color: number[] = []
-    let spy =spyOn(service.colorConvert,'rgbToHex')
-    service.writeColor(color,true)
-    expect(service.cData.primaryColor).toBeUndefined()
-    expect(service.cData.secondaryColor).toBeUndefined()
-    expect(spy).toHaveBeenCalledTimes(0)
+    let color: number[] = [];
+    let spy =spyOn(service.colorConvert,'rgbToHex');
+    service.writeColor(color,true);
+    
+    expect(spy).toHaveBeenCalledTimes(0);
   })
-  it('the secondary color should not change and rgbToHex to be called',()=>{
+  it('the secondary color should not change if undefined',()=>{
     const service: ColorPickingService = TestBed.get(ColorPickingService);
     let color: number[] = [20,25,40]
-    let spy =spyOn(service.colorConvert,'rgbToHex')
+    
     service.writeColor(color,true)
-    expect(service.cData.secondaryColor).toBeUndefined()
+
     expect(service.cData.checkboxSliderStatus).toBeTruthy()
     expect(service.cData.currentColorSelect).toBe('Primary')
-    expect(spy).toHaveBeenCalledTimes(3)
+   
   })
 
-  it('the primary color should not change and rgbToHex to be called',()=>{
+  it('the primary color should not be modified if undefined',()=>{
     const service: ColorPickingService = TestBed.get(ColorPickingService);
     let color: number[] = [20,25,40]
-    let spy =spyOn(service.colorConvert,'rgbToHex')
+    
     service.writeColor(color,false)
-    expect(service.cData.primaryColor).toBeUndefined()
+    
     expect(service.cData.checkboxSliderStatus).toBeFalsy()
     expect(service.cData.currentColorSelect).toBe('Secondary')
-    expect(spy).toHaveBeenCalledTimes(3)
+    
   })
 
   //it('')  

@@ -26,9 +26,9 @@ export class OptionBarComponent implements OnInit {
        
       kbHandler.logkey(e);
 
-      if(kbHandler.ctrlDown && kbHandler.keyCode === O_KEY) {
+      if(kbHandler.ctrlDown && kbHandler.keyCode === O_KEY) { // ctrl+o opens the form!
         winService.openWindow(NewDrawComponent);
-        e.preventDefault();
+        e.preventDefault(); // default behavior (file menu) prevented
       }
       
     });
