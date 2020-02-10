@@ -45,32 +45,42 @@ export class ColorPickingService {
   }
 
   setColor( color : number[] ) {
-    if ( this.cData.primarySelect ) {
-      this.writeColor(color,true )
+    if(color.length <3){
+      return;
     }
-    else {
-        this.writeColor(color, false);
+    else{
+      if ( this.cData.primarySelect ) {
+        this.writeColor(color,true )
+      }
+      else {
+          this.writeColor(color, false);
+      }
+      this.cData.hexColorInput = this.colorConvert.rgbToHex( color[0] )+ this.colorConvert.rgbToHex( color[1] )
+      + this.colorConvert.rgbToHex( color[2] )
+      this.cData.redSliderInput = color[0];
+      this.cData.greenSliderInput = color[1];
+      this.cData.blueSliderInput = color[2];
+      this.hexInputDisplayRefresh();
     }
-    this.cData.hexColorInput = this.colorConvert.rgbToHex( color[0] )+ this.colorConvert.rgbToHex( color[1] )
-     + this.colorConvert.rgbToHex( color[2] )
-    this.cData.redSliderInput = color[0];
-    this.cData.greenSliderInput = color[1];
-    this.cData.blueSliderInput = color[2];
-    this.hexInputDisplayRefresh();
   }
 
   writeColor(color: number[], primary:boolean){
-    if(primary){
-      this.cData.primaryColor = '#' + this.colorConvert.rgbToHex( color[0] )+ this.colorConvert.rgbToHex( color[1] ) 
-        + this.colorConvert.rgbToHex( color[2] ) + this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha);
-        this.cData.checkboxSliderStatus = true;
-        this.cData.currentColorSelect = 'Primary';
+    if(color.length<3){
+      return;
     }
     else{
-      this.cData.secondaryColor = '#' + this.colorConvert.rgbToHex( color[0] )+ this.colorConvert.rgbToHex( color[1] ) 
-        + this.colorConvert.rgbToHex( color[2] ) + this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha);
-        this.cData.checkboxSliderStatus = false; 
-        this.cData.currentColorSelect = 'Secondary';
+      if(primary){
+        this.cData.primaryColor = '#' + this.colorConvert.rgbToHex( color[0] )+ this.colorConvert.rgbToHex( color[1] ) 
+          + this.colorConvert.rgbToHex( color[2] ) + this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha);
+          this.cData.checkboxSliderStatus = true;
+          this.cData.currentColorSelect = 'Primary';
+      }
+      else{
+        this.cData.secondaryColor = '#' + this.colorConvert.rgbToHex( color[0] )+ this.colorConvert.rgbToHex( color[1] ) 
+          + this.colorConvert.rgbToHex( color[2] ) + this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha);
+          this.cData.checkboxSliderStatus = false; 
+          this.cData.currentColorSelect = 'Secondary';
+      }
     }
   }
   hueSelector( event : MouseEvent ) : void {
