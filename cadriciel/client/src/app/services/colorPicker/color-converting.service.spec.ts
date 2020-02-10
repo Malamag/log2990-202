@@ -107,7 +107,7 @@ describe('ColorConvertingService', () => {
     let l = 1
     const service: ColorConvertingService = TestBed.get(ColorConvertingService);
     let rgbContainer= service.hslToRgb(h ,s,l)
-    expect(rgbContainer).toEqual([128, 128, 128])
+    expect(rgbContainer).toEqual([255, 255, 255]) // 8-bits
   })
 
   it('should return a valid RGB array',()=>{
@@ -116,7 +116,7 @@ describe('ColorConvertingService', () => {
     let l = 1
     const service: ColorConvertingService = TestBed.get(ColorConvertingService);
     let rgbContainer= service.hslToRgb(h ,s,l)
-    expect(rgbContainer).toEqual([128, 128, 128])
+    expect(rgbContainer).toEqual([255, 255, 255])
   })
 
   it('should return a valid RGB array',()=>{
@@ -125,7 +125,7 @@ describe('ColorConvertingService', () => {
     let l = 1
     const service: ColorConvertingService = TestBed.get(ColorConvertingService);
     let rgbContainer= service.hslToRgb(h ,s,l)
-    expect(rgbContainer).toEqual([128, 128, 128])
+    expect(rgbContainer).toEqual([255, 255, 255])
   })
 
   it('should return a valid RGB array',()=>{
@@ -134,7 +134,7 @@ describe('ColorConvertingService', () => {
     let l = 1
     const service: ColorConvertingService = TestBed.get(ColorConvertingService);
     let rgbContainer= service.hslToRgb(h ,s,l)
-    expect(rgbContainer).toEqual([128, 128, 128])
+    expect(rgbContainer).toEqual([255, 255, 255])
   })
 
   it('should return a valid RGB array',()=>{
@@ -143,7 +143,7 @@ describe('ColorConvertingService', () => {
     let l = 1
     const service: ColorConvertingService = TestBed.get(ColorConvertingService);
     let rgbContainer= service.hslToRgb(h ,s,l)
-    expect(rgbContainer).toEqual([128, 128, 128])
+    expect(rgbContainer).toEqual([255, 255, 255])
   })
 
   it('should return a valid RGB array',()=>{
@@ -152,7 +152,7 @@ describe('ColorConvertingService', () => {
     let l = 1
     const service: ColorConvertingService = TestBed.get(ColorConvertingService);
     let rgbContainer= service.hslToRgb(h ,s,l)
-    expect(rgbContainer).toEqual([128, 128, 128])
+    expect(rgbContainer).toEqual([255, 255, 255])
   })
 
   it('should return a hue calculated with red value',()=>{
