@@ -20,7 +20,7 @@ export class MouseHandlerService {
   isFirstClick:boolean;
   upFromDoubleClick:boolean;
 
-  constructor(svgCanvas:HTMLElement | null, workingSpace:HTMLElement | null) {
+  constructor(svgCanvas:HTMLElement, workingSpace:HTMLElement) {
 
     this.observers = [];
 
@@ -77,6 +77,7 @@ export class MouseHandlerService {
       this.callObserverDown();
     }
   }
+
   up(e:MouseEvent){
     this.updatePosition(e.x,e.y);
 
@@ -169,7 +170,6 @@ export class MouseHandlerService {
     this.observers.forEach(element => {
       if(element.selected){
         element.doubleClick(this.mouseCanvasPosition,this.insideWorkspace);
-        console.log(this.insideWorkspace);
       }
     });
   }
