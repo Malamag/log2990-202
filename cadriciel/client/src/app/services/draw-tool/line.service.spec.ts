@@ -59,14 +59,16 @@ describe('LineService', () => {
   });
 
   it('should pop the path array on backspace', ()=>{
-    
-    service.update(kbServiceStub);
-
     const spy = spyOn(service.currentPath, "pop");
+    service.currentPath.push(new Point(1,1)); // at least more than 2 points
+    service.currentPath.push(new Point(2,2));
+    service.currentPath.push(new Point(3,3));
+    service.update(kbServiceStub);
     expect(spy).toHaveBeenCalled();
   });
 
   it('should call the path cancelation method on escape', ()=>{
+    service.isDown = false;
     const ESCAPE = 27;
     kbServiceStub.keyCode = ESCAPE;
 
@@ -77,19 +79,16 @@ describe('LineService', () => {
   });
 
   it('should add the same point twice in the array if the mouse doesnt move', ()=>{
-    service.currentPath = []; //emptying the current path (new path)
-  
-    const spy = spyOn(service.currentPath, "push");
-
+    service.currentPath.length = 0;
+    const spy = spyOn(service.currentPath, "push");    
     service.down(ptA, true); // mouse is inside workspace 
     expect(spy).toHaveBeenCalledTimes(2); //point twice in array
     expect(spy).toHaveBeenCalledWith(ptA);
-    expect(service.currentPath).toContain(ptA);
 
   });
 
   it('should add the same point once if the current path is not finished', ()=>{
-    service.currentPath.push(ptB);
+    service.currentPath.push(new Point(1,1));
     const spy = spyOn(service.currentPath, "push");
     service.down(ptA, true);
     expect(spy).toHaveBeenCalledTimes(1);
@@ -133,9 +132,14 @@ describe('LineService', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should pop the current path twice if it has more than 2 points', ()=>{
+  it('should pop the current path twice if it has 4 points or more', ()=>{
     const inWorkspace = true;
     const spy = spyOn(service.currentPath, "pop");
+    service.currentPath.push(ptA);
+    service.currentPath.push(new Point(0,0)); // adding some points
+    service.currentPath.push(new Point(1,2));
+    service.currentPath.push(new Point(0,2));
+
     service.doubleClick(ptA, inWorkspace);
     expect(spy).toHaveBeenCalledTimes(2); //called pop twice
   });
@@ -144,8 +148,10 @@ describe('LineService', () => {
     const inWorkspace = true;
     const spy = spyOn(service, "updateDrawing");
 
-    service.currentPath.push(ptA);
-    service.currentPath.push(ptB); //adding supplementary points
+    service.currentPath.push(new Point(1,1));
+    service.currentPath.push(new Point(0,2)); //adding supplementary points
+    service.currentPath.push(new Point(1,2));
+    service.currentPath.push(new Point(2,2)); // needs at least 4
 
     service.doubleClick(ptA, inWorkspace); // arbitrary point in ws
     expect(spy).toHaveBeenCalledWith(true); // it was a double click, cutting the line
@@ -159,8 +165,10 @@ describe('LineService', () => {
     expect(spy).not.toHaveBeenCalled(); // it was a double click, cutting the line
   });
 
-  it('should call a forced angle if chosen', ()=>{
+  it('should call a forced angle if chosen', ()=>{  
     service.forcedAngle = true;
+    ptArr.push(new Point(0,2)); // adding arbitrary points
+    ptArr.push(new Point(1,2));
     const spy = spyOn(service, "pointAtForcedAngle");
     service.createPath(ptArr, false);
     expect(spy).toHaveBeenCalled();
@@ -205,8 +213,10 @@ describe('LineService', () => {
   });
 
   it('should be composed of the succeeding points', ()=>{
+    ptArr.push(new Point(2,2)); // this new point has not been placed yet.
+
     const line = service.createPath(ptArr, false);
-    expect(line).toContain(`L ${ptB.x} ${ptB.y} `); // ptB is the succeeding point in our array
+    expect(line).toContain(`L ${ptB.x} ${ptB.y} `); // ptB is the succeeding point
   });
 
   it('should have the primary color as attribute', ()=>{
@@ -244,9 +254,66 @@ describe('LineService', () => {
 
 
   });
-  // SIGNET: Rendu à pointAtForcedAngle
   
-  
+  it('should return the same point on forced angle if it was horizontal', ()=>{
+    const PT = new Point(1, 0);
+    const point = service.pointAtForcedAngle(ptA, PT); // (1,1) and (2,1), forming an horizontal line
+    expect(point).toEqual(PT);
+  });
+
+  it('should redirect the point to a forced angle of 0 degrees', ()=>{
+    const PTA = new Point(0,0);
+    const PTB = new Point(1,0.25);
+
+    const REDIR = service.pointAtForcedAngle(PTA, PTB);
+
+    const NEW_Y = 0;
+    expect(REDIR.y).toEqual(NEW_Y); // without calculating the new x value, we can assume the point is well positionned by the forced y
+  })
+
+  it('should redirect the point to a forced angle of 45 degrees', ()=>{
+    const PTA = new Point(0,0);
+    const PTB = new Point(1,0.85);
+
+    const REDIR = service.pointAtForcedAngle(PTA, PTB);
+
+    const NEW_Y = 1;
+    expect(REDIR.y).toEqual(NEW_Y); 
+  });
+
+  it('should redirect the point to a forced angle of 90 degrees', ()=>{
+    const PTA = new Point(0,0);
+    const PTB = new Point(0.25, 1);
+
+    const REDIR = service.pointAtForcedAngle(PTA, PTB);
+
+    const NEW_X = 0; // if it's x value was brought to 0, the line was properly redirected
+    expect(REDIR.x).toEqual(NEW_X); 
+  });
+
+  it('should redirect the point to a forced angle of 135 degrees', ()=>{
+    const PTA = new Point(0,0);
+    const PTB = new Point(-1,0.9);
+
+    const REDIR = service.pointAtForcedAngle(PTA, PTB);
+
+    const NEW_Y = 1;
+    expect(REDIR.y).toEqual(NEW_Y); 
+  });
+
+  it('should redirect the point to a forced angle of 225 degrees', ()=>{
+    const PTA = new Point(0,0);
+    const PTB = new Point(-1,-0.9);
+
+    const REDIR = service.pointAtForcedAngle(PTA, PTB);
+    const NEW_Y = -1;
+    expect(REDIR.y).toEqual(NEW_Y); 
+
+  });
+
+
+
+
 
 
 
