@@ -2,7 +2,7 @@ export const colorData = {
     currentHue : 0,
     primaryColor : '#FF0000ff',
     primaryAlpha : 1,
-    secondaryColor :'#FF0000ff',
+    secondaryColor :'#000000ff',
     secondaryAlpha : 1,
     primarySelect : true,
     currentColorSelect : 'Primary',

@@ -29,8 +29,8 @@ describe('ColorPickerComponent',()=>{
     })
     
     it('should assign the colors to the colors of the service',()=>{
-        let primColor = "#ffffff"
-        let secColor = '#ff0000'
+        let primColor = "#000000ff" // our primary and secondary colors, red and black
+        let secColor = '#ff0000ff'
         let colorConvertingStub = new ColorConvertingService()
         let colorPickingServiceStub = new ColorPickingService(colorConvertingStub)
         let chosenColorStub = new ChoosenColors(primColor,secColor)
