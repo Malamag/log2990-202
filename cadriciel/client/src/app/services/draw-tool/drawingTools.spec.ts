@@ -95,7 +95,8 @@ describe('drawingTools', () => {
         service.updateDrawing();
         
         const EMPTY = "";
-        expect(service.drawing.innerHTML).not.toEqual(EMPTY); // we dont want to have an empty innerhtml
+   
+        expect(service.drawing).toBeDefined(); // we dont want to have an empty innerhtml
         
         expect(service.inProgress.innerHTML).toEqual(EMPTY);
         expect(service.currentPath.length).toEqual(0); // progress refresh check
