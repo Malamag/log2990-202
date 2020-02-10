@@ -148,7 +148,7 @@ export class ColorPickerComponent implements OnInit {
     return {'background': 'linear-gradient(to right, red, crimson, darkgreen, green, blue, indigo , darkblue)', 
             '-webkit-background-clip': 'text',
             '-webkit-text-fill-color': 'transparent'};
-}
+    }
     get svgStyles(): any {
         return { 'transform' : 'translate(100px,100px) rotate(' + this.cData.currentHue + 'deg) translate(-100px,-100px)'};
     }
