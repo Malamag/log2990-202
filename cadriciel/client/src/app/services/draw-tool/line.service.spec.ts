@@ -3,12 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { LineService } from './line.service';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
+import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
  
 
 describe('LineService', () => {
   let service: LineService
   let ptA: Point;
   let ptB: Point;
+  let ptArr: Point[];
   
   let kbServiceStub: any;
   beforeEach(() => {
@@ -30,7 +32,7 @@ describe('LineService', () => {
 
     ptA = new Point(0,0); // using a point to test position functions
     ptB = new Point(1,2);
-  
+    ptArr = [ptA, ptB];
     service = TestBed.get(LineService);
     service.isDown = true; //current tool always selected
 
@@ -142,10 +144,108 @@ describe('LineService', () => {
     const inWorkspace = true;
     const spy = spyOn(service, "updateDrawing");
 
+    service.currentPath.push(ptA);
+    service.currentPath.push(ptB); //adding supplementary points
+
     service.doubleClick(ptA, inWorkspace); // arbitrary point in ws
     expect(spy).toHaveBeenCalledWith(true); // it was a double click, cutting the line
   });
 
+  it('should not cut the line on double click if line is incomplete', ()=>{
+    const inWorkspace = true;
+    const spy = spyOn(service, "updateDrawing");
+
+    service.doubleClick(ptA, inWorkspace); // arbitrary point in ws
+    expect(spy).not.toHaveBeenCalled(); // it was a double click, cutting the line
+  });
+
+  it('should call a forced angle if chosen', ()=>{
+    service.forcedAngle = true;
+    const spy = spyOn(service, "pointAtForcedAngle");
+    service.createPath(ptArr, false);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should not call a forced angle if not chosen', ()=>{
+    service.forcedAngle = false;
+    const spy = spyOn(service, "pointAtForcedAngle");
+    service.createPath(ptArr, false);
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('the line should be named line-segments', ()=>{
+    const line = service.createPath(ptArr, false); // not a double click
+    expect(line).toContain('line-segments');
+  });
+
+  it('should create a valid svg line (from path)', ()=>{
+    const line = service.createPath(ptArr, false); // not a double click
+    expect(line).toContain('<path');
+  });
+
+  it('should be closed on double click', ()=>{
+    const DBL = true;
+    const line = service.createPath(ptArr, DBL);
+    const CLOSE = 'Z'; // character for cutting the line
+
+    expect(line).toContain(CLOSE);
+  });
+
+  it('should be able to be continuated if no click', ()=>{
+    const DBL = false;
+    const line = service.createPath(ptArr, DBL);
+    const CLOSE = 'Z';
+
+    expect(line).not.toContain(CLOSE);
+  });
+
+  it('should contain the starting point coordinates', ()=>{
+    const line = service.createPath(ptArr, false);
+    expect(line).toContain(`M ${ptA.x} ${ptA.y} `); // first point in our point array
+  });
+
+  it('should be composed of the succeeding points', ()=>{
+    const line = service.createPath(ptArr, false);
+    expect(line).toContain(`L ${ptB.x} ${ptB.y} `); // ptB is the succeeding point in our array
+  });
+
+  it('should have the primary color as attribute', ()=>{
+    const PRIM = '#ffffff';
+    const SEC = '#000000';
+    service.chosenColor = new ChoosenColors(PRIM, SEC);
+    const line = service.createPath(ptArr, false);
+    expect(line).toContain(`"stroke="${PRIM}"`);
+  });
+
+  it('should have the choosen thickness as attribute', ()=>{
+    const THICK = 5; //arbitrary, for test purpose
+
+    const line = service.createPath(ptArr, false);
+    expect(line).toContain(`stroke-width="${THICK}"`);
+  });
+
+  it('should render a circle as junction if choosen', ()=>{
+    service.attr.junction = true;
+    const DIAM = 10;
+    service.attr.junctionDiameter = DIAM;
+
+    const line = service.createPath(ptArr, false);
+    expect(line).toContain(`<circle`);
+
+  });
+
+  it('should render a circle as junction of the choosen diameter', ()=>{
+    service.attr.junction = true;
+    const DIAM = 10;
+    service.attr.junctionDiameter = DIAM;
+
+    const line = service.createPath(ptArr, false);
+    expect(line).toContain(`r="${DIAM/2}"`);
+
+
+  });
+  // SIGNET: Rendu à pointAtForcedAngle
+  
   
 
 
