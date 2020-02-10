@@ -122,26 +122,14 @@ describe('NewDrawComponent', () => {
     expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
 
-  it('should not accept null values in color',() => {
-    setInputValue('input[formControlName=canvColor]','');  //Put a null value in the input of color
+  it('should not accept undefined values in color',() => {
+    setInputValue('input[formControlName=canvColor]', undefined); 
     let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
     expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });
 
   it('should not accept more than 6 characters in color',() => {
     setInputValue('input[formControlName=canvColor]','fffffff');  //Put a 7 characters in the input of color
-    let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
-    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
-  });
-
-  it('should not accept more than 20 characters in width',() => {
-    setInputValue('input[formControlName=canvWidth]','123456789012345678901');  //Put a 20 characters in the input of width
-    let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
-    expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
-  });
-
-  it('should not accept more than 20 characters in height',() => {
-    setInputValue('input[formControlName=canvheight]','123456789012345678901');  //Put a 20 characters in the input of height
     let submitButton = fixture.debugElement.query(By.css('button[type=submit]')); //Find the submit button
     expect(submitButton.nativeElement.disabled).toBeTruthy(); //Look if the submit button is disabled
   });

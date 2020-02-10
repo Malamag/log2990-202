@@ -22,18 +22,21 @@ describe('ColorConvertingService', () => {
     expect(service.validateRGB(invalidNumber)).toBeFalsy()
   })
 
-  it('should return an empty string',()=>{
+  it('should return an empty string on invalid input',()=>{
     const service: ColorConvertingService = TestBed.get(ColorConvertingService);
-    let spy = spyOn(service,'validateRGB')
+    let spy = spyOn(service,'validateRGB');
+    service.rgbToHex(invalidNumber);
     expect(spy).toHaveBeenCalled()
     expect(service.rgbToHex(invalidNumber).length).toEqual(0)
   })
 
-  it('should not return an empty string',()=>{
+  it('should not return an empty string on fine rgb input',()=>{
     const service: ColorConvertingService = TestBed.get(ColorConvertingService);
-    let spy = spyOn(service,'validateRGB')
-    expect(spy).toHaveBeenCalled()
-    expect(service.rgbToHex(validNumber).length).toBeGreaterThan(0)
+    let spy = spyOn(service,'validateRGB');
+    service.rgbToHex(validNumber);
+
+    expect(spy).toHaveBeenCalled();
+    expect(service.rgbToHex(validNumber)).toBeDefined();
   })
 
   it('should return an empty string',()=>{
@@ -95,8 +98,12 @@ describe('ColorConvertingService', () => {
     let s = 1
     let l = 1.5
     const service: ColorConvertingService = TestBed.get(ColorConvertingService);
-    let rgbContainer= service.hslToRgb(h ,s,l)
-    let spy = spyOn(service,'validateHSL')
+    let spyObj: jasmine.SpyObj<ColorConvertingService>;
+    spyObj = jasmine.createSpyObj("ColorConvertingService", ["validateHSL"]);
+    spyObj.validateHSL.and.returnValue(false); // we eant validateHSL not to pass
+    
+    let spy = spyOn(service,'validateHSL');
+    let rgbContainer= service.hslToRgb(h ,s,l);
     expect(spy).toHaveBeenCalled()
     expect(rgbContainer).toEqual([-1,-1,-1])
   })
@@ -155,11 +162,11 @@ describe('ColorConvertingService', () => {
     expect(rgbContainer).toEqual([255, 255, 255])
   })
 
-  it('should return a hue calculated with red value',()=>{
+  it('should return a HSL calculated from a RGB input',()=>{
     let r= 250
     let g = 200
     let b= 150
-    let primR= r/255
+    let primR= r/255 //8-bits, 255
     let primG = g/255
     let primB = b/255
     let delta= (primR-primB)/2
@@ -188,14 +195,15 @@ describe('ColorConvertingService', () => {
   })
 
   it('should return a hue calculated with blue value',()=>{
-    let r= 200
+    let r= 200 //arbitrary inputs
     let g = 150
     let b= 250
+
     let primR= r/255
     let primG = g/255
     let primB = b/255
     let delta= (primB-primG)/2
-    let hue = ( 60 * ( ( primR - primG ) / delta + 4 ) )
+    let hue = ( 60 * ( ( primR - primG ) / delta + 4 ) ) // taking the formula
     let lightness= (primG+primB)/2
     
     let saturation =  delta / ( 1 - Math.abs( ( 2 * lightness ) - 1 ) );
