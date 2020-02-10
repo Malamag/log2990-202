@@ -5,7 +5,11 @@ import { DefaultAttributeValues } from '../attributes/default-values';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { Subscription } from 'rxjs';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root'
+})
 export abstract class DrawingTool extends InputObserver{
     isDown:boolean;
     currentPath:Point[];
