@@ -225,15 +225,6 @@ export class ColorPickingService {
       this.slSelector(event);
     }
   }
-  // I don't know why this function exists
-  slSelectorOnMouseLeave(): void{
-    // Selector is a 100x100 pixel square. We give it a 2 pixel buffer on the edge due to mouse move speed for mouse leave event
-    let condition = ( ( this.cData.slCursorX < 2 ) || ( this.cData.slCursorX > 98 ) ) 
-    || ( ( this.cData.slCursorY < 2 ) || ( this.cData.slCursorY > 98 ) ); 
-    if ( condition ) {
-      
-    }
-  }
   //Update last color table with a new color
   updateLastColor( newColor : string ) : void {
     for(let i = 0; i < this.cData.lastColorRects.length; i++ ) {
@@ -328,13 +319,15 @@ export class ColorPickingService {
     this.validateHexInput(event);
   
   }
-  // to review on code check these three functions
+  preventError(event: KeyboardEvent){
+    event.preventDefault();
+    return;
+  }
   validateRedHexInput(event : KeyboardEvent ) : void {
     this.cData.isValideInput = false;
     if (event.which !== 8){
       if (this.cData.redHexInput.length === 2){
-        event.preventDefault();
-        return;
+        this.preventError(event)
       }
     }
     this.validateHexInput(event);
@@ -343,8 +336,7 @@ export class ColorPickingService {
     this.cData.isValideInput = false;
     if (event.which !== 8){
       if (this.cData.greenHexInput.length === 2){
-        event.preventDefault();
-        return;
+        this.preventError(event)
       }
     }
     this.validateHexInput(event);
@@ -353,8 +345,7 @@ export class ColorPickingService {
     this.cData.isValideInput = false;
     if (event.which !== 8){
       if (this.cData.blueHexInput.length === 2){
-        event.preventDefault();
-        return;
+        this.preventError(event)
       }
     }
     this.validateHexInput(event);
@@ -485,18 +476,26 @@ export class ColorPickingService {
     this.cData.blueSliderInput = rgb[2];
     this.sliderInputDisplayRefresh();
   }
+  writeColorSlider(prim:boolean): string{
+    let ret:string =""
+    ret += '#' + this.colorConvert.rgbToHex( this.cData.redSliderInput )+ this.colorConvert.rgbToHex( this.cData.greenSliderInput ) 
+    ret += this.colorConvert.rgbToHex( this.cData.blueSliderInput )
+    if(prim){
+      ret += this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
+    }
+    else{
+      this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
+    }
+    return ret
+  }
   //Refresh display following a slider input
   sliderInputDisplayRefresh() : void {
     if ( this.cData.primarySelect ) {
-        this.cData.primaryColor = '#' + this.colorConvert.rgbToHex( this.cData.redSliderInput )+ 
-        this.colorConvert.rgbToHex( this.cData.greenSliderInput ) + this.colorConvert.rgbToHex( this.cData.blueSliderInput ) 
-        + this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
+        this.cData.primaryColor = this.writeColorSlider(true)
         this.updateLastColor( this.cData.primaryColor );
     }
     else{        
-      this.cData.secondaryColor = '#' + this.colorConvert.rgbToHex( this.cData.redSliderInput )+ 
-      this.colorConvert.rgbToHex( this.cData.greenSliderInput ) + this.colorConvert.rgbToHex( this.cData.blueSliderInput ) +
-       this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
+      this.cData.secondaryColor = this.writeColorSlider(false)
       this.updateLastColor( this.cData.secondaryColor );
     }
     this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
@@ -513,23 +512,27 @@ export class ColorPickingService {
     this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
     this.emitColors();
   }
-  /**
-  * Opacity slider input event function
-  * rgba opacity value are between [0;1] while display is [0;100]%.So we need to divide by 100
-  * rgba opacity value are between [0;1] while hex is [0;255].So we need to multiply by 255 
-  **/
+  
+  writeColorAlphaChange(prim: boolean): string{
+    let ret: string ="";
+    ret += '#' + this.colorConvert.alphaRGBToHex( this.cData.redSliderInput ) 
+    ret +=  this.colorConvert.alphaRGBToHex( this.cData.greenSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.blueSliderInput )
+    if(prim){
+      this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
+    }
+    else{
+      this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
+    }
+    return ret
+  }
   sliderAlphaChange() : void {
     if ( this.cData.primarySelect === true) {
         this.cData.primaryAlpha = this.cData.opacitySliderInput / 100;
-        this.cData.primaryColor = '#' + this.colorConvert.alphaRGBToHex( this.cData.redSliderInput ) +
-         this.colorConvert.alphaRGBToHex( this.cData.greenSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.blueSliderInput ) + 
-         this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
+        this.cData.primaryColor = this.writeColorAlphaChange(true)
     }
     else {
         this.cData.secondaryAlpha = this.cData.opacitySliderInput / 100;
-        this.cData.secondaryColor = '#' + this.colorConvert.alphaRGBToHex( this.cData.redSliderInput ) +
-         this.colorConvert.alphaRGBToHex( this.cData.greenSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.blueSliderInput ) +
-          this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
+        this.cData.secondaryColor = this.writeColorAlphaChange(false)
     }
     this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
     this.emitColors();
