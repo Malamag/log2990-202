@@ -81,6 +81,7 @@ describe('drawingTools', () => {
 
    it('should assing the newly created form/path in the html', ()=>{
         service.currentPath = [new Point(0,0), new Point(1,1)]; // adding points to avoid having an empty array of progress
+        service.createPath = ()=> "test"; // stub fn
         service.updateProgress();
         const EMPTY = "";
         const inner:string = service.inProgress.innerHTML;
@@ -90,7 +91,9 @@ describe('drawingTools', () => {
 
    it('should add the progress to the main drawing and refresh the current progress', ()=>{
         service.currentPath = [new Point(0,0), new Point(1,1)]; // adding points to avoid having an empty array of progress
+        service.createPath = ()=>"test"; // stub function
         service.updateDrawing();
+        
         const EMPTY = "";
         expect(service.drawing.innerHTML).not.toEqual(EMPTY); // we dont want to have an empty innerhtml
         
@@ -101,7 +104,7 @@ describe('drawingTools', () => {
 
     it('should update the drawing if the mouse is going outside canvas', ()=>{
         service.isDown = true;
-        
+        service.createPath = ()=> "test";
         const spy = spyOn(service, "updateDrawing");
         service.goingOutsideCanvas(new Point(0,0)); //random point
         expect(spy).toHaveBeenCalled()
@@ -109,6 +112,8 @@ describe('drawingTools', () => {
 
     it('should continue drawing when mouse goes back in canvas', ()=>{
         service.isDown = true; //tool selected and in use
+        service.down = ()=>0; // defining a function for test purpose
+        service.createPath = () => "test";
         const spy = spyOn(service, "down");
         const PT = new Point(0,0); //a point in our canvas, arbitrary
         service.goingInsideCanvas(PT);
