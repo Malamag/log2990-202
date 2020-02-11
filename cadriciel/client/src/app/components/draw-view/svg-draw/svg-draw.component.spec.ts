@@ -103,8 +103,8 @@ describe('SvgDrawComponent', () => {
 
   it('should unsubscribe',()=>{
     let spyObj = spyOn(component.canvasSubscr,'unsubscribe')
-    component.ngOnDestroy()
-    expect(spyObj).toHaveBeenCalled
+    component.ngOnDestroy();
+    expect(spyObj).toHaveBeenCalled();
   })
 
   it('should call window addEventListener',()=>{

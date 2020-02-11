@@ -131,8 +131,6 @@ describe('ColorPickingService', () => {
     expect(service.cData.primarySelect).toBeTruthy();
   });
 
-  it('should')
-
 
   it('opacities should be setted to default value',()=>{
     let mouseMock = new MouseEvent('mousedown');
