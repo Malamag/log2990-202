@@ -212,7 +212,6 @@ export class ColorPickingService {
       this.hueSelector(event);
     }
   }
-  // split
   selectorOnMouseLeave(event : MouseEvent): void{
     if (this.cData.isHueSelecting){
       this.hueSelector(event);
