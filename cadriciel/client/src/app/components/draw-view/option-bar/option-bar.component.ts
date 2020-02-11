@@ -35,8 +35,8 @@ export class OptionBarComponent implements OnInit {
     let kbHandler: KeyboardHandlerService = new KeyboardHandlerService();
     kbHandler.logkey(e);
 
-      if(kbHandler.ctrlDown && kbHandler.keyCode === O_KEY) { // ctrl+o opens the form!
-        this.winService.openWindow(NewDrawComponent);
+      if(kbHandler.ctrlDown && (kbHandler.keyCode === O_KEY || kbHandler.keyString=='o')) { // ctrl+o opens the form!
+        this.openNewDrawForm();
         e.preventDefault(); // default behavior (file menu) prevented
       }
   }

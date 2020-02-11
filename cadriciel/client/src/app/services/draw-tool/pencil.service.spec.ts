@@ -8,6 +8,7 @@ import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { ToolsAttributes } from '../attributes/tools-attribute';
 
 export class fakeInteractionService extends InteractionService{}
 export class fakeColorPickingService extends ColorPickingService {}
@@ -45,10 +46,11 @@ describe('PencilService', () => {
   });
 
   it('should set the attributes in the subscription', ()=> {
-    
+    service.interaction.emitToolsAttributes(new ToolsAttributes(0,0)); // arbitrary, used to check if the emssion worked
     let spyInteraction = spyOn(service.interaction.$toolsAttributes,'subscribe');
     service.updateAttributes();
     expect(spyInteraction).toHaveBeenCalled();
+    expect(service.attr).toBeDefined();
     
   });
 

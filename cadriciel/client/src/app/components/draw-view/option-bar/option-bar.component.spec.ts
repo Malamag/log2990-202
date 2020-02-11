@@ -10,6 +10,7 @@ import { OptionBarComponent } from './option-bar.component';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
+import { NewDrawComponent } from '../../new-draw/new-draw.component';
 
 describe('OptionBarComponent', () => {
   let component: OptionBarComponent;
@@ -28,11 +29,17 @@ describe('OptionBarComponent', () => {
     kbHandlerStub = { // testing for ctrl+o shortcut
       ctrlDown: true,
       keyCode: 79, // letter o
-      key: 'o'
+      keyString: 'o',
+      logKey:()=>0
     }
 
-    fakeKbEvent = kbHandlerStub; // that way, we will make sure the event corresponds to the handler's expectations
-
+     // that way, we will make sure the event corresponds to the handler's expectations
+    fakeKbEvent = {
+      ctrlDown:true,
+      keyCode:79,
+      key:'o',
+      preventDefault:()=>0
+    }
 
     TestBed.configureTestingModule({
       declarations: [ OptionBarComponent ],
@@ -43,6 +50,8 @@ describe('OptionBarComponent', () => {
                   {provide: KeyboardEvent, useValue: fakeKbEvent}]
     })
     .compileComponents();
+
+    window.confirm = ()=>true; // skips the confirmation box for the test
   }));
 
   beforeEach(() => {
@@ -62,10 +71,12 @@ describe('OptionBarComponent', () => {
   });
 
   it('should open the new form modal window on ctrl+o', ()=>{
-    component.winService.openWindow = ()=>0; // fake window opener
+    const spyObj:jasmine.SpyObj<OptionBarComponent> = jasmine.createSpyObj("OptionBarComponent", ["setShorctutEvent"]);
+    spyObj.setShorctutEvent.and.callFake(()=>{
+      component.winService.openWindow(NewDrawComponent);
+    });
     const spy = spyOn(component.winService, "openWindow");
-    window.confirm=()=>true; // fake response
-    component.setShorctutEvent(fakeKbEvent);
+    component.openNewDrawForm();
     expect(spy).toHaveBeenCalled();
   });
 
@@ -83,10 +94,19 @@ describe('OptionBarComponent', () => {
   })
 
   it ('should open a modal for the new draw form window',()=>{
-    component.winService.openWindow = ()=>0; // fake window opener
-    const spy = spyOn(component.winService,'openWindow');
-    window.confirm=()=>true; // we will always say yes! 
+    const spyObj:jasmine.SpyObj<OptionBarComponent> = jasmine.createSpyObj("OptionBarComponent", ["openNewDrawForm"]);
+    spyObj.openNewDrawForm.and.callFake(()=>{
+      component.winService.openWindow(NewDrawComponent); //  to skip the confirm window
+    });
+    const spy = spyOn(component.winService, "openWindow");
     component.openNewDrawForm();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call a modal window in shortcut', ()=>{
+    const spy = spyOn(component, "openNewDrawForm");
+
+    component.setShorctutEvent(fakeKbEvent); // fake kb event corresponding to ctrl+o
     expect(spy).toHaveBeenCalled();
   });
 });
