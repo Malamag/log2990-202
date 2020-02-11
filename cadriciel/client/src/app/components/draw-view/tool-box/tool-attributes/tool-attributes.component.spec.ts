@@ -110,4 +110,9 @@ describe('ToolAttributesComponent', () => {
     expect(componentStub.selectedTool).toBe("Pencil")
   })
   
+  it('selectedTool should be rectangle',()=>{
+    component.interaction.emitSelectedTool('Rectangle')
+    component.ngOnInit()
+    expect(component.selectedTool).toBe('Rectangle')
+  })
 });
