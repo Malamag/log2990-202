@@ -13,9 +13,6 @@ export class fakeItService extends InteractionService {}
 
 
 describe('drawingTools', () => {
-  //let elem: HTMLElement;
-
-
 
   let service: DrawingTool;
 

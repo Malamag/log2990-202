@@ -169,65 +169,69 @@ export class LineService extends DrawingTool {
   //and adds svg circles on junctions if needed with the line attributes
   createPath(p:Point[], wasDoubleClick:boolean){
     
-    //if we need to force an angle
-    if(this.forcedAngle){
-      p[p.length-1] = this.pointAtForcedAngle(p[p.length-2],p[p.length-1]);
-    }
-    //or stay at current position
-    else{
-      p[p.length-1] = this.currentPos;
-    }
+    let s : string = "";
 
-    //if the path closes on itself
-    let closeIt : boolean = false;
+    if(p.length >= 2){
+      //if we need to force an angle
+      if(this.forcedAngle){
+        p[p.length-1] = this.pointAtForcedAngle(p[p.length-2],p[p.length-1]);
+      }
+      //or stay at current position
+      else{
+        p[p.length-1] = this.currentPos;
+      }
 
-    //if double click, the path is done
-    if(wasDoubleClick){
+      //if the path closes on itself
+      let closeIt : boolean = false;
 
-      //distance between first and last point
-      let dist : number = Point.distance(p[p.length-1],p[0]);
+      //if double click, the path is done
+      if(wasDoubleClick){
 
-      //threshold in pixels to close the path on itself
-      let pixelThreshold : number = 3;
-      let distanceToConnect : number = Math.sqrt(Math.pow(pixelThreshold,2) + Math.pow(pixelThreshold,2));
+        //distance between first and last point
+        let dist : number = Point.distance(p[p.length-1],p[0]);
 
-      //connect first and last if they meet distance threshold
-      closeIt = dist <= distanceToConnect;
-    }
+        //threshold in pixels to close the path on itself
+        let pixelThreshold : number = 3;
+        let distanceToConnect : number = Math.sqrt(Math.pow(pixelThreshold,2) + Math.pow(pixelThreshold,2));
 
-    //create a divider
-    let s = '<g name = "line-segments">';
+        //connect first and last if they meet distance threshold
+        closeIt = dist <= distanceToConnect;
+      }
 
-    //start the path
-    s += '<path d="';
-    //move to first point
-    s+= `M ${p[0].x} ${p[0].y} `;
-    //for each succeding point, connect it with a line, ignore last one if we're closing it on itself
-    for(let i = 1; i < p.length - (closeIt? 1 : 0);i++){
-      s+= `L ${p[i].x} ${p[i].y} `;
-    }
-    //close the path
-    if(closeIt){
-      s+= "Z";
-    }
+      //create a divider
+      s = '<g name = "line-segments">';
 
-    //set render attributes
-    s+= `"stroke="${this.chosenColor.primColor}"`;
-    s+= `stroke-width="${this.attr.lineThickness}"`;
-    s+= 'fill="none"';
-    s+= 'stroke-linecap="round"';
-    s+= 'stroke-linejoin="round" />';
-    //close the path
+      //start the path
+      s += '<path d="';
+      //move to first point
+      s+= `M ${p[0].x} ${p[0].y} `;
+      //for each succeding point, connect it with a line, ignore last one if we're closing it on itself
+      for(let i = 1; i < p.length - (closeIt? 1 : 0);i++){
+        s+= `L ${p[i].x} ${p[i].y} `;
+      }
+      //close the path
+      if(closeIt){
+        s+= "Z";
+      }
 
-    //if we need to show the line junctions
-    if(this.attr.junction){
-      //for each point, add a circle on it (ignore the last one if the path is closed)
-      for(let i = 0; i < p.length - (closeIt? 1 : 0);i++){
-        //set render attributes for the svg circle
-        s += `<circle cx="${p[i].x}" cy="${p[i].y}"`;
-        s += `r="${this.attr.junctionDiameter/2}"`; // to get the radius
-        s += 'stroke="none"';
-        s += `fill="#${this.primary_color}"/>`;
+      //set render attributes
+      s+= `"stroke="${this.chosenColor.primColor}"`;
+      s+= `stroke-width="${this.attr.lineThickness}"`;
+      s+= 'fill="none"';
+      s+= 'stroke-linecap="round"';
+      s+= 'stroke-linejoin="round" />';
+      //close the path
+
+      //if we need to show the line junctions
+      if(this.attr.junction){
+        //for each point, add a circle on it (ignore the last one if the path is closed)
+        for(let i = 0; i < p.length - (closeIt? 1 : 0);i++){
+          //set render attributes for the svg circle
+          s += `<circle cx="${p[i].x}" cy="${p[i].y}"`;
+          s += `r="${this.attr.junctionDiameter/2}"`; // to get the radius
+          s += 'stroke="none"';
+          s += `fill="#${this.primary_color}"/>`;
+        }
       }
     }
   
