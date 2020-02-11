@@ -3,7 +3,17 @@ import { TestBed } from '@angular/core/testing';
 import { ColorPickingService } from './color-picking.service';
 
 describe('ColorPickingService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let mouseEventStub: any;
+  let service: ColorPickingService;
+  beforeEach(() => {
+    mouseEventStub = {
+      button:0 // left button pressed
+    }
+    TestBed.configureTestingModule({
+      providers: [{provide: MouseEvent, mouseEventStub}]
+    })
+    service = TestBed.get(ColorPickingService);
+  });
  
   it('should be created', () => {
     const service: ColorPickingService = TestBed.get(ColorPickingService);
@@ -93,5 +103,32 @@ describe('ColorPickingService', () => {
     
   })
 
-  //it('')  
+  //split from line 206 ************************
+  it('should select a primary hue on mouse down', ()=>{
+    service.cData.isSLSelecting = false; // we are selecting the hue
+    const spy = spyOn(service, "hueSelector");
+    service.hueSelectorOnMouseDown(mouseEventStub);
+    expect(spy).toHaveBeenCalledWith(mouseEventStub); // primary selection with left click
+    expect(service.cData.primarySelect).toBeTruthy();
+  });
+
+  it('should call the hue selector with mouse event on hue sel',()=>{
+    service.cData.isHueSelecting = true;
+    const spy = spyOn(service, "hueSelector");
+    service.selectorOnMouseLeave(mouseEventStub);
+    expect(spy).toHaveBeenCalledWith(mouseEventStub);
+  });
+
+  it('the sl selector should be usable on mouse down (left click)', ()=>{
+    const spy = spyOn(service, "slSelector");
+    service.cData.isHueSelecting = false; // selecting the saturation-luminance
+    service.slSelectorOnMouseDown(mouseEventStub);
+    expect(spy).toHaveBeenCalledWith(mouseEventStub);
+    expect(service.cData.primarySelect).toBeTruthy();
+  });
+
+  it('should')
+
+
+
 });

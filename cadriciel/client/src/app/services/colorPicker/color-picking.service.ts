@@ -208,12 +208,7 @@ export class ColorPickingService {
     if (!(this.cData.isSLSelecting)) {
       this.cData.isHueSelecting = true;
       this.cData.rectOffsetFill = 'white';
-      if ( event.button === 0 ) {
-          this.cData.primarySelect = true;     
-      }
-      else {
-          this.cData.primarySelect = false;
-      }
+      this.cData.primarySelect = (event.button === 0);
       this.hueSelector(event);
     }
   }
@@ -227,12 +222,7 @@ export class ColorPickingService {
   slSelectorOnMouseDown(event : MouseEvent ): void{
     if (!(this.cData.isHueSelecting)) {
       this.cData.isSLSelecting = true;
-      if ( event.button === 0 ) {
-          this.cData.primarySelect = true;     
-      }
-      else {
-          this.cData.primarySelect = false;
-      }
+      this.cData.primarySelect = (event.button === 0);
       this.slSelector(event);
     }
   }
@@ -249,6 +239,7 @@ export class ColorPickingService {
     }
     this.cData.lastColorRects[this.cData.lastColorRects.length - 1].fill = newColor.substring( 0, 7 );
   }
+  
   lastColorSelector( event : MouseEvent, lastColor : string ) : void {
     if ( event.button === 0 ) {
         this.cData.primaryColor = lastColor;
