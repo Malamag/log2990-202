@@ -4,6 +4,7 @@ import { LineService } from './line.service';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { LineAttributes } from '../attributes/line-attributes';
  
 
 describe('LineService', () => {
@@ -45,9 +46,13 @@ describe('LineService', () => {
   });
 
   it('should set the attributes in the subscription', ()=> {
+    service.interaction.emitLineAttributes(new LineAttributes(true, 0,0)); // arbitrary line attr
+
     let spyInteraction = spyOn(service.interaction.$lineAttributes,'subscribe');
     service.updateAttributes();
+
     expect(spyInteraction).toHaveBeenCalled();
+    expect(service.attr).toBeDefined(); // the line attributes have been recieved!
   });
 
   it('should update the progress and the colors while the tool is selected', ()=>{
