@@ -45,28 +45,31 @@ export class BrushService extends PencilService {
 
   //Creates an svg path that connects every points of currentPath and creates a filter with the brush attributes
   createPath(p:Point[]){
-    
-    //get parameters from the used texture
-    let width = this.attr.lineThickness;
-    let scale = this.textures[this.attr.texture].intensity;
 
-    //"normalize" the frequency to keep a constant render no mather the width or scale
-    let frequency = scale/(width/10) * this.textures[this.attr.texture].frequency;
+    let s : string ="";
 
-    //create a divider
-    let s = '<g name = "brush-stroke">';
+    if(p.length >= 2){
+      //get parameters from the used texture
+      let width = this.attr.lineThickness;
+      let scale = this.textures[this.attr.texture].intensity;
 
-    //get a unique ID to make sure each stroke has it's own filter
-    let uniqueID = new Date().getTime();
+      //"normalize" the frequency to keep a constant render no mather the width or scale
+      let frequency = scale/(width/10) * this.textures[this.attr.texture].frequency;
 
-    //create the corresponding svg filter
-    if(this.textures[this.attr.texture].type == "blured"){
+      //create a divider
+      s = '<g name = "brush-stroke">';
+
+      //get a unique ID to make sure each stroke has it's own filter
+      let uniqueID = new Date().getTime();
+
+      //create the corresponding svg filter
+      if(this.textures[this.attr.texture].type == "blured"){
       s +=  this.createBluredFilter(scale,uniqueID);
-    }else if(this.textures[this.attr.texture].type == "noise"){
-      //we use a displacement map so we need to resize the brush to keep the overall width
-      scale = width/((100/scale) / (100/width));
-      s += this.createNoiseFilter(width, scale, frequency,uniqueID);
-      width = (width-(width*scale)/2);
+      }else if(this.textures[this.attr.texture].type == "noise"){
+        //we use a displacement map so we need to resize the brush to keep the overall width
+        scale = width/((100/scale) / (100/width));
+        s += this.createNoiseFilter(width, scale, frequency,uniqueID);
+        width = (width-(width*scale)/2);
     }
 
     //start the path
@@ -85,7 +88,8 @@ export class BrushService extends PencilService {
   
     //end the divider
     s += "</g>";
-
+    }
+    
     return s;
   }
 

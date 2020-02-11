@@ -106,54 +106,58 @@ export class RectangleService extends DrawingTool {
 
   //Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
   createPath(p:Point[]){
+
+    let s : string = "";
+
+    if(p.length >= 2){
+      //first and last points
+      let p1x = p[0].x;
+      let p1y = p[0].y;
+      let p2x = p[p.length-1].x;
+      let p2y = p[p.length-1].y;
+
+      //calculate the width and height of the rectangle
+      let w = p2x - p1x;
+      let h = p2y - p1y;
     
-    //first and last points
-    let p1x = p[0].x;
-    let p1y = p[0].y;
-    let p2x = p[p.length-1].x;
-    let p2y = p[p.length-1].y;
+      //find top-left corner
+      let startX = w > 0 ? p[0].x : p[p.length-1].x;
+      let startY = h > 0 ? p[0].y : p[p.length-1].y;
 
-    //calculate the width and height of the rectangle
-    let w = p2x - p1x;
-    let h = p2y - p1y;
-    
-    //find top-left corner
-    let startX = w > 0 ? p[0].x : p[p.length-1].x;
-    let startY = h > 0 ? p[0].y : p[p.length-1].y;
+      //if we need to make it square
+      if(this.isSquare){
+        //get smallest absolute value between the width and the height
+        let smallest = Math.abs(w) < Math.abs(h)? Math.abs(w) : Math.abs(h);
+        //adjust width and height (keep corresponding sign)
+        w = smallest * Math.sign(w);
+        h = smallest * Math.sign(h);
 
-    //if we need to make it square
-    if(this.isSquare){
-      //get smallest absolute value between the width and the height
-      let smallest = Math.abs(w) < Math.abs(h)? Math.abs(w) : Math.abs(h);
-      //adjust width and height (keep corresponding sign)
-      w = smallest * Math.sign(w);
-      h = smallest * Math.sign(h);
+        //recalculate top-left corner
+        startX = w > 0 ? p[0].x : p[0].x - smallest;
+        startY = h > 0 ? p[0].y : p[0].y - smallest;
+      }
 
-      //recalculate top-left corner
-      startX = w > 0 ? p[0].x : p[0].x - smallest;
-      startY = h > 0 ? p[0].y : p[0].y - smallest;
-    }
+      //create a divider
+      s = '<g name = "rectangle">';
 
-    //create a divider
-    let s : string = '<g name = "rectangle">';
+      //get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
+      let stroke = (this.attr.plotType == 0 || this.attr.plotType == 2) ? `${this.chosenColor.secColor}` : "none";
+      let fill = (this.attr.plotType == 1 || this.attr.plotType == 2) ? `${this.chosenColor.primColor}`: "none";
 
-    //get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
-    let stroke = (this.attr.plotType == 0 || this.attr.plotType == 2) ? `${this.chosenColor.secColor}` : "none";
-    let fill = (this.attr.plotType == 1 || this.attr.plotType == 2) ? `${this.chosenColor.primColor}`: "none";
+      //set render attributes for the svg rect
+      s += `<rect x="${startX}" y="${startY}"`;
+      s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
 
-    //set render attributes for the svg rect
-    s += `<rect x="${startX}" y="${startY}"`;
-    s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
+      s += `fill="${fill}"`;
+      s += `stroke-width="${this.attr.lineThickness}" stroke="${stroke}"/>`;
 
-    s += `fill="${fill}"`;
-    s += `stroke-width="${this.attr.lineThickness}" stroke="${stroke}"/>`;
+      //end the divider
+      s += "</g>"
 
-    //end the divider
-    s += "</g>"
-
-    //can't have rectangle with 0 width or height
-    if(w == 0 || h == 0){
-      s = "";
+      //can't have rectangle with 0 width or height
+      if(w == 0 || h == 0){
+        s = "";
+      }
     }
 
     return s;

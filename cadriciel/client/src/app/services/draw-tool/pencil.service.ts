@@ -86,28 +86,32 @@ export class PencilService extends DrawingTool {
 
   //Creates an svg path that connects every points of currentPath with the pencil attributes
   createPath(p:Point[]){
-    
-    //create a divider
-    let s : string = '<g name = "pencil-stroke">';
 
-    //start the path
-    s += '<path d="';
-    //move to first point
-    s+= `M ${p[0].x} ${p[0].y} `;
-    //for each succeding point, connect it with a line
-    for(let i = 1; i < p.length;i++){
-      s+= `L ${p[i].x} ${p[i].y} `;
-    }
-    //set render attributes
-    s+=`\" stroke="${this.chosenColor.primColor}"`;
-    s+= `stroke-width="${this.attr.lineThickness}"`;
-    s+= 'fill="none"';
-    s+= 'stroke-linecap="round"';
-    s+= 'stroke-linejoin="round"/>';
-    //end the path
+    let s : string = "";
+
+    if(p.length >= 2){
+      //create a divider
+      s = '<g name = "pencil-stroke">';
+
+      //start the path
+      s += '<path d="';
+      //move to first point
+      s+= `M ${p[0].x} ${p[0].y} `;
+      //for each succeding point, connect it with a line
+      for(let i = 1; i < p.length;i++){
+        s+= `L ${p[i].x} ${p[i].y} `;
+      }
+      //set render attributes
+      s+=`\" stroke="${this.chosenColor.primColor}"`;
+      s+= `stroke-width="${this.attr.lineThickness}"`;
+      s+= 'fill="none"';
+      s+= 'stroke-linecap="round"';
+      s+= 'stroke-linejoin="round"/>';
+      //end the path
   
-    //end the divider
-    s+= "</g>";
+      //end the divider
+      s+= "</g>";
+    }
 
     return s;
   }
