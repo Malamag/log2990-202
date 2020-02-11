@@ -160,13 +160,14 @@ describe('ColorPickingService', () => {
     expect(service.cData.opacitySliderInput).toEqual(100)
   })
 
-  it('opacity should be 50',()=>{
+  it('opacity should be 100',()=>{
+    const OP = 100;
     const service: ColorPickingService = TestBed.get(ColorPickingService);
     service.cData.isHueSelecting = true;
     let mouseMock = new MouseEvent('mousedown');
     service.cData.primarySelect = false;
     service.hueSelector(mouseMock)
-    expect(service.cData.opacitySliderInput).toEqual(50)
+    expect(service.cData.opacitySliderInput).toEqual(OP);
   })
 
   it('should use raduisY>=0 case',()=>{
