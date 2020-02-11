@@ -9,16 +9,15 @@ import {
 import { OptionBarComponent } from './option-bar.component';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
-import { NewDrawComponent } from '../../new-draw/new-draw.component';
-import { UserManualComponent } from '../../user-manual/user-manual.component';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
-
 
 describe('OptionBarComponent', () => {
   let component: OptionBarComponent;
   let fixture: ComponentFixture<OptionBarComponent>;
   let winServiceStub:any;
   let kbHandlerStub:any;
+  let fakeKbEvent:any;
+  
 
   beforeEach(async(() => {
     winServiceStub = {
@@ -28,15 +27,20 @@ describe('OptionBarComponent', () => {
 
     kbHandlerStub = { // testing for ctrl+o shortcut
       ctrlDown: true,
-      keyCode: 79 // letter o
+      keyCode: 79, // letter o
+      key: 'o'
     }
+
+    fakeKbEvent = kbHandlerStub; // that way, we will make sure the event corresponds to the handler's expectations
+
 
     TestBed.configureTestingModule({
       declarations: [ OptionBarComponent ],
       imports: [MatButtonModule, MatToolbarModule, MatIconModule, MatTooltipModule],
       providers: [{provide: MatDialog},
                   {provide: ModalWindowService, useValue: winServiceStub },
-                  {provide: KeyboardHandlerService, useValue: kbHandlerStub}]
+                  {provide: KeyboardHandlerService, useValue: kbHandlerStub},
+                  {provide: KeyboardEvent, useValue: fakeKbEvent}]
     })
     .compileComponents();
   }));
@@ -57,19 +61,19 @@ describe('OptionBarComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should open the new draw form on ctrl+o shortcut', ()=>{
+  it('should open the new form modal window on ctrl+o', ()=>{
+    component.winService.openWindow = ()=>0; // fake window opener
     const spy = spyOn(component.winService, "openWindow");
-    
-    new OptionBarComponent(winServiceStub, new InteractionService()); // testing in the constructor
-
-    expect(spy).toHaveBeenCalledWith(NewDrawComponent);
-
+    window.confirm=()=>true; // fake response
+    component.setShorctutEvent(fakeKbEvent);
+    expect(spy).toHaveBeenCalled();
   });
 
   it ('should open a modal window for the user guide',()=>{
-    const spy = spyOn(component.winService,'openWindow')
+    component.winService.openWindow = ()=>0; // fake window opener
+    const spy = spyOn(component.winService,'openWindow');
     component.openUserGuide();
-    expect(spy).toHaveBeenCalledWith(UserManualComponent);
+    expect(spy).toHaveBeenCalled();
   })
 
   it('should emit a boolean using the observer',()=>{
@@ -79,8 +83,10 @@ describe('OptionBarComponent', () => {
   })
 
   it ('should open a modal for the new draw form window',()=>{
-    const spy = spyOn(component.winService,'openWindow')
-    component.openNewDrawForm()
-    expect(spy).toHaveBeenCalledWith(NewDrawComponent)
-  })
+    component.winService.openWindow = ()=>0; // fake window opener
+    const spy = spyOn(component.winService,'openWindow');
+    window.confirm=()=>true; // we will always say yes! 
+    component.openNewDrawForm();
+    expect(spy).toHaveBeenCalled();
+  });
 });

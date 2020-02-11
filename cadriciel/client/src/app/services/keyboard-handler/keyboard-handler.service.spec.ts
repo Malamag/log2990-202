@@ -7,8 +7,11 @@ import { InputObserver } from '../draw-tool/input-observer';
 describe('KeyboardHandlerService', () => {
   let service: KeyboardHandlerService;
   let observerStub: any;
+  let kbEventStub: any;
   beforeEach(() => {
-
+    kbEventStub = {
+      keyCode: 0
+    }
     observerStub = {
       shortcut: 0,
       selected: true,
@@ -136,5 +139,20 @@ describe('KeyboardHandlerService', () => {
     
   });
 
+  it('should toggle the ctrlDown boolean on pressed ctrl', ()=>{
+    service.ctrlDown = true;
+    const CTRL = 17; // keycode 
+    kbEventStub.keyCode = CTRL;
+    service.reset(kbEventStub);
+    expect(service.ctrlDown).toBeFalsy();
+  });
+
+  it('should toggle the shiftDown boolean on pressed ctrl', ()=>{
+    service.shiftDown = true;
+    const SHIFT = 16; // keycode 
+    kbEventStub.keyCode = SHIFT;
+    service.reset(kbEventStub);
+    expect(service.ctrlDown).toBeFalsy();
+  });
 
 });

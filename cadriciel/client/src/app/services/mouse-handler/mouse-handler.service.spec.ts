@@ -152,10 +152,10 @@ describe('MouseHandlerService', () => {
 
   it('should call an observer (up) if the event started in the workspace', ()=>{
     const stubValue = true;
-
+    service.startedInsideWorkspace = stubValue;
     const spy = spyOn(service, "callObserverUp");
     service.validPoint = ()=>stubValue;
-    service.down(mouseEventStub);
+    service.up(mouseEventStub);
     expect(spy).toHaveBeenCalled();
   });
 
@@ -165,17 +165,21 @@ describe('MouseHandlerService', () => {
     expect(service.isFirstClick).toBeFalsy();
   });
 
- /* it('should call the double click observer after a double click', fakeAsync(()=>{
+  it('should call the double click observer after a double click',()=>{
     service.numberOfClicks = 1; // 2 clicks for a double click
     service.isFirstClick = true;
-    service.numberOfClicks++;
+    
+    let spyObj:jasmine.SpyObj<MouseHandlerService> = jasmine.createSpyObj("service", ["up"]);
+    spyObj.up.and.callFake(()=>{
+      service.callObserverDoubleClick(); // we want to skip the timeout
+    });
+    
     service.up(mouseEventStub);
 
-    tick(100);
-    service.up(mouseEventStub)
+    
     const spy = spyOn(service, "callObserverDoubleClick");
     expect(spy).toHaveBeenCalled();
-  }));*/
+  });
 
   it('should call an observer if the mouse is outside the canvas', ()=>{
     service.insideWorkspace = true;

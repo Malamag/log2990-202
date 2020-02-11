@@ -5,6 +5,7 @@ import { Point } from './point';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { FormsAttribute } from '../attributes/attribute-form';
 
 export class fakeInteractionService extends InteractionService{}
 
@@ -47,10 +48,11 @@ describe('RectangleService', () => {
   });
 
   it('should set the attributes in the subscription', ()=> {
-    
+    service.interaction.emitFormsAttributes(new FormsAttribute(0,0,0));
     let spyInteraction = spyOn(service.interaction.$formsAttributes,'subscribe');
     service.updateAttributes();
     expect(spyInteraction).toHaveBeenCalled();
+    expect(service.attr).toBeDefined();
     
   });
 
