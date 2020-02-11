@@ -217,6 +217,7 @@ export class ColorPickingService {
       this.hueSelector(event);
     }
   }
+  // split
   selectorOnMouseLeave(event : MouseEvent): void{
     if (this.cData.isHueSelecting){
       this.hueSelector(event);
@@ -447,6 +448,7 @@ export class ColorPickingService {
   /**
   * Update display with a given color
   **/
+ // put on notice
   updateSliderField( color : string) : void {
     let rgba : number[] = this.colorConvert.hexToRgba( color );
     this.cData.redSliderInput = rgba[0];
@@ -499,6 +501,7 @@ export class ColorPickingService {
     return ret
   }
   //Refresh display following a slider input
+  // put on notice
   sliderInputDisplayRefresh() : void {
     if ( this.cData.primarySelect ) {
         this.cData.primaryColor = this.writeColorSlider(true)
