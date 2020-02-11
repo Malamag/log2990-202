@@ -615,4 +615,19 @@ describe('ColorPickingService', () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it('should write the colors on slider alpha change and emit them', ()=>{
+    let isPrim = true;
+    service.cData.primarySelect = isPrim;
+    const spy = spyOn(service, "writeColorAlphaChange");
+    service.sliderAlphaChange();
+    expect(spy).toHaveBeenCalledWith(isPrim);
+
+    isPrim = false; // sec color
+    const spyEmit = spyOn(service, "emitColors");
+    service.sliderAlphaChange();
+    expect(spy).toHaveBeenCalledWith(isPrim);
+    expect(spyEmit).toHaveBeenCalled();
+
+  })
+
 });
