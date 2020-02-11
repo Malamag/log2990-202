@@ -302,9 +302,9 @@ export class ColorPickingService {
   }
   //validate if char is hexadecimal. A window alert is send id invalide char are found
   validateHexInput(event : KeyboardEvent ) : void {
-    if (!this.colorConvert.validateHex(event.which)){
-      event.preventDefault();
-      return;
+    let validator=this.colorConvert.validateHex(event.which) 
+    if (!validator){
+      this.preventError(event)
     }
     this.cData.isValideInput = true;
     
@@ -313,13 +313,13 @@ export class ColorPickingService {
     this.cData.isValideInput = false;
     if (event.which !== 8){
       if (this.cData.hexColorInput.length === 6){
-        event.preventDefault();
-        return;
+        this.preventError(event)
       }
     }
     this.validateHexInput(event);
   
   }
+  /*-------- je suis rendu la et jai pas teste la fonction swapInputDisplay ---------*/ 
   preventError(event: KeyboardEvent){
     event.preventDefault();
     return;
