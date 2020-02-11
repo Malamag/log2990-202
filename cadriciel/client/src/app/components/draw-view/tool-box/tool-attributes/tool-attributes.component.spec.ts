@@ -45,6 +45,13 @@ describe('ToolAttributesComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should subscribe to the tools on init and select a default', ()=>{
+    const TOOL = "Pencil";
+    component.interaction.emitSelectedTool(TOOL);
+    component.ngOnInit();
+    expect(component.selectedTool).toEqual(TOOL);
+  });
+
   it('should emit forms attributes', ()=>{
     let spyObj = spyOn(component.interaction, 'emitFormsAttributes')
     component.updateForms()

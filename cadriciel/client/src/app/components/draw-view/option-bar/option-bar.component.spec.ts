@@ -16,7 +16,7 @@ describe('OptionBarComponent', () => {
   let component: OptionBarComponent;
   let fixture: ComponentFixture<OptionBarComponent>;
   let winServiceStub:any;
-  let kbHandlerStub:any;
+  let kbService: KeyboardHandlerService;
   let fakeKbEvent:any;
   
 
@@ -26,16 +26,11 @@ describe('OptionBarComponent', () => {
 
     }
 
-    kbHandlerStub = { // testing for ctrl+o shortcut
-      ctrlDown: true,
-      keyCode: 79, // letter o
-      keyString: 'o',
-      logKey:()=>0
-    }
+    
 
      // that way, we will make sure the event corresponds to the handler's expectations
     fakeKbEvent = {
-      ctrlDown:true,
+      ctrlKey:true,
       keyCode:79,
       key:'o',
       preventDefault:()=>0
@@ -46,12 +41,14 @@ describe('OptionBarComponent', () => {
       imports: [MatButtonModule, MatToolbarModule, MatIconModule, MatTooltipModule],
       providers: [{provide: MatDialog},
                   {provide: ModalWindowService, useValue: winServiceStub },
-                  {provide: KeyboardHandlerService, useValue: kbHandlerStub},
+                  {provide: kbService, useValue: KeyboardHandlerService},
                   {provide: KeyboardEvent, useValue: fakeKbEvent}]
     })
     .compileComponents();
 
     window.confirm = ()=>true; // skips the confirmation box for the test
+    kbService = TestBed.get(KeyboardHandlerService);
+  
   }));
 
   beforeEach(() => {
@@ -71,8 +68,8 @@ describe('OptionBarComponent', () => {
   });
 
   it('should open the new form modal window on ctrl+o', ()=>{
-    const spyObj:jasmine.SpyObj<OptionBarComponent> = jasmine.createSpyObj("OptionBarComponent", ["setShorctutEvent"]);
-    spyObj.setShorctutEvent.and.callFake(()=>{
+    const spyObj:jasmine.SpyObj<OptionBarComponent> = jasmine.createSpyObj("OptionBarComponent", ["setShortcutEvent"]);
+    spyObj.setShortcutEvent.and.callFake(()=>{
       component.winService.openWindow(NewDrawComponent);
     });
     const spy = spyOn(component.winService, "openWindow");
@@ -103,10 +100,16 @@ describe('OptionBarComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should call a modal window in shortcut', ()=>{
+  it('should call a new draw form on shortcut', ()=>{
     const spy = spyOn(component, "openNewDrawForm");
-
-    component.setShorctutEvent(fakeKbEvent); // fake kb event corresponding to ctrl+o
+    component.setShortcutEvent(fakeKbEvent);
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('shortcut verif should be called on new ev listener', ()=>{
+    const spy = spyOn(component, "setShortcutEvent");
+    const ev = new KeyboardEvent("keydown");
+    window.dispatchEvent(ev);
+    expect(spy).toHaveBeenCalledWith(ev);
   });
 });

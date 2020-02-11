@@ -21,21 +21,19 @@ export class OptionBarComponent implements OnInit {
   constructor(public winService: ModalWindowService, public interaction:InteractionService) {
     
     window.addEventListener("keydown", (e)=>{
-      this.setShorctutEvent(e);
+      this.setShortcutEvent(e);
     });
   }
 
-  ngOnInit() {
-        
-  }
+  ngOnInit() {}
 
-  setShorctutEvent(e: KeyboardEvent){
+  setShortcutEvent(e: KeyboardEvent){
     const O_KEY = 79; //keycode for letter o
 
     let kbHandler: KeyboardHandlerService = new KeyboardHandlerService();
     kbHandler.logkey(e);
 
-      if(kbHandler.ctrlDown && (kbHandler.keyCode === O_KEY || kbHandler.keyString=='o')) { // ctrl+o opens the form!
+      if(kbHandler.ctrlDown && (kbHandler.keyCode === O_KEY)) { // ctrl+o opens the form!
         this.openNewDrawForm();
         e.preventDefault(); // default behavior (file menu) prevented
       }

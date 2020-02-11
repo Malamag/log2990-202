@@ -387,6 +387,7 @@ export class ColorPickingService {
     }
   }
 
+  // todo
   writeHexColor(color:string, prim: boolean): string{
     let ret:string ="";
     if(color === "Red"){
@@ -478,6 +479,8 @@ export class ColorPickingService {
     this.cData.blueSliderInput = rgb[2];
     this.sliderInputDisplayRefresh();
   }
+  
+  //todo
   writeColorSlider(prim:boolean): string{
     let ret:string =""
     ret += '#' + this.colorConvert.rgbToHex( this.cData.redSliderInput )+ this.colorConvert.rgbToHex( this.cData.greenSliderInput ) 
@@ -516,6 +519,7 @@ export class ColorPickingService {
     this.emitColors();
   }
   
+  //todo
   writeColorAlphaChange(prim: boolean): string{
     let ret: string ="";
     ret += '#' + this.colorConvert.alphaRGBToHex( this.cData.redSliderInput ) 
@@ -528,6 +532,7 @@ export class ColorPickingService {
     }
     return ret
   }
+  
   sliderAlphaChange() : void {
     if ( this.cData.primarySelect === true) {
         this.cData.primaryAlpha = this.cData.opacitySliderInput / 100;
