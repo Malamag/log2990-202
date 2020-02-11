@@ -6,6 +6,8 @@ import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
 
 import{Canvas} from '../../../models/Canvas.model'
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
+import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
 
 const width = 67
 const height = 10
@@ -14,10 +16,27 @@ const color='white'
 describe('SvgDrawComponent', () => {
   let component: SvgDrawComponent;
   let fixture: ComponentFixture<SvgDrawComponent>;
+  let mouseHandlerStub: any;
+  let kbHandlerStub:any;
 
   beforeEach(async(() => {
+    mouseHandlerStub = {
+      move:()=>0,
+      down:()=>0,
+      up:()=>0
+    }
+
+    kbHandlerStub = {
+      reset:(e:KeyboardEvent)=>e,
+      logKey:(e:KeyboardEvent)=>e
+    }
     TestBed.configureTestingModule({
       declarations: [ SvgDrawComponent ],
+      providers:[
+        {provide: KeyboardHandlerService, useValue: kbHandlerStub},
+        {provide: MouseHandlerService, useValue: mouseHandlerStub}
+      
+      ]
       
     })
     .compileComponents();
@@ -34,7 +53,7 @@ describe('SvgDrawComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should diselect all tools', ()=>{
+  it('should deselect all tools', ()=>{
     let color1 = "1167B1";
     let color2 = "000000";
     let name1: string ="Pencil"
@@ -92,5 +111,45 @@ describe('SvgDrawComponent', () => {
     let spyWindow = spyOn(window,'addEventListener');
     component.ngAfterViewInit()
     expect(spyWindow).toHaveBeenCalledTimes(6)
-  })
+  });
+
+  /*it('should call the mousehandler listeners on mouse action', ()=>{
+    
+    component.ngAfterViewInit(); // prepares the event listeners
+    const spyDown = spyOn(mouseHandlerStub, "down");
+    window.dispatchEvent(new MouseEvent("mousedown"));
+    expect(spyDown).toHaveBeenCalled();
+
+    const spyMove = spyOn(mouseHandlerStub, "move");
+    window.dispatchEvent(new MouseEvent("mousemove")); // sending the events
+    expect(spyMove).toHaveBeenCalled(); // we want to see if the functions get called after the event
+
+    const spyUp = spyOn(mouseHandlerStub, "up");
+    window.dispatchEvent(new MouseEvent("mouseup"));
+    expect(spyUp).toHaveBeenCalled();
+  });
+
+  it('should call the kb handler listerners on kb action', ()=>{
+    component.ngAfterViewInit(); // same principle goes for the keyboard events
+    const spyKey = spyOn(kbHandlerStub, "logKey");
+    window.dispatchEvent(new KeyboardEvent("keydown"));
+    expect(spyKey).toHaveBeenCalled();
+
+    const spyRes = spyOn(kbHandlerStub, "reset");
+    window.dispatchEvent(new KeyboardEvent("keyup"));
+    expect(spyRes).toHaveBeenCalled();
+
+  });*/
+
+  it('should affect the variables on subscription', ()=>{
+    const spy = spyOn(component, "closeTools");
+    component.ngAfterViewInit(); // init all
+    component.interaction.emitCancel(true) //we want to cancel the tool selection
+    expect(spy).toHaveBeenCalled();
+
+    const TOOL = "Rectangle"; // arbitrary tool selection
+    component.interaction.emitSelectedTool(TOOL); 
+    expect(component.toolsContainer.get(TOOL).selected).toBeTruthy();
+  
+  });
 });

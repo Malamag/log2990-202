@@ -6,6 +6,7 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { ToolsAttributes } from '../attributes/tools-attribute';
 
 export class fakeInteractionService extends InteractionService { } 
 
@@ -41,10 +42,11 @@ describe('BrushService', () => {
   });
 
   it('should set the attributes in the subscription', ()=> {
-    
+    service.interaction.emitToolsAttributes(new ToolsAttributes(0,0)); // emit fake
     let spyInteraction = spyOn(service.interaction.$toolsAttributes,'subscribe');
     service.updateAttributes();
     expect(spyInteraction).toHaveBeenCalled();
+    expect(service.attr).toBeDefined();
     
   });
 
@@ -130,6 +132,23 @@ describe('BrushService', () => {
     // offset check, as set in brush.service.ts
     expect(filter).toContain(`<feOffset in="turbulence" dx="${((-W*SCALE)/4)}" dy="${((-W*SCALE)/4)}"/>`)
 
+  });
+
+  it('should apply a blured texture', ()=>{
+    const TYPE = 'blured';
+    service.textures[0].type = TYPE;
+    const spy = spyOn(service, "createBluredFilter");
+    service.createPath(ptArr);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should create a noise filter', ()=>{
+    
+    service.attr.texture = 1;
+    
+    const spy = spyOn(service, "createNoiseFilter");
+    service.createPath(ptArr);
+    expect(spy).toHaveBeenCalled();
   });
 
 

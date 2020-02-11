@@ -3,16 +3,22 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserManualComponent } from './user-manual.component';
 import { MatDialogModule, MatButtonModule, MatIconModule, MatDialogRef } from '@angular/material';
 import { UserManualContentComponent } from './user-manual-content/user-manual-content.component';
+import { toolsItems, welcomeItem } from 'src/app/functionality';
 
 describe('UserManualComponent', () => {
   let component: UserManualComponent;
   let fixture: ComponentFixture<UserManualComponent>;
+  let fakeDialog: any;
 
   beforeEach(async(() => {
+    fakeDialog = {
+      close:()=>0
+    }
     TestBed.configureTestingModule({
+
       declarations: [ UserManualComponent, UserManualContentComponent ],
       imports: [ MatDialogModule, MatButtonModule, MatIconModule ],
-      providers: [{provide: MatDialogRef}]
+      providers: [{provide: MatDialogRef, useValue:fakeDialog}]
     })
     .compileComponents();
   }));
@@ -84,6 +90,28 @@ describe('UserManualComponent', () => {
     const closeGuide = spyOn(component, "closeModal");
     button.click();
     expect(closeGuide).toHaveBeenCalled();
+  });
+
+  it('should call the library function to close modal', ()=>{
+    
+    const spy = spyOn(component.dialogRef, "close");
+    component.closeModal();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should disable the next button at the last functionnality',()=>{
+    component.func = welcomeItem;
+    component.activeButton = component.func[1]; // last functionnality
+
+    component.nextPage();
+    expect(component.activeButton).toBeFalsy();
+  });
+
+  it('should disable the previous button at the first functionnality',()=>{
+    component.func = toolsItems;
+    component.activeButton = component.func[component.func.length-2];
+    component.previousPage();
+    expect(component.activePreviousButton).toBeFalsy();
   });
 
 });

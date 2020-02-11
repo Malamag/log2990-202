@@ -169,8 +169,8 @@ describe('ColorConvertingService', () => {
     let primR= r/255 //8-bits, 255
     let primG = g/255
     let primB = b/255
-    let delta= (primR-primB)/2
-    let hue = ( 60 * ( ( ( primG - primB ) / delta ) % 6 ) )
+    let delta= (primR-primB);
+    const hue = ( 60 * ( ( ( primG - primB ) / delta ) % 6 ) )
     let lightness= (primR+primB)/2
     
     let saturation =  delta / ( 1 - Math.abs( ( 2 * lightness ) - 1 ) );
@@ -185,7 +185,7 @@ describe('ColorConvertingService', () => {
     let primR= r/255
     let primG = g/255
     let primB = b/255
-    let delta= (primG-primB)/2
+    let delta= (primG-primB);
     let hue = ( 60 * ( ( primB - primR ) / delta + 2 ) );
     let lightness= (primG+primB)/2
     
@@ -202,7 +202,7 @@ describe('ColorConvertingService', () => {
     let primR= r/255
     let primG = g/255
     let primB = b/255
-    let delta= (primB-primG)/2
+    let delta= (primB-primG);
     let hue = ( 60 * ( ( primR - primG ) / delta + 4 ) ) // taking the formula
     let lightness= (primG+primB)/2
     

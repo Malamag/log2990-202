@@ -14,8 +14,8 @@ import {
 describe('ToolBoxComponent', () => {
   let component: ToolBoxComponent;
   let fixture: ComponentFixture<ToolBoxComponent>;
-
   beforeEach(async(() => {
+    
     TestBed.configureTestingModule({
       declarations: [ ToolBoxComponent ],
       imports: [
@@ -51,13 +51,13 @@ describe('ToolBoxComponent', () => {
   // this test fail I dont know why
   it('should call buttonAction following a good key from the keyboardEvent', ()=>{
     let component = TestBed.createComponent(ToolBoxComponent).componentInstance;
+    const spy = spyOn(component, 'buttonAction');
     let mockKey = new KeyboardEvent("keyup", {
       key:"1"
       
     })
-    component.updateBoard(mockKey)
-    let spyObj = spyOn(component, 'buttonAction')
-    expect(spyObj).toHaveBeenCalled()
+    component.updateBoard(mockKey);
+    expect(spy).toHaveBeenCalled()
   })
   it('should not call buttonAction',()=>{
     let component = TestBed.createComponent(ToolBoxComponent).componentInstance;
