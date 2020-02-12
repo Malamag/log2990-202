@@ -83,6 +83,7 @@ export class ColorPickingService {
       }
     }
   }
+  
   hueSelector( event : MouseEvent ) : void {
     let hue: number =0
     if ( this.cData.isHueSelecting) {

@@ -117,7 +117,6 @@ describe('ColorPickingService', () => {
     
   })
 
-  //split from line 206 ************************
   it('should select a primary hue on mouse down', ()=>{
     service.cData.isSLSelecting = false; // we are selecting the hue
     const spy = spyOn(service, "hueSelector");
