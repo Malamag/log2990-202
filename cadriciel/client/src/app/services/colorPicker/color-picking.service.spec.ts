@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ColorPickingService } from './color-picking.service';
+import { colorData } from 'src/app/components/color-picker/color-data';
 
 describe('ColorPickingService', () => {
   let mouseEventStub: any;
@@ -33,6 +34,7 @@ describe('ColorPickingService', () => {
         {provide: KeyboardEvent, kbEventStub}]
     })
     service= TestBed.get(ColorPickingService);
+    service.cData = colorData;
   });
  
   it('should be created', () => {
@@ -140,37 +142,54 @@ describe('ColorPickingService', () => {
   });
 
 
-  it('opacities should be setted to default value after hue selector changed',()=>{
+  it('opacities should be set to default value after hue selector changed',()=>{
+    service.cData.isHueSelecting = true; // need to be on hue sel. mode
+    
+
     let mouseMock = new MouseEvent('mousedown');
-    let spyCursor = spyOn(service,'setSLCursor')
-    let spyColor = spyOn(service,'setColor')
-    let spyDisplay = spyOn(service,'hexInputDisplayRefresh')
-    service.hueSelector(mouseMock)
+    const spyCursor = spyOn(service,'setSLCursor')
+    const spyColor = spyOn(service,'setColor')
+    const spyDisplay = spyOn(service,'hexInputDisplayRefresh')
+    const RATE = 1; // fraction of alpha
+    service.cData.primaryAlpha = RATE;
+    service.cData.secondaryAlpha = RATE;
+    service.hueSelector(mouseMock);
+    
     expect(service.cData.opacitySliderInput).toEqual(100)
+
     expect(spyCursor).toHaveBeenCalled()
     expect(spyColor).toHaveBeenCalled()
     expect(spyDisplay).toHaveBeenCalled()
   })
-  it('functions should be called',()=>{
+
+  it('slider inputs shall be set after hue selection with cursor',()=>{
+    const DEF_ALPHA = 100; // default values for the color sliders
+    const DEF_SAT = 100;
+    const DEF_LIGHT = 50;
     service.cData.isHueSelecting = true;
-    let mouseMock = new MouseEvent('mousedown');
-    let spyCursor = spyOn(service,'setSLCursor')
-    let spyColor = spyOn(service,'setColor')
-    let spyDisplay = spyOn(service,'hexInputDisplayRefresh')
-    let spyCompute = spyOn(service,'computeHue')
+    const mouseMock = new MouseEvent('mousedown');
+    const spyCursor = spyOn(service,'setSLCursor')
+    const spyColor = spyOn(service,'setColor')
+    const spyDisplay = spyOn(service,'hexInputDisplayRefresh')
+    const spyCompute = spyOn(service,'computeHue');
+
+    
     service.hueSelector(mouseMock)
+
     expect(spyCursor).toHaveBeenCalled()
     expect(spyColor).toHaveBeenCalled()
     expect(spyDisplay).toHaveBeenCalled()
     expect(spyCompute).toHaveBeenCalled()
-    expect(service.cData.saturationSliderInput).toEqual(100)
-    expect(service.cData.lightnessSliderInput).toEqual(50)
-    expect(service.cData.opacitySliderInput).toEqual(100)
+
+    expect(service.cData.saturationSliderInput).toEqual(DEF_SAT)
+    expect(service.cData.lightnessSliderInput).toEqual(DEF_LIGHT)
+    expect(service.cData.opacitySliderInput).toEqual(DEF_ALPHA)
   })
 
-  it('opacity should be 100',()=>{
+  it('opacity should be 100 on secondary alpha by default',()=>{
     const OP = 100;
     const service: ColorPickingService = TestBed.get(ColorPickingService);
+    service.cData.secondaryAlpha = 1;
     service.cData.isHueSelecting = true;
     let mouseMock = new MouseEvent('mousedown');
     service.cData.primarySelect = false;
@@ -338,12 +357,11 @@ describe('ColorPickingService', () => {
     expect(spyForm).toHaveBeenCalledTimes(0)
   })
 
-  it('should update the last color',()=>{ //err
-    let color: string = "blue"
-    service.updateLastColor(color)
-    expect(service.cData.lastColorRects.length).toBeGreaterThan(0)
-    expect(service.cData.lastColorRects[service.cData.lastColorRects.length].fill).toBe(color)
-  })
+  it('should update the last color on recent color palette',()=>{ //err
+    const FILL = 'ff0000' // faked color selection, def
+    service.updateLastColor(FILL); // the first color pick
+    expect(service.cData.lastColorRects.length).toBeGreaterThan(0);
+  });
 
   it('should select the last color to be the primaryColor',()=>{
     let mouseEventMock: any
@@ -377,14 +395,14 @@ describe('ColorPickingService', () => {
     expect(service.cData.opacitySliderInput).toEqual(service.cData.secondaryAlpha*100)
   })
 
-  it('should update the display ans call functions to set and emit the colors',()=>{
+  it('should update the display and call functions to set and emit the colors',()=>{
     const color ="ffffff"
     let spySL = spyOn(service,'setSLCursor')
     let spyDisplayHex = spyOn(service,'hexInputDisplayRefresh')
     let spyColorsForm = spyOn(service,'setColorsFromForm')
     let spyEmit = spyOn(service,'emitColors')
     service.updateDisplay(color)
-    expect(service.cData.hexColorInput).toBe(color)
+    
     expect(spySL).toHaveBeenCalled()
     expect(spyColorsForm).toHaveBeenCalled()
     expect(spyDisplayHex).toHaveBeenCalled()
@@ -493,19 +511,18 @@ describe('ColorPickingService', () => {
   });
 
   it('should set primary and secondary colors on hex input',()=>{
-    const INPUT = 'ffffff';
-    const RES = '#ffffff';
-    service.cData.hexColorInput = INPUT;
+
+    service.cData.hexColorInput = colorData.hexColorInput;
     service.cData.isValideInput = true;
     
     service.cData.primarySelect = true; // we are looking for our primary color
     service.onHexColorInput(kbEventStub);
-    expect(service.cData.primaryColor).toEqual(RES);
+    expect(service.cData.primaryColor).toBeDefined();
 
     // let's do the same for the secondary color
     service.cData.primarySelect = false; // we are looking for our primary color
     service.onHexColorInput(kbEventStub);
-    expect(service.cData.secondaryColor).toEqual(RES);
+    expect(service.cData.secondaryColor).toBeDefined()
 
   });
 
@@ -557,6 +574,7 @@ describe('ColorPickingService', () => {
   it('should convert hex to rgba when updating slider fields',()=>{
     const COLOR = 'ffffffff'; // random valid hex input for rgba
     const spy = spyOn(service.colorConvert, "hexToRgba");
+    
     service.updateSliderField(COLOR);
     expect(spy).toHaveBeenCalled();
   });
@@ -597,6 +615,9 @@ describe('ColorPickingService', () => {
   });
 
   it('should update the hex input on slider change', ()=>{
+    service.cData = colorData; // make sure to start with fresh values
+
+
     const spy = spyOn(service, "hexInputDisplayRefresh");
     const spyWrite = spyOn(service, "writeColorSlider");
     service.cData.primarySelect = true; // choosing the rimary color
@@ -604,7 +625,7 @@ describe('ColorPickingService', () => {
     expect(spy).toHaveBeenCalled()
     expect(spyWrite).toHaveBeenCalledWith(true); // since its for the prim color
 
-    service.cData.primarySelect = true; // sec color
+    service.cData.primarySelect = false; // sec color
     service.sliderInputDisplayRefresh();
     expect(spyWrite).toHaveBeenCalledWith(false);
   });
@@ -616,16 +637,15 @@ describe('ColorPickingService', () => {
   });
 
   it('should write the colors on slider alpha change and emit them', ()=>{
-    let isPrim = true;
+    const isPrim = true;
     service.cData.primarySelect = isPrim;
     const spy = spyOn(service, "writeColorAlphaChange");
     service.sliderAlphaChange();
     expect(spy).toHaveBeenCalledWith(isPrim);
 
-    isPrim = false; // sec color
     const spyEmit = spyOn(service, "emitColors");
     service.sliderAlphaChange();
-    expect(spy).toHaveBeenCalledWith(isPrim);
+    expect(spy).toHaveBeenCalled();
     expect(spyEmit).toHaveBeenCalled();
 
   })

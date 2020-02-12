@@ -1,6 +1,6 @@
 export const colorData = {
     currentHue : 0,
-    primaryColor : '#FF0000ff',
+    primaryColor : '#ff0000ff',
     primaryAlpha : 1,
     secondaryColor :'#000000ff',
     secondaryAlpha : 0.5, // afin des tests

@@ -84,10 +84,10 @@ export class ColorPickingService {
     }
   }
   hueSelector( event : MouseEvent ) : void {
-    let Hue: number =0
+    let hue: number =0
     if ( this.cData.isHueSelecting) {
-      Hue = this.computeHue(event)    
-      this.cData.currentHue = Math.round(Hue)
+      hue = this.computeHue(event)    
+      this.cData.currentHue = Math.round(hue)
       // here we set saturation, lightness to default value i.e 100% and 50%
       this.cData.saturationSliderInput = 100;
       this.cData.lightnessSliderInput = 50;
@@ -99,7 +99,7 @@ export class ColorPickingService {
         this.cData.opacitySliderInput = Math.round(this.cData.secondaryAlpha * 100);
       }
       this.setSLCursor( this.cData.saturationSliderInput, this.cData.lightnessSliderInput );
-      this.setColor( this.colorConvert.hslToRgb(Hue) ) ;
+      this.setColor( this.colorConvert.hslToRgb(hue) ) ;
       this.hexInputDisplayRefresh();
     }
   }
