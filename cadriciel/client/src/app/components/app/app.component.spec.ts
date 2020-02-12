@@ -4,9 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppComponent } from './app.component';
 
-
 describe('AppComponent', () => {
-    //let indexServiceSpy: SpyObj<IndexService>;
+    // let indexServiceSpy: SpyObj<IndexService>;
 
     /*beforeEach(() => {
         indexServiceSpy = jasmine.createSpyObj('IndexService', ['basicGet']);
@@ -33,4 +32,3 @@ describe('AppComponent', () => {
         expect(app.title).toEqual('LOG2990');
     });*/
 });
-

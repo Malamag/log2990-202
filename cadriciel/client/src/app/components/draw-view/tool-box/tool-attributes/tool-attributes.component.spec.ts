@@ -1,18 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ToolAttributesComponent } from './tool-attributes.component';
-import {ColorPickerComponent} from '../../../color-picker/color-picker.component';
-import {  
-  MatFormFieldModule,
-  MatIconModule, 
-  MatToolbarModule,
-  MatSliderModule,
-  MatRadioModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatFormFieldModule,
+  MatIconModule,
+  MatRadioModule,
+  MatSliderModule,
+  MatToolbarModule } from '@angular/material';
+import {ColorPickerComponent} from '../../../color-picker/color-picker.component';
+import { ToolAttributesComponent } from './tool-attributes.component';
 
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
-
-
 
 describe('ToolAttributesComponent', () => {
   let component: ToolAttributesComponent;
@@ -21,11 +19,11 @@ describe('ToolAttributesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ToolAttributesComponent, ColorPickerComponent],
-      //providers:[{provide: InteractionService, useValue:interactionStub}],
+      // providers:[{provide: InteractionService, useValue:interactionStub}],
       imports: [
-        MatSliderModule, 
+        MatSliderModule,
         FormsModule,
-        MatIconModule, 
+        MatIconModule,
         MatToolbarModule,
         MatSliderModule,
         ReactiveFormsModule,
@@ -45,39 +43,39 @@ describe('ToolAttributesComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should subscribe to the tools on init and select a default', ()=>{
-    const TOOL = "Pencil";
+  it('should subscribe to the tools on init and select a default', () => {
+    const TOOL = 'Pencil';
     component.interaction.emitSelectedTool(TOOL);
     component.ngOnInit();
     expect(component.selectedTool).toEqual(TOOL);
   });
 
-  it('should emit forms attributes', ()=>{
-    let spyObj = spyOn(component.interaction, 'emitFormsAttributes')
+  it('should emit forms attributes', () => {
+    const spyObj = spyOn(component.interaction, 'emitFormsAttributes')
     component.updateForms()
     expect(spyObj).toHaveBeenCalled()
   })
 
-  it('should emit line attributes',()=>{
-    let spyObj = spyOn(component.interaction, 'emitLineAttributes')
+  it('should emit line attributes', () => {
+    const spyObj = spyOn(component.interaction, 'emitLineAttributes')
     component.updateLine()
     expect(spyObj).toHaveBeenCalled()
   })
 
-  it('should emit tools attributes',()=>{
-    let spyObj = spyOn(component.interaction, 'emitToolsAttributes')
+  it('should emit tools attributes', () => {
+    const spyObj = spyOn(component.interaction, 'emitToolsAttributes')
     component.updateTools()
     expect(spyObj).toHaveBeenCalled()
   })
 
-  it('should dispatch the window', ()=>{
-    let spyObj = spyOn(window, 'dispatchEvent')
+  it('should dispatch the window', () => {
+    const spyObj = spyOn(window, 'dispatchEvent')
     component.resize()
     expect(spyObj).toHaveBeenCalled()
   })
 
-  it('should set default values',()=>{
-    //component.ngAfterViewInit()
+  it('should set default values', () => {
+    // component.ngAfterViewInit()
     expect(component.lineThickness).toBe(5)
     expect(component.texture).toBe(0)
     expect(component.numberCorners).toBe(3)
@@ -85,32 +83,32 @@ describe('ToolAttributesComponent', () => {
     expect(component.junction).toBe(true)
     expect(component.junctionRadius).toBe(6)
   })
-  it('should call update functions',()=>{
-    let formsSpy = spyOn(component, 'updateForms')
-    let toolsSpy = spyOn(component, 'updateTools')
-    let lineSpy = spyOn(component, 'updateLine')
+  it('should call update functions', () => {
+    const formsSpy = spyOn(component, 'updateForms')
+    const toolsSpy = spyOn(component, 'updateTools')
+    const lineSpy = spyOn(component, 'updateLine')
     component.ngAfterViewInit()
     expect(formsSpy).toHaveBeenCalled()
     expect(toolsSpy).toHaveBeenCalled()
     expect(lineSpy).toHaveBeenCalled()
   })
 
-  it('should select tool', ()=>{
-    component.interaction.emitSelectedTool("Rectangle")
-  
-    expect(component.selectedTool).toBe("Rectangle")
+  it('should select tool', () => {
+    component.interaction.emitSelectedTool('Rectangle')
+
+    expect(component.selectedTool).toBe('Rectangle')
   })
 
-  it('should not select tool',()=>{
-    let interactionStub = new InteractionService()
-    interactionStub.emitSelectedTool("Ellipse")
-    let componentStub = new ToolAttributesComponent(interactionStub)
+  it('should not select tool', () => {
+    const interactionStub = new InteractionService()
+    interactionStub.emitSelectedTool('Ellipse')
+    const componentStub = new ToolAttributesComponent(interactionStub)
     componentStub.ngOnInit()
-  
-    expect(componentStub.selectedTool).toBe("Pencil")
+
+    expect(componentStub.selectedTool).toBe('Pencil')
   })
-  
-  it('selectedTool should be rectangle',()=>{
+
+  it('selectedTool should be rectangle', () => {
     component.interaction.emitSelectedTool('Rectangle')
     component.ngOnInit()
     expect(component.selectedTool).toBe('Rectangle')

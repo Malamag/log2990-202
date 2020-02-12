@@ -1,11 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CanvasBuilderService } from './canvas-builder.service';
-import { Canvas } from '../../models/Canvas.model';
 import { ElementRef } from '@angular/core';
 import { SvgDrawComponent } from 'src/app/components/draw-view/svg-draw/svg-draw.component';
+import { Canvas } from '../../models/Canvas.model';
 import { colorCircles } from '../../palette';
-
+import { CanvasBuilderService } from './canvas-builder.service';
 
 describe('CanvasBuilderService', () => {
   let service: CanvasBuilderService;
@@ -36,7 +35,7 @@ describe('CanvasBuilderService', () => {
 
   it('should whipe an existing doodle', () => {
     const elem: ElementRef = new ElementRef(SvgDrawComponent);
-    const draw: String = "<rect />";
+    const draw: String = '<rect />';
     elem.nativeElement.innerHTML = draw
 
     service.whipeDraw(elem);
@@ -61,7 +60,7 @@ describe('CanvasBuilderService', () => {
   });
 
   it('should emit the new canvas', () => {
-    
+
     const spy = spyOn(service.canvSubject, 'next');
     service.emitCanvas();
     expect(spy).toHaveBeenCalled();

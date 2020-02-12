@@ -5,16 +5,16 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './components/app/app.component';
+import { ColorPickerComponent} from './components/color-picker/color-picker.component'
+import { DrawViewComponent } from './components/draw-view/draw-view.component';
 import { EntryPointComponent } from './components/entry-point/entry-point.component';
 import { NewDrawComponent } from './components/new-draw/new-draw.component';
-import { DrawViewComponent } from './components/draw-view/draw-view.component';
-import { ColorPickerComponent} from './components/color-picker/color-picker.component'
-import { UserManualComponent } from './components/user-manual/user-manual.component';
 import { UserManualContentComponent } from './components/user-manual/user-manual-content/user-manual-content.component';
+import { UserManualComponent } from './components/user-manual/user-manual.component';
+import { ColorConvertingService } from './services/colorPicker/color-converting.service';
+import { ColorPickingService } from './services/colorPicker/color-picking.service';
 import { CanvasBuilderService } from './services/drawing/canvas-builder.service';
 import { ModalWindowService } from './services/window-handler/modal-window.service';
-import { ColorPickingService } from './services/colorPicker/color-picking.service';
-import { ColorConvertingService } from './services/colorPicker/color-converting.service';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -25,19 +25,17 @@ import {
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatSnackBarModule,
+    MatRadioModule,
     MatSidenavModule,
-    MatToolbarModule,
     MatSliderModule,
-    MatTooltipModule,
-    MatRadioModule
+    MatSnackBarModule,
+    MatToolbarModule,
+    MatTooltipModule
 } from '@angular/material';
-import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
-import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.component';
+import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
 import { ToolAttributesComponent } from './components/draw-view/tool-box/tool-attributes/tool-attributes.component';
-
-
+import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.component';
 
 @NgModule({
     declarations: [
@@ -73,7 +71,7 @@ import { ToolAttributesComponent } from './components/draw-view/tool-box/tool-at
         AppRoutingModule
     ],
     providers: [
-        CanvasBuilderService, 
+        CanvasBuilderService,
         ModalWindowService,
         ColorConvertingService,
         ColorPickingService
@@ -81,6 +79,6 @@ import { ToolAttributesComponent } from './components/draw-view/tool-box/tool-at
 
     bootstrap: [AppComponent],
     entryComponents: [NewDrawComponent, UserManualComponent, OptionBarComponent, ColorPickerComponent] // components added dynamically
-    
+
 })
 export class AppModule {}

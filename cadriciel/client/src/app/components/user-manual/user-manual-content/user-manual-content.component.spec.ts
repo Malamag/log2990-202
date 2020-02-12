@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserManualContentComponent } from './user-manual-content.component';
 import { MatIconModule} from '@angular/material';
+import { UserManualContentComponent } from './user-manual-content.component';
 
 describe('UserManualContentComponent', () => {
   let component: UserManualContentComponent;

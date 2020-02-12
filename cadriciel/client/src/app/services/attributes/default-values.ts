@@ -1,5 +1,5 @@
-export class DefaultAttributeValues{
-    DEFAULTJUNCTION: boolean 
+export class DefaultAttributeValues {
+    DEFAULTJUNCTION: boolean
     DEFAULTJUNCTIONRADIUS: number;
     DEFAULTLINETHICKNESS: number
     DEFAULTTEXTURE: number
@@ -8,14 +8,14 @@ export class DefaultAttributeValues{
     DEFAULTPRIMARYCOLOR: string
     DEFAULTSECONDARYCOLOR: string
 
-    constructor(){
+    constructor() {
         this.DEFAULTJUNCTION = true;
-        this.DEFAULTJUNCTIONRADIUS= 6;
+        this.DEFAULTJUNCTIONRADIUS = 6;
         this.DEFAULTLINETHICKNESS = 5;
-        this.DEFAULTTEXTURE=0
+        this.DEFAULTTEXTURE = 0
         this.DEFAULTPLOTTYPE = 2
         this.DEFAULTNUMBERCORNERS = 3
-        this.DEFAULTPRIMARYCOLOR= "ff0000ff"
-        this.DEFAULTSECONDARYCOLOR= "000000"
+        this.DEFAULTPRIMARYCOLOR = 'ff0000ff'
+        this.DEFAULTSECONDARYCOLOR = '000000'
     }
 }

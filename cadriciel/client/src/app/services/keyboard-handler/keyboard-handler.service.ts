@@ -6,36 +6,36 @@ import { InputObserver } from '../draw-tool/input-observer';
 })
 export class KeyboardHandlerService {
 
-  keyString:string;
-  keyCode:number;
-  ctrlDown:boolean
-  shiftDown:boolean;
-  toolObservers:InputObserver[];
-  toolshortcuts:number[];
+  keyString: string;
+  keyCode: number;
+  ctrlDown: boolean
+  shiftDown: boolean;
+  toolObservers: InputObserver[];
+  toolshortcuts: number[];
 
-  //viewObservers:any[];
+  // viewObservers:any[];
 
   constructor() {
-    this.keyString = "";
+    this.keyString = '';
     this.keyCode = -1;
     this.toolObservers = [];
     this.toolshortcuts = [];
   }
 
-  addToolObserver(newObserver:InputObserver){
+  addToolObserver(newObserver: InputObserver) {
     this.toolObservers.push(newObserver);
     this.toolshortcuts.push(newObserver.shortcut);
   }
 
-  updateToolObservers(){
-    this.toolObservers.forEach(element => {
+  updateToolObservers() {
+    this.toolObservers.forEach((element) => {
       element.update(this);
     });
   }
 
-  checkForToolChange(){
-    if(this.toolshortcuts.includes(this.keyCode)){
-      this.toolObservers.forEach(element => {
+  checkForToolChange() {
+    if (this.toolshortcuts.includes(this.keyCode)) {
+      this.toolObservers.forEach((element) => {
         element.cancel();
         element.selected = false;
       });
@@ -43,26 +43,26 @@ export class KeyboardHandlerService {
     }
   }
 
-  logkey(e:KeyboardEvent){
+  logkey(e: KeyboardEvent) {
     this.keyString = e.key;
     this.keyCode = e.keyCode;
     this.ctrlDown = e.ctrlKey;
     this.shiftDown = e.shiftKey;
-    //this.checkForToolChange();
+    // this.checkForToolChange();
     this.updateToolObservers();
   }
 
-  reset(e:KeyboardEvent){
+  reset(e: KeyboardEvent) {
     const SHIFT_CODE = 16;
     const CTRL_CODE = 17;
 
-    if(e.keyCode == CTRL_CODE){
+    if (e.keyCode == CTRL_CODE) {
       this.ctrlDown = false;
     }
-    if(e.keyCode == SHIFT_CODE){
+    if (e.keyCode == SHIFT_CODE) {
       this.shiftDown = false;
     }
-    this.keyString = "";
+    this.keyString = '';
     this.keyCode = -1; // back to invalid keycode (default)
     this.updateToolObservers();
   }

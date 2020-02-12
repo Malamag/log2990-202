@@ -160,10 +160,11 @@ input:checked + .slider:before {
     width: 80px;
 }
 //-------------------
-//form https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+//from STERN, Daniel. 2017. Styling Cross-Browser Compatible Range Inputs with CSS. URL:
+// https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
 input[type=range] {
   -webkit-appearance: none;
-  //margin: 18px 0;
+
   width: 50%;
 }
 input[type=range]:focus {
@@ -197,7 +198,7 @@ input[type=range]::-moz-range-track {
   width: 100%;
   height: 5px;
   cursor: pointer;
-  //animate: 0.2s;
+
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   background: #ccc;
   border-radius: 1.3px;
@@ -249,4 +250,4 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
   background: #ccc;
 }
-  
+//from https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/  

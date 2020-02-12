@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CanvasBuilderService } from '../../services/drawing/canvas-builder.service';
-import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { Router } from '@angular/router';
-
+import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
+import { CanvasBuilderService } from '../../services/drawing/canvas-builder.service';
 
 @Component({
   selector: 'app-new-draw',
@@ -17,7 +16,6 @@ export class NewDrawComponent  implements OnInit  {
   width: number;
   height: number;
   color: string;
-  
 
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
@@ -31,13 +29,13 @@ export class NewDrawComponent  implements OnInit  {
     this.width = this.canvasBuilder.getDefWidth();
     this.height = this.canvasBuilder.getDefHeight();
     this.color = this.canvasBuilder.getDefColor();
-    
+
   }
 
   initForm() {
     this.newDrawForm = this.formBuilder.group({
       canvWidth: ['', [Validators.pattern(/^\d+$/), Validators.min(1)]], // accepts only positive integers
-      canvHeight: ['', [Validators.pattern(/^\d+$/), Validators.min(1)]], 
+      canvHeight: ['', [Validators.pattern(/^\d+$/), Validators.min(1)]],
       canvColor: ['', Validators.pattern(/^[a-fA-F0-9]{6}$/)], // only accepts 6-chars strings made of hex characters
     });
 
@@ -48,18 +46,18 @@ export class NewDrawComponent  implements OnInit  {
     });
   }
 
-  onSubmit() {   
+  onSubmit() {
     const values = this.newDrawForm.value;
-    this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight,values.canvColor);
+    this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight, values.canvColor);
     this.canvasBuilder.emitCanvas();
     this.closeModalForm();
-    this.router.navigate(["/vue"]);
+    this.router.navigate(['/vue']);
 
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 15); // waits for the canvas to be created
   }
-  
+
   closeModalForm() {
     this.winService.closeWindow();
   }

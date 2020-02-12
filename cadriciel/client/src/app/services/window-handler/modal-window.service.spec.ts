@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ModalWindowService } from './modal-window.service';
-import { MatDialogModule, MatDialog } from '@angular/material';
+import { MatDialog, MatDialogModule } from '@angular/material';
 import { NewDrawComponent } from 'src/app/components/new-draw/new-draw.component';
 import { UserManualComponent } from 'src/app/components/user-manual/user-manual.component';
+import { ModalWindowService } from './modal-window.service';
 
 describe('ModalWindowService', () => {
   let service: ModalWindowService;
@@ -13,8 +13,8 @@ describe('ModalWindowService', () => {
   let guideComponentSpy: jasmine.SpyObj<UserManualComponent>;
 
   beforeEach(() => {
-    const formSpy = jasmine.createSpy("NewDrawComponent");
-    const guideSpy = jasmine.createSpy("UserManualComponent");
+    const formSpy = jasmine.createSpy('NewDrawComponent');
+    const guideSpy = jasmine.createSpy('UserManualComponent');
     TestBed.configureTestingModule({
       imports: [MatDialogModule],
       providers: [
@@ -36,25 +36,25 @@ describe('ModalWindowService', () => {
   });
 
   it('should be able to open a new draw form modal window', () => {
-    const spy = spyOn(dialog, "open");
+    const spy = spyOn(dialog, 'open');
     service.openWindow(NewDrawComponent);
     expect(spy).toHaveBeenCalled();
-  
+
     expect(formComponentSpy).toBeDefined();
 
   });
 
   it('should be able to open a user manual modal window', () => {
-    const spy = spyOn(dialog, "open");
+    const spy = spyOn(dialog, 'open');
     service.openWindow(UserManualComponent);
     expect(spy).toHaveBeenCalled();
 
     expect(guideComponentSpy).toBeDefined();
-    
+
   });
 
   it('should be able to close a modal window', () => {
-    const spy = spyOn(dialog, "closeAll");
+    const spy = spyOn(dialog, 'closeAll');
     service.closeWindow();
     expect(spy).toHaveBeenCalled();
   });

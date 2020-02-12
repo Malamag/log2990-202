@@ -1,11 +1,11 @@
-export class LineAttributes{
+export class LineAttributes {
     junction: boolean
     lineThickness: number
     junctionDiameter: number
 
-    constructor(junction: boolean, lineThickness: number, junctionDiameter: number){
-        this.junction= junction
+    constructor(junction: boolean, lineThickness: number, junctionDiameter: number) {
+        this.junction = junction
         this.lineThickness = lineThickness
-        this.junctionDiameter= junctionDiameter
+        this.junctionDiameter = junctionDiameter
     }
 }

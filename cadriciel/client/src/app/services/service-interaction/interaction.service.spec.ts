@@ -1,20 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 
-import { InteractionService } from './interaction.service';
-import { LineAttributes } from '../attributes/line-attributes';
-import { ToolsAttributes } from '../attributes/tools-attribute';
-import { FormsAttribute } from '../attributes/attribute-form';
 import { ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
+import { FormsAttribute } from '../attributes/attribute-form';
+import { LineAttributes } from '../attributes/line-attributes';
+import { ToolsAttributes } from '../attributes/tools-attribute';
+import { InteractionService } from './interaction.service';
 
 describe('InteractionService', () => {
   let service: InteractionService;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      
+
     });
     service = TestBed.get(InteractionService);
-  
+
   });
 
   it('should be created', () => {
@@ -24,28 +24,28 @@ describe('InteractionService', () => {
 
   it('should emit the line attributes', () => {
     const spy = spyOn(service.lineAttributes, 'next');
-    const ATTR: LineAttributes = new LineAttributes(false, 0, 0); //junction presence, thickness & junction diam.
+    const ATTR: LineAttributes = new LineAttributes(false, 0, 0); // junction presence, thickness & junction diam.
     service.emitLineAttributes(ATTR);
     expect(spy).toHaveBeenCalled();
   });
 
   it('should emit the tool attributes', () => {
     const spy = spyOn(service.toolsAttributes, 'next');
-    const ATTR: ToolsAttributes = new ToolsAttributes(0, 0); //thickness & texture number
+    const ATTR: ToolsAttributes = new ToolsAttributes(0, 0); // thickness & texture number
     service.emitToolsAttributes(ATTR);
     expect(spy).toHaveBeenCalled();
   });
 
   it('should emit the selected tool', () => {
     const spy = spyOn(service.selectedTool, 'next');
-    const ATTR: string = ""; //tool name
+    const ATTR = ''; // tool name
     service.emitSelectedTool(ATTR);
     expect(spy).toHaveBeenCalled();
   });
 
   it('should emit the forms attributes', () => {
     const spy = spyOn(service.formsAttributes, 'next');
-    const ATTR: FormsAttribute = new FormsAttribute(0, 0, 0); //plot type, border thickness, num. of corners
+    const ATTR: FormsAttribute = new FormsAttribute(0, 0, 0); // plot type, border thickness, num. of corners
     service.emitFormsAttributes(ATTR);
     expect(spy).toHaveBeenCalled();
   });
@@ -87,6 +87,5 @@ describe('InteractionService', () => {
   it('DOM element reference should have its own observable', () => {
     expect(service.$refObs).toEqual(jasmine.any(Observable));
   });
-
 
 });

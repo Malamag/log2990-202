@@ -1,10 +1,9 @@
-import { Injectable, ElementRef} from '@angular/core';
+import { ElementRef, Injectable} from '@angular/core';
 
 import { Canvas } from '../../models/Canvas.model';
 
 import { Subject } from 'rxjs';
 import { colorCircles } from '../../palette';
-
 
 @Injectable({
   providedIn: 'root'
@@ -15,25 +14,25 @@ export class CanvasBuilderService {
   canvSubject = new Subject<Canvas>(); // using rxjs to emit the created canvas to another component
 
   constructor() { }
-  
+
   getDefWidth(): number {
     const DIV = 1.17;
-    return Math.round(window.innerWidth / DIV); //avoids pixel fractions
+    return Math.round(window.innerWidth / DIV); // avoids pixel fractions
   }
 
   getDefHeight(): number {
     const DIV = 1.11; // adjusts after the top bar size
-    return Math.round(window.innerHeight/DIV);
+    return Math.round(window.innerHeight / DIV);
   }
 
   getDefColor(): string {
-    const DEFCOLOR = "ffffff";
+    const DEFCOLOR = 'ffffff';
     return DEFCOLOR;
   }
 
   setCanvasFromForm(widthInput: number, heightInput: number, colorInput: string): void {
     colorInput = '#' + colorInput;
-    this.newCanvas= new Canvas(widthInput, heightInput, colorInput); // a fresh draw is always clean
+    this.newCanvas = new Canvas(widthInput, heightInput, colorInput); // a fresh draw is always clean
   }
 
   getDefCanvas(): Canvas {
@@ -47,8 +46,8 @@ export class CanvasBuilderService {
   getPalleteAttributes() {
     const CENTERX = 30; // Centre cx, defines spaces between color palette dots
     let space = CENTERX;
-    for(let i = 0; i < colorCircles.length; ++i){
-    
+    for (let i = 0; i < colorCircles.length; ++i) {
+
       colorCircles[i].cx = space; // modifies palette array containing only 0 values
       space += CENTERX;
     }
@@ -56,8 +55,8 @@ export class CanvasBuilderService {
   }
 
   whipeDraw(myDoodle: ElementRef | undefined): void {
-    if(myDoodle){ // element is defined
-      myDoodle.nativeElement.innerHTML = "";
+    if (myDoodle) { // element is defined
+      myDoodle.nativeElement.innerHTML = '';
     }
   }
 

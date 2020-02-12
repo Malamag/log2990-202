@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { toolsItems, menuItems, welcomeItem } from '../../../functionality';
+import { Component, Input, OnInit } from '@angular/core';
+import { menuItems, toolsItems, welcomeItem } from '../../../functionality';
 
 @Component({
   selector: 'app-user-manual-content',
@@ -18,10 +18,4 @@ export class UserManualContentComponent implements OnInit {
   ngOnInit() {
   }
 
-
-
-
-
 }
-
-
