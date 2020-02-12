@@ -166,18 +166,19 @@ describe('MouseHandlerService', () => {
   });
 
   it('should call the double click observer after a double click',()=>{
-    jasmine.clock().install();
+    jasmine.clock().install(); // setting a clock
     service.isFirstClick = true;
     service.numberOfClicks = 2; //double click
     const spy = spyOn(service, "callObserverDoubleClick");
     
     
     service.up(mouseEventStub);
-    jasmine.clock().tick(201);
+    const TIME = 200; // the function's timeout
+    jasmine.clock().tick(TIME+1); // waiting a bit longer
     
     
     expect(spy).toHaveBeenCalled();
-    jasmine.clock().uninstall();
+    jasmine.clock().uninstall(); // remove the clock
   });
 
   it('should call an observer if the mouse is outside the canvas', ()=>{

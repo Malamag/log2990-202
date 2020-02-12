@@ -23,7 +23,6 @@ describe('LineService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        LineService,
         {provide: String, useValue: ""},
         {provide: Boolean, useValue: true},
         {provide: Number, useValue: 0},
@@ -171,11 +170,15 @@ describe('LineService', () => {
   });
 
   it('should call a forced angle if chosen', ()=>{  
-    service.forcedAngle = true;
-    ptArr.push(new Point(0,2)); // adding arbitrary points
-    ptArr.push(new Point(1,2));
+    service.forcedAngle = true; // option choosen
+  
+    service.pointAtForcedAngle = ()=> new Point(0,0);
     const spy = spyOn(service, "pointAtForcedAngle");
+    
     service.createPath(ptArr, false);
+    expect(ptArr[0]).toEqual(ptA);
+    expect(ptArr[1]).toEqual(ptB);
+    expect(service.forcedAngle).toBeTruthy();
     expect(spy).toHaveBeenCalled();
   });
 
