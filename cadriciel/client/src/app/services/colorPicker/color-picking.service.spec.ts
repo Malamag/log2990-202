@@ -614,8 +614,8 @@ describe('ColorPickingService', () => {
   });
 
   it('should update the hex input on slider change', ()=>{
-    service.cData = colorData; // make sure to start with fresh values
-
+    service.cData.primaryColor='ffffffff';
+    service.cData.secondaryColor = '000000ff';
 
     const spy = spyOn(service, "hexInputDisplayRefresh");
     const spyWrite = spyOn(service, "writeColorSlider");
