@@ -29,32 +29,46 @@ export const colorData = {
     isValideInput : false,
     rectOffsetFill : 'none',
     swapStrokeStyle : 'white',
-    // Ascii table number of hex
-    hexNumber : [   48, // 0
-                    49, // 1
-                    50, // 2
-                    51, // 3
-                    52, // 4
-                    53, // 5
-                    54, // 6
-                    55, // 7
-                    56, // 8
-                    57, // 9
-                    65, // a
-                    66, // b
-                    67, // c
-                    68, // d
-                    69, // e
-                    70, // f
-                    8], // backspace
-    lastColorRects : [  { x: 0, y: 0, fill: 'none'},
-                        { x: 40, y: 0, fill: 'none'},
-                        { x: 80, y: 0, fill: 'none'},
-                        { x: 120, y: 0, fill: 'none'},
-                        { x: 160, y: 0, fill: 'none'},
-                        { x: 0, y: 25, fill: 'none'},
-                        { x: 40, y: 25, fill: 'none'},
-                        { x: 80, y: 25, fill: 'none'},
-                        { x: 120, y: 25, fill: 'none'},
-                        { x: 160, y: 25, fill: 'none'}]
+    //Ascii table number of hex 
+    hexNumber : [   48,//0
+                    49,//1
+                    50,//2
+                    51,//3
+                    52,//4
+                    53,//5
+                    54,//6
+                    55,//7
+                    56,//8
+                    57,//9
+                    65,//a
+                    66,//b
+                    67,//c
+                    68,//d
+                    69,//e
+                    70,//f
+                    8],//backspace
+    lastColorRects : [  { x: 0, y: 0, fill:'none'},
+                        { x: 40, y:0, fill:'none'},
+                        { x: 80, y:0, fill:'none'},
+                        { x: 120, y:0, fill:'none'},
+                        { x: 160, y:0, fill:'none'},
+                        { x: 0, y:25, fill:'none'},
+                        { x: 40, y:25, fill:'none'},
+                        { x: 80, y:25, fill:'none'},
+                        { x: 120, y:25, fill:'none'},
+                        { x: 160, y:25, fill:'none'}],
+    MAX_RGB_VALUE : 255,
+    MIN_RGB_VALUE : 0,
+    MIN_HUE_VALUE : 0,
+    MAX_HUE_VALUE : 360,
+    MIN_SATURATION_VALUE : 0,
+    MAX_SATURATION_VALUE : 1,
+    MIN_LIGHTNESS_VALUE : 0,
+    MAX_LIGHTNESS_VALUE : 1,
+    RGBA_TO_HEX_ALPHA_MODIFIER : 255,
+    HEX_NUMBER_LETTER_MIN_VALUE : 10,
+    ASCII_A :  65,
+    ASCII_a :  97,
+    ASCII_0 :  48,
+    HEX_NUMBER_MAX_LENGTH : 9
 }
