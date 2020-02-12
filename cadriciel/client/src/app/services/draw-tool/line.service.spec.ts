@@ -169,13 +169,16 @@ describe('LineService', () => {
     expect(spy).not.toHaveBeenCalled(); // it was a double click, cutting the line
   });
 
+  // for some reason, the test never passes.
+  // spied on data and its always defined
   it('should call a forced angle if chosen', ()=>{  
-    service.forcedAngle = true; // option choosen
-  
-    service.pointAtForcedAngle = ()=> new Point(0,0);
-    const spy = spyOn(service, "pointAtForcedAngle");
     
+    service.forcedAngle = true; // option choosen
+    service.currentPos = ptB;
+    
+    const spy = spyOn(service, "pointAtForcedAngle");
     service.createPath(ptArr, false);
+    
     expect(ptArr[0]).toEqual(ptA);
     expect(ptArr[1]).toEqual(ptB);
     expect(service.forcedAngle).toBeTruthy();
