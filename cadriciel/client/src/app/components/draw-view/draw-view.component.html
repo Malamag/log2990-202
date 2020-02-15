@@ -9,8 +9,8 @@
       <app-tool-attributes id="toolAttributes"></app-tool-attributes>
     </nav>
   
-    <main id = "working-space" #workingSpace>
-        <app-svg-draw></app-svg-draw>
+    <main id = "working-space" #workingSpace (scroll)="adaptWindowSize()">
+        <app-svg-draw ></app-svg-draw>
     </main>
   </div>
   
