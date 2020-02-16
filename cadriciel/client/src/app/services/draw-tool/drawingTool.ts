@@ -14,8 +14,6 @@ export abstract class DrawingTool extends InputObserver {
     isDown: boolean;
     currentPath: Point[];
     selected: boolean;
-    width: number;
-    primary_color: string;
     ignoreNextUp: boolean;
     inProgress: HTMLElement;
     drawing: HTMLElement;
@@ -27,15 +25,12 @@ export abstract class DrawingTool extends InputObserver {
 
     abstract createPath(path: Point[], doubleClickCheck?: boolean): void;
 
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, width: number, primary_color: string, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService) {
 
       super(shortcut, selected);
       this.interaction = interaction;
       this.inProgress = inProgess;
       this.drawing = drawing;
-
-      this.width = width;
-      this.primary_color = primary_color;
 
       this.isDown = false;
       this.currentPath = [];

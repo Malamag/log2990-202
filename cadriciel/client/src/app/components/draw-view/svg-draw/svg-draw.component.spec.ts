@@ -54,13 +54,11 @@ describe('SvgDrawComponent', () => {
   });
 
   it('should deselect all tools', () => {
-    const color1 = '1167B1';
-    const color2 = '000000';
     const name1 = 'Pencil'
     const name2 = 'rect'
 
-    const pencil = new PencilService(component.workingSpace, component.workingSpace, true, 67, color1, 10, component.interaction, component.colorPick)
-    const rect = new RectangleService(component.workingSpace, component.workingSpace, true, 65, color1, color2, 0, 68, component.interaction, component.colorPick)
+    const pencil = new PencilService(component.workingSpace, component.workingSpace, true, 10, component.interaction, component.colorPick)
+    const rect = new RectangleService(component.workingSpace, component.workingSpace, true, 68, component.interaction, component.colorPick)
     const mapTest = new Map()
     mapTest.set(name1, pencil)
     mapTest.set(name2, rect)

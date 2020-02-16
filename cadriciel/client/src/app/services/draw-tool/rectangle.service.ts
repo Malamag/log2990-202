@@ -11,16 +11,13 @@ import { Point } from './point';
 })
 export class RectangleService extends DrawingTool {
 
-  secondary_color: string;
   isSquare: boolean;
-  renderMode: number;
+  
   attr: FormsAttribute
 
-  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, width: number, primary_color: string, secondary_color: string, renderMode: number, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService) {
+  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService) {
 
-    super(inProgess, drawing, selected, width, primary_color, shortcut, interaction, colorPick);
-    this.secondary_color = secondary_color;
-    this.renderMode = renderMode;
+    super(inProgess, drawing, selected, shortcut, interaction, colorPick);
     this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS)
     this.isSquare = false;
     this.updateColors()

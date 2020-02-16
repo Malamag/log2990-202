@@ -10,16 +10,13 @@ import { Point } from './point';
 })
 export class BrushService extends PencilService {
 
-  textureNumber: number;
-
   textures: {type: string, intensity: number, frequency: number}[];
   attr: ToolsAttributes
-  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, width: number, primary_color: string, textureNumber: number, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService) {
+  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService) {
 
-    super(inProgess, drawing, selected, width, primary_color, shortcut, interaction, colorPick);
+    super(inProgess, drawing, selected, shortcut, interaction, colorPick);
     this.updateColors()
     this.updateAttributes()
-    this.textureNumber = textureNumber;
     this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)
     // values used as texture presets
     this.textures = [
