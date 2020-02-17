@@ -1,18 +1,17 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { InteractionTool } from '../interactionTool';
 import {Subject } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class ExportService extends InteractionTool {
+export class ExportService{
   currentDraw: ElementRef;
 
   ask: Subject<boolean>; // only used for data emission
 
   constructor() {
-    super();
+    
     this.ask = new Subject<boolean>();
   }
 
@@ -22,6 +21,10 @@ export class ExportService extends InteractionTool {
 
 
   getDrawing(): SVGElement {
-    return super.getSVGElementFromRef(this.currentDraw);
+    return this.getSVGElementFromRef(this.currentDraw);
+  }
+
+  getSVGElementFromRef(el: ElementRef): SVGElement {
+    return el.nativeElement;
   }
 }
