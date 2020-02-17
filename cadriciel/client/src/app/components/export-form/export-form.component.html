@@ -1,3 +1,19 @@
 <!--Only used for data conversion. We dont want to actually SEE a canvas element.-->
-<canvas [ngStyle]="{'display': 'none'}"></canvas> 
 
+
+<div class="form-container">
+    <h1>Exporter un dessin</h1>
+    <mat-form-field>
+        <mat-label>Format d'exportation</mat-label>
+        <mat-select>
+            <mat-option *ngFor="let format of formats" [value]="format.type">
+                {{format.view}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <h5>Appliquer un filtre</h5>
+    <!--ngfor des types de filtres-->
+
+    <!--preview-->
+    <canvas [ngStyle]="{'display': 'none'}"></canvas> 
+</div>

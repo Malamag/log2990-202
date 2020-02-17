@@ -30,7 +30,8 @@ import {
     MatSliderModule,
     MatSnackBarModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule
 } from '@angular/material';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
 import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
@@ -71,6 +72,7 @@ import { ExportService } from './services/exportation/export.service';
         MatSliderModule,
         MatTooltipModule,
         MatRadioModule,
+        MatSelectModule,
         AppRoutingModule
     ],
     providers: [
