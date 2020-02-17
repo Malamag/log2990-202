@@ -23,7 +23,7 @@ export class UndoRedoService extends InteractionTool{
   }
   undo(){
     if(this.done.length && this.done[length-1]!== null){
-      let elem = this.done.pop();
+      let elem:Element = this.done.pop();
       this.drawing.innerHTML="";
       this.done.forEach(elem=>{
         this.render.appendChild(this.drawing, elem);
@@ -33,7 +33,7 @@ export class UndoRedoService extends InteractionTool{
   }
   redo(){
     if(this.undone.length){
-      let elem = this.undone.pop();
+      let elem:Element = this.undone.pop();
       this.render.appendChild(this.drawing, elem);
       this.done.push(elem);
     }
