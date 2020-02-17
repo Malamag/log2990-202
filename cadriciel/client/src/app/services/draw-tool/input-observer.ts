@@ -3,7 +3,8 @@ import { Point } from './point';
 
 export abstract class InputObserver {
 
-    constructor( selected: boolean) {
+    constructor(selected: boolean) {
+        
         this.selected = selected;
     }
     shortcut: number;
