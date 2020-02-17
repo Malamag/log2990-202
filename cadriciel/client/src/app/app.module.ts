@@ -39,6 +39,7 @@ import { ToolAttributesComponent } from './components/draw-view/tool-box/tool-at
 import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.component';
 import { ExportFormComponent } from './components/export-form/export-form.component';
 import { ExportService } from './services/exportation/export.service';
+import { PreviewBoxComponent } from './components/preview-box/preview-box.component';
 
 @NgModule({
     declarations: [
@@ -53,7 +54,8 @@ import { ExportService } from './services/exportation/export.service';
         ColorPickerComponent,
         ToolBoxComponent,
         ToolAttributesComponent,
-        ExportFormComponent
+        ExportFormComponent,
+        PreviewBoxComponent
     ],
     imports: [
         BrowserModule,
@@ -84,7 +86,13 @@ import { ExportService } from './services/exportation/export.service';
     ],
 
     bootstrap: [AppComponent],
-    entryComponents: [NewDrawComponent, UserManualComponent, OptionBarComponent, ColorPickerComponent, ExportFormComponent] // components added dynamically
+    entryComponents: [
+        NewDrawComponent, 
+        UserManualComponent, 
+        OptionBarComponent, 
+        ColorPickerComponent, 
+        ExportFormComponent, 
+        PreviewBoxComponent] // components added dynamically
 
 })
 export class AppModule {}
