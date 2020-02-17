@@ -84,7 +84,7 @@ import { ExportService } from './services/exportation/export.service';
     ],
 
     bootstrap: [AppComponent],
-    entryComponents: [NewDrawComponent, UserManualComponent, OptionBarComponent, ColorPickerComponent] // components added dynamically
+    entryComponents: [NewDrawComponent, UserManualComponent, OptionBarComponent, ColorPickerComponent, ExportFormComponent] // components added dynamically
 
 })
 export class AppModule {}
