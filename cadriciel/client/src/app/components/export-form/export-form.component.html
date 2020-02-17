@@ -1,9 +1,14 @@
-<!--Only used for data conversion. We dont want to actually SEE a canvas element.-->
 
 
+<!--TODO: Vignette de preview peut être un component en soi qui se get le svg-->
 <div class="form-container">
     <h1>Exporter un dessin</h1>
     
+    <mat-form-field>
+        <mat-label>Nom du dessin</mat-label>
+        <input matInput>
+    </mat-form-field>
+
     <mat-form-field>
         <mat-label>Format d'exportation</mat-label>
         <mat-select>

@@ -140,6 +140,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
       ()=>{this.exportService.currentDraw = this.svg;}
     );
 
+    
+
   }
 
   ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus
