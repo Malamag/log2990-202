@@ -57,8 +57,8 @@ describe('SvgDrawComponent', () => {
     const name1 = 'Pencil'
     const name2 = 'rect'
 
-    const pencil = new PencilService(component.workingSpace, component.workingSpace, true, 10, component.interaction, component.colorPick)
-    const rect = new RectangleService(component.workingSpace, component.workingSpace, true, 68, component.interaction, component.colorPick)
+    const pencil = new PencilService(component.workingSpace, component.workingSpace, true, component.interaction, component.colorPick)
+    const rect = new RectangleService(component.workingSpace, component.workingSpace, true, component.interaction, component.colorPick)
     const mapTest = new Map()
     mapTest.set(name1, pencil)
     mapTest.set(name2, rect)

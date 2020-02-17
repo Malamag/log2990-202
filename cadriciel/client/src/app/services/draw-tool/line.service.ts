@@ -14,8 +14,8 @@ export class LineService extends DrawingTool {
   currentPos: Point;
   attr: LineAttributes
 
-  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService) {
-    super(inProgess, drawing, selected, shortcut, interaction, colorPick);
+  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
+    super(inProgess, drawing, selected, interaction, colorPick);
     this.attr = new LineAttributes(this.defaultValues.DEFAULTJUNCTION, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTJUNCTIONRADIUS);
     this.forcedAngle = false;
     this.currentPos = new Point(0, 0);

@@ -12,9 +12,9 @@ export class BrushService extends PencilService {
 
   textures: {type: string, intensity: number, frequency: number}[];
   attr: ToolsAttributes
-  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService) {
+  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
 
-    super(inProgess, drawing, selected, shortcut, interaction, colorPick);
+    super(inProgess, drawing, selected, interaction, colorPick);
     this.updateColors()
     this.updateAttributes()
     this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE)

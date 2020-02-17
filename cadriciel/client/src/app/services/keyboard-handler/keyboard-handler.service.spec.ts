@@ -11,12 +11,13 @@ describe('KeyboardHandlerService', () => {
       keyCode: 0
     }
     observerStub = {
-      shortcut: 0,
+      
       selected: true,
 
       update: () => 0,
       cancel: () => 0
     }
+    
 
     TestBed.configureTestingModule({
       providers: [{provide: InputObserver, useValue: observerStub}]
