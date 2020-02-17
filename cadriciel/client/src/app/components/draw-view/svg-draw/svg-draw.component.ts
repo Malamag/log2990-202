@@ -69,10 +69,10 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     // Create all the tools
     const tc = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
 
-    const pencil = tc.CreatePencil(true, 67, this.interaction, this.colorPick);
-    const rect = tc.CreateRectangle(false, 49, this.interaction, this.colorPick);
-    const line = tc.CreateLine(false, 76, this.interaction, this.colorPick);
-    const brush = tc.CreateBrush(false, 87, this.interaction, this.colorPick);
+    const pencil = tc.CreatePencil(true, this.interaction, this.colorPick);
+    const rect = tc.CreateRectangle(false, this.interaction, this.colorPick);
+    const line = tc.CreateLine(false, this.interaction, this.colorPick);
+    const brush = tc.CreateBrush(false, this.interaction, this.colorPick);
 
     this.toolsContainer.set('Rectangle', rect);
     this.toolsContainer.set('Ligne', line);

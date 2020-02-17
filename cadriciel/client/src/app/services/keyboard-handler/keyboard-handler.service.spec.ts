@@ -11,7 +11,6 @@ describe('KeyboardHandlerService', () => {
       keyCode: 0
     }
     observerStub = {
-      shortcut: 0,
       selected: true,
 
       update: () => 0,
