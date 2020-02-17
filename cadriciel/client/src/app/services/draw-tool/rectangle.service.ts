@@ -15,9 +15,9 @@ export class RectangleService extends DrawingTool {
   
   attr: FormsAttribute
 
-  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService) {
+  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
 
-    super(inProgess, drawing, selected, shortcut, interaction, colorPick);
+    super(inProgess, drawing, selected, interaction, colorPick);
     this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS)
     this.isSquare = false;
     this.updateColors()

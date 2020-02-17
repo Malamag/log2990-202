@@ -7,6 +7,7 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import {InputObserver } from './input-observer';
 import { Point } from './point';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,9 +26,9 @@ export abstract class DrawingTool extends InputObserver {
 
     abstract createPath(path: Point[], doubleClickCheck?: boolean): void;
 
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
 
-      super(shortcut, selected);
+      super(selected);
       this.interaction = interaction;
       this.inProgress = inProgess;
       this.drawing = drawing;
@@ -87,6 +88,7 @@ export abstract class DrawingTool extends InputObserver {
 
       // add it to the main drawing
       this.drawing.innerHTML += d;
+      this.interaction.emitDone();
       // clear current progress
       this.inProgress.innerHTML = '';
 

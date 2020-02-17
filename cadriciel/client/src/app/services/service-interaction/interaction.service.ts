@@ -13,6 +13,8 @@ export class InteractionService {
 
   formsAttributes = new Subject<FormsAttribute>()
   $formsAttributes = this.formsAttributes.asObservable()
+  drawingDone= new Subject<boolean>();
+  $drawingDone= this.drawingDone.asObservable()
 
   toolsAttributes = new Subject<ToolsAttributes>()
   $toolsAttributes = this.toolsAttributes.asObservable()
@@ -50,5 +52,8 @@ export class InteractionService {
   emitRef(el: ElementRef) {
 
     this.ref.next(el)
+  }
+  emitDone(){
+    this.drawingDone.next(true);
   }
 }

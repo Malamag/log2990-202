@@ -20,19 +20,19 @@ export class ToolCreator {
     this.drawing = drawing;
   }
 
-  CreatePencil(selected: boolean, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService): PencilService {
-    return new PencilService(this.inProgress, this.drawing, selected, shortcut, interaction, colorPick);
+  CreatePencil(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): PencilService {
+    return new PencilService(this.inProgress, this.drawing, selected, interaction, colorPick);
   }
 
-  CreateRectangle(selected: boolean, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService): RectangleService {
-    return new RectangleService(this.inProgress, this.drawing, selected, shortcut, interaction, colorPick);
+  CreateRectangle(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): RectangleService {
+    return new RectangleService(this.inProgress, this.drawing, selected, interaction, colorPick);
   }
 
-  CreateLine(selected: boolean, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService): LineService {
-    return new LineService(this.inProgress, this.drawing, selected, shortcut, interaction, colorPick);
+  CreateLine(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): LineService {
+    return new LineService(this.inProgress, this.drawing, selected, interaction, colorPick);
   }
 
-  CreateBrush(selected: boolean, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService): BrushService {
-    return new BrushService(this.inProgress, this.drawing, selected, shortcut, interaction, colorPick);
+  CreateBrush(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): BrushService {
+    return new BrushService(this.inProgress, this.drawing, selected, interaction, colorPick);
   }
 }
