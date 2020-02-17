@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { ExportService } from 'src/app/services/exportation/export.service';
+import { FormGroup } from '@angular/forms';
 
 interface Formats {
   type: string,
@@ -22,15 +23,18 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
 
   constructor(private exportService: ExportService) { }
   draw: SVGElement;
+  exportForm: FormGroup;
 
   ngOnInit() {
     // get the element
     this.exportService.askForDoodle();
-    
   }
 
   ngAfterViewInit() {
     this.draw = this.exportService.getDrawing();
+    this.export.nativeElement.innerHTML = this.draw.outerHTML;
   }
+
+ 
 
 }

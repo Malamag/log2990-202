@@ -1,16 +1,15 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { InteractionTool } from '../interactionTool';
-import { Subscription, Subject } from 'rxjs';
+import {Subject } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExportService extends InteractionTool {
-  frameSubscription: Subscription;
   currentDraw: ElementRef;
 
-  ask: Subject<boolean>
+  ask: Subject<boolean>; // only used for data emission
 
   constructor() {
     super();
@@ -18,7 +17,7 @@ export class ExportService extends InteractionTool {
   }
 
   askForDoodle() {
-    this.ask.next(true); //
+    this.ask.next(true); // are telling the svg draw component that we want to access the doodle
   }
 
 
