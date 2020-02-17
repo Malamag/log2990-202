@@ -65,7 +65,7 @@ export class RectangleService extends DrawingTool {
     // in case we changed tool while the mouse was down
     if (!this.ignoreNextUp) {
 
-      // the pencil should not affect the canvas
+      // the rectangle should not affect the canvas
       this.isDown = false;
 
       // add everything to the canvas
@@ -86,9 +86,9 @@ export class RectangleService extends DrawingTool {
     }
   }
 
-  // mouse doubleClick with pencil in hand
+  // mouse doubleClick with rectangle in hand
   doubleClick(position: Point) {
-    // since its down -> up -> down -> up -> doubleClick, nothing more happens for the renctangle
+    // since its down -> up -> down -> up -> doubleClick, nothing more happens for the rectangle
   }
 
   // when we go from inside to outside the canvas

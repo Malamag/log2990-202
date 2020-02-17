@@ -20,6 +20,7 @@ export class ToolBoxComponent implements OnInit {
     this.selectingToolsMap.set('c', 'Crayon');
     this.selectingToolsMap.set('w', 'Pinceau');
     this.selectingToolsMap.set('l', 'Ligne');
+    this.selectingToolsMap.set('3', 'Polygone');
   }
 
   @HostListener('document: keydown', ['$event'])
@@ -32,7 +33,7 @@ export class ToolBoxComponent implements OnInit {
   ngOnInit() {
 
   }
-
+  
   buttonAction(name: string) { // on click, emit the selected tool name
     this.interactionService.emitSelectedTool(name);
   }
