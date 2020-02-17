@@ -17,6 +17,7 @@ describe('KeyboardHandlerService', () => {
       update: () => 0,
       cancel: () => 0
     }
+    
 
     TestBed.configureTestingModule({
       providers: [{provide: InputObserver, useValue: observerStub}]
