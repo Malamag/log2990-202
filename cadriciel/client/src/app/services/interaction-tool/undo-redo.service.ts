@@ -23,26 +23,26 @@ export class UndoRedoService extends InteractionTool{
   }
   undo(){
     if(this.done.length && this.done[length-1]!== null){
-      let elem:Element = this.done.pop();
+      let elem = this.done.pop();
       this.drawing.innerHTML="";
-      this.done.forEach(elem=>{
+      this.done.forEach((elem)=>{
         this.render.appendChild(this.drawing, elem);
       })
-      this.undone.push(elem);
+      if(elem)
+        this.undone.push(elem);
     }
   }
   redo(){
-    if(this.undone.length){
-      let elem:Element = this.undone.pop();
-      this.render.appendChild(this.drawing, elem);
+    let elem = this.undone.pop();
+    this.render.appendChild(this.drawing, elem);
+    if(elem)
       this.done.push(elem);
-    }
   }
   apply(name: string){
     if(name === 'Annuler'){
       this.undo();
     }
-    if(name === 'Refaire'){
+    else if(name === 'Refaire'){
       this.redo();
     }
   }

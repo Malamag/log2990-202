@@ -25,6 +25,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   backColor: string;
 
   toolsContainer = new Map();
+  interactionToolsContainer= new Map();
 
   @ViewChild('inPrgress', {static: false})inProgress: ElementRef
   @ViewChild('canvas', {static: false})svg: ElementRef
@@ -75,7 +76,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     const line = tc.CreateLine(false, this.interaction, this.colorPick);
     const brush = tc.CreateBrush(false, this.interaction, this.colorPick);
     const undoRedo: UndoRedoService = new UndoRedoService(this.interaction,this.frameRef.nativeElement,this.render);
-    this.toolsContainer.set('AnnulerRefaire', undoRedo)
+    this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
     this.toolsContainer.set('Rectangle', rect);
     this.toolsContainer.set('Ligne', line);
     this.toolsContainer.set('Pinceau', brush);
@@ -86,13 +87,14 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     })
     this.interaction.$selectedTool.subscribe((toolName) => {
-      if (this.toolsContainer.get(toolName)) {
+      if(toolName ==='Annuler'||toolName === 'Refaire'){
+        this.interactionToolsContainer.get('AnnulerRefaire').apply(toolName);
+      }
+      else if (this.toolsContainer.get(toolName)) {
         this.closeTools(this.toolsContainer);
-        if(toolName === 'Annuler' || toolName === 'Refaire'){
-          this.toolsContainer.get('AnnulerRefaire').apply(toolName);
-        }
         this.toolsContainer.get(toolName).selected = true;
       }
+      
     })
 
     // Subscribe each tool to keyboard and mouse
