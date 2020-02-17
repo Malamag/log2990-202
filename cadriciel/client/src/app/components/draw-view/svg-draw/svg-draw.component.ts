@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, Renderer2} from '@angular/core';
 import { Subscription} from 'rxjs';
 import { Canvas } from 'src/app/models/Canvas.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
@@ -8,6 +8,7 @@ import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.se
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
+import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.service';
 
 @Component({
   selector: 'app-svg-draw',
@@ -16,7 +17,7 @@ import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handl
 })
 export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor(private canvBuilder: CanvasBuilderService, public interaction: InteractionService, public colorPick: ColorPickingService) { }
+  constructor(private canvBuilder: CanvasBuilderService, public interaction: InteractionService, public colorPick: ColorPickingService, private render: Renderer2) { }
   canvas: Canvas;
   canvasSubscr: Subscription;
   width: number;
@@ -73,7 +74,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     const rect = tc.CreateRectangle(false, this.interaction, this.colorPick);
     const line = tc.CreateLine(false, this.interaction, this.colorPick);
     const brush = tc.CreateBrush(false, this.interaction, this.colorPick);
-
+    const undoRedo: UndoRedoService = new UndoRedoService(this.interaction,this.frameRef.nativeElement,this.render);
+    this.toolsContainer.set('AnnulerRefaire', undoRedo)
     this.toolsContainer.set('Rectangle', rect);
     this.toolsContainer.set('Ligne', line);
     this.toolsContainer.set('Pinceau', brush);
@@ -86,6 +88,9 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     this.interaction.$selectedTool.subscribe((toolName) => {
       if (this.toolsContainer.get(toolName)) {
         this.closeTools(this.toolsContainer);
+        if(toolName === 'Annuler' || toolName === 'Refaire'){
+          this.toolsContainer.get('AnnulerRefaire').apply(toolName);
+        }
         this.toolsContainer.get(toolName).selected = true;
       }
     })

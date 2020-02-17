@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { toolsItems } from '../../../functionality';
 @Component({
@@ -12,7 +12,6 @@ export class ToolBoxComponent implements OnInit {
 
   // I doubt if we can delete these two
   @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
-  renderer: Renderer2
   selectingToolsMap = new Map();
 
   constructor(public interactionService: InteractionService) {
@@ -20,10 +19,18 @@ export class ToolBoxComponent implements OnInit {
     this.selectingToolsMap.set('c', 'Crayon');
     this.selectingToolsMap.set('w', 'Pinceau');
     this.selectingToolsMap.set('l', 'Ligne');
+    this.selectingToolsMap.set('u','Annuler');
+    this.selectingToolsMap.set('r','Refaire');
   }
 
   @HostListener('document: keydown', ['$event'])
   updateBoard(event: KeyboardEvent) {
+    if (event.shiftKey && event.key === 'z') {
+      this.buttonAction(this.selectingToolsMap.get('u'))
+    }
+    else if (event.shiftKey && event.key==='z' && event.ctrlKey) {
+      this.buttonAction(this.selectingToolsMap.get('r'))
+    }
     if (this.selectingToolsMap.has(event.key)) {
       this.buttonAction(this.selectingToolsMap.get(event.key))
     }
