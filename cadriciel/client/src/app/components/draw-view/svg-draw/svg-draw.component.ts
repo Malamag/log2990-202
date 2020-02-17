@@ -8,6 +8,7 @@ import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.se
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
+import { ExportService } from 'src/app/services/exportation/export.service';
 
 @Component({
   selector: 'app-svg-draw',
@@ -16,7 +17,12 @@ import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handl
 })
 export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor(private canvBuilder: CanvasBuilderService, public interaction: InteractionService, public colorPick: ColorPickingService) { }
+  constructor(
+    private canvBuilder: CanvasBuilderService, 
+    public interaction: InteractionService, 
+    public colorPick: ColorPickingService,
+    public exportService: ExportService) { }
+
   canvas: Canvas;
   canvasSubscr: Subscription;
   width: number;
@@ -26,9 +32,12 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   toolsContainer = new Map();
 
   @ViewChild('inPrgress', {static: false})inProgress: ElementRef
-  @ViewChild('canvas', {static: false})svg: ElementRef
+  @ViewChild('canvas', {static: false}) svg: ElementRef
+
 
   @ViewChild('frame', {static: false}) frameRef: ElementRef;
+  
+
   workingSpace: HTMLElement
 
   ngOnInit() {
@@ -40,11 +49,16 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
+
+
   closeTools(map: Map<string, DrawingTool>) {
     map.forEach((el) => {
       el.selected = false;
     })
   }
+
+  
+
 
   initCanvas() {
     this.canvasSubscr = this.canvBuilder.canvSubject.subscribe(
@@ -60,6 +74,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     );
     this.canvBuilder.emitCanvas();
   }
+
 
   ngAfterViewInit() {
 
@@ -121,10 +136,15 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     window.dispatchEvent(new Event('resize'));
 
+    this.exportService.ask.subscribe(
+      ()=>{this.exportService.currentDraw = this.svg;}
+    );
+
   }
 
   ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus
     this.canvasSubscr.unsubscribe();
+
 
   }
 

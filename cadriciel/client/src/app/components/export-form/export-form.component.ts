@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { ExportService } from 'src/app/services/exportation/export.service';
 
 interface Formats {
   type: string,
@@ -10,17 +11,26 @@ interface Formats {
   templateUrl: './export-form.component.html',
   styleUrls: ['./export-form.component.scss']
 })
-export class ExportFormComponent implements OnInit {
+export class ExportFormComponent implements OnInit, AfterViewInit {
   formats: Formats[] = [
     {type: "jpeg", view: ".jpeg"},
     {type: "png", view: ".png"},
     {type: "svg", view: ".svg"}
   ];
+  
+  @ViewChild('imgBox', {static:false}) export: ElementRef; // has an eye on the <canvas> element
 
-  constructor() { }
+  constructor(private exportService: ExportService) { }
+  draw: SVGElement;
 
   ngOnInit() {
-  
+    // get the element
+    this.exportService.askForDoodle();
+    
+  }
+
+  ngAfterViewInit() {
+    this.draw = this.exportService.getDrawing();
   }
 
 }
