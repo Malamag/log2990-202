@@ -23,7 +23,7 @@ export abstract class DrawingTool extends InputObserver {
     chosenColor: ChoosenColors
     colorSub: Subscription
 
-    abstract createPath(path: Point[], doubleClickCheck?: boolean): void;
+    abstract createPath(path: Point[], doubleClickCheck?: boolean, removePerimeter?:boolean): void;
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, shortcut: number, interaction: InteractionService, colorPick: ColorPickingService) {
 
@@ -69,7 +69,7 @@ export abstract class DrawingTool extends InputObserver {
     }
 
     // render the current progress
-    updateProgress(wasDoubleClick?: boolean) {
+    updateProgress(wasDoubleClick?: boolean, removePerimeter?:boolean) {
 
       // create an svg element from the current path
       let d = '';
@@ -79,11 +79,11 @@ export abstract class DrawingTool extends InputObserver {
     }
 
     // add the progress to the main drawing
-    updateDrawing(wasDoubleClick?: boolean) {
+    updateDrawing(endIt?: boolean) {
 
       // create the final svg element
       let d = '';
-      d += this.createPath(this.currentPath, wasDoubleClick);
+      d += this.createPath(this.currentPath, endIt);
 
       // add it to the main drawing
       this.drawing.innerHTML += d;
