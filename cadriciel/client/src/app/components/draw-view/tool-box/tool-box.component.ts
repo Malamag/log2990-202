@@ -25,7 +25,16 @@ export class ToolBoxComponent implements OnInit {
 
   @HostListener('document: keydown', ['$event'])
   updateBoard(event: KeyboardEvent) {
-    if (this.selectingToolsMap.has(event.key)) {
+    // keyCode 90 for z
+    if(event.ctrlKey && event.keyCode ===90){
+      if(event.shiftKey){
+        this.buttonAction(this.selectingToolsMap.get('r'));
+      }
+      else{
+      this.buttonAction(this.selectingToolsMap.get('u'));
+      }
+    }
+    else if (this.selectingToolsMap.has(event.key)) {
       this.buttonAction(this.selectingToolsMap.get(event.key))
     }
   }

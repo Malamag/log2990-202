@@ -22,7 +22,7 @@ export class UndoRedoService extends InteractionTool{
     })
   }
   undo(){
-    if(this.done.length && this.done[length-1]!== null){
+    if(this.done.length){
       let elem = this.done.pop();
       this.drawing.innerHTML="";
       this.done.forEach((elem)=>{
@@ -33,10 +33,12 @@ export class UndoRedoService extends InteractionTool{
     }
   }
   redo(){
-    let elem = this.undone.pop();
-    this.render.appendChild(this.drawing, elem);
-    if(elem)
-      this.done.push(elem);
+    if(this.undone.length){
+      let elem = this.undone.pop();
+      this.render.appendChild(this.drawing, elem);
+      if(elem)
+        this.done.push(elem);
+    }
   }
   apply(name: string){
     if(name === 'Annuler'){
