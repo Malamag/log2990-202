@@ -10,7 +10,7 @@
 
             <mat-form-field>
                 <mat-label for="formatSel">Format d'exportation</mat-label>
-                <mat-select formControlName="formatSel" >
+                <mat-select formControlName="formatSel" required>
                     <mat-option *ngFor="let format of formats" [value]="format.type">
                         {{format.view}}
                     </mat-option>
@@ -26,6 +26,8 @@
             Here goes the preview box
             <!--<app-preview-box></app-preview-box>-->
         </div>
-        <button mat-button (click)="onSubmit()">Click</button>
+        <button mat-raised-button color="primary"(click)="onSubmit()" [disabled]="exportForm.invalid">Exporter</button>
+        <button mat-button id="quitButton" (click)="closeForm()">Cancel</button>
     </div>
+    
 </div>

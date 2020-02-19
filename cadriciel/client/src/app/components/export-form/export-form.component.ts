@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 
 interface Formats {
   type: string,
@@ -21,12 +22,14 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
   
   @ViewChild('imgBox', {static:false}) export: ElementRef; // has an eye on the <canvas> element
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private winService: ModalWindowService) { }
   
   exportForm: FormGroup;
 
   ngOnInit() {
-    // get the element
+
     this.initForm();
     
   }
@@ -34,7 +37,7 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
   initForm() {
     this.exportForm = this.formBuilder.group({
       doodleName:['Dessin sans titre', Validators.required],
-      formatSel: ['', Validators.required]
+      formatSel: [null, Validators.required]
     })
   }
 
@@ -44,7 +47,13 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
   onSubmit() {
     const FORMVAL = this.exportForm.value;
     console.log(FORMVAL);
+    // call the conversion & download functions from service with the givent values
+    this.closeForm();
 
+  }
+
+  closeForm() {
+    this.winService.closeWindow();
   }
 
 
