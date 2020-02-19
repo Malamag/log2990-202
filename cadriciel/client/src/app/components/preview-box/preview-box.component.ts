@@ -8,6 +8,7 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
 })
 export class PreviewBoxComponent implements OnInit, AfterViewInit {
   draw: SVGElement;
+
   
   @ViewChild('imgBox', {static:false}) export: ElementRef; // has an eye on the <canvas> element
  
@@ -19,7 +20,8 @@ export class PreviewBoxComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.draw = this.doodleFetch.getDrawing();
-    this.export.nativeElement.innerHTML = this.draw.innerHTML;
+
+    this.export.nativeElement.innerHTML = this.draw.outerHTML;
   }
   
 

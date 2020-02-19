@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 interface Formats {
   type: string,
@@ -21,16 +21,30 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
   
   @ViewChild('imgBox', {static:false}) export: ElementRef; // has an eye on the <canvas> element
 
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) { }
   
   exportForm: FormGroup;
 
   ngOnInit() {
     // get the element
+    this.initForm();
     
   }
 
+  initForm() {
+    this.exportForm = this.formBuilder.group({
+      doodleName:['Dessin sans titre', Validators.required],
+      formatSel: ['', Validators.required]
+    })
+  }
+
   ngAfterViewInit() {
+  }
+
+  onSubmit() {
+    const FORMVAL = this.exportForm.value;
+    console.log(FORMVAL);
+
   }
 
 
