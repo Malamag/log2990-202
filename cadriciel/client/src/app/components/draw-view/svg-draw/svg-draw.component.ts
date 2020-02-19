@@ -8,7 +8,7 @@ import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.se
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
-import { ExportService } from 'src/app/services/exportation/export.service';
+import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 
 @Component({
   selector: 'app-svg-draw',
@@ -21,7 +21,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     private canvBuilder: CanvasBuilderService, 
     public interaction: InteractionService, 
     public colorPick: ColorPickingService,
-    public exportService: ExportService) { }
+    private doodleFetch: DoodleFetchService) { }
 
   canvas: Canvas;
   canvasSubscr: Subscription;
@@ -136,8 +136,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     window.dispatchEvent(new Event('resize'));
 
-    this.exportService.ask.subscribe(
-      ()=>{this.exportService.currentDraw = this.svg;}
+    this.doodleFetch.ask.subscribe(
+      ()=>{this.doodleFetch.currentDraw = this.svg;}
     );
 
     
