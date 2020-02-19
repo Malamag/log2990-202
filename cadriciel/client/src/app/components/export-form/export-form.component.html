@@ -1,23 +1,27 @@
 <div class="form-container">
-    <h1>Exporter un dessin</h1>
-    
-    <mat-form-field>
-        <mat-label>Nom du dessin</mat-label>
-        <input matInput>
-    </mat-form-field>
+    <div>
+        <h1>Exporter un dessin</h1>
+        
+        <mat-form-field>
+            <mat-label>Nom du dessin</mat-label>
+            <input matInput>
+        </mat-form-field>
 
-    <mat-form-field>
-        <mat-label>Format d'exportation</mat-label>
-        <mat-select>
-            <mat-option *ngFor="let format of formats" [value]="format.type">
-                {{format.view}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <h5>Appliquer un filtre</h5>
-    <!--ngfor des types de filtres-->
+        <mat-form-field>
+            <mat-label>Format d'exportation</mat-label>
+            <mat-select>
+                <mat-option *ngFor="let format of formats" [value]="format.type">
+                    {{format.view}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <h5>Appliquer un filtre</h5>
+        <!--ngfor des types de filtres-->
 
-    
-    <!--preview-->
-    <app-preview-box></app-preview-box>
+
+        <!--preview-->
+        <div id="prev">
+            <app-preview-box></app-preview-box>
+        </div>
+    </div>
 </div>
