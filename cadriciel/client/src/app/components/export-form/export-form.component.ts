@@ -61,6 +61,7 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
     const NAME = FORMVAL.doodleName;
 
     this.exportation(NAME, TYPE);
+    
 
     this.closeForm();
   }

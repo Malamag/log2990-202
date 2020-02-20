@@ -7,6 +7,7 @@ import { Injectable, ElementRef } from '@angular/core';
 })
 export class ExportService{
 
+  imageURL: string;
 
   constructor() {
     
@@ -36,30 +37,27 @@ export class ExportService{
 
   exportLocal(name:string, type: string, svgElem: SVGElement, canvasRef: ElementRef ) {
     //https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
-    let ctx = canvasRef.nativeElement.getContext('2d');
-    let u = this.svgToURL(svgElem);
-
+    const DOWNLOAD_CANVAS: ElementRef = this.drawInCanvas(svgElem, canvasRef);
     if(type == "svg"){
-      this.download(name, type, u);
-      return;
-    }
-
-    let img = new Image();
-    img.onload = () =>{
-
-      if(ctx){
-        ctx.drawImage(img, 0, 0);
-        let dwn = canvasRef.nativeElement.toDataURL(`image/${type}`)
-        console.log(dwn)
-        this.download(name, type, dwn);
-      }
-    }
-    img.src = u;
-
-
+      this.download(name, type, this.imageURL);
+      
+    }else{
+      let dwn = DOWNLOAD_CANVAS.nativeElement.toDataURL(`image/${type}`)
+      this.download(name, type, dwn);
+    }   
   }
 
-  drawInCanvas(svgElem: SVGElement, canvasRef: ElementRef) {
-
+  drawInCanvas(svgElem: SVGElement, canvasRef: ElementRef): ElementRef {
+    //https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
+    let ctx: CanvasRenderingContext2D = canvasRef.nativeElement.getContext('2d');
+    let img = new Image();
+    this.imageURL = this.svgToURL(svgElem);
+    img.onload = () =>{
+      if(ctx){
+        ctx.drawImage(img, 0, 0);
+      }
+    }
+    img.src = this.imageURL;
+    return canvasRef;
   }
 }
