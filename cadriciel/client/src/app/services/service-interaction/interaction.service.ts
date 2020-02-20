@@ -14,6 +14,9 @@ export class InteractionService {
   formsAttributes = new Subject<FormsAttribute>()
   $formsAttributes = this.formsAttributes.asObservable()
 
+  enableDisableButtons = new Subject<boolean[]>()
+  $enableDisableButtons = this.enableDisableButtons.asObservable()
+
   drawingDone = new Subject<boolean>()
   $drawingDone =this.drawingDone.asObservable()
 
@@ -56,5 +59,8 @@ export class InteractionService {
   }
   emitDrawingDone(){
     this.drawingDone.next(true);
+  }
+  emitEnableDisable(disableContainer: boolean[]){
+    this.enableDisableButtons.next(disableContainer);
   }
 }

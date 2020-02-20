@@ -6,7 +6,6 @@ import { InteractionService } from '../service-interaction/interaction.service';
   providedIn: 'root'
 })
 export class UndoRedoService extends InteractionTool{
-
   constructor(interact: InteractionService, drawing: HTMLElement, render: Renderer2) {
     super(interact, drawing, render);
     this.updateContainer();
@@ -18,6 +17,7 @@ export class UndoRedoService extends InteractionTool{
           this.undone = [];
         }
         this.done.push(this.drawing.lastElementChild);
+        this.updateButtons();
       }
     })
   }
@@ -47,5 +47,13 @@ export class UndoRedoService extends InteractionTool{
     else if(name === 'Refaire'){
       this.redo();
     }
+    this.updateButtons();
+  }
+  updateButtons(){
+    let disableUndo: boolean =true;
+    let disableRedo: boolean= true;
+    (this.done.length)? disableUndo= false : disableUndo = true;
+    (this.undone.length)? disableRedo= false : disableRedo = true;
+    this.interact.emitEnableDisable([disableUndo, disableRedo]);
   }
 }

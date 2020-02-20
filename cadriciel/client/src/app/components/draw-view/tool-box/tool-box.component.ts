@@ -9,7 +9,8 @@ import { toolsItems } from '../../../functionality';
 
 export class ToolBoxComponent implements OnInit {
   funcTools = toolsItems;
-
+  disableUndo:boolean;
+  disableRedo: boolean;
   // I doubt if we can delete these two
   @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
   selectingToolsMap = new Map();
@@ -40,11 +41,14 @@ export class ToolBoxComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.interactionService.$enableDisableButtons.subscribe(disableContainer=>{
+      this.disableUndo = disableContainer[0]
+      this.disableRedo = disableContainer[1]
+    })
   }
 
   buttonAction(name: string) { // on click, emit the selected tool name
     this.interactionService.emitSelectedTool(name);
   }
-
+  
 }
