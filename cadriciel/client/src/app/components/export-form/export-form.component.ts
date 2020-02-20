@@ -32,28 +32,23 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
   
   exportForm: FormGroup;
   doodle: SVGElement;
- 
 
-  cWidth: number;
+  cWidth: number; // attributes to get the correct export size
   cHeigth: number;
 
   ngOnInit() {
-
     this.initForm();
     this.doodleFetch.askForDoodle();
     this.cWidth = this.doodleFetch.widthAttr;
-    this.cHeigth = this.doodleFetch.heightAttr;
-    console.log(this.cWidth)
-    
+    this.cHeigth = this.doodleFetch.heightAttr;    
   }
 
   initForm() {
     this.exportForm = this.formBuilder.group({
       doodleName:['Dessin sans titre', Validators.required],
       formatSel: [null, Validators.required]
-    })
+    });
   }
-  
   
   ngAfterViewInit() {
     this.doodle = this.doodleFetch.getDrawing();
@@ -61,40 +56,22 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     const FORMVAL = this.exportForm.value;
-    console.log(FORMVAL);
-    // call the conversion & download functions from service with the givent values
+  
     const TYPE = FORMVAL.formatSel;
-    this.exportation(TYPE);
+    const NAME = FORMVAL.doodleName;
+
+    this.exportation(NAME, TYPE);
+
     this.closeForm();
-
-
   }
 
   closeForm() {
     this.winService.closeWindow();
   }
 
-    exportation(type: string){
-      /*https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file*/
-      let ctx = this.export.nativeElement.getContext('2d');
-      let u = this.expService.svgToURL(this.doodle);
-      let img = new Image();
-      img.onload = () =>{
-        if(ctx){
-          ctx.drawImage(img, 0, 0);
-          let dwn = this.export.nativeElement.toDataURL(`image/${type}`)
-          console.log(dwn)
-        }
-      }
-      img.src = u;
-    }
-
-    download() {
-      
-      
-      
-    }
-    
+  exportation(name: string, type: string) {
+    this.expService.exportLocal(name, type, this.doodle, this.export);
+  }
 
 
 }
