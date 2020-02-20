@@ -3,6 +3,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
+import { ExportService } from 'src/app/services/exportation/export.service';
 
 interface Formats {
   type: string,
@@ -26,7 +27,8 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
   constructor(
     private formBuilder: FormBuilder,
     private winService: ModalWindowService,
-    private doodleFetch: DoodleFetchService) { }
+    private doodleFetch: DoodleFetchService,
+    private expService: ExportService) { }
   
   exportForm: FormGroup;
   doodle: SVGElement;
@@ -72,32 +74,24 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
   }
 
     exportation(){
-      
+      /*https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file*/
       let ctx = this.export.nativeElement.getContext('2d');
-      let data = new XMLSerializer().serializeToString(this.doodle);
-
-    
+      let u = this.expService.svgToURL(this.doodle);
       let img = new Image();
-
-      let blob = new Blob([data], {type: 'image/svg+xml'});
-      let domurl = window.URL;
-      let url = domurl.createObjectURL(blob);
-
-      img.onload = ()=>{
+      img.onload = () =>{
         if(ctx){
           ctx.drawImage(img, 0, 0);
-          domurl.revokeObjectURL(url);
-
-          let dwnldImg = this.export.nativeElement.toDataURL('image/png');
-          console.log(dwnldImg)
+          let dwn = this.export.nativeElement.toDataURL("image/png")
+          console.log(dwn)
         }
-        
       }
-      img.src = url;
+      img.src = u;
     }
 
     download() {
-
+      
+      
+      
     }
     
 
