@@ -63,7 +63,8 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
     const FORMVAL = this.exportForm.value;
     console.log(FORMVAL);
     // call the conversion & download functions from service with the givent values
-    this.exportation();
+    const TYPE = FORMVAL.formatSel;
+    this.exportation(TYPE);
     this.closeForm();
 
 
@@ -73,7 +74,7 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
     this.winService.closeWindow();
   }
 
-    exportation(){
+    exportation(type: string){
       /*https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file*/
       let ctx = this.export.nativeElement.getContext('2d');
       let u = this.expService.svgToURL(this.doodle);
@@ -81,7 +82,7 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
       img.onload = () =>{
         if(ctx){
           ctx.drawImage(img, 0, 0);
-          let dwn = this.export.nativeElement.toDataURL("image/png")
+          let dwn = this.export.nativeElement.toDataURL(`image/${type}`)
           console.log(dwn)
         }
       }
