@@ -7,6 +7,7 @@ import { ModalWindowService } from 'src/app/services/window-handler/modal-window
 import {menuItems} from '../../../functionality';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
+import { GalleryComponent } from '../../gallery/gallery.component';
 
 @Component({
   selector: 'app-option-bar',
@@ -42,6 +43,12 @@ export class OptionBarComponent implements OnInit {
   openNewDrawForm() {
     if (confirm('Un dessin est déjà en cours. Voulez-vous continuer?')) {
       this.winService.openWindow(NewDrawComponent);
+    }
+  }
+
+  openGallery(){
+    if (confirm('Un dessin est déjà en cours. Voulez-vous continuer?')) {
+      this.winService.openWindow(GalleryComponent);
     }
   }
 

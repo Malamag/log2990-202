@@ -36,6 +36,7 @@ import { OptionBarComponent } from './components/draw-view/option-bar/option-bar
 import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
 import { ToolAttributesComponent } from './components/draw-view/tool-box/tool-attributes/tool-attributes.component';
 import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
 
 @NgModule({
     declarations: [
@@ -49,7 +50,8 @@ import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.compo
         OptionBarComponent,
         ColorPickerComponent,
         ToolBoxComponent,
-        ToolAttributesComponent
+        ToolAttributesComponent,
+        GalleryComponent
     ],
     imports: [
         BrowserModule,
@@ -78,7 +80,7 @@ import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.compo
     ],
 
     bootstrap: [AppComponent],
-    entryComponents: [NewDrawComponent, UserManualComponent, OptionBarComponent, ColorPickerComponent] // components added dynamically
+    entryComponents: [NewDrawComponent, UserManualComponent,GalleryComponent, OptionBarComponent, ColorPickerComponent] // components added dynamically
 
 })
 export class AppModule {}
