@@ -137,11 +137,12 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     window.dispatchEvent(new Event('resize'));
 
     this.doodleFetch.ask.subscribe(
-      ()=>{this.doodleFetch.currentDraw = this.svg;}
+      ()=>{
+        this.doodleFetch.currentDraw = this.svg;
+        this.doodleFetch.widthAttr = this.width;
+        this.doodleFetch.heightAttr = this.height;
+      }
     );
-
-    
-
   }
 
   ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus

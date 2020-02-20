@@ -9,6 +9,9 @@ export class DoodleFetchService {
 
   ask: Subject<boolean>; // only used for data emission
 
+  widthAttr: number;
+  heightAttr: number;
+  
   constructor() { 
     this.ask = new Subject<boolean>();
   }
