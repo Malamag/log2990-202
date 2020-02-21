@@ -42,47 +42,50 @@ export class BrushService extends PencilService {
 
     let s = '';
 
-    if (p.length >= 2) {
-      // get parameters from the used texture
-      let width = this.attr.lineThickness;
-      let scale = this.textures[this.attr.texture].intensity;
-
-      // "normalize" the frequency to keep a constant render no mather the width or scale
-      const frequency = scale / (width / 10) * this.textures[this.attr.texture].frequency;
-
-      // create a divider
-      s = '<g name = "brush-stroke">';
-
-      // get a unique ID to make sure each stroke has it's own filter
-      const uniqueID = new Date().getTime();
-
-      // create the corresponding svg filter
-      if (this.textures[this.attr.texture].type == 'blured') {
-      s +=  this.createBluredFilter(scale, uniqueID);
-      } else if (this.textures[this.attr.texture].type == 'noise') {
-        // we use a displacement map so we need to resize the brush to keep the overall width
-        scale = width / ((100 / scale) / (100 / width));
-        s += this.createNoiseFilter(width, scale, frequency, uniqueID);
-        width = (width - (width * scale) / 2);
+    //We need at least 2 points
+    if(p.length < 2){
+      return s;
     }
 
+    // get parameters from the used texture
+    let width = this.attr.lineThickness;
+    let scale = this.textures[this.attr.texture].intensity;
+    
+    // "normalize" the frequency to keep a constant render no mather the width or scale
+    const frequency = scale / (width / 10) * this.textures[this.attr.texture].frequency;
+    
+    // create a divider
+    s = '<g name = "brush-stroke">';
+    
+    // get a unique ID to make sure each stroke has it's own filter
+    const uniqueID = new Date().getTime();
+    
+    // create the corresponding svg filter
+    if (this.textures[this.attr.texture].type == 'blured') {
+      s +=  this.createBluredFilter(scale, uniqueID);
+    } else if (this.textures[this.attr.texture].type == 'noise') {
+    // we use a displacement map so we need to resize the brush to keep the overall width
+      scale = width / ((100 / scale) / (100 / width));
+      s += this.createNoiseFilter(width, scale, frequency, uniqueID);
+      width = (width - (width * scale) / 2);
+    }
+    
     // start the path
-      s += '<path d="';
+    s += '<path d="';
     // move to the first point
-      s += `M ${p[0].x} ${p[0].y} `;
+    s += `M ${p[0].x} ${p[0].y} `;
     // for each succeding point, connect it with a line
-      for (let i = 1; i < p.length; i++) {
+    for (let i = 1; i < p.length; i++) {
       s += `L ${p[i].x} ${p[i].y} `;
     }
     // set render attributes
-      s += `"stroke="${this.chosenColor.primColor}" stroke-width="${this.attr.lineThickness}"`;
-      s += 'fill="none" stroke-linecap="round" stroke-linejoin="round"';
-      s += `filter="url(#${uniqueID})"/>`;
+    s += `"stroke="${this.chosenColor.primColor}" stroke-width="${this.attr.lineThickness}"`;
+    s += 'fill="none" stroke-linecap="round" stroke-linejoin="round"';
+    s += `filter="url(#${uniqueID})"/>`;
     // end the path
-
+    
     // end the divider
-      s += '</g>';
-    }
+    s += '</g>';
 
     return s;
   }

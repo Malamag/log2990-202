@@ -7,6 +7,7 @@ import { ModalWindowService } from 'src/app/services/window-handler/modal-window
 import {menuItems} from '../../../functionality';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
+import { ExportFormComponent } from '../../export-form/export-form.component';
 
 @Component({
   selector: 'app-option-bar',
@@ -48,6 +49,11 @@ export class OptionBarComponent implements OnInit {
   openUserGuide() {
     this.winService.openWindow(UserManualComponent)
   }
+
+  openExportForm() {
+    this.winService.openWindow(ExportFormComponent);
+  }
+
   sendSigKill() {
     this.interaction.emitCancel(true)
   }
