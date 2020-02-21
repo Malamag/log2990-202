@@ -12,7 +12,7 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
 
 @Component({
   selector: 'app-svg-draw',
-  templateUrl: './svg-draw.component.svg', // changed file type
+  templateUrl: './svg-draw.component.html', // changed file type
   styleUrls: ['./svg-draw.component.scss']
 })
 export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
