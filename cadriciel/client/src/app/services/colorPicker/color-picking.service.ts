@@ -51,12 +51,12 @@ export class ColorPickingService {
       + this.colorConvert.rgbToHex( color[2] ) 
       if ( this.cData.primarySelect ) {
         newColor += this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha);
-        this.cData.currentColorSelect = 'Primary';
+        this.cData.currentColorSelect = 'Primaire';
         this.cData.primaryColor = newColor;
         
       } else {
         newColor += this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha);
-        this.cData.currentColorSelect = 'Secondary';
+        this.cData.currentColorSelect = 'Secondaire';
         this.cData.secondaryColor = newColor;
       }
       return newColor;
@@ -74,10 +74,10 @@ export class ColorPickingService {
     }
   }
   computeHue(event: MouseEvent): number {
-    // Hue circle radius is 90px and stroke widht 10px which mean average radius is ( 100 - 90 ) / 2 = 95
+    // Hue circle radius is 45px and stroke widht 10px which mean average radius is ( 55 - 45 ) / 2 = 50
     // Which is subtract from offset to center circle for math formula
-    const radiusX: number = event.offsetX - 95;
-    const radiusY: number = event.offsetY - 95;
+    const radiusX: number = event.offsetX - 50;
+    const radiusY: number = event.offsetY - 50;
     const radius: number = Math.sqrt( Math.pow( radiusX, 2) + Math.pow( radiusY, 2) );
     const theta: number = Math.acos( radiusX / radius);
     let Hue = 0;
@@ -105,11 +105,11 @@ export class ColorPickingService {
   // saturation/lightness selector
   slSelector(event: MouseEvent): void {
     if ( this.cData.isSLSelecting) {
-      const x: number = event.offsetX - 50;
-      const y: number = event.offsetY - 50;
+      const x: number = event.offsetX - 25;
+      const y: number = event.offsetY - 25;
       this.setSLCursor( x, y );
-      this.cData.saturationSliderInput = x;
-      this.cData.lightnessSliderInput = y;
+      this.cData.saturationSliderInput = x * 2;
+      this.cData.lightnessSliderInput = y * 2;
       let hsl : number[] = [this.cData.currentHue, this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER, this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER];
       let color = this.setColor( this.colorConvert.hslToRgb(this.cData.currentHue, this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
                     this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER ) ) ;
@@ -219,7 +219,7 @@ export class ColorPickingService {
       this.cData.saturationSliderInput = newSaturation;
     }
     this.cData.lightnessSliderInput = Math.round( hsl[2] * this.cData.POURCENT_MODIFIER );
-    this.setSLCursor( this.cData.saturationSliderInput, this.cData.lightnessSliderInput );
+    this.setSLCursor( this.cData.saturationSliderInput / 2, this.cData.lightnessSliderInput / 2 );
   }
   upadateDisplayHex( hex : string ) : void {
     this.cData.hexColorInput = hex.substring( 1, 7 ); // only 1 to 7 char are needed for view
@@ -237,10 +237,10 @@ export class ColorPickingService {
     let color = '' ;
 
     if ( this.cData.primarySelect ) {
-        this.cData.currentColorSelect = 'Primary';
+        this.cData.currentColorSelect = 'Primaire';
         color = this.cData.primaryColor;
     } else {
-        this.cData.currentColorSelect = 'Secondary';
+        this.cData.currentColorSelect = 'Secondaire';
         color = this.cData.secondaryColor;
     }
     return color;
@@ -273,13 +273,16 @@ export class ColorPickingService {
   **/
   onHexInput(hexLength : number, hex: string, hexInputField : string): void {
     if ( (hex.length === hexLength) && this.cData.isValideInput) {
+      let newColor : string = this.writeHexColor(hexInputField, this.cData.primarySelect);
       if ( this.cData.primarySelect ) {
-        this.cData.primaryColor = this.writeHexColor(hexInputField, true)
-        this.updateDisplay( this.cData.primaryColor );
+        this.cData.primaryColor = newColor;
+        
       } else {
-          this.cData.secondaryColor = this.writeHexColor(hexInputField, false)
-          this.updateDisplay( this.cData.secondaryColor );
+        this.cData.secondaryColor = newColor;
       }
+      this.updateDisplay( newColor );
+      this.updateLastColor( newColor );
+      this.cData.isValideInput = false;
     }
   }
   writeHexColor(color: string, prim: boolean): string {

@@ -5,7 +5,7 @@ export const colorData = {
     secondaryColor : '#000000ff',
     secondaryAlpha : 1,
     primarySelect : true,
-    currentColorSelect : 'Primary',
+    currentColorSelect : 'Primaire',
     currentAlpha : 0,
 
     // input style
@@ -21,8 +21,8 @@ export const colorData = {
     opacitySliderInput : 100,
     checkboxSliderStatus : true,
 
-    slCursorX : 100,
-    slCursorY : 50,
+    slCursorX : 0,
+    slCursorY : 0,
     isColorSelecting : false,
     isHueSelecting : false,
     isSLSelecting : false,
@@ -47,16 +47,16 @@ export const colorData = {
                     69,//e
                     70,//f
                     8],//backspace
-    lastColorRects : [  { x: 0, y: 0, fill:'none'},
-                        { x: 40, y:0, fill:'none'},
-                        { x: 80, y:0, fill:'none'},
-                        { x: 120, y:0, fill:'none'},
-                        { x: 160, y:0, fill:'none'},
-                        { x: 0, y:25, fill:'none'},
-                        { x: 40, y:25, fill:'none'},
-                        { x: 80, y:25, fill:'none'},
-                        { x: 120, y:25, fill:'none'},
-                        { x: 160, y:25, fill:'none'}],
+    lastColorRects : [  { x: 110, y: 25, fill:'none'},
+                        { x: 130, y:25, fill:'none'},
+                        { x: 150, y:25, fill:'none'},
+                        { x: 170, y:25, fill:'none'},
+                        { x: 190, y:25, fill:'none'},
+                        { x: 110, y:50, fill:'none'},
+                        { x: 130, y:50, fill:'none'},
+                        { x: 150, y:50, fill:'none'},
+                        { x: 170, y:50, fill:'none'},
+                        { x: 190, y:50, fill:'none'}],
     MAX_RGB_VALUE : 255,
     MIN_RGB_VALUE : 0,
     MIN_HUE_VALUE : 0,

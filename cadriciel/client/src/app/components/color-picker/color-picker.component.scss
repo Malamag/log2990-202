@@ -15,10 +15,10 @@ button {
 }
 
 .colortypelabel {
-  position: absolute;
+  //position: absolute;
   font-size: 10px;
   color: white;
-  width: 200px;
+  width: 20px;
   height: 20px;
   font-weight: bold;
   padding: 0px;
@@ -32,6 +32,15 @@ button {
     font-weight: bold;
     padding: 0px;
 }
+.rgbnamelabel {
+  font-size: 9px;
+  color: white;
+  float: right;
+  width: 30px;
+  height: 8px;
+  font-weight: bold;
+  padding: 0px;
+}
 .numberlabel {
     font-size: 9px;
     float: left;
@@ -43,28 +52,25 @@ button {
 }
 .hexInput {
     position: relative;
-    width: 40px;
-    font-size: 10px;
+    width: 30px;
+    font-size: 7px;
     border: none;
     border-bottom: 1px solid black;
-    display: block;
     caret-color: white;
-    background:linear-gradient(to right, white,snow);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: white;
+    background:transparent;
 }
 .rgbInput {
-    width: 20px;
-    font-size: 10px;
-    border: none;
-    border-bottom: 1px solid black;
-    display: block;
-    caret-color: white;
-    background:linear-gradient(to right, white,snow);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  position: absolute;
+  width: 25px;
+  font-size: 10px;
+  color: white;
+  border: none;
+  left: 160px;
+  border-bottom-width: 10px;
+  border-bottom: 1px solid black;
+  caret-color: white;
+  background:transparent;
 }
 svg {
     position: relative;
