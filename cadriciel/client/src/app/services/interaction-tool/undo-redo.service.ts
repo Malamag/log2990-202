@@ -24,34 +24,37 @@ export class UndoRedoService extends InteractionTool{
         }
         this.done.push(list);
         this.updateButtons();
-        console.log(this.done.length);
       }
     })
   }
   undo(){
-    if(this.done.length){
-      let elem = this.done.pop();
-      this.drawing.innerHTML="";
-      if(elem)
-        this.undone.push(elem);
-      if(this.done.length){
-        this.done[this.done.length-1].forEach((elem)=>{
-          this.render.appendChild(this.drawing, elem);
-        })
-      }
+    if(!this.done.length){
+      return;
     }
-  }
-  redo(){
-    if(this.undone.length){
-      let elem = this.undone.pop();
-      this.drawing.innerHTML="";
-      if(elem)
-        this.done.push(elem);
+    let elem = this.done.pop();
+    this.drawing.innerHTML="";
+    if(elem)
+      this.undone.push(elem);
+    if(this.done.length){
       this.done[this.done.length-1].forEach((elem)=>{
         this.render.appendChild(this.drawing, elem);
       })
     }
   }
+  redo(){
+    if(!this.undone.length){
+      return;
+    }
+    let elem = this.undone.pop();
+    this.drawing.innerHTML = "";
+    if(elem){
+      this.done.push(elem);
+    }
+    this.done[this.done.length-1].forEach((elem)=>{
+      this.render.appendChild(this.drawing, elem);
+    })
+  }
+
   apply(name: string){
     if(name === 'Annuler'){
       this.undo();
