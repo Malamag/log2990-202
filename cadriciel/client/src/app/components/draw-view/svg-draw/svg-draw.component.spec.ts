@@ -8,6 +8,8 @@ import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.se
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
 import {Canvas} from '../../../models/Canvas.model'
+import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
+import { Subject } from 'rxjs';
 
 const width = 67
 const height = 10
@@ -18,6 +20,7 @@ describe('SvgDrawComponent', () => {
   let fixture: ComponentFixture<SvgDrawComponent>;
   let mouseHandlerStub: any;
   let kbHandlerStub: any;
+  let dFetchService: any;
 
   beforeEach(async(() => {
     mouseHandlerStub = {
@@ -30,11 +33,17 @@ describe('SvgDrawComponent', () => {
       reset: (e: KeyboardEvent) => e,
       logKey: (e: KeyboardEvent) => e
     }
+
+    dFetchService = {
+      ask: new Subject<boolean>()
+    }
+
     TestBed.configureTestingModule({
       declarations: [ SvgDrawComponent ],
       providers: [
         {provide: KeyboardHandlerService, useValue: kbHandlerStub},
-        {provide: MouseHandlerService, useValue: mouseHandlerStub}
+        {provide: MouseHandlerService, useValue: mouseHandlerStub},
+        {provide: DoodleFetchService, useValue: dFetchService}
 
       ]
 
@@ -83,7 +92,7 @@ describe('SvgDrawComponent', () => {
     const canvas = new Canvas(width, height, color)
     canvasBuilderStub.newCanvas = canvas
 
-    const componentStub = new SvgDrawComponent(canvasBuilderStub, component.interaction, component.colorPick)
+    const componentStub = new SvgDrawComponent(canvasBuilderStub, component.interaction, component.colorPick, dFetchService)
     componentStub.initCanvas();
     expect(componentStub.width).toBe(canvas.canvasWidth)
     expect(componentStub.height).toBe(canvas.canvasHeight)
