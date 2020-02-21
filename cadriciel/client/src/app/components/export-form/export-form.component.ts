@@ -71,7 +71,7 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
   }
 
   exportation(name: string, type: string) {
-    this.expService.exportLocal(name, type, this.doodle, this.export);
+    this.expService.exportInCanvas(this.doodle, this.export, name, type);
   }
 
 
