@@ -20,7 +20,7 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
   selectedTool: String;
   tools: string[] = []
   constructor(public interaction: InteractionService) {
-    this.tools = ['Rectangle', 'Ligne', 'Pinceau', 'Crayon', 'Sélection de couleur']
+    this.tools = ['Rectangle', 'Ligne', 'Pinceau', 'Crayon', 'Sélection de couleur', 'Ellipse'];
     this.lineThickness = 5; // 5px thick line
     this.texture = 0; // blur texture
 

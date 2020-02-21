@@ -64,7 +64,7 @@ export class ColorConvertingService {
         G = X;
         B = this.cData.MIN_RGB_VALUE;
     }
-    else if ( ( (this.cData.MAX_HUE_VALUE / 2) <= H ) && ( H < (this.cData.MAX_HUE_VALUE / 3) ) ) {
+    else if ( ( (this.cData.MAX_HUE_VALUE / 6) <= H ) && ( H < (this.cData.MAX_HUE_VALUE / 3) ) ) {
         R = X;
         G = C;
         B = this.cData.MIN_RGB_VALUE;

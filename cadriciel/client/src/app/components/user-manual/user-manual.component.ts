@@ -36,8 +36,8 @@ export class UserManualComponent implements OnInit {
     // Change activeButton reference to the button clicked
     this.activeButton = actualButton;
     // Look if the nextButton and previousButtons should be hidden due to being at the beginning/end of the array
-    this.activeButton === this.func[this.func.length - 1] ? this.activeNextButton = false : this.activeNextButton = true;
-    this.activeButton === this.func[0] ? this.activePreviousButton = false : this.activePreviousButton = true;
+    this.activeNextButton = this.activeButton !== this.func[this.func.length - 1];
+    this.activePreviousButton = this.activeButton !== this.func[0];
   }
 
   nextPage() {

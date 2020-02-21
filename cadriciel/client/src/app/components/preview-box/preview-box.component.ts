@@ -20,8 +20,6 @@ export class PreviewBoxComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.draw = this.doodleFetch.getDrawing();
-
-    this.export.nativeElement.innerHTML = this.draw.outerHTML;
   }
   
 

@@ -3,7 +3,7 @@ export const colorData = {
     primaryColor : '#ff0000ff',
     primaryAlpha : 1,
     secondaryColor : '#000000ff',
-    secondaryAlpha : 0.5, // afin des tests
+    secondaryAlpha : 1,
     primarySelect : true,
     currentColorSelect : 'Primary',
     currentAlpha : 0,
@@ -61,6 +61,7 @@ export const colorData = {
     MIN_RGB_VALUE : 0,
     MIN_HUE_VALUE : 0,
     MAX_HUE_VALUE : 360,
+    POURCENT_MODIFIER : 100,
     MIN_SATURATION_VALUE : 0,
     MAX_SATURATION_VALUE : 1,
     MIN_LIGHTNESS_VALUE : 0,
@@ -70,5 +71,11 @@ export const colorData = {
     ASCII_A :  65,
     ASCII_a :  97,
     ASCII_0 :  48,
-    HEX_NUMBER_MAX_LENGTH : 9
+    HEX_NUMBER_MAX_LENGTH : 9,
+    HEX_COLOR_INPUT_MAX_LENGTH : 6,
+    HEX_RGB_INPUT_MAX_LENGTH : 2,
+    COLOR_HEX_INPUT_FIELD : 'Hex',
+    RED_INPUT_FIELD : 'Red',
+    GREEN_INPUT_FIELD : 'Green',
+    BLUE_INPUT_FIELD : 'Blue'
 }

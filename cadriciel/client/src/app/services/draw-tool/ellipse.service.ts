@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
 import { FormsAttribute } from '../attributes/attribute-form';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
-import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
-import { DrawingTool } from './drawingTool';
+import { RectangleService } from './rectangle.service'
 import { Point } from './point';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RectangleService extends DrawingTool {
+export class EllipseService extends RectangleService {
 
   isSquare: boolean;
-  
+
   attr: FormsAttribute
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
@@ -23,43 +22,10 @@ export class RectangleService extends DrawingTool {
     this.updateColors()
     this.updateAttributes()
   }
-  updateAttributes() {
-    this.interaction.$formsAttributes.subscribe((obj) => {
-      if (obj) {
-        this.attr = new FormsAttribute(obj.plotType, obj.lineThickness, obj.numberOfCorners)
-      }
 
-    });
-  }
-  // updating on key change
-  update(keyboard: KeyboardHandlerService) {
 
-    // rectangle becomes square when shift is pressed
-    this.isSquare = keyboard.shiftDown;
 
-    // real time update
-    if (this.isDown) {
-      this.updateProgress();
-    }
-  }
-
-  // mouse down with rectangle in hand
-  down(position: Point) {
-
-    // in case we changed tool while the mouse was down
-    this.ignoreNextUp = false;
-
-    // the rectangleTool should affect the canvas
-    this.isDown = true;
-
-    // add the same point twice in case the mouse doesnt move
-    this.currentPath.push(position);
-    this.currentPath.push(position);
-
-    this.updateProgress();
-  }
-
-  // mouse up with rectangle in hand
+  // mouse up with ellipse in hand
   up(position: Point) {
 
     // in case we changed tool while the mouse was down
@@ -69,43 +35,17 @@ export class RectangleService extends DrawingTool {
       this.isDown = false;
 
       // add everything to the canvas
-      this.updateDrawing();
+      this.updateDrawing(true);
     }
   }
 
-  // mouse move with rectangle in hand
-  move(position: Point) {
 
-    // only if the rectangleTool is currently affecting the canvas
-    if (this.isDown) {
 
-      // save mouse position
-      this.currentPath.push(position);
-
-      this.updateProgress();
-    }
-  }
-
-  // mouse doubleClick with pencil in hand
-  doubleClick(position: Point) {
-    // since its down -> up -> down -> up -> doubleClick, nothing more happens for the renctangle
-  }
-
-  // when we go from inside to outside the canvas
-  goingOutsideCanvas() {
-    // nothing happens since we might want to readjust the rectangle once back in
-  }
-
-  // when we go from outside to inside the canvas
-  goingInsideCanvas() {
-    // nothing happens since we just update the preview
-  }
-
-  // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
-  createPath(p: Point[],removePerimeter?: boolean) {
+  // Creates an svg rect that connects the first and last points of currentPath with the ellipse attributes and a perimeter
+  createPath(p: Point[], removePerimeter: boolean) {
 
     let s = '';
-
+    
     //We need at least 2 points
     if(p.length < 2){
       return s;
@@ -121,11 +61,15 @@ export class RectangleService extends DrawingTool {
     let w = p2x - p1x;
     let h = p2y - p1y;
 
+
+
     // find top-left corner
     let startX = w > 0 ? p[0].x : p[p.length - 1].x;
     let startY = h > 0 ? p[0].y : p[p.length - 1].y;
 
-    // if we need to make it square
+
+
+    // if we need to make it square (perimeter = square => ellipse = circle)
     if (this.isSquare) {
       // get smallest absolute value between the width and the height
       const smallest = Math.abs(w) < Math.abs(h) ? Math.abs(w) : Math.abs(h);
@@ -138,24 +82,31 @@ export class RectangleService extends DrawingTool {
       startY = h > 0 ? p[0].y : p[0].y - smallest;
     }
 
-    // create a divider
-    s = '<g name = "rectangle">';
+    
+    // create a divider for the ellipse
+    s += '<g name = "ellipse">';
 
     // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
     const stroke = (this.attr.plotType == 0 || this.attr.plotType == 2) ? `${this.chosenColor.secColor}` : 'none';
     const fill = (this.attr.plotType == 1 || this.attr.plotType == 2) ? `${this.chosenColor.primColor}` : 'none';
 
-    // set render attributes for the svg rect
-    s += `<rect x="${startX}" y="${startY}"`;
-    s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
-
+    // set render attributes for the svg ellipse
+    s += `<ellipse cx="${startX + Math.abs(w / 2)}" cy="${startY + Math.abs(h / 2)}" rx="${Math.abs(w / 2)}" ry="${Math.abs(h / 2)}"`;
     s += `fill="${fill}"`;
     s += `stroke-width="${this.attr.lineThickness}" stroke="${stroke}"/>`;
+
+    if (!removePerimeter) {
+      // create a perimeter 
+      s += `<rect x="${startX}" y="${startY}"`;
+      s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
+      s += `style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"`;
+      s += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
+    }
 
     // end the divider
     s += '</g>'
 
-    // can't have rectangle with 0 width or height
+    // can't have ellipse with 0 width or height
     if (w == 0 || h == 0) {
       s = '';
     }

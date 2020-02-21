@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InputObserver } from '../draw-tool/input-observer';
-import { Point } from '../draw-tool/point';
+import { Point } from '../../point';
 
 @Injectable({
   providedIn: 'root'
