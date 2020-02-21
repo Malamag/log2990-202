@@ -88,7 +88,7 @@ export abstract class DrawingTool extends InputObserver {
 
       // add it to the main drawing
       this.drawing.innerHTML += d;
-      this.interaction.emitDone();
+      this.interaction.emitDrawingDone();
       // clear current progress
       this.inProgress.innerHTML = '';
 
