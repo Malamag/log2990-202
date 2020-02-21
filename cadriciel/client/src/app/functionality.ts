@@ -37,6 +37,13 @@ export const menuItems = [
         description: 'Disponible sous peu!',
         icon: 'arrow_forward',
     },
+    {
+      name: 'Exporter un dessin',
+      shortcutName: 'Exporter',
+      shortDescription: 'Permet dexporter un dessin localement selon 3 différents formats: SVG, PNG ou JPG.',
+      description:'TODO',
+      icon: 'save'
+    }
 
 ];
 
