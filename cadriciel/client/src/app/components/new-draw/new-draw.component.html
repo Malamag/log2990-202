@@ -3,14 +3,14 @@
     <div  class="drawForm">
         <form [formGroup]="newDrawForm" (ngSubmit)="onSubmit()"> <!--TODO: ng submit function-->
 
-            <mat-form-field>
+            <mat-form-field >
                 <mat-label for="canvWidth">Largeur (px)</mat-label>
-                <input matInput type="text" formControlName="canvWidth" [value]="width">
+                <input matInput type="text" formControlName="canvWidth"  [value]="width" (keydown)="blockEvent()">
             </mat-form-field>
 
-            <mat-form-field>
+            <mat-form-field >
                 <mat-label for="canvHeight">Hauteur (px)</mat-label>
-                <input matInput type="text" formControlName="canvHeight" [value]="height">
+                <input matInput type="text" formControlName="canvHeight" [value]="height" (keydown)="blockEvent()">
             </mat-form-field>
 
             <mat-form-field>

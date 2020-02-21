@@ -42,8 +42,8 @@ export class ExportService{
       this.download(name, type, this.imageURL);
       
     }else{
-      let dwn = canvasRef.nativeElement.toDataURL(`image/${type}`)
-      this.download(name, type, dwn);
+      const DWNLD = canvasRef.nativeElement.toDataURL(`image/${type}`)
+      this.download(name, type, DWNLD);
     }   
   }
 
