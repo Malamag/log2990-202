@@ -29,7 +29,6 @@
         <button mat-raised-button color="primary"(click)="onSubmit()" [disabled]="exportForm.invalid">Exporter</button>
         <button mat-button id="quitButton" (click)="closeForm()">Cancel</button>
     </div>
-    
+    <canvas #imgBox [width]="cWidth" [height]="cHeigth"></canvas> <!--Canvas element used for conversion-->
 </div>
 
-<canvas #imgBox [width]="cWidth" [height]="cHeigth"></canvas>
