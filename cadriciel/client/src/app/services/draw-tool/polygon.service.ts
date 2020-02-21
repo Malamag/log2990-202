@@ -20,6 +20,8 @@ export class PolygonService extends RectangleService {
   private smallest:number;
   private startX:number;
   private startY:number;
+  private middleX:number;
+  private middleY:number;
   private corners:Point[];
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
@@ -100,40 +102,55 @@ export class PolygonService extends RectangleService {
     // get smallest absolute value between the width and the height
     this.smallest = Math.abs(this.width) < Math.abs(this.height) ? Math.abs(this.width) : Math.abs(this.height);
 
+    if(this.width > 0){
+      this.middleX = this.startX + this.smallest/2;
+    }
+    else{
+      this.middleX = this.startX - this.smallest/2;
+    }
+    if(this.height > 0){
+      this.middleY = this.startY + this.smallest/2;
+    }
+    else{
+      this.middleY = this.startY - this.smallest/2;
+    }
+
     //Put the first point inside the array
-    this.corners[0] = new Point(this.startX,this.startY);
+    //this.corners[0] = new Point(this.middleX,this.middleY);
 
     //Calculating the circle area diameter outside the square perimeter
     //const diameter = Math.sqrt((this.smallest*this.smallest)+(this.smallest*this.smallest));
     //const diameter = this.smallest*(Math.sqrt(this.attr.numberOfCorners));
     //const diameter = this.smallest*Math.cos(Math.PI/this.attr.numberOfCorners);
-    //Formula for the length of a polygon's side
+
+    //Formula for the length of a polygon's side : R*sin(PI/n)
     //const sideLength = this.smallest*Math.tan(Math.PI/this.attr.numberOfCorners);
-    const sideLength = this.smallest*Math.sin(Math.PI/this.attr.numberOfCorners);
+    //const sideLength = this.smallest*Math.sin(Math.PI/this.attr.numberOfCorners);
 
     //Initilize values used for determining the other polygon's corners
-    let rotateAngle = 0;
+    let rotateAngle = Math.PI/2;
     let x;
     let y;
-    for (let i = 1; i < this.attr.numberOfCorners; i++){
-      //Formula for the outside angles of the polygon
-      rotateAngle += (2*Math.PI/this.attr.numberOfCorners);
+    for (let i = 0; i < this.attr.numberOfCorners; i++){
+      //Formula for the outside angles of the polygon : 2*PI/n
+      
 
       //Assigning length for x and y sides depending on the axis
       if(this.width > 0){
-        x = this.corners[i-1].x - sideLength*Math.cos(rotateAngle);
+        x = this.middleX - this.smallest*Math.cos(rotateAngle)/2;
       }
       else{
-        x = this.corners[i-1].x + sideLength*Math.cos(rotateAngle);
+        x = this.middleX + this.smallest*Math.cos(rotateAngle)/2;
       }
       if(this.height > 0){
-        y = this.corners[i-1].y + sideLength*Math.sin(rotateAngle);
+        y = this.middleY + this.smallest*Math.sin(rotateAngle)/2;
       }
       else{
-        y = this.corners[i-1].y - sideLength*Math.sin(rotateAngle);
+        y = this.middleY - this.smallest*Math.sin(rotateAngle)/2;
       }
       //Put new point in the array of corners
       this.corners[i] = new Point(x,y);
+      rotateAngle += (2*Math.PI/this.attr.numberOfCorners);
     }
 
     //can't have rectangle with 0 width or height
@@ -144,7 +161,7 @@ export class PolygonService extends RectangleService {
       this.displayPolygon = true;
     }
 
-    this.alignCorners();
+    //this.alignCorners();
   }
 
   createPerimeter():string{
@@ -161,7 +178,7 @@ export class PolygonService extends RectangleService {
   //}
     return sPerimeter;
   }
-
+/*
   alignCorners(){
     if (this.width > 0){
       let leftCorner = this.startX;
@@ -186,5 +203,6 @@ export class PolygonService extends RectangleService {
       }
     }
     return this.corners;
-  }
+  }*/
+  
 }
