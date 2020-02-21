@@ -44,9 +44,10 @@ export class UndoRedoService extends InteractionTool{
   redo(){
     if(this.undone.length){
       let elem = this.undone.pop();
-      this.drawing.innerHTML="";
-      if(elem)
+      this.drawing.innerHTML = "";
+      if(elem){
         this.done.push(elem);
+    }
       this.done[this.done.length-1].forEach((elem)=>{
         this.render.appendChild(this.drawing, elem);
       })
