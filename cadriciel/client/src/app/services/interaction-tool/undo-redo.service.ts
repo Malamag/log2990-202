@@ -16,8 +16,15 @@ export class UndoRedoService extends InteractionTool{
         if(this.undone.length> 0){
           this.undone = [];
         }
-        this.done.push(this.drawing.lastElementChild);
+        
+        let children =this.drawing.children;
+        let list: Element[] =[]
+        for(let i=0; i<children.length; ++i){
+          list.push(children[i]);
+        }
+        this.done.push(list);
         this.updateButtons();
+        console.log(this.done.length);
       }
     })
   }
@@ -25,19 +32,24 @@ export class UndoRedoService extends InteractionTool{
     if(this.done.length){
       let elem = this.done.pop();
       this.drawing.innerHTML="";
-      this.done.forEach((elem)=>{
-        this.render.appendChild(this.drawing, elem);
-      })
       if(elem)
         this.undone.push(elem);
+      if(this.done.length){
+        this.done[this.done.length-1].forEach((elem)=>{
+          this.render.appendChild(this.drawing, elem);
+        })
+      }
     }
   }
   redo(){
     if(this.undone.length){
       let elem = this.undone.pop();
-      this.render.appendChild(this.drawing, elem);
+      this.drawing.innerHTML="";
       if(elem)
         this.done.push(elem);
+      this.done[this.done.length-1].forEach((elem)=>{
+        this.render.appendChild(this.drawing, elem);
+      })
     }
   }
   apply(name: string){
