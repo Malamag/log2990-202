@@ -5,12 +5,12 @@
 
             <mat-form-field >
                 <mat-label for="canvWidth">Largeur (px)</mat-label>
-                <input matInput type="text" formControlName="canvWidth"  [value]="width" (keydown)="blockEvent()">
+                <input matInput type="text" formControlName="canvWidth"  [value]="width" (keydown)="blockEvent($event)">
             </mat-form-field>
 
             <mat-form-field >
                 <mat-label for="canvHeight">Hauteur (px)</mat-label>
-                <input matInput type="text" formControlName="canvHeight" [value]="height" (keydown)="blockEvent()">
+                <input matInput type="text" formControlName="canvHeight" [value]="height" (keydown)="blockEvent($event)">
             </mat-form-field>
 
             <mat-form-field>

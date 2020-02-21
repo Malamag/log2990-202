@@ -38,7 +38,9 @@ export class NewDrawComponent  implements OnInit  {
     });
   }
 
-  blockEvent(){
+  blockEvent(ev: KeyboardEvent){
+    ev.stopPropagation();
+
     this.inputEntered=false;
   }
 
