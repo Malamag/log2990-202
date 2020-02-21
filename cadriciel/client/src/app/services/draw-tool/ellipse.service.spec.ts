@@ -102,6 +102,11 @@ describe('EllipseService', () => {
     expect(rect).toContain('<rect');
   });
 
+  it('should create a valid ellipse svg from one point to another', () => {
+    const rect = service.createPath(ptArr,false);
+    expect(rect).toContain('<ellipse');
+  });
+
   it('should create a rectangle of the correct dimensions from mouse move', () => {
     const rect = service.createPath(ptArr,false);
     const expWidth = `width="${ptB.x - ptA.x}"`;
