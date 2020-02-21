@@ -102,7 +102,7 @@ export class RectangleService extends DrawingTool {
   }
 
   // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
-  createPath(p: Point[]) {
+  createPath(p: Point[],removePerimeter?: boolean) {
 
     let s = '';
 

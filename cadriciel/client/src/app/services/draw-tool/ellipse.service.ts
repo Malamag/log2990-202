@@ -41,7 +41,7 @@ export class EllipseService extends RectangleService {
 
 
 
-  // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
+  // Creates an svg rect that connects the first and last points of currentPath with the ellipse attributes and a perimeter
   createPath(p: Point[], removePerimeter: boolean) {
 
     let s = '';
@@ -65,7 +65,7 @@ export class EllipseService extends RectangleService {
 
 
 
-      // if we need to make it square
+      // if we need to make it square (perimeter = square => ellipse = circle)
       if (this.isSquare) {
         // get smallest absolute value between the width and the height
         const smallest = Math.abs(w) < Math.abs(h) ? Math.abs(w) : Math.abs(h);
@@ -102,7 +102,7 @@ export class EllipseService extends RectangleService {
       // end the divider
       s += '</g>'
 
-      // can't have rectangle with 0 width or height
+      // can't have ellipse with 0 width or height
       if (w == 0 || h == 0) {
         s = '';
       }
