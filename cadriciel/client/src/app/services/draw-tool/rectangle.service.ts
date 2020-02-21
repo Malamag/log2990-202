@@ -106,55 +106,58 @@ export class RectangleService extends DrawingTool {
 
     let s = '';
 
-    if (p.length >= 2) {
-      // first and last points
-      const p1x = p[0].x;
-      const p1y = p[0].y;
-      const p2x = p[p.length - 1].x;
-      const p2y = p[p.length - 1].y;
+    //We need at least 2 points
+    if(p.length < 2){
+      return s;
+    }
 
-      // calculate the width and height of the rectangle
-      let w = p2x - p1x;
-      let h = p2y - p1y;
+    // first and last points
+    const p1x = p[0].x;
+    const p1y = p[0].y;
+    const p2x = p[p.length - 1].x;
+    const p2y = p[p.length - 1].y;
 
-      // find top-left corner
-      let startX = w > 0 ? p[0].x : p[p.length - 1].x;
-      let startY = h > 0 ? p[0].y : p[p.length - 1].y;
+    // calculate the width and height of the rectangle
+    let w = p2x - p1x;
+    let h = p2y - p1y;
 
-      // if we need to make it square
-      if (this.isSquare) {
-        // get smallest absolute value between the width and the height
-        const smallest = Math.abs(w) < Math.abs(h) ? Math.abs(w) : Math.abs(h);
-        // adjust width and height (keep corresponding sign)
-        w = smallest * Math.sign(w);
-        h = smallest * Math.sign(h);
+    // find top-left corner
+    let startX = w > 0 ? p[0].x : p[p.length - 1].x;
+    let startY = h > 0 ? p[0].y : p[p.length - 1].y;
 
-        // recalculate top-left corner
-        startX = w > 0 ? p[0].x : p[0].x - smallest;
-        startY = h > 0 ? p[0].y : p[0].y - smallest;
-      }
+    // if we need to make it square
+    if (this.isSquare) {
+      // get smallest absolute value between the width and the height
+      const smallest = Math.abs(w) < Math.abs(h) ? Math.abs(w) : Math.abs(h);
+      // adjust width and height (keep corresponding sign)
+      w = smallest * Math.sign(w);
+      h = smallest * Math.sign(h);
 
-      // create a divider
-      s = '<g name = "rectangle">';
+      // recalculate top-left corner
+      startX = w > 0 ? p[0].x : p[0].x - smallest;
+      startY = h > 0 ? p[0].y : p[0].y - smallest;
+    }
 
-      // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
-      const stroke = (this.attr.plotType == 0 || this.attr.plotType == 2) ? `${this.chosenColor.secColor}` : 'none';
-      const fill = (this.attr.plotType == 1 || this.attr.plotType == 2) ? `${this.chosenColor.primColor}` : 'none';
+    // create a divider
+    s = '<g name = "rectangle">';
 
-      // set render attributes for the svg rect
-      s += `<rect x="${startX}" y="${startY}"`;
-      s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
+    // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
+    const stroke = (this.attr.plotType == 0 || this.attr.plotType == 2) ? `${this.chosenColor.secColor}` : 'none';
+    const fill = (this.attr.plotType == 1 || this.attr.plotType == 2) ? `${this.chosenColor.primColor}` : 'none';
 
-      s += `fill="${fill}"`;
-      s += `stroke-width="${this.attr.lineThickness}" stroke="${stroke}"/>`;
+    // set render attributes for the svg rect
+    s += `<rect x="${startX}" y="${startY}"`;
+    s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
 
-      // end the divider
-      s += '</g>'
+    s += `fill="${fill}"`;
+    s += `stroke-width="${this.attr.lineThickness}" stroke="${stroke}"/>`;
 
-      // can't have rectangle with 0 width or height
-      if (w == 0 || h == 0) {
-        s = '';
-      }
+    // end the divider
+    s += '</g>'
+
+    // can't have rectangle with 0 width or height
+    if (w == 0 || h == 0) {
+      s = '';
     }
 
     return s;
