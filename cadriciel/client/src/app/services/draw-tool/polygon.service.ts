@@ -22,6 +22,8 @@ export class PolygonService extends RectangleService {
   private startY:number;
   private middleX:number;
   private middleY:number;
+  private leftPoint:number;
+  private rightPoint:number;
   private corners:Point[];
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
@@ -35,7 +37,10 @@ export class PolygonService extends RectangleService {
     this.smallest = 0;
     this.startX = 0;
     this.startY = 0;
+    this.leftPoint = 0;
+    this.rightPoint = 0;
     this.corners = [];
+
   }
   
   // updating on key change
@@ -128,12 +133,13 @@ export class PolygonService extends RectangleService {
     //const sideLength = this.smallest*Math.sin(Math.PI/this.attr.numberOfCorners);
 
     //Initilize values used for determining the other polygon's corners
-    let rotateAngle = Math.PI/2;
+    let rotateAngle = 3*Math.PI/2;
     let x;
     let y;
+    this.leftPoint = this.middleX;
+    this.rightPoint = this.middleX;
     for (let i = 0; i < this.attr.numberOfCorners; i++){
       //Formula for the outside angles of the polygon : 2*PI/n
-      
 
       //Assigning length for x and y sides depending on the axis
       if(this.width > 0){
@@ -148,6 +154,14 @@ export class PolygonService extends RectangleService {
       else{
         y = this.middleY - this.smallest*Math.sin(rotateAngle)/2;
       }
+
+      if(this.leftPoint > x){
+        this.leftPoint = x;
+      }
+      else if(this.rightPoint < x){
+        this.rightPoint = x;
+      }
+      
       //Put new point in the array of corners
       this.corners[i] = new Point(x,y);
       rotateAngle += (2*Math.PI/this.attr.numberOfCorners);
@@ -161,25 +175,58 @@ export class PolygonService extends RectangleService {
       this.displayPolygon = true;
     }
 
-    //this.alignCorners();
+    this.alignCorners();
   }
 
   createPerimeter():string{
+    let widthPerimeter = this.rightPoint - this.leftPoint;
+    let endYPoint = Math.floor(this.attr.numberOfCorners/2);
+    let heightPerimeter = this.startY - this.corners[endYPoint].y;
     let sPerimeter = "";
     //if (!removePerimeter) {
-    // create a perimeter 
-    let perStartX = this.width > 0 ? this.startX : this.startX - this.smallest;
-    let perStartY = this.height > 0 ? this.startY : this.startY - this.smallest;
+    // create a perimeter
+    //let differenceY = this.startY - widthPerimeter;
+    /*
+    let perStartX; 
+    let perStartY;  
+    
+    if(this.width > 0){
+      perStartX = this.startX*2 - widthPerimeter;
+    }
+    else{
+      perStartX = this.startX*2 - widthPerimeter;
+    }
+    if(this.height > 0){
+      perStartX = this.startY*2 - heightPerimeter;
+    }
+    else{
+      perStartX = this.startY*2 - heightPerimeter;
+    }*/
+    let perStartX = this.width > 0 ? this.startX : this.startX - widthPerimeter;
+    let perStartY = this.height > 0 ? this.startY : this.startY - heightPerimeter;
 
     sPerimeter += `<rect x="${perStartX}" y="${perStartY}"`;
-    sPerimeter += `width="${Math.abs(this.smallest)}" height="${Math.abs(this.smallest)}"`;
+    sPerimeter += `width="${Math.abs(widthPerimeter)}" height="${Math.abs(heightPerimeter)}"`;
     sPerimeter += `style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"`;
     sPerimeter += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
   //}
     return sPerimeter;
   }
-/*
+
   alignCorners(){
+    if(this.leftPoint > this.startX){
+      let substractionX = this.leftPoint - this.startX;
+      for(let i = 0; i < this.corners.length; i++){
+        this.corners[i].x -= substractionX;
+      }
+    }  
+    if(this.rightPoint < this.startX){
+      let additionX = this.startX - this.rightPoint;
+      for(let i = 0; i < this.corners.length; i++){
+        this.corners[i].x += additionX;
+      }
+    }  
+    /*
     if (this.width > 0){
       let leftCorner = this.startX;
       for(let i = 0; i < this.corners.length; i++){
@@ -203,6 +250,6 @@ export class PolygonService extends RectangleService {
       }
     }
     return this.corners;
-  }*/
+  */}
   
 }
