@@ -1,38 +1,37 @@
 
 .drawingTools{
-    width: 20%;
+    width: auto;
     border-right: thick;
     float: left;
-    padding-bottom: 1vh; 
-    
+    //padding-bottom: 1vh; 
     margin-left: 0;
 }
-
 
 .toolsSideBar{
     width: 4vw;
     height : auto;
-    
 }
-
-
+div.selected {
+    -moz-border-radius: auto/auto;
+    -webkit-border-radius: auto/auto;
+    border-radius: 30px/30px;
+    border: solid 1px whitesmoke;
+    width: auto;
+    height: auto;
+  }
 .toolIcon {
     height: 3vh;
     width: 3vh;
-    
-    position: relative; // alignement des icônes avec les boutons respectifs
-    
-
+    // alignement des icônes avec les boutons respectifs
+    position:absolute;
+    top: 50%;
+     left:50%;
+    transform: translate(-50%, -50%);
     filter: invert(100%); // inversion des couleurs afin d'obtenir des icônes blancs
 }
-
-.toolBtn {
-    height: 5vh;
-    width: 5vh;
-    margin-left:0; // Éléments centrés
-    
-}
-
+  div.notSelected{
+    border: solid 1px none;
+  }
 /*.toolBtn:focus { // le bouton vire au rose après avoir été cliqué
     background-color: rgb(255, 34, 107); 
     

@@ -21,11 +21,13 @@ import { AppRoutingModule } from './app-routing.module';
 /*import material*/
 import {
     MatButtonModule,
+    MatButtonToggleModule,
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatRadioModule,
+    MatSelectModule,
     MatSidenavModule,
     MatSliderModule,
     MatSnackBarModule,
@@ -36,6 +38,9 @@ import { OptionBarComponent } from './components/draw-view/option-bar/option-bar
 import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
 import { ToolAttributesComponent } from './components/draw-view/tool-box/tool-attributes/tool-attributes.component';
 import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.component';
+import { ExportFormComponent } from './components/export-form/export-form.component';
+import { PreviewBoxComponent } from './components/preview-box/preview-box.component';
+import { ExportService } from './services/exportation/export.service';
 
 @NgModule({
     declarations: [
@@ -49,7 +54,9 @@ import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.compo
         OptionBarComponent,
         ColorPickerComponent,
         ToolBoxComponent,
-        ToolAttributesComponent
+        ToolAttributesComponent,
+        ExportFormComponent,
+        PreviewBoxComponent
     ],
     imports: [
         BrowserModule,
@@ -68,17 +75,26 @@ import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.compo
         MatSliderModule,
         MatTooltipModule,
         MatRadioModule,
-        AppRoutingModule
+        MatSelectModule,
+        AppRoutingModule,
+        MatButtonToggleModule,
     ],
     providers: [
         CanvasBuilderService,
         ModalWindowService,
         ColorConvertingService,
-        ColorPickingService
+        ColorPickingService,
+        ExportService
     ],
 
     bootstrap: [AppComponent],
-    entryComponents: [NewDrawComponent, UserManualComponent, OptionBarComponent, ColorPickerComponent] // components added dynamically
+    entryComponents: [
+        NewDrawComponent,
+        UserManualComponent,
+        OptionBarComponent,
+        ColorPickerComponent,
+        ExportFormComponent,
+        PreviewBoxComponent] // components added dynamically
 
 })
 export class AppModule {}

@@ -2,6 +2,7 @@ import { Injectable} from '@angular/core';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { BrushService } from './brush.service';
+import { EllipseService } from './ellipse.service';
 import { LineService } from './line.service';
 import { PencilService } from './pencil.service';
 import { RectangleService } from './rectangle.service';
@@ -37,7 +38,12 @@ export class ToolCreator {
     return new BrushService(this.inProgress, this.drawing, selected, interaction, colorPick);
   }
 
+  CreateEllipse(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): EllipseService {
+    return new EllipseService(this.inProgress, this.drawing, selected, interaction, colorPick);
+  }
+
   CreatePolygon(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): PolygonService {
     return new PolygonService(this.inProgress, this.drawing, selected, interaction, colorPick);
   }
+
 }

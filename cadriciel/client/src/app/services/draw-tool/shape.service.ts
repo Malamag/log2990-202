@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { DrawingTool } from './drawingTool';
 import { FormsAttribute } from '../attributes/attribute-form';
-import { InteractionService } from '../service-interaction/interaction.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
+import { InteractionService } from '../service-interaction/interaction.service';
+import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 
 @Injectable({
@@ -13,19 +13,21 @@ export class ShapeService extends DrawingTool {
 
   protected attr: FormsAttribute;
 
-  //Shape's dimensions
-  protected width:number;
-  protected height:number;
-  protected smallest:number;  //used for getting the smallest value between height and width
+  // Shape's dimensions
+  public width: number;
+  public height: number;
+  public smallest: number;  // used for getting the smallest value between height and width
 
-  //First point in x and y when first clicked
-  protected startX:number;
-  protected startY:number;
+  // First point in x and y when first clicked
+  public startX: number;
+  public startY: number;
 
-  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
+  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
+              interaction: InteractionService, colorPick: ColorPickingService) {
 
     super(inProgess, drawing, selected, interaction, colorPick);
-    this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS);
+    this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, 
+                                   this.defaultValues.DEFAULTNUMBERCORNERS);
     this.updateColors();
     this.updateAttributes();
     this.width = 0;
@@ -37,7 +39,7 @@ export class ShapeService extends DrawingTool {
 
   updateAttributes() {
     this.interaction.$formsAttributes.subscribe((obj) => {
-      if (obj) {  //Getting attributes for a shape
+      if (obj) {  // Getting attributes for a shape
         this.attr = new FormsAttribute(obj.plotType, obj.lineThickness, obj.numberOfCorners);
       }
     });
@@ -78,7 +80,7 @@ export class ShapeService extends DrawingTool {
       this.isDown = false;
 
       // add everything to the canvas
-      this.updateDrawing();
+      this.updateDrawing(true);
     }
   }
 
@@ -94,7 +96,7 @@ export class ShapeService extends DrawingTool {
       this.updateProgress();
     }
   }
-  
+
   // mouse doubleClick with rectangle in hand
   doubleClick(position: Point) {
     // since its down -> up -> down -> up -> doubleClick, nothing more happens for the rectangle
@@ -112,19 +114,19 @@ export class ShapeService extends DrawingTool {
 
   setdimensions(p: Point[]){
     // first and last points
-    const p1x = p[0].x;
-    const p1y = p[0].y;
-    const p2x = p[p.length - 1].x;
-    const p2y = p[p.length - 1].y;
+    const P1X = p[0].x;
+    const P1Y = p[0].y;
+    const P2X = p[p.length - 1].x;
+    const P2Y = p[p.length - 1].y;
 
     // calculate the width and height of the rectangle
-    this.width = p2x - p1x;
-    this.height = p2y - p1y;
+    this.width = P2X - P1X;
+    this.height = P2Y - P1Y;
   }
 
    // Creates an svg shape
-   createPath(p: Point[]) {
-      //Shape is only virtual, so we do not create a path
+   createPath(p: Point[], removePerimeter?: boolean) {
+      // Shape is only virtual, so we do not create a path
    }
 
 }

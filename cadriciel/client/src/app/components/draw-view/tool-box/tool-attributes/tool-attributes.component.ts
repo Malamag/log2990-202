@@ -20,11 +20,11 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
   selectedTool: String;
   tools: string[] = []
   constructor(public interaction: InteractionService) {
-    this.tools = ['Rectangle', 'Ligne', 'Pinceau', 'Crayon', 'Sélection de couleur', 'Polygone']
+    this.tools = ['Rectangle', 'Ligne', 'Pinceau', 'Crayon', 'Sélection de couleur', 'Ellipse', 'Polygone'];
     this.lineThickness = 5; // 5px thick line
     this.texture = 0; // blur texture
 
-    this.numberCorners = 3; // for polygon -- wait 'til sprint 2!
+    this.numberCorners = 3; // for polygon
 
     this.plotType = 2; // type 2 --> filled with border
     this.junction = true; // with junction dots of 6 px size

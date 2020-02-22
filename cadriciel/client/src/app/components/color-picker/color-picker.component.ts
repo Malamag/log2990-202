@@ -82,71 +82,22 @@ export class ColorPickerComponent implements OnInit {
     swapInputDisplay(event: any) {
         this.colorPicking.swapInputDisplay(event);
     }
-    refreshDisplay(): void {
-        this.colorPicking.refreshDisplay();
+
+    validateHexInput(event: KeyboardEvent, hexLenght: number, hex: string): void {
+        this.colorPicking.validateHexInput(event, hexLenght, hex);
     }
-    validateHexInput(event: KeyboardEvent): void {
-        this.colorPicking.validateHexInput(event);
-    }
-    validateHexColorInput(event: KeyboardEvent): void {
-        this.colorPicking.validateHexColorInput(event);
-    }
-    validateRedHexInput(event: KeyboardEvent): void {
-        this.colorPicking.validateRedHexInput(event);
-    }
-    validateGreenHexInput(event: KeyboardEvent): void {
-        this.colorPicking.validateGreenHexInput(event);
-    }
-    validateBlueHexInput(event: KeyboardEvent): void {
-        this.colorPicking.validateBlueHexInput(event);
-    }
-    onHexColorInput(event: any): void { // unmoved
-        this.colorPicking.onHexColorInput(event);
+    onHexInput(hexLength: number, hex: string, hexInputField: string): void { // unmoved
+        this.colorPicking.onHexInput(hexLength, hex, hexInputField);
     }
 
-    onRedHexInput(): void { // unmoved
-        this.colorPicking.onRedHexInput();
-    }
-
-    onGreenHexInput(): void { // unmoved
-        this.colorPicking.onGreenHexInput();
-    }
-
-    onBlueHexInput(): void { // unmoved
-        this.colorPicking.onBlueHexInput();
-    }
-
-    onRGBSliderInput(): void {
-        this.colorPicking.onRGBSliderInput();
+    onRGBSliderInput(slider: string): void {
+        this.colorPicking.onRGBSliderInput(slider);
     }
 
     onSLSliderInput(): void {
         this.colorPicking.onSLSliderInput();
     }
 
-    get myInputStylesRL(): any {
-        return {'background': 'white',
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-
-    get myInputStylesL(): any {
-        return {'background': 'linear-gradient(to right, black, white)',
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-
-    get myInputStylesHex(): any {
-        return {'background': 'linear-gradient(to right, white,snow)',
-                '-webkit-background-clip': 'text',
-                '-webkit-text-fill-color': 'transparent'};
-    }
-
-    get myInputStylesArt(): any {
-    return {'background': 'linear-gradient(to right, red, crimson, darkgreen, green, blue, indigo , darkblue)',
-            '-webkit-background-clip': 'text',
-            '-webkit-text-fill-color': 'transparent'};
-    }
     get svgStyles(): any {
         return { transform : 'translate(100px,100px) rotate(' + this.cData.currentHue + 'deg) translate(-100px,-100px)'};
     }
