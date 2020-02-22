@@ -31,20 +31,20 @@ export class NewDrawComponent  implements OnInit  {
     this.resizeCanvas();
     this.color = this.canvasBuilder.getDefColor();
     this.inputEntered = true;
-    window.addEventListener("resize", ()=>{
-      if(this.inputEntered){
+    window.addEventListener('resize', () => {
+      if (this.inputEntered) {
         this.resizeCanvas();
       }
     });
   }
 
-  blockEvent(ev: KeyboardEvent){
+  blockEvent(ev: KeyboardEvent) {
     ev.stopPropagation();
 
-    this.inputEntered=false;
+    this.inputEntered = false;
   }
 
-  resizeCanvas(){
+  resizeCanvas() {
     this.width = this.canvasBuilder.getDefWidth();
     this.height = this.canvasBuilder.getDefHeight();
   }

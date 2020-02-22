@@ -26,20 +26,20 @@ import {
     MatIconModule,
     MatInputModule,
     MatRadioModule,
+    MatSelectModule,
     MatSidenavModule,
     MatSliderModule,
     MatSnackBarModule,
     MatToolbarModule,
-    MatTooltipModule,
-    MatSelectModule
+    MatTooltipModule
 } from '@angular/material';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
 import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
 import { ToolAttributesComponent } from './components/draw-view/tool-box/tool-attributes/tool-attributes.component';
 import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.component';
 import { ExportFormComponent } from './components/export-form/export-form.component';
-import { ExportService } from './services/exportation/export.service';
 import { PreviewBoxComponent } from './components/preview-box/preview-box.component';
+import { ExportService } from './services/exportation/export.service';
 
 @NgModule({
     declarations: [
@@ -87,11 +87,11 @@ import { PreviewBoxComponent } from './components/preview-box/preview-box.compon
 
     bootstrap: [AppComponent],
     entryComponents: [
-        NewDrawComponent, 
-        UserManualComponent, 
-        OptionBarComponent, 
-        ColorPickerComponent, 
-        ExportFormComponent, 
+        NewDrawComponent,
+        UserManualComponent,
+        OptionBarComponent,
+        ColorPickerComponent,
+        ExportFormComponent,
         PreviewBoxComponent] // components added dynamically
 
 })

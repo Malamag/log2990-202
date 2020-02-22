@@ -19,12 +19,12 @@ export class KeyboardHandlerService {
     this.keyString = '';
     this.keyCode = -1;
     this.toolObservers = [];
-    
+
   }
 
   addToolObserver(newObserver: InputObserver) {
     this.toolObservers.push(newObserver);
-    
+
   }
 
   updateToolObservers() {

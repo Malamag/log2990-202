@@ -82,15 +82,15 @@ export class ColorPickerComponent implements OnInit {
     swapInputDisplay(event: any) {
         this.colorPicking.swapInputDisplay(event);
     }
-   
-    validateHexInput(event: KeyboardEvent, hexLenght : number, hex : string): void {
+
+    validateHexInput(event: KeyboardEvent, hexLenght: number, hex: string): void {
         this.colorPicking.validateHexInput(event, hexLenght, hex);
     }
-    onHexInput(hexLength : number, hex: string, hexInputField : string): void { // unmoved
+    onHexInput(hexLength: number, hex: string, hexInputField: string): void { // unmoved
         this.colorPicking.onHexInput(hexLength, hex, hexInputField);
     }
 
-    onRGBSliderInput(slider : string): void {
+    onRGBSliderInput(slider: string): void {
         this.colorPicking.onRGBSliderInput(slider);
     }
 

@@ -9,7 +9,7 @@ import { toolsItems } from '../../../functionality';
 
 export class ToolBoxComponent implements OnInit {
   funcTools = toolsItems;
-  disableUndo:boolean;
+  disableUndo: boolean;
   disableRedo: boolean;
   // I doubt if we can delete these two
   @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
@@ -21,28 +21,26 @@ export class ToolBoxComponent implements OnInit {
     this.selectingToolsMap.set('w', 'Pinceau');
     this.selectingToolsMap.set('l', 'Ligne');
     this.selectingToolsMap.set('2', 'Ellipse');
-    this.selectingToolsMap.set('u','Annuler');
-    this.selectingToolsMap.set('r','Refaire');
+    this.selectingToolsMap.set('u', 'Annuler');
+    this.selectingToolsMap.set('r', 'Refaire');
   }
 
   @HostListener('document: keydown', ['$event'])
   updateBoard(event: KeyboardEvent) {
     // keyCode 90 for z
-    if(event.ctrlKey && event.keyCode ===90){
-      if(event.shiftKey){
+    if (event.ctrlKey && event.keyCode === 90) {
+      if (event.shiftKey) {
         this.buttonAction(this.selectingToolsMap.get('r'));
-      }
-      else{
+      } else {
       this.buttonAction(this.selectingToolsMap.get('u'));
       }
-    }
-    else if (this.selectingToolsMap.has(event.key)) {
+    } else if (this.selectingToolsMap.has(event.key)) {
       this.buttonAction(this.selectingToolsMap.get(event.key))
     }
   }
 
   ngOnInit() {
-    this.interactionService.$enableDisableButtons.subscribe(disableContainer=>{
+    this.interactionService.$enableDisableButtons.subscribe((disableContainer) => {
       this.disableUndo = disableContainer[0]
       this.disableRedo = disableContainer[1]
     })
@@ -51,5 +49,5 @@ export class ToolBoxComponent implements OnInit {
   buttonAction(name: string) { // on click, emit the selected tool name
     this.interactionService.emitSelectedTool(name);
   }
-  
+
 }

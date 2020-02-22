@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PreviewBoxComponent } from './preview-box.component';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { SvgDrawComponent } from '../draw-view/svg-draw/svg-draw.component';
+import { PreviewBoxComponent } from './preview-box.component';
 
 describe('PreviewBoxComponent', () => {
   let component: PreviewBoxComponent;
@@ -12,8 +12,8 @@ describe('PreviewBoxComponent', () => {
   beforeEach(async(() => {
 
     dFetchStub = {
-      askForDoodle:()=>0,
-      getDrawing:()=>undefined
+      askForDoodle: () => 0,
+      getDrawing: () => undefined
     }
 
     TestBed.configureTestingModule({
