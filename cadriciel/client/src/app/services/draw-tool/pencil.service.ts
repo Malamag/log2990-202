@@ -88,8 +88,8 @@ export class PencilService extends DrawingTool {
 
     let s = '';
 
-    //We need at least 2 points
-    if(p.length < 2){
+    // We need at least 2 points
+    if (p.length < 2) {
       return s;
     }
 

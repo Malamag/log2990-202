@@ -1,19 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExportFormComponent } from './export-form.component';
-import { 
-  MatDialogModule, 
-  MatFormFieldModule, 
-  MatInputModule, 
-  MatButtonModule, 
-  MatOptionModule, 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatButtonModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatOptionModule,
   MatSelectModule } from '@angular/material';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ExportFormComponent } from './export-form.component';
 
-import { SvgDrawComponent } from '../draw-view/svg-draw/svg-draw.component';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-
+import { SvgDrawComponent } from '../draw-view/svg-draw/svg-draw.component';
 
 describe('ExportFormComponent', () => {
   let component: ExportFormComponent;
@@ -21,10 +20,10 @@ describe('ExportFormComponent', () => {
   let dFetchStub: any;
 
   beforeEach(async(() => {
-    
+
     dFetchStub = {
-      askForDoodle:()=>0,
-      getDrawing:()=>undefined
+      askForDoodle: () => 0,
+      getDrawing: () => undefined
     }
 
     TestBed.configureTestingModule({
@@ -41,10 +40,10 @@ describe('ExportFormComponent', () => {
         MatOptionModule,
         MatSelectModule
       ],
-      providers:[
+      providers: [
         {provide: DoodleFetchService, useValue: dFetchStub}
       ]
-      
+
     })
     .compileComponents();
   }));
@@ -52,7 +51,7 @@ describe('ExportFormComponent', () => {
   beforeEach(() => {
     dFetchStub.askForDoodle();
     fixture = TestBed.createComponent(ExportFormComponent);
-    component = fixture.componentInstance;    
+    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 

@@ -42,24 +42,24 @@ export class BrushService extends PencilService {
 
     let s = '';
 
-    //We need at least 2 points
-    if(p.length < 2){
+    // We need at least 2 points
+    if (p.length < 2) {
       return s;
     }
 
     // get parameters from the used texture
     let width = this.attr.lineThickness;
     let scale = this.textures[this.attr.texture].intensity;
-    
+
     // "normalize" the frequency to keep a constant render no mather the width or scale
     const frequency = scale / (width / 10) * this.textures[this.attr.texture].frequency;
-    
+
     // create a divider
     s = '<g name = "brush-stroke">';
-    
+
     // get a unique ID to make sure each stroke has it's own filter
     const uniqueID = new Date().getTime();
-    
+
     // create the corresponding svg filter
     if (this.textures[this.attr.texture].type == 'blured') {
       s +=  this.createBluredFilter(scale, uniqueID);
@@ -69,7 +69,7 @@ export class BrushService extends PencilService {
       s += this.createNoiseFilter(width, scale, frequency, uniqueID);
       width = (width - (width * scale) / 2);
     }
-    
+
     // start the path
     s += '<path d="';
     // move to the first point
@@ -83,7 +83,7 @@ export class BrushService extends PencilService {
     s += 'fill="none" stroke-linecap="round" stroke-linejoin="round"';
     s += `filter="url(#${uniqueID})"/>`;
     // end the path
-    
+
     // end the divider
     s += '</g>';
 

@@ -139,5 +139,4 @@ describe('ColorPickingService', () => {
     expect(spyDisplay).toHaveBeenCalled();
   });
 
-
 });*/

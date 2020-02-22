@@ -51,10 +51,10 @@ export class InteractionService {
 
     this.ref.next(el)
   }
-  emitDrawingDone(){
+  emitDrawingDone() {
     this.drawingDone.next(true);
   }
-  emitEnableDisable(disableContainer: boolean[]){
+  emitEnableDisable(disableContainer: boolean[]) {
     this.enableDisableButtons.next(disableContainer);
   }
 }
