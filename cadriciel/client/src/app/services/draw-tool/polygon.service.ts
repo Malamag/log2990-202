@@ -1,54 +1,32 @@
 import { Injectable } from '@angular/core';
-//import { DrawingTool } from './drawingTool';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
-import { FormsAttribute } from '../attributes/attribute-form';
 import { InteractionService } from '../service-interaction/interaction.service';
-import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { Point } from './point';
-import { RectangleService } from './rectangle.service';
+import { ShapeService } from './shape.service';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class PolygonService extends RectangleService {
+export class PolygonService extends ShapeService {
   
-  attr: FormsAttribute
   private displayPolygon:boolean  //False if polygon is too small
-  private width:number;
-  private height:number;
-  private smallest:number;
-  private startX:number;
-  private startY:number;
+
+  //Point for the middle of the perimeter
   private middleX:number;
   private middleY:number;
+  //min and max values for x
   private leftPoint:number;
   private rightPoint:number;
+  //All corners of the polygon
   private corners:Point[];
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
     super(inProgess, drawing, selected, interaction, colorPick);
-    this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTNUMBERCORNERS)
-    this.updateColors()
-    this.updateAttributes()
     this.displayPolygon = false;
-    this.width = 0;
-    this.height = 0;
-    this.smallest = 0;
-    this.startX = 0;
-    this.startY = 0;
     this.leftPoint = 0;
     this.rightPoint = 0;
     this.corners = [];
-
-  }
-  
-  // updating on key change
-  update(keyboard: KeyboardHandlerService) {
-    // real time update
-    if (this.isDown) {
-      this.updateProgress();
-    }
   }
 
   // Creates an svg polygon that connects the first and last points of currentPath with the rectangle attributes
@@ -83,7 +61,7 @@ export class PolygonService extends RectangleService {
       s += '</g>'
 
       // need to display?
-      if (this.displayPolygon == false) {
+      if (!this.displayPolygon) {
         s = '';
       }
     }
@@ -91,17 +69,12 @@ export class PolygonService extends RectangleService {
     return s;
   }
 
-  setCorners(p:Point[]){
-    
-    // first and last points
+  setdimensions(p:Point[]){
+
+    super.setdimensions(p);
+
     this.startX = p[0].x;
     this.startY = p[0].y;
-    const endX = p[p.length - 1].x;
-    const endY = p[p.length - 1].y;
-
-    // calculate the width and height of the polygon area
-    this.width = endX - this.startX;
-    this.height = endY - this.startY;
 
     // we need regular polygons ->
     // get smallest absolute value between the width and the height
@@ -119,18 +92,11 @@ export class PolygonService extends RectangleService {
     else{
       this.middleY = this.startY - this.smallest/2;
     }
+  }
 
-    //Put the first point inside the array
-    //this.corners[0] = new Point(this.middleX,this.middleY);
+  setCorners(p:Point[]){  
 
-    //Calculating the circle area diameter outside the square perimeter
-    //const diameter = Math.sqrt((this.smallest*this.smallest)+(this.smallest*this.smallest));
-    //const diameter = this.smallest*(Math.sqrt(this.attr.numberOfCorners));
-    //const diameter = this.smallest*Math.cos(Math.PI/this.attr.numberOfCorners);
-
-    //Formula for the length of a polygon's side : R*sin(PI/n)
-    //const sideLength = this.smallest*Math.tan(Math.PI/this.attr.numberOfCorners);
-    //const sideLength = this.smallest*Math.sin(Math.PI/this.attr.numberOfCorners);
+    this.setdimensions(p);
 
     //Initilize values used for determining the other polygon's corners
     let rotateAngle = 3*Math.PI/2;
@@ -140,7 +106,6 @@ export class PolygonService extends RectangleService {
     this.rightPoint = this.middleX;
     for (let i = 0; i < this.attr.numberOfCorners; i++){
       //Formula for the outside angles of the polygon : 2*PI/n
-
       //Assigning length for x and y sides depending on the axis
       if(this.width > 0){
         x = this.middleX - this.smallest*Math.cos(rotateAngle)/2;
@@ -155,6 +120,7 @@ export class PolygonService extends RectangleService {
         y = this.middleY - this.smallest*Math.sin(rotateAngle)/2;
       }
 
+      //Assigning max and min for x
       if(this.leftPoint > x){
         this.leftPoint = x;
       }
@@ -182,26 +148,8 @@ export class PolygonService extends RectangleService {
     let widthPerimeter = this.rightPoint - this.leftPoint;
     let endYPoint = Math.floor(this.attr.numberOfCorners/2);
     let heightPerimeter = this.startY - this.corners[endYPoint].y;
+
     let sPerimeter = "";
-    //if (!removePerimeter) {
-    // create a perimeter
-    //let differenceY = this.startY - widthPerimeter;
-    /*
-    let perStartX; 
-    let perStartY;  
-    
-    if(this.width > 0){
-      perStartX = this.startX*2 - widthPerimeter;
-    }
-    else{
-      perStartX = this.startX*2 - widthPerimeter;
-    }
-    if(this.height > 0){
-      perStartX = this.startY*2 - heightPerimeter;
-    }
-    else{
-      perStartX = this.startY*2 - heightPerimeter;
-    }*/
     let perStartX = this.width > 0 ? this.startX : this.startX - widthPerimeter;
     let perStartY = this.height > 0 ? this.startY : this.startY - heightPerimeter;
 
@@ -209,7 +157,7 @@ export class PolygonService extends RectangleService {
     sPerimeter += `width="${Math.abs(widthPerimeter)}" height="${Math.abs(heightPerimeter)}"`;
     sPerimeter += `style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"`;
     sPerimeter += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
-  //}
+    
     return sPerimeter;
   }
 
@@ -226,30 +174,6 @@ export class PolygonService extends RectangleService {
         this.corners[i].x += additionX;
       }
     }  
-    /*
-    if (this.width > 0){
-      let leftCorner = this.startX;
-      for(let i = 0; i < this.corners.length; i++){
-        if (this.corners[i].x < leftCorner){
-          leftCorner = this.corners[i].x;
-        }
-      }
-      for(let i = 0; i < this.corners.length; i++){
-        this.corners[i].x += this.startX - leftCorner;
-      }
-    }
-    else{
-      let rightCorner = this.startX;
-      for(let i = 0; i < this.corners.length; i++){
-        if (this.corners[i].x > rightCorner){
-          rightCorner = this.corners[i].x;
-        }
-      }
-      for(let i = 0; i < this.corners.length; i++){
-        this.corners[i].x += this.startX - rightCorner;
-      }
-    }
-    return this.corners;
-  */}
+  }
   
 }
