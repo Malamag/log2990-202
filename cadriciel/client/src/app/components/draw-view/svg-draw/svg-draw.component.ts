@@ -8,6 +8,7 @@ import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.se
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
+import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 
 @Component({
   selector: 'app-svg-draw',
@@ -19,6 +20,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private canvBuilder: CanvasBuilderService, public interaction: InteractionService, public colorPick: ColorPickingService) { }
   canvas: Canvas;
   canvasSubscr: Subscription;
+  backgroundColorSub: Subscription;
   width: number;
   height: number;
   backColor: string;
@@ -38,12 +40,21 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.initCanvas();
 
+    
+
   }
 
   closeTools(map: Map<string, DrawingTool>) {
     map.forEach((el) => {
       el.selected = false;
     })
+  }
+
+  bgroundChangeSubscription(){
+    this.backgroundColorSub = this.colorPick.colorSubject.subscribe(
+      (choosenColors: ChoosenColors)=>{
+        this.backColor = choosenColors.backColor;
+    });
   }
 
   initCanvas() {
@@ -122,7 +133,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
       keyboardHandler.reset(e);
     });
     window.dispatchEvent(new Event('resize'));
-
+    this.bgroundChangeSubscription();
   }
 
   ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus

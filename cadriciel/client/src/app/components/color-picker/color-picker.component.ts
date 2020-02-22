@@ -24,24 +24,25 @@ export class ColorPickerComponent implements OnInit {
     initColors() {
         const DEF_PRIM = '#000000ff';
         const DEF_SEC = '#ff0000ff';
+        const DEF_BG = '#ffffffff'
         this.colorSubsc = this.colorPicking.colorSubject.subscribe(
             (colors: ChoosenColors) => {
                 if (colors == undefined) {
-                    colors = new ChoosenColors(DEF_PRIM, DEF_SEC);
+                    colors = new ChoosenColors(DEF_PRIM, DEF_SEC, DEF_BG);
 
                 }
                 this.cData.primaryColor = colors.primColor;
                 this.cData.secondaryColor = colors.secColor;
-
+                this.cData.backgroundColor = colors.backColor;
             }
         );
     }
 
-    setColor(color: number[] ) { // DONE
+    setColor(color: number[] ) { 
         this.colorPicking.setColor(color)
     }
 
-    hueSelector( event: MouseEvent ): void { // DONE
+    hueSelector( event: MouseEvent ): void { 
         this.colorPicking.hueSelector(event);
     }
 
@@ -78,46 +79,28 @@ export class ColorPickerComponent implements OnInit {
     onSwapSVGMouseUp(): void {
         this.colorPicking.onSwapSVGMouseUp();
     }
-    // convert rbg to h value of hsl.
-    swapInputDisplay(event: any) {
-        this.colorPicking.swapInputDisplay(event);
+    onRadioButtonChange( newColorMode : string) : void {
+        this.colorPicking.onRadioButtonChange( newColorMode );
+    }
+    swapInputDisplay() {
+        this.colorPicking.swapInputDisplay();
     }
    
     validateHexInput(event: KeyboardEvent, hexLenght : number, hex : string): void {
         this.colorPicking.validateHexInput(event, hexLenght, hex);
     }
-    onHexInput(hexLength : number, hex: string, hexInputField : string): void { // unmoved
+    onHexInput(hexLength : number, hex: string, hexInputField : string): void {
         this.colorPicking.onHexInput(hexLength, hex, hexInputField);
     }
-
-    onRGBSliderInput(slider : string): void {
-        this.colorPicking.onRGBSliderInput(slider);
-    }
-
     onSLSliderInput(): void {
         this.colorPicking.onSLSliderInput();
     }
 
     get svgStyles(): any {
-        return { transform : 'translate(100px,100px) rotate(' + this.cData.currentHue + 'deg) translate(-100px,-100px)'};
-    }
-    get gradientStyles(): any {
-        return { 'stop-color': 'hsl( ' + this.cData.currentHue + ', 100%, 50% )' };
-    }
-    get gradientStylesP(): any {
-        return { 'stop-color': this.cData.primaryColor };
-    }
-    get gradientStylesS(): any {
-        return { 'stop-color': this.cData.secondaryColor };
-    }
-    get swapStyles(): any {
-        return { 'stroke' : this.cData.swapStrokeStyle, 'font-size' : 10, 'font-style' : 'italic'};
+        return { transform : 'translate(50px,50px) rotate(' + this.cData.currentHue + 'deg) translate(-50px,-50px)'};
     }
     get cursorStyles(): any {
         return { transform : 'translate(' + this.cData.slCursorX + 'px,' + this.cData.slCursorY + 'px)'};
-    }
-    get rectOffsetBg(): any {
-        return { fill: this.cData.rectOffsetFill };
     }
     // change primary alpha when primary slide change
     sliderAlphaChange(): void {
