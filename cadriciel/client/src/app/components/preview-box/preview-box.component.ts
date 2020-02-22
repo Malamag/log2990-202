@@ -11,24 +11,28 @@ export class PreviewBoxComponent implements OnInit, AfterViewInit {
   @Input() svgH: number;
   @Input() svgW: number;
   
+  viewBoxStr: string;
   
   @ViewChild('prevBox', {static:false}) previewBoxRef: ElementRef; // has an eye on the <canvas> element
  
   constructor() { }
 
   ngOnInit() {
-    
+    const SCALE = 3;
+    this.scaleSVG(SCALE);
   }
 
   ngAfterViewInit() {
-    //this.draw = this.doodleFetch.getDrawing();
-   
-    this.previewBoxRef.nativeElement.innerHTML = this.draw.outerHTML;
-    
+
+    this.previewBoxRef.nativeElement.innerHTML = this.draw.innerHTML;
   }
 
-  scaleSVG() {
-    
+  scaleSVG(scaleFacor: number) {
+    let viewboxW = this.svgW;
+    let viewBoxH = this.svgH;
+    this.viewBoxStr = `0 0 ${viewboxW} ${viewBoxH}`;
+    this.svgW = this.svgW/scaleFacor;
+    this.svgH = this.svgH/scaleFacor;
   }
   
 

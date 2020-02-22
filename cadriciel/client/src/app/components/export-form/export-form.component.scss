@@ -1,8 +1,16 @@
 .form-container{
     
     height: 75vh;
+    width: 30vw;
 }
 
 canvas{
     display: none;
 }
+
+#prev{
+    
+    overflow: auto;
+    
+}
+
