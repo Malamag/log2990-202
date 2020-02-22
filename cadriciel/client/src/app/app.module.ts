@@ -31,7 +31,8 @@ import {
     MatSnackBarModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatSelectModule
+    MatSelectModule,
+    MatButtonToggleModule
 } from '@angular/material';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
 import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
@@ -75,7 +76,8 @@ import { PreviewBoxComponent } from './components/preview-box/preview-box.compon
         MatTooltipModule,
         MatRadioModule,
         MatSelectModule,
-        AppRoutingModule
+        AppRoutingModule,
+        MatButtonToggleModule,
     ],
     providers: [
         CanvasBuilderService,

@@ -10,6 +10,8 @@ import { toolsItems } from '../../../functionality';
 export class ToolBoxComponent implements OnInit {
   funcTools = toolsItems;
 
+  activeButton: any;
+
   // I doubt if we can delete these two
   @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
   renderer: Renderer2
@@ -34,8 +36,11 @@ export class ToolBoxComponent implements OnInit {
 
   }
 
-  buttonAction(name: string) { // on click, emit the selected tool name
+  buttonAction(name: string, actualButton?: any) { // on click, emit the selected tool name
     this.interactionService.emitSelectedTool(name);
+    this.activeButton = actualButton;
   }
+
+  
 
 }

@@ -1,8 +1,10 @@
+
 <div class= "drawingTools" *ngFor="let func of funcTools; index as id">
-    <div>
-        <button class="toolBtn" mat-icon-button color="primary" matTooltip={{func.name}} matTooltipPosition = "after" (click)="buttonAction(func.name)">
+        <button  mat-icon-button color="primary" matTooltip={{func.name}} matTooltipPosition = "after" (click)="buttonAction(func.name,func)" >
             <img src={{func.icon}} class="toolIcon"> 
+            <div [ngClass]="(activeButton === func)? 'selected':'notSelected'">
+                <img/>
+            </div>
         </button>    
-    </div>
 </div>
 
