@@ -139,7 +139,7 @@ export class RectangleService extends DrawingTool {
     }
 
     // create a divider
-    s = '<g name = "rectangle">';
+    s = '<g style="transform: translate(0px, 0px);" name = "rectangle">';
 
     // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
     const stroke = (this.attr.plotType == 0 || this.attr.plotType == 2) ? `${this.chosenColor.secColor}` : 'none';

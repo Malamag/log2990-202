@@ -94,7 +94,7 @@ export class PencilService extends DrawingTool {
     }
 
     // create a divider
-    s = '<g name = "pencil-stroke">';
+    s = '<g style="transform: translate(0px, 0px);" name = "pencil-stroke">';
 
     // start the path
     s += '<path d="';
