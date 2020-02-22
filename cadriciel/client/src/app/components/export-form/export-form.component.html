@@ -16,7 +16,9 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+            
         </form>
+        
         <h5>Appliquer un filtre</h5>
         <!--ngfor des types de filtres-->
 
@@ -25,9 +27,10 @@
             
             <app-preview-box [draw]="doodle" [svgW]="cWidth" [svgH]="cHeigth"></app-preview-box>
         </div>
-        
+
         <button mat-raised-button color="primary"(click)="onSubmit()" [disabled]="exportForm.invalid">Exporter</button>
         <button mat-button id="quitButton" (click)="closeForm()">Cancel</button>
+        <span id="dimensions">{{cWidth}}px X {{cHeigth}}px</span>
     </div>
     <canvas #imgBox [width]="cWidth" [height]="cHeigth"></canvas> <!--Canvas element used for conversion-->
 </div>
