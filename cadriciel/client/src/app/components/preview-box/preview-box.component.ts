@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Input } from '@angular/core';
+//import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 
 @Component({
   selector: 'app-preview-box',
@@ -7,19 +7,28 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
   styleUrls: ['./preview-box.component.scss']
 })
 export class PreviewBoxComponent implements OnInit, AfterViewInit {
-  draw: SVGElement;
-
+  @Input() draw: SVGElement;
+  @Input() svgH: number;
+  @Input() svgW: number;
   
-  @ViewChild('imgBox', {static:false}) export: ElementRef; // has an eye on the <canvas> element
+  
+  @ViewChild('prevBox', {static:false}) previewBoxRef: ElementRef; // has an eye on the <canvas> element
  
-  constructor(private doodleFetch: DoodleFetchService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.doodleFetch.askForDoodle();
+    
   }
 
   ngAfterViewInit() {
-    this.draw = this.doodleFetch.getDrawing();
+    //this.draw = this.doodleFetch.getDrawing();
+   
+    this.previewBoxRef.nativeElement.innerHTML = this.draw.outerHTML;
+    
+  }
+
+  scaleSVG() {
+    
   }
   
 

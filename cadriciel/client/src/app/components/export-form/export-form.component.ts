@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterContentInit } from '@angular/core';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
@@ -15,7 +15,7 @@ interface Formats {
   templateUrl: './export-form.component.html',
   styleUrls: ['./export-form.component.scss']
 })
-export class ExportFormComponent implements OnInit, AfterViewInit {
+export class ExportFormComponent implements OnInit, AfterContentInit {
   formats: Formats[] = [
     {type: "jpeg", view: ".jpeg"},
     {type: "png", view: ".png"},
@@ -50,7 +50,7 @@ export class ExportFormComponent implements OnInit, AfterViewInit {
     });
   }
   
-  ngAfterViewInit() {
+  ngAfterContentInit() {
     this.doodle = this.doodleFetch.getDrawing();
   }
 

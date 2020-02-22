@@ -20,11 +20,10 @@
         <h5>Appliquer un filtre</h5>
         <!--ngfor des types de filtres-->
 
-
         <!--preview-->
         <div id="prev">
             Here goes the preview box
-            <!--<app-preview-box></app-preview-box>-->
+            <app-preview-box [draw]="doodle"></app-preview-box>
         </div>
         <button mat-raised-button color="primary"(click)="onSubmit()" [disabled]="exportForm.invalid">Exporter</button>
         <button mat-button id="quitButton" (click)="closeForm()">Cancel</button>
