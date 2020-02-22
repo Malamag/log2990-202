@@ -10,6 +10,7 @@ import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.ser
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
+import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 
 @Component({
   selector: 'app-svg-draw',
@@ -26,6 +27,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     private render: Renderer2) { }
   canvas: Canvas;
   canvasSubscr: Subscription;
+  backgroundColorSub: Subscription;
   width: number;
   height: number;
   backColor: string;
@@ -47,12 +49,21 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.initCanvas();
 
+    
+
   }
 
   closeTools(map: Map<string, DrawingTool>) {
     map.forEach((el) => {
       el.selected = false;
     })
+  }
+
+  bgroundChangeSubscription(){
+    this.backgroundColorSub = this.colorPick.colorSubject.subscribe(
+      (choosenColors: ChoosenColors)=>{
+        this.backColor = choosenColors.backColor;
+    });
   }
 
   initCanvas() {
@@ -146,6 +157,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         this.doodleFetch.heightAttr = this.height;
       }
     );
+    this.bgroundChangeSubscription();
   }
 
   ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus

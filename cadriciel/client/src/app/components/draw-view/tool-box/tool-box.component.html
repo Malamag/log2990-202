@@ -1,3 +1,6 @@
+<div>
+    <app-color-picker></app-color-picker>
+</div>
 <div class="drawingTools" *ngFor="let func of funcTools">
     <div *ngIf="func.name === 'Annuler' || func.name ==='Refaire'; else elseBlock">
         <div *ngIf="func.name ==='Annuler'; else redoBlock">

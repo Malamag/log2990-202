@@ -7,6 +7,7 @@ export class DefaultAttributeValues {
     DEFAULTNUMBERCORNERS: number
     DEFAULTPRIMARYCOLOR: string
     DEFAULTSECONDARYCOLOR: string
+    DEFAULTBACKCOLOR: string
 
     constructor() {
         this.DEFAULTJUNCTION = true;
@@ -17,5 +18,6 @@ export class DefaultAttributeValues {
         this.DEFAULTNUMBERCORNERS = 3
         this.DEFAULTPRIMARYCOLOR = 'ff0000ff'
         this.DEFAULTSECONDARYCOLOR = '000000'
+        this.DEFAULTBACKCOLOR = 'ffffffff'
     }
 }
