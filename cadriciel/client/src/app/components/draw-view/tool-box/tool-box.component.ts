@@ -51,9 +51,9 @@ export class ToolBoxComponent implements OnInit {
     })
   }
 
-  buttonAction(name: string, actualButton?: any) { // on click, emit the selected tool name
+  buttonAction(name: string) { // on click, emit the selected tool name
     this.interactionService.emitSelectedTool(name);
-    this.activeButton = actualButton;
+    this.activeButton = name;
   }
 
   
