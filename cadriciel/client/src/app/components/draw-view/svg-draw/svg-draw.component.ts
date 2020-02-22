@@ -84,12 +84,15 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     const brush = tc.CreateBrush(false, this.interaction, this.colorPick);
     const ellipse = tc.CreateEllipse(false, this.interaction, this.colorPick);
     const undoRedo: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
+    const polygon = tc.CreatePolygon(false, this.interaction, this.colorPick);
+    
     this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
     this.toolsContainer.set('Rectangle', rect);
     this.toolsContainer.set('Ligne', line);
     this.toolsContainer.set('Pinceau', brush);
     this.toolsContainer.set('Crayon', pencil);
     this.toolsContainer.set('Ellipse', ellipse);
+    this.toolsContainer.set('Polygone', polygon);
     this.interaction.$cancelToolsObs.subscribe((sig) => {
       if (sig) {
           this.closeTools(this.toolsContainer)

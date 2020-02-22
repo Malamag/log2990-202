@@ -34,6 +34,7 @@ export class ToolBoxComponent implements OnInit {
     this.selectingToolsMap.set('w', 'Pinceau');
     this.selectingToolsMap.set('l', 'Ligne');
     this.selectingToolsMap.set('2', 'Ellipse');
+    this.selectingToolsMap.set('3', 'Polygone');
     this.selectingToolsMap.set('u', 'Annuler');
     this.selectingToolsMap.set('r', 'Refaire');
   }
