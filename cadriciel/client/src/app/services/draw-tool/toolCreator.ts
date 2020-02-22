@@ -6,6 +6,7 @@ import { LineService } from './line.service';
 import { PencilService } from './pencil.service';
 import { RectangleService } from './rectangle.service';
 import { EllipseService } from './ellipse.service';
+import { SelectionService } from './selection.service';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,10 @@ export class ToolCreator {
 
   CreateEllipse(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): EllipseService {
     return new EllipseService(this.inProgress, this.drawing, selected, interaction, colorPick);
+  }
+
+  CreateSelection(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): RectangleService {
+    return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick);
   }
   
 }
