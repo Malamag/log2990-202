@@ -26,6 +26,8 @@ export class ToolBoxComponent implements OnInit {
     this.selectingToolsMap.set('2', 'Ellipse');
     this.selectingToolsMap.set('u','Annuler');
     this.selectingToolsMap.set('r','Refaire');
+    this.disableUndo = true;
+    this.disableRedo = true;
   }
 
   @HostListener('document: keydown', ['$event'])
