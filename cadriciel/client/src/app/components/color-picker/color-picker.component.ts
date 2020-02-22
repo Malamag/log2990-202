@@ -24,15 +24,16 @@ export class ColorPickerComponent implements OnInit {
     initColors() {
         const DEF_PRIM = '#000000ff';
         const DEF_SEC = '#ff0000ff';
+        const DEF_BG = '#ffffffff'
         this.colorSubsc = this.colorPicking.colorSubject.subscribe(
             (colors: ChoosenColors) => {
                 if (colors == undefined) {
-                    colors = new ChoosenColors(DEF_PRIM, DEF_SEC);
+                    colors = new ChoosenColors(DEF_PRIM, DEF_SEC, DEF_BG);
 
                 }
                 this.cData.primaryColor = colors.primColor;
                 this.cData.secondaryColor = colors.secColor;
-
+                this.cData.backgroundColor = colors.backColor;
             }
         );
     }
@@ -91,11 +92,6 @@ export class ColorPickerComponent implements OnInit {
     onHexInput(hexLength : number, hex: string, hexInputField : string): void {
         this.colorPicking.onHexInput(hexLength, hex, hexInputField);
     }
-
-    onRGBSliderInput(slider : string): void {
-        this.colorPicking.onRGBSliderInput(slider);
-    }
-
     onSLSliderInput(): void {
         this.colorPicking.onSLSliderInput();
     }
@@ -103,23 +99,8 @@ export class ColorPickerComponent implements OnInit {
     get svgStyles(): any {
         return { transform : 'translate(50px,50px) rotate(' + this.cData.currentHue + 'deg) translate(-50px,-50px)'};
     }
-    get gradientStyles(): any {
-        return { 'stop-color': 'hsl( ' + this.cData.currentHue + ', 100%, 50% )' };
-    }
-    get gradientStylesP(): any {
-        return { 'stop-color': this.cData.primaryColor };
-    }
-    get gradientStylesS(): any {
-        return { 'stop-color': this.cData.secondaryColor };
-    }
-    get swapStyles(): any {
-        return { 'stroke' : this.cData.swapStrokeStyle, 'font-size' : 10, 'font-style' : 'italic'};
-    }
     get cursorStyles(): any {
         return { transform : 'translate(' + this.cData.slCursorX + 'px,' + this.cData.slCursorY + 'px)'};
-    }
-    get rectOffsetBg(): any {
-        return { fill: this.cData.rectOffsetFill };
     }
     // change primary alpha when primary slide change
     sliderAlphaChange(): void {

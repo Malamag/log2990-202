@@ -28,22 +28,15 @@ export class ColorPickingService {
 
   colors: ChoosenColors;
   colorSubject = new Subject<ChoosenColors>(); // le constuire à qqpart
-
   constructor(public colorConvert: ColorConvertingService) { }
 
   emitColors() { // observerved-observer design pattern
     this.colorSubject.next(this.colors);
   }
-
+  /************************ SETTERS SECTION ***************************/
   setColorsFromForm(primary: string, secondary: string, background : string) {
     this.colors = new ChoosenColors(primary, secondary, background);
   }
-
-  slCursor(x: number, y: number) {
-    this.cData.saturationSliderInput = x;
-    this.cData.lightnessSliderInput = y;
-  }
-
   setColor( color: number[] ) : string {
     if (color.length < 3) {
       return '';
@@ -64,7 +57,22 @@ export class ColorPickingService {
       return newColor;
     }
   }
-
+  setColorMode( event : MouseEvent ) : void {
+    if ( this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE ) {
+      switch ( event.button ) {
+        case 0 : this.cData.colorMode = this.cData.PRIMARY_COLOR_MODE;
+                                        break;
+        case 2 : this.cData.colorMode = this.cData.SECONDARY_COLOR_MODE;
+                                        break;
+      }
+    }
+  }
+  // Set position of x and y of saturatio/lightness cursor
+  setSLCursor( x: number, y: number): void {
+    this.cData.slCursorX = x;
+    this.cData.slCursorY = y;
+  }
+  /************************ SELECTORS SECTION ***************************/
   hueSelector( event: MouseEvent ): void {
     let hue = 0
     if ( this.cData.isHueSelecting) {
@@ -73,37 +81,6 @@ export class ColorPickingService {
       let color = this.setColor( this.colorConvert.hslToRgb(hue, this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
                                  this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER ) ) ;
       this.updateDisplay( color );
-    }
-  }
-  computeHue(event: MouseEvent): number {
-    // Hue circle radius is 45px and stroke widht 10px which mean average radius is ( 55 - 45 ) / 2 = 50
-    // Which is subtract from offset to center circle for math formula
-    const radiusX: number = event.offsetX - 50;
-    const radiusY: number = event.offsetY - 50;
-    const radius: number = Math.sqrt( Math.pow( radiusX, 2) + Math.pow( radiusY, 2) );
-    const theta: number = Math.acos( radiusX / radius);
-    let Hue = 0;
-    // hue is a value of 0 to 360 degree but theta is in radiant so conversion are needed depending on raduisY signe
-    if ( radiusY >= 0 ) {
-        Hue = 180 / Math.PI * theta;
-    } else {
-        Hue = 360 - 180 / Math.PI * theta;
-    }
-    return Hue;
-  }
-  // Exchange primary and secondary value
-  swapPrimarySecondary(): void {
-    if ( this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE ) {
-      const tempColor: string = this.cData.primaryColor;
-      const tempAlpha: number = this.cData.primaryAlpha;
-
-      this.cData.primaryColor = this.cData.secondaryColor;
-      this.cData.primaryAlpha = this.cData.secondaryAlpha;
-
-      this.cData.secondaryColor = tempColor;
-      this.cData.secondaryAlpha = tempAlpha;
-      let color = this.selectDisplayColor();
-      this.updateDisplay(color);
     }
   }
   // saturation/lightness selector
@@ -120,11 +97,12 @@ export class ColorPickingService {
       this.updateDisplay( color, this.colorConvert.hexToRgba( color ), hsl );
     }
   }
-  // Set position of x and y of saturatio/lightness cursor
-  setSLCursor( x: number, y: number): void {
-    this.cData.slCursorX = x;
-    this.cData.slCursorY = y;
+  lastColorSelector( event: MouseEvent, lastColor: string ): void {
+    this.setColorMode( event );
+    let color = this.setColor( this.colorConvert.hexToRgba( lastColor ) );
+    this.updateDisplay( color );
   }
+  /************************ EVENTS SECTION ***************************/
   onContextMenu(event: MouseEvent): void {
     event.preventDefault();
   }
@@ -188,11 +166,13 @@ export class ColorPickingService {
       this.slSelector(event);
     }
   }
+  // DISPLAY/UPDATE
   // Update last color table with a new color
   updateLastColor( newColor: string ): void {
     for (let i = 0; i < this.cData.lastColorRects.length; i++ ) {
       if (this.cData.lastColorRects[i].fill === 'none') {
         this.cData.lastColorRects[i].fill = newColor.substring( 0, 7 );
+        this.cData.lastColorRects[i].stroke = 'white';
         return;
       }
     }
@@ -201,22 +181,6 @@ export class ColorPickingService {
     }
     this.cData.lastColorRects[this.cData.lastColorRects.length - 1].fill = newColor.substring( 0, 7 );
   }
-
-  lastColorSelector( event: MouseEvent, lastColor: string ): void {
-    this.setColorMode( event );
-    let color = this.setColor( this.colorConvert.hexToRgba( lastColor ) );
-    this.updateDisplay( color );
-  }
-  setColorMode( event : MouseEvent ) : void {
-    if ( this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE ) {
-      switch ( event.button ) {
-        case 0 : this.cData.colorMode = this.cData.PRIMARY_COLOR_MODE;
-                                        break;
-        case 2 : this.cData.colorMode = this.cData.SECONDARY_COLOR_MODE;
-                                        break;
-      }
-    }
-  } 
   updateDisplay(hex: string, rgb: number[] = this.colorConvert.hexToRgba( hex.substring( 1, 9 ) ), hsl: number[] = this.colorConvert.rgbToHsl( rgb[0], rgb[1], rgb[2] ) ) {
     // RGBA value of last color for display
     this.updateDisplayRGB( rgb );
@@ -263,6 +227,22 @@ export class ColorPickingService {
     }
     return color;
   }
+  // Exchange primary and secondary value
+  swapPrimarySecondary(): void {
+    if ( this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE ) {
+      const tempColor: string = this.cData.primaryColor;
+      const tempAlpha: number = this.cData.primaryAlpha;
+
+      this.cData.primaryColor = this.cData.secondaryColor;
+      this.cData.primaryAlpha = this.cData.secondaryAlpha;
+
+      this.cData.secondaryColor = tempColor;
+      this.cData.secondaryAlpha = tempAlpha;
+      let color = this.selectDisplayColor();
+      this.updateDisplay(color);
+    }
+  }
+  // INPUTS
   // validate if char is hexadecimal. A window alert is send id invalide char are found
   validateHexInput(event: KeyboardEvent, hexLength : number, hex: string ): void {
     event.stopPropagation();
@@ -325,23 +305,11 @@ export class ColorPickingService {
     }
     return ret;
   }
-
-  /**
-  * Update display with a given color
-  **/
-  // RBG slider input event function
-  onRGBSliderInput(slider : string ): void {
-    const rgb :number[] = [this.cData.redSliderInput,this.cData.greenSliderInput,this.cData.blueSliderInput];
-    this.sliderColorUpdate( rgb );
-  }
   // Saturation and lightness slider input event function
   onSLSliderInput(): void {
     // hsl saturation and ligthness value are between [0;1] while display is [0;100]%.So we need to divide by 100
     const rgb = this.colorConvert.hslToRgb( this.cData.currentHue, this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
-       this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER);
-    this.sliderColorUpdate( rgb );
-  }
-  sliderColorUpdate( rgb : number[] ) : void {
+                this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER);
     let newColor = this.setColor( rgb );
     this.updateDisplay( newColor );
     this.updateLastColor( newColor );
@@ -366,5 +334,22 @@ export class ColorPickingService {
     }
     this.setColorsFromForm( this.cData.primaryColor, this.cData.secondaryColor, this.cData.backgroundColor );
     this.emitColors();
+  }
+  /************************ MATH SECTION ***************************/
+  computeHue(event: MouseEvent): number {
+    // Hue circle radius is 45px and stroke widht 10px which mean average radius is ( 55 - 45 ) / 2 = 50
+    // Which is subtract from offset to center circle for math formula
+    const radiusX: number = event.offsetX - 50;
+    const radiusY: number = event.offsetY - 50;
+    const radius: number = Math.sqrt( Math.pow( radiusX, 2) + Math.pow( radiusY, 2) );
+    const theta: number = Math.acos( radiusX / radius);
+    let Hue = 0;
+    // hue is a value of 0 to 360 degree but theta is in radiant so conversion are needed depending on raduisY signe
+    if ( radiusY >= 0 ) {
+        Hue = 180 / Math.PI * theta;
+    } else {
+        Hue = 360 - 180 / Math.PI * theta;
+    }
+    return Hue;
   }
 }

@@ -37,7 +37,7 @@ button {
   color: white;
   float: right;
   width: 30px;
-  height: 8px;
+  height: 25px;
   font-weight: bold;
   padding: 0px;
 }
@@ -52,21 +52,20 @@ button {
 }
 .hexInput {
     position: relative;
-    width: 30px;
-    font-size: 7px;
+    width: 40px;
+    font-size: 10px;
     border: none;
     border-bottom: 1px solid white;
     caret-color: white;
     color: white;
     background:transparent;
+    padding-top: 4px;
 }
 .rgbInput {
-  //position: absolute;
   width: 25px;
   font-size: 10px;
   color: white;
   border: none;
-  //left: 160px;
   border-bottom-width: 10px;
   border-bottom: 1px solid white;
   caret-color: white;
