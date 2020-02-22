@@ -5,9 +5,9 @@ import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboa
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import {menuItems} from '../../../functionality';
+import { ExportFormComponent } from '../../export-form/export-form.component';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
-import { ExportFormComponent } from '../../export-form/export-form.component';
 
 @Component({
   selector: 'app-option-bar',

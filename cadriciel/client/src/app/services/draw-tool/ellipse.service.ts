@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { FormsAttribute } from '../attributes/attribute-form';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
-import { RectangleService } from './rectangle.service'
 import { Point } from './point';
+import { RectangleService } from './rectangle.service'
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +23,6 @@ export class EllipseService extends RectangleService {
     this.updateAttributes()
   }
 
-
-
   // mouse up with ellipse in hand
   up(position: Point) {
 
@@ -39,15 +37,13 @@ export class EllipseService extends RectangleService {
     }
   }
 
-
-
   // Creates an svg rect that connects the first and last points of currentPath with the ellipse attributes and a perimeter
   createPath(p: Point[], removePerimeter: boolean) {
 
     let s = '';
-    
-    //We need at least 2 points
-    if(p.length < 2){
+
+    // We need at least 2 points
+    if (p.length < 2) {
       return s;
     }
 
@@ -61,13 +57,9 @@ export class EllipseService extends RectangleService {
     let w = p2x - p1x;
     let h = p2y - p1y;
 
-
-
     // find top-left corner
     let startX = w > 0 ? p[0].x : p[p.length - 1].x;
     let startY = h > 0 ? p[0].y : p[p.length - 1].y;
-
-
 
     // if we need to make it square (perimeter = square => ellipse = circle)
     if (this.isSquare) {
@@ -82,7 +74,6 @@ export class EllipseService extends RectangleService {
       startY = h > 0 ? p[0].y : p[0].y - smallest;
     }
 
-    
     // create a divider for the ellipse
     s += '<g name = "ellipse">';
 
@@ -96,10 +87,10 @@ export class EllipseService extends RectangleService {
     s += `stroke-width="${this.attr.lineThickness}" stroke="${stroke}"/>`;
 
     if (!removePerimeter) {
-      // create a perimeter 
+      // create a perimeter
       s += `<rect x="${startX}" y="${startY}"`;
       s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
-      s += `style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"`;
+      s += 'style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"';
       s += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
     }
 

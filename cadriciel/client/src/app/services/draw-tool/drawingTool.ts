@@ -7,7 +7,6 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import {InputObserver } from './input-observer';
 import { Point } from './point';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +23,7 @@ export abstract class DrawingTool extends InputObserver {
     chosenColor: ChoosenColors
     colorSub: Subscription
 
-    abstract createPath(path: Point[], doubleClickCheck?: boolean, removePerimeter?:boolean): void;
+    abstract createPath(path: Point[], doubleClickCheck?: boolean, removePerimeter?: boolean): void;
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
 
@@ -70,7 +69,7 @@ export abstract class DrawingTool extends InputObserver {
     }
 
     // render the current progress
-    updateProgress(wasDoubleClick?: boolean, removePerimeter?:boolean) {
+    updateProgress(wasDoubleClick?: boolean, removePerimeter?: boolean) {
 
       // create an svg element from the current path
       let d = '';

@@ -1,4 +1,4 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -11,8 +11,8 @@ export class DoodleFetchService {
 
   widthAttr: number;
   heightAttr: number;
-  
-  constructor() { 
+
+  constructor() {
     this.ask = new Subject<boolean>();
   }
 

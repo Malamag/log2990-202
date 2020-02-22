@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { InputObserver } from '../draw-tool/input-observer';
 import { Point } from '../../point';
+import { InputObserver } from '../draw-tool/input-observer';
 import { MouseHandlerService } from './mouse-handler.service';
 
 describe('MouseHandlerService', () => {

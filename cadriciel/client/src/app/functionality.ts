@@ -41,7 +41,7 @@ export const menuItems = [
       name: 'Exporter un dessin',
       shortcutName: 'Exporter',
       shortDescription: 'Permet dexporter un dessin localement selon 3 différents formats: SVG, PNG ou JPG.',
-      description:'TODO',
+      description: 'TODO',
       icon: 'save'
     }
 

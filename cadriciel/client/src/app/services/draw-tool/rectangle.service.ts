@@ -12,7 +12,7 @@ import { Point } from './point';
 export class RectangleService extends DrawingTool {
 
   isSquare: boolean;
-  
+
   attr: FormsAttribute
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
@@ -102,12 +102,12 @@ export class RectangleService extends DrawingTool {
   }
 
   // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
-  createPath(p: Point[],removePerimeter?: boolean) {
+  createPath(p: Point[], removePerimeter?: boolean) {
 
     let s = '';
 
-    //We need at least 2 points
-    if(p.length < 2){
+    // We need at least 2 points
+    if (p.length < 2) {
       return s;
     }
 
