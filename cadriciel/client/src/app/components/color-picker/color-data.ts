@@ -4,8 +4,12 @@ export const colorData = {
     primaryAlpha : 1,
     secondaryColor : '#000000ff',
     secondaryAlpha : 1,
-    primarySelect : true,
-    currentColorSelect : 'Primaire',
+    backgroundColor : '#ffffffff',
+    backgroundColorAlpha : 1,
+    colorMode : "Primary",
+    PRIMARY_COLOR_MODE : "Primary",
+    SECONDARY_COLOR_MODE : "Secondary",
+    BACKGROUND_COLOR_MODE : "Background",
     currentAlpha : 0,
 
     // input style
@@ -19,7 +23,6 @@ export const colorData = {
     saturationSliderInput : 100,
     lightnessSliderInput : 50,
     opacitySliderInput : 100,
-    checkboxSliderStatus : true,
 
     slCursorX : 0,
     slCursorY : 0,

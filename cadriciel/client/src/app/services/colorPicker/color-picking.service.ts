@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { colorData } from '../../components/color-picker/color-data';
 import { ChoosenColors } from '../../models/ChoosenColors.model';
 import { ColorConvertingService } from './color-converting.service';
+import { throwMatDialogContentAlreadyAttachedError } from '@angular/material';
 
 /*-----------------------------Color valur table-----------------------------------------*
 * RGBA min/max value : R [0,255] , G [0,255] , B [0,255] , A [0,1]                       *
@@ -34,8 +35,8 @@ export class ColorPickingService {
     this.colorSubject.next(this.colors);
   }
 
-  setColorsFromForm(primary: string, secondary: string) {
-    this.colors = new ChoosenColors(primary, secondary);
+  setColorsFromForm(primary: string, secondary: string, background : string) {
+    this.colors = new ChoosenColors(primary, secondary, background);
   }
 
   slCursor(x: number, y: number) {
@@ -49,15 +50,16 @@ export class ColorPickingService {
     } else {
       let newColor : string = '#' + this.colorConvert.rgbToHex( color[0] ) + this.colorConvert.rgbToHex( color[1] )
       + this.colorConvert.rgbToHex( color[2] ) 
-      if ( this.cData.primarySelect ) {
-        newColor += this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha);
-        this.cData.currentColorSelect = 'Primaire';
-        this.cData.primaryColor = newColor;
-        
-      } else {
-        newColor += this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha);
-        this.cData.currentColorSelect = 'Secondaire';
-        this.cData.secondaryColor = newColor;
+      switch ( this.cData.colorMode ) {
+        case this.cData.PRIMARY_COLOR_MODE: newColor += this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha);
+                                            this.cData.primaryColor = newColor;
+                                            break;
+        case this.cData.SECONDARY_COLOR_MODE: newColor += this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha);
+                                              this.cData.secondaryColor = newColor;
+                                              break;
+        case this.cData.BACKGROUND_COLOR_MODE:  newColor += this.colorConvert.alphaRGBToHex( this.cData.backgroundColorAlpha );
+                                                this.cData.backgroundColor = newColor;
+                                                break;
       }
       return newColor;
     }
@@ -91,16 +93,18 @@ export class ColorPickingService {
   }
   // Exchange primary and secondary value
   swapPrimarySecondary(): void {
-    const tempColor: string = this.cData.primaryColor;
-    const tempAlpha: number = this.cData.primaryAlpha;
+    if ( this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE ) {
+      const tempColor: string = this.cData.primaryColor;
+      const tempAlpha: number = this.cData.primaryAlpha;
 
-    this.cData.primaryColor = this.cData.secondaryColor;
-    this.cData.primaryAlpha = this.cData.secondaryAlpha;
+      this.cData.primaryColor = this.cData.secondaryColor;
+      this.cData.primaryAlpha = this.cData.secondaryAlpha;
 
-    this.cData.secondaryColor = tempColor;
-    this.cData.secondaryAlpha = tempAlpha;
-    let color = this.selectDisplayColor();
-    this.updateDisplay(color);
+      this.cData.secondaryColor = tempColor;
+      this.cData.secondaryAlpha = tempAlpha;
+      let color = this.selectDisplayColor();
+      this.updateDisplay(color);
+    }
   }
   // saturation/lightness selector
   slSelector(event: MouseEvent): void {
@@ -113,9 +117,7 @@ export class ColorPickingService {
       let hsl : number[] = [this.cData.currentHue, this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER, this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER];
       let color = this.setColor( this.colorConvert.hslToRgb(this.cData.currentHue, this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
                     this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER ) ) ;
-      this.updateDisplayHSL( hsl );
-      this.updateDisplayRGB( this.colorConvert.hexToRgba( color ) );
-      this.upadateDisplayHex( color );
+      this.updateDisplay( color, this.colorConvert.hexToRgba( color ), hsl );
     }
   }
   // Set position of x and y of saturatio/lightness cursor
@@ -127,16 +129,24 @@ export class ColorPickingService {
     event.preventDefault();
   }
   onSwapSVGMouseOver(): void {
+    if ( this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE ) {
     this.cData.swapStrokeStyle = 'yellow';
+    }
   }
   onSwapSVGMouseLeave(): void {
     this.cData.swapStrokeStyle = 'white';
   }
   onSwapSVGMouseDown(): void {
+    if ( this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE ) {
     this.cData.swapStrokeStyle = 'lightblue';
+    }
   }
   onSwapSVGMouseUp(): void {
     this.cData.swapStrokeStyle = 'white';
+  }
+  onRadioButtonChange( newColorMode : string) : void {
+    this.cData.colorMode = newColorMode;
+    this.swapInputDisplay();
   }
   // Mouse up event function when mouse on a color selector
   colorSelectOnMouseUp(): void {
@@ -144,12 +154,15 @@ export class ColorPickingService {
       this.cData.rectOffsetFill = 'none';
       this.cData.isHueSelecting = false;
       this.cData.isSLSelecting = false;
-      if ( this.cData.primarySelect ) {
-          this.updateLastColor( this.cData.primaryColor );
-      } else {
-          this.updateLastColor( this.cData.secondaryColor );
+      switch ( this.cData.colorMode ) {
+        case this.cData.PRIMARY_COLOR_MODE: this.updateLastColor( this.cData.primaryColor );
+                                            break;
+        case this.cData.SECONDARY_COLOR_MODE: this.updateLastColor( this.cData.secondaryColor );
+                                              break;
+        case this.cData.BACKGROUND_COLOR_MODE:  this.updateLastColor( this.cData.backgroundColor );
+                                                break;
       }
-      this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
+      this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor, this.cData.backgroundColor);
       this.emitColors();
     }
   }
@@ -158,7 +171,7 @@ export class ColorPickingService {
     if (!(this.cData.isSLSelecting)) {
       this.cData.isHueSelecting = true;
       this.cData.rectOffsetFill = 'white';
-      this.cData.primarySelect = (event.button === 0);
+      this.setColorMode( event );
       this.hueSelector(event);
     }
   }
@@ -171,7 +184,7 @@ export class ColorPickingService {
   slSelectorOnMouseDown(event: MouseEvent ): void {
     if (!(this.cData.isHueSelecting)) {
       this.cData.isSLSelecting = true;
-      this.cData.primarySelect = (event.button === 0);
+      this.setColorMode( event );
       this.slSelector(event);
     }
   }
@@ -190,20 +203,27 @@ export class ColorPickingService {
   }
 
   lastColorSelector( event: MouseEvent, lastColor: string ): void {
-    this.cData.primarySelect = ( event.button === 0 );
+    this.setColorMode( event );
     let color = this.setColor( this.colorConvert.hexToRgba( lastColor ) );
     this.updateDisplay( color );
   }
-
-  updateDisplay(color: string) {
+  setColorMode( event : MouseEvent ) : void {
+    if ( this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE ) {
+      switch ( event.button ) {
+        case 0 : this.cData.colorMode = this.cData.PRIMARY_COLOR_MODE;
+                                        break;
+        case 2 : this.cData.colorMode = this.cData.SECONDARY_COLOR_MODE;
+                                        break;
+      }
+    }
+  } 
+  updateDisplay(hex: string, rgb: number[] = this.colorConvert.hexToRgba( hex.substring( 1, 9 ) ), hsl: number[] = this.colorConvert.rgbToHsl( rgb[0], rgb[1], rgb[2] ) ) {
     // RGBA value of last color for display
-    const rgb: number[] = this.colorConvert.hexToRgba( color.substring( 1, 9 ) );
     this.updateDisplayRGB( rgb );
     // HSL value of last color for display
-    const hsl: number[] = this.colorConvert.rgbToHsl( rgb[0], rgb[1], rgb[2] );
     this.updateDisplayHSL( hsl );
-    this.upadateDisplayHex( color );
-    this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
+    this.upadateDisplayHex( hex );
+    this.setColorsFromForm( this.cData.primaryColor, this.cData.secondaryColor, this.cData.backgroundColor );
     this.emitColors();
   }
   updateDisplayRGB( rgb : number[]) : void {
@@ -215,9 +235,7 @@ export class ColorPickingService {
   updateDisplayHSL( hsl : number[] ) : void {
     this.cData.currentHue = hsl[0];
     let newSaturation : number = Math.round( hsl[1] * this.cData.POURCENT_MODIFIER );
-    if ( newSaturation !== this.cData.MIN_SATURATION_VALUE ) {
-      this.cData.saturationSliderInput = newSaturation;
-    }
+    this.cData.saturationSliderInput = newSaturation;
     this.cData.lightnessSliderInput = Math.round( hsl[2] * this.cData.POURCENT_MODIFIER );
     this.setSLCursor( this.cData.saturationSliderInput / 2, this.cData.lightnessSliderInput / 2 );
   }
@@ -228,20 +246,20 @@ export class ColorPickingService {
     this.cData.blueHexInput = hex.substring( 5, 7 );
   }
   // Change color display between primary and secondary
-  swapInputDisplay(event: MouseEvent) {
+  swapInputDisplay() {
     let color = this.selectDisplayColor();
     this.updateDisplay(color);
   }
   // udapte display with current value
   selectDisplayColor(): string {
     let color = '' ;
-
-    if ( this.cData.primarySelect ) {
-        this.cData.currentColorSelect = 'Primaire';
-        color = this.cData.primaryColor;
-    } else {
-        this.cData.currentColorSelect = 'Secondaire';
-        color = this.cData.secondaryColor;
+    switch ( this.cData.colorMode ) {
+      case this.cData.PRIMARY_COLOR_MODE: color = this.cData.primaryColor;
+                                          break;
+      case this.cData.SECONDARY_COLOR_MODE: color = this.cData.secondaryColor;
+                                            break;
+      case this.cData.BACKGROUND_COLOR_MODE:  color = this.cData.backgroundColor;
+                                              break;
     }
     return color;
   }
@@ -249,8 +267,8 @@ export class ColorPickingService {
   validateHexInput(event: KeyboardEvent, hexLength : number, hex: string ): void {
     event.stopPropagation();
     this.cData.isValideInput = false;
-    //left/right arrow
-    if ( event.which === 37 || event.which === 39 ) {
+    //left/right arrow/delete
+    if ( event.which === 37 || event.which === 39 || event.which === 46 ) {
       return;
     }
     //if not backspace
@@ -273,33 +291,37 @@ export class ColorPickingService {
   **/
   onHexInput(hexLength : number, hex: string, hexInputField : string): void {
     if ( (hex.length === hexLength) && this.cData.isValideInput) {
-      let newColor : string = this.writeHexColor(hexInputField, this.cData.primarySelect);
-      if ( this.cData.primarySelect ) {
-        this.cData.primaryColor = newColor;
-        
-      } else {
-        this.cData.secondaryColor = newColor;
-      }
+      let newColor : string = this.writeHexColor(hexInputField);
       this.updateDisplay( newColor );
       this.updateLastColor( newColor );
       this.cData.isValideInput = false;
     }
   }
-  writeHexColor(color: string, prim: boolean): string {
+  writeHexColor(color: string): string {
     let ret = '';
-    if (color === this.cData.RED_INPUT_FIELD) {
-      ret += '#' + this.cData.redHexInput + this.cData.hexColorInput.substring( 2, 6 );
-    } else if (color === this.cData.GREEN_INPUT_FIELD) {
-      ret += '#' + this.cData.hexColorInput.substring( 0, 2 ) + this.cData.greenHexInput + this.cData.hexColorInput.substring( 4, 6 );
-    } else if (color === this.cData.BLUE_INPUT_FIELD) {
-      ret += '#' + this.cData.hexColorInput.substring( 0, 4 ) + this.cData.blueHexInput;
-    } else if (color === this.cData.COLOR_HEX_INPUT_FIELD){
-      ret += '#' + this.cData.hexColorInput;
+    switch (color) {
+      case this.cData.RED_INPUT_FIELD : ret += '#' + this.cData.redHexInput + 
+                                        this.cData.hexColorInput.substring( 2, 6 );
+                                        break;
+      case this.cData.GREEN_INPUT_FIELD : ret += '#' + this.cData.hexColorInput.substring( 0, 2 ) + 
+                                          this.cData.greenHexInput + this.cData.hexColorInput.substring( 4, 6 );
+                                          break;
+      case this.cData.BLUE_INPUT_FIELD :  ret += '#' + this.cData.hexColorInput.substring( 0, 4 ) + 
+                                          this.cData.blueHexInput;
+                                          break;
+      case this.cData.COLOR_HEX_INPUT_FIELD : ret += '#' + this.cData.hexColorInput;
+                                              break;
     }
-    if (prim) {
-      ret += this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
-    } else if (!prim) {
-      ret += this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
+    switch ( this.cData.colorMode ) {
+      case this.cData.PRIMARY_COLOR_MODE: ret += this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
+                                          this.cData.primaryColor = ret;
+                                          break;
+      case this.cData.SECONDARY_COLOR_MODE: ret += this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
+                                            this.cData.secondaryColor = ret;
+                                            break;
+      case this.cData.BACKGROUND_COLOR_MODE:  ret += this.colorConvert.alphaRGBToHex( this.cData.backgroundColorAlpha );
+                                              this.cData.backgroundColor = ret;
+                                              break;
     }
     return ret;
   }
@@ -325,14 +347,24 @@ export class ColorPickingService {
     this.updateLastColor( newColor );
   }
   sliderAlphaChange(): void {
-    if ( this.cData.primarySelect ) {
-        this.cData.primaryAlpha = this.cData.opacitySliderInput / this.cData.POURCENT_MODIFIER;
-        this.cData.primaryColor = this.cData.primaryColor.substring(0,7)+ this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
-    } else {
-        this.cData.secondaryAlpha = this.cData.opacitySliderInput / this.cData.POURCENT_MODIFIER;
-        this.cData.secondaryColor = this.cData.secondaryColor.substring(0,7)+ this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
+    switch ( this.cData.colorMode ) {
+      case this.cData.PRIMARY_COLOR_MODE: this.cData.primaryAlpha = this.cData.opacitySliderInput / 
+                                          this.cData.POURCENT_MODIFIER;
+                                          this.cData.primaryColor = this.cData.primaryColor.substring( 0, 7 ) +
+                                          this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
+                                          break;
+      case this.cData.SECONDARY_COLOR_MODE: this.cData.secondaryAlpha = this.cData.opacitySliderInput /
+                                            this.cData.POURCENT_MODIFIER;
+                                            this.cData.secondaryColor = this.cData.secondaryColor.substring( 0, 7 ) +
+                                            this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
+                                            break;
+      case this.cData.BACKGROUND_COLOR_MODE:  this.cData.backgroundColorAlpha = this.cData.opacitySliderInput /
+                                              this.cData.POURCENT_MODIFIER;
+                                              this.cData.backgroundColor = '#' + this.cData.hexColorInput + 
+                                              this.colorConvert.alphaRGBToHex( this.cData.backgroundColorAlpha );
+                                              break;
     }
-    this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
+    this.setColorsFromForm( this.cData.primaryColor, this.cData.secondaryColor, this.cData.backgroundColor );
     this.emitColors();
   }
 }

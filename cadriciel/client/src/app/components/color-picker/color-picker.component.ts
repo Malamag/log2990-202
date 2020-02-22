@@ -78,8 +78,11 @@ export class ColorPickerComponent implements OnInit {
     onSwapSVGMouseUp(): void {
         this.colorPicking.onSwapSVGMouseUp();
     }
-    swapInputDisplay(event: any) {
-        this.colorPicking.swapInputDisplay(event);
+    onRadioButtonChange( newColorMode : string) : void {
+        this.colorPicking.onRadioButtonChange( newColorMode );
+    }
+    swapInputDisplay() {
+        this.colorPicking.swapInputDisplay();
     }
    
     validateHexInput(event: KeyboardEvent, hexLenght : number, hex : string): void {

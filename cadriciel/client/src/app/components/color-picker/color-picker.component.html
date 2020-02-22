@@ -73,28 +73,33 @@
                 <polyline points="160,70 110,70 105,75 105,70 105,75 110,75" stroke-width="1" stroke="white" fill="none" [ngStyle]="swapStyles"></polyline>
                 <text x="107" y="83" [ngStyle]="swapStyles">PERMUTER</text>
                 <rect x="104" y="70" width="42" height="20" style="fill-opacity: .1;" fill="black" (click)="swapPrimarySecondary()" (mouseover)="onSwapSVGMouseOver()" (mouseup)="onSwapSVGMouseUp()" (mousedown)="onSwapSVGMouseDown()"(mouseleave)="onSwapSVGMouseLeave()"></rect>
-                <rect x="170" y="70" width="20" height="20" style="fill:white;"></rect>
             </svg>
         </td>  
-        <td >
-        </td>
     </tr>
     <tr>
         <td>
-            <label class="namelabel" style="width: 50px;">{{cData.currentColorSelect}}</label>
+            <label class="radiocontainer">Primaire
+                <input type="radio" [checked]="cData.colorMode === cData.PRIMARY_COLOR_MODE" name="radio" (change)="onRadioButtonChange(cData.PRIMARY_COLOR_MODE)">
+                <span class="radiocheckmark"></span>
+            </label>
+            <label class="radiocontainer">Secondaire
+                <input type="radio" [checked]="cData.colorMode === cData.SECONDARY_COLOR_MODE" name="radio" (change)="onRadioButtonChange(cData.SECONDARY_COLOR_MODE)">
+                <span class="radiocheckmark"></span>
+            </label>
+            <label class="radiocontainer">Fond
+                <input type="radio" [checked]="cData.colorMode === cData.BACKGROUND_COLOR_MODE" name="radio" (change)="onRadioButtonChange(cData.BACKGROUND_COLOR_MODE)">
+                <span class="radiocheckmark"></span>
+            </label>
             <label class="namelabel" style="width: 20px;">Hex </label><label class="numberlabel"style="width: 7px;">#</label>
             <input class="hexInput" type="text" maxlength="cData.HEX_COLOR_INPUT_MAX_LENGTH" [(ngModel)]="cData.hexColorInput"  (keydown)="validateHexInput($event,cData.HEX_COLOR_INPUT_MAX_LENGTH,cData.hexColorInput)"(keyup)="onHexInput(cData.HEX_COLOR_INPUT_MAX_LENGTH,cData.hexColorInput,cData.COLOR_HEX_INPUT_FIELD)"> 
-            <label class="rgbnamelabel"><font color="#054dc2">Bleu</font></label>
-            <label class="rgbnamelabel"><font color="green">Vert</font></label>
-            <label class="rgbnamelabel"><font color="red">Rouge</font></label>
-            <br/>
-            <input class="rgbInput" style="left: 115px;" type="text" maxlength="cData.HEX_RGB_INPUT_MAX_LENGTH" [(ngModel)]="cData.redHexInput"  (keydown)="validateHexInput($event,cData.HEX_RGB_INPUT_MAX_LENGTH,cData.redHexInput)"(keyup)="onHexInput(cData.HEX_RGB_INPUT_MAX_LENGTH,cData.redHexInput,cData.RED_INPUT_FIELD)">
-            <input class="rgbInput" style="left: 145px;" type="text" maxlength="cData.HEX_RGB_INPUT_MAX_LENGTH" [(ngModel)]="cData.greenHexInput" (keydown)="validateHexInput($event,cData.HEX_RGB_INPUT_MAX_LENGTH,cData.greenHexInput)"(keyup)="onHexInput(cData.HEX_RGB_INPUT_MAX_LENGTH,cData.greenHexInput,cData.GREEN_INPUT_FIELD)">
-            <input class="rgbInput" style="left: 175px;" type="text" maxlength="cData.HEX_RGB_INPUT_MAX_LENGTH" [(ngModel)]="cData.blueHexInput" (keydown)="validateHexInput($event,cData.HEX_RGB_INPUT_MAX_LENGTH,cData.blueHexInput)"(keyup)="onHexInput(cData.HEX_RGB_INPUT_MAX_LENGTH,cData.blueHexInput,cData.BLUE_INPUT_FIELD)">
-            
-            <label class="switch">
-                <input id="colorCheckBox" type="checkbox" [(ngModel)]="cData.primarySelect" (change)="swapInputDisplay($event)">
-                <span class="slider round"></span>
+            <label class="rgbnamelabel"><font color="#054dc2">Bleu</font>
+                <input class="rgbInput"  type="text" maxlength="cData.HEX_RGB_INPUT_MAX_LENGTH" [(ngModel)]="cData.redHexInput"  (keydown)="validateHexInput($event,cData.HEX_RGB_INPUT_MAX_LENGTH,cData.redHexInput)"(keyup)="onHexInput(cData.HEX_RGB_INPUT_MAX_LENGTH,cData.redHexInput,cData.RED_INPUT_FIELD)">
+            </label>
+            <label class="rgbnamelabel"><font color="green">Vert</font>
+                <input class="rgbInput"  type="text" maxlength="cData.HEX_RGB_INPUT_MAX_LENGTH" [(ngModel)]="cData.greenHexInput" (keydown)="validateHexInput($event,cData.HEX_RGB_INPUT_MAX_LENGTH,cData.greenHexInput)"(keyup)="onHexInput(cData.HEX_RGB_INPUT_MAX_LENGTH,cData.greenHexInput,cData.GREEN_INPUT_FIELD)">
+            </label>
+            <label class="rgbnamelabel"><font color="red">Rouge</font>
+                <input class="rgbInput" type="text" maxlength="cData.HEX_RGB_INPUT_MAX_LENGTH" [(ngModel)]="cData.blueHexInput" (keydown)="validateHexInput($event,cData.HEX_RGB_INPUT_MAX_LENGTH,cData.blueHexInput)"(keyup)="onHexInput(cData.HEX_RGB_INPUT_MAX_LENGTH,cData.blueHexInput,cData.BLUE_INPUT_FIELD)">
             </label>
         </td>
     </tr>
