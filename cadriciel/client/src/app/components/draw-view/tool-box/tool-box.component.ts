@@ -1,6 +1,8 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { toolsItems } from '../../../functionality';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material/icon';
 @Component({
   selector: 'app-tool-box',
   templateUrl: './tool-box.component.html',
@@ -12,13 +14,21 @@ export class ToolBoxComponent implements OnInit {
 
   activeButton: any;
 
-  disableUndo: boolean;
-  disableRedo: boolean;
+  disableUndo: boolean = true;
+  disableRedo: boolean = true;
   // I doubt if we can delete these two
-  @ViewChild('toolsOptionsRef', {static: false}) navBarRef: ElementRef
+  @ViewChild('toolsOptionsRef', { static: false }) navBarRef: ElementRef
   selectingToolsMap = new Map();
 
-  constructor(public interactionService: InteractionService) {
+  constructor(public interactionService: InteractionService, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+
+    iconRegistry.addSvgIcon(
+      'redo',
+      sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/redo.svg'));
+    iconRegistry.addSvgIcon(
+      'undo',
+      sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/undo.svg'));
+
     this.selectingToolsMap.set('1', 'Rectangle');
     this.selectingToolsMap.set('c', 'Crayon');
     this.selectingToolsMap.set('w', 'Pinceau');
@@ -27,7 +37,6 @@ export class ToolBoxComponent implements OnInit {
     this.selectingToolsMap.set('u', 'Annuler');
     this.selectingToolsMap.set('r', 'Refaire');
   }
-
   @HostListener('document: keydown', ['$event'])
   updateBoard(event: KeyboardEvent) {
     // keyCode 90 for z
@@ -35,7 +44,7 @@ export class ToolBoxComponent implements OnInit {
       if (event.shiftKey) {
         this.buttonAction(this.selectingToolsMap.get('r'));
       } else {
-      this.buttonAction(this.selectingToolsMap.get('u'));
+        this.buttonAction(this.selectingToolsMap.get('u'));
       }
     } else if (this.selectingToolsMap.has(event.key)) {
       this.buttonAction(this.selectingToolsMap.get(event.key))
