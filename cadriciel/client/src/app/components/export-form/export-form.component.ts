@@ -18,14 +18,6 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         { type: 'svg', view: '.svg' },
     ];
 
-    textures: { type: string; intensity: number; frequency: number }[] = [
-        { type: 'blured', intensity: 5, frequency: 0 },
-        { type: 'noise', intensity: 0.5, frequency: 0.5 },
-        { type: 'noise', intensity: 0.3, frequency: 0.3 },
-        { type: 'noise', intensity: 0.9, frequency: 0.3 },
-        { type: 'noise', intensity: 0.3, frequency: 0.9 },
-    ];
-
     @ViewChild('imgBox', { static: false }) export: ElementRef; // has an eye on the <canvas> element
 
     constructor(
@@ -77,4 +69,6 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     exportation(name: string, type: string) {
         this.expService.exportInCanvas(this.doodle, this.export, name, type);
     }
+
+    applyFiler() {}
 }
