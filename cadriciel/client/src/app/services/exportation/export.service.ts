@@ -31,8 +31,8 @@ export class ExportService {
 
     exportCanvas(name: string, type: string, canvasRef: ElementRef) {
         // https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
-        // const DOWNLOAD_CANVAS: ElementRef = this.drawInCanvas(svgElem, canvasRef);
-        this.imgFilter.createNoiseFilter();
+
+        this.imgFilter.createCrazySaturationFilter();
         if (type == 'svg') {
             this.download(name, type, this.imageURL);
         } else {
