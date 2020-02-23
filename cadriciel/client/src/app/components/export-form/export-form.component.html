@@ -17,9 +17,14 @@
             </mat-form-field>
         </form>
 
-        <h5>Appliquer un filtre</h5>
-        <!--ngfor des types de filtres-->
-
+        <mat-form-field>
+            <mat-label>Appliquer un filtre</mat-label>
+            <mat-select>
+                <mat-option *ngFor="let filter of filters" [value]="filter.num">
+                    {{ filter.view }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
         <!--preview-->
         <div id="prev">
             <app-preview-box [draw]="doodle" [svgW]="cWidth" [svgH]="cHeigth"></app-preview-box>

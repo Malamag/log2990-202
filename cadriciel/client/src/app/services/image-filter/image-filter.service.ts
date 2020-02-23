@@ -70,9 +70,15 @@ export class ImageFilterService {
         return FILTER;
     }
 
-    createLightFilter(): SVGElement {
+    createPaperFilter(): SVGElement {
         const FILTER: SVGElement = this.filterInit();
-        FILTER.id = 'light';
+        FILTER.id = 'paper';
+
+        /* const TURB_EFFECT = this.renderer.createElement('feTurbulence', this.ns);
+        this.renderer.setAttribute(TURB_EFFECT, 'type', 'fractalNoise');
+        this.renderer.setAttribute(TURB_EFFECT, 'baseFrequency', '0.04');
+        this.renderer.setAttribute(TURB_EFFECT, 'numOctaves', '5');
+        this.renderer.setAttribute(TURB_EFFECT, 'result', 'noise');*/
 
         return FILTER;
     }
@@ -97,7 +103,7 @@ export class ImageFilterService {
         FILTER_ARRAY.push(this.createBNWFilter());
         FILTER_ARRAY.push(this.createHueRotateFilter());
         FILTER_ARRAY.push(this.createNoiseFilter());
-        FILTER_ARRAY.push(this.createLightFilter());
+        FILTER_ARRAY.push(this.createPaperFilter());
         FILTER_ARRAY.push(this.createCrazySaturationFilter());
         return FILTER_ARRAY;
     }

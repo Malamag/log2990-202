@@ -36,7 +36,7 @@ export class ExportService {
 
     exportInCanvas(svgElem: Node, canvasRef: ElementRef, name?: string, type?: string): ElementRef {
         // https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
-        this.imgFilter.toggleFilter(svgElem, 0);
+        this.imgFilter.toggleFilter(svgElem, 3);
 
         const ctx: CanvasRenderingContext2D = canvasRef.nativeElement.getContext('2d');
         const img = new Image();
@@ -47,7 +47,7 @@ export class ExportService {
             }
 
             if (name && type) {
-                // exportation needs to happen in
+                // exportation needs to happen in a canvas element
                 this.exportCanvas(name, type, canvasRef);
             }
         };

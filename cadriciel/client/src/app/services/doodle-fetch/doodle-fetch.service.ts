@@ -21,6 +21,7 @@ export class DoodleFetchService {
     }
 
     getDrawing(): Node {
+        // returns a deep copy of the svg element.
         return this.getSVGElementFromRef(this.currentDraw).cloneNode(true);
     }
 

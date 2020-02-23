@@ -24,7 +24,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         { num: 1, view: 'Voyage' },
         { num: 2, view: 'Bruit' },
         { num: 3, view: 'Sepia' },
-        { num: 4, view: 'Satuaration intrépide' },
+        { num: 4, view: 'Saturation intrépide' },
     ];
 
     @ViewChild('imgConvert', { static: false }) exportFromCanvas: ElementRef; // has an eye on the <canvas> element
