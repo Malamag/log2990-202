@@ -173,5 +173,165 @@ describe('ColorPickingService', () => {
     service.onContextMenu(mouseStub);
     expect(spyPrevent).toHaveBeenCalled();
   })
-  
+  it('should set the swap stroke to yellow',()=>{
+    service.cData.colorMode = service.cData.PRIMARY_COLOR_MODE;
+    service.onSwapSVGMouseOver();
+    expect(service.cData.swapStrokeStyle).toBe('yellow');
+  })
+  it('should set the swap stroke to white',()=>{
+    service.onSwapSVGMouseLeave()
+    expect(service.cData.swapStrokeStyle).toBe('white');
+  })
+  it('should set the swap stroke to lightblue',()=>{
+    service.cData.colorMode = service.cData.PRIMARY_COLOR_MODE;
+    service.onSwapSVGMouseDown();
+    expect(service.cData.swapStrokeStyle).toBe('lightblue');
+  })
+  it('should set the swap stroke to white',()=>{
+    service.onSwapSVGMouseUp()
+    expect(service.cData.swapStrokeStyle).toBe('white');
+  })
+  it('should set the colorMode to the color mode passed in parameter',()=>{
+    const colorMode = "Primary";
+    const spySwapDisplay = spyOn(service,'swapInputDisplay');
+    service.onRadioButtonChange(colorMode);
+    expect(spySwapDisplay).toHaveBeenCalled()
+    expect(service.cData.colorMode).toBe(colorMode)
+  })
+  it('colorSelectOnMouseUp should not call functions',()=>{
+    service.cData.isSLSelecting = false;
+    service.cData.isHueSelecting = false;
+    const spyUpdateLastColor = spyOn(service,'updateLastColor');
+    const spySetColor = spyOn(service,'setColorsFromForm')
+    const spyEmit = spyOn(service,'emitColors')
+    service.colorSelectOnMouseUp();
+    expect(spyEmit).toHaveBeenCalledTimes(0);
+    expect(spySetColor).toHaveBeenCalledTimes(0);
+    expect(spyUpdateLastColor).toHaveBeenCalledTimes(0);
+  })
+  it('colorSelectOnMouseUp should call functions and update attributes',()=>{
+    service.cData.isSLSelecting = true;
+    service.cData.isHueSelecting = false;
+    const spyUpdateLastColor = spyOn(service,'updateLastColor');
+    const spySetColor = spyOn(service,'setColorsFromForm')
+    const spyEmit = spyOn(service,'emitColors')
+    service.cData.colorMode= service.cData.PRIMARY_COLOR_MODE;
+    service.colorSelectOnMouseUp();
+    expect(spyEmit).toHaveBeenCalled();
+    expect(spySetColor).toHaveBeenCalled();
+    expect(spyUpdateLastColor).toHaveBeenCalled();
+    expect(service.cData.rectOffsetFill).toBe('none');
+    expect(service.cData.isHueSelecting).toBeFalsy();
+    expect(service.cData.isSLSelecting).toBeFalsy();
+  })
+  it('colorSelectOnMouseUp should call functions and update attributes',()=>{
+    service.cData.isSLSelecting = true;
+    service.cData.isHueSelecting = false;
+    const spyUpdateLastColor = spyOn(service,'updateLastColor');
+    const spySetColor = spyOn(service,'setColorsFromForm')
+    const spyEmit = spyOn(service,'emitColors')
+    service.cData.colorMode= service.cData.SECONDARY_COLOR_MODE;
+    service.colorSelectOnMouseUp();
+    expect(spyEmit).toHaveBeenCalled();
+    expect(spySetColor).toHaveBeenCalled();
+    expect(spyUpdateLastColor).toHaveBeenCalled();
+    expect(service.cData.rectOffsetFill).toBe('none');
+    expect(service.cData.isHueSelecting).toBeFalsy();
+    expect(service.cData.isSLSelecting).toBeFalsy();
+  })
+  it('colorSelectOnMouseUp should call functions and update attributes',()=>{
+    service.cData.isSLSelecting = true;
+    service.cData.isHueSelecting = false;
+    const spyUpdateLastColor = spyOn(service,'updateLastColor');
+    const spySetColor = spyOn(service,'setColorsFromForm')
+    const spyEmit = spyOn(service,'emitColors')
+    service.cData.colorMode= service.cData.BACKGROUND_COLOR_MODE;
+    service.colorSelectOnMouseUp();
+    expect(spyEmit).toHaveBeenCalled();
+    expect(spySetColor).toHaveBeenCalled();
+    expect(spyUpdateLastColor).toHaveBeenCalled();
+    expect(service.cData.rectOffsetFill).toBe('none');
+    expect(service.cData.isHueSelecting).toBeFalsy();
+    expect(service.cData.isSLSelecting).toBeFalsy();
+  })
+  it('hue selctor should not call functions',()=>{
+    const spySetColor = spyOn(service,'setColorMode');
+    const spySLSelector = spyOn(service,'slSelector');
+    service.cData.isSLSelecting = true;
+    service.hueSelectorOnMouseDown(mouseEventStub);
+    expect(spySetColor).toHaveBeenCalledTimes(0);
+    expect(spySLSelector).toHaveBeenCalledTimes(0);
+  })
+  it('hue selctor should call functions and set attributes',()=>{
+    const spySetColor = spyOn(service,'setColorMode');
+    const spySLSelector = spyOn(service,'slSelector');
+    service.cData.isSLSelecting = false;
+    service.hueSelectorOnMouseDown(mouseEventStub);
+    expect(spySetColor).toHaveBeenCalled();
+    expect(spySLSelector).toHaveBeenCalled();
+    expect(service.cData.isHueSelecting).toBeTruthy();
+    expect(service.cData.rectOffsetFill).toBe('white');
+  })
+  it('should not call hue selector function',()=>{
+    service.cData.isHueSelecting = false;
+    const spyHue =  spyOn(service,'hueSelector');
+    service.selectorOnMouseLeave(mouseEventStub);
+    expect(spyHue).toHaveBeenCalledTimes(0);
+  })
+  it('should call hue selector function',()=>{
+    service.cData.isHueSelecting = true;
+    const spyHue =  spyOn(service,'hueSelector');
+    service.selectorOnMouseLeave(mouseEventStub);
+    expect(spyHue).toHaveBeenCalled();
+  })
+  it('should not call functions after slSelector call',()=>{
+    service.cData.isHueSelecting = true;
+    const spySet = spyOn(service,'setColorMode');
+    const spySLSelector = spyOn(service,'slSelector');
+    service.slSelectorOnMouseDown(mouseEventStub);
+    expect(spySLSelector).toHaveBeenCalledTimes(0);
+    expect(spySet).toHaveBeenCalledTimes(0);
+  })
+  it('should call functions after slSelector call',()=>{
+    service.cData.isHueSelecting = false;
+    const spySet = spyOn(service,'setColorMode');
+    const spySLSelector = spyOn(service,'slSelector');
+    service.slSelectorOnMouseDown(mouseEventStub);
+    expect(spySLSelector).toHaveBeenCalled();
+    expect(spySet).toHaveBeenCalled();
+    expect(service.cData.isSLSelecting).toBeTruthy();
+  })
+  it('should set the primary color saturation',()=>{
+    const s= 2;
+    service.cData.colorMode = service.cData.PRIMARY_COLOR_MODE;
+    service.setSaturation(s);
+    expect(service.cData.primarySaturation).toBe(s);
+  })
+  it('should set the secondary color saturation',()=>{
+    const s= 2;
+    service.cData.colorMode = service.cData.SECONDARY_COLOR_MODE;
+    service.setSaturation(s);
+    expect(service.cData.secondarySaturation).toBe(s);
+  })
+  it('should set the background color saturation',()=>{
+    const s= 2;
+    service.cData.colorMode = service.cData.BACKGROUND_COLOR_MODE;
+    service.setSaturation(s);
+    expect(service.cData.backgroundColorSaturation).toBe(s);
+  })
+  it('should return the primary color saturation',()=>{
+    service.cData.colorMode = service.cData.PRIMARY_COLOR_MODE;
+    let sat = service.getSaturation()
+    expect(sat).toBe(service.cData.primarySaturation);
+  })
+  it('should return the secondary color saturation',()=>{
+    service.cData.colorMode = service.cData.SECONDARY_COLOR_MODE;
+    let sat = service.getSaturation()
+    expect(sat).toBe(service.cData.secondarySaturation);
+  })
+  it('should return the background color saturation',()=>{
+    service.cData.colorMode = service.cData.BACKGROUND_COLOR_MODE;
+    let sat = service.getSaturation()
+    expect(sat).toBe(service.cData.backgroundColorSaturation);
+  })
 });
