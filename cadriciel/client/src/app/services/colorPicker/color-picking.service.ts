@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { colorData } from '../../components/color-picker/color-data';
 import { ChoosenColors } from '../../models/ChoosenColors.model';
 import { ColorConvertingService } from './color-converting.service';
-
+import { throwMatDialogContentAlreadyAttachedError } from '@angular/material';
 
 /*-----------------------------Color valur table-----------------------------------------*
 * RGBA min/max value : R [0,255] , G [0,255] , B [0,255] , A [0,1]                       *
@@ -72,13 +72,30 @@ export class ColorPickingService {
     this.cData.slCursorX = x;
     this.cData.slCursorY = y;
   }
+  setSaturation( s : number ) : void {
+    switch ( this.cData.colorMode ) {
+      case this.cData.PRIMARY_COLOR_MODE :  this.cData.primarySaturation = s;
+                                            break;
+      case this.cData.SECONDARY_COLOR_MODE :  this.cData.secondarySaturation = s;
+                                              break;
+      case this.cData.BACKGROUND_COLOR_MODE : this.cData.backgroundColorSaturation = s;
+    }
+  }
+  getSaturation() : number {
+    switch ( this.cData.colorMode ) {
+      case this.cData.PRIMARY_COLOR_MODE :  return this.cData.primarySaturation;
+      case this.cData.SECONDARY_COLOR_MODE :  return this.cData.secondarySaturation;
+      case this.cData.BACKGROUND_COLOR_MODE : return this.cData.backgroundColorSaturation;
+    }
+    return -1;
+  }
   /************************ SELECTORS SECTION ***************************/
   hueSelector( event: MouseEvent ): void {
     let hue = 0
     if ( this.cData.isHueSelecting) {
       hue = this.computeHue(event)
       this.cData.currentHue = Math.round(hue)
-      const color = this.setColor( this.colorConvert.hslToRgb(hue, this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
+      let color = this.setColor( this.colorConvert.hslToRgb(hue, this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
                                  this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER ) ) ;
       this.updateDisplay( color );
     }
@@ -91,6 +108,7 @@ export class ColorPickingService {
       this.setSLCursor( x, y );
       this.cData.saturationSliderInput = x * 2;
       this.cData.lightnessSliderInput = y * 2;
+      this.setSaturation ( this.cData.saturationSliderInput );
       let hsl : number[] = [this.cData.currentHue, this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER, this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER];
       let color = this.setColor( this.colorConvert.hslToRgb(this.cData.currentHue, this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
                     this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER ) ) ;
@@ -170,6 +188,11 @@ export class ColorPickingService {
   // Update last color table with a new color
   updateLastColor( newColor: string ): void {
     for (let i = 0; i < this.cData.lastColorRects.length; i++ ) {
+      if (this.cData.lastColorRects[i].fill === newColor.substring( 0, 7 ) ) {
+        return;
+      }
+    }
+    for (let i = 0; i < this.cData.lastColorRects.length; i++ ) {
       if (this.cData.lastColorRects[i].fill === 'none') {
         this.cData.lastColorRects[i].fill = newColor.substring( 0, 7 );
         this.cData.lastColorRects[i].stroke = 'white';
@@ -190,26 +213,29 @@ export class ColorPickingService {
     this.setColorsFromForm( this.cData.primaryColor, this.cData.secondaryColor, this.cData.backgroundColor );
     this.emitColors();
   }
-  updateDisplayRGB( rgb: number[]): void {
-    this.cData.redSliderInput = rgb[0];
-    this.cData.greenSliderInput = rgb[1];
-    this.cData.blueSliderInput = rgb[2];
+  updateDisplayRGB( rgb : number[]) : void {
     this.cData.opacitySliderInput = Math.round( rgb[3] * this.cData.POURCENT_MODIFIER );
   }
-  updateDisplayHSL( hsl: number[] ): void {
-    this.cData.currentHue = hsl[0];
+  updateDisplayHSL( hsl : number[] ) : void {
     let newSaturation : number = Math.round( hsl[1] * this.cData.POURCENT_MODIFIER );
-    this.cData.saturationSliderInput = newSaturation;
     this.cData.lightnessSliderInput = Math.round( hsl[2] * this.cData.POURCENT_MODIFIER );
+    let lightnessMinMax = this.cData.lightnessSliderInput === this.cData.MIN_LIGHTNESS_VALUE ||
+                    this.cData.lightnessSliderInput === ( this.cData.MAX_LIGHTNESS_VALUE * this.cData.POURCENT_MODIFIER );
+    if ( !lightnessMinMax ) {
+      this.cData.saturationSliderInput = newSaturation;
+    }
+    else {
+      this.cData.saturationSliderInput = this.getSaturation();
+    }
     this.setSLCursor( this.cData.saturationSliderInput / 2, this.cData.lightnessSliderInput / 2 );
   }
-  upadateDisplayHex( hex: string ): void {
+  upadateDisplayHex( hex : string ) : void {
     this.cData.hexColorInput = hex.substring( 1, 7 ); // only 1 to 7 char are needed for view
     this.cData.redHexInput = hex.substring( 1, 3 );
     this.cData.greenHexInput = hex.substring( 3, 5 );
     this.cData.blueHexInput = hex.substring( 5, 7 );
   }
-  // Change color display between primary and secondary
+  // Change color display between primary , secondary and background
   swapInputDisplay() {
     let color = this.selectDisplayColor();
     this.updateDisplay(color);
@@ -243,15 +269,15 @@ export class ColorPickingService {
     }
   }
   // INPUTS
-  // validate if char is hexadecimal. A window alert is send id invalide char are found
-  validateHexInput(event: KeyboardEvent, hexLength: number, hex: string ): void {
+  // validate if char is hexadecimal.
+  validateHexInput(event: KeyboardEvent, hexLength : number, hex: string ): void {
     event.stopPropagation();
     this.cData.isValideInput = false;
     //left/right arrow/delete
     if ( event.which === 37 || event.which === 39 || event.which === 46 ) {
       return;
     }
-    // if not backspace
+    //if not backspace
     if (event.which !== 8) {
       if (hex.length === hexLength) {
         event.preventDefault();
@@ -269,7 +295,7 @@ export class ColorPickingService {
   * Red hex text field input event function
   * Update display if valide value are input
   **/
-  onHexInput(hexLength: number, hex: string, hexInputField: string): void {
+  onHexInput(hexLength : number, hex: string, hexInputField : string): void {
     if ( (hex.length === hexLength) && this.cData.isValideInput) {
       let newColor : string = this.writeHexColor(hexInputField);
       this.updateDisplay( newColor );
@@ -311,6 +337,7 @@ export class ColorPickingService {
     const rgb = this.colorConvert.hslToRgb( this.cData.currentHue, this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
                 this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER);
     let newColor = this.setColor( rgb );
+    this.setSaturation( this.cData.saturationSliderInput );
     this.updateDisplay( newColor );
     this.updateLastColor( newColor );
   }
