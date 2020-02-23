@@ -1,7 +1,7 @@
-/*import { TestBed } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
 import { colorData } from 'src/app/components/color-picker/color-data';
 import { ColorPickingService } from './color-picking.service';
+import { ColorConvertingService } from './color-converting.service';
 
 describe('ColorPickingService', () => {
   let mouseEventStub: any;
@@ -22,7 +22,8 @@ describe('ColorPickingService', () => {
     }
     mouseEventStubBigOffset = {
       offsetX: 160, // mouse positions
-      offsetY: 190
+      offsetY: 190,
+      button: 2
     }
     mouseEventStubSmallOffset = {
       offsetX: 40,
@@ -42,7 +43,6 @@ describe('ColorPickingService', () => {
   });
 
   it('should call the next method of the observer', () => {
-    const service: ColorPickingService = TestBed.get(ColorPickingService);
     const spy = spyOn(service.colorSubject, 'next')
     service.emitColors()
     expect(spy).toHaveBeenCalled()
@@ -51,7 +51,8 @@ describe('ColorPickingService', () => {
   it('should modifiy the color with the parameters', () => {
     const prim = 'red'
     const sec = 'blue'
-    service.setColorsFromForm(prim, sec)
+    const bg = 'Green'
+    service.setColorsFromForm(prim, sec, bg)
     expect(service.colors.primColor).toBe(prim)
     expect(service.colors.secColor).toBe(sec)
   })
@@ -72,71 +73,105 @@ describe('ColorPickingService', () => {
     expect(spyAlphaRGB).toHaveBeenCalledTimes(0);
   });
 
-  it('setColor should call functions and set the selector to primary',()=>{
-    let color: number[] = [1,2,3];
+  it('set color should set the primary color to the string returned by the converter',()=>{
+    let color : number[] = [1, 2, 3]
     const spyRgb = spyOn(service.colorConvert,'rgbToHex');
     const spyAlphaRGB = spyOn(service.colorConvert,'alphaRGBToHex');
-    service.cData.primarySelect =true;
-    service.setColor(color);
-    expect(spyRgb).toHaveBeenCalled();
-    expect(spyAlphaRGB).toHaveBeenCalled();
-    expect(service.cData.currentColorSelect).toBe('Primary');
-  });
+    const converter = new ColorConvertingService()
+    let expectedColor = '#'+ converter.rgbToHex(color[0])+converter.rgbToHex(color[1])+ converter.rgbToHex(color[2])
+    expectedColor += converter.alphaRGBToHex(service.cData.primaryAlpha);
+    service.setColor(color)
+    expect(spyRgb).toHaveBeenCalled()
+    expect(spyAlphaRGB).toHaveBeenCalled()
+    expect(service.cData.primaryColor).toBe(expectedColor);
+  })
 
-  it('setColor should call functions and set the the selector to secondary',()=>{
-    let color: number[] = [1,2,3];
+  it('set color should set the secondary color to the string returned by the converter',()=>{
+    let color : number[] = [1, 2, 3]
     const spyRgb = spyOn(service.colorConvert,'rgbToHex');
     const spyAlphaRGB = spyOn(service.colorConvert,'alphaRGBToHex');
-    service.cData.primarySelect =false;
-    service.setColor(color);
-    expect(spyRgb).toHaveBeenCalled();
-    expect(spyAlphaRGB).toHaveBeenCalled();
-    expect(service.cData.currentColorSelect).toBe('Secondary');
-  });
+    const converter = new ColorConvertingService()
+    let expectedColor = '#'+ converter.rgbToHex(color[0])+converter.rgbToHex(color[1])+ converter.rgbToHex(color[2])
+    expectedColor += converter.alphaRGBToHex(service.cData.secondaryAlpha);
+    service.cData.colorMode = "Secondary";
+    service.setColor(color)
+    expect(spyRgb).toHaveBeenCalled()
+    expect(spyAlphaRGB).toHaveBeenCalled()
+    expect(service.cData.secondaryColor).toBe(expectedColor);
+  })
+  it('set color should set the background color to the string returned by the converter',()=>{
+    let color : number[] = [1, 2, 3]
+    const spyRgb = spyOn(service.colorConvert,'rgbToHex');
+    const spyAlphaRGB = spyOn(service.colorConvert,'alphaRGBToHex');
+    const converter = new ColorConvertingService()
+    let expectedColor = '#'+ converter.rgbToHex(color[0])+converter.rgbToHex(color[1])+ converter.rgbToHex(color[2])
+    expectedColor += converter.alphaRGBToHex(service.cData.backgroundColorAlpha);
+    service.cData.colorMode = service.cData.BACKGROUND_COLOR_MODE;
+    service.setColor(color)
+    expect(spyRgb).toHaveBeenCalled()
+    expect(spyAlphaRGB).toHaveBeenCalled()
+    expect(service.cData.backgroundColor).toBe(expectedColor);
+  })
+  it('color mode should be background color mode',()=>{
+    service.cData.colorMode = service.cData.BACKGROUND_COLOR_MODE;
+    service.setColorMode(mouseEventStub);
+    expect(service.cData.colorMode).toBe(service.cData.BACKGROUND_COLOR_MODE)
+  })
 
-  it('hueSelector should call functions',()=>{
-    const spyCompute = spyOn(service,'computeHue');
-    const spySet= spyOn(service,'setColor');
-    const spyDisplay= spyOn(service,'updateDisplay');
-    service.cData.isHueSelecting = true;
-    service.hueSelector(mouseEventStub);
-    expect(spyCompute).toHaveBeenCalled();
-    expect(spySet).toHaveBeenCalled();
-    expect(spyDisplay).toHaveBeenCalled();
-  });
-
-  it('Hue should be computed using radiusY bigger than zero',()=>{
-    const radiusX: number = mouseEventStubBigOffset.offsetX - 95;
-    const radiusY: number = mouseEventStubBigOffset.offsetY - 95;
-    const radius: number = Math.sqrt( Math.pow( radiusX, 2) + Math.pow( radiusY, 2) );
-    const theta: number = Math.acos( radiusX / radius);
-    let Hue = 180 / Math.PI * theta;
-    expect(service.computeHue(mouseEventStubBigOffset)).toEqual(Hue);
-  });
-
-  it('Hue should be computed using radiusY smaller than zero',()=>{
-    const radiusX: number = mouseEventStubSmallOffset.offsetX - 95;
-    const radiusY: number = mouseEventStubSmallOffset.offsetY - 95;
-    const radius: number = Math.sqrt( Math.pow( radiusX, 2) + Math.pow( radiusY, 2) );
-    const theta: number = Math.acos( radiusX / radius);
-    let Hue = 360-180 / Math.PI * theta;
-    expect(service.computeHue(mouseEventStubSmallOffset)).toEqual(Hue);
-  });
-
-  it('should swap primary and secondary colors',()=>{
-    const tmpPrimaryColor = service.cData.primaryColor;
-    const tmpPrimaryAlpha = service.cData.primaryAlpha;
-    const tmpSecColor = service.cData.secondaryColor;
-    const tmpSecAlpha = service.cData.secondaryAlpha;
-    const spySelectDisplay = spyOn(service,'selectDisplayColor');
-    const spyDisplay = spyOn(service,'updateDisplay')
-    service.swapPrimarySecondary();
-    expect(service.cData.primaryColor).toBe(tmpSecColor);
-    expect(service.cData.primaryAlpha).toBe(tmpSecAlpha);
-    expect(service.cData.secondaryColor).toBe(tmpPrimaryColor);
-    expect(service.cData.secondaryAlpha).toBe(tmpPrimaryAlpha);
-    expect(spySelectDisplay).toHaveBeenCalled();
-    expect(spyDisplay).toHaveBeenCalled();
-  });
-
-});*/
+  it('color mode should change to primary color mode',()=>{
+    service.cData.colorMode = service.cData.SECONDARY_COLOR_MODE;
+    service.setColorMode(mouseEventStub);
+    expect(service.cData.colorMode).toBe(service.cData.PRIMARY_COLOR_MODE)
+  })
+  it('color mode should change to secondary color mode',()=>{
+    service.cData.colorMode = service.cData.PRIMARY_COLOR_MODE;
+    service.setColorMode(mouseEventStubBigOffset);
+    expect(service.cData.colorMode).toBe(service.cData.SECONDARY_COLOR_MODE)
+  })
+  it('should set the SLCursor to the parameters values',()=>{
+    const x: number =1;
+    const y: number =2;
+    service.setSLCursor(x,y);
+    expect(service.cData.slCursorX).toEqual(x);
+    expect(service.cData.slCursorY).toEqual(y);
+  })
+  it('slSelector method should not call functions',()=>{
+    const spySL = spyOn(service,'setSLCursor');
+    const spyColor = spyOn(service,'setColor');
+    const spyUpdate = spyOn(service, 'updateDisplay');
+    service.cData.isSLSelecting = false;
+    service.slSelector(mouseEventStubBigOffset);
+    expect(spySL).toHaveBeenCalledTimes(0);
+    expect(spyColor).toHaveBeenCalledTimes(0);
+    expect(spyUpdate).toHaveBeenCalledTimes(0);
+  })
+  it('slSelector should call functions and set values to attributes',()=>{
+    const spySL = spyOn(service,'setSLCursor');
+    const spyColor = spyOn(service,'setColor');
+    const spyUpdate = spyOn(service, 'updateDisplay');
+    service.cData.isSLSelecting = true;
+    service.slSelector(mouseEventStubBigOffset)
+    expect(spySL).toHaveBeenCalled();
+    expect(spyColor).toHaveBeenCalled();
+    expect(spyUpdate).toHaveBeenCalled();
+    expect(service.cData.saturationSliderInput).toEqual((mouseEventStubBigOffset.offsetX-25)*2)
+    expect(service.cData.lightnessSliderInput).toEqual((mouseEventStubBigOffset.offsetY-25)*2)
+  })
+  it('last color selector should call setters and update the display',()=>{
+    const spyColorMode = spyOn(service,'setColorMode');
+    const spyColor = spyOn(service,'setColor');
+    const spyUpdate = spyOn(service,'updateDisplay')
+    const color ='ffffffff'
+    service.lastColorSelector(mouseEventStub, color);
+    expect(spyColorMode).toHaveBeenCalled();
+    expect(spyColor).toHaveBeenCalled();
+    expect(spyUpdate).toHaveBeenCalled();
+  })
+  it('should call to prevent the error',()=>{
+    const mouseStub = new MouseEvent('mousedown');
+    const spyPrevent = spyOn(mouseStub,'preventDefault');
+    service.onContextMenu(mouseStub);
+    expect(spyPrevent).toHaveBeenCalled();
+  })
+  
+});
