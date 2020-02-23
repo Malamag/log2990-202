@@ -9,7 +9,7 @@ export class ExportService {
 
     constructor(private imgFilter: ImageFilterService) {}
 
-    svgToURL(svgElement: SVGElement) {
+    svgToURL(svgElement: Node) {
         const data = new XMLSerializer().serializeToString(svgElement);
         const blob = new Blob([data], { type: 'image/svg+xml' });
         const domurl = window.URL;
@@ -19,7 +19,6 @@ export class ExportService {
 
     download(name: string, format: string, src: string) {
         // https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
-        // utilisation de document absolument nécessaire ici??
 
         const downloadLink = document.createElement('a');
         downloadLink.href = src;
@@ -32,17 +31,13 @@ export class ExportService {
     exportCanvas(name: string, type: string, canvasRef: ElementRef) {
         // https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
 
-        this.imgFilter.createCrazySaturationFilter();
-        if (type == 'svg') {
-            this.download(name, type, this.imageURL);
-        } else {
-            const DWNLD = canvasRef.nativeElement.toDataURL(`image/${type}`);
-            this.download(name, type, DWNLD);
-        }
+        type === 'svg' ? this.download(name, type, this.imageURL) : this.download(name, type, canvasRef.nativeElement.toDataURL(`image/${type}`)); // else, use canvas conversion
     }
 
-    exportInCanvas(svgElem: SVGElement, canvasRef: ElementRef, name?: string, type?: string): ElementRef {
+    exportInCanvas(svgElem: Node, canvasRef: ElementRef, name?: string, type?: string): ElementRef {
         // https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
+        this.imgFilter.toggleFilter(svgElem, 0);
+
         const ctx: CanvasRenderingContext2D = canvasRef.nativeElement.getContext('2d');
         const img = new Image();
         this.imageURL = this.svgToURL(svgElem);

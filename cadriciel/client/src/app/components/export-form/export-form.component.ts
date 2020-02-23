@@ -18,7 +18,16 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         { type: 'svg', view: '.svg' },
     ];
 
-    @ViewChild('imgBox', { static: false }) export: ElementRef; // has an eye on the <canvas> element
+    filters: { num: number | null; view: string }[] = [
+        { num: -1, view: 'Aucun' },
+        { num: 0, view: 'Noir & blanc' },
+        { num: 1, view: 'Voyage' },
+        { num: 2, view: 'Bruit' },
+        { num: 3, view: 'Sepia' },
+        { num: 4, view: 'Satuaration intrépide' },
+    ];
+
+    @ViewChild('imgConvert', { static: false }) exportFromCanvas: ElementRef; // has an eye on the <canvas> element
 
     constructor(
         private formBuilder: FormBuilder,
@@ -28,7 +37,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     ) {}
 
     exportForm: FormGroup;
-    doodle: SVGElement;
+    doodle: Node;
 
     cWidth: number; // attributes to get the correct export size
     cHeigth: number;
@@ -53,12 +62,9 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
 
     onSubmit() {
         const FORMVAL = this.exportForm.value;
-
         const TYPE = FORMVAL.formatSel;
         const NAME = FORMVAL.doodleName;
-
         this.exportation(NAME, TYPE);
-
         this.closeForm();
     }
 
@@ -67,8 +73,6 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     }
 
     exportation(name: string, type: string) {
-        this.expService.exportInCanvas(this.doodle, this.export, name, type);
+        this.expService.exportInCanvas(this.doodle, this.exportFromCanvas, name, type);
     }
-
-    applyFiler() {}
 }

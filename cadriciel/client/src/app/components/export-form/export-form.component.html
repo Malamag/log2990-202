@@ -29,6 +29,6 @@
         <button mat-button id="quitButton" (click)="closeForm()">Cancel</button>
         <span id="dimensions">{{ cWidth }}px X {{ cHeigth }}px</span>
     </div>
-    <canvas #imgBox [width]="cWidth" [height]="cHeigth"></canvas>
-    <!--Canvas element used for conversion-->
+    <canvas #imgConvert [width]="cWidth" [height]="cHeigth"></canvas>
+    <!--hidden canvas element used for conversion-->
 </div>

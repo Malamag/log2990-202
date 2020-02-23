@@ -6,9 +6,15 @@ import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 export class ImageFilterService {
     ns: string = 'http://www.w3.org/2000/svg';
     renderer: Renderer2;
+    filterArray: SVGElement[];
 
     constructor(rendererFact: RendererFactory2) {
         this.renderer = rendererFact.createRenderer(null, null);
+        this.filterArray = this.createAllFilters();
+    }
+
+    filterInit(): SVGElement {
+        return this.renderer.createElement('filter', this.ns);
     }
 
     createBNWFilter(): SVGElement {
@@ -21,7 +27,7 @@ export class ImageFilterService {
         this.renderer.setAttribute(EFFECT, 'values', '0.1');
 
         this.renderer.appendChild(FILTER, EFFECT);
-        //console.log(FILTER);
+
         return FILTER;
     }
 
@@ -36,7 +42,7 @@ export class ImageFilterService {
         this.renderer.setAttribute(EFFECT, 'values', '180');
 
         this.renderer.appendChild(FILTER, EFFECT);
-        //console.log(FILTER);
+
         return FILTER;
     }
 
@@ -60,31 +66,14 @@ export class ImageFilterService {
 
         this.renderer.appendChild(FILTER, TURB_EFFECT);
         this.renderer.appendChild(FILTER, DISPLACE);
-        // console.log(FILTER);
+
         return FILTER;
     }
 
-    createSepiaFilter(): SVGElement {
+    createLightFilter(): SVGElement {
         const FILTER: SVGElement = this.filterInit();
-        FILTER.id = 'sepia';
+        FILTER.id = 'light';
 
-        const EFFECT: SVGElement = this.renderer.createElement('feFlood', this.ns);
-
-        this.renderer.setAttribute(EFFECT, 'result', 'floodFill');
-        this.renderer.setAttribute(EFFECT, 'width', '100%');
-        this.renderer.setAttribute(EFFECT, 'height', '100%');
-        this.renderer.setAttribute(EFFECT, 'flood-color', '#EBC9AC'); // sepia look
-        this.renderer.setAttribute(EFFECT, 'flood-opacity', '1');
-
-        const BLEND: SVGElement = this.renderer.createElement('feBlend', this.ns);
-        this.renderer.setAttribute(BLEND, 'in', 'SourceGraphic');
-        this.renderer.setAttribute(BLEND, 'in2', 'floodFill');
-        this.renderer.setAttribute(BLEND, 'mode', 'multiply');
-
-        this.renderer.appendChild(FILTER, EFFECT);
-        this.renderer.appendChild(FILTER, BLEND);
-
-        console.log(FILTER);
         return FILTER;
     }
 
@@ -102,18 +91,22 @@ export class ImageFilterService {
         return NOISE_FILTER;
     }
 
-    filterInit(): SVGElement {
-        return this.renderer.createElement('filter', this.ns);
-    }
-
     createAllFilters(): SVGElement[] {
         const FILTER_ARRAY: SVGElement[] = [];
 
         FILTER_ARRAY.push(this.createBNWFilter());
         FILTER_ARRAY.push(this.createHueRotateFilter());
         FILTER_ARRAY.push(this.createNoiseFilter());
-        FILTER_ARRAY.push(this.createSepiaFilter());
+        FILTER_ARRAY.push(this.createLightFilter());
         FILTER_ARRAY.push(this.createCrazySaturationFilter());
         return FILTER_ARRAY;
+    }
+
+    toggleFilter(doodle: Node, filterNum: number) {
+        const SELECT_FILTER = this.filterArray[filterNum];
+        this.renderer.setAttribute(doodle, 'filter', `url(#${SELECT_FILTER.id}`);
+        this.renderer.appendChild(doodle, SELECT_FILTER);
+        console.log(SELECT_FILTER);
+        console.log(doodle);
     }
 }
