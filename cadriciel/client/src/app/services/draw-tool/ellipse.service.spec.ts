@@ -144,7 +144,7 @@ describe('EllipseService', () => {
 
   it('should create a rectangle filled with the selected color', () => {
     const color = '#ffffff';
-    service.chosenColor = new ChoosenColors(color, color); // both prim. and sec.
+    service.chosenColor = new ChoosenColors(color, color, color); // both prim. and sec.
 
     const rect = service.createPath(ptArr, false);
     expect(rect).toContain(`fill="${color}"`);
@@ -153,8 +153,8 @@ describe('EllipseService', () => {
   it('should create a border of the selected secondary color', () => {
     const prim = '#000000';
     const sec = '#ffffff';
-
-    service.chosenColor = new ChoosenColors(prim, sec);
+    const back = '#ffffff';
+    service.chosenColor = new ChoosenColors(prim, sec, back);
     const rect = service.createPath(ptArr, false);
 
     expect(rect).toContain(`stroke="${sec}"`);
@@ -164,7 +164,8 @@ describe('EllipseService', () => {
     service.attr.plotType = 0; // init the plot type
     const prim = '#000000';
     const sec = '#ffffff';
-    service.chosenColor = new ChoosenColors(prim, sec);
+    const back = '#ffffff';
+    service.chosenColor = new ChoosenColors(prim, sec, back);
 
     const rect = service.createPath(ptArr, false);
 
@@ -177,7 +178,8 @@ describe('EllipseService', () => {
     service.attr.plotType = 1; // init the plot type
     const prim = '#000000';
     const sec = '#ffffff';
-    service.chosenColor = new ChoosenColors(prim, sec);
+    const back = '#ffffff';
+    service.chosenColor = new ChoosenColors(prim, sec, back);
 
     const rect = service.createPath(ptArr, false);
 
@@ -190,7 +192,8 @@ describe('EllipseService', () => {
     service.attr.plotType = 2; // init the plot type
     const prim = '#000000';
     const sec = '#ffffff';
-    service.chosenColor = new ChoosenColors(prim, sec);
+    const back = '#ffffff';
+    service.chosenColor = new ChoosenColors(prim, sec, back);
 
     const rect = service.createPath(ptArr, false);
 

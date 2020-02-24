@@ -8,7 +8,7 @@ describe('ColorPickingService', () => {
   let service: ColorPickingService;
 
   let mouseEventStubBigOffset: any;
-  let mouseEventStubSmallOffset: any
+  //let mouseEventStubSmallOffset: any
   let kbEventStub: any;
 
   beforeEach(() => {
@@ -25,10 +25,10 @@ describe('ColorPickingService', () => {
       offsetY: 190,
       button: 2
     }
-    mouseEventStubSmallOffset = {
+    /*mouseEventStubSmallOffset = {
       offsetX: 40,
       offsetY: 49
-    }
+    }*/
     TestBed.configureTestingModule({
       providers: [
         {provide: MouseEvent, mouseEventStub},
@@ -334,4 +334,14 @@ describe('ColorPickingService', () => {
     let sat = service.getSaturation()
     expect(sat).toBe(service.cData.backgroundColorSaturation);
   })
+  it('should update the last color',()=>{
+    const color ='ffffffff';
+    service.updateLastColor(color);
+    expect(service.cData.lastColorRects[service.cData.lastColorRects.length-1].fill).toBe(color);
+  })
+  /*it('update display should call functions',()=>{
+    const hex ="00000000";
+    const rgb: number[] = []
+
+  })*/
 });

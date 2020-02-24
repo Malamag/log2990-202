@@ -37,7 +37,8 @@ describe('drawingTools', () => {
     const emitSpy = spyOn(service.colorPick, 'emitColors');
     const PRIM = '#ffffff';
     const SEC = '#000000';
-    service.colorPick.colors = new ChoosenColors(PRIM, SEC);
+    const back = '#ffffff';
+    service.colorPick.colors = new ChoosenColors(PRIM, SEC, back);
 
     service.updateColors();
     expect(spy).toHaveBeenCalled();
@@ -49,7 +50,8 @@ describe('drawingTools', () => {
 
     const PRIM = '#ffff00';
     const SEC = '#0000ff';
-    service.colorPick.colors = new ChoosenColors(PRIM, SEC); // color init in service
+    const back = '#ffffff';
+    service.colorPick.colors = new ChoosenColors(PRIM, SEC, back); // color init in service
 
     service.updateColors();
     expect(service.chosenColor).toEqual(service.colorPick.colors); // checking the assignation

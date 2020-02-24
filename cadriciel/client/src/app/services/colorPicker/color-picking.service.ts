@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { colorData } from '../../components/color-picker/color-data';
 import { ChoosenColors } from '../../models/ChoosenColors.model';
 import { ColorConvertingService } from './color-converting.service';
-import { throwMatDialogContentAlreadyAttachedError } from '@angular/material';
+
 
 /*-----------------------------Color valur table-----------------------------------------*
 * RGBA min/max value : R [0,255] , G [0,255] , B [0,255] , A [0,1]                       *
