@@ -4,9 +4,11 @@ import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
     providedIn: 'root',
 })
 export class ImageFilterService {
-    ns: string = 'http://www.w3.org/2000/svg';
+    ns: string = 'http://www.w3.org/2000/svg'; // svg namespace to get its proper attributes
+
     renderer: Renderer2;
     filterArray: SVGElement[];
+
     currentFilter: SVGElement | undefined;
 
     constructor(rendererFact: RendererFactory2) {
@@ -71,31 +73,39 @@ export class ImageFilterService {
         return FILTER;
     }
 
-    createPaperFilter(): SVGElement {
+    createSoftFilter(): SVGElement {
         const FILTER: SVGElement = this.filterInit();
-        FILTER.id = 'paper';
+        FILTER.id = 'soft';
 
-        /* const TURB_EFFECT = this.renderer.createElement('feTurbulence', this.ns);
-        this.renderer.setAttribute(TURB_EFFECT, 'type', 'fractalNoise');
-        this.renderer.setAttribute(TURB_EFFECT, 'baseFrequency', '0.04');
-        this.renderer.setAttribute(TURB_EFFECT, 'numOctaves', '5');
-        this.renderer.setAttribute(TURB_EFFECT, 'result', 'noise');*/
+        const SOFT_EFFECT = this.renderer.createElement('feGaussianBlur', this.ns);
+        this.renderer.setAttribute(SOFT_EFFECT, 'stdDeviation', '2');
+
+        const LIGHT_EFFECT = this.renderer.createElement('feColorMatrix');
+        this.renderer.setAttribute(LIGHT_EFFECT, 'in', 'SourceGraphic');
+        this.renderer.setAttribute(LIGHT_EFFECT, 'type', 'matrix');
+        const VALUES: string =
+            '1.3 0 0 0 0' + //increases luminosity
+            '0 1.3 0 0 0' +
+            '0 0 1.3 0 0' +
+            '0 0 0 1.3 1';
+
+        this.renderer.setAttribute(LIGHT_EFFECT, 'values', VALUES);
+        this.renderer.appendChild(FILTER, SOFT_EFFECT);
+        this.renderer.appendChild(FILTER, LIGHT_EFFECT);
 
         return FILTER;
     }
 
-    createCrazySaturationFilter(): SVGElement {
-        const NOISE_FILTER: SVGElement = this.createNoiseFilter();
+    createTextureFilter(): SVGElement {
+        const FILTER: SVGElement = this.filterInit();
+        FILTER.id = 'texture';
+        const EFFECT: SVGElement = this.renderer.createElement('feConvolveMatrix', this.ns);
+        const VALUES = ' 10 0 0 0 0 0 0 -10 3'; // some random values for a 3x3 matrix
 
-        const SATURATION_EFFECT: SVGElement = this.renderer.createElement('feColorMatrix', this.ns);
+        this.renderer.setAttribute(EFFECT, 'kernelMatrix', VALUES);
 
-        this.renderer.setAttribute(SATURATION_EFFECT, 'in', 'SourceGraphic');
-        this.renderer.setAttribute(SATURATION_EFFECT, 'type', 'saturate');
-        this.renderer.setAttribute(SATURATION_EFFECT, 'values', '100');
-
-        this.renderer.appendChild(NOISE_FILTER, SATURATION_EFFECT);
-
-        return NOISE_FILTER;
+        this.renderer.appendChild(FILTER, EFFECT);
+        return FILTER;
     }
 
     createAllFilters(): SVGElement[] {
@@ -104,8 +114,8 @@ export class ImageFilterService {
         FILTER_ARRAY.push(this.createBNWFilter());
         FILTER_ARRAY.push(this.createHueRotateFilter());
         FILTER_ARRAY.push(this.createNoiseFilter());
-        FILTER_ARRAY.push(this.createPaperFilter());
-        FILTER_ARRAY.push(this.createCrazySaturationFilter());
+        FILTER_ARRAY.push(this.createSoftFilter());
+        FILTER_ARRAY.push(this.createTextureFilter());
         return FILTER_ARRAY;
     }
 
@@ -115,8 +125,9 @@ export class ImageFilterService {
         if (filterNum === NO_FILTER_INDEX) {
             if (this.currentFilter) {
                 this.renderer.removeChild(doodle, this.currentFilter); // remove the previous filter from the svg
+                this.renderer.setAttribute(doodle, 'filter', '');
             }
-            return;
+            return; // no filer choosen; get out of the method
         }
 
         if (this.currentFilter) {
@@ -124,9 +135,8 @@ export class ImageFilterService {
         }
 
         const SELECT_FILTER = this.filterArray[filterNum];
-        this.renderer.setAttribute(doodle, 'filter', `url(#${SELECT_FILTER.id}`);
+        this.renderer.setAttribute(doodle, 'filter', `url(#${SELECT_FILTER.id})`);
         this.renderer.appendChild(doodle, SELECT_FILTER);
-        console.log(SELECT_FILTER);
         this.currentFilter = SELECT_FILTER;
     }
 }

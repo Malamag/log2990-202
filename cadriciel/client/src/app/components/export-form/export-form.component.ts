@@ -23,10 +23,10 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     filters: { num: number | null; view: string }[] = [
         { num: -1, view: 'Aucun' },
         { num: 0, view: 'Noir & blanc' },
-        { num: 1, view: 'Voyage' },
+        { num: 1, view: 'Rotation de teinte' },
         { num: 2, view: 'Bruit' },
-        { num: 3, view: 'Sepia' },
-        { num: 4, view: 'Saturation intrépide' },
+        { num: 3, view: 'Lisse' },
+        { num: 4, view: 'Texture' },
     ];
 
     @ViewChild('imgConvert', { static: false }) exportFromCanvas: ElementRef; // has an eye on the <canvas> element
