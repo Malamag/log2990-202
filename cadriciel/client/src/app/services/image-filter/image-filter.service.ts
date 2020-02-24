@@ -113,6 +113,5 @@ export class ImageFilterService {
         this.renderer.setAttribute(doodle, 'filter', `url(#${SELECT_FILTER.id}`);
         this.renderer.appendChild(doodle, SELECT_FILTER);
         console.log(SELECT_FILTER);
-        console.log(doodle);
     }
 }

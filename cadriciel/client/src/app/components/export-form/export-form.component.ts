@@ -1,9 +1,11 @@
-import { AfterContentInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, OnInit, ViewChild, Output } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { ExportService } from 'src/app/services/exportation/export.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
+import { ImageFilterService } from 'src/app/services/image-filter/image-filter.service';
+import { EventEmitter } from 'events';
 
 @Component({
     selector: 'app-export-form',
@@ -28,12 +30,14 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     ];
 
     @ViewChild('imgConvert', { static: false }) exportFromCanvas: ElementRef; // has an eye on the <canvas> element
+    @Output() doodleChange = new EventEmitter();
 
     constructor(
         private formBuilder: FormBuilder,
         private winService: ModalWindowService,
         private doodleFetch: DoodleFetchService,
         private expService: ExportService,
+        private imgFilter: ImageFilterService,
     ) {}
 
     exportForm: FormGroup;
@@ -41,6 +45,8 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
 
     cWidth: number; // attributes to get the correct export size
     cHeigth: number;
+
+    selectedFilter: number;
 
     ngOnInit() {
         this.initForm();
@@ -74,5 +80,15 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
 
     exportation(name: string, type: string) {
         this.expService.exportInCanvas(this.doodle, this.exportFromCanvas, name, type);
+    }
+
+    applyFilter(event: number) {
+        this.selectedFilter = event;
+        this.imgFilter.toggleFilter(this.doodle, this.selectedFilter);
+        console.log(this.doodle);
+    }
+
+    sendDoodleUpdate() {
+        this.doodleChange.emit('doodleChange', this.doodle);
     }
 }

@@ -8,6 +8,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '
 })
 export class PreviewBoxComponent implements OnInit, AfterViewInit {
     @Input() draw: SVGElement;
+
     @Input() svgH: number;
     @Input() svgW: number;
 
@@ -21,7 +22,7 @@ export class PreviewBoxComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.previewBoxRef.nativeElement.innerHTML = this.draw.innerHTML;
+        this.previewBoxRef.nativeElement.appendChild(this.draw);
     }
 
     scaleSVG(scaleFacor: number) {

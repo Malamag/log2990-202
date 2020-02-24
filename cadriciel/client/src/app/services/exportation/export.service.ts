@@ -1,5 +1,4 @@
 import { ElementRef, Injectable } from '@angular/core';
-import { ImageFilterService } from '../image-filter/image-filter.service';
 
 @Injectable({
     providedIn: 'root',
@@ -7,7 +6,7 @@ import { ImageFilterService } from '../image-filter/image-filter.service';
 export class ExportService {
     imageURL: string;
 
-    constructor(private imgFilter: ImageFilterService) {}
+    constructor() {}
 
     svgToURL(svgElement: Node) {
         const data = new XMLSerializer().serializeToString(svgElement);
@@ -36,7 +35,6 @@ export class ExportService {
 
     exportInCanvas(svgElem: Node, canvasRef: ElementRef, name?: string, type?: string): ElementRef {
         // https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
-        this.imgFilter.toggleFilter(svgElem, 3);
 
         const ctx: CanvasRenderingContext2D = canvasRef.nativeElement.getContext('2d');
         const img = new Image();
