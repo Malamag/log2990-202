@@ -7,6 +7,7 @@ export class ImageFilterService {
     ns: string = 'http://www.w3.org/2000/svg';
     renderer: Renderer2;
     filterArray: SVGElement[];
+    currentFilter: SVGElement | undefined;
 
     constructor(rendererFact: RendererFactory2) {
         this.renderer = rendererFact.createRenderer(null, null);
@@ -24,7 +25,7 @@ export class ImageFilterService {
 
         this.renderer.setAttribute(EFFECT, 'in', 'SourceGraphic');
         this.renderer.setAttribute(EFFECT, 'type', 'saturate');
-        this.renderer.setAttribute(EFFECT, 'values', '0.1');
+        this.renderer.setAttribute(EFFECT, 'values', '0');
 
         this.renderer.appendChild(FILTER, EFFECT);
 
@@ -109,9 +110,23 @@ export class ImageFilterService {
     }
 
     toggleFilter(doodle: Node, filterNum: number) {
+        const NO_FILTER_INDEX: number = -1;
+
+        if (filterNum === NO_FILTER_INDEX) {
+            if (this.currentFilter) {
+                this.renderer.removeChild(doodle, this.currentFilter); // remove the previous filter from the svg
+            }
+            return;
+        }
+
+        if (this.currentFilter) {
+            this.renderer.removeChild(doodle, this.currentFilter);
+        }
+
         const SELECT_FILTER = this.filterArray[filterNum];
         this.renderer.setAttribute(doodle, 'filter', `url(#${SELECT_FILTER.id}`);
         this.renderer.appendChild(doodle, SELECT_FILTER);
         console.log(SELECT_FILTER);
+        this.currentFilter = SELECT_FILTER;
     }
 }
