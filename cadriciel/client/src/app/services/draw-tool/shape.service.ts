@@ -21,6 +21,13 @@ export class ShapeService extends DrawingTool {
   // First point in x and y when first clicked
   public startX: number;
   public startY: number;
+  
+  //String for createPath
+  public svgString:string;
+
+  //Attribute for createPath
+  public stroke:string;
+  public fill:string;
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
               interaction: InteractionService, colorPick: ColorPickingService) {
@@ -35,6 +42,9 @@ export class ShapeService extends DrawingTool {
     this.smallest = 0;
     this.startX = 0;
     this.startY = 0;
+    this.svgString = '';
+    this.stroke = '';
+    this.fill = '';
   }
 
   updateAttributes() {
@@ -124,9 +134,21 @@ export class ShapeService extends DrawingTool {
     this.height = P2Y - P1Y;
   }
 
-   // Creates an svg shape
-   createPath(p: Point[], removePerimeter?: boolean) {
-      // Shape is only virtual, so we do not create a path
-   }
+  // Creates an svg shape
+  createPath(p: Point[], removePerimeter?: boolean) {
+    // Shape is only virtual, so we do not create a path
+  }
+
+  setAttributesToPath() {
+    // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
+    this.stroke = (this.attr.plotType === 0 || this.attr.plotType === 2) ? `${this.chosenColor.secColor}` : 'none';
+    this.fill = (this.attr.plotType === 1 || this.attr.plotType === 2) ? `${this.chosenColor.primColor}` : 'none';
+
+    //this.svgString += ` fill="${this.fill}"`;
+    //this.svgString += ` stroke-width="${this.attr.lineThickness}" stroke="${this.stroke}"/>`;
+
+    this.svgString += `" fill="${this.fill}"`;
+    this.svgString += `stroke-width="${this.attr.lineThickness}" stroke="${this.stroke}"/>`;
+  }
 
 }

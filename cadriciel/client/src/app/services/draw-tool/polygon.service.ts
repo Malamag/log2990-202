@@ -1,7 +1,12 @@
+import { Injectable } from '@angular/core';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 import { ShapeService } from './shape.service';
+
+@Injectable({
+  providedIn: 'root'
+})
 
 export class PolygonService extends ShapeService {
 
@@ -28,41 +33,43 @@ export class PolygonService extends ShapeService {
   // Creates an svg polygon that connects the first and last points of currentPath with the rectangle attributes
   createPath(p: Point[], removePerimeter: boolean) {
 
-    let s = '';
+    // We need at least 2 points
+    if (p.length < 2) {
+      return this.svgString;
+    }
+    
+    // Set the polygon's corners
+    this.setCorners(p);
 
-    if (p.length >= 2) {
+    // create a divider
+    this.svgString = '<g name = "polygon">';
 
-      // Set the polygon's corners
-      this.setCorners(p);
-
-      // create a divider
-      s = '<g name = "polygon">';
-
-      // set all points used as corners for the polygon
-      s += '<polygon points="';
-      for (let i = 0; i < this.attr.numberOfCorners; i++){
-        s += ` ${this.corners[i].x},${this.corners[i].y}`;
-      }
-
-      // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
-      const stroke = (this.attr.plotType === 0 || this.attr.plotType === 2) ? `${this.chosenColor.secColor}` : 'none';
-      const fill = (this.attr.plotType === 1 || this.attr.plotType === 2) ? `${this.chosenColor.primColor}` : 'none';
-
-      s += `" fill="${fill}"`;
-      s += `stroke-width="${this.attr.lineThickness}" stroke="${stroke}"/>`;
-
-      s += this.createPerimeter(removePerimeter);
-
-      // end the divider
-      s += '</g>'
-
-      // need to display?
-      if (!this.displayPolygon) {
-        s = '';
-      }
+    // set all points used as corners for the polygon
+    this.svgString += '<polygon points="';
+    for (let i = 0; i < this.attr.numberOfCorners; i++){
+      this.svgString += ` ${this.corners[i].x},${this.corners[i].y}`;
     }
 
-    return s;
+    this.setAttributesToPath();
+    // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
+    //this.stroke = (this.attr.plotType === 0 || this.attr.plotType === 2) ? `${this.chosenColor.secColor}` : 'none';
+    //this.fill = (this.attr.plotType === 1 || this.attr.plotType === 2) ? `${this.chosenColor.primColor}` : 'none';
+
+    //this.svgString += `" fill="${this.fill}"`;
+    //this.svgString += `stroke-width="${this.attr.lineThickness}" stroke="${this.stroke}"/>`;
+
+    this.createPerimeter(removePerimeter);
+
+    // end the divider
+    this.svgString += '</g>'
+
+    // need to display?
+    if (!this.displayPolygon) {
+      this.svgString = '';
+    }
+    
+
+    return this.svgString;
   }
 
   setdimensions(p: Point[]) {
@@ -140,21 +147,19 @@ export class PolygonService extends ShapeService {
     this.alignCorners();
   }
 
-  createPerimeter(removePerimeter: boolean): string {
+  createPerimeter(removePerimeter: boolean) {
     const WIDTH_PERIMETER = this.rightPoint - this.leftPoint;
     const END_Y_POINT = Math.floor(this.attr.numberOfCorners / 2);
     const HEIGHT_PERIMETER = this.startY - this.corners[END_Y_POINT].y;
 
-    let sPerimeter = '';
     const PER_START_X = this.width > 0 ? this.startX : this.startX - WIDTH_PERIMETER;
     const PER_START_Y = this.height > 0 ? this.startY : this.startY - HEIGHT_PERIMETER;
     if (!removePerimeter) {
-    sPerimeter += `<rect x="${PER_START_X}" y="${PER_START_Y}"`;
-    sPerimeter += `width="${Math.abs(WIDTH_PERIMETER)}" height="${Math.abs(HEIGHT_PERIMETER)}"`;
-    sPerimeter += 'style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"';
-    sPerimeter += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
+    this.svgString += `<rect x="${PER_START_X}" y="${PER_START_Y}"`;
+    this.svgString += `width="${Math.abs(WIDTH_PERIMETER)}" height="${Math.abs(HEIGHT_PERIMETER)}"`;
+    this.svgString += 'style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"';
+    this.svgString += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
     }
-    return sPerimeter;
   }
 
   alignCorners() {
