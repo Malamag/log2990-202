@@ -10,124 +10,118 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
-import {Canvas} from '../../../models/Canvas.model'
+import { Canvas } from '../../../models/Canvas.model';
 
-const width = 67
-const height = 10
-const color = 'white'
+const width = 67;
+const height = 10;
+const color = 'white';
 
 describe('SvgDrawComponent', () => {
-  let component: SvgDrawComponent;
-  let fixture: ComponentFixture<SvgDrawComponent>;
-  let mouseHandlerStub: any;
-  let kbHandlerStub: any;
-  let dFetchService: any;
-  let rendererStub: any;
+    let component: SvgDrawComponent;
+    let fixture: ComponentFixture<SvgDrawComponent>;
+    let mouseHandlerStub: any;
+    let kbHandlerStub: any;
+    let dFetchService: any;
+    let rendererStub: any;
 
-  beforeEach(async(() => {
-    mouseHandlerStub = {
-      move: () => 0,
-      down: () => 0,
-      up: () => 0
-    }
+    beforeEach(async(() => {
+        mouseHandlerStub = {
+            move: () => 0,
+            down: () => 0,
+            up: () => 0,
+        };
 
-    kbHandlerStub = {
-      reset: (e: KeyboardEvent) => e,
-      logKey: (e: KeyboardEvent) => e
-    }
+        kbHandlerStub = {
+            reset: (e: KeyboardEvent) => e,
+            logKey: (e: KeyboardEvent) => e,
+        };
 
-    dFetchService = {
-      ask: new Subject<boolean>()
-    }
+        dFetchService = {
+            ask: new Subject<boolean>(),
+        };
 
-    rendererStub = {
+        rendererStub = {};
 
-    }
+        TestBed.configureTestingModule({
+            declarations: [SvgDrawComponent],
+            providers: [
+                { provide: KeyboardHandlerService, useValue: kbHandlerStub },
+                { provide: MouseHandlerService, useValue: mouseHandlerStub },
+                { provide: DoodleFetchService, useValue: dFetchService },
+                { provide: Renderer2, useValue: rendererStub },
+            ],
+        }).compileComponents();
+    }));
 
-    TestBed.configureTestingModule({
-      declarations: [ SvgDrawComponent ],
-      providers: [
-        {provide: KeyboardHandlerService, useValue: kbHandlerStub},
-        {provide: MouseHandlerService, useValue: mouseHandlerStub},
-        {provide: DoodleFetchService, useValue: dFetchService},
-        {provide: Renderer2, useValue: rendererStub}
+    beforeEach(async(async () => {
+        fixture = TestBed.createComponent(SvgDrawComponent);
+        component = fixture.componentInstance;
+        await fixture.whenStable();
+        fixture.detectChanges();
+    }));
 
-      ]
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 
-    })
-    .compileComponents();
-  }));
+    it('should deselect all tools', () => {
+        const name1 = 'Pencil';
+        const name2 = 'rect';
 
-  beforeEach(async(async () => {
-    fixture = TestBed.createComponent(SvgDrawComponent);
-    component = fixture.componentInstance;
-    await fixture.whenStable()
-    fixture.detectChanges();
-  }));
+        const pencil = new PencilService(component.workingSpace, component.workingSpace, true, component.interaction, component.colorPick);
+        const rect = new RectangleService(component.workingSpace, component.workingSpace, true, component.interaction, component.colorPick);
+        const mapTest = new Map();
+        mapTest.set(name1, pencil);
+        mapTest.set(name2, rect);
+        component.closeTools(mapTest);
+        expect(mapTest.get(name1).selected).toBeFalsy();
+        expect(mapTest.get(name2).selected).toBeFalsy();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('the containers length should be greater than zero', () => {
+        component.ngAfterViewInit();
+        expect(component.toolsContainer.size).toBeGreaterThan(0);
+    });
 
-  it('should deselect all tools', () => {
-    const name1 = 'Pencil'
-    const name2 = 'rect'
+    it('a dispatch should be sent', () => {
+        const spyObj = spyOn(window, 'dispatchEvent');
+        component.ngAfterViewInit();
+        expect(spyObj).toHaveBeenCalled();
+    });
 
-    const pencil = new PencilService(component.workingSpace, component.workingSpace, true, component.interaction, component.colorPick)
-    const rect = new RectangleService(component.workingSpace, component.workingSpace, true, component.interaction, component.colorPick)
-    const mapTest = new Map()
-    mapTest.set(name1, pencil)
-    mapTest.set(name2, rect)
-    component.closeTools(mapTest)
-    expect(mapTest.get(name1).selected).toBeFalsy()
-    expect(mapTest.get(name2).selected).toBeFalsy()
-  })
+    it('should have the same parameters as the observer', () => {
+        const canvasBuilderStub = new CanvasBuilderService();
+        const canvas = new Canvas(width, height, color);
+        canvasBuilderStub.newCanvas = canvas;
 
-  it('the containers length should be greater than zero', () => {
-    component.ngAfterViewInit()
-    expect(component.toolsContainer.size).toBeGreaterThan(0)
-  })
+        const componentStub = new SvgDrawComponent(canvasBuilderStub, component.interaction, component.colorPick, dFetchService, rendererStub);
+        componentStub.initCanvas();
+        expect(componentStub.width).toBe(canvas.canvasWidth);
+        expect(componentStub.height).toBe(canvas.canvasHeight);
+        expect(componentStub.backColor).toBe(canvas.canvasColor);
+    });
 
-  it('a dispatch should be sent', () => {
-    const spyObj = spyOn(window, 'dispatchEvent')
-    component.ngAfterViewInit()
-    expect(spyObj).toHaveBeenCalled()
-  })
+    it('should call initCanvas and the observable', () => {
+        const spyObj = spyOn(component, 'initCanvas');
+        const spyInteraction = spyOn(component.interaction.$refObs, 'subscribe');
+        component.ngOnInit();
+        expect(spyObj).toHaveBeenCalled();
+        expect(spyInteraction).toHaveBeenCalled();
+    });
 
-  it('should have the same parameters as the observer', () => {
-    const canvasBuilderStub = new CanvasBuilderService()
-    const canvas = new Canvas(width, height, color)
-    canvasBuilderStub.newCanvas = canvas
+    it('should unsubscribe', () => {
+        const spyObj = spyOn(component.canvasSubscr, 'unsubscribe');
+        component.ngOnDestroy();
+        expect(spyObj).toHaveBeenCalled();
+    });
 
-    const componentStub = new SvgDrawComponent(canvasBuilderStub, component.interaction, component.colorPick, dFetchService, rendererStub)
-    componentStub.initCanvas();
-    expect(componentStub.width).toBe(canvas.canvasWidth)
-    expect(componentStub.height).toBe(canvas.canvasHeight)
-    expect(componentStub.backColor).toBe(canvas.canvasColor)
+    it('should call window addEventListener', () => {
+        const spyWindow = spyOn(window, 'addEventListener');
+        component.ngAfterViewInit();
+        expect(spyWindow).toHaveBeenCalledTimes(6);
+    });
 
-  })
-
-  it('should call initCanvas and the observable', () => {
-    const spyObj = spyOn(component, 'initCanvas')
-    const spyInteraction = spyOn(component.interaction.$refObs, 'subscribe')
-    component.ngOnInit()
-    expect(spyObj).toHaveBeenCalled()
-    expect(spyInteraction).toHaveBeenCalled()
-  })
-
-  it('should unsubscribe', () => {
-    const spyObj = spyOn(component.canvasSubscr, 'unsubscribe')
-    component.ngOnDestroy();
-    expect(spyObj).toHaveBeenCalled();
-  })
-
-  it('should call window addEventListener', () => {
-    const spyWindow = spyOn(window, 'addEventListener');
-    component.ngAfterViewInit()
-    expect(spyWindow).toHaveBeenCalledTimes(6)
-  });
-
-  /*it('should call the mousehandler listeners on mouse action', ()=>{
+    /*it('should call the mousehandler listeners on mouse action', ()=>{
 
     component.ngAfterViewInit(); // prepares the event listeners
     const spyDown = spyOn(mouseHandlerStub, "down");
@@ -155,15 +149,14 @@ describe('SvgDrawComponent', () => {
 
   });*/
 
-  it('should affect the variables on subscription', () => {
-    const spy = spyOn(component, 'closeTools');
-    component.ngAfterViewInit(); // init all
-    component.interaction.emitCancel(true) // we want to cancel the tool selection
-    expect(spy).toHaveBeenCalled();
+    it('should affect the variables on subscription', () => {
+        const spy = spyOn(component, 'closeTools');
+        component.ngAfterViewInit(); // init all
+        component.interaction.emitCancel(true); // we want to cancel the tool selection
+        expect(spy).toHaveBeenCalled();
 
-    const TOOL = 'Rectangle'; // arbitrary tool selection
-    component.interaction.emitSelectedTool(TOOL);
-    expect(component.toolsContainer.get(TOOL).selected).toBeTruthy();
-
-  });
+        const TOOL = 'Rectangle'; // arbitrary tool selection
+        component.interaction.emitSelectedTool(TOOL);
+        expect(component.toolsContainer.get(TOOL).selected).toBeTruthy();
+    });
 });
