@@ -96,8 +96,8 @@ describe('BrushService', () => {
 
     it('a filter of a unique id should be present on the brush stroke', () => {
         const path = service.createPath(ptArr);
-        const filerId = new Date().getTime();
-        expect(path).toContain(`filter="url(#${filerId})"`);
+
+        expect(path).toContain(`filter="url(#"`);
     });
 
     it('should build a gaussian blur filter based on a given scale', () => {
