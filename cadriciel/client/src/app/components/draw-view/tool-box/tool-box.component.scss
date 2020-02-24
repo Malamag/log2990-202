@@ -1,43 +1,33 @@
 
 .drawingTools{
-    width: auto;
-    border-right: thick;
-    float: left;
-    //padding-bottom: 1vh; 
-    margin-left: 0;
+  width: auto;
+  border-right: thick;
+  float: left;
+  //padding-bottom: 1vh; 
+  margin-left: 0;
 }
 
 .toolsSideBar{
-    width: 4vw;
-    height : auto;
+  width: 4vw;
+  height : auto;
 }
-div.selected {
-    -moz-border-radius: auto/auto;
-    -webkit-border-radius: auto/auto;
-    border-radius: 30px/30px;
-    border: solid 1px whitesmoke;
-    width: auto;
-    height: auto;
-  }
+.selected {
+  color: #ff4081;
+}
 .toolIcon {
-    height: 3vh;
-    width: 3vh;
-    // alignement des icônes avec les boutons respectifs
-    position:absolute;
-    top: 50%;
-     left:50%;
-    transform: translate(-50%, -50%);
-    filter: invert(100%); // inversion des couleurs afin d'obtenir des icônes blancs
+  height: 3vh;
+  width: 3vh;
+  // alignement des icônes avec les boutons respectifs
+  position:absolute;
+  top: 50%;
+   left:50%;
+  transform: translate(-50%, -50%);
+  filter: invert(100%); // inversion des couleurs afin d'obtenir des icônes blancs
 }
-  div.notSelected{
-    border: solid 1px none;
-  }
+.notSelected{
+  color:white;
+}
 /*.toolBtn:focus { // le bouton vire au rose après avoir été cliqué
-    background-color: rgb(255, 34, 107); 
-    
+  background-color: rgb(255, 34, 107); 
+  
 }*/
-
-
-
-
-
