@@ -283,7 +283,7 @@ describe('ColorPickingService', () => {
 
     it('hue selctor should call functions and set attributes', () => {
         const spySetColor = spyOn(service, 'setColorMode');
-        const spySLSelector = spyOn(service, 'slSelector');
+        const spySLSelector = spyOn(service, 'hueSelector');
         service.cData.isSLSelecting = false;
         service.hueSelectorOnMouseDown(mouseEventStub);
         expect(spySetColor).toHaveBeenCalled();
@@ -413,13 +413,6 @@ describe('ColorPickingService', () => {
         expect(service.cData.redHexInput).toBe(hex.substring(1, 3));
         expect(service.cData.greenHexInput).toBe(hex.substring(3, 5));
         expect(service.cData.blueHexInput).toBe(hex.substring(5, 7));
-    });
-
-    it('should select the display and update it', () => {
-        const spySelect = spyOn(service, 'selectDisplayColor');
-        const spyUpdate = spyOn(service, 'updateDisplay');
-        expect(spySelect).toHaveBeenCalled();
-        expect(spyUpdate).toHaveBeenCalled();
     });
 
     it('should select the primary color', () => {
