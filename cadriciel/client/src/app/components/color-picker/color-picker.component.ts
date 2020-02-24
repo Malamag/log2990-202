@@ -7,10 +7,9 @@ import { colorData } from './color-data';
 @Component({
     selector: 'app-color-picker',
     templateUrl: './color-picker.component.html',
-    styleUrls: [ './color-picker.component.scss']
+    styleUrls: ['./color-picker.component.scss'],
 })
 export class ColorPickerComponent implements OnInit {
-
     cData = colorData;
     colorSubsc: Subscription;
 
@@ -24,25 +23,22 @@ export class ColorPickerComponent implements OnInit {
     initColors() {
         const DEF_PRIM = '#000000ff';
         const DEF_SEC = '#ff0000ff';
-        const DEF_BG = '#ffffffff'
-        this.colorSubsc = this.colorPicking.colorSubject.subscribe(
-            (colors: ChoosenColors) => {
-                if (colors == undefined) {
-                    colors = new ChoosenColors(DEF_PRIM, DEF_SEC, DEF_BG);
-
-                }
-                this.cData.primaryColor = colors.primColor;
-                this.cData.secondaryColor = colors.secColor;
-                this.cData.backgroundColor = colors.backColor;
+        const DEF_BG = '#ffffffff';
+        this.colorSubsc = this.colorPicking.colorSubject.subscribe((colors: ChoosenColors) => {
+            if (colors == undefined) {
+                colors = new ChoosenColors(DEF_PRIM, DEF_SEC, DEF_BG);
             }
-        );
+            this.cData.primaryColor = colors.primColor;
+            this.cData.secondaryColor = colors.secColor;
+            this.cData.backgroundColor = colors.backColor;
+        });
     }
 
-    setColor(color: number[] ) { 
-        this.colorPicking.setColor(color)
+    setColor(color: number[]) {
+        this.colorPicking.setColor(color);
     }
 
-    hueSelector( event: MouseEvent ): void { 
+    hueSelector(event: MouseEvent): void {
         this.colorPicking.hueSelector(event);
     }
 
@@ -55,16 +51,16 @@ export class ColorPickerComponent implements OnInit {
     colorSelectOnMouseUp(): void {
         this.colorPicking.colorSelectOnMouseUp();
     }
-    hueSelectorOnMouseDown(event: MouseEvent ): void {
+    hueSelectorOnMouseDown(event: MouseEvent): void {
         this.colorPicking.hueSelectorOnMouseDown(event);
     }
     selectorOnMouseLeave(event: MouseEvent): void {
         this.colorPicking.selectorOnMouseLeave(event);
     }
-    slSelectorOnMouseDown(event: MouseEvent ): void {
+    slSelectorOnMouseDown(event: MouseEvent): void {
         this.colorPicking.slSelectorOnMouseDown(event);
     }
-    lastColorSelector( event: MouseEvent, lastColor: string ): void {
+    lastColorSelector(event: MouseEvent, lastColor: string): void {
         this.colorPicking.lastColorSelector(event, lastColor);
     }
     onSwapSVGMouseOver(): void {
@@ -79,8 +75,8 @@ export class ColorPickerComponent implements OnInit {
     onSwapSVGMouseUp(): void {
         this.colorPicking.onSwapSVGMouseUp();
     }
-    onRadioButtonChange( newColorMode : string) : void {
-        this.colorPicking.onRadioButtonChange( newColorMode );
+    onRadioButtonChange(newColorMode: string): void {
+        this.colorPicking.onRadioButtonChange(newColorMode);
     }
     swapInputDisplay() {
         this.colorPicking.swapInputDisplay();
@@ -89,7 +85,7 @@ export class ColorPickerComponent implements OnInit {
     validateHexInput(event: KeyboardEvent, hexLenght: number, hex: string): void {
         this.colorPicking.validateHexInput(event, hexLenght, hex);
     }
-    onHexInput(hexLength : number, hex: string, hexInputField : string): void {
+    onHexInput(hexLength: number, hex: string, hexInputField: string): void {
         this.colorPicking.onHexInput(hexLength, hex, hexInputField);
     }
     onSLSliderInput(): void {
@@ -97,10 +93,10 @@ export class ColorPickerComponent implements OnInit {
     }
 
     get svgStyles(): any {
-        return { transform : 'translate(50px,50px) rotate(' + this.cData.currentHue + 'deg) translate(-50px,-50px)'};
+        return { transform: 'translate(50px,50px) rotate(' + this.cData.currentHue + 'deg) translate(-50px,-50px)' };
     }
     get cursorStyles(): any {
-        return { transform : 'translate(' + this.cData.slCursorX + 'px,' + this.cData.slCursorY + 'px)'};
+        return { transform: 'translate(' + this.cData.slCursorX + 'px,' + this.cData.slCursorY + 'px)' };
     }
     // change primary alpha when primary slide change
     sliderAlphaChange(): void {
@@ -110,5 +106,4 @@ export class ColorPickerComponent implements OnInit {
     swapPrimarySecondary(): void {
         this.colorPicking.swapPrimarySecondary();
     }
-
 }

@@ -11,6 +11,8 @@ import {
 } from '@angular/material';
 import { ToolBoxComponent } from './tool-box.component';
 import { ColorPickerComponent } from '../../color-picker/color-picker.component';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('ToolBoxComponent', () => {
     let component: ToolBoxComponent;
@@ -18,7 +20,17 @@ describe('ToolBoxComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [ToolBoxComponent, ColorPickerComponent],
-            imports: [MatIconModule, MatButtonModule, MatTooltipModule, MatToolbarModule, MatSliderModule, MatFormFieldModule, MatRadioModule],
+            imports: [
+                MatIconModule,
+                MatButtonModule,
+                MatTooltipModule,
+                MatToolbarModule,
+                MatSliderModule,
+                MatFormFieldModule,
+                MatRadioModule,
+                FormsModule,
+                HttpClientModule,
+            ],
         }).compileComponents();
     }));
 
@@ -33,7 +45,6 @@ describe('ToolBoxComponent', () => {
     });
 
     it('should emit a name with the interaction service', () => {
-        const component = TestBed.createComponent(ToolBoxComponent).componentInstance;
         const spyObj = spyOn(component.interactionService, 'emitSelectedTool');
         const name = 'Rectangle';
         component.buttonAction(name);
@@ -42,7 +53,6 @@ describe('ToolBoxComponent', () => {
 
     // this test fail I dont know why
     it('should call buttonAction following a good key from the keyboardEvent', () => {
-        const component = TestBed.createComponent(ToolBoxComponent).componentInstance;
         const spy = spyOn(component, 'buttonAction');
         const mockKey = new KeyboardEvent('keyup', {
             key: '1',
@@ -51,7 +61,6 @@ describe('ToolBoxComponent', () => {
         expect(spy).toHaveBeenCalled();
     });
     it('should not call buttonAction', () => {
-        const component = TestBed.createComponent(ToolBoxComponent).componentInstance;
         const mockKey = new KeyboardEvent('keyup', {
             key: 'r',
         });
