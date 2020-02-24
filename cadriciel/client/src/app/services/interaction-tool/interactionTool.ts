@@ -7,7 +7,7 @@ export abstract class InteractionTool {
     undone: Element[][];
     interact: InteractionService;
     drawing: HTMLElement;
-    render: Renderer2
+    render: Renderer2;
     constructor(interact: InteractionService, drawing: HTMLElement, render: Renderer2) {
         this.done = [];
         this.undone = [];
@@ -15,5 +15,4 @@ export abstract class InteractionTool {
         this.drawing = drawing;
         this.render = render;
     }
-
 }
