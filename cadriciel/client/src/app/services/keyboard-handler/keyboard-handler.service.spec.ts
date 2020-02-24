@@ -68,12 +68,14 @@ describe('KeyboardHandlerService', () => {
     it('should select the right tool on valid shortcut', () => {
         const LEN = 10;
         service.toolObservers = [];
+        service.toolshortcuts = [];
         for (let i = 0; i < LEN; ++i) {
             // declares an array of 10 elements
             service.toolObservers.push(observerStub);
         }
         const goodShortcut = 0;
         service.keyCode = goodShortcut;
+        service.toolshortcuts.push(goodShortcut);
         service.checkForToolChange();
 
         expect(service.toolObservers[0].selected).toBeTruthy();
@@ -82,6 +84,7 @@ describe('KeyboardHandlerService', () => {
     it('should not update tool selection on invalid keycode', () => {
         const badKey = -1;
         service.keyCode = badKey;
+
         service.toolshortcuts = [];
         service.toolshortcuts.push(badKey);
         const LEN = 10;
@@ -89,11 +92,9 @@ describe('KeyboardHandlerService', () => {
             // declares an array of 10 elements
             service.toolObservers.push(observerStub);
         }
-
         const spy = spyOn(service.toolshortcuts, 'indexOf');
         service.checkForToolChange();
-
-        expect(spy).not.toHaveBeenCalled(); // array not accessed -> no update
+        expect(spy).not.toHaveBeenCalled(); // undefined -> no update
     });
 
     it('should get the key information and the observers must be updated and the change check is done', () => {

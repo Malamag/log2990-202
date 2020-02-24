@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { colorData } from 'src/app/components/color-picker/color-data';
 import { ColorPickingService } from './color-picking.service';
-import { ColorConvertingService } from './color-converting.service';
 
 describe('ColorPickingService', () => {
     let mouseEventStub: any;
@@ -36,7 +35,7 @@ describe('ColorPickingService', () => {
             ],
         });
         service = TestBed.get(ColorPickingService);
-        service.cData = JSON.parse(JSON.stringify(colorData));
+        service.cData = JSON.parse(JSON.stringify(colorData)); // deep-copying the interface to avoid test disturbance
     });
 
     it('should be created', () => {
@@ -78,41 +77,38 @@ describe('ColorPickingService', () => {
         let color: number[] = [1, 2, 3];
         const spyRgb = spyOn(service.colorConvert, 'rgbToHex');
         const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex');
-        const converter = new ColorConvertingService();
-        let expectedColor = '#' + converter.rgbToHex(color[0]) + converter.rgbToHex(color[1]) + converter.rgbToHex(color[2]);
-        expectedColor += converter.alphaRGBToHex(service.cData.primaryAlpha);
+
         service.setColor(color);
+
         expect(spyRgb).toHaveBeenCalled();
         expect(spyAlphaRGB).toHaveBeenCalled();
-        expect(service.cData.primaryColor).toBe(expectedColor);
     });
 
     it('set color should set the secondary color to the string returned by the converter', () => {
         let color: number[] = [1, 2, 3];
         const spyRgb = spyOn(service.colorConvert, 'rgbToHex');
         const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex');
-        const converter = new ColorConvertingService();
-        let expectedColor = '#' + converter.rgbToHex(color[0]) + converter.rgbToHex(color[1]) + converter.rgbToHex(color[2]);
-        expectedColor += converter.alphaRGBToHex(service.cData.secondaryAlpha);
+
         service.cData.colorMode = 'Secondary';
         service.setColor(color);
+
         expect(spyRgb).toHaveBeenCalled();
         expect(spyAlphaRGB).toHaveBeenCalled();
-        expect(service.cData.secondaryColor).toBe(expectedColor);
     });
     it('set color should set the background color to the string returned by the converter', () => {
         let color: number[] = [1, 2, 3];
+
         const spyRgb = spyOn(service.colorConvert, 'rgbToHex');
         const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex');
-        const converter = new ColorConvertingService();
-        let expectedColor = '#' + converter.rgbToHex(color[0]) + converter.rgbToHex(color[1]) + converter.rgbToHex(color[2]);
-        expectedColor += converter.alphaRGBToHex(service.cData.backgroundColorAlpha);
+
         service.cData.colorMode = service.cData.BACKGROUND_COLOR_MODE;
+
         service.setColor(color);
+
         expect(spyRgb).toHaveBeenCalled();
         expect(spyAlphaRGB).toHaveBeenCalled();
-        expect(service.cData.backgroundColor).toBe(expectedColor);
     });
+
     it('color mode should be background color mode', () => {
         service.cData.colorMode = service.cData.BACKGROUND_COLOR_MODE;
         service.setColorMode(mouseEventStub);
