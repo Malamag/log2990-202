@@ -339,9 +339,78 @@ describe('ColorPickingService', () => {
     service.updateLastColor(color);
     expect(service.cData.lastColorRects[service.cData.lastColorRects.length-1].fill).toBe(color);
   })
-  /*it('update display should call functions',()=>{
+  it('update display should call functions',()=>{
     const hex ="00000000";
-    const rgb: number[] = []
-
-  })*/
+    const spyUpdateRGB = spyOn(service,'updateDisplayRGB');
+    const spyUpdateHsl = spyOn(service,'updateDisplayHSL');
+    const spyUpdateHex = spyOn(service,'upadateDisplayHex');
+    const spySetColor = spyOn(service,'setColorsFromForm');
+    const spyEmit = spyOn(service,'emitColors');
+    service.updateDisplay(hex);
+    expect(spyEmit).toHaveBeenCalled();
+    expect(spyUpdateHex).toHaveBeenCalled();
+    expect(spyUpdateRGB).toHaveBeenCalled();
+    expect(spyUpdateHsl).toHaveBeenCalled();
+    expect(spySetColor).toHaveBeenCalled();
+  })
+  it('should return the opacity computed with the formula',()=>{
+    const rgb = [1,2,3, 4];
+    const expectedResult = Math.round(rgb[3]*service.cData.POURCENT_MODIFIER);
+    service.updateDisplayRGB(rgb)
+    expect(service.cData.opacitySliderInput).toEqual(expectedResult)
+  })
+  it('should not call get saturation',()=>{
+    const hsl= [1, 2, 0.5];
+    const spySaturation = spyOn(service,'getSaturation');
+    service.updateDisplayHSL(hsl);
+    expect(spySaturation).toHaveBeenCalledTimes(0);
+  })
+  it('should call get saturation',()=>{
+    const hsl= [1, 2, 1];
+    const spySaturation = spyOn(service,'getSaturation');
+    service.updateDisplayHSL(hsl);
+    expect(spySaturation).toHaveBeenCalled();
+  })
+  it('should update all hex input values',()=>{
+    const hex = '#ffffffff';
+    service.upadateDisplayHex(hex)
+    expect(service.cData.hexColorInput).toBe(hex.substring(1,7));
+    expect(service.cData.redHexInput).toBe(hex.substring(1,3));
+    expect(service.cData.greenHexInput).toBe(hex.substring(3,5));
+    expect(service.cData.blueHexInput).toBe(hex.substring(5,7));
+  })
+  it('should select the display and update it',()=>{
+    const spySelect = spyOn(service,'selectDisplayColor');
+    const spyUpdate = spyOn(service,'updateDisplay');
+    expect(spySelect).toHaveBeenCalled();
+    expect(spyUpdate).toHaveBeenCalled();
+  })
+  it('should select the primary color',()=>{
+    service.cData.colorMode = service.cData.PRIMARY_COLOR_MODE;
+    expect(service.selectDisplayColor).toBe(service.cData.primaryColor);
+  })
+  it('should select the secondary color',()=>{
+    service.cData.colorMode = service.cData.SECONDARY_COLOR_MODE;
+    expect(service.selectDisplayColor).toBe(service.cData.secondaryColor);
+  })
+  it('should select the background color',()=>{
+    service.cData.colorMode = service.cData.BACKGROUND_COLOR_MODE;
+    expect(service.selectDisplayColor).toBe(service.cData.backgroundColor);
+  })
+  it('should swap primary secondary color and update the display',()=>{
+    service.cData.colorMode = service.cData.PRIMARY_COLOR_MODE;
+    const tmpPrimaryColor = service.cData.primaryColor
+    const tmpPrimaryAlpha = service.cData.primaryAlpha;
+    const tmpSecColor = service.cData.secondaryColor;
+    const tmpSecAlpha = service.cData.secondaryAlpha;
+    const spyUpdate = spyOn(service,'updateDisplay');
+    const spySelect = spyOn(service,'selectDisplayColor');
+    service.swapPrimarySecondary();
+    expect(service.cData.primaryColor).toBe(tmpSecColor);
+    expect(service.cData.primaryAlpha).toBe(tmpSecAlpha);
+    expect(service.cData.secondaryColor).toBe(tmpPrimaryColor);
+    expect(service.cData.secondaryAlpha).toBe(tmpPrimaryAlpha);
+    expect(spySelect).toHaveBeenCalled();
+    expect(spyUpdate).toHaveBeenCalled(); 
+  })
 });
