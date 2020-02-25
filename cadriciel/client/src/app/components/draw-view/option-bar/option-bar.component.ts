@@ -37,12 +37,14 @@ export class OptionBarComponent implements OnInit {
         if (kbHandler.ctrlDown && kbHandler.keyCode === O_KEY) {
             // ctrl+o opens the form!
             this.openNewDrawForm();
+            e.preventDefault(); // default behavior prevented
         }
 
         if (kbHandler.ctrlDown && kbHandler.keyCode === E_KEY) {
             this.openExportForm();
+            e.preventDefault();
         }
-        e.preventDefault(); // default behavior prevented
+        //e.preventDefault(); // if it was here, no inputs would be possible...
     }
 
     openNewDrawForm() {
