@@ -3,9 +3,9 @@ import { ImageData } from '../imageData';
 import { Collection, MongoClient, MongoClientOptions, UpdateQuery, FilterQuery } from 'mongodb';
 import 'reflect-metadata';
 
-const DATABASE_URL = 'mongodb+srv://Equipe202:<password>@cluster0-kusq4.mongodb.net/test?retryWrites=true&w=majority'
+const DATABASE_URL = 'mongodb+srv://Equipe202:Equipe202@cluster0-kusq4.mongodb.net/test?retryWrites=true&w=majority'
 const DATABASE_NAME = 'Equipe202_Database';
-const DATABASE_COLLECTION= 'Images';
+const DATABASE_COLLECTION = 'Images';
 
 
 @injectable()
@@ -21,6 +21,7 @@ export class DatabaseService {
         MongoClient.connect( DATABASE_URL, this.options )
             .then( ( client: MongoClient ) => {
                 this.collection = client.db( DATABASE_NAME ).collection( DATABASE_COLLECTION );
+                console.error( 'connexion ok ');
             } )
             .catch( () => { 
                 console.error( 'Erreur de connexion. Terminaison du processus' );
