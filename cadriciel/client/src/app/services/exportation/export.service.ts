@@ -1,14 +1,16 @@
-import { ElementRef, Injectable } from '@angular/core';
+import { ElementRef, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ExportService {
     imageURL: string;
+    render: Renderer2;
+    constructor(rendererFact: RendererFactory2) {
+        this.render = rendererFact.createRenderer(null, null);
+    }
 
-    constructor() {}
-
-    svgToURL(svgElement: Node) {
+    svgToURL(svgElement: Node): string {
         const data = new XMLSerializer().serializeToString(svgElement);
         const blob = new Blob([data], { type: 'image/svg+xml' });
         const domurl = window.URL;
@@ -19,12 +21,12 @@ export class ExportService {
     download(name: string, format: string, src: string) {
         // https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
 
-        const downloadLink = document.createElement('a');
+        const downloadLink = this.render.createElement('a');
         downloadLink.href = src;
         downloadLink.download = `${name + '.' + format}`; // produces name.format image
-        document.body.appendChild(downloadLink);
+        this.render.appendChild(document.body, downloadLink);
         downloadLink.click();
-        document.body.removeChild(downloadLink);
+        this.render.removeChild(document.body, downloadLink);
     }
 
     exportCanvas(name: string, type: string, canvasRef: ElementRef) {

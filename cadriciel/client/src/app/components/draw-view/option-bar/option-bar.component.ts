@@ -42,7 +42,7 @@ export class OptionBarComponent implements OnInit {
         if (kbHandler.ctrlDown && kbHandler.keyCode === E_KEY) {
             this.openExportForm();
         }
-        e.preventDefault(); // default behavior (file menu) prevented
+        e.preventDefault(); // default behavior prevented
     }
 
     openNewDrawForm() {
