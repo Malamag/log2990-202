@@ -214,7 +214,7 @@ describe('MouseHandlerService', () => {
   it('should call down on every observer', () => {
     service.observers = [iObserverStub, iObserverStub, iObserverStub];
     const spy = spyOn(iObserverStub, 'down');
-    service.callObserverDown();
+    service.callObserverDown(false);
     expect(spy).toHaveBeenCalledTimes(service.observers.length);
   });
 

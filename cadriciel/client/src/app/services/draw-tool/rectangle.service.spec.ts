@@ -58,7 +58,7 @@ describe('RectangleService', () => {
 
   it('should update progress on move', () => {
     const spy = spyOn(service, 'updateProgress');
-    service.down(ptA); // simulating a mouse down at given point
+    service.down(ptA,true,false); // simulating a mouse down at given point
     service.update(kbServiceStub);
     expect(service.isSquare).toBeTruthy();
     expect(spy).toHaveBeenCalled();
@@ -66,7 +66,7 @@ describe('RectangleService', () => {
 
   it('should update the current path on mouse down', () => {
     const spy = spyOn(service,  'updateProgress');
-    service.down(ptA);
+    service.down(ptA,true,false);
     expect(service.currentPath.length).toBe(2); // same point added twice to manage static mouse
     expect(service.currentPath).toContain(ptA);
 
@@ -74,7 +74,7 @@ describe('RectangleService', () => {
   });
 
   it('should update the drawing on mouse up', () => {
-    service.down(ptA); // pressing the mouse
+    service.down(ptA,true,false); // pressing the mouse
     const spy = spyOn(service, 'updateDrawing');
     service.up(ptA);
     expect(spy).toHaveBeenCalled();
@@ -89,12 +89,12 @@ describe('RectangleService', () => {
 
   it('should update the progress on mouse down', () => {
     const spy = spyOn(service, 'updateProgress');
-    service.down(ptA);
+    service.down(ptA,true,false);
     expect(spy).toHaveBeenCalled();
   });
 
   it('should add the new position in the current path array on mouse down', () => {
-    service.down(ptA);
+    service.down(ptA,true,false);
     service.move(ptA);
     expect(service.currentPath).toContain(ptA);
   });

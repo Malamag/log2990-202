@@ -57,10 +57,12 @@ export class SelectionService extends RectangleService {
     }else if(keyboard.keyCode == 40){
       yoff = 3;
     }
-    
-    this.moveSelection(xoff,yoff);
-    this.updateBoundingBox();
-    document.getElementsByName("selected-items")[0].innerHTML = this.updateBoundingBox();
+
+    if(this.selectedItems.length > 0){
+      this.moveSelection(xoff,yoff);
+      this.updateBoundingBox();
+      document.getElementsByName("selected-items")[0].innerHTML = this.updateBoundingBox();
+    }
   }
 
   updateBoundingBox(){

@@ -90,12 +90,14 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     const brush = tc.CreateBrush(false, this.interaction, this.colorPick);
     const ellipse = tc.CreateEllipse(false, this.interaction, this.colorPick);
     const selection = tc.CreateSelection(false, this.interaction, this.colorPick);
+    const colorEditor = tc.CreateColorEditor(false, this.interaction, this.colorPick);
     this.toolsContainer.set('Rectangle', rect);
     this.toolsContainer.set('Ligne', line);
     this.toolsContainer.set('Pinceau', brush);
     this.toolsContainer.set('Crayon', pencil);
     this.toolsContainer.set('Ellipse',ellipse);
     this.toolsContainer.set('Selection',selection);
+    this.toolsContainer.set('ColorEditor',colorEditor);
     this.interaction.$cancelToolsObs.subscribe((sig) => {
       if (sig) {
           this.closeTools(this.toolsContainer)

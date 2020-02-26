@@ -44,7 +44,7 @@ export class RectangleService extends DrawingTool {
   }
 
   // mouse down with rectangle in hand
-  down(position: Point) {
+  down(position: Point, insideWorkSpace:boolean, isRightClick:boolean) {
 
     // in case we changed tool while the mouse was down
     this.ignoreNextUp = false;
