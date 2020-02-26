@@ -8,6 +8,8 @@ import {menuItems} from '../../../functionality';
 import { ExportFormComponent } from '../../export-form/export-form.component';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
+import { IndexService } from 'src/app/services/index/index.service';
+import { ImageData } from '../../../imageData';
 
 @Component({
   selector: 'app-option-bar',
@@ -19,7 +21,7 @@ export class OptionBarComponent implements OnInit {
   canvasSub: Subscription;
   currentCanvas: Canvas;
 
-  constructor(public winService: ModalWindowService, public interaction: InteractionService) {
+  constructor(public winService: ModalWindowService, public interaction: InteractionService, public index: IndexService) {
 
     window.addEventListener('keydown', (e) => {
       this.setShortcutEvent(e);
@@ -46,6 +48,13 @@ export class OptionBarComponent implements OnInit {
     }
   }
 
+  openGalleryForm() {
+    //this.winService.openWindow(GalleryComponent);
+    let image : ImageData = {id: '1', name: 'one', tags: ["string"]};
+    //this.index.pupolatedBd();
+    let msg = this.index.addImage(image);
+    window.alert(msg);
+  }
   openUserGuide() {
     this.winService.openWindow(UserManualComponent)
   }

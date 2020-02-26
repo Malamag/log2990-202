@@ -4,6 +4,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ExportFormComponent } from 'src/app/components/export-form/export-form.component';
 import { NewDrawComponent } from 'src/app/components/new-draw/new-draw.component';
 import { UserManualComponent } from 'src/app/components/user-manual/user-manual.component';
+import { GalleryComponent } from 'src/app/components/gallery/gallery.component';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,7 @@ export class ModalWindowService {
      ComponentType<
      NewDrawComponent|
      UserManualComponent|
+     GalleryComponent|
      ExportFormComponent>) { // Can open new draw form or user guide (for now)
     this.dialog.open(component, this.dialogConfig);
   }

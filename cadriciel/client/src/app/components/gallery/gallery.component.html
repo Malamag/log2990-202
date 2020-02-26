@@ -1,0 +1,10 @@
+<div  class="form-container">
+    <h1>Nouveau dessin</h1>
+    <div  class="drawForm">
+        <form [formGroup]="galleryForm" (ngSubmit)="onSubmit()"> <!--TODO: ng submit function-->
+
+            <button mat-raised-button color="primary" id="submitButton"
+            type="submit" [disabled]="newDrawForm.invalid">C'est parti!</button>
+        </form>
+    </div>
+</div>

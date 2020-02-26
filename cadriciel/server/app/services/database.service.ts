@@ -53,8 +53,8 @@ export class DatabaseService {
         //return tags.forEach( this.collection.find({}))
     //}
 
-    async addImage(image: ImageData): Promise<void>{
-        this.collection.insertOne(image).catch((error: Error) => {
+    async addImage(imageData: ImageData): Promise<void>{
+        this.collection.insertOne(imageData).catch((error: Error) => {
             throw error;
         });
     }
@@ -70,7 +70,7 @@ export class DatabaseService {
     async modifyImage(imageData: ImageData): Promise<void>{
         let filterQuery : FilterQuery<ImageData> = {name: imageData.name};
         let udateQuery : UpdateQuery<ImageData> = {
-            $set : { image : imageData.image,
+            $set : { id: imageData.id,
                      name : imageData.name,
                      tags : imageData.tags}
         }
@@ -83,13 +83,13 @@ export class DatabaseService {
 
     async populateDB(){
         let images: ImageData[] = [
-            {image: new ImageBitmap, name: 'one', tags: ["string"]},
-            {image: new ImageBitmap, name: 'two', tags: ["string"]},
-            {image: new ImageBitmap, name: 'three', tags: ["string"]},
-            {image: new ImageBitmap, name: 'four', tags: ["string"]}]
-
+            {id: '1', name: 'one', tags: ["string"]},
+            {id: '2', name: 'two', tags: ["string"]},
+            {id: '3', name: 'three', tags: ["string"]},
+            {id: '4', name: 'four', tags: ["string"]}]
         images.forEach((image) => {
             this.addImage(image);
         })
     }
+    
 }

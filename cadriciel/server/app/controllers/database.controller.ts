@@ -41,6 +41,7 @@ export class DatabaseController {
         })
 
         this.router.post("/Images/", async (req: Request, res: Response, next: NextFunction) => {
+            console.log('charmander');
             this.databaseService.addImage(req.body)
             .then(() => {
                 res.sendStatus(Httpstatus.CREATED).send();
