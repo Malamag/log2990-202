@@ -23,6 +23,7 @@ export class ToolBoxComponent implements OnInit {
     this.selectingToolsMap.set('2', 'Ellipse');
     this.selectingToolsMap.set('s', 'Selection');
     this.selectingToolsMap.set('r', 'ColorEditor');
+    this.selectingToolsMap.set('e', 'Eraser');
   }
 
   @HostListener('document: keydown', ['$event'])
