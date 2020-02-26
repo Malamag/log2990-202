@@ -27,13 +27,32 @@ export class IndexService {
           return of(result as T);
       };
   }
-  public addImage (image : ImageData ): string {
+  public getAllImages() : void {
+    this.http.get<ImageData[]>('http://localhost:3000/database/Images/').subscribe( data => { 
+      window.alert(data[0].id + " " + data[0].name + " " + data[0].tags);
+   });
+  }
+  public getImageById(imageId: string) : void{
+    this.http.get<ImageData>('http://localhost:3000/database/Images/'+ imageId).subscribe( data => { 
+       window.alert(data.name);
+    });
+  }
+  public addImage (imageData : ImageData ): string {
     
-    this.http.post<ImageData>('http://localhost:3000/database/Images/', image, httpOptions )
+    this.http.post<ImageData>('http://localhost:3000/database/Images/', imageData, httpOptions )
     .subscribe( data => { });
     return 'Ok';
   }
-  public pupolatedBd () {
-    this.http.get('http://localhost:3000/api/index/populateDB');
+
+  public deleteImageById(imageId: string){
+    this.http.delete<ImageData>('http://localhost:3000/database/Images/'+imageId, httpOptions).subscribe( data => {});
+  }
+  public modifyImage(imageData : ImageData) {
+    httpOptions.headers = httpOptions.headers.set('Authorization', 'my-new-auth-token');
+    this.http.patch<ImageData>('http://localhost:3000/database/Images/', imageData, httpOptions).subscribe( data => {})
+  }
+
+  public pupolatedBd (){
+    this.http.get<any>('http://localhost:3000/api/index/populateDB').subscribe( data => { });
   }
 }

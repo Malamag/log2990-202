@@ -30,8 +30,8 @@ export class DatabaseController {
             });
         })
 
-        this.router.get("/Images/:name", async (req: Request, res: Response, next: NextFunction) => {
-            this.databaseService.getImageByName(req.params.name)
+        this.router.get("/Images/:id", async (req: Request, res: Response, next: NextFunction) => {
+            this.databaseService.getImageById(req.params.id)
             .then((imageData: ImageData) => {
                 res.json(imageData);
             })
@@ -51,8 +51,8 @@ export class DatabaseController {
             });
         })
 
-        this.router.delete("/Images/:name", async (req: Request, res: Response, next: NextFunction) => {
-            this.databaseService.deleteImageByName(req.params.name)
+        this.router.delete("/Images/:id", async (req: Request, res: Response, next: NextFunction) => {
+            this.databaseService.deleteImageById(req.params.id)
             .then(() => {
                 res.sendStatus(Httpstatus.NO_CONTENT).send();
             })

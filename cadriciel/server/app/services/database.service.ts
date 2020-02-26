@@ -39,8 +39,8 @@ export class DatabaseService {
         });
     }
 
-    async getImageByName(imageName: string): Promise<ImageData>{
-        return this.collection.findOne({name:imageName})
+    async getImageById(imageId: string): Promise<ImageData>{
+        return this.collection.findOne({id:imageId})
         .then((image: ImageData) => {
             return image;
         })
@@ -59,8 +59,8 @@ export class DatabaseService {
         });
     }
 
-    async deleteImageByName(imageName: string): Promise<void>{
-        return this.collection.findOneAndDelete({ name: imageName })
+    async deleteImageById(imageId: string): Promise<void>{
+        return this.collection.findOneAndDelete({ id: imageId })
         .then(() => { })
         .catch((error: Error) => {
             throw new Error( "Impposible de supprimer l'image");
@@ -68,7 +68,7 @@ export class DatabaseService {
     }
 
     async modifyImage(imageData: ImageData): Promise<void>{
-        let filterQuery : FilterQuery<ImageData> = {name: imageData.name};
+        let filterQuery : FilterQuery<ImageData> = {id: imageData.id};
         let udateQuery : UpdateQuery<ImageData> = {
             $set : { id: imageData.id,
                      name : imageData.name,

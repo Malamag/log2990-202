@@ -50,10 +50,14 @@ export class OptionBarComponent implements OnInit {
 
   openGalleryForm() {
     //this.winService.openWindow(GalleryComponent);
-    let image : ImageData = {id: '1', name: 'one', tags: ["string"]};
-    //this.index.pupolatedBd();
-    let msg = this.index.addImage(image);
+    //let image : ImageData = {id: '1', name: 'one', tags: ["string"]};
+    //this.index.getAllImages();
+    //this.index.getImageById('1');
+    //this.index.deleteImageById('1');
+    let msg = 'ok'//this.index.addImage(image);
     window.alert(msg);
+    let image2 : ImageData = {id: '1', name: 'two', tags: ["string"]};
+    this.index.modifyImage(image2);
   }
   openUserGuide() {
     this.winService.openWindow(UserManualComponent)
