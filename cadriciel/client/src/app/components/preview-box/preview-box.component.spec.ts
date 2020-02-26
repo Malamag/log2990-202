@@ -1,39 +1,39 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { SvgDrawComponent } from '../draw-view/svg-draw/svg-draw.component';
 import { PreviewBoxComponent } from './preview-box.component';
+import { ElementRef } from '@angular/core';
 
 describe('PreviewBoxComponent', () => {
-  let component: PreviewBoxComponent;
-  let fixture: ComponentFixture<PreviewBoxComponent>;
-  let dFetchStub: any;
+    let component: PreviewBoxComponent;
+    let fixture: ComponentFixture<PreviewBoxComponent>;
+    let elementStub: any;
+    let nativeElemStub: any;
 
-  beforeEach(async(() => {
+    beforeEach(async(() => {
+        nativeElemStub = {
+            appendChild: () => 0,
+        };
+        elementStub = {
+            nativeElement: nativeElemStub,
+        };
+        TestBed.configureTestingModule({
+            declarations: [PreviewBoxComponent, SvgDrawComponent],
+            providers: [
+                { provide: SVGElement, useValue: {} },
+                { provide: ElementRef, useValue: elementStub },
+            ],
+        }).compileComponents();
+    }));
 
-    dFetchStub = {
-      askForDoodle: () => 0,
-      getDrawing: () => undefined
-    }
+    beforeEach(() => {
+        fixture = TestBed.createComponent(PreviewBoxComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+        component.previewBoxRef = elementStub;
+    });
 
-    TestBed.configureTestingModule({
-      declarations: [ PreviewBoxComponent, SvgDrawComponent ],
-      providers: [
-        {provide: DoodleFetchService, useValue: dFetchStub}
-      ]
-    })
-    .compileComponents();
-  }));
-
-  beforeEach(() => {
-    dFetchStub.askForDoodle();
-    fixture = TestBed.createComponent(PreviewBoxComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

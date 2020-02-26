@@ -83,6 +83,5 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     applyFilter(event: number) {
         this.selectedFilter = event;
         this.imgFilter.toggleFilter(this.doodle, this.selectedFilter);
-        console.log(this.doodle);
     }
 }

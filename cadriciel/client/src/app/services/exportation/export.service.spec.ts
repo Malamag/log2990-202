@@ -42,14 +42,10 @@ describe('ExportService', () => {
         expect(URL).toBeDefined();
     });
 
-    // check for a possible viewchild
-    /*it('should build a download link', () => {
-        const spy = spyOn(document, 'createElement');
-        const FAKE_NAME = 'monDessin';
-        const FAKE_TYPE = 'png';
-        const FAKE_SRC = 'src';
-        service.download(FAKE_NAME, FAKE_TYPE, FAKE_SRC);
-        expect(spy).toHaveBeenCalledWith('a');
+    /*it('should build a download link with renderer', () => {
+        const spy = spyOn(service.render, 'createElement');
+        service.download('fakeName', 'png', 'www.polymtl.com');
+        expect(spy).toHaveBeenCalled();
     });*/
 
     it('should export canvas in svg from image url', () => {

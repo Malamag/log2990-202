@@ -17,12 +17,13 @@ export class DoodleFetchService {
     }
 
     askForDoodle() {
-        this.ask.next(true); // are telling the svg draw component that we want to access the doodle
+        this.ask.next(true); // we are telling the svg draw component that we want to access the doodle
     }
 
     getDrawing(): Node {
         // returns a deep copy of the svg element.
-        return this.getSVGElementFromRef(this.currentDraw).cloneNode(true);
+        const SVG_NODE = this.getSVGElementFromRef(this.currentDraw);
+        return SVG_NODE.cloneNode(true);
     }
 
     getSVGElementFromRef(el: ElementRef): Node {

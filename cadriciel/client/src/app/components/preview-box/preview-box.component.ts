@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-// import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 
 @Component({
     selector: 'app-preview-box',
@@ -26,9 +25,9 @@ export class PreviewBoxComponent implements OnInit, AfterViewInit {
     }
 
     scaleSVG(scaleFacor: number) {
-        const viewboxW = this.svgW;
-        const viewBoxH = this.svgH;
-        this.viewBoxStr = `0 0 ${viewboxW} ${viewBoxH}`;
+        const VIEWBOX_W = this.svgW;
+        const VIEWBOX_H = this.svgH;
+        this.viewBoxStr = `0 0 ${VIEWBOX_W} ${VIEWBOX_H}`;
         this.svgW = this.svgW / scaleFacor;
         this.svgH = this.svgH / scaleFacor;
     }
