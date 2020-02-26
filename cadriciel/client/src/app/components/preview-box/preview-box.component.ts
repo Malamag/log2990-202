@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, Renderer2, AfterViewInit } from '@angular/core';
 
 @Component({
     selector: 'app-preview-box',
@@ -10,18 +10,20 @@ export class PreviewBoxComponent implements OnInit, AfterViewInit {
 
     @Input() svgH: number;
     @Input() svgW: number;
-
+    render: Renderer2;
     viewBoxStr: string;
 
     @ViewChild('prevBox', { static: false }) previewBoxRef: ElementRef; // has an eye on the <canvas> element
-
+    constructor(render: Renderer2) {
+        this.render = render;
+    }
     ngOnInit() {
         const SCALE = 3;
         this.scaleSVG(SCALE);
     }
 
     ngAfterViewInit() {
-        this.previewBoxRef.nativeElement.appendChild(this.draw);
+        this.initBox();
     }
 
     scaleSVG(scaleFacor: number) {
@@ -30,5 +32,9 @@ export class PreviewBoxComponent implements OnInit, AfterViewInit {
         this.viewBoxStr = `0 0 ${VIEWBOX_W} ${VIEWBOX_H}`;
         this.svgW = this.svgW / scaleFacor;
         this.svgH = this.svgH / scaleFacor;
+    }
+
+    initBox() {
+        this.render.appendChild(this.previewBoxRef.nativeElement, this.draw);
     }
 }

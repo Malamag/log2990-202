@@ -1,6 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SvgDrawComponent } from '../draw-view/svg-draw/svg-draw.component';
 import { PreviewBoxComponent } from './preview-box.component';
 import { ElementRef } from '@angular/core';
 
@@ -9,31 +7,34 @@ describe('PreviewBoxComponent', () => {
     let fixture: ComponentFixture<PreviewBoxComponent>;
     let elementStub: any;
     let nativeElemStub: any;
-
     beforeEach(async(() => {
         nativeElemStub = {
-            appendChild: () => 0,
+            toDataURL: (data: string) => 0,
+            getContext: (ctx: string) => 2, // true in an if-clause
         };
         elementStub = {
             nativeElement: nativeElemStub,
         };
         TestBed.configureTestingModule({
-            declarations: [PreviewBoxComponent, SvgDrawComponent],
+            declarations: [PreviewBoxComponent],
             providers: [
-                { provide: SVGElement, useValue: {} },
                 { provide: ElementRef, useValue: elementStub },
+                { provide: SVGElement, useValue: nativeElemStub },
             ],
         }).compileComponents();
     }));
 
     beforeEach(() => {
         fixture = TestBed.createComponent(PreviewBoxComponent);
+
         component = fixture.componentInstance;
+
         fixture.detectChanges();
-        component.previewBoxRef = elementStub;
     });
 
     it('should create', () => {
+        console.log(component.draw);
         expect(component).toBeTruthy();
+        console.log(component.previewBoxRef.nativeElement);
     });
 });
