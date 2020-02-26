@@ -13,13 +13,15 @@ export class SelectionService extends RectangleService {
 
   isSquare: boolean;
   
-  attr: FormsAttribute
+  attr: FormsAttribute;
 
   selectedItems : Element[];
+  moving : boolean;
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
     super(inProgess, drawing, selected, interaction, colorPick);
     this.selectedItems = [];
+    this.moving = false;
   }
 
   // mouse up with rectangle in hand
@@ -34,6 +36,8 @@ export class SelectionService extends RectangleService {
       // add everything to the canvas
       this.currentPath = [];
       this.inProgress.innerHTML = "";
+
+      this.moving = false;
 
       //this.updateDrawing();
     }
@@ -95,8 +99,8 @@ export class SelectionService extends RectangleService {
     testing += `<rect id="selection" x="${minX}" y="${minY}"`;
     testing += `width="${maxX - minX}" height="${maxY - minY}"`;
 
-    testing += `fill="rgba(0,0,255,0.5)"`;
-    testing += `stroke-width="1" stroke="blue"/>`;
+    testing += `fill="rgba(0,120,215,0.3)"`;
+    testing += `stroke-width="1" stroke="rgba(0,120,215,0.9)"/>`;
 
     return testing;
   }
@@ -155,11 +159,15 @@ export class SelectionService extends RectangleService {
     let e = document.elementFromPoint(px,py);
     if(e!=null){
       if(e.id == "selection"){
+        /*
         let old = e;
         let dis = (e as HTMLElement).style.display;
         (e as HTMLElement).style.display = "none";
         e = document.elementFromPoint(px,py);
         (old as HTMLElement).style.display = dis;
+        */
+        e = null;
+        this.moving = true;
       }
       if(e!= null && e.id == "ignore"){
         e = null;
@@ -184,13 +192,18 @@ export class SelectionService extends RectangleService {
     this.currentPath.push(position);
     this.currentPath.push(position);
 
-    this.selectedItems = [];
 
     let n = this.retrieveItemUnderMouse(position);
+    if(!this.moving){
+      this.selectedItems = [];
       if(n!=null){
         this.selectedItems.push(n);
     }
+    }
 
+    if(this.moving){
+      console.log("MOVING");
+    }
     document.getElementsByName("selected-items")[0].innerHTML = this.updateBoundingBox();
 
     this.updateProgress();
@@ -198,6 +211,21 @@ export class SelectionService extends RectangleService {
 
   move(position: Point) {
 
+    if(this.moving){
+      for(let i = 0; i < this.selectedItems.length;i++){
+        //console.log(this.selectedItems[i]);
+        let prev = this.currentPath[this.currentPath.length-1];
+        let offset = new Point(position.x - prev.x, position.y - prev.y);
+
+        //console.log(offset);
+        
+        let current = (this.selectedItems[i] as HTMLElement).style.transform;
+        let s = current?current.split(","):"";
+        let newX = +(s[0].replace(/[^\d.-]/g, '')) + offset.x;
+        let newY = +(s[1].replace(/[^\d.-]/g, '')) + offset.y;
+        (this.selectedItems[i] as HTMLElement).style.transform = `translate(${newX}px,${newY}px)`;
+      }
+    }
     // only if the rectangleTool is currently affecting the canvas
     if (this.isDown) {
 
@@ -206,16 +234,18 @@ export class SelectionService extends RectangleService {
       // save mouse position
       this.currentPath.push(position);
 
-      if(Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length-1]) > 10){
-        this.selectedItems = [];
-        this.retrieveItemsInRect();
+      if(!this.moving){
+        if(Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length-1]) > 10){
+          this.selectedItems = [];
+          this.retrieveItemsInRect();
+        }
+        this.updateProgress();
       }
 
 
-      this.updateProgress();
-    }
     document.getElementsByName("selected-items")[0].innerHTML = this.updateBoundingBox();
-    console.log(this.selectedItems);
+    //console.log(this.selectedItems);
+    }
   }
 
   // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
@@ -259,15 +289,15 @@ export class SelectionService extends RectangleService {
     s = '<g name = "selection-perimeter" id = "test_selection">';
 
     // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
-    const stroke = (this.attr.plotType == 0 || this.attr.plotType == 2) ? `${this.chosenColor.secColor}` : 'none';
+    //const stroke = (this.attr.plotType == 0 || this.attr.plotType == 2) ? `${this.chosenColor.secColor}` : 'none';
     //const fill = (this.attr.plotType == 1 || this.attr.plotType == 2) ? `${this.chosenColor.primColor}` : 'none';
 
     // set render attributes for the svg rect
     s += `<rect x="${startX}" y="${startY}"`;
     s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
 
-    s += `fill="none"`;
-    s += `stroke-width="${this.attr.lineThickness}" stroke="${stroke}" stroke-dasharray="5,5"/>`;
+    s += `fill="rgba(0,102,204,0.3)"`;
+    s += `stroke-width="5" stroke="rgba(0,102,204,0.9)" stroke-dasharray="5,5"/>`;
 
     // end the divider
     s += '</g>'

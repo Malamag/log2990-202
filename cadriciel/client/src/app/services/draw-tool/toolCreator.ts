@@ -44,6 +44,5 @@ export class ToolCreator {
 
   CreateSelection(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): RectangleService {
     return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick);
-  }
-  
+  }  
 }
