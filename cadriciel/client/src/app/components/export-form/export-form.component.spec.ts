@@ -10,7 +10,7 @@ import { SvgDrawComponent } from '../draw-view/svg-draw/svg-draw.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ExportService } from 'src/app/services/exportation/export.service';
-import { ImageFilterService } from 'src/app/services/image-filter/image-filter.service';
+import { ImageFilterService } from 'src/app/services/exportation/image-filter/image-filter.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 
 describe('ExportFormComponent', () => {

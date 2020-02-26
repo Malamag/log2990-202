@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { ExportService } from 'src/app/services/exportation/export.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
-import { ImageFilterService } from 'src/app/services/image-filter/image-filter.service';
+import { ImageFilterService } from 'src/app/services/exportation/image-filter/image-filter.service';
 
 @Component({
     selector: 'app-export-form',
