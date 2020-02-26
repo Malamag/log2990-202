@@ -35,23 +35,24 @@ export class ExportService {
         type === 'svg' ? this.download(name, type, this.imageURL) : this.download(name, type, canvasRef.nativeElement.toDataURL(`image/${type}`)); // else, use canvas conversion
     }
 
-    exportInCanvas(svgElem: Node, canvasRef: ElementRef, name?: string, type?: string): ElementRef {
+    exportInCanvas(svgElem: Node, canvasRef: ElementRef, name?: string, type?: string) {
         // https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
 
-        const ctx: CanvasRenderingContext2D = canvasRef.nativeElement.getContext('2d');
-        const img = new Image();
+        const CTX: CanvasRenderingContext2D = canvasRef.nativeElement.getContext('2d');
+        const IMG = new Image();
         this.imageURL = this.svgToURL(svgElem);
-        img.onload = () => {
-            if (ctx) {
-                ctx.drawImage(img, 0, 0);
-            }
+        this.loadImageInCanvas(IMG, CTX, canvasRef, name, type);
+    }
 
-            if (name && type) {
-                // exportation needs to happen in a canvas element
-                this.exportCanvas(name, type, canvasRef);
+    loadImageInCanvas(image: HTMLImageElement, ctx: CanvasRenderingContext2D, canvasRef: ElementRef, imgName?: string, imgType?: string) {
+        image.onload = () => {
+            ctx.drawImage(image, 0, 0);
+            if (imgName && imgType) {
+                // will proceed to download if defined name and type
+
+                this.exportCanvas(imgName, imgType, canvasRef);
             }
         };
-        img.src = this.imageURL;
-        return canvasRef;
+        image.src = this.imageURL;
     }
 }

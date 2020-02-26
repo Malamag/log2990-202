@@ -7,10 +7,14 @@ describe('ExportService', () => {
     let service: ExportService;
     let elementStub: any;
     let nativeElemStub: any;
+    let ctxStub: any;
     beforeEach(() => {
+        ctxStub = {
+            drawImage: (img: CanvasImageSource, dx: number, dy: number) => 1,
+        };
         nativeElemStub = {
             toDataURL: (data: string) => 0,
-            getContext: (ctx: string) => 0,
+            getContext: (ctx: string) => 2, // true in an if-clause
         };
         elementStub = {
             nativeElement: nativeElemStub,
@@ -20,6 +24,7 @@ describe('ExportService', () => {
                 { provide: Node, useValue: elementStub },
                 { provide: SVGElement, useValue: elementStub },
                 { provide: ElementRef, useValue: elementStub },
+                { provide: CanvasRenderingContext2D, useValue: ctxStub },
             ],
         });
         service = TestBed.get(ExportService);
@@ -64,5 +69,44 @@ describe('ExportService', () => {
 
         service.exportCanvas(NAME, TYPE, elementStub);
         expect(spy).toHaveBeenCalledWith(NAME, TYPE, 0);
+    });
+
+    it('should produce an url during exportation', () => {
+        const spy = spyOn(service, 'svgToURL');
+        service.exportInCanvas(elementStub, elementStub);
+        expect(spy).toHaveBeenCalledWith(elementStub);
+    });
+
+    it('should load an image in a <canvas> element', () => {
+        const spy = spyOn(service, 'loadImageInCanvas');
+        service.svgToURL = () => '';
+
+        service.exportInCanvas(elementStub, elementStub);
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should draw an image in the <canvas> element on load', () => {
+        const IMG: HTMLImageElement = new Image();
+
+        const spy = spyOn(ctxStub, 'drawImage');
+        IMG.onload = () => {
+            ctxStub.drawImage(IMG, 0, 0);
+        };
+        IMG.dispatchEvent(new Event('load'));
+        service.loadImageInCanvas(IMG, ctxStub, elementStub);
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should call canvas exportation if name and type are defined', () => {
+        const IMG: HTMLImageElement = new Image();
+        const NAME = 'fakeName';
+        const TYPE = 'fakeType';
+        const spy = spyOn(service, 'exportCanvas');
+        IMG.onload = () => {
+            service.exportCanvas(NAME, TYPE, elementStub);
+        };
+        IMG.dispatchEvent(new Event('load'));
+        service.loadImageInCanvas(IMG, ctxStub, elementStub, NAME, TYPE);
+        expect(spy).toHaveBeenCalled();
     });
 });
