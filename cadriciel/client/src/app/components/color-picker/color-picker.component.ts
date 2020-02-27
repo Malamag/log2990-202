@@ -25,7 +25,7 @@ export class ColorPickerComponent implements OnInit {
         const DEF_SEC = '#ff0000ff';
         const DEF_BG = '#ffffffff';
         this.colorSubsc = this.colorPicking.colorSubject.subscribe((colors: ChoosenColors) => {
-            if (colors == undefined) {
+            if (colors === undefined) {
                 colors = new ChoosenColors(DEF_PRIM, DEF_SEC, DEF_BG);
             }
             this.cData.primaryColor = colors.primColor;

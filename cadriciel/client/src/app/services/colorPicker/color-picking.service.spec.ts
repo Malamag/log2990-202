@@ -7,13 +7,24 @@ describe('ColorPickingService', () => {
     let service: ColorPickingService;
 
     let mouseEventStubBigOffset: any;
-    //let mouseEventStubSmallOffset: any
+    let mouseEventStubSmallOffset: any
     let kbEventStub: any;
-
+    let keyboardEventBadWhich: any
+    let keyboardEventGoodWhich: any
     beforeEach(() => {
+        keyboardEventGoodWhich ={
+            which: 8,
+            stopPropagation: () => 0,
+            preventDefault: () => 0,
+        }
+        keyboardEventBadWhich ={
+            which: 37,
+            stopPropagation: () => 0,
+        }
         kbEventStub = {
             preventDefault: () => 0,
             which: 7,
+            stopPropagation: () => 0,
         };
 
         mouseEventStub = {
@@ -24,10 +35,10 @@ describe('ColorPickingService', () => {
             offsetY: 190,
             button: 2,
         };
-        /*mouseEventStubSmallOffset = {
+        mouseEventStubSmallOffset = {
       offsetX: 40,
       offsetY: 49
-    }*/
+    }
         TestBed.configureTestingModule({
             providers: [
                 { provide: MouseEvent, mouseEventStub },
@@ -365,6 +376,7 @@ describe('ColorPickingService', () => {
     });
 
     it('should update the last color', () => {
+        service.cData.lastColorRects[service.cData.lastColorRects.length - 1].fill = 'ff000000';
         const color = 'ffffffff';
         service.updateLastColor(color);
         expect(service.cData.lastColorRects[service.cData.lastColorRects.length - 1].fill).toBe(color);
@@ -467,5 +479,188 @@ describe('ColorPickingService', () => {
         expect(spySelect).toHaveBeenCalled();
         expect(spyUpdate).toHaveBeenCalled();
     });
-    
+    it('should not validate the input beause the which is not good',()=>{
+        const hexLength = 8;
+        const hex = 'fff';
+        const validateSpy = spyOn(service.colorConvert,'validateHex');
+        service.validateHexInput(kbEventStub, hexLength, hex);
+        expect(service.cData.isValideInput).toBeFalsy();
+        expect(validateSpy).toHaveBeenCalled();
+    })
+
+    it('should not validate the input beause the hex length is equal to the string length',()=>{
+        const hexLength = 3;
+        const hex = 'fff';
+        const validateSpy = spyOn(service.colorConvert,'validateHex');
+        service.validateHexInput(kbEventStub, hexLength, hex);
+        expect(service.cData.isValideInput).toBeFalsy();
+        expect(validateSpy).toHaveBeenCalledTimes(0);
+    })
+
+    it('should not validate the input beause the keyboard which is equal to 37',()=>{
+        const hexLength = 4;
+        const hex = 'fff';
+        const validateSpy = spyOn(service.colorConvert,'validateHex');
+        service.validateHexInput(keyboardEventBadWhich, hexLength, hex);
+        expect(service.cData.isValideInput).toBeFalsy();
+        expect(validateSpy).toHaveBeenCalledTimes(0);
+    })
+    it('should not validate the input beause the keyboard which is equal to 8',()=>{
+        const hexLength = 3;
+        const hex = 'fff';
+        const validateSpy = spyOn(service.colorConvert,'validateHex');
+        service.validateHexInput(keyboardEventGoodWhich, hexLength, hex);
+        expect(service.cData.isValideInput).toBeFalsy();
+        expect(validateSpy).toHaveBeenCalled();
+    })
+    it('onHexInput should not update',()=>{
+        const hexLength = 8;
+        const hex = 'fff';
+        const hexInputFields = '00000';
+        const writerSpy = spyOn(service, 'writeHexColor');
+        const displaySpy = spyOn(service,'updateDisplay');
+        const lastColorSpy = spyOn(service, 'updateLastColor');
+        service.onHexInput(hexLength, hex, hexInputFields);
+        expect(writerSpy).toHaveBeenCalledTimes(0);
+        expect(displaySpy).toHaveBeenCalledTimes(0);
+        expect(lastColorSpy).toHaveBeenCalledTimes(0);
+    })
+    it('onHexInput should not update',()=>{
+        service.cData.isValideInput = true;
+        const hexLength = 3;
+        const hex = 'fff';
+        const hexInputFields = '00000';
+        const writerSpy = spyOn(service, 'writeHexColor');
+        const displaySpy = spyOn(service,'updateDisplay');
+        const lastColorSpy = spyOn(service, 'updateLastColor');
+        service.onHexInput(hexLength, hex, hexInputFields);
+        expect(writerSpy).toHaveBeenCalled();
+        expect(displaySpy).toHaveBeenCalled();
+        expect(lastColorSpy).toHaveBeenCalled();
+    })
+    it('should write a red color in the primaryColor',()=>{
+        const serviceStub = TestBed.get(ColorPickingService);
+        const color = 'Red';
+        service.cData.colorMode = service.cData.PRIMARY_COLOR_MODE;
+        const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex')
+        const result = service.writeHexColor(color);
+        let expectedResult = '#' + service.cData.redHexInput + service.cData.hexColorInput.substring(2, 6);
+        expectedResult += serviceStub.colorConvert.alphaRGBToHex(service.cData.primaryAlpha);
+        expect(result).toBe(expectedResult);
+        expect(service.cData.primaryColor).toBe(expectedResult);
+        expect(spyAlphaRGB).toHaveBeenCalled();
+    })
+
+    it('should write a green color in the secondaryColor',()=>{
+        const serviceStub = TestBed.get(ColorPickingService);
+        service.cData.colorMode = service.cData.SECONDARY_COLOR_MODE;
+        const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex')
+        const result = service.writeHexColor(service.cData.GREEN_INPUT_FIELD);
+        let expectedResult = '#' + service.cData.greenHexInput + service.cData.hexColorInput.substring(0, 2)+service.cData.hexColorInput.substring(4,6);
+        expectedResult += serviceStub.colorConvert.alphaRGBToHex(service.cData.secondaryAlpha);
+        expect(result).toBe(expectedResult);
+        expect(service.cData.secondaryColor).toBe(expectedResult);
+        expect(spyAlphaRGB).toHaveBeenCalled();
+    })
+    it('should write a blue color in the background color',()=>{
+        service.cData.blueHexInput = 'ff';
+        service.cData.hexColorInput = '000000';
+        service.cData.backgroundColorAlpha = 1;
+        const serviceStub = TestBed.get(ColorPickingService);
+        service.cData.colorMode = service.cData.BACKGROUND_COLOR_MODE;
+        const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex');
+        const result = service.writeHexColor(service.cData.BLUE_INPUT_FIELD);
+        let expectedResult = '#' + service.cData.blueHexInput + service.cData.hexColorInput.substring(0, 4);
+        expectedResult += serviceStub.colorConvert.alphaRGBToHex(service.cData.backgroundColorAlpha);
+        expect(result).toBe(expectedResult);
+        expect(service.cData.backgroundColor).toBe(expectedResult);
+        expect(spyAlphaRGB).toHaveBeenCalled();
+    })
+    it('should write an hex color in the primaryColor',()=>{
+        const serviceStub = TestBed.get(ColorPickingService);
+        service.cData.colorMode = service.cData.PRIMARY_COLOR_MODE;
+        const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex')
+        const result = service.writeHexColor(service.cData.COLOR_HEX_INPUT_FIELD);
+        let expectedResult = '#' + service.cData.hexColorInput;
+        expectedResult += serviceStub.colorConvert.alphaRGBToHex(service.cData.primaryAlpha);
+        expect(result).toBe(expectedResult);
+        expect(service.cData.primaryColor).toBe(expectedResult);
+        expect(spyAlphaRGB).toHaveBeenCalled();
+    })
+    it('onSLSliderInput should set a color and a saturation and update the view',()=>{
+        const hslSpy = spyOn(service.colorConvert, 'hslToRgb');
+        const setSpy = spyOn(service, 'setColor');
+        const saturationSpy = spyOn(service,'setSaturation');
+        const displaySpy = spyOn(service, 'updateDisplay');
+        const lastColorSpy = spyOn(service, 'updateLastColor');
+        expect(hslSpy).toHaveBeenCalled();
+        expect(setSpy).toHaveBeenCalled();
+        expect(saturationSpy).toHaveBeenCalled();
+        expect(displaySpy).toHaveBeenCalled();
+        expect(lastColorSpy).toHaveBeenCalled();
+    })
+    it('sliderAphaChange should change the primary color',()=>{
+        const serviceStub = TestBed.get(ColorPickingService);
+        service.cData.colorMode = service.cData.PRIMARY_COLOR_MODE;
+        const setSpy = spyOn(service, 'setColorsFromForm');
+        const spyRGB = spyOn(service.colorConvert, 'alphaRGBToHex');
+        const emitSpy = spyOn(service, 'emitColors');
+        const percentModifier = service.cData.POURCENT_MODIFIER;
+        const opacity = service.cData.opacitySliderInput;
+        const newPrimColor = service.cData.primaryColor.substring(0,7)+serviceStub.colorConvert.alphaRGBToHex(service.cData.primaryAlpha);
+        service.sliderAlphaChange();
+        expect(service.cData.primaryAlpha).toEqual(opacity / percentModifier);
+        expect(service.cData.primaryColor).toBe(newPrimColor);
+        expect(setSpy).toHaveBeenCalled();
+        expect(spyRGB).toHaveBeenCalled();
+        expect(emitSpy).toHaveBeenCalled();
+    })
+    it('sliderAphaChange should change the secondary color',()=>{
+        const serviceStub = TestBed.get(ColorPickingService);
+        service.cData.colorMode = service.cData.SECONDARY_COLOR_MODE;
+        const setSpy = spyOn(service, 'setColorsFromForm');
+        const spyRGB = spyOn(service.colorConvert, 'alphaRGBToHex');
+        const emitSpy = spyOn(service, 'emitColors');
+        const percentModifier = service.cData.POURCENT_MODIFIER;
+        const opacity = service.cData.opacitySliderInput;
+        const newColor = service.cData.secondaryColor.substring(0,7)+ serviceStub.colorConvert.alphaRGBToHex(service.cData.secondaryAlpha);
+        service.sliderAlphaChange();
+        expect(service.cData.secondaryAlpha).toEqual(opacity / percentModifier);
+        expect(service.cData.secondaryColor).toBe(newColor);
+        expect(setSpy).toHaveBeenCalled();
+        expect(spyRGB).toHaveBeenCalled();
+        expect(emitSpy).toHaveBeenCalled();
+    })
+    it('sliderAphaChange should change the primary color',()=>{
+        const serviceStub = TestBed.get(ColorPickingService);
+        service.cData.colorMode = service.cData.BACKGROUND_COLOR_MODE;
+        const setSpy = spyOn(service, 'setColorsFromForm');
+        const spyRGB = spyOn(service.colorConvert, 'alphaRGBToHex');
+        const emitSpy = spyOn(service, 'emitColors');
+        const percentModifier = service.cData.POURCENT_MODIFIER;
+        const opacity = service.cData.opacitySliderInput;
+        const newColor = '#' + service.cData.hexColorInput + serviceStub.colorConvert.alphaRGBToHex(service.cData.backgroundColorAlpha);
+        service.sliderAlphaChange();
+        expect(service.cData.backgroundColorAlpha).toEqual(opacity / percentModifier);
+        expect(service.cData.backgroundColor).toBe(newColor);
+        expect(setSpy).toHaveBeenCalled();
+        expect(spyRGB).toHaveBeenCalled();
+        expect(emitSpy).toHaveBeenCalled();
+    })
+    it('should compute the hue using raduis Y smaller than zero',()=>{
+        const radiusX = mouseEventStubSmallOffset.offsetX - 50;
+        const radiusY: number = mouseEventStubSmallOffset.offsetY - 50;
+        const radius: number = Math.sqrt(Math.pow(radiusX, 2) + Math.pow(radiusY, 2));
+        const theta: number = Math.acos(radiusX / radius);
+        const expectedHue = 360 - (180 / Math.PI) * theta;
+        expect(service.computeHue(mouseEventStubSmallOffset)).toEqual(expectedHue);
+    })
+    it('should compute the hue using raduis Y smaller than zero',()=>{
+        const radiusX = mouseEventStubBigOffset.offsetX - 50;
+        const radiusY: number = mouseEventStubBigOffset.offsetY - 50;
+        const radius: number = Math.sqrt(Math.pow(radiusX, 2) + Math.pow(radiusY, 2));
+        const theta: number = Math.acos(radiusX / radius);
+        const expectedHue = (180 / Math.PI) * theta;
+        expect(service.computeHue(mouseEventStubBigOffset)).toEqual(expectedHue);
+    })
 });

@@ -33,8 +33,6 @@ describe('PreviewBoxComponent', () => {
     });
 
     it('should create', () => {
-        console.log(component.draw);
         expect(component).toBeTruthy();
-        console.log(component.previewBoxRef.nativeElement);
     });
 });
