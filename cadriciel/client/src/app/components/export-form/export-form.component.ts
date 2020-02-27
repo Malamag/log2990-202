@@ -1,76 +1,87 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { ExportService } from 'src/app/services/exportation/export.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
-
-interface Formats {
-  type: string,
-  view: string
-}
+import { ImageFilterService } from 'src/app/services/exportation/image-filter/image-filter.service';
 
 @Component({
-  selector: 'app-export-form',
-  templateUrl: './export-form.component.html',
-  styleUrls: ['./export-form.component.scss']
+    selector: 'app-export-form',
+    templateUrl: './export-form.component.html',
+    styleUrls: ['./export-form.component.scss'],
 })
-export class ExportFormComponent implements OnInit, AfterViewInit {
-  formats: Formats[] = [
-    {type: 'jpeg', view: '.jpeg'},
-    {type: 'png', view: '.png'},
-    {type: 'svg', view: '.svg'}
-  ];
+export class ExportFormComponent implements OnInit, AfterContentInit {
+    formats: { type: string; view: string }[] = [
+        // idea from angular material's site on select (TODO SRC)
+        { type: 'jpeg', view: '.jpeg' },
+        { type: 'png', view: '.png' },
+        { type: 'svg', view: '.svg' },
+    ];
 
-  @ViewChild('imgBox', {static: false}) export: ElementRef; // has an eye on the <canvas> element
+    filters: { num: number | null; view: string }[] = [
+        { num: -1, view: 'Aucun' },
+        { num: 0, view: 'Noir & blanc' },
+        { num: 1, view: 'Rotation de teinte' },
+        { num: 2, view: 'Bruit' },
+        { num: 3, view: 'Lisse' },
+        { num: 4, view: 'Texture' },
+    ];
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private winService: ModalWindowService,
-    private doodleFetch: DoodleFetchService,
-    private expService: ExportService) { }
+    @ViewChild('imgConvert', { static: false }) exportFromCanvas: ElementRef; // has an eye on the <canvas> element
 
-  exportForm: FormGroup;
-  doodle: SVGElement;
+    constructor(
+        private formBuilder: FormBuilder,
+        private winService: ModalWindowService,
+        private doodleFetch: DoodleFetchService,
+        private expService: ExportService,
+        private imgFilter: ImageFilterService,
+    ) {}
 
-  cWidth: number; // attributes to get the correct export size
-  cHeigth: number;
+    exportForm: FormGroup;
+    doodle: Node;
 
-  ngOnInit() {
-    this.initForm();
-    this.doodleFetch.askForDoodle();
-    this.cWidth = this.doodleFetch.widthAttr;
-    this.cHeigth = this.doodleFetch.heightAttr;
-  }
+    cWidth: number; // attributes to get the correct export size
+    cHeigth: number;
 
-  initForm() {
-    this.exportForm = this.formBuilder.group({
-      doodleName: ['Dessin sans titre', Validators.required],
-      formatSel: [null, Validators.required]
-    });
-  }
+    selectedFilter: number;
 
-  ngAfterViewInit() {
-    this.doodle = this.doodleFetch.getDrawing();
-  }
+    ngOnInit() {
+        this.initForm();
+        this.doodleFetch.askForDoodle();
+        this.cWidth = this.doodleFetch.widthAttr;
+        this.cHeigth = this.doodleFetch.heightAttr;
+    }
 
-  onSubmit() {
-    const FORMVAL = this.exportForm.value;
+    initForm() {
+        this.exportForm = this.formBuilder.group({
+            doodleName: ['Dessin sans titre', Validators.required],
+            formatSel: [null, Validators.required],
+        });
+    }
 
-    const TYPE = FORMVAL.formatSel;
-    const NAME = FORMVAL.doodleName;
+    ngAfterContentInit() {
+        this.doodle = this.doodleFetch.getDrawing();
+    }
 
-    this.exportation(NAME, TYPE);
+    onSubmit() {
+        const FORMVAL = this.exportForm.value;
+        const TYPE = FORMVAL.formatSel;
+        const NAME = FORMVAL.doodleName;
+        this.exportation(NAME, TYPE);
+        this.closeForm();
+    }
 
-    this.closeForm();
-  }
+    closeForm() {
+        this.winService.closeWindow();
+    }
 
-  closeForm() {
-    this.winService.closeWindow();
-  }
+    exportation(name: string, type: string) {
+        this.expService.exportInCanvas(this.doodle, this.exportFromCanvas, name, type);
+    }
 
-  exportation(name: string, type: string) {
-    this.expService.exportInCanvas(this.doodle, this.export, name, type);
-  }
-
+    applyFilter(event: number) {
+        this.selectedFilter = event;
+        this.imgFilter.toggleFilter(this.doodle, this.selectedFilter);
+    }
 }
