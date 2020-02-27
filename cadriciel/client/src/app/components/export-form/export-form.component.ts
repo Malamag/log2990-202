@@ -68,7 +68,9 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         const FORMVAL = this.exportForm.value;
         const TYPE = FORMVAL.formatSel;
         const NAME = FORMVAL.doodleName;
+
         this.exportation(NAME, TYPE);
+
         this.closeForm();
     }
 

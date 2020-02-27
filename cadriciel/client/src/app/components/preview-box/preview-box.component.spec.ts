@@ -1,40 +1,32 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import { PreviewBoxComponent } from './preview-box.component';
-import { ElementRef } from '@angular/core';
+import { Renderer2, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ExportFormComponent } from '../export-form/export-form.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 describe('PreviewBoxComponent', () => {
     let component: PreviewBoxComponent;
-    let fixture: ComponentFixture<PreviewBoxComponent>;
-    let elementStub: any;
-    let nativeElemStub: any;
+    //  let fixture: ComponentFixture<PreviewBoxComponent>;
+    let rdStub: any;
     beforeEach(async(() => {
-        nativeElemStub = {
-            toDataURL: (data: string) => 0,
-            getContext: (ctx: string) => 2, // true in an if-clause
-        };
-        elementStub = {
-            nativeElement: nativeElemStub,
-        };
+        rdStub = {};
         TestBed.configureTestingModule({
-            declarations: [PreviewBoxComponent],
-            providers: [
-                { provide: ElementRef, useValue: elementStub },
-                { provide: SVGElement, useValue: nativeElemStub },
-            ],
+            declarations: [PreviewBoxComponent, ExportFormComponent],
+            imports: [ReactiveFormsModule, FormsModule],
+            providers: [{ provide: Renderer2, useValue: rdStub }],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(PreviewBoxComponent);
-
-        component = fixture.componentInstance;
-
-        fixture.detectChanges();
+        // fixture = TestBed.createComponent(PreviewBoxComponent);
+        // component = fixture.componentInstance;
+        // console.log(component);
+        //  fixture.detectChanges();
     });
 
     it('should create', () => {
-        console.log(component.draw);
+        component = new PreviewBoxComponent(rdStub);
         expect(component).toBeTruthy();
-        console.log(component.previewBoxRef.nativeElement);
     });
 });

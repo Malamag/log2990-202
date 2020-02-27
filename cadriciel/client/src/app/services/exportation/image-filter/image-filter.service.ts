@@ -4,7 +4,7 @@ import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
     providedIn: 'root',
 })
 export class ImageFilterService {
-    ns: string = 'http://www.w3.org/2000/svg'; // svg namespace to get its proper attributes
+    private readonly ns: string = 'http://www.w3.org/2000/svg'; // svg namespace to get its proper attributes
 
     renderer: Renderer2;
     filterArray: SVGElement[];
