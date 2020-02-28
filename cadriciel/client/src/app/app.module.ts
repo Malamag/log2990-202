@@ -42,7 +42,6 @@ import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.compo
 import { ExportFormComponent } from './components/export-form/export-form.component';
 import { PreviewBoxComponent } from './components/preview-box/preview-box.component';
 import { ExportService } from './services/exportation/export.service';
-import { GridComponent } from './components/draw-view/grid/grid.component';
 
 @NgModule({
     declarations: [
@@ -59,7 +58,6 @@ import { GridComponent } from './components/draw-view/grid/grid.component';
         ToolAttributesComponent,
         ExportFormComponent,
         PreviewBoxComponent,
-        GridComponent,
     ],
     imports: [
         BrowserModule,

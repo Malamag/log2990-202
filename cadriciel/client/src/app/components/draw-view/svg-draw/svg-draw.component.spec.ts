@@ -4,7 +4,7 @@ import { PencilService } from 'src/app/services/draw-tool/pencil.service';
 import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
 import { SvgDrawComponent } from './svg-draw.component';
 
-import { Renderer2 } from '@angular/core';
+import { Renderer2, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
@@ -50,6 +50,7 @@ describe('SvgDrawComponent', () => {
                 { provide: DoodleFetchService, useValue: dFetchService },
                 { provide: Renderer2, useValue: rendererStub },
             ],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
     }));
 

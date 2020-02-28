@@ -6,34 +6,30 @@ import { NewDrawComponent } from 'src/app/components/new-draw/new-draw.component
 import { UserManualComponent } from 'src/app/components/user-manual/user-manual.component';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
-
 export class ModalWindowService {
-  // Construct a modal window depending of the desired component
-  dialogConfig: MatDialogConfig;
+    // Construct a modal window depending of the desired component
+    dialogConfig: MatDialogConfig;
 
-  constructor(private dialog: MatDialog) {
-    this.dialogConfig = new MatDialogConfig();
-    this.dialogConfig.disableClose = false;
-    this.dialogConfig.hasBackdrop = true;
-    this.dialogConfig.id = 'modalWindow';
-    this.dialogConfig.height = 'auto';
-    this.dialogConfig.width = 'auto';
-    this.dialogConfig.maxWidth = '100vw';
-    this.dialogConfig.restoreFocus = false;
-  }
+    constructor(private dialog: MatDialog) {
+        this.dialogConfig = new MatDialogConfig();
+        this.dialogConfig.disableClose = false;
+        this.dialogConfig.hasBackdrop = true;
+        this.dialogConfig.id = 'modalWindow';
+        this.dialogConfig.height = 'auto';
+        this.dialogConfig.width = 'auto';
+        this.dialogConfig.maxWidth = '100vw';
+        this.dialogConfig.restoreFocus = false;
+    }
 
-  openWindow(component:
-     ComponentType<
-     NewDrawComponent|
-     UserManualComponent|
-     ExportFormComponent>) { // Can open new draw form or user guide (for now)
-    this.dialog.open(component, this.dialogConfig);
-  }
+    openWindow(component: ComponentType<NewDrawComponent | UserManualComponent | ExportFormComponent>) {
+        // Can open new draw form or user guide (for now)
+        this.closeWindow();
+        this.dialog.open(component, this.dialogConfig);
+    }
 
-  closeWindow() {
-    this.dialog.closeAll();
-
-  }
+    closeWindow() {
+        this.dialog.closeAll();
+    }
 }
