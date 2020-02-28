@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, RendererFactory2 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Canvas } from 'src/app/models/Canvas.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
@@ -11,6 +11,7 @@ import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboa
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 
 @Component({
     selector: 'app-svg-draw',
@@ -24,6 +25,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         public colorPick: ColorPickingService,
         private doodleFetch: DoodleFetchService,
         private render: Renderer2,
+        private rdFact: RendererFactory2,
     ) {}
     canvas: Canvas;
     canvasSubscr: Subscription;
@@ -39,6 +41,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('canvas', { static: false }) svg: ElementRef;
 
     @ViewChild('frame', { static: false }) frameRef: ElementRef;
+    @ViewChild('grid', { static: false }) gridRef: ElementRef;
 
     workingSpace: HTMLElement;
 
@@ -81,6 +84,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
         // Create all the tools
         const tc = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
+        const grid = new GridRenderService(this.gridRef.nativeElement, this.rdFact);
+        grid.initGrid(this.width, this.height);
 
         const pencil = tc.CreatePencil(true, this.interaction, this.colorPick);
         const rect = tc.CreateRectangle(false, this.interaction, this.colorPick);

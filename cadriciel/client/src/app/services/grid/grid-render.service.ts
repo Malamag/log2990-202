@@ -8,18 +8,20 @@ export class GridRenderService {
 
     private readonly defTransparency = '#000000ff'; // black
     private readonly ns: string = 'http://www.w3.org/2000/svg';
-    private readonly vGridLines: SVGLineElement[];
-    private readonly hGridLines: SVGLineElement[];
+    private readonly vGridLines: SVGLineElement[] = [];
+    private readonly hGridLines: SVGLineElement[] = [];
 
     drawHeight: number;
     drawWidth: number;
+    drawColor: string;
+
     // gridElem: SVGElement
-    constructor(private doodle: SVGElement, rendererFactory: RendererFactory2) {
-        this.render = rendererFactory.createRenderer(null, null);
+    constructor(private doodle: SVGElement, rdFact: RendererFactory2) {
+        this.render = rdFact.createRenderer(null, null);
     }
 
     renderVerticalLine(): SVGLineElement {
-        const V_LINE = this.render.createElement('Line', this.ns);
+        const V_LINE = this.render.createElement('line', this.ns);
 
         this.render.setAttribute(V_LINE, 'y1', '0');
         /*
@@ -32,7 +34,7 @@ export class GridRenderService {
     }
 
     renderHorizontalLine() {
-        const H_LINE = this.render.createElement('Line', this.ns);
+        const H_LINE = this.render.createElement('line', this.ns);
 
         this.render.setAttribute(H_LINE, 'x1', '0');
         /*
@@ -62,12 +64,15 @@ export class GridRenderService {
             const hLineElement: SVGLineElement = this.renderHorizontalLine();
             this.render.setAttribute(hLineElement, 'y1', position);
             this.render.setAttribute(hLineElement, 'y2', position);
+            console.log(hLineElement);
             this.hGridLines.push(hLineElement);
         }
     }
 
-    initGrid() {
-        const DEF_PX_STEP = 5;
+    initGrid(width: number, height: number) {
+        this.drawWidth = width;
+        this.drawHeight = height;
+        const DEF_PX_STEP = 20;
         this.renderHorizontalLines(DEF_PX_STEP);
         this.renderVerticalLines(DEF_PX_STEP);
 
@@ -105,5 +110,5 @@ export class GridRenderService {
          */
     }
 
-    removeGrid() {}
+    hideGrid() {}
 }
