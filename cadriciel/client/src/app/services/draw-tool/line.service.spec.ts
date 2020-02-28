@@ -231,7 +231,8 @@ describe('LineService', () => {
   it('should have the primary color as attribute', () => {
     const PRIM = '#ffffff';
     const SEC = '#000000';
-    service.chosenColor = new ChoosenColors(PRIM, SEC);
+    const back = '#ffffff';
+    service.chosenColor = new ChoosenColors(PRIM, SEC, back);
     const line = service.createPath(ptArr, false);
     expect(line).toContain(`"stroke="${PRIM}"`);
   });

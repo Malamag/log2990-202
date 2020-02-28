@@ -131,8 +131,8 @@ describe('PencilService', () => {
   it('should have the primary color as attribute', () => {
     const prim = '#ffffff';
     const sec = '#000000';
-
-    service.chosenColor = new ChoosenColors(prim, sec);
+    const back = '#ffffff';
+    service.chosenColor = new ChoosenColors(prim, sec, back);
 
     const path = service.createPath(ptArr);
 

@@ -7,7 +7,6 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import {InputObserver } from './input-observer';
 import { Point } from './point';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +23,7 @@ export abstract class DrawingTool extends InputObserver {
     chosenColor: ChoosenColors
     colorSub: Subscription
 
-    abstract createPath(path: Point[], doubleClickCheck?: boolean): void;
+    abstract createPath(path: Point[], doubleClickCheck?: boolean, removePerimeter?: boolean): void;
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
 
@@ -39,18 +38,19 @@ export abstract class DrawingTool extends InputObserver {
 
       this.ignoreNextUp = false;
       this.defaultValues = new DefaultAttributeValues()
-      this.chosenColor = new ChoosenColors(this.defaultValues.DEFAULTPRIMARYCOLOR, this.defaultValues.DEFAULTSECONDARYCOLOR)
+      this.chosenColor = new ChoosenColors(this.defaultValues.DEFAULTPRIMARYCOLOR, this.defaultValues.DEFAULTSECONDARYCOLOR ,this.defaultValues.DEFAULTBACKCOLOR)
     }
 
     updateColors() {
-      const DEF_PRIM = '#000000ff';
-      const DEF_SEC = '#ff0000ff';
+      const DEFPRIM = '#000000ff';
+      const DEFSEC = '#ff0000ff';
+      const DEFBACK ="#ff0000ff";
       this.colorSub = this.colorPick.colorSubject.subscribe(
         (color: ChoosenColors) => {
           if (color === undefined) {
-            color = new ChoosenColors(DEF_PRIM, DEF_SEC);
+            color = new ChoosenColors(DEFPRIM, DEFSEC, DEFBACK);
           }
-          this.chosenColor = new ChoosenColors(color.primColor, color.secColor);
+          this.chosenColor = new ChoosenColors(color.primColor, color.secColor, color.backColor);
         });
       this.colorPick.emitColors()
     }
@@ -70,7 +70,7 @@ export abstract class DrawingTool extends InputObserver {
     }
 
     // render the current progress
-    updateProgress(wasDoubleClick?: boolean) {
+    updateProgress(wasDoubleClick?: boolean, removePerimeter?: boolean) {
 
       // create an svg element from the current path
       let d = '';
@@ -80,15 +80,15 @@ export abstract class DrawingTool extends InputObserver {
     }
 
     // add the progress to the main drawing
-    updateDrawing(wasDoubleClick?: boolean) {
+    updateDrawing(endIt?: boolean) {
 
       // create the final svg element
       let d = '';
-      d += this.createPath(this.currentPath, wasDoubleClick);
+      d += this.createPath(this.currentPath, endIt);
 
       // add it to the main drawing
       this.drawing.innerHTML += d;
-      this.interaction.emitDone();
+      this.interaction.emitDrawingDone();
       // clear current progress
       this.inProgress.innerHTML = '';
 

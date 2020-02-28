@@ -5,521 +5,416 @@ import { ChoosenColors } from '../../models/ChoosenColors.model';
 import { ColorConvertingService } from './color-converting.service';
 
 /*-----------------------------Color valur table-----------------------------------------*
-* RGBA min/max value : R [0,255] , G [0,255] , B [0,255] , A [0,1]                       *
-* HSL  min/max value : H [0,360] , S [0,1] , L [0,1]                                     *
-* HEX  min/max value : R [00,FF] , G [00,FF] , B [00,FF] , A [00,FF] ( i.e FF = 255 )    *
-* Display min/max value : RGB [0,255] , H [0,360] , ASL [0,100]% , HEX [00,FF]           *
-* Conversion methode for display : RBAH HEX  the same value, ASL * 100 for poucent value *
-* HEX color string 9 number total: #RRGGBBAA                                             *
-* # is not needed for math so it need to be cut from formula (i.e substring(1,X))        *
-* RR is red value.To get use substring(1,3) if # is present else substring(0,2)          *
-* GG is green value.To get use substring(3,5) if # is present else substring(2,4)        *
-* BB is blue value.To get use substring(5,7) if # is present else substring(4,6)         *
-* AA is opacity value.To get use substring(7,9) if # is present else substring(6,8)      *
-*---------------------------------------------------------------------------------------*/
+ * RGBA min/max value : R [0,255] , G [0,255] , B [0,255] , A [0,1]                       *
+ * HSL  min/max value : H [0,360] , S [0,1] , L [0,1]                                     *
+ * HEX  min/max value : R [00,FF] , G [00,FF] , B [00,FF] , A [00,FF] ( i.e FF = 255 )    *
+ * Display min/max value : RGB [0,255] , H [0,360] , ASL [0,100]% , HEX [00,FF]           *
+ * Conversion methode for display : RBAH HEX  the same value, ASL * 100 for poucent value *
+ * HEX color string 9 number total: #RRGGBBAA                                             *
+ * # is not needed for math so it need to be cut from formula (i.e substring(1,X))        *
+ * RR is red value.To get use substring(1,3) if # is present else substring(0,2)          *
+ * GG is green value.To get use substring(3,5) if # is present else substring(2,4)        *
+ * BB is blue value.To get use substring(5,7) if # is present else substring(4,6)         *
+ * AA is opacity value.To get use substring(7,9) if # is present else substring(6,8)      *
+ *---------------------------------------------------------------------------------------*/
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
-
 export class ColorPickingService {
-  cData = colorData; // Interface for Color data
+    cData = colorData; // Interface for Color data
 
-  colors: ChoosenColors;
-  colorSubject = new Subject<ChoosenColors>(); // le constuire à qqpart
+    colors: ChoosenColors;
+    colorSubject = new Subject<ChoosenColors>(); // le constuire à qqpart
+    constructor(public colorConvert: ColorConvertingService) {}
 
-  constructor(public colorConvert: ColorConvertingService) { }
-
-  emitColors() { // observerved-observer design pattern
-    this.colorSubject.next(this.colors);
-  }
-
-  setColorsFromForm(primary: string, secondary: string) {
-    this.colors = new ChoosenColors(primary, secondary);
-  }
-
-  slCursor(x: number, y: number) {
-    this.cData.saturationSliderInput = x;
-    this.cData.lightnessSliderInput = y;
-  }
-
-  setColor( color: number[] ) {
-    if (color.length < 3) {
-      return;
-    } else {
-      if ( this.cData.primarySelect ) {
-        this.writeColor(color, true )
-      } else {
-          this.writeColor(color, false);
-      }
-      this.cData.hexColorInput = this.colorConvert.rgbToHex( color[0] ) + this.colorConvert.rgbToHex( color[1] )
-      + this.colorConvert.rgbToHex( color[2] )
-      this.cData.redSliderInput = color[0];
-      this.cData.greenSliderInput = color[1];
-      this.cData.blueSliderInput = color[2];
-      this.hexInputDisplayRefresh();
+    emitColors() {
+        // observerved-observer design pattern
+        this.colorSubject.next(this.colors);
     }
-  }
-
-  writeColor(color: number[], primary: boolean) {
-    if (color.length < 3) {
-      return;
-    } else {
-      if (primary) {
-        this.cData.primaryColor = '#' + this.colorConvert.rgbToHex( color[0] ) + this.colorConvert.rgbToHex( color[1] )
-          + this.colorConvert.rgbToHex( color[2] ) + this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha);
-        this.cData.checkboxSliderStatus = true;
-        this.cData.currentColorSelect = 'Primary';
-      } else {
-        this.cData.secondaryColor = '#' + this.colorConvert.rgbToHex( color[0] ) + this.colorConvert.rgbToHex( color[1] )
-          + this.colorConvert.rgbToHex( color[2] ) + this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha);
-        this.cData.checkboxSliderStatus = false;
-        this.cData.currentColorSelect = 'Secondary';
-      }
+    /************************ SETTERS SECTION ***************************/
+    setColorsFromForm(primary: string, secondary: string, background: string) {
+        this.colors = new ChoosenColors(primary, secondary, background);
     }
-  }
-
-  hueSelector( event: MouseEvent ): void {
-    let hue = 0
-    if ( this.cData.isHueSelecting) {
-      hue = this.computeHue(event)
-      this.cData.currentHue = Math.round(hue)
-      // here we set saturation, lightness to default value i.e 100% and 50%
-      this.cData.saturationSliderInput = 100;
-      this.cData.lightnessSliderInput = 50;
-      // opacity conversion for display
-      if (this.cData.primarySelect ) {
-        this.cData.opacitySliderInput = Math.round(this.cData.primaryAlpha * 100);
-      } else {
-        this.cData.opacitySliderInput = Math.round(this.cData.secondaryAlpha * 100);
-      }
-      this.setSLCursor( this.cData.saturationSliderInput, this.cData.lightnessSliderInput );
-      this.setColor( this.colorConvert.hslToRgb(hue) ) ;
-      this.hexInputDisplayRefresh();
-    }
-  }
-  computeHue(event: MouseEvent): number {
-    // Hue circle radius is 90px and stroke widht 10px which mean average radius is ( 100 - 90 ) / 2 = 95
-    // Which is subtract from offset to center circle for math formula
-    const radiusX: number = event.offsetX - 95;
-    const radiusY: number = event.offsetY - 95;
-    const radius: number = Math.sqrt( Math.pow( radiusX, 2) + Math.pow( radiusY, 2) );
-    const theta: number = Math.acos( radiusX / radius);
-    let Hue = 0;
-    // hue is a value of 0 to 360 degree but theta is in radiant so conversion are needed depending on raduisY signe
-    if ( radiusY >= 0 ) {
-        Hue = 180 / Math.PI * theta;
-    } else {
-        Hue = 360 - 180 / Math.PI * theta;
-    }
-    return Hue;
-  }
-  // Exchange primary and secondary value
-  swapPrimarySecondary(): void {
-    const tempColor: string = this.cData.primaryColor;
-    const tempAlpha: number = this.cData.primaryAlpha;
-
-    this.cData.primaryColor = this.cData.secondaryColor;
-    this.cData.primaryAlpha = this.cData.secondaryAlpha;
-
-    this.cData.secondaryColor = tempColor;
-    this.cData.secondaryAlpha = tempAlpha;
-    this.refreshDisplay();
-  }
-  // saturation/lightness selector
-  slSelector(event: MouseEvent): void {
-    if ( this.cData.isSLSelecting) {
-      // -2 to offset to align mouse pointer and color cursor
-      const x: number = this.computeSaturation(event)
-      const y: number = this.computeLightness(event)
-      this.setSLCursor( x, y );
-      this.cData.saturationSliderInput = x;
-      this.cData.lightnessSliderInput = y;
-      this.setColor( this.colorConvert.hslToRgb(this.cData.currentHue, this.cData.saturationSliderInput / 100,
-        this.cData.lightnessSliderInput / 100 ) ) ;
-    }
-  }
-
-  computeSaturation(event: MouseEvent): number {
-    let x: number = event.offsetX - 50;
-    if ( x > 100 ) {
-      x = 100;
-    } else if ( x < 0 ) {
-      x = 0;
-    }
-    return x;
-  }
-
-  computeLightness(event: MouseEvent): number {
-    let y: number = event.offsetY - 50;
-    if ( y > 100 ) {
-      y = 100;
-    } else if ( y < 0 ) {
-      y = 0;
-    }
-    return y
-  }
-  // Set position of x and y of saturatio/lightness cursor
-  setSLCursor( x: number, y: number): void {
-    this.cData.slCursorX = x;
-    this.cData.slCursorY = y;
-  }
-  onContextMenu(event: MouseEvent): void {
-    event.preventDefault();
-  }
-  onSwapSVGMouseOver(): void {
-    this.cData.swapStrokeStyle = 'yellow';
-  }
-  onSwapSVGMouseLeave(): void {
-    this.cData.swapStrokeStyle = 'white';
-  }
-  onSwapSVGMouseDown(): void {
-    this.cData.swapStrokeStyle = 'lightblue';
-  }
-  onSwapSVGMouseUp(): void {
-    this.cData.swapStrokeStyle = 'white';
-  }
-  // Mouse up event function when mouse on a color selector
-  colorSelectOnMouseUp(): void {
-    if ( this.cData.isSLSelecting || this.cData.isHueSelecting) {
-      this.cData.rectOffsetFill = 'none';
-      this.cData.isHueSelecting = false;
-      this.cData.isSLSelecting = false;
-      if ( this.cData.primarySelect ) {
-          this.updateLastColor( this.cData.primaryColor );
-      } else {
-          this.updateLastColor( this.cData.secondaryColor );
-      }
-      this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
-      this.emitColors();
-    }
-  }
-  // Mouse down event function when mouse on hue selector
-  hueSelectorOnMouseDown(event: MouseEvent ): void {
-    if (!(this.cData.isSLSelecting)) {
-      this.cData.isHueSelecting = true;
-      this.cData.rectOffsetFill = 'white';
-      this.cData.primarySelect = (event.button === 0);
-      this.hueSelector(event);
-    }
-  }
-  selectorOnMouseLeave(event: MouseEvent): void {
-    if (this.cData.isHueSelecting) {
-      this.hueSelector(event);
-    }
-  }
-  // Mouse down event function when mouse on saturation/lightness selector
-  slSelectorOnMouseDown(event: MouseEvent ): void {
-    if (!(this.cData.isHueSelecting)) {
-      this.cData.isSLSelecting = true;
-      this.cData.primarySelect = (event.button === 0);
-      this.slSelector(event);
-    }
-  }
-  // Update last color table with a new color
-  updateLastColor( newColor: string ): void {
-    for (let i = 0; i < this.cData.lastColorRects.length; i++ ) {
-      if (this.cData.lastColorRects[i].fill === 'none') {
-        this.cData.lastColorRects[i].fill = newColor.substring( 0, 7 );
-        return;
-      }
-    }
-    for (let i = 0; i < this.cData.lastColorRects.length - 1; i++ ) {
-      this.cData.lastColorRects[i].fill = this.cData.lastColorRects[i + 1].fill;
-    }
-    this.cData.lastColorRects[this.cData.lastColorRects.length - 1].fill = newColor.substring( 0, 7 );
-  }
-
-  lastColorSelector( event: MouseEvent, lastColor: string ): void {
-    if ( event.button === 0 ) {
-        this.cData.primaryColor = lastColor;
-        this.cData.checkboxSliderStatus = true;
-        this.cData.primarySelect = true;
-        this.cData.currentColorSelect = 'Primary';
-        this.cData.opacitySliderInput = this.cData.primaryAlpha * 100;
-    } else if ( event.button === 2 ) {
-        this.cData.secondaryColor = lastColor;
-        this.cData.checkboxSliderStatus = false;
-        this.cData.primarySelect = false;
-        this.cData.currentColorSelect = 'Secondary';
-        this.cData.opacitySliderInput = this.cData.secondaryAlpha * 100;
-    }
-    this.updateDisplay(lastColor)
-  }
-
-  updateDisplay(lastColor: string) {
-    this.cData.hexColorInput = lastColor.substring( 1, 7 ); // only 1 to 7 char are needed for view
-    // RGBA value of last color for display
-    const color: number[] = this.colorConvert.hexToRgba( lastColor.substring( 1, 9 ) );
-    this.cData.redSliderInput = color[0];
-    this.cData.greenSliderInput = color[1];
-    this.cData.blueSliderInput = color[2];
-    this.cData.opacitySliderInput;
-    // HSL value of last color for display
-    const hsl: number[] = this.colorConvert.rgbToHsl( color[0], color[1], color[2] );
-    this.cData.currentHue = hsl[0];
-    this.cData.saturationSliderInput = Math.round( hsl[1] * 100 );
-    this.cData.lightnessSliderInput = Math.round( hsl[2] * 100);
-    this.setSLCursor( this.cData.saturationSliderInput, this.cData.lightnessSliderInput );
-    this.hexInputDisplayRefresh();
-    this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
-    this.emitColors();
-  }
-  // Change color display between primary and secondary
-  swapInputDisplay(event: MouseEvent) {
-    if ( (event.srcElement as HTMLInputElement).checked ) {
-        this.cData.primarySelect = true;
-    } else {
-        this.cData.primarySelect = false;
-    }
-    this.refreshDisplay();
-  }
-  // udapte display with current value
-  refreshDisplay(): void {
-    let color = '' ;
-
-    if ( this.cData.primarySelect ) {
-        this.cData.currentColorSelect = 'Primary';
-        color = this.cData.primaryColor;
-    } else {
-        this.cData.currentColorSelect = 'Secondary';
-        color = this.cData.secondaryColor;
-    }
-    this.cData.hexColorInput = color.substring(1, 7);
-    this.updateSliderField( color );
-  }
-  // validate if char is hexadecimal. A window alert is send id invalide char are found
-  validateHexInput(event: KeyboardEvent ): void {
-    const validator = this.colorConvert.validateHex(event.which)
-    if (!validator) {
-      this.preventError(event)
-    }
-    this.cData.isValideInput = true;
-
-  }
-  validateHexColorInput(event: KeyboardEvent ): void {
-    this.cData.isValideInput = false;
-    if (event.which !== 8) {
-      if (this.cData.hexColorInput.length === 6) {
-        this.preventError(event)
-      }
-    }
-    this.validateHexInput(event);
-
-  }
-  /*-------- je suis rendu la et jai pas teste la fonction swapInputDisplay ---------*/
-  preventError(event: KeyboardEvent) {
-    event.preventDefault();
-    return;
-  }
-  validateRedHexInput(event: KeyboardEvent ): void {
-    this.cData.isValideInput = false;
-    if (event.which !== 8) {
-      if (this.cData.redHexInput.length === 2) {
-        this.preventError(event)
-      }
-    }
-    this.validateHexInput(event);
-  }
-  validateGreenHexInput(event: KeyboardEvent ): void {
-    this.cData.isValideInput = false;
-    if (event.which !== 8) {
-      if (this.cData.greenHexInput.length === 2) {
-        this.preventError(event)
-      }
-    }
-    this.validateHexInput(event);
-  }
-  validateBlueHexInput(event: KeyboardEvent ): void {
-    this.cData.isValideInput = false;
-    if (event.which !== 8) {
-      if (this.cData.blueHexInput.length === 2) {
-        this.preventError(event)
-      }
-    }
-    this.validateHexInput(event);
-  }
-  /**
-  * Hex color text field input event function
-  * Update display if valide value are input
-  **/
-  onHexColorInput(event: KeyboardEvent): void {
-    if ( (this.cData.hexColorInput.length === 6) && this.cData.isValideInput) {
-      this.updateSliderField( this.cData.hexColorInput);
-      if ( this.cData.primarySelect ) {
-          this.cData.primaryColor = '#' + this.cData.hexColorInput + this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
-      } else {
-          this.cData.secondaryColor = '#' + this.cData.hexColorInput + this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
-      }
-      this.cData.redHexInput = this.cData.hexColorInput.substring(0, 2);
-      this.cData.greenHexInput = this.cData.hexColorInput.substring(2, 4);
-      this.cData.blueHexInput = this.cData.hexColorInput.substring(4, 6);
-    }
-  }
-  /**
-  * Red hex text field input event function
-  * Update display if valide value are input
-  **/
-  onRedHexInput(): void {
-    if ( (this.cData.redHexInput.length === 2) && this.cData.isValideInput) {
-      if ( this.cData.primarySelect ) {
-        this.cData.primaryColor = this.writeHexColor('Red', true)
-        this.updateSliderField( this.cData.primaryColor );
-      } else {
-          this.cData.secondaryColor = this.writeHexColor('Red', false)
-          this.updateSliderField( this.cData.secondaryColor );
-      }
-      this.cData.hexColorInput = this.cData.redHexInput + this.cData.hexColorInput.substring( 2, 6 );
-    }
-  }
-
-  // todo
-  writeHexColor(color: string, prim: boolean): string {
-    let ret = '';
-    if (color === 'Red') {
-      ret += '#' + this.cData.redHexInput + this.cData.hexColorInput.substring( 2, 6 )
-    } else if (color === 'Green') {
-      ret += '#' + this.cData.hexColorInput.substring( 0, 2 ) + this.cData.greenHexInput + this.cData.hexColorInput.substring( 4, 6 )
-    } else if (color === 'Blue') {
-      ret += '#' + this.cData.hexColorInput.substring( 0, 4 ) + this.cData.blueHexInput
-    }
-    if (prim) {
-      ret += this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
-    } else if (!prim) {
-      ret += this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
-    }
-    return ret;
-  }
-
-  onGreenHexInput(): void { // unmoved
-    if ((this.cData.greenHexInput.length === 2) && this.cData.isValideInput) {
-      if ( this.cData.primarySelect ) {
-          this.cData.primaryColor = this.writeHexColor('Green', true)
-          this.updateSliderField( this.cData.primaryColor );
-      } else {
-          this.cData.secondaryColor = this.writeHexColor('Green', false)
-          this.updateSliderField( this.cData.secondaryColor );
-      }
-      this.cData.hexColorInput = this.cData.hexColorInput.substring( 0, 2 ) + this.cData.greenHexInput +
-       this.cData.hexColorInput.substring( 4, 6 );
-    }
-  }
-
-  onBlueHexInput(): void { // unmoved
-    if ((this.cData.blueHexInput.length === 2) && this.cData.isValideInput) {
-      if ( this.cData.primarySelect ) {
-          this.cData.primaryColor = this.writeHexColor('Blue', true)
-          this.updateSliderField( this.cData.primaryColor );
-      } else {
-          this.cData.secondaryColor = this.writeHexColor('Blue', false)
-          this.updateSliderField( this.cData.secondaryColor );
+    setColor(color: number[]): string {
+        if (color.length < 3) {
+            return '';
+        } else {
+            let newColor: string =
+                '#' + this.colorConvert.rgbToHex(color[0]) + this.colorConvert.rgbToHex(color[1]) + this.colorConvert.rgbToHex(color[2]);
+            switch (this.cData.colorMode) {
+                case this.cData.PRIMARY_COLOR_MODE:
+                    newColor += this.colorConvert.alphaRGBToHex(this.cData.primaryAlpha);
+                    this.cData.primaryColor = newColor;
+                    break;
+                case this.cData.SECONDARY_COLOR_MODE:
+                    newColor += this.colorConvert.alphaRGBToHex(this.cData.secondaryAlpha);
+                    this.cData.secondaryColor = newColor;
+                    break;
+                case this.cData.BACKGROUND_COLOR_MODE:
+                    newColor += this.colorConvert.alphaRGBToHex(this.cData.backgroundColorAlpha);
+                    this.cData.backgroundColor = newColor;
+                    break;
+            }
+            return newColor;
         }
     }
-    this.cData.hexColorInput = this.cData.hexColorInput.substring( 0, 4 ) + this.cData.blueHexInput;
-  }
-  /**
-  * Update display with a given color
-  **/
- // put on notice
-  updateSliderField( color: string): void {
-    const rgba: number[] = this.colorConvert.hexToRgba( color );
-    this.cData.redSliderInput = rgba[0];
-    this.cData.greenSliderInput = rgba[1];
-    this.cData.blueSliderInput = rgba[2];
-    // if opacity existeb i.e fourth attribut of hexToRgba is not -1 then we set opacity after conversion for display
-    if ( rgba[3] !== -1 ) {
-        this.cData.opacitySliderInput = rgba[3] * 100;
+    setColorMode(event: MouseEvent): void {
+        if (this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE) {
+            switch (event.button) {
+                case 0:
+                    this.cData.colorMode = this.cData.PRIMARY_COLOR_MODE;
+                    break;
+                case 2:
+                    this.cData.colorMode = this.cData.SECONDARY_COLOR_MODE;
+                    break;
+            }
+        }
     }
+    // Set position of x and y of saturatio/lightness cursor
+    setSLCursor(x: number, y: number): void {
+        this.cData.slCursorX = x;
+        this.cData.slCursorY = y;
+    }
+    setSaturation(s: number): void {
+        switch (this.cData.colorMode) {
+            case this.cData.PRIMARY_COLOR_MODE:
+                this.cData.primarySaturation = s;
+                break;
+            case this.cData.SECONDARY_COLOR_MODE:
+                this.cData.secondarySaturation = s;
+                break;
+            case this.cData.BACKGROUND_COLOR_MODE:
+                this.cData.backgroundColorSaturation = s;
+        }
+    }
+    getSaturation(): number {
+        switch (this.cData.colorMode) {
+            case this.cData.PRIMARY_COLOR_MODE:
+                return this.cData.primarySaturation;
+            case this.cData.SECONDARY_COLOR_MODE:
+                return this.cData.secondarySaturation;
+            case this.cData.BACKGROUND_COLOR_MODE:
+                return this.cData.backgroundColorSaturation;
+        }
+        return -1;
+    }
+    /************************ SELECTORS SECTION ***************************/
+    hueSelector(event: MouseEvent): void {
+        let hue = 0;
+        if (this.cData.isHueSelecting) {
+            hue = this.computeHue(event);
+            this.cData.currentHue = Math.round(hue);
+            let color = this.setColor(
+                this.colorConvert.hslToRgb(
+                    hue,
+                    this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
+                    this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER,
+                ),
+            );
+            this.updateDisplay(color);
+        }
+    }
+    // saturation/lightness selector
+    slSelector(event: MouseEvent): void {
+        if (this.cData.isSLSelecting) {
+            const x: number = event.offsetX - 25;
+            const y: number = event.offsetY - 25;
+            this.setSLCursor(x, y);
+            this.cData.saturationSliderInput = x * 2;
+            this.cData.lightnessSliderInput = y * 2;
+            this.setSaturation(this.cData.saturationSliderInput);
+            let hsl: number[] = [
+                this.cData.currentHue,
+                this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
+                this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER,
+            ];
+            let color = this.setColor(
+                this.colorConvert.hslToRgb(
+                    this.cData.currentHue,
+                    this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
+                    this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER,
+                ),
+            );
+            this.updateDisplay(color, this.colorConvert.hexToRgba(color), hsl);
+        }
+    }
+    lastColorSelector(event: MouseEvent, lastColor: string): void {
+        this.setColorMode(event);
+        let color = this.setColor(this.colorConvert.hexToRgba(lastColor));
+        this.updateDisplay(color);
+    }
+    /************************ EVENTS SECTION ***************************/
+    onContextMenu(event: MouseEvent): void {
+        event.preventDefault();
+    }
+    onSwapSVGMouseOver(): void {
+        if (this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE) {
+            this.cData.swapStrokeStyle = 'yellow';
+        }
+    }
+    onSwapSVGMouseLeave(): void {
+        this.cData.swapStrokeStyle = 'white';
+    }
+    onSwapSVGMouseDown(): void {
+        if (this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE) {
+            this.cData.swapStrokeStyle = 'lightblue';
+        }
+    }
+    onSwapSVGMouseUp(): void {
+        this.cData.swapStrokeStyle = 'white';
+    }
+    onRadioButtonChange(newColorMode: string): void {
+        this.cData.colorMode = newColorMode;
+        this.swapInputDisplay();
+    }
+    // Mouse up event function when mouse on a color selector
+    colorSelectOnMouseUp(): void {
+        if (this.cData.isSLSelecting || this.cData.isHueSelecting) {
+            this.cData.rectOffsetFill = 'none';
+            this.cData.isHueSelecting = false;
+            this.cData.isSLSelecting = false;
+            switch (this.cData.colorMode) {
+                case this.cData.PRIMARY_COLOR_MODE:
+                    this.updateLastColor(this.cData.primaryColor);
+                    break;
+                case this.cData.SECONDARY_COLOR_MODE:
+                    this.updateLastColor(this.cData.secondaryColor);
+                    break;
+                case this.cData.BACKGROUND_COLOR_MODE:
+                    this.updateLastColor(this.cData.backgroundColor);
+                    break;
+            }
+            this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor, this.cData.backgroundColor);
+            this.emitColors();
+        }
+    }
+    // Mouse down event function when mouse on hue selector
+    hueSelectorOnMouseDown(event: MouseEvent): void {
+        if (!this.cData.isSLSelecting) {
+            this.cData.isHueSelecting = true;
+            this.cData.rectOffsetFill = 'white';
+            this.setColorMode(event);
+            this.hueSelector(event);
+        }
+    }
+    selectorOnMouseLeave(event: MouseEvent): void {
+        if (this.cData.isHueSelecting) {
+            this.hueSelector(event);
+        }
+    }
+    // Mouse down event function when mouse on saturation/lightness selector
+    slSelectorOnMouseDown(event: MouseEvent): void {
+        if (!this.cData.isHueSelecting) {
+            this.cData.isSLSelecting = true;
+            this.setColorMode(event);
+            this.slSelector(event);
+        }
+    }
+    // DISPLAY/UPDATE
+    // Update last color table with a new color
+    updateLastColor(newColor: string): void {
+        for (let i = 0; i < this.cData.lastColorRects.length; i++) {
+            if (this.cData.lastColorRects[i].fill === newColor.substring(0, 7)) {
+                return;
+            }
+        }
+        for (let i = 0; i < this.cData.lastColorRects.length; i++) {
+            if (this.cData.lastColorRects[i].fill === 'none') {
+                this.cData.lastColorRects[i].fill = newColor.substring(0, 7);
+                this.cData.lastColorRects[i].stroke = 'white';
+                return;
+            }
+        }
+        for (let i = 0; i < this.cData.lastColorRects.length - 1; i++) {
+            this.cData.lastColorRects[i].fill = this.cData.lastColorRects[i + 1].fill;
+        }
+        this.cData.lastColorRects[this.cData.lastColorRects.length - 1].fill = newColor.substring(0, 7);
+    }
+    updateDisplay(
+        hex: string,
+        rgb: number[] = this.colorConvert.hexToRgba(hex.substring(1, 9)),
+        hsl: number[] = this.colorConvert.rgbToHsl(rgb[0], rgb[1], rgb[2]),
+    ) {
+        // RGBA value of last color for display
+        this.updateDisplayRGB(rgb);
+        // HSL value of last color for display
+        this.updateDisplayHSL(hsl);
+        this.upadateDisplayHex(hex);
+        this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor, this.cData.backgroundColor);
+        this.emitColors();
+    }
+    updateDisplayRGB(rgb: number[]): void {
+        this.cData.opacitySliderInput = Math.round(rgb[3] * this.cData.POURCENT_MODIFIER);
+    }
+    updateDisplayHSL(hsl: number[]): void {
+        let newSaturation: number = Math.round(hsl[1] * this.cData.POURCENT_MODIFIER);
+        this.cData.lightnessSliderInput = Math.round(hsl[2] * this.cData.POURCENT_MODIFIER);
+        let lightnessMinMax =
+            this.cData.lightnessSliderInput === this.cData.MIN_LIGHTNESS_VALUE ||
+            this.cData.lightnessSliderInput === this.cData.MAX_LIGHTNESS_VALUE * this.cData.POURCENT_MODIFIER;
+        if (!lightnessMinMax) {
+            this.cData.saturationSliderInput = newSaturation;
+        } else {
+            this.cData.saturationSliderInput = this.getSaturation();
+        }
+        this.setSLCursor(this.cData.saturationSliderInput / 2, this.cData.lightnessSliderInput / 2);
+    }
+    upadateDisplayHex(hex: string): void {
+        this.cData.hexColorInput = hex.substring(1, 7); // only 1 to 7 char are needed for view
+        this.cData.redHexInput = hex.substring(1, 3);
+        this.cData.greenHexInput = hex.substring(3, 5);
+        this.cData.blueHexInput = hex.substring(5, 7);
+    }
+    // Change color display between primary , secondary and background
+    swapInputDisplay() {
+        let color = this.selectDisplayColor();
+        this.updateDisplay(color);
+    }
+    // udapte display with current value
+    selectDisplayColor(): string {
+        let color = '';
+        switch (this.cData.colorMode) {
+            case this.cData.PRIMARY_COLOR_MODE:
+                color = this.cData.primaryColor;
+                break;
+            case this.cData.SECONDARY_COLOR_MODE:
+                color = this.cData.secondaryColor;
+                break;
+            case this.cData.BACKGROUND_COLOR_MODE:
+                color = this.cData.backgroundColor;
+                break;
+        }
+        return color;
+    }
+    // Exchange primary and secondary value
+    swapPrimarySecondary(): void {
+        if (this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE) {
+            const tempColor: string = this.cData.primaryColor;
+            const tempAlpha: number = this.cData.primaryAlpha;
 
-    const hsl: number[] = this.colorConvert.rgbToHsl( this.cData.redSliderInput, this.cData.greenSliderInput, this.cData.blueSliderInput );
-    this.cData.currentHue = hsl[0];
-    // hsl saturation and ligthness value are between [0;1] while display is [0;100]%.So we need to multiply by 100
-    this.cData.saturationSliderInput = Math.round( hsl[1] * 100 );
-    this.cData.lightnessSliderInput = Math.round( hsl[2] * 100 );
-    this.setSLCursor(this.cData.saturationSliderInput, this.cData.lightnessSliderInput);
-    this.updateLastColor(color);
-    this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
-    this.emitColors();
-  }
-  // RBG slider input event function
-  onRGBSliderInput(): void {
-    const hsl = this.colorConvert.rgbToHsl( this.cData.redSliderInput, this.cData.greenSliderInput, this.cData.blueSliderInput );
-    this.cData.currentHue = hsl[0];
-    // hsl saturation and ligthness value are between [0;1] while display is [0;100]%.So we need to multiply by 100
-    this.cData.saturationSliderInput = Math.round( hsl[1] * 100 );
-    this.cData.lightnessSliderInput = Math.round( hsl[2] * 100 );
-    this.sliderInputDisplayRefresh();
-  }
-  // Saturation and lightness slider input event function
-  onSLSliderInput(): void {
-    // hsl saturation and ligthness value are between [0;1] while display is [0;100]%.So we need to divide by 100
-    const rgb = this.colorConvert.hslToRgb( this.cData.currentHue, this.cData.saturationSliderInput / 100,
-       this.cData.lightnessSliderInput / 100);
-    this.cData.redSliderInput = rgb[0];
-    this.cData.greenSliderInput = rgb[1];
-    this.cData.blueSliderInput = rgb[2];
-    this.sliderInputDisplayRefresh();
-  }
+            this.cData.primaryColor = this.cData.secondaryColor;
+            this.cData.primaryAlpha = this.cData.secondaryAlpha;
 
-  // todo
-  writeColorSlider(prim: boolean): string {
-    let ret = ''
-    ret += '#' + this.colorConvert.rgbToHex( this.cData.redSliderInput ) + this.colorConvert.rgbToHex( this.cData.greenSliderInput )
-    ret += this.colorConvert.rgbToHex( this.cData.blueSliderInput )
-    if (prim) {
-      ret += this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
-    } else {
-      this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
+            this.cData.secondaryColor = tempColor;
+            this.cData.secondaryAlpha = tempAlpha;
+            let color = this.selectDisplayColor();
+            this.updateDisplay(color);
+        }
     }
-    return ret
-  }
-  // Refresh display following a slider input
-  // put on notice
-  sliderInputDisplayRefresh(): void {
-    if ( this.cData.primarySelect ) {
-        this.cData.primaryColor = this.writeColorSlider(true)
-        this.updateLastColor( this.cData.primaryColor );
-    } else {
-      this.cData.secondaryColor = this.writeColorSlider(false)
-      this.updateLastColor( this.cData.secondaryColor );
+    // INPUTS
+    // validate if char is hexadecimal.
+    validateHexInput(event: KeyboardEvent, hexLength: number, hex: string): void {
+        event.stopPropagation();
+        this.cData.isValideInput = false;
+        //left/right arrow/delete
+        if (event.which === 37 || event.which === 39 || event.which === 46) {
+            return;
+        }
+        //if not backspace
+        if (event.which !== 8) {
+            if (hex.length === hexLength) {
+                event.preventDefault();
+                return;
+            }
+        }
+        const validator = this.colorConvert.validateHex(event.which);
+        if (!validator) {
+            event.preventDefault();
+            return;
+        }
+        this.cData.isValideInput = true;
     }
-    this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
-    this.emitColors();
-    this.setSLCursor( this.cData.saturationSliderInput, this.cData.lightnessSliderInput );
-    this.hexInputDisplayRefresh();
-  }
-  // Refresh hex display following an input
-  hexInputDisplayRefresh(): void {
-    this.cData.redHexInput = this.colorConvert.rgbToHex( this.cData.redSliderInput );
-    this.cData.greenHexInput = this.colorConvert.rgbToHex( this.cData.greenSliderInput );
-    this.cData.blueHexInput = this.colorConvert.rgbToHex( this.cData.blueSliderInput );
-    this.cData.hexColorInput = this.cData.redHexInput + this.cData.greenHexInput + this.cData.blueHexInput;
-    this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
-    this.emitColors();
-  }
-
-  // todo
-  writeColorAlphaChange(prim: boolean): string {
-    let ret = '';
-    ret += '#' + this.colorConvert.alphaRGBToHex( this.cData.redSliderInput )
-    ret +=  this.colorConvert.alphaRGBToHex( this.cData.greenSliderInput ) + this.colorConvert.alphaRGBToHex( this.cData.blueSliderInput )
-    if (prim) {
-      this.colorConvert.alphaRGBToHex( this.cData.primaryAlpha );
-    } else {
-      this.colorConvert.alphaRGBToHex( this.cData.secondaryAlpha );
+    /**
+     * Red hex text field input event function
+     * Update display if valide value are input
+     **/
+    onHexInput(hexLength: number, hex: string, hexInputField: string): void {
+        if (hex.length === hexLength && this.cData.isValideInput) {
+            let newColor: string = this.writeHexColor(hexInputField);
+            this.updateDisplay(newColor);
+            this.updateLastColor(newColor);
+            this.cData.isValideInput = false;
+        }
     }
-    return ret
-  }
-
-  sliderAlphaChange(): void {
-    if ( this.cData.primarySelect === true) {
-        this.cData.primaryAlpha = this.cData.opacitySliderInput / 100;
-        this.cData.primaryColor = this.writeColorAlphaChange(true)
-    } else {
-        this.cData.secondaryAlpha = this.cData.opacitySliderInput / 100;
-        this.cData.secondaryColor = this.writeColorAlphaChange(false)
+    writeHexColor(color: string): string {
+        let ret = '';
+        switch (color) {
+            case this.cData.RED_INPUT_FIELD:
+                ret += '#' + this.cData.redHexInput + this.cData.hexColorInput.substring(2, 6);
+                break;
+            case this.cData.GREEN_INPUT_FIELD:
+                ret += '#' + this.cData.hexColorInput.substring(0, 2) + this.cData.greenHexInput + this.cData.hexColorInput.substring(4, 6);
+                break;
+            case this.cData.BLUE_INPUT_FIELD:
+                ret += '#' + this.cData.hexColorInput.substring(0, 4) + this.cData.blueHexInput;
+                break;
+            case this.cData.COLOR_HEX_INPUT_FIELD:
+                ret += '#' + this.cData.hexColorInput;
+                break;
+        }
+        switch (this.cData.colorMode) {
+            case this.cData.PRIMARY_COLOR_MODE:
+                ret += this.colorConvert.alphaRGBToHex(this.cData.primaryAlpha);
+                this.cData.primaryColor = ret;
+                break;
+            case this.cData.SECONDARY_COLOR_MODE:
+                ret += this.colorConvert.alphaRGBToHex(this.cData.secondaryAlpha);
+                this.cData.secondaryColor = ret;
+                break;
+            case this.cData.BACKGROUND_COLOR_MODE:
+                ret += this.colorConvert.alphaRGBToHex(this.cData.backgroundColorAlpha);
+                this.cData.backgroundColor = ret;
+                break;
+        }
+        return ret;
     }
-    this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor);
-    this.emitColors();
-  }
+    // Saturation and lightness slider input event function
+    onSLSliderInput(): void {
+        // hsl saturation and ligthness value are between [0;1] while display is [0;100]%.So we need to divide by 100
+        const rgb = this.colorConvert.hslToRgb(
+            this.cData.currentHue,
+            this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
+            this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER,
+        );
+        let newColor = this.setColor(rgb);
+        this.setSaturation(this.cData.saturationSliderInput);
+        this.updateDisplay(newColor);
+        this.updateLastColor(newColor);
+    }
+    sliderAlphaChange(): void {
+        switch (this.cData.colorMode) {
+            case this.cData.PRIMARY_COLOR_MODE:
+                this.cData.primaryAlpha = this.cData.opacitySliderInput / this.cData.POURCENT_MODIFIER;
+                this.cData.primaryColor = this.cData.primaryColor.substring(0, 7) + this.colorConvert.alphaRGBToHex(this.cData.primaryAlpha);
+                break;
+            case this.cData.SECONDARY_COLOR_MODE:
+                this.cData.secondaryAlpha = this.cData.opacitySliderInput / this.cData.POURCENT_MODIFIER;
+                this.cData.secondaryColor = this.cData.secondaryColor.substring(0, 7) + this.colorConvert.alphaRGBToHex(this.cData.secondaryAlpha);
+                break;
+            case this.cData.BACKGROUND_COLOR_MODE:
+                this.cData.backgroundColorAlpha = this.cData.opacitySliderInput / this.cData.POURCENT_MODIFIER;
+                this.cData.backgroundColor = '#' + this.cData.hexColorInput + this.colorConvert.alphaRGBToHex(this.cData.backgroundColorAlpha);
+                break;
+        }
+        this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor, this.cData.backgroundColor);
+        this.emitColors();
+    }
+    /************************ MATH SECTION ***************************/
+    computeHue(event: MouseEvent): number {
+        // Hue circle radius is 45px and stroke widht 10px which mean average radius is ( 55 - 45 ) / 2 = 50
+        // Which is subtract from offset to center circle for math formula
+        const radiusX: number = event.offsetX - 50;
+        const radiusY: number = event.offsetY - 50;
+        const radius: number = Math.sqrt(Math.pow(radiusX, 2) + Math.pow(radiusY, 2));
+        const theta: number = Math.acos(radiusX / radius);
+        let Hue = 0;
+        // hue is a value of 0 to 360 degree but theta is in radiant so conversion are needed depending on raduisY signe
+        if (radiusY >= 0) {
+            Hue = (180 / Math.PI) * theta;
+        } else {
+            Hue = 360 - (180 / Math.PI) * theta;
+        }
+        return Hue;
+    }
 }
