@@ -1,0 +1,15 @@
+#gallery{
+    height: 75%;
+    width: 75%;
+    overflow:scroll;
+}
+.header{
+    position: relative;
+    
+}
+#imageContainer  {
+    display: inline-block;
+    //align-content: flex-start;
+    height: 25%;
+    width: 25%;
+}

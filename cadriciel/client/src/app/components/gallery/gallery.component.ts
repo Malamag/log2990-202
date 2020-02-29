@@ -20,7 +20,7 @@ export class GalleryComponent implements OnInit, AfterViewInit{
   ngAfterViewInit(){
     
   }
-  AddFilter(){
+  addFilter(){
     const newInput = this.render.createElement('input');
     this.render.setAttribute(newInput, 'type', 'text');
     this.render.appendChild(this.filters.nativeElement, newInput);
