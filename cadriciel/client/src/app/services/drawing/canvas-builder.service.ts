@@ -32,11 +32,11 @@ export class CanvasBuilderService {
 
     setCanvasFromForm(widthInput: number, heightInput: number, colorInput: string): void {
         colorInput = '#' + colorInput;
-        this.newCanvas = new Canvas(widthInput, heightInput, colorInput); // a fresh draw is always clean
+        this.newCanvas = {canvasWidth: widthInput, canvasHeight: heightInput, canvasColor: colorInput}; // a fresh draw is always clean
     }
 
     getDefCanvas(): Canvas {
-        return new Canvas(this.getDefWidth(), this.getDefHeight(), this.getDefColor());
+        return {canvasWidth: this.getDefWidth(), canvasHeight: this.getDefHeight(), canvasColor: this.getDefColor()};
     }
 
     emitCanvas(): void {
