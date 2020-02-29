@@ -8,6 +8,7 @@ import { InteractionTool } from './interactionTool';
 export class UndoRedoService extends InteractionTool {
     constructor(interact: InteractionService, drawing: HTMLElement, render: Renderer2) {
         super(interact, drawing, render);
+        this.updateDoneContainer();
         this.updateContainer();
     }
     updateContainer() {
@@ -26,6 +27,15 @@ export class UndoRedoService extends InteractionTool {
                 this.updateButtons();
             }
         });
+    }
+    updateDoneContainer(){
+        this.interact.$canvasRedone.subscribe(sig =>{
+            if(sig){
+                this.done = [];
+                this.undone = []
+            }
+            
+        })
     }
     undo() {
         if (!this.done.length) {

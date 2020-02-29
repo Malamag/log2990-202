@@ -38,7 +38,8 @@ export abstract class DrawingTool extends InputObserver {
 
       this.ignoreNextUp = false;
       this.defaultValues = new DefaultAttributeValues()
-      this.chosenColor = new ChoosenColors(this.defaultValues.DEFAULTPRIMARYCOLOR, this.defaultValues.DEFAULTSECONDARYCOLOR ,this.defaultValues.DEFAULTBACKCOLOR)
+      this.chosenColor = {primColor: this.defaultValues.DEFAULTPRIMARYCOLOR, secColor: this.defaultValues.DEFAULTSECONDARYCOLOR ,
+        backColor: this.defaultValues.DEFAULTBACKCOLOR}
     }
 
     updateColors() {
@@ -48,9 +49,9 @@ export abstract class DrawingTool extends InputObserver {
       this.colorSub = this.colorPick.colorSubject.subscribe(
         (color: ChoosenColors) => {
           if (color === undefined) {
-            color = new ChoosenColors(DEFPRIM, DEFSEC, DEFBACK);
+            color = {primColor: DEFPRIM, secColor: DEFSEC, backColor: DEFBACK};
           }
-          this.chosenColor = new ChoosenColors(color.primColor, color.secColor, color.backColor);
+          this.chosenColor  = {primColor: color.primColor, secColor: color.secColor, backColor: color.backColor};
         });
       this.colorPick.emitColors()
     }

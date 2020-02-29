@@ -34,7 +34,7 @@ export class ColorPickingService {
     }
     /************************ SETTERS SECTION ***************************/
     setColorsFromForm(primary: string, secondary: string, background: string) {
-        this.colors = new ChoosenColors(primary, secondary, background);
+        this.colors = {primColor: primary, secColor: secondary, backColor: background};
     }
     setColor(color: number[]): string {
         if (color.length < 3) {

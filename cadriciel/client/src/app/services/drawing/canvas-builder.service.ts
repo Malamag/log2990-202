@@ -4,6 +4,7 @@ import { Canvas } from '../../models/Canvas.model';
 
 import { Subject } from 'rxjs';
 import { colorCircles } from '../../palette';
+import { InteractionService } from '../service-interaction/interaction.service';
 
 @Injectable({
     providedIn: 'root',
@@ -12,7 +13,7 @@ export class CanvasBuilderService {
     newCanvas: Canvas;
     canvSubject = new Subject<Canvas>(); // using rxjs to emit the created canvas to another component
 
-    constructor() {}
+    constructor(private interact: InteractionService) {}
 
     getDefWidth(): number {
         const DIV = 1.18;
@@ -40,6 +41,7 @@ export class CanvasBuilderService {
 
     emitCanvas(): void {
         this.canvSubject.next(this.newCanvas);
+        this.interact.emitCanvasRedone()
     }
 
     getPalleteAttributes() {

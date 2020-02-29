@@ -71,8 +71,10 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
             this.canvBuilder.whipeDraw(this.frameRef);
+            //this.interaction.emitCanvasRedone();
         });
         this.canvBuilder.emitCanvas();
+        
     }
 
     ngAfterViewInit() {

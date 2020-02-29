@@ -23,11 +23,9 @@ export class ShapeService extends DrawingTool {
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
         super(inProgess, drawing, selected, interaction, colorPick);
-        this.attr = new FormsAttribute(
-            this.defaultValues.DEFAULTPLOTTYPE,
-            this.defaultValues.DEFAULTLINETHICKNESS,
-            this.defaultValues.DEFAULTNUMBERCORNERS,
-        );
+        this.attr = {plotType: this.defaultValues.DEFAULTPLOTTYPE,
+            lineThickness: this.defaultValues.DEFAULTLINETHICKNESS,
+            numberOfCorners: this.defaultValues.DEFAULTNUMBERCORNERS}
         this.updateColors();
         this.updateAttributes();
         this.width = 0;
@@ -38,10 +36,10 @@ export class ShapeService extends DrawingTool {
     }
 
     updateAttributes() {
-        this.interaction.$formsAttributes.subscribe(obj => {
+        this.interaction.$formsAttributes.subscribe( (obj) => {
             if (obj) {
                 // Getting attributes for a shape
-                this.attr = new FormsAttribute(obj.plotType, obj.lineThickness, obj.numberOfCorners);
+                this.attr = {plotType: obj.plotType, lineThickness: obj.lineThickness, numberOfCorners: obj.numberOfCorners};
             }
         });
     }

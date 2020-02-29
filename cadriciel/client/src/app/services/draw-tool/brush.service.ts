@@ -15,7 +15,7 @@ export class BrushService extends PencilService {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.updateColors();
         this.updateAttributes();
-        this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE);
+        this.attr = {lineThickness: this.defaultValues.DEFAULTLINETHICKNESS, texture: this.defaultValues.DEFAULTTEXTURE};
         // values used as texture presets
         this.textures = [
             { type: 'blured', intensity: 5, frequency: 0 },
@@ -29,7 +29,7 @@ export class BrushService extends PencilService {
     updateAttributes() {
         this.interaction.$toolsAttributes.subscribe(obj => {
             if (obj) {
-                this.attr = new ToolsAttributes(obj.lineThickness, obj.texture);
+                this.attr = {lineThickness: obj.lineThickness, texture: obj.texture};
             }
         });
     }
