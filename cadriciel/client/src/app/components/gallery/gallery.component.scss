@@ -5,14 +5,20 @@
     max-width: 75vw;
     background-color: transparent;
 }
-.header{
+div.header{
     position: relative;
     float: right;
     
 }
-#drawingContainer {
-    display: inline-box;
+div.drawing{
+    border-color: black;
+    background-color: transparent;
     height: auto;
     width: auto;
-    position: relative;
+    margin-right: 2px;
+    display: inline-block;
+}
+div.drawingContainer{
+    display: inline-block;
+
 }

@@ -1,4 +1,4 @@
-<div class ="gallery" [style.background-color] = "white">
+<div class ="gallery">
   <div id ="header">
     <div #filterContainer>
       <input type = "text" [(ngModel)] = "filter">
@@ -6,17 +6,19 @@
     <button (click)= "addFilter()"> Ajouter filtre </button>
     <button> Appliquer Filtre </button>
   </div>
-  <div  class= "imageContainer" >
-    <mat-card class="drawingContainer" *ngFor = "let im of fakeImage">
-      <mat-card-header>
-        <mat-card-title> {{im.title}}</mat-card-title>
-        <mat-card-subtitle> {{im.tag}} </mat-card-subtitle>
-      </mat-card-header>
-      <img src ={{im.image}}>
-      <mat-card-actions>
-        <button> Supprimer </button>
-        <button> Continuer dessin</button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
+  <div id = "drawingContainer">
+    <div class = "drawings" *ngFor ="let im of fakeImage">
+      <div id ="drawing">
+        <header>
+          <title> {{im.title}}</title>
+          <sub> {{im.tag}}</sub>
+        </header>
+        <img src = {{im.image}}>
+        <footer>
+          <button> Supprimer </button>
+          <button>Continuer dessin </button>
+        </footer>
+      </div>
+    </div>
+  </div>  
 </div>
