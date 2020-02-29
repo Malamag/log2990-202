@@ -1,15 +1,18 @@
 #gallery{
-    height: 75%;
-    width: 75%;
-    overflow:scroll;
+    //overflow-x:scroll;
+    overflow-y: scroll;
+    max-height: 75vh;
+    max-width: 75vw;
+    background-color: transparent;
 }
 .header{
     position: relative;
+    float: right;
     
 }
-#imageContainer  {
-    display: inline-block;
-    //align-content: flex-start;
-    height: 25%;
-    width: 25%;
+#drawingContainer {
+    display: inline-box;
+    height: auto;
+    width: auto;
+    position: relative;
 }

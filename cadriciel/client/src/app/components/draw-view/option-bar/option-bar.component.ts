@@ -31,6 +31,7 @@ export class OptionBarComponent implements OnInit {
     setShortcutEvent(e: KeyboardEvent) {
         const O_KEY = 79; // keycode for letter o
         const E_KEY = 69;
+        const G_KEY =71;
 
         const kbHandler: KeyboardHandlerService = new KeyboardHandlerService();
         kbHandler.logkey(e);
@@ -46,6 +47,10 @@ export class OptionBarComponent implements OnInit {
             e.preventDefault();
         }
         //e.preventDefault(); // if it was here, no inputs would be possible...
+        if(kbHandler.ctrlDown && kbHandler.keyCode === G_KEY){
+            this.openGallery();
+            e.preventDefault();
+        }
     }
 
     openNewDrawForm() {
