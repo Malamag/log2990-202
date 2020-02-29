@@ -6,6 +6,9 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 
+const DEFAULTJUNCTION = true;
+const DEFAULTJUNCTIONRADIUS = 6;
+const DEFAULTLINETHICKNESS = 5;
 @Injectable({
   providedIn: 'root'
 })
@@ -16,8 +19,7 @@ export class LineService extends DrawingTool {
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
     super(inProgess, drawing, selected, interaction, colorPick);
-    this.attr = {junction : this.defaultValues.DEFAULTJUNCTION,
-            lineThickness: this.defaultValues.DEFAULTLINETHICKNESS, junctionDiameter: this.defaultValues.DEFAULTJUNCTIONRADIUS};
+    this.attr = {junction : DEFAULTJUNCTION, lineThickness: DEFAULTLINETHICKNESS, junctionDiameter: DEFAULTJUNCTIONRADIUS};
     this.forcedAngle = false;
     this.currentPos = new Point(0, 0);
     this.updateAttributes()

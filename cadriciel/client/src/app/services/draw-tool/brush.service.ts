@@ -5,6 +5,9 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { PencilService } from './pencil.service';
 import { Point } from './point';
 
+const DEFAULTLINETHICKNESS = 5;
+const DEFAULTTEXTURE = 0;
+
 @Injectable({
     providedIn: 'root',
 })
@@ -15,7 +18,7 @@ export class BrushService extends PencilService {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.updateColors();
         this.updateAttributes();
-        this.attr = {lineThickness: this.defaultValues.DEFAULTLINETHICKNESS, texture: this.defaultValues.DEFAULTTEXTURE};
+        this.attr = {lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE};
         // values used as texture presets
         this.textures = [
             { type: 'blured', intensity: 5, frequency: 0 },
