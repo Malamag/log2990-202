@@ -70,7 +70,7 @@ export class GridRenderService {
         }
     }
 
-    initGrid(gridElement: SVGElement, width: number, height: number) {
+    initGrid(gridElement: SVGElement, width: number, height: number, color: string) {
         this.grid = gridElement;
         this.drawWidth = width;
         this.drawHeight = height;
@@ -85,6 +85,7 @@ export class GridRenderService {
         this.vGridLines.forEach((vLine: SVGLineElement) => {
             this.render.appendChild(this.grid, vLine);
         });
+        this.updateColor(color);
     }
 
     updateSpacing(spacing: number) {
@@ -113,15 +114,33 @@ export class GridRenderService {
         const RGBA: number[] = this.colConv.hexToRgba(bgColor);
         const LIMIT = 128;
 
-        //too dark if true. the grid color must be changed to become visible
-        if (RGBA[0] < LIMIT && RGBA[1] < LIMIT && RGBA[2] < LIMIT) {
-            const WHITE: string = '#ffffff';
+        //the grid color must be changed to become visible if the background is too dark
+        const DARK_BG: boolean = RGBA[0] < LIMIT && RGBA[1] < LIMIT && RGBA[2] < LIMIT;
+
+        const WHITE: string = '#ffffff';
+        const BLACK: string = '#000000';
+
+        if (DARK_BG) {
             this.gridColor = WHITE;
-            this.render.setAttribute(this.grid, 'style', `stroke:${WHITE + this.gridAlpha}`);
+            this.updateAttributes('style', `stroke:${WHITE + this.gridAlpha}`);
+            //this.render.setAttribute(this.grid, 'style', `background-color:${WHITE}`);
+        } else if (!DARK_BG && this.gridColor === WHITE) {
+            this.gridColor = BLACK;
+            this.updateAttributes('style', `stroke:${BLACK + this.gridAlpha}`);
         }
     }
 
     toggleGridVisibility(show: boolean) {
         this.itService.emitGridVisibility(show);
+    }
+
+    updateAttributes(attrName: string, value: string) {
+        this.hGridLines.forEach((hLine: SVGLineElement) => {
+            this.render.setAttribute(hLine, attrName, value);
+        });
+
+        this.vGridLines.forEach((vLine: SVGLineElement) => {
+            this.render.setAttribute(vLine, attrName, value);
+        });
     }
 }

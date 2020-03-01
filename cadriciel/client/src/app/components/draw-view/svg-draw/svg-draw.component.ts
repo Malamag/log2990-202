@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+
 import { Canvas } from 'src/app/models/Canvas.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
@@ -18,7 +18,7 @@ import { GridRenderService } from 'src/app/services/grid/grid-render.service';
     templateUrl: './svg-draw.component.html', // changed file type
     styleUrls: ['./svg-draw.component.scss'],
 })
-export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
+export class SvgDrawComponent implements OnInit, AfterViewInit {
     constructor(
         private canvBuilder: CanvasBuilderService,
         public interaction: InteractionService,
@@ -28,8 +28,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         private gridService: GridRenderService,
     ) {}
     canvas: Canvas;
-    canvasSubscr: Subscription;
-    backgroundColorSub: Subscription;
+
     width: number;
     height: number;
     backColor: string;
@@ -51,8 +50,6 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         this.interaction.$refObs.subscribe(ref => {
             this.workingSpace = ref.nativeElement;
         });
-
-        this.initCanvas();
     }
 
     closeTools(map: Map<string, DrawingTool>) {
@@ -62,13 +59,14 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     bgroundChangeSubscription() {
-        this.backgroundColorSub = this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
+        this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
             this.backColor = choosenColors.backColor;
+            this.gridService.updateColor(this.backColor);
         });
     }
 
     initCanvas() {
-        this.canvasSubscr = this.canvBuilder.canvSubject.subscribe((canvas: Canvas) => {
+        this.canvBuilder.canvSubject.subscribe((canvas: Canvas) => {
             if (canvas === undefined || canvas === null) {
                 canvas = this.canvBuilder.getDefCanvas();
             }
@@ -76,9 +74,11 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
             this.canvBuilder.whipeDraw(this.frameRef);
+            this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
         });
         this.canvBuilder.emitCanvas();
     }
+
     initGridVisibility() {
         this.interaction.$showGrid.subscribe((show: boolean) => {
             this.showGrid = show;
@@ -86,7 +86,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height);
+        this.initCanvas();
+        this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
         this.initGridVisibility();
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
         const mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);
@@ -159,10 +160,5 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
             this.doodleFetch.heightAttr = this.height;
         });
         this.bgroundChangeSubscription();
-    }
-
-    ngOnDestroy() {
-        // quand le component est détruit, la subscription n'existe plus
-        this.canvasSubscr.unsubscribe();
     }
 }
