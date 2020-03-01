@@ -74,7 +74,6 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
             //this.interaction.emitCanvasRedone();
         });
         this.canvBuilder.emitCanvas();
-        
     }
 
     ngAfterViewInit() {

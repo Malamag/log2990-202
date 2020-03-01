@@ -1,28 +1,27 @@
-<div class ="gallery">
-  <div class ="header">
-    <div #filterContainer>
-      <input type = "text" [(ngModel)] = "filter">
+<div class="gallery">
+    <!-- <div class="header">
+        <div #filterContainer>
+            <input matInput type="text" [(ngModel)]="filter" />
+        </div>
+        <button mat-button>Ajouter filtre</button>
+        <button mat-button>Appliquer Filtre</button>
+    </div>-->
+    <br />
+    <div id="cards-container">
+        <mat-card class="drawing" *ngFor="let drawing of fakeImage">
+            <mat-card-header>
+                <mat-card-title> {{ drawing.title }} </mat-card-title>
+                <mat-card-subtitle> {{ drawing.tag }} </mat-card-subtitle>
+            </mat-card-header>
+            <img mat-card-image src="{{ drawing.image }}" />
+            <mat-card-actions>
+                <button mat-stroked-button color="warn">
+                    <mat-icon matTooltip="Supprimer"> delete </mat-icon>
+                </button>
+                <button mat-stroked-button color="basic">
+                    <mat-icon matTooltip="Continuer dessin"> arrow_right_alt</mat-icon>
+                </button>
+            </mat-card-actions>
+        </mat-card>
     </div>
-    <button > Ajouter filtre </button>
-    <button> Appliquer Filtre </button>
-  </div>
-  <br>
-  <div id = "drawing container" *ngFor = "let drawing of fakeImage">
-    <mat-card id= "drawing">
-      <mat-card-header>
-        <mat-card-title> {{drawing.title}} </mat-card-title>
-        <mat-card-subtitle> {{drawing.tag}} </mat-card-subtitle>
-      </mat-card-header>
-      <img mat-card-image src = {{drawing.image}}>
-      <mat-card-actions>
-        <button>
-          <mat-icon matTooltip= "Supprimer"> delete </mat-icon> 
-        </button>
-        <button>
-          <mat-icon matTooltip = "Continuer dessin"> arrow_right_alt</mat-icon>
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </div>  
 </div>
-

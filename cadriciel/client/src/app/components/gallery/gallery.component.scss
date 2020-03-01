@@ -1,26 +1,24 @@
-.gallery{
-    overflow-x:scroll;
+.gallery {
+    overflow-x: scroll;
     overflow-y: scroll;
     height: 75vh;
     width: 90vw;
     background-color: #f1f1f1;
 }
-.gallery > .header{
+.gallery > .header {
     position: relative;
     float: right;
-    
 }
-mat-card{
+mat-card {
     position: relative;
-    align-items: baseline;
-    width: 25%;
-    height: 50%;
+    height: 100%;
     border-color: lightskyblue;
     border-width: 2px;
     margin-right: 5px;
     float: left;
-    margin-bottom: 5px ;
+    margin-bottom: 5px;
 }
-button{
-    margin-right: 10px;
+#cards-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
 }
