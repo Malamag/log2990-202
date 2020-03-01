@@ -11,17 +11,16 @@ export class GridRenderService {
     private readonly vGridLines: SVGLineElement[] = [];
     private readonly hGridLines: SVGLineElement[] = [];
 
-    fullGrid: SVGElement;
-
     gridAlpha: string = 'ff';
     gridColor: string = '#000000';
 
     drawHeight: number;
     drawWidth: number;
     drawColor: string;
+    grid: SVGElement;
 
     // gridElem: SVGElement
-    constructor(private doodle: SVGElement, rdFact: RendererFactory2, private colConv: ColorConvertingService) {
+    constructor(rdFact: RendererFactory2, private colConv: ColorConvertingService) {
         this.render = rdFact.createRenderer(null, null);
     }
 
@@ -70,7 +69,8 @@ export class GridRenderService {
         }
     }
 
-    initGrid(width: number, height: number) {
+    initGrid(gridElement: SVGElement, width: number, height: number) {
+        this.grid = gridElement;
         this.drawWidth = width;
         this.drawHeight = height;
         const DEF_PX_STEP = 20;
@@ -78,11 +78,11 @@ export class GridRenderService {
         this.renderVerticalLines(DEF_PX_STEP);
 
         this.hGridLines.forEach((hLine: SVGLineElement) => {
-            this.render.appendChild(this.doodle, hLine);
+            this.render.appendChild(this.grid, hLine);
         });
 
         this.vGridLines.forEach((vLine: SVGLineElement) => {
-            this.render.appendChild(this.doodle, vLine);
+            this.render.appendChild(this.grid, vLine);
         });
     }
 
@@ -105,7 +105,7 @@ export class GridRenderService {
 
     updateTransparency(alpha: string) {
         this.gridAlpha = alpha;
-        this.render.setAttribute(this.fullGrid, 'style', `stroke:${this.gridColor + alpha}`);
+        this.render.setAttribute(this.grid, 'style', `stroke:${this.gridColor + alpha}`);
     }
 
     updateColor(bgColor: string) {
@@ -116,19 +116,9 @@ export class GridRenderService {
         if (RGBA[0] < LIMIT && RGBA[1] < LIMIT && RGBA[2] < LIMIT) {
             const WHITE: string = '#ffffff';
             this.gridColor = WHITE;
-            this.render.setAttribute(this.fullGrid, 'style', `stroke:${WHITE + this.gridAlpha}`);
+            this.render.setAttribute(this.grid, 'style', `stroke:${WHITE + this.gridAlpha}`);
         }
     }
-
-    /*updateAttributes(attrName: string, value: string) {
-        this.vGridLines.forEach((vLine: SVGLineElement) => {
-            this.render.setAttribute(vLine, attrName, value);
-        });
-
-        this.hGridLines.forEach((hLine: SVGLineElement) => {
-            this.render.setAttribute(hLine, attrName, value);
-        });
-    }*/
 
     hideGrid() {}
 }

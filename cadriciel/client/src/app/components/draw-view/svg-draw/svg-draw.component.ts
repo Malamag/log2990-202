@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, RendererFactory2 } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Canvas } from 'src/app/models/Canvas.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
@@ -25,7 +25,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         public colorPick: ColorPickingService,
         private doodleFetch: DoodleFetchService,
         private render: Renderer2,
-        private rdFact: RendererFactory2,
+        private gridService: GridRenderService,
     ) {}
     canvas: Canvas;
     canvasSubscr: Subscription;
@@ -79,13 +79,12 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
+        this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height);
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
         const mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);
 
         // Create all the tools
         const tc = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
-        const grid = new GridRenderService(this.gridRef.nativeElement, this.rdFact);
-        grid.initGrid(this.width, this.height);
 
         const pencil = tc.CreatePencil(true, this.interaction, this.colorPick);
         const rect = tc.CreateRectangle(false, this.interaction, this.colorPick);
