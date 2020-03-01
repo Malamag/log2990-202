@@ -3,22 +3,26 @@
     <div #filterContainer>
       <input type = "text" [(ngModel)] = "filter">
     </div>
-    <button (click)= "addFilter()"> Ajouter filtre </button>
+    <button > Ajouter filtre </button>
     <button> Appliquer Filtre </button>
   </div>
-  <div id = "drawingContainer">
-    <div class = "drawings" *ngFor ="let im of fakeImage">
-      <div id ="drawing">
-        <header>
-          <title> {{im.title}}</title>
-          <sub> {{im.tag}}</sub>
-        </header>
-        <img src = {{im.image}}>
-        <footer>
-          <button> Supprimer </button>
-          <button>Continuer dessin </button>
-        </footer>
-      </div>
-    </div>
+
+  <div id = "drawing container" *ngFor = "let drawing of fakeImage">
+    <mat-card id= "drawing">
+      <mat-card-header>
+        <mat-card-title> {{drawing.title}} </mat-card-title>
+        <mat-card-subtitle> {{drawing.tag}} </mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image src = {{drawing.image}}>
+      <mat-card-actions>
+        <button>
+          <mat-icon matTooltip= "Supprimer"> delete </mat-icon> 
+        </button>
+        <button>
+          <mat-icon matTooltip = "Continuer dessin"> arrow_right_alt</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>  
 </div>
+

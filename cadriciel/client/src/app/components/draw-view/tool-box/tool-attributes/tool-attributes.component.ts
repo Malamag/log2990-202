@@ -1,7 +1,4 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormsAttribute } from 'src/app/services/attributes/attribute-form';
-import { LineAttributes } from 'src/app/services/attributes/line-attributes';
-import { ToolsAttributes } from 'src/app/services/attributes/tools-attribute';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 
 @Component({

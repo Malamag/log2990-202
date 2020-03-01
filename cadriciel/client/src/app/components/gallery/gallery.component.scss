@@ -1,24 +1,25 @@
 #gallery{
-    //overflow-x:scroll;
+    overflow-x:scroll;
     overflow-y: scroll;
-    max-height: 75vh;
-    max-width: 75vw;
-    background-color: transparent;
+    height: 75vh;
+    width: 45vw;
+    background-color: #f1f1f1;
 }
-div.header{
+#gallery > .header{
     position: relative;
     float: right;
     
 }
-div.drawing{
+mat-card{
+    position: relative;
+    align-items: center;
+    width: 10%;
+    height: 10%;
     border-color: black;
-    background-color: transparent;
-    height: auto;
-    width: auto;
-    margin-right: 2px;
-    display: inline-block;
+    border-width: 2px;
+    margin-right: 5vw;
+    float: left;
 }
-div.drawingContainer{
-    display: inline-block;
-
+button{
+    margin-right: 10px;
 }
