@@ -2,7 +2,7 @@
     <mat-form-field class="header">
         <mat-chip-list>
             <mat-chip> </mat-chip>
-            <input />
+            <input matInput />
         </mat-chip-list>
     </mat-form-field>
 
@@ -18,6 +18,7 @@
                 <mat-card-subtitle> {{ drawing.tag }} </mat-card-subtitle>
             </mat-card-header>
             <img mat-card-image src="{{ drawing.image }}" />
+
             <mat-card-actions>
                 <button mat-stroked-button color="warn">
                     <mat-icon matTooltip="Supprimer"> delete </mat-icon>
