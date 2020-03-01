@@ -1,8 +1,12 @@
 <div class="gallery">
     <mat-form-field class="header">
-        <mat-chip-list>
-            <mat-chip> </mat-chip>
-            <input matInput />
+        <mat-chip-list #tagList>
+            <mat-chip *ngFor="let tag of tags" (removed)="removeTag(tag)">
+                {{ tag }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+
+            <input matInput [matChipInputFor]="tagList" [matChipInputSeparatorKeyCodes]="inputTagSeparators" />
         </mat-chip-list>
     </mat-form-field>
 
