@@ -7,6 +7,7 @@ import { LineService } from './line.service';
 import { PencilService } from './pencil.service';
 import { RectangleService } from './rectangle.service';
 import { PolygonService } from './polygon.service';
+import { AerosolService } from './aerosol.service';
 
 @Injectable({
     providedIn: 'root',
@@ -42,5 +43,9 @@ export class ToolCreator {
 
     CreatePolygon(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): PolygonService {
         return new PolygonService(this.inProgress, this.drawing, selected, interaction, colorPick);
+    }
+
+    CreateAerosol(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): AerosolService {
+        return new AerosolService(this.inProgress, this.drawing, selected, interaction, colorPick);
     }
 }
