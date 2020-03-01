@@ -19,7 +19,7 @@
             </mat-card-header>
             <img mat-card-image src="{{ drawing.image }}" />
             <mat-card-actions>
-                <button mat-stroked-button color="warn">
+                <button mat-stroked-button color="warn" (click)= "delete()">
                     <mat-icon matTooltip="Supprimer"> delete </mat-icon>
                 </button>
                 <button mat-stroked-button color="basic">
