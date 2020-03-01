@@ -1,4 +1,5 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { ColorConvertingService } from '../colorPicker/color-converting.service';
 
 @Injectable({
     providedIn: 'root',
@@ -6,17 +7,21 @@ import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 export class GridRenderService {
     render: Renderer2;
 
-    private readonly defTransparency = '#000000ff'; // black
     private readonly ns: string = 'http://www.w3.org/2000/svg';
     private readonly vGridLines: SVGLineElement[] = [];
     private readonly hGridLines: SVGLineElement[] = [];
+
+    fullGrid: SVGElement;
+
+    gridAlpha: string = 'ff';
+    gridColor: string = '#000000';
 
     drawHeight: number;
     drawWidth: number;
     drawColor: string;
 
     // gridElem: SVGElement
-    constructor(private doodle: SVGElement, rdFact: RendererFactory2) {
+    constructor(private doodle: SVGElement, rdFact: RendererFactory2, private colConv: ColorConvertingService) {
         this.render = rdFact.createRenderer(null, null);
     }
 
@@ -25,7 +30,7 @@ export class GridRenderService {
 
         this.render.setAttribute(V_LINE, 'y1', '0');
         this.render.setAttribute(V_LINE, 'y2', `${this.drawHeight}`);
-        this.render.setAttribute(V_LINE, 'style', `stroke: ${this.defTransparency}`);
+        this.render.setAttribute(V_LINE, 'style', `stroke: ${this.gridColor + this.gridAlpha}`);
 
         return V_LINE;
     }
@@ -36,7 +41,7 @@ export class GridRenderService {
         this.render.setAttribute(H_LINE, 'x1', '0');
 
         this.render.setAttribute(H_LINE, 'x2', `${this.drawWidth}`);
-        this.render.setAttribute(H_LINE, 'style', `stroke: ${this.defTransparency}`);
+        this.render.setAttribute(H_LINE, 'style', `stroke: ${this.gridColor + this.gridAlpha}`);
         return H_LINE;
     }
 
@@ -98,17 +103,32 @@ export class GridRenderService {
         });
     }
 
-    updateTransparency() {}
-
-    updateGrid() {
-        /**
-         * takes the svg element and updates the associated grid
-         */
+    updateTransparency(alpha: string) {
+        this.gridAlpha = alpha;
+        this.render.setAttribute(this.fullGrid, 'style', `stroke:${this.gridColor + alpha}`);
     }
 
     updateColor(bgColor: string) {
-        // hexadecimal string of 8 characters + '#'
+        const RGBA: number[] = this.colConv.hexToRgba(bgColor);
+        const LIMIT = 128;
+
+        //too dark if true. the grid color must be changed to become visible
+        if (RGBA[0] < LIMIT && RGBA[1] < LIMIT && RGBA[2] < LIMIT) {
+            const WHITE: string = '#ffffff';
+            this.gridColor = WHITE;
+            this.render.setAttribute(this.fullGrid, 'style', `stroke:${WHITE + this.gridAlpha}`);
+        }
     }
+
+    /*updateAttributes(attrName: string, value: string) {
+        this.vGridLines.forEach((vLine: SVGLineElement) => {
+            this.render.setAttribute(vLine, attrName, value);
+        });
+
+        this.hGridLines.forEach((hLine: SVGLineElement) => {
+            this.render.setAttribute(hLine, attrName, value);
+        });
+    }*/
 
     hideGrid() {}
 }
