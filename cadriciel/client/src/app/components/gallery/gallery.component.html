@@ -4,7 +4,7 @@
         <mat-chip-list #tagList>
             <mat-chip *ngFor="let tag of tags" (removed)="removeTag(tag)">
                 {{ tag }}
-                <mat-icon matChipRemove>cancel</mat-icon>
+                <mat-icon matChipRemove>clear</mat-icon>
             </mat-chip>
 
             <input
