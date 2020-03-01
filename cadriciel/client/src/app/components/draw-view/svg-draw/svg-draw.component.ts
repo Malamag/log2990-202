@@ -87,7 +87,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         this.initCanvas();
-        this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+
         this.initGridVisibility();
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
         const mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);
