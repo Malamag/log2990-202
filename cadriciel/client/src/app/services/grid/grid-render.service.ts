@@ -21,12 +21,9 @@ export class GridRenderService {
     }
 
     renderVerticalLine(): SVGLineElement {
-        const V_LINE = this.render.createElement('line', this.ns);
+        const V_LINE = this.render.createElement('line', this.ns); // creating a primitive line
 
         this.render.setAttribute(V_LINE, 'y1', '0');
-        /*
-        Shall we build a complete line from 0, 0 to 0, drawHeight?
-       */
         this.render.setAttribute(V_LINE, 'y2', `${this.drawHeight}`);
         this.render.setAttribute(V_LINE, 'style', `stroke: ${this.defTransparency}`);
 
@@ -37,21 +34,19 @@ export class GridRenderService {
         const H_LINE = this.render.createElement('line', this.ns);
 
         this.render.setAttribute(H_LINE, 'x1', '0');
-        /*
-        Shall we build a complete line from 0, 0 to 0, drawHeight?
-      */
+
         this.render.setAttribute(H_LINE, 'x2', `${this.drawWidth}`);
         this.render.setAttribute(H_LINE, 'style', `stroke: ${this.defTransparency}`);
         return H_LINE;
     }
 
     renderVerticalLines(step: number) {
-        //let vLineElement: SVGElement;
-        //let position: string;
+        let vLineElement: SVGLineElement;
+        let position: string;
 
         for (let i = 0; i < this.drawWidth; i += step) {
-            const position: string = i.toString();
-            const vLineElement: SVGLineElement = this.renderVerticalLine();
+            position = i.toString();
+            vLineElement = this.renderVerticalLine();
             this.render.setAttribute(vLineElement, 'x1', position);
             this.render.setAttribute(vLineElement, 'x2', position);
             this.vGridLines.push(vLineElement);
@@ -59,12 +54,13 @@ export class GridRenderService {
     }
 
     renderHorizontalLines(step: number) {
+        let hLineElement: SVGLineElement;
+        let position: string;
         for (let j = 0; j < this.drawHeight; j += step) {
-            const position: string = j.toString();
-            const hLineElement: SVGLineElement = this.renderHorizontalLine();
+            position = j.toString();
+            hLineElement = this.renderHorizontalLine();
             this.render.setAttribute(hLineElement, 'y1', position);
             this.render.setAttribute(hLineElement, 'y2', position);
-            console.log(hLineElement);
             this.hGridLines.push(hLineElement);
         }
     }
@@ -108,6 +104,10 @@ export class GridRenderService {
         /**
          * takes the svg element and updates the associated grid
          */
+    }
+
+    updateColor(bgColor: string) {
+        // hexadecimal string of 8 characters + '#'
     }
 
     hideGrid() {}

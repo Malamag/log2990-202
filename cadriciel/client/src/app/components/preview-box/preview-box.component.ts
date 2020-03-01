@@ -23,7 +23,7 @@ export class PreviewBoxComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.initBox();
+        this.render.appendChild(this.previewBoxRef.nativeElement, this.draw);
     }
 
     scaleSVG(scaleFacor: number) {
@@ -33,9 +33,5 @@ export class PreviewBoxComponent implements OnInit, AfterViewInit {
 
         this.svgW = this.svgW / scaleFacor;
         this.svgH = this.svgH / scaleFacor; // ...but with scaled children
-    }
-
-    initBox() {
-        this.render.appendChild(this.previewBoxRef.nativeElement, this.draw);
     }
 }

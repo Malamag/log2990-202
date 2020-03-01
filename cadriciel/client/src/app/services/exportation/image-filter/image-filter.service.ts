@@ -78,16 +78,16 @@ export class ImageFilterService {
         FILTER.id = 'soft';
 
         const SOFT_EFFECT = this.renderer.createElement('feGaussianBlur', this.ns);
-        this.renderer.setAttribute(SOFT_EFFECT, 'stdDeviation', '2');
+        this.renderer.setAttribute(SOFT_EFFECT, 'stdDeviation', '5');
 
         const LIGHT_EFFECT = this.renderer.createElement('feColorMatrix');
         this.renderer.setAttribute(LIGHT_EFFECT, 'in', 'SourceGraphic');
         this.renderer.setAttribute(LIGHT_EFFECT, 'type', 'matrix');
         const VALUES: string =
-            '1.3 0 0 0 0' + //increases luminosity
-            '0 1.3 0 0 0' +
-            '0 0 1.3 0 0' +
-            '0 0 0 1.3 1';
+            '2 0 0 1 0' + //increases luminosity
+            '0 2 0 0 3' +
+            '0 0 2 0 0' +
+            '1 0 0 2 1';
 
         this.renderer.setAttribute(LIGHT_EFFECT, 'values', VALUES);
         this.renderer.appendChild(FILTER, SOFT_EFFECT);

@@ -24,7 +24,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         { num: 0, view: 'Noir & blanc' },
         { num: 1, view: 'Rotation de teinte' },
         { num: 2, view: 'Bruit' },
-        { num: 3, view: 'Lisse' },
+        { num: 3, view: 'HANGOVER' },
         { num: 4, view: 'Texture' },
     ];
 

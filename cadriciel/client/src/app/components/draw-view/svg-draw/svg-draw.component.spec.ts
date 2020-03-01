@@ -4,7 +4,7 @@ import { PencilService } from 'src/app/services/draw-tool/pencil.service';
 import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
 import { SvgDrawComponent } from './svg-draw.component';
 
-import { Renderer2, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Renderer2, CUSTOM_ELEMENTS_SCHEMA, RendererFactory2 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
@@ -23,6 +23,7 @@ describe('SvgDrawComponent', () => {
     let kbHandlerStub: any;
     let dFetchService: any;
     let rendererStub: any;
+    let rdFactStub: any;
 
     beforeEach(async(() => {
         mouseHandlerStub = {
@@ -41,6 +42,7 @@ describe('SvgDrawComponent', () => {
         };
 
         rendererStub = {};
+        rdFactStub = {};
 
         TestBed.configureTestingModule({
             declarations: [SvgDrawComponent],
@@ -49,6 +51,7 @@ describe('SvgDrawComponent', () => {
                 { provide: MouseHandlerService, useValue: mouseHandlerStub },
                 { provide: DoodleFetchService, useValue: dFetchService },
                 { provide: Renderer2, useValue: rendererStub },
+                { provide: RendererFactory2, useValue: rdFactStub },
             ],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
@@ -95,7 +98,14 @@ describe('SvgDrawComponent', () => {
         const canvas = new Canvas(width, height, color);
         canvasBuilderStub.newCanvas = canvas;
 
-        const componentStub = new SvgDrawComponent(canvasBuilderStub, component.interaction, component.colorPick, dFetchService, rendererStub);
+        const componentStub = new SvgDrawComponent(
+            canvasBuilderStub,
+            component.interaction,
+            component.colorPick,
+            dFetchService,
+            rendererStub,
+            rdFactStub,
+        );
         componentStub.initCanvas();
         expect(componentStub.width).toBe(canvas.canvasWidth);
         expect(componentStub.height).toBe(canvas.canvasHeight);
