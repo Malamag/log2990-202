@@ -1,12 +1,16 @@
 <div class="gallery">
-    <!-- <div class="header">
-        <div #filterContainer>
-            <input matInput type="text" [(ngModel)]="filter" />
-        </div>
-        <button mat-button>Ajouter filtre</button>
-        <button mat-button>Appliquer Filtre</button>
-    </div>-->
-    <br />
+    <mat-form-field class="header">
+        <mat-chip-list>
+            <mat-chip> </mat-chip>
+            <input />
+        </mat-chip-list>
+    </mat-form-field>
+
+    <button id="add-field-btn" mat-button>
+        <mat-icon>add</mat-icon>
+    </button>
+    <button id="filter-btn" mat-stroked-button color="primary">Filtrer</button>
+
     <div id="cards-container">
         <mat-card class="drawing" *ngFor="let drawing of fakeImage">
             <mat-card-header>
