@@ -11,24 +11,30 @@ import { GridAttributes } from '../attributes/grid-attributes';
 export class InteractionService {
     selectedTool = new Subject<String>();
     $selectedTool = this.selectedTool.asObservable();
+
     formsAttributes = new Subject<FormsAttribute>();
     $formsAttributes = this.formsAttributes.asObservable();
+
     drawingDone = new Subject<boolean>();
     $drawingDone = this.drawingDone.asObservable();
+
     enableDisableButtons = new Subject<boolean[]>();
     $enableDisableButtons = this.enableDisableButtons.asObservable();
+
     toolsAttributes = new Subject<ToolsAttributes>();
     $toolsAttributes = this.toolsAttributes.asObservable();
+
     lineAttributes = new Subject<LineAttributes>();
     $lineAttributes = this.lineAttributes.asObservable();
+
     cancelTools = new Subject<boolean>();
     $cancelToolsObs = this.cancelTools.asObservable();
+
     gridAttributes = new Subject<GridAttributes>();
     $gridAttributes = this.gridAttributes.asObservable();
+
     ref = new Subject<ElementRef>();
     $refObs = this.ref.asObservable();
-
-    constructor() {}
 
     emitSelectedTool(tool: string) {
         this.selectedTool.next(tool);
@@ -53,12 +59,15 @@ export class InteractionService {
     emitCancel(sig: boolean) {
         this.cancelTools.next(sig);
     }
+
     emitRef(el: ElementRef) {
         this.ref.next(el);
     }
+
     emitDrawingDone() {
         this.drawingDone.next(true);
     }
+
     emitEnableDisable(disableContainer: boolean[]) {
         this.enableDisableButtons.next(disableContainer);
     }
