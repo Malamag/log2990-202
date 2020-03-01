@@ -7,6 +7,12 @@ import { ENTER, COMMA } from '@angular/cdk/keycodes';
     templateUrl: './gallery.component.html',
     styleUrls: ['./gallery.component.scss'],
 })
+
+/**
+ * The addTag/removeTag functions as well as the mat-chips-list template is inspired by the examples given
+ * in the Angular Material documentation on Chips elements. SOURCE:
+ * Angular Material (Google). "Chips" (01/03/2020). En ligne: https://material.angular.io/components/chips/examples
+ */
 export class GalleryComponent implements OnInit {
     fakeImage = fakeImages;
     filter: string = '';
