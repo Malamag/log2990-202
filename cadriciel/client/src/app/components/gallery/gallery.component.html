@@ -1,4 +1,5 @@
-<div class="gallery">
+<div class="gallery" (keydown)="blockEvent($event)">
+    <h1>Galerie</h1>
     <mat-form-field class="header">
         <mat-chip-list #tagList>
             <mat-chip *ngFor="let tag of tags" (removed)="removeTag(tag)">
@@ -6,14 +7,16 @@
                 <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
 
-            <input matInput [matChipInputFor]="tagList" [matChipInputSeparatorKeyCodes]="inputTagSeparators" />
+            <input
+                matInput
+                [matChipInputFor]="tagList"
+                [matChipInputSeparatorKeyCodes]="inputTagSeparators"
+                placeholder="Étiquette..."
+                (matChipInputTokenEnd)="addTag($event)"
+            />
+            <button id="filter-btn" mat-stroked-button color="primary">Filtrer</button>
         </mat-chip-list>
     </mat-form-field>
-
-    <button id="add-field-btn" mat-button>
-        <mat-icon>add</mat-icon>
-    </button>
-    <button id="filter-btn" mat-stroked-button color="primary">Filtrer</button>
 
     <div id="cards-container">
         <mat-card class="drawing" *ngFor="let drawing of fakeImage">

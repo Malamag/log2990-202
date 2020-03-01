@@ -22,13 +22,24 @@ export class GalleryComponent implements OnInit {
     this.render.setAttribute(newInput, 'type', 'text');
     this.render.appendChild(this.filters.nativeElement, newInput);
   }*/
+    blockEvent(ev: KeyboardEvent) {
+        ev.stopPropagation();
+    }
     removeTag(tag: string) {
-        const INDEX = this.tags.indexOf(tag);
+        const INDEX: number = this.tags.indexOf(tag);
         if (INDEX >= 0) {
             // making sure the tag exists in the array
             this.tags.splice(INDEX, 1);
         }
     }
 
-    addTag(tagAdd: MatChipInputEvent) {}
+    addTag(tagAdd: MatChipInputEvent) {
+        const INPUT: HTMLInputElement = tagAdd.input;
+        const VAL: string = tagAdd.value;
+        if (VAL !== '') {
+            this.tags.push(VAL);
+        }
+
+        INPUT.value = ''; // resets the input after insertion
+    }
 }
