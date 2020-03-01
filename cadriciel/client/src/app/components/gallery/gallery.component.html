@@ -1,12 +1,12 @@
 <div class ="gallery">
-  <div id ="header">
+  <div class ="header">
     <div #filterContainer>
       <input type = "text" [(ngModel)] = "filter">
     </div>
     <button > Ajouter filtre </button>
     <button> Appliquer Filtre </button>
   </div>
-
+  <br>
   <div id = "drawing container" *ngFor = "let drawing of fakeImage">
     <mat-card id= "drawing">
       <mat-card-header>
