@@ -1,5 +1,6 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
+import { InteractionService } from '../service-interaction/interaction.service';
 
 @Injectable({
     providedIn: 'root',
@@ -20,7 +21,7 @@ export class GridRenderService {
     grid: SVGElement;
 
     // gridElem: SVGElement
-    constructor(rdFact: RendererFactory2, private colConv: ColorConvertingService) {
+    constructor(rdFact: RendererFactory2, private colConv: ColorConvertingService, private itService: InteractionService) {
         this.render = rdFact.createRenderer(null, null);
     }
 
@@ -120,5 +121,7 @@ export class GridRenderService {
         }
     }
 
-    hideGrid() {}
+    toggleGridVisibility(show: boolean) {
+        this.itService.emitGridVisibility(show);
+    }
 }

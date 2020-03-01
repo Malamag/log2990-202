@@ -3,7 +3,6 @@ import { Subject } from 'rxjs';
 import { FormsAttribute } from '../attributes/attribute-form';
 import { LineAttributes } from '../attributes/line-attributes';
 import { ToolsAttributes } from '../attributes/tools-attribute';
-import { GridAttributes } from '../attributes/grid-attributes';
 
 @Injectable({
     providedIn: 'root',
@@ -30,14 +29,18 @@ export class InteractionService {
     cancelTools = new Subject<boolean>();
     $cancelToolsObs = this.cancelTools.asObservable();
 
-    gridAttributes = new Subject<GridAttributes>();
-    $gridAttributes = this.gridAttributes.asObservable();
-
     ref = new Subject<ElementRef>();
     $refObs = this.ref.asObservable();
 
+    showGrid = new Subject<boolean>();
+    $showGrid = this.showGrid.asObservable();
+
     emitSelectedTool(tool: string) {
         this.selectedTool.next(tool);
+    }
+
+    emitGridVisibility(showGrid: boolean) {
+        this.showGrid.next(showGrid);
     }
 
     emitLineAttributes(attr: LineAttributes) {
@@ -46,10 +49,6 @@ export class InteractionService {
 
     emitFormsAttributes(attr: FormsAttribute) {
         this.formsAttributes.next(attr);
-    }
-
-    emitGridAttributes(attr: GridAttributes) {
-        this.gridAttributes.next(attr);
     }
 
     emitToolsAttributes(attr: ToolsAttributes) {

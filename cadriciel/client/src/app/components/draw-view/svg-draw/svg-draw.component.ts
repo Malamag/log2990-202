@@ -37,6 +37,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     toolsContainer = new Map();
     interactionToolsContainer = new Map();
 
+    showGrid: boolean = false;
+
     @ViewChild('inPrgress', { static: false }) inProgress: ElementRef;
     @ViewChild('canvas', { static: false }) svg: ElementRef;
 
@@ -77,9 +79,15 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         });
         this.canvBuilder.emitCanvas();
     }
+    initGridVisibility() {
+        this.interaction.$showGrid.subscribe((show: boolean) => {
+            this.showGrid = show;
+        });
+    }
 
     ngAfterViewInit() {
         this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height);
+        this.initGridVisibility();
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
         const mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);
 

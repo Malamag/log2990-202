@@ -18,6 +18,8 @@
             <mat-icon class="topIcon">{{ funcMenu[4].icon }}</mat-icon>
         </button>
     </div>
-    <mat-slide-toggle id="grid-toggle">Grille</mat-slide-toggle>
+    <mat-slide-toggle [formControl]="toggleGridControl" id="grid-toggle" (change)="toggleGrid($event)">
+        <mat-icon>grid_on</mat-icon>
+    </mat-slide-toggle>
     <!--**************************************************-->
 </mat-toolbar>
