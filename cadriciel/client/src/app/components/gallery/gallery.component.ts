@@ -54,6 +54,7 @@ export class GalleryComponent implements OnInit {
     }
     delete(id: string){
         this.index.deleteImageById(id);
+        this.getAllImages();
     }
     getAllImages(): void{
        this.drawings = this.index.getAllImages()
