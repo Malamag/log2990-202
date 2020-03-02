@@ -1,25 +1,33 @@
-<div class="gallery">
+<div class="gallery" (keydown)="blockEvent($event)">
+    <h1>Galerie</h1>
     <mat-form-field class="header">
-        <mat-chip-list>
-            <mat-chip> </mat-chip>
-            <input />
+        <mat-chip-list #tagList>
+            <mat-chip *ngFor="let tag of tags" (removed)="removeTag(tag)">
+                {{ tag }}
+                <mat-icon matChipRemove>clear</mat-icon>
+            </mat-chip>
+
+            <input
+                matInput
+                [matChipInputFor]="tagList"
+                [matChipInputSeparatorKeyCodes]="inputTagSeparators"
+                placeholder="Étiquette..."
+                (matChipInputTokenEnd)="addTag($event)"
+            />
+            <button id="filter-btn" mat-stroked-button color="primary">Filtrer</button>
         </mat-chip-list>
     </mat-form-field>
 
-    <button id="add-field-btn" mat-button>
-        <mat-icon>add</mat-icon>
-    </button>
-    <button id="filter-btn" mat-stroked-button color="primary">Filtrer</button>
-
     <div id="cards-container">
-        <mat-card class="drawing" *ngFor="let drawing of fakeImage">
+        <mat-card class="drawing" *ngFor="let drawing of drawings">
             <mat-card-header>
                 <mat-card-title> {{ drawing.title }} </mat-card-title>
                 <mat-card-subtitle> {{ drawing.tag }} </mat-card-subtitle>
             </mat-card-header>
-            <img mat-card-image src="{{ drawing.image }}" />
+            <img mat-card-image src='https://cdn.instructables.com/F1F/IFEN/GW88TP3T/F1FIFENGW88TP3T.LARGE.jpg?auto=webp&fit=bounds' />
+
             <mat-card-actions>
-                <button mat-stroked-button color="warn" (click)= "delete()">
+                <button mat-stroked-button color="warn" (click)= "delete(drawing.id)">
                     <mat-icon matTooltip="Supprimer"> delete </mat-icon>
                 </button>
                 <button mat-stroked-button color="basic">

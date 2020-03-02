@@ -5,7 +5,9 @@
     width: 90vw;
     background-color: #313131;
 }
-
+.header {
+    width: 99%;
+}
 mat-card {
     position: relative;
     align-items: baseline;
@@ -19,4 +21,11 @@ mat-card {
 #cards-container {
     display: grid;
     grid-template-columns: auto auto auto;
+}
+#chip-container {
+    width: 100%;
+}
+h1 {
+    text-align: center;
+    margin: 0;
 }
