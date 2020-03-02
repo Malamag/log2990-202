@@ -10,6 +10,7 @@ import { NewDrawComponent } from '../../new-draw/new-draw.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
 import { GalleryComponent } from '../../gallery/gallery.component';
 
+
 @Component({
     selector: 'app-option-bar',
     templateUrl: './option-bar.component.html',
