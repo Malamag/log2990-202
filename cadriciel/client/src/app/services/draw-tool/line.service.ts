@@ -227,7 +227,7 @@ export class LineService extends DrawingTool {
         s += `<circle cx="${p[i].x}" cy="${p[i].y}"`;
         s += `r="${this.attr.junctionDiameter / 2}"`; // to get the radius
         s += 'stroke="none"';
-        s += `fill="#${this.chosenColor.primColor}"/>`;
+        s += `fill="${this.chosenColor.primColor}"/>`;
       }
     }
 

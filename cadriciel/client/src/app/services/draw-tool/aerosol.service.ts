@@ -18,6 +18,8 @@ export class AerosolService extends DrawingTool{
 
   private points:Point[];
 
+  private path:string;
+
   //private sub: Subscription;  
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
@@ -30,7 +32,8 @@ export class AerosolService extends DrawingTool{
     this.updateAttributes();
     this.lastPoint = new Point(0,0);
     this.points = new Array();
-    const srcInterval = interval(1000/this.attr.emissionPerSecond);
+    this.startPath();
+    const srcInterval = interval(1000/this.attr.emissionPerSecond/20);
     /*this.sub = */srcInterval.subscribe(val => this.generatePoint());
   }
 
@@ -100,6 +103,10 @@ export class AerosolService extends DrawingTool{
     // since its down -> up -> down -> up -> doubleClick, nothing more happens for the pencil
   }
 
+  startPath(){
+    this.path = '<g name = "aerosol">';
+  }
+
   // Creates an svg path that connects every points of currentPath with the pencil attributes
   createPath(p: Point[]) {
 
@@ -107,34 +114,36 @@ export class AerosolService extends DrawingTool{
 
     //this.CreatePointCollection();
 
-    let s = '';
-
-    // create a divider
-    s = '<g name = "aerosol">';
+    const pointRadius = this.attr.diameter/50;
     for(let i = 0; i < this.points.length; i++) {
-      s += `<circle cx="${this.points[i].x}" cy="${this.points[i].y}"`;
-      s += `r="${this.attr.diameter/50}"`; // to get the radius
-      s += 'stroke="none"';
-      s += `fill="#${this.chosenColor.primColor}"/>`;
-    }    
+      this.path += `<circle cx="${this.points[i].x}" cy="${this.points[i].y}"`;
+      this.path += `r="${pointRadius}"`; // to get the radius
+      this.path += 'stroke="none"';
+      this.path += `fill="${this.chosenColor.primColor}"/>`;
+    }   
+    this.points = new Array(); 
 
     // end the divider
+    let s = this.path;
     s += '</g>';
     return s;
   }
 
   generatePoint() {
     if(this.isDown){
+      //for (let j = 1; j < 5 && this.isDown ; j++) {
       let r = (this.attr.diameter / 2) * Math.sqrt(Math.random());
       let angle = Math.random() * 2 * Math.PI;
-
-      let x = this.lastPoint.x + r * Math.cos(angle);
-      let y = this.lastPoint.y + r * Math.sin(angle);
-      this.points.push(new Point(x,y));
+      for (let i = 1; i < 5 ; i++) {
+        let x = this.lastPoint.x + r * Math.cos(angle*i);
+        let y = this.lastPoint.y + r * Math.sin(angle*i);
+        this.points.push(new Point(x,y));
+      }  
       this.down(this.lastPoint);
+    //}
     }
-    else{
-      this.points = new Array();
+    else if (this.path !== '<g name = "aerosol">' ){
+      this.startPath();
       //this.sub.unsubscribe();
     }
   }
