@@ -24,6 +24,7 @@ export class GalleryComponent implements OnInit {
     constructor(private index: IndexService) {}
 
     ngOnInit() {
+        this.index.pupolatedBd();
         this.getAllImages();
     }
 
