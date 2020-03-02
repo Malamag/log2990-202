@@ -5,6 +5,7 @@ import { Point } from './point';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { AerosolAttributes } from '../attributes/aerosol-attribute';
+import { interval/*, Subscription */} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class AerosolService extends DrawingTool{
 
   private points:Point[];
 
+  //private sub: Subscription;  
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
     super(inProgess, drawing, selected, interaction, colorPick);
@@ -28,6 +30,8 @@ export class AerosolService extends DrawingTool{
     this.updateAttributes();
     this.lastPoint = new Point(0,0);
     this.points = new Array();
+    const srcInterval = interval(1000/this.attr.emissionPerSecond);
+    /*this.sub = */srcInterval.subscribe(val => this.generatePoint());
   }
 
   updateAttributes() {
@@ -38,8 +42,6 @@ export class AerosolService extends DrawingTool{
     })
     this.colorPick.emitColors()
   }
-
-  /////////////////////////////////////////////////////
 
   // updating on key change
   update(keyboard: KeyboardHandlerService) {
@@ -58,8 +60,9 @@ export class AerosolService extends DrawingTool{
     // add the same point twice in case the mouse doesnt move
     this.currentPath.push(position);
     this.currentPath.push(position);
-
+  
     this.updateProgress();
+    
   }
 
   // mouse up with pencil in hand
@@ -102,20 +105,15 @@ export class AerosolService extends DrawingTool{
 
     this.lastPoint = p[p.length-1]
 
-    this.generatePoint();
+    //this.CreatePointCollection();
 
     let s = '';
-
-    // We need at least 2 points
-    if (p.length < 2) {
-      return s;
-    }
 
     // create a divider
     s = '<g name = "aerosol">';
     for(let i = 0; i < this.points.length; i++) {
       s += `<circle cx="${this.points[i].x}" cy="${this.points[i].y}"`;
-      s += `r="${1}"`; // to get the radius
+      s += `r="${this.attr.diameter/50}"`; // to get the radius
       s += 'stroke="none"';
       s += `fill="#${this.chosenColor.primColor}"/>`;
     }    
@@ -125,20 +123,20 @@ export class AerosolService extends DrawingTool{
     return s;
   }
 
-  CreatePointCollection() {
-    while(this.down) {
-      setTimeout(()=> { this.generatePoint() }, 1/this.attr.emissionPerSecond);
-      //setInterval(()=> { this.generatePoint() }, 1/this.nbEmission);    
-    }
-  }
-
   generatePoint() {
-    let r = (this.attr.diameter / 2) * Math.sqrt(Math.random());
-    let angle = Math.random() * 2 * Math.PI;
+    if(this.isDown){
+      let r = (this.attr.diameter / 2) * Math.sqrt(Math.random());
+      let angle = Math.random() * 2 * Math.PI;
 
-    let x = this.lastPoint.x + r * Math.cos(angle);
-    let y = this.lastPoint.y + r * Math.sin(angle);
-    this.points.push(new Point(x,y));
+      let x = this.lastPoint.x + r * Math.cos(angle);
+      let y = this.lastPoint.y + r * Math.sin(angle);
+      this.points.push(new Point(x,y));
+      this.down(this.lastPoint);
+    }
+    else{
+      this.points = new Array();
+      //this.sub.unsubscribe();
+    }
   }
 
 }

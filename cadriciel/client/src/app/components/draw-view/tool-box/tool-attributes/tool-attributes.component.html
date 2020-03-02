@@ -78,9 +78,9 @@
     <!-- for the aerosol-->
     <div *ngSwitchCase = " 'Aérosol' ">
         <label> Nombre d'émissions/sec: {{emissionPerSecond}} </label>
-        <mat-slider thumbLabel type="range" min= "20" max= "100" value="20" [(ngModel)] ="emissionPerSecond" ></mat-slider> <br>
+        <mat-slider thumbLabel type="range" min= "100" max= "500" value="200" [(ngModel)] ="emissionPerSecond" ></mat-slider> <br>
         <label> Diamètre du jet: {{diameter}} px </label>
-        <mat-slider thumbLabel type="range" min= "5" max= "50" value="5"  [(ngModel)] ="diameter" ></mat-slider> <br>
+        <mat-slider thumbLabel type="range" min= "10" max= "200" value="50"  [(ngModel)] ="diameter" ></mat-slider> <br>
     </div>
     <!-- for the line -->
     <div *ngSwitchCase = " 'Ligne' " (mouseleave)="updateLine()">

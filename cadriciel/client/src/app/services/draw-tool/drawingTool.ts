@@ -4,7 +4,7 @@ import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { DefaultAttributeValues } from '../attributes/default-values';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
-import {InputObserver } from './input-observer';
+import { InputObserver } from './input-observer';
 import { Point } from './point';
 
 @Injectable({

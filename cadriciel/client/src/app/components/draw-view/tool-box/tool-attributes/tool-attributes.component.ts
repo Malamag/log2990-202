@@ -29,8 +29,8 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
 
     this.numberCorners = 3; // for polygon
 
-    this.emissionPerSecond = 20;
-    this.diameter = 5;
+    this.emissionPerSecond = 200;
+    this.diameter = 50;
 
     this.plotType = 2; // type 2 --> filled with border
     this.junction = true; // with junction dots of 6 px size
@@ -58,6 +58,7 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
     this.updateForms(); // emit all after init
     this.updateLine();
     this.updateTools();
+    this.updateAerosol();
   }
 
   updateForms() {
