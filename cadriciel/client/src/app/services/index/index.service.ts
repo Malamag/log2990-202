@@ -59,6 +59,6 @@ export class IndexService {
   }
 
   pupolatedBd() {
-    this.http.get<any>('http://localhost:3000/api/index/populateDB').subscribe( (data) => { });
+    this.http.get<any>('http://localhost:3000/database/populateDB').subscribe( (data) => { });
   }
 }
