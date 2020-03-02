@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2} from '@angular/core';
 import { FormsAttribute } from '../attributes/attribute-form';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
@@ -15,13 +15,16 @@ export class SelectionService extends RectangleService {
   
   attr: FormsAttribute;
 
+  canMoveSelection : boolean;
+
   selectedItems : Element[];
   moving : boolean;
 
-  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
+  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService, private render:Renderer2) {
     super(inProgess, drawing, selected, interaction, colorPick);
     this.selectedItems = [];
     this.moving = false;
+    this.canMoveSelection = true;
   }
 
   // mouse up with rectangle in hand
@@ -45,23 +48,38 @@ export class SelectionService extends RectangleService {
 
   update(keyboard: KeyboardHandlerService) {
 
-    let xoff = 0;
-    let yoff = 0;
-    if(keyboard.keyCode == 39){
-      xoff = 3;
-    }else if(keyboard.keyCode == 37){
-      xoff = -3;
-    }
-    else if(keyboard.keyCode == 38){
-      yoff = -3;
-    }else if(keyboard.keyCode == 40){
-      yoff = 3;
+    if(keyboard.keyCode == 65 && keyboard.ctrlDown){
+      this.selectedItems = [];
+      for(let i = 0; i < this.drawing.children.length;i++){
+        this.selectedItems.push(this.drawing.children[i]);
+      }
+      document.getElementsByName("selected-items")[0].innerHTML = this.updateBoundingBox();
     }
 
-    if(this.selectedItems.length > 0){
-      this.moveSelection(xoff,yoff);
-      this.updateBoundingBox();
-      document.getElementsByName("selected-items")[0].innerHTML = this.updateBoundingBox();
+    if(this.canMoveSelection){
+      let xoff = 0;
+      let yoff = 0;
+      if(keyboard.keyCode == 39){
+        xoff = 3;
+      }else if(keyboard.keyCode == 37){
+        xoff = -3;
+      }
+      else if(keyboard.keyCode == 38){
+        yoff = -3;
+      }else if(keyboard.keyCode == 40){
+        yoff = 3;
+      }
+
+      if(this.selectedItems.length > 0){
+        this.moveSelection(xoff,yoff);
+        this.updateBoundingBox();
+        document.getElementsByName("selected-items")[0].innerHTML = this.updateBoundingBox();
+        console.log(new Date().getTime());
+        this.canMoveSelection = false;
+        setTimeout(() => {
+          this.canMoveSelection = true;
+        }, 100);
+      }
     }
   }
 
@@ -144,6 +162,12 @@ export class SelectionService extends RectangleService {
   }
 
   retrieveItemUnderMouse(mousePos:Point){
+  
+    const div = this.render.createElement('div');
+    const text = this.render.createText('Hello world!');
+
+    this.render.appendChild(div, text);
+    this.render.appendChild(document, div);
 
     let ws = document.getElementById("working-space");
     let sv = document.getElementById("canvas");
@@ -161,13 +185,6 @@ export class SelectionService extends RectangleService {
     let e = document.elementFromPoint(px,py);
     if(e!=null){
       if(e.id == "selection"){
-        /*
-        let old = e;
-        let dis = (e as HTMLElement).style.display;
-        (e as HTMLElement).style.display = "none";
-        e = document.elementFromPoint(px,py);
-        (old as HTMLElement).style.display = dis;
-        */
         e = null;
         this.moving = true;
       }
@@ -175,7 +192,6 @@ export class SelectionService extends RectangleService {
         e = null;
       }
     }
-    //console.log(e);
 
     e = e?e.parentElement:null;
 
@@ -288,11 +304,7 @@ export class SelectionService extends RectangleService {
     }
 
     // create a divider
-    s = '<g name = "selection-perimeter" id = "test_selection">';
-
-    // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
-    //const stroke = (this.attr.plotType == 0 || this.attr.plotType == 2) ? `${this.chosenColor.secColor}` : 'none';
-    //const fill = (this.attr.plotType == 1 || this.attr.plotType == 2) ? `${this.chosenColor.primColor}` : 'none';
+    s = '<g name = "selection-perimeter">';
 
     // set render attributes for the svg rect
     s += `<rect x="${startX}" y="${startY}"`;

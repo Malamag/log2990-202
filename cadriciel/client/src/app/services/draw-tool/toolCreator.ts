@@ -1,4 +1,4 @@
-import { Injectable} from '@angular/core';
+import { Injectable, Renderer2} from '@angular/core';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { BrushService } from './brush.service';
@@ -19,9 +19,12 @@ export class ToolCreator {
   inProgress: HTMLElement;
   drawing: HTMLElement;
 
-  constructor(inProgess: HTMLElement, drawing: HTMLElement) {
+  render :Renderer2;
+
+  constructor(inProgess: HTMLElement, drawing: HTMLElement, render:Renderer2) {
     this.inProgress = inProgess;
     this.drawing = drawing;
+    this.render = render
   }
 
   CreatePencil(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): PencilService {
@@ -45,7 +48,7 @@ export class ToolCreator {
   }
 
   CreateSelection(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): SelectionService {
-    return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick);
+    return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick, this.render);
   }  
   CreateColorEditor(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): ColorEditorService {
     return new ColorEditorService(this.inProgress, this.drawing, selected, interaction, colorPick);
