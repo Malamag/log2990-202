@@ -35,6 +35,7 @@ import {
     MatToolbarModule,
     MatTooltipModule,
     MatCardModule,
+    MatChipsModule,
 } from '@angular/material';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
 import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
@@ -44,6 +45,7 @@ import { GalleryComponent } from './components/gallery/gallery.component';
 import { ExportFormComponent } from './components/export-form/export-form.component';
 import { PreviewBoxComponent } from './components/preview-box/preview-box.component';
 import { ExportService } from './services/exportation/export.service';
+import { SaveFormComponent } from './components/save-form/save-form.component';
 
 @NgModule({
     declarations: [
@@ -61,6 +63,7 @@ import { ExportService } from './services/exportation/export.service';
         GalleryComponent,
         ExportFormComponent,
         PreviewBoxComponent,
+        SaveFormComponent,
     ],
     imports: [
         BrowserModule,
@@ -82,13 +85,14 @@ import { ExportService } from './services/exportation/export.service';
         MatSelectModule,
         MatButtonToggleModule,
         AppRoutingModule,
-        MatCardModule
+        MatCardModule,
+        MatChipsModule,
     ],
     providers: [CanvasBuilderService, ModalWindowService, ColorConvertingService, ColorPickingService, ExportService],
 
     bootstrap: [AppComponent],
     entryComponents: [NewDrawComponent, UserManualComponent,GalleryComponent, OptionBarComponent, 
-        ColorPickerComponent,ExportFormComponent, PreviewBoxComponent] // components added dynamically
+        ColorPickerComponent,ExportFormComponent, PreviewBoxComponent, SaveFormComponent] // components added dynamically
 
 })
 export class AppModule {
