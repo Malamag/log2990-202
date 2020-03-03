@@ -106,6 +106,7 @@ export class GridRenderService {
             this.render.setAttribute(verticalLine, 'x2', wSpacing.toString());
             wSpacing += spacing;
         });
+        this.gridHTML = this.grid.innerHTML;
     }
 
     updateTransparency(alphaPercent: number) {
@@ -148,6 +149,7 @@ export class GridRenderService {
         this.vGridLines.forEach((vLine: SVGLineElement) => {
             this.render.setAttribute(vLine, attrName, value);
         });
+        this.gridHTML = this.grid.innerHTML;
     }
 
     removeGrid() {
@@ -156,5 +158,15 @@ export class GridRenderService {
 
     renderCurrentGrid() {
         this.grid.innerHTML = this.gridHTML;
+    }
+
+    renderBack() {
+        this.hGridLines.forEach((hLine: SVGLineElement) => {
+            this.render.appendChild(this.grid, hLine);
+        });
+
+        this.vGridLines.forEach((vLine: SVGElement) => {
+            this.render.appendChild(this.grid, vLine);
+        });
     }
 }
