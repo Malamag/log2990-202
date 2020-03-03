@@ -18,7 +18,8 @@
             <mat-icon class="topIcon">{{ funcMenu[4].icon }}</mat-icon>
         </button>
     </div>
-    <div *ngIf="gridSelected === true" id="sliders-container">
+
+    <div [ngStyle]="{ visibility: gridSelected === true ? 'visible' : 'hidden' }" id="sliders-container">
         <mat-slider
             thumbLabel
             type="range"
