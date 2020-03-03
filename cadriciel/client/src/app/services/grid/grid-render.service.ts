@@ -153,11 +153,7 @@ export class GridRenderService {
     }
 
     removeGrid() {
-        this.grid.innerHTML = '';
-    }
-
-    renderCurrentGrid() {
-        this.grid.innerHTML = this.gridHTML;
+        this.grid.innerHTML = ''; // removes the line elements
     }
 
     renderBack() {

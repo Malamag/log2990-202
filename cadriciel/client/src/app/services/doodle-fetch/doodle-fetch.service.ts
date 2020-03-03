@@ -25,7 +25,8 @@ export class DoodleFetchService {
         // returns a deep copy of the svg element.
         this.gService.removeGrid();
         const SVG_NODE = this.getSVGElementFromRef(this.currentDraw).cloneNode(true);
-        this.gService.renderCurrentGrid();
+
+        this.gService.renderBack();
         return SVG_NODE;
     }
 
