@@ -13,6 +13,7 @@
                 [matChipInputSeparatorKeyCodes]="inputTagSeparators"
                 placeholder="Étiquette..."
                 (matChipInputTokenEnd)="addTag($event)"
+                (keydown)= "blockEvent($event)"
             />
             <button id="filter-btn" mat-stroked-button color="primary">Filtrer</button>
         </mat-chip-list>

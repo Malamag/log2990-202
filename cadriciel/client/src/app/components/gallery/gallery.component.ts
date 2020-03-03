@@ -21,12 +21,17 @@ export class GalleryComponent implements OnInit {
     drawings: ImageData[];
     readonly inputTagSeparators: number[] = [ENTER, COMMA];
     tags: string[] = [];
+    possibleTags: string[];
     @ViewChild('cardsContainer',{static:false}) cardsContainer: ElementRef
-    constructor(private index: IndexService, private render: Renderer2) {}
+    constructor(private index: IndexService, private render: Renderer2) {
+        this.index.pupolatedBd();
+        this.possibleTags = [];
+    }
 
     ngOnInit() {
-        this.index.pupolatedBd();
+        
         this.getAllImages();
+        this.getAllTags(this.drawings);
     }
 
     /*addFilter() {
@@ -43,6 +48,7 @@ export class GalleryComponent implements OnInit {
             // making sure the tag exists in the array
             this.tags.splice(INDEX, 1);
         }
+        
     }
 
     addTag(tagAdd: MatChipInputEvent) {
@@ -51,7 +57,6 @@ export class GalleryComponent implements OnInit {
         if (VAL !== '') {
             this.tags.push(VAL);
         }
-
         INPUT.value = ''; // resets the input after insertion
     }
     showMessage(){
@@ -60,13 +65,24 @@ export class GalleryComponent implements OnInit {
     }
     delete(id: string){
         this.index.deleteImageById(id);
-        setTimeout(this.showMessage, 50)
+        setTimeout(this.showMessage, 200)
         this.getAllImages();
-        //setTimeout(this.showMessage, 25)
     }
     getAllImages(): void{
-        setTimeout(this.showMessage, 1500)
        this.drawings = this.index.getAllImages()
     }
-
+    getAllTags(imageContainer: ImageData[]): void{ 
+        imageContainer.forEach(image=>{
+            for(let i = 0; i< image.tags.length; ++i){
+                let tagExist: boolean = false;
+                for(let j =0; j< this.possibleTags.length; ++j){
+                    if(image.tags[i]=== this.possibleTags[j]){
+                        tagExist = true;
+                        break;
+                    }
+                }
+                if(!tagExist) {this.possibleTags.push(image.tags[i])}
+            }
+        })
+    }
 }
