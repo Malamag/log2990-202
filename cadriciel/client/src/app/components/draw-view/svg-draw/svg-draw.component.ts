@@ -132,8 +132,15 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
             mouseHandler.move(e);
         });
         window.addEventListener('mousedown', function(e) {
+            e.preventDefault();
             mouseHandler.down(e);
         });
+
+        window.oncontextmenu = (e:MouseEvent) => {
+            e.preventDefault();
+        };
+
+        // Prevent right-click menu
         window.addEventListener('mouseup', function(e) {
             mouseHandler.up(e);
         });
