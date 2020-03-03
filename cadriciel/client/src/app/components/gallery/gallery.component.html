@@ -18,7 +18,7 @@
         </mat-chip-list>
     </mat-form-field>
 
-    <div id="cards-container">
+    <div id="cards-container" #cardsContainer>
         <mat-card class="drawing" *ngFor="let drawing of drawings">
             <mat-card-header>
                 <mat-card-title> {{ drawing.name }} </mat-card-title>

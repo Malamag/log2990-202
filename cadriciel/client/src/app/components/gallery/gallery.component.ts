@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { fakeImages } from './fake_images';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
@@ -21,10 +21,12 @@ export class GalleryComponent implements OnInit {
     drawings: ImageData[];
     readonly inputTagSeparators: number[] = [ENTER, COMMA];
     tags: string[] = [];
-    constructor(private index: IndexService) {}
+    @ViewChild('cardsContainer',{static:false}) cardsContainer: ElementRef
+    constructor(private index: IndexService, private render: Renderer2) {}
 
     ngOnInit() {
         this.index.pupolatedBd();
+        setTimeout(this.showMessage, 25)
         this.getAllImages();
     }
 
@@ -53,9 +55,15 @@ export class GalleryComponent implements OnInit {
 
         INPUT.value = ''; // resets the input after insertion
     }
+    showMessage(){
+        const text = this.render.createText('en cours de chargement');
+        this.render.appendChild(this.cardsContainer.nativeElement, text);
+    }
     delete(id: string){
         this.index.deleteImageById(id);
+        setTimeout(this.showMessage ,35);
         this.getAllImages();
+        //setTimeout(this.showMessage, 25)
     }
     getAllImages(): void{
        this.drawings = this.index.getAllImages()
