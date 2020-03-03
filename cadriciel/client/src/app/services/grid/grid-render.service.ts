@@ -75,6 +75,8 @@ export class GridRenderService {
     initGrid(gridElement: SVGElement, width: number, height: number, color: string) {
         this.grid = gridElement;
         this.drawHeight = height;
+        this.drawWidth = width;
+        this.drawColor = color;
         this.renderHorizontalLines(this.defSteps);
         this.renderVerticalLines(this.defSteps);
 
