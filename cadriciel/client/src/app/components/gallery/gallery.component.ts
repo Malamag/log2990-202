@@ -26,7 +26,6 @@ export class GalleryComponent implements OnInit {
 
     ngOnInit() {
         this.index.pupolatedBd();
-        setTimeout(this.showMessage, 25)
         this.getAllImages();
     }
 
@@ -61,11 +60,12 @@ export class GalleryComponent implements OnInit {
     }
     delete(id: string){
         this.index.deleteImageById(id);
-        setTimeout(this.showMessage ,35);
+        setTimeout(this.showMessage, 50)
         this.getAllImages();
         //setTimeout(this.showMessage, 25)
     }
     getAllImages(): void{
+        setTimeout(this.showMessage, 1500)
        this.drawings = this.index.getAllImages()
     }
 
