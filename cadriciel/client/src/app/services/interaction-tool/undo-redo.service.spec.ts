@@ -27,8 +27,6 @@ describe('UndoRedoService', () => {
         expect(service).toBeTruthy();
     });
     it('should empty the undone list and fill the done list and update the buttons',()=>{
-        //service.drawing= drawingStub;
-        //service.drawing.innerHTML = "<div> hello world </div>"
         const spyUpdate = spyOn(service, 'updateButtons');
         service.interact.emitDrawingDone();
         service.updateContainer();
