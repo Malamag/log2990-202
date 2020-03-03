@@ -20,6 +20,8 @@ export class GridRenderService {
     drawColor: string;
     grid: SVGElement;
 
+    gridHTML: string;
+
     constructor(rdFact: RendererFactory2, private colConv: ColorConvertingService, private itService: InteractionService) {
         // gridElem: SVGElement
         this.render = rdFact.createRenderer(null, null);
@@ -72,7 +74,6 @@ export class GridRenderService {
 
     initGrid(gridElement: SVGElement, width: number, height: number, color: string) {
         this.grid = gridElement;
-        this.drawWidth = width;
         this.drawHeight = height;
         this.renderHorizontalLines(this.defSteps);
         this.renderVerticalLines(this.defSteps);
@@ -85,6 +86,7 @@ export class GridRenderService {
             this.render.appendChild(this.grid, vLine);
         });
         this.updateColor(color);
+        this.gridHTML = this.grid.innerHTML;
     }
 
     updateSpacing(spacing: number) {
@@ -109,7 +111,6 @@ export class GridRenderService {
         const ALPHA_VAL: number = alphaPercent / PERCENT;
 
         this.gridAlpha = this.colConv.alphaRGBToHex(ALPHA_VAL);
-        console.log(this.gridAlpha);
         this.updateAttributes('style', `stroke:${this.gridColor + this.gridAlpha}`);
     }
 
@@ -147,17 +148,11 @@ export class GridRenderService {
         });
     }
 
-    killGrid() {
-        const GRID_POSITION = 0; // first element in the svg doodle
-        const GRID: Element = this.render.parentNode(this.hGridLines[GRID_POSITION]); //taking a random line
-        this.render;
-        this.hGridLines.forEach((hLine: SVGLineElement) => {
-            this.render.removeChild(GRID, hLine);
-        });
-        this.vGridLines.forEach((vLine: SVGLineElement) => {
-            this.render.removeChild(GRID, vLine);
-        });
-        this.hGridLines = [];
-        this.vGridLines = [];
+    removeGrid() {
+        this.grid.innerHTML = '';
+    }
+
+    renderCurrentGrid() {
+        this.grid.innerHTML = this.gridHTML;
     }
 }

@@ -22,7 +22,7 @@ export class OptionBarComponent {
     currentCanvas: Canvas;
     gridSelected: boolean = false;
     stepVal: number;
-    alphaVal: number;
+    alphaVal: number = 100;
     readonly maxStepVal: number = 70;
     readonly minStepVal: number = 5;
 

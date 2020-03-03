@@ -18,9 +18,7 @@
             <mat-icon class="topIcon">{{ funcMenu[4].icon }}</mat-icon>
         </button>
     </div>
-    <div *ngIf="gridSelected === true">
-        <span>{{ stepVal }}px</span>
-
+    <div *ngIf="gridSelected === true" id="sliders-container">
         <mat-slider
             thumbLabel
             type="range"
@@ -31,6 +29,8 @@
             [(ngModel)]="stepVal"
             (ngModelChange)="updateSpacing()"
         ></mat-slider>
+        <span>{{ stepVal }}px</span>
+
         <mat-slider
             thumbLabel
             type="range"
@@ -41,6 +41,7 @@
             [(ngModel)]="alphaVal"
             (ngModelChange)="updateAlpha()"
         ></mat-slider>
+        <span>{{ alphaVal }}%</span>
     </div>
     <mat-slide-toggle [checked]="gridSelected" id="grid-toggle" (change)="toggleGrid($event)">
         <mat-icon>grid_on</mat-icon>
