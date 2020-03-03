@@ -17,17 +17,6 @@ export class UndoRedoService extends InteractionTool {
                 if (this.undone.length > 0) {
                     this.undone = [];
                 }
-
-                const children = this.drawing.childNodes;
-                const list: Element[] = [];
-                for (let i = 0; i < children.length; ++i) {
-                    let el = this.render.createElement(children[i].nodeName,"http://www.w3.org/2000/svg");
-                    //console.log(children[i]);
-                    this.render.appendChild(el, children[i].cloneNode(true));
-                    this.render.setStyle(el,"transform",(children[i] as HTMLElement).style.transform);
-                    //console.log(el);
-                    list.push(el);
-                }
                 this.done.push(this.drawing.innerHTML);
                 this.updateButtons();
             }
@@ -52,12 +41,6 @@ export class UndoRedoService extends InteractionTool {
             this.undone.push(elem);
         }
         if (this.done.length) {
-            /*
-            this.done[this.done.length - 1].forEach(elem => {
-                this.render.appendChild(this.drawing, elem);
-                let event = new Event("newDrawing");
-                window.dispatchEvent(event);
-            });*/
             this.drawing.innerHTML = this.done[this.done.length-1]
             let event = new Event("newDrawing");
             window.dispatchEvent(event);
@@ -72,12 +55,6 @@ export class UndoRedoService extends InteractionTool {
         if (elem) {
             this.done.push(elem);
         }
-        /*
-        this.done[this.done.length - 1].forEach(elem => {
-            this.render.appendChild(this.drawing, elem);
-            let event = new Event("newDrawing");
-            window.dispatchEvent(event);
-        });*/
         this.drawing.innerHTML = this.done[this.done.length-1]
         let event = new Event("newDrawing");
         window.dispatchEvent(event);
