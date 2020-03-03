@@ -39,6 +39,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('canvas', { static: false }) svg: ElementRef;
 
     @ViewChild('frame', { static: false }) frameRef: ElementRef;
+    @ViewChild('drawingSpace', {static: false}) drawingSpace: ElementRef
+    @ViewChild('selectedItems', {static: false}) selectedItems: ElementRef
 
     workingSpace: HTMLElement;
 
@@ -71,7 +73,6 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
             this.canvBuilder.whipeDraw(this.frameRef);
-            //this.interaction.emitCanvasRedone();
         });
         this.canvBuilder.emitCanvas();
         
@@ -92,7 +93,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         const ellipse = tc.CreateEllipse(false, this.interaction, this.colorPick);
         const undoRedo: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
         const polygon = tc.CreatePolygon(false, this.interaction, this.colorPick);
-        const selection = tc.CreateSelection(false, this.interaction, this.colorPick,this.render);
+        const selection = tc.CreateSelection(false, this.interaction, this.colorPick,this.render, this.selectedItems.nativeElement, this.svg.nativeElement, this.workingSpace);
 
         this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
         this.toolsContainer.set('Rectangle', rect);

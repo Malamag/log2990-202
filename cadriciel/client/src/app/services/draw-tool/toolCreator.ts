@@ -45,7 +45,7 @@ export class ToolCreator {
         return new PolygonService(this.inProgress, this.drawing, selected, interaction, colorPick);
     }
 
-    CreateSelection(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,render:Renderer2): SelectionService {
-        return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick,render);
+    CreateSelection(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,render:Renderer2, selectedRef: HTMLElement, canvas: HTMLElement, workingSpace: HTMLElement): SelectionService {
+        return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick,render, selectedRef, canvas, workingSpace);
     }
 }

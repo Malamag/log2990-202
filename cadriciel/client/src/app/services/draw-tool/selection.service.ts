@@ -18,17 +18,23 @@ export class SelectionService extends ShapeService {
   found :boolean;
   selectedItems : Element[];
   moving : boolean;
-  render:Renderer2
+  render:Renderer2;
+  selectedRef: HTMLElement
+  canvas: HTMLElement
+  workingSpace: HTMLElement
 
-  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService, render:Renderer2) {
+  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService,
+              colorPick: ColorPickingService, render: Renderer2, selectedItems: HTMLElement, canvas: HTMLElement, workingSapce: HTMLElement) {
     super(inProgess, drawing, selected, interaction, colorPick);
     this.selectedItems = [];
     this.moving = false;
     this.canMoveSelection = true;
     this.render = render;
     this.found = false;
-
-    this.render.listen(document.getElementsByName("selected-items")[0],"mousedown",()=>{
+    this.selectedRef = selectedItems;
+    this.canvas = canvas;
+    this.workingSpace = workingSapce 
+    this.render.listen(this.selectedRef,"mousedown",()=>{
       if(!this.found){
         this.moving = true;
         this.found = true;
@@ -78,7 +84,7 @@ export class SelectionService extends ShapeService {
       for(let i = 0; i < this.drawing.children.length;i++){
         this.selectedItems.push(this.drawing.children[i]);
       }
-      document.getElementsByName("selected-items")[0].innerHTML = this.updateBoundingBox();
+      this.selectedRef.innerHTML = this.updateBoundingBox();
     }
 
     if(this.canMoveSelection){
@@ -98,7 +104,7 @@ export class SelectionService extends ShapeService {
       if(this.selectedItems.length > 0){
         this.moveSelection(xoff,yoff);
         this.updateBoundingBox();
-        document.getElementsByName("selected-items")[0].innerHTML = this.updateBoundingBox();
+        this.selectedRef.innerHTML = this.updateBoundingBox();
         //console.log(new Date().getTime());
         this.canMoveSelection = false;
         setTimeout(() => {
@@ -112,7 +118,7 @@ export class SelectionService extends ShapeService {
 
     // REFACTOR THIS ASAP IT HURTS
     let ws = document.getElementById("working-space");
-    let sv = document.getElementById("canvas");
+    let sv = this.canvas
 
     let bsv = sv?sv.getBoundingClientRect():null;
 
@@ -229,7 +235,7 @@ export class SelectionService extends ShapeService {
     this.under = null;
     this.found = false;
 
-    document.getElementsByName("selected-items")[0].innerHTML = this.updateBoundingBox();
+    this.selectedRef.innerHTML = this.updateBoundingBox();
 
     this.updateProgress();
   }
@@ -269,7 +275,7 @@ export class SelectionService extends ShapeService {
       }
 
 
-    document.getElementsByName("selected-items")[0].innerHTML = this.updateBoundingBox();
+    this.selectedRef.innerHTML = this.updateBoundingBox();
     //console.log(this.selectedItems);
     }
   }
