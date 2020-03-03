@@ -10,7 +10,7 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
-import { Canvas } from '../../../models/Canvas.model';
+
 
 const width = 67;
 const height = 10;
@@ -90,8 +90,8 @@ describe('SvgDrawComponent', () => {
     });
 
     it('should have the same parameters as the observer', () => {
-        const canvasBuilderStub = new CanvasBuilderService();
-        const canvas = new Canvas(width, height, color);
+        const canvasBuilderStub = new CanvasBuilderService(component.interaction);
+        const canvas = {canvasWidth: width, canvasHeight: height, canvasColor: color};
         canvasBuilderStub.newCanvas = canvas;
 
         const componentStub = new SvgDrawComponent(canvasBuilderStub, component.interaction, component.colorPick, dFetchService, rendererStub);
