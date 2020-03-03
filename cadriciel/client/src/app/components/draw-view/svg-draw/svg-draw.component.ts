@@ -50,6 +50,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.interaction.$refObs.subscribe(ref => {
             this.workingSpace = ref.nativeElement;
         });
+        this.initCanvas();
     }
 
     closeTools(map: Map<string, DrawingTool>) {
@@ -74,7 +75,9 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
             this.canvBuilder.whipeDraw(this.frameRef);
-            this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+            if (this.gridService.grid) {
+                this.gridService.updateColor(this.backColor);
+            }
         });
         this.canvBuilder.emitCanvas();
     }
@@ -86,8 +89,8 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.initCanvas();
-
+        //this.initCanvas()
+        this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
         this.initGridVisibility();
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
         const mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);

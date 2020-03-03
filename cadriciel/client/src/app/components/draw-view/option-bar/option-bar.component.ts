@@ -9,7 +9,7 @@ import { ExportFormComponent } from '../../export-form/export-form.component';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
-import { FormControl } from '@angular/forms';
+import { G } from '@angular/cdk/keycodes';
 
 @Component({
     selector: 'app-option-bar',
@@ -21,32 +21,61 @@ export class OptionBarComponent {
     canvasSub: Subscription;
     currentCanvas: Canvas;
     gridSelected: boolean = false;
-    toggleGridControl: FormControl = new FormControl();
+    stepVal: number;
+    alphaVal: number;
+    readonly maxStepVal: number = 70;
+    readonly minStepVal: number = 5;
 
-    constructor(public winService: ModalWindowService, public interaction: InteractionService, private gridService: GridRenderService) {
+    constructor(
+        public winService: ModalWindowService,
+        public interaction: InteractionService,
+        private kbHandler: KeyboardHandlerService,
+        private gridService: GridRenderService,
+    ) {
         window.addEventListener('keydown', e => {
             this.setShortcutEvent(e);
         });
+        this.stepVal = this.gridService.defSteps;
     }
 
     setShortcutEvent(e: KeyboardEvent) {
         const O_KEY = 79; // keycode for letter o
         const E_KEY = 69;
+        const NUMPAD_PLUS = 107;
+        const NUMPAD_MINUS = 109;
+        const DASH = 189; // minus sign
+        const EQUAL = 187; // plus sign located on the equal key (shift-equal)
 
-        const kbHandler: KeyboardHandlerService = new KeyboardHandlerService();
-        kbHandler.logkey(e);
+        this.kbHandler.logkey(e);
 
-        if (kbHandler.ctrlDown && kbHandler.keyCode === O_KEY) {
+        if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === O_KEY) {
             // ctrl+o opens the form!
             this.openNewDrawForm();
             e.preventDefault(); // default behavior prevented
         }
 
-        if (kbHandler.ctrlDown && kbHandler.keyCode === E_KEY) {
+        if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === E_KEY) {
             this.openExportForm();
             e.preventDefault();
         }
-        //e.preventDefault(); // if it was here, no inputs would be possible...
+
+        if (e.keyCode === G) {
+            this.toggleGrid();
+        }
+
+        if (this.kbHandler.keyCode === NUMPAD_PLUS || (this.kbHandler.shiftDown && this.kbHandler.keyCode === EQUAL)) {
+            if (this.stepVal < this.maxStepVal) {
+                this.stepVal += this.minStepVal;
+                this.gridService.updateSpacing(this.stepVal);
+            }
+        }
+
+        if (this.kbHandler.keyCode === NUMPAD_MINUS || this.kbHandler.keyCode === DASH) {
+            if (this.stepVal > this.minStepVal) {
+                this.stepVal -= this.minStepVal;
+                this.gridService.updateSpacing(this.stepVal);
+            }
+        }
     }
 
     openNewDrawForm() {
@@ -68,6 +97,16 @@ export class OptionBarComponent {
     }
 
     toggleGrid() {
-        this.gridService.toggleGridVisibility(this.toggleGridControl.value);
+        this.gridSelected = !this.gridSelected;
+        this.gridService.toggleGridVisibility(this.gridSelected);
+        console.log(this.gridSelected);
+    }
+
+    updateSpacing() {
+        this.gridService.updateSpacing(this.stepVal);
+    }
+
+    updateAlpha() {
+        this.gridService.updateTransparency(this.alphaVal);
     }
 }

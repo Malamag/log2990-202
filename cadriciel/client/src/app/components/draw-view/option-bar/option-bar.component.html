@@ -18,8 +18,33 @@
             <mat-icon class="topIcon">{{ funcMenu[4].icon }}</mat-icon>
         </button>
     </div>
-    <mat-slide-toggle [formControl]="toggleGridControl" id="grid-toggle" (change)="toggleGrid($event)">
+    <div *ngIf="gridSelected === true">
+        <span>{{ stepVal }}px</span>
+
+        <mat-slider
+            thumbLabel
+            type="range"
+            step="5"
+            tickInterval="1"
+            min="5"
+            max="70"
+            [(ngModel)]="stepVal"
+            (ngModelChange)="updateSpacing()"
+        ></mat-slider>
+        <mat-slider
+            thumbLabel
+            type="range"
+            step="5"
+            tickInterval="1"
+            min="20"
+            max="100"
+            [(ngModel)]="alphaVal"
+            (ngModelChange)="updateAlpha()"
+        ></mat-slider>
+    </div>
+    <mat-slide-toggle [checked]="gridSelected" id="grid-toggle" (change)="toggleGrid($event)">
         <mat-icon>grid_on</mat-icon>
     </mat-slide-toggle>
+
     <!--**************************************************-->
 </mat-toolbar>

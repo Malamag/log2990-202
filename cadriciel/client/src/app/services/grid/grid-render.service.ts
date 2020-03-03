@@ -7,10 +7,10 @@ import { InteractionService } from '../service-interaction/interaction.service';
 })
 export class GridRenderService {
     render: Renderer2;
-
+    readonly defSteps = 5;
     private readonly ns: string = 'http://www.w3.org/2000/svg';
-    private readonly vGridLines: SVGLineElement[] = [];
-    private readonly hGridLines: SVGLineElement[] = [];
+    private vGridLines: SVGLineElement[] = [];
+    private hGridLines: SVGLineElement[] = [];
 
     gridAlpha: string = 'ff';
     gridColor: string = '#000000';
@@ -20,8 +20,8 @@ export class GridRenderService {
     drawColor: string;
     grid: SVGElement;
 
-    // gridElem: SVGElement
     constructor(rdFact: RendererFactory2, private colConv: ColorConvertingService, private itService: InteractionService) {
+        // gridElem: SVGElement
         this.render = rdFact.createRenderer(null, null);
     }
 
@@ -74,9 +74,8 @@ export class GridRenderService {
         this.grid = gridElement;
         this.drawWidth = width;
         this.drawHeight = height;
-        const DEF_PX_STEP = 20;
-        this.renderHorizontalLines(DEF_PX_STEP);
-        this.renderVerticalLines(DEF_PX_STEP);
+        this.renderHorizontalLines(this.defSteps);
+        this.renderVerticalLines(this.defSteps);
 
         this.hGridLines.forEach((hLine: SVGLineElement) => {
             this.render.appendChild(this.grid, hLine);
@@ -105,9 +104,13 @@ export class GridRenderService {
         });
     }
 
-    updateTransparency(alpha: string) {
-        this.gridAlpha = alpha;
-        this.render.setAttribute(this.grid, 'style', `stroke:${this.gridColor + alpha}`);
+    updateTransparency(alphaPercent: number) {
+        const PERCENT: number = 100;
+        const ALPHA_VAL: number = alphaPercent / PERCENT;
+
+        this.gridAlpha = this.colConv.alphaRGBToHex(ALPHA_VAL);
+        console.log(this.gridAlpha);
+        this.updateAttributes('style', `stroke:${this.gridColor + this.gridAlpha}`);
     }
 
     updateColor(bgColor: string) {
@@ -142,5 +145,19 @@ export class GridRenderService {
         this.vGridLines.forEach((vLine: SVGLineElement) => {
             this.render.setAttribute(vLine, attrName, value);
         });
+    }
+
+    killGrid() {
+        const GRID_POSITION = 0; // first element in the svg doodle
+        const GRID: Element = this.render.parentNode(this.hGridLines[GRID_POSITION]); //taking a random line
+        this.render;
+        this.hGridLines.forEach((hLine: SVGLineElement) => {
+            this.render.removeChild(GRID, hLine);
+        });
+        this.vGridLines.forEach((vLine: SVGLineElement) => {
+            this.render.removeChild(GRID, vLine);
+        });
+        this.hGridLines = [];
+        this.vGridLines = [];
     }
 }
