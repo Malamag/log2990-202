@@ -22,18 +22,20 @@ export class SelectionService extends ShapeService {
   selectedRef: HTMLElement
   canvas: HTMLElement
   workingSpace: HTMLElement
+  movedOnce :boolean;
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService,
-              colorPick: ColorPickingService, render: Renderer2, selectedItems: HTMLElement, canvas: HTMLElement, workingSapce: HTMLElement) {
+              colorPick: ColorPickingService, render: Renderer2, selection: HTMLElement, canvas: HTMLElement, workingSpace: HTMLElement) {
     super(inProgess, drawing, selected, interaction, colorPick);
     this.selectedItems = [];
     this.moving = false;
     this.canMoveSelection = true;
     this.render = render;
     this.found = false;
-    this.selectedRef = selectedItems;
+    this.selectedRef = selection;
     this.canvas = canvas;
-    this.workingSpace = workingSapce 
+    this.workingSpace = workingSpace
+    this.movedOnce = false;
     this.render.listen(this.selectedRef,"mousedown",()=>{
       if(!this.found){
         this.moving = true;
@@ -71,6 +73,12 @@ export class SelectionService extends ShapeService {
       this.currentPath = [];
       this.inProgress.innerHTML = "";
 
+      if(this.selectedItems.length != 0 && this.moving && this.movedOnce){
+        console.log("now");
+        this.interaction.emitDrawingDone();
+      }
+
+      this.movedOnce = false;
       this.moving = false;
 
       //this.updateDrawing();
@@ -223,10 +231,11 @@ export class SelectionService extends ShapeService {
 
     let n = this.under;
     if(!this.moving){
+      /*
       if(n == null && this.selectedItems.length != 0){
         console.log("now");
         this.interaction.emitDrawingDone();
-      }
+      }*/
       this.selectedItems = [];
       if(n!=null){
         this.selectedItems.push(n);
@@ -243,6 +252,7 @@ export class SelectionService extends ShapeService {
   move(position: Point) {
 
     if(this.moving){
+      this.movedOnce = true;
       for(let i = 0; i < this.selectedItems.length;i++){
         //console.log(this.selectedItems[i]);
         let prev = this.currentPath[this.currentPath.length-1];
