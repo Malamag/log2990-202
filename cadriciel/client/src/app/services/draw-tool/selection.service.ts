@@ -163,7 +163,7 @@ export class SelectionService extends ShapeService {
     let minY:[number,boolean] = [1000000000,isValidNumber];
     let maxY:[number,boolean] = [-1,isValidNumber];
 
-    for(let j = 0; j < this.selectedItems.length;j++) {
+    for(let j = 0; j < Math.min(this.selectedItems.length,this.drawing.childElementCount);j++) {
 
       if(!this.selectedItems[j]){continue;}
       for(let i = 0; i < this.drawing.children[j].childElementCount;i++){
@@ -246,7 +246,7 @@ export class SelectionService extends ShapeService {
 
   moveSelection(xoff:number,yoff:number){
     if(this.selectedItems.includes(true)){
-      for(let i = 0; i < this.selectedItems.length; i++){
+      for(let i = 0; i < Math.min(this.selectedItems.length,this.drawing.childElementCount); i++){
         if(!this.selectedItems[i]){continue;}
         let current = (this.drawing.children[i] as HTMLElement).style.transform;
         let s = current?current.split(","):"";
@@ -293,7 +293,7 @@ export class SelectionService extends ShapeService {
   move(position: Point) {
     if(this.movingSelection){
       this.movedSelectionOnce = true;
-      for(let i = 0; i < this.selectedItems.length;i++){
+      for(let i = 0; i < Math.min(this.selectedItems.length,this.drawing.childElementCount);i++){
         if(!this.selectedItems[i]){continue;}
         let prev = this.currentPath[this.currentPath.length-1];
         let offset = new Point(position.x - prev.x, position.y - prev.y);
