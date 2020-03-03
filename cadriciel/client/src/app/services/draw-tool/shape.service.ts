@@ -54,7 +54,7 @@ export class ShapeService extends DrawingTool {
     }
 
     // mouse down with shape in hand
-    down(position: Point) {
+    down(position: Point, insideWorkspace?:boolean, isRightClick? : boolean) {
         // in case we changed tool while the mouse was down
         this.ignoreNextUp = false;
 

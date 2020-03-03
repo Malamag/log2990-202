@@ -1,5 +1,4 @@
 import { Injectable, Renderer2} from '@angular/core';
-import { FormsAttribute } from '../attributes/attribute-form';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
@@ -11,37 +10,42 @@ import { ShapeService } from './shape.service';
 })
 export class SelectionService extends ShapeService {
 
-  isSquare: boolean;
-  attr: FormsAttribute;
-  under:any;
-  canMoveSelection : boolean;
-  found :boolean;
-  selectedItems : Element[];
-  moving : boolean;
   render:Renderer2;
   selectedRef: HTMLElement
+
+  itemUnderMouse:any;
+  canMoveSelection : boolean;
+  foundAnItem :boolean;
+  selectedItems : boolean[];
+  invertedItems : boolean[];
+  movingSelection : boolean;
   canvas: HTMLElement
   workingSpace: HTMLElement
-  movedOnce :boolean;
+  movedSelectionOnce :boolean;
+  movedMouseOnce : boolean;
+  inverted:boolean;
+  wrapperDimensions : [Point,Point];
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService,
               colorPick: ColorPickingService, render: Renderer2, selection: HTMLElement, canvas: HTMLElement, workingSpace: HTMLElement) {
     super(inProgess, drawing, selected, interaction, colorPick);
+
     this.selectedItems = [];
-    this.moving = false;
+    this.invertedItems = [];
+    this.movingSelection = false;
     this.canMoveSelection = true;
     this.render = render;
-    this.found = false;
+    this.foundAnItem = false;
     this.selectedRef = selection;
     this.canvas = canvas;
     this.workingSpace = workingSpace
-    this.movedOnce = false;
-    this.render.listen(this.selectedRef,"mousedown",()=>{
-      if(!this.found){
-        this.moving = true;
-        this.found = true;
-      }
-    });
+    this.movedSelectionOnce = false;
+    this.movedMouseOnce = false;
+    this.inverted = false;
+    
+    this.wrapperDimensions = [new Point(-1,-1),new Point(-1,-1)];
+
+    this.selectedRef.style.pointerEvents = "none"; //PUT IN CSS
 
     window.addEventListener("newDrawing",(e:Event)=>{
       for(let i = 0; i < this.drawing.childElementCount; i++){
@@ -50,9 +54,9 @@ export class SelectionService extends ShapeService {
         if(status !== "true"){
           this.render.listen(el,"mousedown", () =>{
             this.render.setAttribute(el, "isListening","true");
-            if(!this.found){
-              this.under = el;
-              this.found = true;
+            if(!this.foundAnItem){
+              this.itemUnderMouse = i;
+              this.foundAnItem = true;
             }
           });
         }
@@ -66,6 +70,29 @@ export class SelectionService extends ShapeService {
     // in case we changed tool while the mouse was down
     if (!this.ignoreNextUp) {
 
+      let n = this.itemUnderMouse;
+    if(Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length-1]) < 5){
+
+
+      if(!this.inverted){
+        this.selectedItems = [];
+        this.invertedItems = [];
+      }else{
+        for(let i = 0; i < this.selectedItems.length;i++){
+          this.invertedItems[i] = !this.selectedItems[i]
+        }
+      }
+
+      if(n!=null){
+        this.selectedItems[this.itemUnderMouse] = this.inverted? !this.selectedItems[this.itemUnderMouse] : true;
+      }
+    }
+
+    this.itemUnderMouse = null;
+    this.foundAnItem = false;
+
+    this.selectedRef.innerHTML = this.updateBoundingBox();
+
       // the pencil should not affect the canvas
       this.isDown = false;
       
@@ -73,13 +100,13 @@ export class SelectionService extends ShapeService {
       this.currentPath = [];
       this.inProgress.innerHTML = "";
 
-      if(this.selectedItems.length != 0 && this.moving && this.movedOnce){
-        console.log("now");
+      if(this.selectedItems.includes(true) && this.movingSelection && this.movedSelectionOnce){
         this.interaction.emitDrawingDone();
       }
 
-      this.movedOnce = false;
-      this.moving = false;
+      this.movedSelectionOnce = false;
+      this.movedMouseOnce = false;
+      this.movingSelection = false;
 
       //this.updateDrawing();
     }
@@ -90,7 +117,7 @@ export class SelectionService extends ShapeService {
     if(keyboard.keyCode == 65 && keyboard.ctrlDown){
       this.selectedItems = [];
       for(let i = 0; i < this.drawing.children.length;i++){
-        this.selectedItems.push(this.drawing.children[i]);
+        this.selectedItems[i] = true;
       }
       this.selectedRef.innerHTML = this.updateBoundingBox();
     }
@@ -136,10 +163,11 @@ export class SelectionService extends ShapeService {
     let minY:[number,boolean] = [1000000000,isValidNumber];
     let maxY:[number,boolean] = [-1,isValidNumber];
 
-    this.selectedItems.forEach(element => {
+    for(let j = 0; j < this.selectedItems.length;j++) {
 
-      for(let i = 0; i < element.childElementCount;i++){
-        let current = element.children[i] as HTMLElement;
+      if(!this.selectedItems[j]){continue;}
+      for(let i = 0; i < this.drawing.children[j].childElementCount;i++){
+        let current = this.drawing.children[j].children[i] as HTMLElement;
         if(current.tagName.toString() == "filter"){
           continue;
         }
@@ -156,7 +184,7 @@ export class SelectionService extends ShapeService {
         minY = tl.y<minY[0]? [tl.y,true]:[minY[0],minY[1]];
         maxY = br.y>maxY[0]? [br.y,true]:[maxY[0],maxY[1]];
       }
-    });
+    };
 
     if(ws != null && bsv != null){
       minX[0] = minX[0] - bsv.left + (ws ? ws.scrollLeft : 0);
@@ -164,6 +192,9 @@ export class SelectionService extends ShapeService {
       minY[0] = minY[0] - bsv.top + (ws ? ws.scrollTop : 0);
       maxY[0] = maxY[0] - bsv.top + (ws ? ws.scrollTop : 0);
     }
+
+    this.wrapperDimensions[0] = new Point(minX[0], minY[0]);
+    this.wrapperDimensions[1] = new Point(maxX[0], maxY[0]);
 
     let testing = "";
     if(minX[1] && maxX[1] && minY[1] && maxY[1]){
@@ -194,30 +225,44 @@ export class SelectionService extends ShapeService {
 
       let one:boolean = Point.rectOverlap(tl1, br1, tl2, br2);
 
+      //item is overlapping the selection
       if(one){
-        this.selectedItems.push(t[i]);
+        if(this.inverted){
+          this.selectedItems[i] = this.invertedItems[i] == undefined ? true : this.invertedItems[i];
+        }else{
+          this.selectedItems[i] = true;
+          this.invertedItems[i] = false;
+        }
+      }else{ //item is outside the selection
+        if(this.inverted){
+          this.selectedItems[i] = this.invertedItems[i] == undefined ? false : !this.invertedItems[i];
+        }else{
+          this.selectedItems[i] = false;
+          this.invertedItems[i] = true;
+        }
       }
     }
   }
 
   moveSelection(xoff:number,yoff:number){
-    if(this.selectedItems){
+    if(this.selectedItems.includes(true)){
       for(let i = 0; i < this.selectedItems.length; i++){
-        let current = (this.selectedItems[i] as HTMLElement).style.transform;
+        if(!this.selectedItems[i]){continue;}
+        let current = (this.drawing.children[i] as HTMLElement).style.transform;
         let s = current?current.split(","):"";
         let newX = +(s[0].replace(/[^\d.-]/g, '')) + xoff;
         let newY = +(s[1].replace(/[^\d.-]/g, '')) + yoff;
         //this.render.setAttribute(this.selectedItems[i],"transform","translate(10px,10px)");
-        (this.selectedItems[i] as HTMLElement).style.transform = `translate(${newX}px,${newY}px)`;
+        (this.drawing.children[i] as HTMLElement).style.transform = `translate(${newX}px,${newY}px)`;
       }
     }
   }
 
-  retrieveItemUnderMouse(){
+  down(position: Point, insideWorkspace:boolean, isRightClick:boolean) {
 
-  }
+    this.inverted = isRightClick;
 
-  down(position: Point) {
+    this.movingSelection = !this.inverted && Point.insideRectangle(position, this.wrapperDimensions[0],this.wrapperDimensions[1]);
 
     // in case we changed tool while the mouse was down
     this.ignoreNextUp = false;
@@ -229,42 +274,36 @@ export class SelectionService extends ShapeService {
     this.currentPath.push(position);
     this.currentPath.push(position);
 
-    let n = this.under;
-    if(!this.moving){
-      /*
-      if(n == null && this.selectedItems.length != 0){
-        console.log("now");
-        this.interaction.emitDrawingDone();
-      }*/
-      this.selectedItems = [];
-      if(n!=null){
-        this.selectedItems.push(n);
+    if(this.inverted){
+      for(let i = 0; i < this.selectedItems.length;i++){
+        this.invertedItems[i] = !this.selectedItems[i]
       }
     }
-    this.under = null;
-    this.found = false;
-
-    this.selectedRef.innerHTML = this.updateBoundingBox();
+    
+    let n = this.itemUnderMouse;
+    if(n!= null && !this.selectedItems[n] && !this.inverted){
+      this.selectedItems = [];
+      this.selectedItems[n] = true;
+      this.movingSelection = true;
+    }
 
     this.updateProgress();
   }
 
   move(position: Point) {
-
-    if(this.moving){
-      this.movedOnce = true;
+    if(this.movingSelection){
+      this.movedSelectionOnce = true;
       for(let i = 0; i < this.selectedItems.length;i++){
-        //console.log(this.selectedItems[i]);
+        if(!this.selectedItems[i]){continue;}
         let prev = this.currentPath[this.currentPath.length-1];
         let offset = new Point(position.x - prev.x, position.y - prev.y);
 
-        //console.log(offset);
         
-        let current = (this.selectedItems[i] as HTMLElement).style.transform;
+        let current = (this.drawing.children[i] as HTMLElement).style.transform;
         let s = current?current.split(","):"";
         let newX = +(s[0].replace(/[^\d.-]/g, '')) + offset.x;
         let newY = +(s[1].replace(/[^\d.-]/g, '')) + offset.y;
-        (this.selectedItems[i] as HTMLElement).style.transform = `translate(${newX}px,${newY}px)`;
+        (this.drawing.children[i] as HTMLElement).style.transform = `translate(${newX}px,${newY}px)`;
         //console.log(this.selectedItems[i]);
       }
     }
@@ -276,9 +315,11 @@ export class SelectionService extends ShapeService {
       // save mouse position
       this.currentPath.push(position);
 
-      if(!this.moving){
+      if(!this.movingSelection){
         if(Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length-1]) > 10){
-          this.selectedItems = [];
+          if(!this.inverted){
+            this.selectedItems = [];
+          }
           this.retrieveItemsInRect();
         }
         this.updateProgress();
@@ -314,19 +355,6 @@ export class SelectionService extends ShapeService {
     let startX = w > 0 ? p[0].x : p[p.length - 1].x;
     let startY = h > 0 ? p[0].y : p[p.length - 1].y;
 
-    // if we need to make it square
-    if (this.isSquare) {
-      // get smallest absolute value between the width and the height
-      const smallest = Math.abs(w) < Math.abs(h) ? Math.abs(w) : Math.abs(h);
-      // adjust width and height (keep corresponding sign)
-      w = smallest * Math.sign(w);
-      h = smallest * Math.sign(h);
-
-      // recalculate top-left corner
-      startX = w > 0 ? p[0].x : p[0].x - smallest;
-      startY = h > 0 ? p[0].y : p[0].y - smallest;
-    }
-
     // create a divider
     s = '<g name = "selection-perimeter">';
 
@@ -334,7 +362,7 @@ export class SelectionService extends ShapeService {
     s += `<rect x="${startX}" y="${startY}"`;
     s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
 
-    s += `fill="rgba(0,102,204,0.3)"`;
+    s += `fill="rgba(${this.inverted? 255:0},102,204,0.3)"`;
     s += `stroke-width="5" stroke="rgba(0,102,204,0.9)" stroke-dasharray="5,5"/>`;
 
     // end the divider

@@ -14,7 +14,7 @@ export abstract class InputObserver {
     abstract cancel(): void;
 
     // Mouse
-    abstract down(position: Point, insideWorkspace?: boolean): void;
+    abstract down(position: Point, insideWorkspace?: boolean, isRightClick?:boolean): void;
     abstract up(position: Point, insideWorkspace?: boolean): void;
     abstract move(position: Point): void;
     abstract doubleClick(position: Point, insideWorkspace?: boolean): void;

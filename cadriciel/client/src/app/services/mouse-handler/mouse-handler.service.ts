@@ -74,7 +74,7 @@ export class MouseHandlerService {
     this.insideWorkspace = this.validPoint(this.mouseCanvasPosition);
 
     if (this.startedInsideWorkspace) {
-      this.callObserverDown();
+      this.callObserverDown(e.button === 2);
     }
   }
 
@@ -129,11 +129,11 @@ export class MouseHandlerService {
     });
   }
 
-  callObserverDown() {
+  callObserverDown(isRightClick:boolean) {
     // console.log("DOWN");
     this.observers.forEach((element) => {
       if (element.selected) {
-        element.down(this.mouseCanvasPosition, this.insideWorkspace);
+        element.down(this.mouseCanvasPosition, this.insideWorkspace,isRightClick);
       }
     });
   }
