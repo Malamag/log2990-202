@@ -90,6 +90,10 @@ export abstract class DrawingTool extends InputObserver {
 
       // add it to the main drawing
       this.drawing.innerHTML += d;
+
+      let event = new Event("newDrawing");
+      window.dispatchEvent(event);
+
       this.interaction.emitDrawingDone();
       // clear current progress
       this.inProgress.innerHTML = '';
