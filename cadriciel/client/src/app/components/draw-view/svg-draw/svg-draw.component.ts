@@ -76,7 +76,8 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.backColor = canvas.canvasColor;
             this.canvBuilder.whipeDraw(this.frameRef);
             if (this.gridService.grid) {
-                this.gridService.updateColor(this.backColor);
+                this.gridService.removeGrid();
+                this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
             }
         });
         this.canvBuilder.emitCanvas();

@@ -6,7 +6,9 @@ describe('GridRenderService', () => {
     let service: GridRenderService;
     let svgElemStub: any;
     beforeEach(() => {
-        svgElemStub = {};
+        svgElemStub = {
+            innerHTML: '<div>Hello World</div>',
+        };
         TestBed.configureTestingModule({
             providers: [],
         });
@@ -128,5 +130,16 @@ describe('GridRenderService', () => {
         expect(spy).toHaveBeenCalledWith(COLOR);
     });
 
-    it('should set the new position attibutes on spacing update', () => {});
+    it('should set the new position attibutes on spacing update', () => {
+        const ELEM_NUM: number = 15;
+        const SPACE: number = 30;
+
+        for (let i = 0; i < ELEM_NUM; ++i) {
+            service['hGridLines'].push(svgElemStub);
+            service['vGridLines'].push(svgElemStub);
+        }
+        const spy = spyOn(service.render, 'setAttribute');
+        service.updateSpacing(SPACE);
+        expect(spy).toHaveBeenCalledTimes(ELEM_NUM * 4);
+    });
 });
