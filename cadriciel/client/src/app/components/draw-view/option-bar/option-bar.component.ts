@@ -9,6 +9,7 @@ import { ExportFormComponent } from '../../export-form/export-form.component';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
 import { GalleryComponent } from '../../gallery/gallery.component';
+import { SaveFormComponent } from '../../save-form/save-form.component'
 
 
 @Component({
@@ -33,13 +34,19 @@ export class OptionBarComponent implements OnInit {
         const O_KEY = 79; // keycode for letter o
         const E_KEY = 69;
         const G_KEY = 71;
-
+        const S_KEY = 83;
         const kbHandler: KeyboardHandlerService = new KeyboardHandlerService();
         kbHandler.logkey(e);
 
         if (kbHandler.ctrlDown && kbHandler.keyCode === O_KEY) {
             // ctrl+o opens the form!
             this.openNewDrawForm();
+            e.preventDefault(); // default behavior prevented
+        }
+
+        if (kbHandler.ctrlDown && kbHandler.keyCode === S_KEY) {
+            // ctrl+o opens the form!
+            this.openSaveForm();
             e.preventDefault(); // default behavior prevented
         }
 
@@ -66,6 +73,10 @@ export class OptionBarComponent implements OnInit {
 
     openExportForm() {
         this.winService.openWindow(ExportFormComponent);
+    }
+
+    openSaveForm() {
+        this.winService.openWindow(SaveFormComponent);
     }
 
     sendSigKill() {

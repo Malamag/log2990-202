@@ -45,6 +45,7 @@ import { GalleryComponent } from './components/gallery/gallery.component';
 import { ExportFormComponent } from './components/export-form/export-form.component';
 import { PreviewBoxComponent } from './components/preview-box/preview-box.component';
 import { ExportService } from './services/exportation/export.service';
+import { SaveFormComponent } from './components/save-form/save-form.component';
 
 @NgModule({
     declarations: [
@@ -62,6 +63,7 @@ import { ExportService } from './services/exportation/export.service';
         GalleryComponent,
         ExportFormComponent,
         PreviewBoxComponent,
+        SaveFormComponent,
     ],
     imports: [
         BrowserModule,
@@ -89,15 +91,9 @@ import { ExportService } from './services/exportation/export.service';
     providers: [CanvasBuilderService, ModalWindowService, ColorConvertingService, ColorPickingService, ExportService],
 
     bootstrap: [AppComponent],
-    entryComponents: [
-        NewDrawComponent,
-        UserManualComponent,
-        GalleryComponent,
-        OptionBarComponent,
-        ColorPickerComponent,
-        ExportFormComponent,
-        PreviewBoxComponent,
-    ], // components added dynamically
+    entryComponents: [NewDrawComponent, UserManualComponent,GalleryComponent, OptionBarComponent, 
+        ColorPickerComponent,ExportFormComponent, PreviewBoxComponent, SaveFormComponent] // components added dynamically
+
 })
 export class AppModule {
     constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
