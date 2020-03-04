@@ -20,8 +20,6 @@ export class GridRenderService {
     drawColor: string;
     grid: SVGElement;
 
-    gridHTML: string;
-
     constructor(private rdFact: RendererFactory2, private colConv: ColorConvertingService, private itService: InteractionService) {
         this.render = this.rdFact.createRenderer(null, null);
     }
@@ -89,7 +87,6 @@ export class GridRenderService {
             this.render.appendChild(this.grid, vLine);
         });
         this.updateColor(color);
-        this.gridHTML = this.grid.innerHTML;
     }
 
     updateSpacing(spacing: number) {
@@ -107,7 +104,6 @@ export class GridRenderService {
             this.render.setAttribute(verticalLine, 'x2', wSpacing.toString());
             wSpacing += spacing;
         });
-        this.gridHTML = this.grid.innerHTML;
     }
 
     updateTransparency(alphaPercent: number) {
@@ -131,7 +127,6 @@ export class GridRenderService {
         if (DARK_BG) {
             this.gridColor = WHITE;
             this.updateAttributes('style', `stroke:${WHITE + this.gridAlpha}`);
-            //this.render.setAttribute(this.grid, 'style', `background-color:${WHITE}`);
         } else if (!DARK_BG && this.gridColor === WHITE) {
             this.gridColor = BLACK;
             this.updateAttributes('style', `stroke:${BLACK + this.gridAlpha}`);
@@ -150,7 +145,6 @@ export class GridRenderService {
         this.vGridLines.forEach((vLine: SVGLineElement) => {
             this.render.setAttribute(vLine, attrName, value);
         });
-        this.gridHTML = this.grid.innerHTML;
     }
 
     removeGrid() {
