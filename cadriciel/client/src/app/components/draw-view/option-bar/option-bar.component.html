@@ -21,7 +21,7 @@
 
     <div [ngStyle]="{ visibility: gridSelected === true ? 'visible' : 'hidden' }" id="sliders-container">
         <div class="slider-label">
-            <span>Espacement</span>
+            <mat-icon>straighten</mat-icon>
         </div>
         <mat-slider
             thumbLabel
@@ -35,10 +35,11 @@
         ></mat-slider>
         <span class="slider-val">{{ stepVal }}px</span>
 
-        <span class="slider-label">Opacité</span>
+        <mat-icon class="slider-label">tonality</mat-icon>
 
         <mat-slider
             thumbLabel
+            invert
             type="range"
             step="5"
             tickInterval="1"
