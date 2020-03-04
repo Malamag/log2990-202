@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
-import { FormsAttribute } from '../attributes/attribute-form';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
@@ -47,7 +45,7 @@ describe('RectangleService', () => {
     });
 
     it('should set the attributes in the subscription', () => {
-        service.interaction.emitFormsAttributes(new FormsAttribute(0, 0, 0));
+        service.interaction.emitFormsAttributes({plotType: 0, lineThickness: 0, numberOfCorners: 0});
         const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
         service.updateAttributes();
         expect(spyInteraction).toHaveBeenCalled();
@@ -138,7 +136,7 @@ describe('RectangleService', () => {
 
     it('should create a rectangle filled with the selected color', () => {
         const color = '#ffffff';
-        service.chosenColor = new ChoosenColors(color, color, color); // both prim. and sec.
+        service.chosenColor = {primColor: color, secColor: color, backColor: color}; // both prim. and sec.
 
         const rect = service.createPath(ptArr);
         expect(rect).toContain(`fill="${color}"`);
@@ -148,7 +146,7 @@ describe('RectangleService', () => {
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = new ChoosenColors(prim, sec, back);
+        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
         const rect = service.createPath(ptArr);
 
         expect(rect).toContain(`stroke="${sec}"`);
@@ -159,7 +157,7 @@ describe('RectangleService', () => {
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = new ChoosenColors(prim, sec, back);
+        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
 
         const rect = service.createPath(ptArr);
 
@@ -173,7 +171,7 @@ describe('RectangleService', () => {
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = new ChoosenColors(prim, sec, back);
+        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
 
         const rect = service.createPath(ptArr);
 
@@ -187,7 +185,7 @@ describe('RectangleService', () => {
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = new ChoosenColors(prim, sec, back);
+        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
 
         const rect = service.createPath(ptArr);
 

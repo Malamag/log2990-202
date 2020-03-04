@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import {DrawingTool} from './drawingTool'
@@ -38,7 +37,7 @@ describe('drawingTools', () => {
     const PRIM = '#ffffff';
     const SEC = '#000000';
     const back = '#ffffff';
-    service.colorPick.colors = new ChoosenColors(PRIM, SEC, back);
+    service.colorPick.colors = {primColor: PRIM, secColor: SEC, backColor: back};
 
     service.updateColors();
     expect(spy).toHaveBeenCalled();
@@ -51,7 +50,7 @@ describe('drawingTools', () => {
     const PRIM = '#ffff00';
     const SEC = '#0000ff';
     const back = '#ffffff';
-    service.colorPick.colors = new ChoosenColors(PRIM, SEC, back); // color init in service
+    service.colorPick.colors = {primColor: PRIM, secColor: SEC, backColor: back}; // color init in service
 
     service.updateColors();
     expect(service.chosenColor).toEqual(service.colorPick.colors); // checking the assignation
