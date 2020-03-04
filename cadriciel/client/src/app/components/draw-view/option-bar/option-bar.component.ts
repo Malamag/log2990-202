@@ -39,13 +39,14 @@ export class OptionBarComponent {
     }
 
     setShortcutEvent(e: KeyboardEvent) {
-        const O_KEY = 79; // keycode for letter o
-        const E_KEY = 69;
-        const NUMPAD_PLUS = 107;
-        const NUMPAD_MINUS = 109;
-        const DASH = 189; // minus sign
-        const EQUAL = 187; // plus sign located on the equal key (shift-equal)
+        const O_KEY: number = 79; // keycode for letter o
+        const E_KEY: number = 69;
+        const NUMPAD_PLUS: number = 107;
+        const NUMPAD_MINUS: number = 109;
+        const DASH: number = 189; // minus sign
+        const EQUAL: number = 187; // plus sign located on the equal key (shift-equal)
 
+        const STEP: number = 5;
         this.kbHandler.logkey(e);
 
         if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === O_KEY) {
@@ -65,14 +66,14 @@ export class OptionBarComponent {
 
         if (this.kbHandler.keyCode === NUMPAD_PLUS || (this.kbHandler.shiftDown && this.kbHandler.keyCode === EQUAL)) {
             if (this.stepVal < this.maxStepVal) {
-                this.stepVal += this.minStepVal;
+                this.stepVal += STEP;
                 this.gridService.updateSpacing(this.stepVal);
             }
         }
 
         if (this.kbHandler.keyCode === NUMPAD_MINUS || this.kbHandler.keyCode === DASH) {
             if (this.stepVal > this.minStepVal) {
-                this.stepVal -= this.minStepVal;
+                this.stepVal -= STEP;
                 this.gridService.updateSpacing(this.stepVal);
             }
         }

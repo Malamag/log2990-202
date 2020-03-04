@@ -22,9 +22,8 @@ export class GridRenderService {
 
     gridHTML: string;
 
-    constructor(rdFact: RendererFactory2, private colConv: ColorConvertingService, private itService: InteractionService) {
-        // gridElem: SVGElement
-        this.render = rdFact.createRenderer(null, null);
+    constructor(private rdFact: RendererFactory2, private colConv: ColorConvertingService, private itService: InteractionService) {
+        this.render = this.rdFact.createRenderer(null, null);
     }
 
     renderVerticalLine(): SVGLineElement {

@@ -23,7 +23,7 @@ describe('DoodleFetchService', () => {
                 { provide: Node, useValue: nativeElemStub },
             ],
         });
-        service = new DoodleFetchService();
+        service = TestBed.get(DoodleFetchService);
     });
 
     it('should be created', () => {
