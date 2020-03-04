@@ -2,13 +2,18 @@
     <h1>Galerie</h1>
     <mat-form-field class="header">
         <mat-chip-list #tagList>
-            <mat-chip *ngFor="let tag of tags" (removed)="removeTag(tag)">
+            <mat-chip *ngFor="let tag of tags" 
+                (removed)="removeTag(tag)" 
+                [selectable] = "selectable">
                 {{ tag }}
                 <mat-icon matChipRemove>clear</mat-icon>
             </mat-chip>
 
             <input
                 matInput
+                #tagInput
+                [formControl]= "tagCtrl"
+                [matAutocomplete] = "auto"
                 [matChipInputFor]="tagList"
                 [matChipInputSeparatorKeyCodes]="inputTagSeparators"
                 placeholder="Étiquette..."
@@ -17,10 +22,15 @@
             />
             <button id="filter-btn" mat-stroked-button color="primary">Filtrer</button>
         </mat-chip-list>
+        <mat-autocomplete #auto = "matAutocomplete" (optionSlected)= "selected($event)">
+            <mat-option *ngFor= "let tag of filteredTags |async "[value] = "tag">
+                {{tag}}
+            </mat-option>
+        </mat-autocomplete>
     </mat-form-field>
 
     <div id="cards-container" #cardsContainer>
-        <mat-card class="drawing" *ngFor="let drawing of drawings">
+        <mat-card class="drawing" *ngFor="let drawing of drawings | async">
             <mat-card-header>
                 <mat-card-title> {{ drawing.name }} </mat-card-title>
                 <mat-card-subtitle> {{ drawing.tags }} </mat-card-subtitle>

@@ -4,6 +4,11 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import {IndexService} from './../../services/index/index.service'
 import{ImageData} from'../../imageData'
+import { FormControl } from '@angular/forms';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
+import { map, startWith } from 'rxjs/operators';
+import {Observable} from 'rxjs';
+
 
 @Component({
     selector: 'app-gallery',
@@ -18,27 +23,30 @@ import{ImageData} from'../../imageData'
  */
 export class GalleryComponent implements OnInit {
     fakeImage = fakeImages;
-    drawings: ImageData[];
+    drawings: Observable<ImageData[]>;
     readonly inputTagSeparators: number[] = [ENTER, COMMA];
     tags: string[] = [];
-    possibleTags: string[];
+    private possibleTags: string[];
+    filteredTags: Observable<string[]>;
+    tagCtrl = new FormControl();
+    render: Renderer2;
     @ViewChild('cardsContainer',{static:false}) cardsContainer: ElementRef
-    constructor(private index: IndexService, private render: Renderer2) {
+    @ViewChild('tagInput', {static: false}) tagInput: ElementRef<HTMLInputElement>
+    @ViewChild('auto', {static: false}) autoComplete: MatAutocomplete;
+    constructor(private index: IndexService, render: Renderer2) {
+        this.render = render;
         this.index.pupolatedBd();
         this.possibleTags = [];
+        this.filteredTags = this.tagCtrl.valueChanges.pipe(
+            startWith(null),
+            map((tag: string | null) => tag? this.filter(tag): this.possibleTags.slice())
+        )
     }
 
     ngOnInit() {
-        
         this.getAllImages();
-        this.getAllTags(this.drawings);
     }
-
-    /*addFilter() {
-    const newInput = this.render.createElement('input');
-    this.render.setAttribute(newInput, 'type', 'text');
-    this.render.appendChild(this.filters.nativeElement, newInput);
-  }*/
+    
     blockEvent(ev: KeyboardEvent) {
         ev.stopPropagation();
     }
@@ -48,7 +56,6 @@ export class GalleryComponent implements OnInit {
             // making sure the tag exists in the array
             this.tags.splice(INDEX, 1);
         }
-        
     }
 
     addTag(tagAdd: MatChipInputEvent) {
@@ -57,7 +64,11 @@ export class GalleryComponent implements OnInit {
         if (VAL !== '') {
             this.tags.push(VAL);
         }
-        INPUT.value = ''; // resets the input after insertion
+        // resets the input after insertion
+        if(INPUT){
+            INPUT.value = ' ';
+        }
+        this.tagCtrl.setValue(null);
     }
     showMessage(){
         const text = this.render.createText('en cours de chargement');
@@ -65,11 +76,16 @@ export class GalleryComponent implements OnInit {
     }
     delete(id: string){
         this.index.deleteImageById(id);
-        setTimeout(this.showMessage, 200)
+        
         this.getAllImages();
     }
-    getAllImages(): void{
-       this.drawings = this.index.getAllImages()
+
+    async getAllImages(){
+        //setTimeout(this.showMessage, 25);
+       this.drawings = await this.index.getAllImages()
+       this.drawings.subscribe(data=>{
+           this.getAllTags(data);
+       })
     }
     getAllTags(imageContainer: ImageData[]): void{ 
         imageContainer.forEach(image=>{
@@ -78,11 +94,20 @@ export class GalleryComponent implements OnInit {
                 for(let j =0; j< this.possibleTags.length; ++j){
                     if(image.tags[i]=== this.possibleTags[j]){
                         tagExist = true;
-                        break;
                     }
                 }
                 if(!tagExist) {this.possibleTags.push(image.tags[i])}
             }
         })
+    }
+    //source: https://material.angular.io/components/chips/examples
+    selected(event: MatAutocompleteSelectedEvent){
+        this.tags.push(event.option.value);
+        this.tagInput.nativeElement.value ='';
+        this.tagCtrl.setValue(null);
+    }
+    private filter(value: string): string[]{
+        const filterValue = value.toLowerCase()
+        return this.possibleTags.filter(tag => tag.toLowerCase().indexOf(filterValue) === 0)
     }
 }

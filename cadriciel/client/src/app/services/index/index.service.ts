@@ -27,14 +27,8 @@ export class IndexService {
           return of(result as T);
       };
   }
-  getAllImages(): ImageData[] {
-    let ret: ImageData[] = [];
-    this.http.get<ImageData[]>('http://localhost:3000/database/Images/').subscribe( (data) => {
-      data.forEach((image) => {
-        ret.push({id:image.id, name: image.name, tags: image.tags});
-      })
-   });
-    return ret;
+  getAllImages(): Observable<ImageData[]>{
+    return this.http.get<ImageData[]>('http://localhost:3000/database/Images/')
   }
   getImageById(imageId: string): ImageData {
     let ret: ImageData = {id: '', name: '', tags: []};
