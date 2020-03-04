@@ -20,12 +20,11 @@ export class MouseHandlerService {
   isFirstClick: boolean;
   upFromDoubleClick: boolean;
 
-  constructor(svgCanvas: HTMLElement, workingSpace: HTMLElement) {
+  constructor(svgCanvas: HTMLElement) {
 
     this.observers = [];
 
     this.svgCanvas = svgCanvas;
-    this.workingSpace = workingSpace;
 
     this.updateWindowSize();
 
@@ -46,8 +45,8 @@ export class MouseHandlerService {
   }
 
   windowToCanvas(windowPosition: Point) {
-    const canvasX: number = windowPosition.x - this.svgBox.left + (this.workingSpace ? this.workingSpace.scrollLeft : 0);
-    const canvasY: number = windowPosition.y - this.svgBox.top + (this.workingSpace ? this.workingSpace.scrollTop : 0);
+    const canvasX: number = windowPosition.x - this.svgBox.left;
+    const canvasY: number = windowPosition.y - this.svgBox.top;
 
     return new Point(canvasX, canvasY);
   }

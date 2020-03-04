@@ -42,13 +42,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('drawingSpace', {static: false}) drawingSpace: ElementRef
     @ViewChild('selectedItems', {static: false}) selectedItems: ElementRef
 
-    workingSpace: HTMLElement;
-
     ngOnInit() {
-        this.interaction.$refObs.subscribe(ref => {
-            this.workingSpace = ref.nativeElement;
-        });
-
         this.initCanvas();
     }
 
@@ -80,7 +74,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngAfterViewInit() {
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
-        const mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);
+        const mouseHandler = new MouseHandlerService(this.svg.nativeElement);
 
         // Create all the tools
         //console.log(this.render);
@@ -93,7 +87,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         const ellipse = tc.CreateEllipse(false, this.interaction, this.colorPick);
         const undoRedo: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
         const polygon = tc.CreatePolygon(false, this.interaction, this.colorPick);
-        const selection = tc.CreateSelection(false, this.interaction, this.colorPick,this.render, this.selectedItems.nativeElement, this.svg.nativeElement, this.workingSpace);
+        const selection = tc.CreateSelection(false, this.interaction, this.colorPick,this.render, this.selectedItems.nativeElement, this.svg.nativeElement);
 
         this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
         this.toolsContainer.set('Rectangle', rect);
@@ -136,14 +130,14 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
             mouseHandler.down(e);
         });
 
-        window.oncontextmenu = (e:MouseEvent) => {
-            e.preventDefault();
-        };
-
-        // Prevent right-click menu
         window.addEventListener('mouseup', function(e) {
             mouseHandler.up(e);
         });
+
+        // Prevent right-click menu
+        window.oncontextmenu = (e:MouseEvent) => {
+            e.preventDefault();
+        };
 
         // Keyboard listeners
         window.addEventListener('keydown', function(e) {
