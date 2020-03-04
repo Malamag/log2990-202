@@ -23,8 +23,8 @@ export class OptionBarComponent {
     gridSelected: boolean = false;
     stepVal: number;
     alphaVal: number = 100;
-    readonly maxStepVal: number = 100;
-    readonly minStepVal: number = 5;
+    readonly maxStepVal: number = 90;
+    readonly minStepVal: number = 10;
 
     constructor(
         public winService: ModalWindowService,

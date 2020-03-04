@@ -7,7 +7,7 @@ import { InteractionService } from '../service-interaction/interaction.service';
 })
 export class GridRenderService {
     render: Renderer2;
-    readonly defSteps = 5;
+    readonly defSteps = 10;
     private readonly ns: string = 'http://www.w3.org/2000/svg';
     private vGridLines: SVGLineElement[] = [];
     private hGridLines: SVGLineElement[] = [];
