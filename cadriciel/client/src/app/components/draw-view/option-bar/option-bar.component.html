@@ -20,6 +20,9 @@
     </div>
 
     <div [ngStyle]="{ visibility: gridSelected === true ? 'visible' : 'hidden' }" id="sliders-container">
+        <div class="slider-label">
+            <span>Espacement</span>
+        </div>
         <mat-slider
             thumbLabel
             type="range"
@@ -30,7 +33,9 @@
             [(ngModel)]="stepVal"
             (ngModelChange)="updateSpacing()"
         ></mat-slider>
-        <span>{{ stepVal }}px</span>
+        <span class="slider-val">{{ stepVal }}px</span>
+
+        <span class="slider-label">Opacité</span>
 
         <mat-slider
             thumbLabel
@@ -42,7 +47,7 @@
             [(ngModel)]="alphaVal"
             (ngModelChange)="updateAlpha()"
         ></mat-slider>
-        <span>{{ alphaVal }}%</span>
+        <span class="slider-val">{{ alphaVal }}%</span>
     </div>
     <mat-slide-toggle [checked]="gridSelected" id="grid-toggle" (change)="toggleGrid($event)">
         <mat-icon>grid_on</mat-icon>

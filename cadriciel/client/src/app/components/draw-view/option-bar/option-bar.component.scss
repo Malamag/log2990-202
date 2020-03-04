@@ -7,4 +7,23 @@
 }
 
 #grid-toggle {
+    position: absolute;
+    left: 90%;
+    padding: 2%;
+}
+
+#sliders-container {
+    margin-left: 50%;
+    margin-top: 2%;
+}
+
+.slider-label {
+    position: absolute;
+    top: 1%;
+    font-size: medium;
+}
+
+.slider-val {
+    font-size: small;
+    margin-right: 2%;
 }
