@@ -1,7 +1,5 @@
-export class Canvas {
-    constructor(
-        public canvasWidth: number,
-        public canvasHeight: number,
-        public canvasColor: string
-    ) {}
+export interface Canvas {
+    canvasWidth: number;
+    canvasHeight: number;
+    canvasColor: string,
 }

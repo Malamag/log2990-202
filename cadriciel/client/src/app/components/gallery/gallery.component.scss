@@ -1,40 +1,31 @@
-.drawForm >* {
-    display: flex;
-    flex-direction: column;
-    overflow-y: hidden;
+.gallery {
+    /*overflow-x: scroll;*/
+    overflow-y: scroll;
+    height: 90vh;
+    width: 90vw;
+    background-color: whitesmoke;
 }
+.header {
+    width: 99%;
+}
+mat-card {
+    position: relative;
+    align-items: baseline;
 
+    border-color: lightskyblue;
+    border-width: 2px;
+    margin-right: 5px;
+    float: left;
+    margin-bottom: 5px;
+}
+#cards-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+#chip-container {
+    width: 100%;
+}
 h1 {
     text-align: center;
+    margin: 0;
 }
-
-.form-container {
-   padding: 20px;
-}
-
-@media only screen and (max-width: 600px) {
-    h1 {
-        font-size: 20px;
-    }
-}
-
-.warnMessage {
-    font-size: 12px;
-    color: rgb(255, 46, 46);
-    position: absolute;
-    top: 77%;
-}
-
-#palette {
-    height: 28px;
-    width: 240px;
-    position: relative;
-    margin-bottom: 5%;
-}
-
-.paletteElem {
-    display: flex;
-    flex-direction: row;
-    cursor: pointer;
-}
-

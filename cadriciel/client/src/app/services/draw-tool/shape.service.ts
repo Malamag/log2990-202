@@ -6,28 +6,27 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 
+const DEFAULTPLOTTYPE = 2;
+const DEFAULTNUMBERCORNERS = 3;
+const DEFAULTLINETHICKNESS = 5;
 @Injectable({
     providedIn: 'root',
 })
 export class ShapeService extends DrawingTool {
-    public attr: FormsAttribute;
+    attr: FormsAttribute;
 
     // Shape's dimensions
-    public width: number;
-    public height: number;
-    public smallest: number; // used for getting the smallest value between height and width
+    width: number;
+    height: number;
+    smallest: number; // used for getting the smallest value between height and width
 
     // First point in x and y when first clicked
-    public startX: number;
-    public startY: number;
+    startX: number;
+    startY: number;
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
         super(inProgess, drawing, selected, interaction, colorPick);
-        this.attr = new FormsAttribute(
-            this.defaultValues.DEFAULTPLOTTYPE,
-            this.defaultValues.DEFAULTLINETHICKNESS,
-            this.defaultValues.DEFAULTNUMBERCORNERS,
-        );
+        this.attr = {plotType: DEFAULTPLOTTYPE, lineThickness: DEFAULTLINETHICKNESS, numberOfCorners: DEFAULTNUMBERCORNERS}
         this.updateColors();
         this.updateAttributes();
         this.width = 0;
@@ -38,10 +37,10 @@ export class ShapeService extends DrawingTool {
     }
 
     updateAttributes() {
-        this.interaction.$formsAttributes.subscribe(obj => {
+        this.interaction.$formsAttributes.subscribe( (obj) => {
             if (obj) {
                 // Getting attributes for a shape
-                this.attr = new FormsAttribute(obj.plotType, obj.lineThickness, obj.numberOfCorners);
+                this.attr = {plotType: obj.plotType, lineThickness: obj.lineThickness, numberOfCorners: obj.numberOfCorners};
             }
         });
     }

@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
-import { DefaultAttributeValues } from '../attributes/default-values';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import {InputObserver } from './input-observer';
 import { Point } from './point';
 
+const DEFAULTPRIMARYCOLOR = 'ff0000ff';
+const DEFAULTSECONDARYCOLOR = '000000';
+const DEFAULTBACKCOLOR = 'ffffffff';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,10 +20,10 @@ export abstract class DrawingTool extends InputObserver {
     inProgress: HTMLElement;
     drawing: HTMLElement;
     interaction: InteractionService
-    defaultValues: DefaultAttributeValues
     colorPick: ColorPickingService
     chosenColor: ChoosenColors
     colorSub: Subscription
+    
 
     abstract createPath(path: Point[], doubleClickCheck?: boolean, removePerimeter?: boolean): void;
 
@@ -37,8 +39,8 @@ export abstract class DrawingTool extends InputObserver {
       this.colorPick = colorPick
 
       this.ignoreNextUp = false;
-      this.defaultValues = new DefaultAttributeValues()
-      this.chosenColor = new ChoosenColors(this.defaultValues.DEFAULTPRIMARYCOLOR, this.defaultValues.DEFAULTSECONDARYCOLOR ,this.defaultValues.DEFAULTBACKCOLOR)
+      this.chosenColor = {primColor: DEFAULTPRIMARYCOLOR, secColor: DEFAULTSECONDARYCOLOR ,
+        backColor: DEFAULTBACKCOLOR}
     }
 
     updateColors() {
@@ -48,9 +50,9 @@ export abstract class DrawingTool extends InputObserver {
       this.colorSub = this.colorPick.colorSubject.subscribe(
         (color: ChoosenColors) => {
           if (color === undefined) {
-            color = new ChoosenColors(DEFPRIM, DEFSEC, DEFBACK);
+            color = {primColor: DEFPRIM, secColor: DEFSEC, backColor: DEFBACK};
           }
-          this.chosenColor = new ChoosenColors(color.primColor, color.secColor, color.backColor);
+          this.chosenColor  = {primColor: color.primColor, secColor: color.secColor, backColor: color.backColor};
         });
       this.colorPick.emitColors()
     }

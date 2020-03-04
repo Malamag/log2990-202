@@ -25,12 +25,7 @@ export class ModalWindowService {
     this.dialogConfig.restoreFocus = false;
   }
 
-  openWindow(component:
-     ComponentType<
-     NewDrawComponent|
-     UserManualComponent|
-     GalleryComponent|
-     ExportFormComponent>) { // Can open new draw form or user guide (for now)
+  openWindow(component: ComponentType<NewDrawComponent|UserManualComponent|GalleryComponent|ExportFormComponent>) { // Can open new draw form or user guide (for now)
     this.dialog.open(component, this.dialogConfig);
   }
 

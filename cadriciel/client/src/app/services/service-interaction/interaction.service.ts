@@ -26,6 +26,9 @@ export class InteractionService {
   ref = new Subject<ElementRef>()
   $refObs = this.ref.asObservable()
 
+  canvasRedone = new Subject<boolean>()
+  $canvasRedone = this.canvasRedone.asObservable();
+
   constructor() { }
 
   emitSelectedTool(tool: string) {
@@ -56,5 +59,8 @@ export class InteractionService {
   }
   emitEnableDisable(disableContainer: boolean[]) {
     this.enableDisableButtons.next(disableContainer);
+  }
+  emitCanvasRedone() {
+    this.canvasRedone.next(true);
   }
 }

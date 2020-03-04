@@ -1,10 +1,8 @@
-/*import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-// import { colorData } from './color-data';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
-import { ColorConvertingService } from 'src/app/services/colorPicker/color-converting.service';
-// import { Component, OnInit } from '@angular/core';
-import { ColorPickingService } from '../../services/colorPicker/color-picking.service';
+//import { ColorConvertingService } from 'src/app/services/colorPicker/color-converting.service';
+//import { ColorPickingService } from '../../services/colorPicker/color-picking.service';
 import { ColorPickerComponent } from './color-picker.component';
 
 describe('ColorPickerComponent', () => {
@@ -27,214 +25,145 @@ describe('ColorPickerComponent', () => {
     it('should create', () => {
         expect(component).toBeTruthy()
     })
-
-    it('should assign the colors to the colors of the service', () => {
-        const primColor = '#000000ff' // our primary and secondary colors, red and black
-        const secColor = '#ff0000ff'
-        const colorConvertingStub = new ColorConvertingService()
-        const colorPickingServiceStub = new ColorPickingService(colorConvertingStub)
-        const chosenColorStub = new ChoosenColors(primColor, secColor)
-        colorPickingServiceStub.colors = new ChoosenColors(chosenColorStub.primColor, chosenColorStub.secColor);
-        const componentStub = new ColorPickerComponent(colorPickingServiceStub);
-        componentStub.initColors();
-        expect(componentStub.cData.primaryColor).toBe(primColor)
-        expect(componentStub.cData.secondaryColor).toBe(secColor)
+    it('should init colors and emit them', ()=>{
+        const initSpy = spyOn(component,'initColors');
+        const emitSpy = spyOn(component.colorPicking, 'emitColors');
+        component.ngOnInit();
+        expect(initSpy).toHaveBeenCalled();
+        expect(emitSpy).toHaveBeenCalled();
     })
-
-    it('should assign to the default values', () => {
+    it('should init colors with the default values',()=>{
         const DEF_PRIM = '#000000ff';
         const DEF_SEC = '#ff0000ff';
-        const colorConvertingStub = new ColorConvertingService()
-        const colorPickingServiceStub = new ColorPickingService(colorConvertingStub)
-        const componentStub = new ColorPickerComponent(colorPickingServiceStub);
-        componentStub.initColors();
-        expect(componentStub.cData.primaryColor).toBe(DEF_PRIM)
-        expect(componentStub.cData.secondaryColor).toBe(DEF_SEC)
+        const DEF_BG = '#ffffffff';
+        component.initColors();
+        expect(component.cData.primaryColor).toBe(DEF_PRIM);
+        expect(component.cData.secondaryColor).toBe(DEF_SEC);
+        expect(component.cData.backgroundColor).toBe(DEF_BG);
     })
-
-    it('should call the setColor method of the service', () => {
-        const colors: number[] = [10, 55]
-        const spyObj = spyOn(component.colorPicking, 'setColor')
-        component.setColor(colors)
-        expect(spyObj).toHaveBeenCalled()
+    it(' should init colors with the custom values',()=>{
+        //const colorPicking = new ColorPickingService(new ColorConvertingService());
+        const PRIM_COLOR = '#ffffffff';
+        const SEC_COLOR = '#ffffffff';
+        const BG_COLOR = '#00000000';
+        //colorPicking.colorSubject.next(new ChoosenColors(PRIM_COLOR, SEC_COLOR,BG_COLOR));
+        component.colorPicking.colorSubject.next(new ChoosenColors(PRIM_COLOR, SEC_COLOR, BG_COLOR));
+        component.initColors();
+        expect(component.cData.primaryColor).toBe(PRIM_COLOR);
+        expect(component.cData.secondaryColor).toBe(SEC_COLOR);
+        expect(component.cData.backgroundColor).toBe(BG_COLOR);
     })
-
-    it('should call the hueSelector of the service', () => {
-        const mouseEventStub = new MouseEvent('mousedown')
-        const spyObj = spyOn(component.colorPicking, 'hueSelector')
-        component.hueSelector(mouseEventStub)
-        expect(spyObj).toHaveBeenCalled();
+    it('should call set color',()=>{
+        const setSpy = spyOn(component.colorPicking,'setColor');
+        component.setColor([1, 2, 3]);
+        expect(setSpy).toHaveBeenCalled();
     })
-
-    it('should call the slSelector of the service', () => {
-        const mouseEventStub = new MouseEvent('mousedown')
-        const spyObj = spyOn(component.colorPicking, 'slSelector')
-        component.slSelector(mouseEventStub)
-        expect(spyObj).toHaveBeenCalled();
+    it('should call hue selector',()=>{
+        const mouseStub = new MouseEvent('mousedown');
+        const hueSpy = spyOn(component.colorPicking, 'hueSelector');
+        component.hueSelector(mouseStub);
+        expect(hueSpy).toHaveBeenCalled();
     })
-
-    it('should call the onContextMenu of the service', () => {
-        const mouseEventStub = new MouseEvent('mousedown')
-        const spyObj = spyOn(component.colorPicking, 'onContextMenu')
-        component.onContextMenu(mouseEventStub)
-        expect(spyObj).toHaveBeenCalled();
+    it('should call sl selector',()=>{
+        const mouseStub = new MouseEvent('mousedown');
+        const slSpy = spyOn(component.colorPicking, 'slSelector');
+        component.slSelector(mouseStub);
+        expect(slSpy).toHaveBeenCalled();
     })
-
-    it('should call the selectMouseUp of the service', () => {
-
-        const spyObj = spyOn(component.colorPicking, 'colorSelectOnMouseUp')
+    it('should call on context menu',()=>{
+        const mouseStub = new MouseEvent('mousedown');
+        const contextSpy = spyOn(component.colorPicking, 'onContextMenu');
+        component.onContextMenu(mouseStub);
+        expect(contextSpy).toHaveBeenCalled();
+    })
+    it('should call color select on mouse up',()=>{
+        const selectorSpy = spyOn(component.colorPicking,'colorSelectOnMouseUp');
         component.colorSelectOnMouseUp()
-        expect(spyObj).toHaveBeenCalled();
+        expect(selectorSpy).toHaveBeenCalled();
     })
-
-    it('should call the hueSelectorOnMouseDown of the service', () => {
-        const mouseEventStub = new MouseEvent('mousedown')
-        const spyObj = spyOn(component.colorPicking, 'hueSelectorOnMouseDown')
-        component.hueSelectorOnMouseDown(mouseEventStub)
-        expect(spyObj).toHaveBeenCalled();
+    it('should call the hue selector on mouse down',()=>{
+        const mouseStub = new MouseEvent('mousedown');
+        const hueSpy = spyOn(component.colorPicking, 'hueSelectorOnMouseDown');
+        component.hueSelectorOnMouseDown(mouseStub);
+        expect(hueSpy).toHaveBeenCalled();
     })
-
-    it('should call the selectorOnMouseLeave of the service', () => {
-        const mouseEventStub = new MouseEvent('mousedown')
-        const spyObj = spyOn(component.colorPicking, 'selectorOnMouseLeave')
-        component.selectorOnMouseLeave(mouseEventStub)
-        expect(spyObj).toHaveBeenCalled();
+    it('should call the selector on mouse leave', ()=>{
+        const mouseStub = new MouseEvent('mousedown');
+        const selectorSpy = spyOn(component.colorPicking, 'selectorOnMouseLeave');
+        component.selectorOnMouseLeave(mouseStub);
+        expect(selectorSpy).toHaveBeenCalled();
     })
-
-    it('should call the slSelectorOnMouseLeave of the service', () => {
-        const mouseEventStub = new MouseEvent('mousedown')
-        const spyObj = spyOn(component.colorPicking, 'slSelectorOnMouseDown')
-        component.slSelectorOnMouseDown(mouseEventStub)
-        expect(spyObj).toHaveBeenCalled();
+    it('should call the slSelector',()=>{
+        const mouseStub = new MouseEvent('mousedown');
+        const selectorSpy = spyOn(component.colorPicking, 'slSelectorOnMouseDown');
+        component.slSelectorOnMouseDown(mouseStub);
+        expect(selectorSpy).toHaveBeenCalled();
     })
-
-    it('should call the lastColorSelector of the service', () => {
-        const mouseEventStub = new MouseEvent('mousedown')
-        const lastCol = 'ffffff';
-        const spyObj = spyOn(component.colorPicking, 'lastColorSelector')
-        component.lastColorSelector(mouseEventStub, lastCol)
-        expect(spyObj).toHaveBeenCalled()
+    it('should call the last color selector', ()=>{
+        const mouseStub = new MouseEvent('mousedown');
+        const lastColor = 'ffffffff';
+        const lastColorSpy = spyOn(component.colorPicking, 'lastColorSelector');
+        component.lastColorSelector(mouseStub, lastColor);
+        expect(lastColorSpy).toHaveBeenCalled();
     })
-
-    it('should call onSwapSVGMouseOver of the service', () => {
-        const spyObj = spyOn(component.colorPicking, 'onSwapSVGMouseOver')
-        component.onSwapSVGMouseOver()
-        expect(spyObj).toHaveBeenCalled()
+    it('should call swap on mouse over',()=>{
+        const swapSpy = spyOn(component.colorPicking,'onSwapSVGMouseOver');
+        component.onSwapSVGMouseOver();
+        expect(swapSpy).toHaveBeenCalled();
     })
-
-    it('should call onSwapSVGMouseLeave of the service', () => {
-        const spyObj = spyOn(component.colorPicking, 'onSwapSVGMouseLeave')
-        component.onSwapSVGMouseLeave()
-        expect(spyObj).toHaveBeenCalled()
+    it('should call swap on mouse leave',()=>{
+        const swapSpy = spyOn(component.colorPicking,'onSwapSVGMouseLeave');
+        component.onSwapSVGMouseLeave();
+        expect(swapSpy).toHaveBeenCalled();
     })
-
-    it('should call onSwapSVGMouseDown of the service', () => {
-        const spyObj = spyOn(component.colorPicking, 'onSwapSVGMouseDown')
-        component.onSwapSVGMouseDown()
-        expect(spyObj).toHaveBeenCalled()
+    it('should call swap on mouse down',()=>{
+        const swapSpy = spyOn(component.colorPicking,'onSwapSVGMouseDown');
+        component.onSwapSVGMouseDown();
+        expect(swapSpy).toHaveBeenCalled();
     })
-
-    it('should call onSwapMouseUp of the service', () => {
-        const spy = spyOn(component.colorPicking, 'onSwapSVGMouseUp')
-        component.onSwapSVGMouseUp()
-        expect(spy).toHaveBeenCalled()
+    it('should call swap on mouse up',()=>{
+        const swapSpy = spyOn(component.colorPicking,'onSwapSVGMouseUp');
+        component.onSwapSVGMouseUp();
+        expect(swapSpy).toHaveBeenCalled();
     })
-
-    it('should call swapInputDisplay of the service', () => {
-        const spy = spyOn(component.colorPicking, 'swapInputDisplay')
-        const eventStub: MouseEvent = new MouseEvent('mousedown')
-        component.swapInputDisplay(eventStub)
-        expect(spy).toHaveBeenCalled()
+    it('should call on radio button change',()=>{
+        const radioSpy = spyOn(component.colorPicking,'onRadioButtonChange');
+        const colorMode = 'Primary'
+        component.onRadioButtonChange(colorMode);
+        expect(radioSpy).toHaveBeenCalled()
     })
-
-    it('should call refreshDisplay of the service', () => {
-        const spy = spyOn(component.colorPicking, 'refreshDisplay')
-        component.refreshDisplay()
-        expect(spy).toHaveBeenCalled()
+    it('should swap input display', ()=>{
+        const swapSpy = spyOn(component.colorPicking,'swapInputDisplay');
+        component.swapInputDisplay();
+        expect(swapSpy).toHaveBeenCalled(); 
     })
-
-    it('should call validateHexInput of the service', () => {
-        const spy = spyOn(component.colorPicking, 'validateHexInput')
-        const keyboardEventStub = new KeyboardEvent('keydown')
-        component.validateHexInput(keyboardEventStub)
-        expect(spy).toHaveBeenCalled()
+    it('should call validate hex input',()=>{
+        const validatorSpy = spyOn(component.colorPicking,'validateHexInput');
+        const keyboardEventStub = new KeyboardEvent('keyUp');
+        const hexLength = 10;
+        const hex = '0000';
+        component.validateHexInput(keyboardEventStub, hexLength, hex);
+        expect(validatorSpy).toHaveBeenCalled();
     })
-
-    it('should call validateHexColorInput of the service', () => {
-        const spy = spyOn(component.colorPicking, 'validateHexColorInput')
-        const keyboardEventStub = new KeyboardEvent('keydown')
-        component.validateHexColorInput(keyboardEventStub)
-        expect(spy).toHaveBeenCalled()
+    it('should call onHexInput',()=>{
+        const inputSpy = spyOn(component.colorPicking, 'onHexInput');
+        component.onHexInput(10, '00000000', 'background');
+        expect(inputSpy).toHaveBeenCalled();
     })
-
-    it('should call validateRedHexInput of the service', () => {
-        const spy = spyOn(component.colorPicking, 'validateRedHexInput')
-        const keyboardEventStub = new KeyboardEvent('keydown')
-        component.validateRedHexInput(keyboardEventStub)
-        expect(spy).toHaveBeenCalled()
+    it('should call on sl slider input',()=>{
+        const sliderSpy = spyOn(component.colorPicking,'onSLSliderInput');
+        component.onSLSliderInput();
+        expect(sliderSpy).toHaveBeenCalled();
     })
-
-    it('should call validateGreenHexInput of the service', () => {
-        const spy = spyOn(component.colorPicking, 'validateGreenHexInput')
-        const keyboardEventStub = new KeyboardEvent('keydown')
-        component.validateGreenHexInput(keyboardEventStub)
-        expect(spy).toHaveBeenCalled()
+    it('should call slider alpha change',()=>{
+        const sliderSpy = spyOn(component.colorPicking, 'sliderAlphaChange');
+        component.sliderAlphaChange();
+        expect(sliderSpy).toHaveBeenCalled();
     })
-
-    it('should call validateBlueHexInput of the service', () => {
-        const spy = spyOn(component.colorPicking, 'validateBlueHexInput')
-        const keyboardEventStub = new KeyboardEvent('keydown')
-        component.validateBlueHexInput(keyboardEventStub)
-        expect(spy).toHaveBeenCalled()
-    })
-
-    it('should call onHexColorInput of the service', () => {
-        const spy = spyOn(component.colorPicking, 'onHexColorInput')
-        const keyboardEventStub = new KeyboardEvent('keydown')
-        component.onHexColorInput(keyboardEventStub)
-        expect(spy).toHaveBeenCalled()
-    })
-
-    it('should call onRedHexInput of the service', () => {
-        const spy = spyOn(component.colorPicking, 'onRedHexInput')
-        component.onRedHexInput()
-        expect(spy).toHaveBeenCalled()
-    })
-
-    it('should call onGreenHexInput of the service', () => {
-        const spy = spyOn(component.colorPicking, 'onGreenHexInput')
-        component.onGreenHexInput()
-        expect(spy).toHaveBeenCalled()
-    })
-
-    it('should call onBlueHexInput of the service', () => {
-        const spy = spyOn(component.colorPicking, 'onBlueHexInput')
-        component.onBlueHexInput()
-        expect(spy).toHaveBeenCalled()
-    })
-
-    it('should call onRGBSliderInput of the service', () => {
-        const spy = spyOn(component.colorPicking, 'onRGBSliderInput')
-        component.onRGBSliderInput()
-        expect(spy).toHaveBeenCalled()
-    })
-
-    it('should call onSLSliderInput of the service', () => {
-        const spy = spyOn(component.colorPicking, 'onSLSliderInput')
-        component.onSLSliderInput()
-        expect(spy).toHaveBeenCalled()
-    })
-
-    it('should call sliderAplphaChange of the service', () => {
-        const spy = spyOn(component.colorPicking, 'sliderAlphaChange')
-        component.sliderAlphaChange()
-        expect(spy).toHaveBeenCalled()
-    })
-
-    it('should call swapPrimarySecondary of the service', () => {
-        const spy = spyOn(component.colorPicking, 'swapPrimarySecondary')
-        component.swapPrimarySecondary()
-        expect(spy).toHaveBeenCalled()
+    it('should swap primary secondary',()=>{
+        const swapSpy = spyOn(component.colorPicking,'swapPrimarySecondary');
+        component.swapPrimarySecondary();
+        expect(swapSpy).toHaveBeenCalled();
     })
 })
-*/
+

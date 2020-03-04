@@ -17,6 +17,8 @@ export class NewDrawComponent  implements OnInit  {
   height: number;
   color: string;
 
+  inputEntered: boolean;
+
   constructor(private formBuilder: FormBuilder,
               private canvasBuilder: CanvasBuilderService,
               private winService: ModalWindowService,
@@ -26,10 +28,25 @@ export class NewDrawComponent  implements OnInit  {
 
   ngOnInit() {
     this.initForm();
+    this.resizeCanvas();
+    this.color = this.canvasBuilder.getDefColor();
+    this.inputEntered = true;
+    window.addEventListener('resize', () => {
+      if (this.inputEntered) {
+        this.resizeCanvas();
+      }
+    });
+  }
+
+  blockEvent(ev: KeyboardEvent) {
+    ev.stopPropagation();
+
+    this.inputEntered = false;
+  }
+
+  resizeCanvas() {
     this.width = this.canvasBuilder.getDefWidth();
     this.height = this.canvasBuilder.getDefHeight();
-    this.color = this.canvasBuilder.getDefColor();
-
   }
 
   initForm() {
