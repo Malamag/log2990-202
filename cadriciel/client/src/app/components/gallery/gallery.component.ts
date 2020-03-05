@@ -4,6 +4,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import {IndexService} from './../../services/index/index.service'
 import{ImageData} from'../../imageData'
+import { Image } from '../../image';
 
 @Component({
     selector: 'app-gallery',
@@ -19,13 +20,14 @@ import{ImageData} from'../../imageData'
 export class GalleryComponent implements OnInit {
     fakeImage = fakeImages;
     drawings: ImageData[];
+    image : Image;
     readonly inputTagSeparators: number[] = [ENTER, COMMA];
     tags: string[] = [];
     @ViewChild('cardsContainer',{static:false}) cardsContainer: ElementRef
     constructor(private index: IndexService, private render: Renderer2) {}
 
     ngOnInit() {
-        this.index.pupolatedBd();
+        //this.index.pupolatedBd();
         this.getAllImages();
     }
 
@@ -66,7 +68,7 @@ export class GalleryComponent implements OnInit {
     }
     getAllImages(): void{
         setTimeout(this.showMessage, 1500)
-       this.drawings = this.index.getAllImages()
+        this.drawings = this.index.getAllImages()
     }
 
 }

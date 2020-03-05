@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Message } from '../../../../../common/communication/message';
 import { ImageData } from '../../imageData';
+import { Image } from '../../image'
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -16,7 +17,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class IndexService {
- private readonly BASE_URL: string = 'http://localhost:3000/api/index';
+ private readonly BASE_URL: string = 'http://localhost:3000/database/Images/';
   constructor(private http: HttpClient) {
   }
   basicGet(): Observable<Message> {
@@ -29,36 +30,41 @@ export class IndexService {
   }
   getAllImages(): ImageData[] {
     let ret: ImageData[] = [];
-    this.http.get<ImageData[]>('http://localhost:3000/database/Images/').subscribe( (data) => {
+    this.http.get<ImageData[]>(this.BASE_URL).subscribe( (data) => {
       data.forEach((image) => {
-        ret.push({id:image.id, name: image.name, tags: image.tags});
+        ret.push({id:image.id, name: image.name, tags: image.tags, svgElement : image.svgElement});
       })
    });
     return ret;
   }
   getImageById(imageId: string): ImageData {
-    let ret: ImageData = {id: '', name: '', tags: []};
-    this.http.get<ImageData>('http://localhost:3000/database/Images/' + imageId).subscribe( (data) => {
-       ret = {id: data.id, name: data.name, tags: data.tags}
+    let ret: ImageData = {id: '', name: '', tags: [], svgElement : new Node()};
+    this.http.get<ImageData>(this.BASE_URL + imageId).subscribe( (data) => {
+       ret = {id: data.id, name: data.name, tags: data.tags, svgElement : data.svgElement};
     });
+    
     return ret;
   }
   addImage(imageData: ImageData ): string {
 
-    this.http.post<ImageData>('http://localhost:3000/database/Images/', imageData, httpOptions )
+    this.http.post<ImageData>(this.BASE_URL, imageData, httpOptions )
     .subscribe( (data) => { });
     return 'Ok';
   }
 
   deleteImageById(imageId: string) {
-    this.http.delete<ImageData>('http://localhost:3000/database/Images/' + imageId, httpOptions).subscribe( (data) => {});
+    this.http.delete<ImageData>(this.BASE_URL + imageId, httpOptions).subscribe( (data) => {});
   }
   modifyImage(imageData: ImageData) {
     httpOptions.headers = httpOptions.headers.set('Authorization', 'my-new-auth-token');
-    this.http.patch<ImageData>('http://localhost:3000/database/Images/', imageData, httpOptions).subscribe( (data) => {})
+    this.http.patch<ImageData>(this.BASE_URL, imageData, httpOptions).subscribe( (data) => {})
   }
 
   pupolatedBd() {
     this.http.get<any>('http://localhost:3000/database/populateDB').subscribe( (data) => { });
+  }
+
+  saveImage(image : Image) {
+    this.http.post<Image>('http://localhost:3000/database/saveImage', image, httpOptions).subscribe((data) => {});
   }
 }

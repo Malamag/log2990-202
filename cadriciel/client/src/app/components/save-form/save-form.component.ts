@@ -4,6 +4,10 @@ import { ModalWindowService } from 'src/app/services/window-handler/modal-window
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
+import { IndexService } from 'src/app/services/index/index.service';
+//import { Image } from '../../image';
+import { ImageData } from '../../imageData';
+
 @Component({
   selector: 'app-save-form',
   templateUrl: './save-form.component.html',
@@ -11,7 +15,7 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
 })
 export class SaveFormComponent implements OnInit {
   saveForm: FormGroup;
-  constructor(private winService: ModalWindowService, private formBuilder: FormBuilder, private doodleFetch: DoodleFetchService,) { }
+  constructor(private winService: ModalWindowService, private formBuilder: FormBuilder, private doodleFetch: DoodleFetchService,private index: IndexService) { }
   readonly LabelsNumberCap :number = 20;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   labels: string[];
@@ -70,7 +74,14 @@ export class SaveFormComponent implements OnInit {
     }
     this.labelsIsFull = this.labels.length >= this.LabelsNumberCap;
   }
-
+  saveImage() {
+    let id : string = new Date().getUTCMilliseconds() + '';
+    let image : ImageData = {id : id, name : 'TODO', tags : this.labels, svgElement : this.doodle };
+    //let metaData : ImageData = {id : image.id, name : "todo", tags : this.labels};
+    this.index.addImage(image);
+    //this.index.saveImage(image);
+    this.winService.closeWindow();
+  }
   closeForm() {
     this.winService.closeWindow();
   }
