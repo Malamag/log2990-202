@@ -52,9 +52,10 @@ describe('DrawViewComponent', () => {
         }).compileComponents();
     }));
 
-    beforeEach(() => {
+    beforeEach(async () => {
         fixture = TestBed.createComponent(DrawViewComponent);
         component = fixture.componentInstance;
+        await fixture.whenStable();
         fixture.detectChanges();
     });
 

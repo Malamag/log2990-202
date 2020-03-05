@@ -4,7 +4,7 @@ import { PencilService } from 'src/app/services/draw-tool/pencil.service';
 import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
 import { SvgDrawComponent } from './svg-draw.component';
 
-import { CUSTOM_ELEMENTS_SCHEMA, Renderer2, RendererFactory2 } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
@@ -13,7 +13,7 @@ import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handle
 
 const width = 67;
 const height = 10;
-const color = 'white';
+const color = '#ffffff';
 
 describe('SvgDrawComponent', () => {
     let component: SvgDrawComponent;
@@ -22,13 +22,12 @@ describe('SvgDrawComponent', () => {
     let kbHandlerStub: any;
     let dFetchService: any;
     let rendererStub: any;
-    let rdFactStub: any;
 
     beforeEach(async(() => {
         mouseHandlerStub = {
-            move: () => 0,
-            down: () => 0,
-            up: () => 0,
+            move: (e: MouseEvent) => 0,
+            down: (e: MouseEvent) => 0,
+            up: (e: MouseEvent) => 0,
         };
 
         kbHandlerStub = {
@@ -41,7 +40,6 @@ describe('SvgDrawComponent', () => {
         };
 
         rendererStub = {};
-        rdFactStub = {};
 
         TestBed.configureTestingModule({
             declarations: [SvgDrawComponent],
@@ -50,18 +48,18 @@ describe('SvgDrawComponent', () => {
                 { provide: MouseHandlerService, useValue: mouseHandlerStub },
                 { provide: DoodleFetchService, useValue: dFetchService },
                 { provide: Renderer2, useValue: rendererStub },
-                { provide: RendererFactory2, useValue: rdFactStub },
             ],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
     }));
 
-    beforeEach(async(async () => {
+    beforeEach(async () => {
         fixture = TestBed.createComponent(SvgDrawComponent);
         component = fixture.componentInstance;
+        component.backColor = color;
         await fixture.whenStable();
         fixture.detectChanges();
-    }));
+    });
 
     it('should create', () => {
         expect(component).toBeTruthy();
@@ -88,6 +86,7 @@ describe('SvgDrawComponent', () => {
 
     it('a dispatch should be sent', () => {
         const spyObj = spyOn(window, 'dispatchEvent');
+        component.ngOnInit();
         component.ngAfterViewInit();
         expect(spyObj).toHaveBeenCalled();
     });
@@ -101,9 +100,9 @@ describe('SvgDrawComponent', () => {
             canvasBuilderStub,
             component.interaction,
             component.colorPick,
-            dFetchService,
+            component['doodleFetch'],
             rendererStub,
-            rdFactStub,
+            component['gridService'],
         );
         componentStub.initCanvas();
         expect(componentStub.width).toBe(canvas.canvasWidth);
@@ -120,9 +119,10 @@ describe('SvgDrawComponent', () => {
     });
 
     it('should call window addEventListener', () => {
+        const LISTENER_NUM: number = 7;
         const spyWindow = spyOn(window, 'addEventListener');
         component.ngAfterViewInit();
-        expect(spyWindow).toHaveBeenCalledTimes(6);
+        expect(spyWindow).toHaveBeenCalledTimes(LISTENER_NUM);
     });
 
     /*it('should call the mousehandler listeners on mouse action', ()=>{
