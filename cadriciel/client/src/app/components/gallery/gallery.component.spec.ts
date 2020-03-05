@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GalleryComponent } from './gallery.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('GalleryComponent', () => {
     let component: GalleryComponent;
@@ -10,7 +10,7 @@ describe('GalleryComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [GalleryComponent],
-            schemas: [CUSTOM_ELEMENTS_SCHEMA],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
         }).compileComponents();
     }));
 

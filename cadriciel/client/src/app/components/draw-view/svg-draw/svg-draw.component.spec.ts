@@ -8,11 +8,11 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
 
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
-import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+//import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 
-const width: number = 67;
-const height: number = 10;
-const color: string = '#ffffff';
+//const width: number = 67;
+//const height: number = 10;
+//const color: string = '#ffffff';
 
 describe('SvgDrawComponent', () => {
     let component: SvgDrawComponent;
@@ -55,7 +55,7 @@ describe('SvgDrawComponent', () => {
     beforeEach(async () => {
         fixture = TestBed.createComponent(SvgDrawComponent);
         component = fixture.componentInstance;
-        component.backColor = color;
+
         await fixture.whenStable();
         fixture.detectChanges();
     });
@@ -78,7 +78,7 @@ describe('SvgDrawComponent', () => {
         expect(mapTest.get(name2).selected).toBeFalsy();
     });*/
 
-    it('the containers length should be greater than zero', () => {
+    /* it('the containers length should be greater than zero', () => {
         component.ngAfterViewInit();
         expect(component.toolsContainer.size).toBeGreaterThan(0);
     });
@@ -107,7 +107,7 @@ describe('SvgDrawComponent', () => {
         expect(componentStub.width).toBe(canvas.canvasWidth);
         expect(componentStub.height).toBe(canvas.canvasHeight);
         expect(componentStub.backColor).toBe(canvas.canvasColor);
-    });
+    });*/
 
     /*TEST PASSING
     it('should call initCanvas and the observable', () => {
