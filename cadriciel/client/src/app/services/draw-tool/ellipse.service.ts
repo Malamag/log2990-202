@@ -82,8 +82,18 @@ export class EllipseService extends ShapeService {
 
     if (!removePerimeter) {
       // create a perimeter
-      this.svgString += `<rect x="${this.startX}" y="${this.startY}"`;
-      this.svgString += `width="${Math.abs(this.width)}" height="${Math.abs(this.height)}"`;
+      let perStartX = this.startX;
+      let perStartY = this.startY;
+      let perWidth = Math.abs(this.width);
+      let perHeight = Math.abs(this.height);
+      if(this.attr.plotType !== 1){
+        perStartX -= this.attr.lineThickness/2;
+        perStartY -= this.attr.lineThickness/2;
+        perWidth += this.attr.lineThickness;
+        perHeight += this.attr.lineThickness;
+      }
+      this.svgString += `<rect x="${perStartX}" y="${perStartY}"`;
+      this.svgString += `width="${perWidth}" height="${perHeight}"`;
       this.svgString += 'style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"';
       this.svgString += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
     }
