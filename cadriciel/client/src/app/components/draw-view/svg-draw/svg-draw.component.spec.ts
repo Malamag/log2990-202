@@ -1,11 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SvgDrawComponent } from './svg-draw.component';
-
 import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
 //import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
@@ -21,25 +18,20 @@ describe('SvgDrawComponent', () => {
     let kbHandlerStub: any;
     let dFetchService: any;
     let rendererStub: any;
-
     beforeEach(async(() => {
         mouseHandlerStub = {
             move: (e: MouseEvent) => 0,
             down: (e: MouseEvent) => 0,
             up: (e: MouseEvent) => 0,
         };
-
         kbHandlerStub = {
             reset: (e: KeyboardEvent) => e,
             logKey: (e: KeyboardEvent) => e,
         };
-
         dFetchService = {
             ask: new Subject<boolean>(),
         };
-
         rendererStub = {};
-
         TestBed.configureTestingModule({
             declarations: [SvgDrawComponent],
             providers: [
@@ -51,7 +43,6 @@ describe('SvgDrawComponent', () => {
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
     }));
-
     beforeEach(async () => {
         fixture = TestBed.createComponent(SvgDrawComponent);
         component = fixture.componentInstance;
@@ -59,15 +50,12 @@ describe('SvgDrawComponent', () => {
         await fixture.whenStable();
         fixture.detectChanges();
     });
-
     it('should create', () => {
         expect(component).toBeTruthy();
     });
-
     /* it('should deselect all tools', () => {
         const name1 = 'Pencil';
         const name2 = 'rect';
-
         const pencil = new PencilService(component.workingSpace, component.workingSpace, true, component.interaction, component.colorPick);
         const rect = new RectangleService(component.workingSpace, component.workingSpace, true, component.interaction, component.colorPick);
         const mapTest = new Map();
@@ -82,19 +70,16 @@ describe('SvgDrawComponent', () => {
         component.ngAfterViewInit();
         expect(component.toolsContainer.size).toBeGreaterThan(0);
     });
-
     it('a dispatch should be sent', () => {
         const spyObj = spyOn(window, 'dispatchEvent');
         component.ngOnInit();
         component.ngAfterViewInit();
         expect(spyObj).toHaveBeenCalled();
     });
-
     it('should have the same parameters as the observer', () => {
         const canvasBuilderStub = new CanvasBuilderService(component.interaction);
         const canvas = { canvasWidth: width, canvasHeight: height, canvasColor: color };
         canvasBuilderStub.newCanvas = canvas;
-
         const componentStub = new SvgDrawComponent(
             canvasBuilderStub,
             component.interaction,
@@ -133,11 +118,9 @@ describe('SvgDrawComponent', () => {
     const spyDown = spyOn(mouseHandlerStub, "down");
     window.dispatchEvent(new MouseEvent("mousedown"));
     expect(spyDown).toHaveBeenCalled();
-
     const spyMove = spyOn(mouseHandlerStub, "move");
     window.dispatchEvent(new MouseEvent("mousemove")); // sending the events
     expect(spyMove).toHaveBeenCalled(); // we want to see if the functions get called after the event
-
     const spyUp = spyOn(mouseHandlerStub, "up");
     window.dispatchEvent(new MouseEvent("mouseup"));
     expect(spyUp).toHaveBeenCalled();
@@ -149,7 +132,6 @@ describe('SvgDrawComponent', () => {
         const spyKey = spyOn(kbHandlerStub, 'logKey');
         window.dispatchEvent(new KeyboardEvent('keydown'));
         expect(spyKey).toHaveBeenCalled();
-
         const spyRes = spyOn(kbHandlerStub, 'reset');
         window.dispatchEvent(new KeyboardEvent('keyup'));
         expect(spyRes).toHaveBeenCalled();
@@ -160,10 +142,8 @@ describe('SvgDrawComponent', () => {
         const spy = spyOn(component, 'closeTools');
         component.ngOnInit();
         component.ngAfterViewInit(); // init all
-
         component.interaction.emitCancel(true); // we want to cancel the tool selection
         expect(spy).toHaveBeenCalled();
-
         const TOOL = 'Rectangle'; // arbitrary tool selection
         component.interaction.emitSelectedTool(TOOL);
         expect(component.toolsContainer.get(TOOL).selected).toBeTruthy();
