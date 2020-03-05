@@ -14,7 +14,7 @@ const DEFAULTLINETHICKNESS = 5;
 })
 export class ShapeService extends DrawingTool {
 
-  protected attr: FormsAttribute;
+  attr: FormsAttribute;
 
   // Shape's dimensions
   public width: number;
@@ -86,27 +86,27 @@ export class ShapeService extends DrawingTool {
   up(position: Point) {
 
     // in case we changed tool while the mouse was down
-    if (!this.ignoreNextUp) {
-
-      // the shape should not affect the canvas
-      this.isDown = false;
-
-      // add everything to the canvas
-      this.updateDrawing(true);
+    if (this.ignoreNextUp) {
+      return;
     }
+     // the shape should not affect the canvas
+    this.isDown = false;
+
+     // add everything to the canvas
+    this.updateDrawing(true);
   }
 
   // mouse move with shape in hand
   move(position: Point) {
 
     // only if the shapeTool is currently affecting the canvas
-    if (this.isDown) {
-
-      // save mouse position
-      this.currentPath.push(position);
-
-      this.updateProgress();
+    if (!this.isDown) {
+      return;
     }
+       // save mouse position
+    this.currentPath.push(position);
+
+    this.updateProgress();
   }
 
   // mouse doubleClick with rectangle in hand

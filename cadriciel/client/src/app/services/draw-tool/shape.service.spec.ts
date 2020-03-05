@@ -1,23 +1,110 @@
-/*import { TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import { ShapeService } from './shape.service';
-import { InteractionService } from '../service-interaction/interaction.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
+import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
+import { InteractionService } from '../service-interaction/interaction.service';
+import { ShapeService } from './shape.service';
+import { Point } from './point';
+
+
+export class FakeInteractionService extends InteractionService {}
 
 describe('ShapeService', () => {
+    let service: ShapeService
+    let kbServiceStub: any;
+    let ptA: Point;
+    let ptB: Point;
+    let ptArr: Point[];
+    //let interaction : InteractionService
     beforeEach(() => {
+        kbServiceStub = {
+            shiftDown: true,
+            ctrlDown: true,
+        };
+
+        ptA = new Point(0, 0); // using a point to test position functions
+        ptB = new Point(1, 2);
+        ptArr = [ptA, ptB];
+
         TestBed.configureTestingModule({
             providers: [
                 { provide: HTMLElement, useValue: {} },
                 { provide: Boolean, useValue: true },
-                { provide: InteractionService, useValue: {} },
                 { provide: ColorPickingService, useValue: {} },
+                { provide: InteractionService, useClass: FakeInteractionService },
+                { provide: KeyboardHandlerService, useValue: kbServiceStub },
             ],
         });
+        //interaction = new InteractionService()
+        service = TestBed.get(ShapeService)
+        service.ignoreNextUp = false;
+        service.isDown = false;
+        service.attr = {plotType: 0, lineThickness: 5, numberOfCorners: 3};
     });
 
     it('should be created', () => {
-        const service: ShapeService = TestBed.get(ShapeService);
         expect(service).toBeTruthy();
     });
-});*/
+
+    it('should set the attributes in the subscription', () => {
+        service.interaction.emitFormsAttributes({plotType: 0, lineThickness: 0, numberOfCorners: 0});
+        const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
+        service.updateAttributes();
+        expect(spyInteraction).toHaveBeenCalled();
+        expect(service.attr).toBeDefined();
+    });
+    it('should update progress on move', () => {
+        const spy = spyOn(service, 'updateProgress');
+        service.down(ptA); // simulating a mouse down at given point
+        service.update(kbServiceStub);
+        expect(spy).toHaveBeenCalled();
+    });
+    it('should update the current path on mouse down', () => {
+        const spy = spyOn(service, 'updateProgress');
+        service.down(ptA);
+        expect(service.currentPath.length).toBe(2); // same point added twice to manage static mouse
+        expect(service.currentPath).toContain(ptA);
+
+        expect(spy).toHaveBeenCalled();
+    })
+    it('should update the drawing on mouse up', () => {
+        service.down(ptA); // pressing the mouse
+        const spy = spyOn(service, 'updateDrawing');
+        service.up(ptA);
+        expect(spy).toHaveBeenCalled();
+    });
+    it('should not update the drawing on mouse up', () => {
+        service.ignoreNextUp = true;
+        const spy = spyOn(service, 'updateDrawing');
+        service.up(ptA);
+        expect(spy).toHaveBeenCalledTimes(0);
+    })
+    it('should not update the progress on mouse move', ()=>{
+        service.isDown = false;
+        const spy = spyOn(service, 'updateProgress');
+        service.move(ptA);
+        expect(spy).toHaveBeenCalledTimes(0);
+    })
+    it('should update the progress on mouse mouve', ()=>{
+        service.isDown = true;
+        const spy = spyOn(service, 'updateProgress');
+        service.move(ptA);
+        expect(spy).toHaveBeenCalled()
+    })
+    it('should set the width and the height', ()=>{
+        service.setdimensions(ptArr);
+        expect(service.width).toEqual(ptB.x - ptA.x)
+        expect(service.height).toEqual(ptB.y - ptA.y)
+    })
+    it('should not fill the shape', () => {
+        service.setAttributesToPath();
+        const expectedString = `"fill= none"` + `stroke-width" = ${service.attr.lineThickness}" stroke =" ${service.chosenColor.secColor}"/>`;
+        expect(service.svgString).toBe(expectedString)
+    })
+    it('should not have a stroke and fill the shape', ()=>{
+        service.attr = {plotType: 0, lineThickness: 5, numberOfCorners: 3 }
+        service.setAttributesToPath();
+        const expectedString = `"fill=" ${service.chosenColor.primColor}` + `stroke-width" = ${service.attr.lineThickness}"` + `"stroke = none"/>`;
+        expect(service.svgString).toBe(expectedString);
+    })
+});
