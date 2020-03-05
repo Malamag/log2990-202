@@ -1,15 +1,15 @@
+import { Injectable } from '@angular/core';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 import { ShapeService } from './shape.service';
-import { Injectable } from '@angular/core';
 
 @Injectable({
     providedIn: 'root',
 })
 export class RectangleService extends ShapeService {
-    public isSquare: boolean;
+    isSquare: boolean;
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
         super(inProgess, drawing, selected, interaction, colorPick);
