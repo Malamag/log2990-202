@@ -4,13 +4,12 @@ import { PencilService } from 'src/app/services/draw-tool/pencil.service';
 import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
 import { SvgDrawComponent } from './svg-draw.component';
 
-import { Renderer2, CUSTOM_ELEMENTS_SCHEMA, RendererFactory2 } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Renderer2, RendererFactory2 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
-
 
 const width = 67;
 const height = 10;
@@ -95,7 +94,7 @@ describe('SvgDrawComponent', () => {
 
     it('should have the same parameters as the observer', () => {
         const canvasBuilderStub = new CanvasBuilderService(component.interaction);
-        const canvas = {canvasWidth: width, canvasHeight: height, canvasColor: color};
+        const canvas = { canvasWidth: width, canvasHeight: height, canvasColor: color };
         canvasBuilderStub.newCanvas = canvas;
 
         const componentStub = new SvgDrawComponent(
