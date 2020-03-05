@@ -11,7 +11,7 @@ const DEFAULTTEXTURE = 0;
 @Injectable({
   providedIn: 'root'
 })
-export class PencilService extends DrawingTool {
+export class EraserService extends DrawingTool {
   attr: ToolsAttributes
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
@@ -36,7 +36,7 @@ export class PencilService extends DrawingTool {
 
   // updating on key up
   updateUp(keyCode : number) {
-    // nothing happens for pencil tool
+    // nothing happens for eraser tool
   }
 
   // mouse down with pencil in hand
@@ -112,7 +112,7 @@ export class PencilService extends DrawingTool {
       s += `L ${p[i].x} ${p[i].y} `;
     }
     // set render attributes
-    s += `\" stroke="${this.chosenColor.primColor}"`;
+    s += `\" stroke="blue"`;
     s += `stroke-width="${this.attr.lineThickness}"`;
     s += 'fill="none"';
     s += 'stroke-linecap="round"';

@@ -16,11 +16,16 @@ export class RectangleService extends ShapeService {
         this.isSquare = false;
     }
     // updating on key change
-    update(keyboard: KeyboardHandlerService) {
+    updateDown(keyboard: KeyboardHandlerService) {
         // rectangle becomes square when shift is pressed
         this.isSquare = keyboard.shiftDown;
 
-        super.update(keyboard);
+        super.updateDown(keyboard);
+    }
+
+    // updating on key up
+    updateUp(keyCode : number) {
+        // nothing happens for rectangle service
     }
 
     setdimensions(p: Point[]) {

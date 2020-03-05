@@ -13,6 +13,9 @@ const INVERTED_FILL_COLOR : string = "204, 0, 102, 0.3";
 const NO_MOUSE_MOVEMENT_TOLERANCE : number = 5;
 const MIN_OFFSET_FOR_SELECTION : number = 10;
 
+const START_ARROW_DELAY = 500;
+const ARROW_MOVEMENT_DELAY = 100;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -34,6 +37,13 @@ export class SelectionService extends ShapeService {
   inverted:boolean;
   wrapperDimensions : [Point,Point];
 
+  arrows :[boolean,boolean,boolean,boolean];
+  arrowTimers : [number, number,number,number];
+  singleUseArrows : [boolean,boolean,boolean,boolean];
+  existingLoop : boolean;
+  timeCount:number;
+  movedSelectionWithArrowsOnce:boolean;
+
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService,
               colorPick: ColorPickingService, render: Renderer2, selection: HTMLElement, canvas: HTMLElement) {
     super(inProgess, drawing, selected, interaction, colorPick);
@@ -49,6 +59,14 @@ export class SelectionService extends ShapeService {
     this.movedSelectionOnce = false;
     this.movedMouseOnce = false;
     this.inverted = false;
+
+    this.arrows = [false,false, false,false];
+    this.singleUseArrows = [false,false, false,false];
+    this.arrowTimers = [0,0,0,0];
+    this.timeCount = 0;
+    this.existingLoop = false;
+    this.moveWithArrowsLoop();
+    this.movedSelectionWithArrowsOnce = false;
     
     this.wrapperDimensions = [new Point(-1,-1),new Point(-1,-1)];
 
@@ -72,8 +90,9 @@ export class SelectionService extends ShapeService {
 
   }
 
-  update(keyboard: KeyboardHandlerService) {
+  updateDown(keyboard: KeyboardHandlerService) {
 
+    //CTRL-A SELECT ALL
     if(keyboard.keyCode == 65 && keyboard.ctrlDown){
       this.selectedItems = [];
       for(let i = 0; i < this.drawing.children.length;i++){
@@ -82,30 +101,115 @@ export class SelectionService extends ShapeService {
       this.selectedRef.innerHTML = this.updateBoundingBox();
     }
 
-    if(this.canMoveSelection){
+    if(!keyboard.released){
+      this.arrows[0] = keyboard.keyCode == 37? true : this.arrows[0];
+      this.arrows[1] = keyboard.keyCode == 38? true : this.arrows[1];
+      this.arrows[2] = keyboard.keyCode == 39? true : this.arrows[2];
+      this.arrows[3] = keyboard.keyCode == 40? true : this.arrows[3];
+    }
+
+    let singleLeft = this.arrows[0] && !this.singleUseArrows[0];
+    let singleUp = this.arrows[1] && !this.singleUseArrows[1];
+    let singleRight = this.arrows[2] && !this.singleUseArrows[2];
+    let singleDown = this.arrows[3] && !this.singleUseArrows[3];
+
+    this.moveWithArrowOnce(singleLeft, singleUp, singleRight, singleDown)
+  }
+
+  moveWithArrowOnce(left:boolean, up : boolean, right:boolean, down:boolean){
+
+    this.singleUseArrows[0] = left? true : this.singleUseArrows[0];
+    this.singleUseArrows[1] = up? true : this.singleUseArrows[1];
+    this.singleUseArrows[2] = right? true : this.singleUseArrows[2];
+    this.singleUseArrows[3] = down? true : this.singleUseArrows[3];
+
+    let xoff = 0;
+    let yoff = 0;
+    if(right){
+      xoff += 3;
+    }
+    if(left){
+      xoff += -3;
+    }
+    if(up){
+      yoff += -3;
+    }
+    if(down){
+      yoff += 3;
+    }
+
+    this.movedSelectionWithArrowsOnce = (xoff != 0 || yoff != 0);
+  
+    if(this.selectedItems.length > 0){
+      this.moveSelection(xoff,yoff);
+      this.selectedRef.innerHTML = this.updateBoundingBox();
+    }
+  }
+
+  moveWithArrowsLoop(){
+
+    this.existingLoop = true;
+
+    if(this.arrowTimers.some(el => el >= START_ARROW_DELAY)){
       let xoff = 0;
       let yoff = 0;
-      if(keyboard.keyCode == 39){
-        xoff = 3;
-      }else if(keyboard.keyCode == 37){
-        xoff = -3;
+      if(this.arrows[2]){
+        xoff += 3;
       }
-      else if(keyboard.keyCode == 38){
-        yoff = -3;
-      }else if(keyboard.keyCode == 40){
-        yoff = 3;
+      if(this.arrows[0]){
+        xoff += -3;
+      }
+      if(this.arrows[1]){
+        yoff += -3;
+      }
+      if(this.arrows[3]){
+        yoff += 3;
       }
 
+      this.movedSelectionWithArrowsOnce = (xoff != 0 || yoff != 0);
+  
       if(this.selectedItems.length > 0){
         this.moveSelection(xoff,yoff);
-        this.updateBoundingBox();
         this.selectedRef.innerHTML = this.updateBoundingBox();
         //console.log(new Date().getTime());
-        this.canMoveSelection = false;
-        setTimeout(() => {
-          this.canMoveSelection = true;
-        }, 100);
       }
+    }
+    setTimeout(() => {
+      this.moveWithArrowsLoop();
+      for(let i = 0; i < this.arrowTimers.length;i++){
+        this.arrowTimers[i] = this.arrows[i]? this.arrowTimers[i] + ARROW_MOVEMENT_DELAY : this.arrowTimers[i];
+      }
+    }, ARROW_MOVEMENT_DELAY);
+  }
+
+  // updating on key up
+  updateUp(keyCode : number) {
+
+    if(keyCode == 37){
+      this.arrows[0] = false;
+      this.arrowTimers[0] = 0;
+      this.singleUseArrows[0] = false;
+    }
+    if(keyCode == 38){
+      this.arrows[1] = false;
+      this.arrowTimers[1] = 0;
+      this.singleUseArrows[1] = false;
+    }
+    if(keyCode == 39){
+      this.arrows[2] = false;
+      this.arrowTimers[2] = 0;
+      this.singleUseArrows[2] = false;
+    }
+    if(keyCode == 40){
+      this.arrows[3] = false;
+      this.arrowTimers[3] = 0;
+      this.singleUseArrows[3] = false;
+    }
+
+    this.canMoveSelection = this.arrows.includes(true);
+    if(this.movedSelectionWithArrowsOnce && !this.arrows.includes(true)){
+      this.movedSelectionWithArrowsOnce = false;
+      this.interaction.emitDrawingDone();
     }
   }
 
