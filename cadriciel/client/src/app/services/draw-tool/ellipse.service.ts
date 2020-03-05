@@ -59,12 +59,18 @@ export class EllipseService extends ShapeService {
 
     this.svgString = '';
 
-    // We need at least 2 points
-    if (p.length < 2) {
-      return this.svgString;
-    }
-
     this.setdimensions(p);
+
+    //The Ellipse won't display if smaller than 10 -> minValue chosen by ergonomy
+    let MinValue = 10;
+    if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
+      return '';
+    } 
+    //For eliminating bug with large lineThickness and small area
+    MinValue = this.attr.lineThickness;
+    if ((this.attr.plotType !== 1) && Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
+      return '';
+    }   
     
     // create a divider for the ellipse
     this.svgString += '<g name = "ellipse">';

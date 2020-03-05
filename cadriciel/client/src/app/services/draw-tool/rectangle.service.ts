@@ -55,12 +55,13 @@ export class RectangleService extends ShapeService {
   // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
   createPath(p: Point[], removePerimeter?: boolean) {
 
-    // We need at least 2 points
-    if (p.length < 2) {
-      return this.svgString;
-    }
-
     this.setdimensions(p);
+
+    //The Rectangle won't display if smaller than 10 -> minValue chosen by ergonomy
+    let MinValue = 10;
+    if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
+      return '';
+    } 
 
     // create a divider
     this.svgString = '<g name = "rectangle">';
