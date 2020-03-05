@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { fakeImages } from './fake_images';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
@@ -21,7 +21,7 @@ import {Observable} from 'rxjs';
  * in the Angular Material documentation on Chips elements. SOURCE:
  * Angular Material (Google). "Chips" (01/03/2020). En ligne: https://material.angular.io/components/chips/examples
  */
-export class GalleryComponent implements OnInit {
+export class GalleryComponent implements OnInit, AfterViewInit {
     fakeImage = fakeImages;
     drawings: Observable<ImageData[]>;
     readonly inputTagSeparators: number[] = [ENTER, COMMA];
@@ -44,9 +44,11 @@ export class GalleryComponent implements OnInit {
     }
 
     ngOnInit() {
+        //this.getAllImages();
+    }
+    ngAfterViewInit(){
         this.getAllImages();
     }
-    
     blockEvent(ev: KeyboardEvent) {
         ev.stopPropagation();
     }
@@ -70,22 +72,25 @@ export class GalleryComponent implements OnInit {
         }
         this.tagCtrl.setValue(null);
     }
-    showMessage(){
+    showMessage() {
         const text = this.render.createText('en cours de chargement');
         this.render.appendChild(this.cardsContainer.nativeElement, text);
+        return text;
     }
-    delete(id: string){
+    delete(id: string) {
         this.index.deleteImageById(id);
         
         this.getAllImages();
     }
 
     async getAllImages(){
-        //setTimeout(this.showMessage, 25);
-       this.drawings = await this.index.getAllImages()
-       this.drawings.subscribe(data=>{
+        const text = this.showMessage();
+        this.drawings = await this.index.getAllImages()
+        this.render.removeChild(this.cardsContainer, text);
+        this.drawings.subscribe((data) => {
            this.getAllTags(data);
        })
+       
     }
     getAllTags(imageContainer: ImageData[]): void{ 
         imageContainer.forEach(image=>{
