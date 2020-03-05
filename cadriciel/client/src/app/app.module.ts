@@ -35,6 +35,7 @@ import {
     MatToolbarModule,
     MatTooltipModule,
     MatCardModule,
+    MatSlideToggleModule,
 } from '@angular/material';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
 import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
@@ -81,15 +82,22 @@ import { ExportService } from './services/exportation/export.service';
         MatRadioModule,
         MatSelectModule,
         MatButtonToggleModule,
+        MatSlideToggleModule,
         AppRoutingModule,
-        MatCardModule
+        MatCardModule,
     ],
     providers: [CanvasBuilderService, ModalWindowService, ColorConvertingService, ColorPickingService, ExportService],
 
     bootstrap: [AppComponent],
-    entryComponents: [NewDrawComponent, UserManualComponent,GalleryComponent, OptionBarComponent, 
-        ColorPickerComponent,ExportFormComponent, PreviewBoxComponent] // components added dynamically
-
+    entryComponents: [
+        NewDrawComponent,
+        UserManualComponent,
+        GalleryComponent,
+        OptionBarComponent,
+        ColorPickerComponent,
+        ExportFormComponent,
+        PreviewBoxComponent,
+    ], // components added dynamically
 })
 export class AppModule {
     constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
