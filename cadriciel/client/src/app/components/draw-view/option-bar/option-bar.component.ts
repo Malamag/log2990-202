@@ -80,7 +80,7 @@ export class OptionBarComponent {
     }
 
     openNewDrawForm() {
-        if (confirm('Un dessin est déjà en cours. Voulez-vous continuer?')) {
+        if (window.confirm('Un dessin est déjà en cours. Voulez-vous continuer?')) {
             this.winService.openWindow(NewDrawComponent);
         }
     }
@@ -100,7 +100,6 @@ export class OptionBarComponent {
     toggleGrid() {
         this.gridSelected = !this.gridSelected;
         this.gridService.toggleGridVisibility(this.gridSelected);
-        console.log(this.gridSelected);
     }
 
     updateSpacing() {
