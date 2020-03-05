@@ -1,9 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-
-
 import { ColorPickerComponent } from './color-picker.component';
-
 describe('ColorPickerComponent', () => {
     let component: ColorPickerComponent;
     let fixture: ComponentFixture<ColorPickerComponent>
@@ -14,13 +11,11 @@ describe('ColorPickerComponent', () => {
         })
         .compileComponents();
     }));
-
     beforeEach(() => {
         fixture = TestBed.createComponent(ColorPickerComponent);
         component = fixture.componentInstance
         fixture.detectChanges();
     });
-
     it('should create', () => {
         expect(component).toBeTruthy()
     })
@@ -165,4 +160,3 @@ describe('ColorPickerComponent', () => {
         expect(swapSpy).toHaveBeenCalled();
     })
 })
-
