@@ -1,19 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PencilService } from 'src/app/services/draw-tool/pencil.service';
-import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
 import { SvgDrawComponent } from './svg-draw.component';
 
 import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
+import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 
-const width = 67;
-const height = 10;
-const color = '#ffffff';
+const width: number = 67;
+const height: number = 10;
+const color: string = '#ffffff';
 
 describe('SvgDrawComponent', () => {
     let component: SvgDrawComponent;
@@ -65,7 +64,7 @@ describe('SvgDrawComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should deselect all tools', () => {
+    /* it('should deselect all tools', () => {
         const name1 = 'Pencil';
         const name2 = 'rect';
 
@@ -77,7 +76,7 @@ describe('SvgDrawComponent', () => {
         component.closeTools(mapTest);
         expect(mapTest.get(name1).selected).toBeFalsy();
         expect(mapTest.get(name2).selected).toBeFalsy();
-    });
+    });*/
 
     it('the containers length should be greater than zero', () => {
         component.ngAfterViewInit();
@@ -141,21 +140,22 @@ describe('SvgDrawComponent', () => {
     expect(spyUp).toHaveBeenCalled();
   });
 
-  it('should call the kb handler listerners on kb action', ()=>{
-    component.ngAfterViewInit(); // same principle goes for the keyboard events
-    const spyKey = spyOn(kbHandlerStub, "logKey");
-    window.dispatchEvent(new KeyboardEvent("keydown"));
-    expect(spyKey).toHaveBeenCalled();
+    it('should call the kb handler listerners on kb action', () => {
+        component.ngAfterViewInit(); // same principle goes for the keyboard events
+        const spyKey = spyOn(kbHandlerStub, 'logKey');
+        window.dispatchEvent(new KeyboardEvent('keydown'));
+        expect(spyKey).toHaveBeenCalled();
 
-    const spyRes = spyOn(kbHandlerStub, "reset");
-    window.dispatchEvent(new KeyboardEvent("keyup"));
-    expect(spyRes).toHaveBeenCalled();
-
-  });*/
+        const spyRes = spyOn(kbHandlerStub, 'reset');
+        window.dispatchEvent(new KeyboardEvent('keyup'));
+        expect(spyRes).toHaveBeenCalled();
+    });*/
 
     it('should affect the variables on subscription', () => {
         const spy = spyOn(component, 'closeTools');
+        component.ngOnInit();
         component.ngAfterViewInit(); // init all
+
         component.interaction.emitCancel(true); // we want to cancel the tool selection
         expect(spy).toHaveBeenCalled();
 
