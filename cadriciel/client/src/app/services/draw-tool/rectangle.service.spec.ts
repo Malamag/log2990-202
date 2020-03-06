@@ -97,14 +97,18 @@ describe('RectangleService', () => {
     });
 
     it('should create a valid rectangle svg from one point to another', () => {
-        const rect = service.createPath(ptArr);
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
         expect(rect).toContain('<rect');
     });
 
     it('should create a rectangle of the correct dimensions from mouse move', () => {
-        const rect = service.createPath(ptArr);
-        const expWidth = `width="${ptB.x - ptA.x}"`;
-        const expHeigth = `height="${ptB.y - ptA.y}"`;
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
+        const expWidth = `width="${ptBStub.x - ptAStub.x}"`;
+        const expHeigth = `height="${ptBStub.y - ptAStub.y}"`;
 
         expect(rect).toContain(expWidth);
         expect(rect).toContain(expHeigth);
@@ -114,7 +118,9 @@ describe('RectangleService', () => {
         const thick = 1;
         // tslint:disable-next-line: no-string-literal
         service['attr'].lineThickness = thick; // simulated border thickness
-        const rect = service.createPath(ptArr);
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
         const expTick = `stroke-width="${thick}"`;
         expect(rect).toContain(expTick);
     });
@@ -130,7 +136,9 @@ describe('RectangleService', () => {
     });
 
     it('should create a rectangle with corner at mouse start', () => {
-        const rect = service.createPath(ptArr);
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
 
         expect(rect).toContain(`x="${0}"`);
         expect(rect).toContain(`y="${0}"`);
@@ -140,7 +148,9 @@ describe('RectangleService', () => {
         const color = '#ffffff';
         service.chosenColor = { primColor: color, secColor: color, backColor: color }; // both prim. and sec.
 
-        const rect = service.createPath(ptArr);
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
         expect(rect).toContain(`fill="${color}"`);
     });
 
@@ -149,7 +159,9 @@ describe('RectangleService', () => {
         const sec = '#ffffff';
         const back = '#ffffff';
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-        const rect = service.createPath(ptArr);
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
 
         expect(rect).toContain(`stroke="${sec}"`);
     });
@@ -161,8 +173,9 @@ describe('RectangleService', () => {
         const sec = '#ffffff';
         const back = '#ffffff';
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-
-        const rect = service.createPath(ptArr);
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
 
         expect(rect).toContain(`fill="${'none'}"`); // no color for fill
 
@@ -176,9 +189,9 @@ describe('RectangleService', () => {
         const sec = '#ffffff';
         const back = '#ffffff';
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-
-        const rect = service.createPath(ptArr);
-
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
         expect(rect).toContain(`fill="${prim}"`); // primary color fill
 
         expect(rect).toContain(`stroke="${'none'}"`);
@@ -191,8 +204,9 @@ describe('RectangleService', () => {
         const sec = '#ffffff';
         const back = '#ffffff';
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-
-        const rect = service.createPath(ptArr);
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
 
         expect(rect).toContain(`fill="${prim}"`); // no color for fill
 
@@ -208,7 +222,9 @@ describe('RectangleService', () => {
     });
 
     it('should be named rectangle', () => {
-        const path = service.createPath(ptArr);
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const path = service.createPath([ptAStub, ptBStub]);
         const name = 'rectangle';
         expect(path).toContain(name);
     });
