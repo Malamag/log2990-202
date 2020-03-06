@@ -10,16 +10,16 @@ import { ShapeService } from './shape.service';
 
 export class PolygonService extends ShapeService {
 
-  private displayPolygon: boolean  // False if polygon is too small
+  displayPolygon: boolean  // False if polygon is too small
 
   // Point for the middle of the perimeter
-  private middleX: number;
-  private middleY: number;
+  middleX: number;
+  middleY: number;
   // min and max values for x
-  private leftPoint: number;
-  private rightPoint: number;
+  leftPoint: number;
+  rightPoint: number;
   // All corners of the polygon
-  private corners: Point[];
+  corners: Point[];
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
               interaction: InteractionService, colorPick: ColorPickingService) {
