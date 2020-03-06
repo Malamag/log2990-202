@@ -50,7 +50,7 @@ export class PolygonService extends ShapeService {
     this.setCorners(p);
 
     // create a divider
-    this.svgString = '<g name = "polygon">';
+    this.svgString = '<g name = "polygon" style="transform: translate(0px, 0px);" >';
 
     // set all points used as corners for the polygon
     this.svgString += '<polygon points="';

@@ -73,7 +73,7 @@ export class EllipseService extends ShapeService {
     }   
     
     // create a divider for the ellipse
-    this.svgString += '<g name = "ellipse">';
+    this.svgString += '<g name = "ellipse" style="transform: translate(0px, 0px);">';
 
     // set render attributes for the svg ellipse
     this.svgString += `<ellipse cx="${this.startX + Math.abs(this.width / 2)}" cy="${this.startY + Math.abs(this.height / 2)}" rx="${Math.abs(this.width / 2)}" ry="${Math.abs(this.height / 2)}"`;

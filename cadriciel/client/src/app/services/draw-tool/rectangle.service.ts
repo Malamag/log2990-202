@@ -64,7 +64,7 @@ export class RectangleService extends ShapeService {
     } 
 
     // create a divider
-    this.svgString = '<g name = "rectangle">';
+    this.svgString = '<g name = "rectangle" style="transform: translate(0px, 0px);">';
 
     // set render attributes for the svg rect
     this.svgString += `<rect x="${this.startX}" y="${this.startY}"`;
