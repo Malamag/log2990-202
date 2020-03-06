@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
-import { LineAttributes } from '../attributes/line-attributes';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { LineService } from './line.service';
 import { Point } from './point';
@@ -43,7 +41,7 @@ describe('LineService', () => {
   });
 
   it('should set the attributes in the subscription', () => {
-    service.interaction.emitLineAttributes(new LineAttributes(true, 0, 0)); // arbitrary line attr
+    service.interaction.emitLineAttributes({junction: true, lineThickness: 0, junctionDiameter: 0}); // arbitrary line attr
 
     const spyInteraction = spyOn(service.interaction.$lineAttributes, 'subscribe');
     service.updateAttributes();
@@ -232,7 +230,7 @@ describe('LineService', () => {
     const PRIM = '#ffffff';
     const SEC = '#000000';
     const back = '#ffffff';
-    service.chosenColor = new ChoosenColors(PRIM, SEC, back);
+    service.chosenColor = {primColor: PRIM, secColor: SEC, backColor: back};
     const line = service.createPath(ptArr, false);
     expect(line).toContain(`"stroke="${PRIM}"`);
   });

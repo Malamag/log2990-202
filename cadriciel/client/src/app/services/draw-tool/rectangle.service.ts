@@ -1,15 +1,15 @@
+import { Injectable } from '@angular/core';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 import { ShapeService } from './shape.service';
-import { Injectable } from '@angular/core';
 
 @Injectable({
     providedIn: 'root',
 })
 export class RectangleService extends ShapeService {
-    public isSquare: boolean;
+    isSquare: boolean;
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
         super(inProgess, drawing, selected, interaction, colorPick);
@@ -54,7 +54,7 @@ export class RectangleService extends ShapeService {
             this.setdimensions(p);
 
             // create a divider
-            s = '<g name = "rectangle">';
+            s = '<g style="transform: translate(0px, 0px);" name = "rectangle">';
 
             // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
             const stroke = this.attr.plotType === 0 || this.attr.plotType === 2 ? `${this.chosenColor.secColor}` : 'none';

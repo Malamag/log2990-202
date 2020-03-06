@@ -36,6 +36,7 @@ import {
     MatTooltipModule,
     MatCardModule,
     MatChipsModule,
+    MatSlideToggleModule,
 } from '@angular/material';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
 import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
@@ -84,6 +85,7 @@ import { SaveFormComponent } from './components/save-form/save-form.component';
         MatRadioModule,
         MatSelectModule,
         MatButtonToggleModule,
+        MatSlideToggleModule,
         AppRoutingModule,
         MatCardModule,
         MatChipsModule,

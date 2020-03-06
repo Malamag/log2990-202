@@ -32,12 +32,12 @@ export class SaveFormComponent implements OnInit {
     this.containsSymbols = false;
     this.labelsIsFull = false;
     this.doodleFetch.askForDoodle();
-        this.cWidth = this.doodleFetch.widthAttr;
-        this.cHeigth = this.doodleFetch.heightAttr;
+    this.cWidth = this.doodleFetch.widthAttr;
+    this.cHeigth = this.doodleFetch.heightAttr;
   }
 
   ngAfterContentInit() {
-    this.doodle = this.doodleFetch.getDrawing();
+    this.doodle = this.doodleFetch.getDrawingWithoutGrid();
 }
 
 

@@ -62,7 +62,7 @@ export class EllipseService extends ShapeService {
         this.setdimensions(p);
 
         // create a divider for the ellipse
-        s += '<g name = "ellipse">';
+        s += '<g style="transform: translate(0px, 0px);" name = "ellipse">';
 
         // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
         const stroke = this.attr.plotType == 0 || this.attr.plotType == 2 ? `${this.chosenColor.secColor}` : 'none';

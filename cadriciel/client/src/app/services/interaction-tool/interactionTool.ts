@@ -3,8 +3,8 @@ import { InteractionService } from './../service-interaction/interaction.service
 
 export abstract class InteractionTool {
     // Parameters I need is: interactionService??, HTMLELement, Rendrer2: maybe for undo redo only?, colorPickingService?
-    done: Element[][];
-    undone: Element[][];
+    done: string[];
+    undone: string[];
     interact: InteractionService;
     drawing: HTMLElement;
     render: Renderer2;

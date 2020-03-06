@@ -199,7 +199,7 @@ export class LineService extends DrawingTool {
     }
 
     // create a divider
-    s = '<g name = "line-segments">';
+    s = '<g style="transform: translate(0px, 0px);" name = "line-segments">';
 
     // start the path
     s += '<path d="';
