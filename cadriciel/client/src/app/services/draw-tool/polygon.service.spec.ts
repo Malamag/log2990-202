@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PolygonService } from './polygon.service';
-//import { FormsAttribute } from '../attributes/attribute-form';
-import { Point } from './point';
-//import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 
-fdescribe('PolygonService', () => {
+import { Point } from './point';
+
+
+describe('PolygonService', () => {
 
   let service: PolygonService;
   let ptA: Point;
@@ -47,21 +47,25 @@ fdescribe('PolygonService', () => {
   });
 
   it('should call functions', () => {
+    const ptAStub = new Point(0,0)
+    const PtBStub = new Point(10 , 10)
     const cornersSpy = spyOn(service, 'setCorners');
     const attributesSpy = spyOn(service, 'setAttributesToPath')
     const perimeterSpy = spyOn(service, 'createPerimeter')    
-    service.createPath(ptArr, false);
+    service.createPath([ptAStub, PtBStub], false);
     expect(service.svgString).toContain('<g name = "polygon">')
     expect(cornersSpy).toHaveBeenCalled()
     expect(attributesSpy).toHaveBeenCalled()
     expect(perimeterSpy).toHaveBeenCalled();
   })
   it('should return an empty string but call functions', () => {
+    const ptAStub = new Point(0,0)
+    const PtBStub = new Point(10 , 10)
     service.displayPolygon = false;
     const cornersSpy = spyOn(service, 'setCorners');
     const attributesSpy = spyOn(service, 'setAttributesToPath')
     const perimeterSpy = spyOn(service, 'createPerimeter')    
-    service.createPath(ptArr, false);
+    service.createPath([ptAStub , PtBStub], false);
     expect(cornersSpy).toHaveBeenCalled()
     expect(attributesSpy).toHaveBeenCalled()
     expect(perimeterSpy).toHaveBeenCalled();
@@ -87,11 +91,9 @@ fdescribe('PolygonService', () => {
     expect(service.middleY).toEqual(service.startY - service.smallest / 2 )
   })
 
-  it('should set the dimensions and align the corners', () => {
-    const setSpy = spyOn(service, 'setdimensions')
+  it('should align the corners', () => {
     const alignSpy = spyOn(service, 'alignCorners')
     service.setCorners(ptArr);
-    expect(setSpy).toHaveBeenCalled()
     expect(alignSpy).toHaveBeenCalled()
   })
   it('should display the polygon', () => {
