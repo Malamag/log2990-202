@@ -45,7 +45,7 @@ import { GalleryComponent } from './components/gallery/gallery.component';
 import { ExportFormComponent } from './components/export-form/export-form.component';
 import { PreviewBoxComponent } from './components/preview-box/preview-box.component';
 import { ExportService } from './services/exportation/export.service';
-import { CanvasSwitchDirective } from './services/directives/canvas-switch.directive';
+import { CanvasSwitchDirective } from './directives/canvas-switch.directive';
 
 @NgModule({
     declarations: [

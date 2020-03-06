@@ -80,7 +80,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     }
 
     exportation(name: string, type: string) {
-        this.expService.exportInCanvas(this.doodle, this.exportFromCanvas, name, type);
+        this.expService.exportInCanvas(this.doodle, this.exportFromCanvas.nativeElement, name, type);
     }
 
     applyFilter(event: number) {

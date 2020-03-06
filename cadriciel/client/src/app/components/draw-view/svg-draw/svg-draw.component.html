@@ -1,4 +1,6 @@
-<svg #canvas id="canvas" [style.width]="width" [style.height]="height" appCanvasSwitch>
+<!--Needs to be hidden the rest of the time!-->
+<canvas #pixelField [width]="width" [height]="height"></canvas>
+<svg #canvas id="canvas" [style.width]="width" [style.height]="height" appCanvasSwitch [appCanvasRef]="pixelField">
     <rect width="100%" height="100%" [style.fill]="backColor" #drawingSpace />
     <g #grid [ngStyle]="{ display: showGrid === true ? 'block' : 'none' }"></g>
     <g name="filters"></g>

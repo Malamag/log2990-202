@@ -38,6 +38,8 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     showGrid: boolean = false;
 
+   // pixelMatrix: HTMLCanvasElement | undefined;
+
     @ViewChild('inPrgress', { static: false }) inProgress: ElementRef;
     @ViewChild('canvas', { static: false }) svg: ElementRef;
 
@@ -45,7 +47,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     @ViewChild('drawingSpace', { static: false }) drawingSpace: ElementRef;
     @ViewChild('selectedItems', { static: false }) selectedItems: ElementRef;
     @ViewChild('grid', { static: false }) gridRef: ElementRef;
-
+    //@ViewChild('pixelField', { static: false }) pixelMatrixRef: ElementRef;
     workingSpace: HTMLElement;
 
     ngOnInit() {
@@ -93,6 +95,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         //this.initCanvas()
+        
         this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
         this.initGridVisibility();
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
