@@ -54,7 +54,7 @@ export class BrushService extends PencilService {
         const frequency = (scale / (width / 10)) * this.textures[this.attr.texture].frequency;
 
         // create a divider
-        s = '<g name = "brush-stroke">';
+        s = '<g style="transform: translate(0px, 0px);" name = "brush-stroke">';
 
         // get a unique ID to make sure each stroke has it's own filter
         const uniqueID = new Date().getTime();

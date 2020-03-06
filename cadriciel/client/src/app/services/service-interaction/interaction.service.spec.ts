@@ -24,14 +24,14 @@ describe('InteractionService', () => {
 
   it('should emit the line attributes', () => {
     const spy = spyOn(service.lineAttributes, 'next');
-    const ATTR: LineAttributes = new LineAttributes(false, 0, 0); // junction presence, thickness & junction diam.
+    const ATTR: LineAttributes  = {junction: false, lineThickness: 0, junctionDiameter: 0}; // junction presence, thickness & junction diam.
     service.emitLineAttributes(ATTR);
     expect(spy).toHaveBeenCalled();
   });
 
   it('should emit the tool attributes', () => {
     const spy = spyOn(service.toolsAttributes, 'next');
-    const ATTR: ToolsAttributes = new ToolsAttributes(0, 0); // thickness & texture number
+    const ATTR: ToolsAttributes = {lineThickness: 0, texture: 0}; // thickness & texture number
     service.emitToolsAttributes(ATTR);
     expect(spy).toHaveBeenCalled();
   });
@@ -45,7 +45,7 @@ describe('InteractionService', () => {
 
   it('should emit the forms attributes', () => {
     const spy = spyOn(service.formsAttributes, 'next');
-    const ATTR: FormsAttribute = new FormsAttribute(0, 0, 0); // plot type, border thickness, num. of corners
+    const ATTR: FormsAttribute = {plotType: 0, lineThickness: 0, numberOfCorners: 0}; // plot type, border thickness, num. of corners
     service.emitFormsAttributes(ATTR);
     expect(spy).toHaveBeenCalled();
   });
