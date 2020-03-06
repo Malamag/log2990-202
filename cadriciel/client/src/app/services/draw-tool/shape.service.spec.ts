@@ -5,12 +5,12 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 import { InteractionService } from '../service-interaction/interaction.service';
 import { ShapeService } from './shape.service';
 import { Point } from './point';
-
+import { ColorConvertingService } from '../colorPicker/color-converting.service';
 
 export class FakeInteractionService extends InteractionService {}
 
-describe('ShapeService', () => {
-    let service: ShapeService
+fdescribe('ShapeService', () => {
+    let service: ShapeService;
     let kbServiceStub: any;
     let ptA: Point;
     let ptB: Point;
@@ -31,15 +31,16 @@ describe('ShapeService', () => {
                 { provide: HTMLElement, useValue: {} },
                 { provide: Boolean, useValue: true },
                 { provide: ColorPickingService, useValue: {} },
-                { provide: InteractionService, useClass: FakeInteractionService },
+                { provide: InteractionService, useValue: new InteractionService() },
+                { provide: ColorPickingService, useValue: new ColorPickingService(new ColorConvertingService()) },
                 { provide: KeyboardHandlerService, useValue: kbServiceStub },
             ],
         });
-        //interaction = new InteractionService()
-        service = TestBed.get(ShapeService)
+
+        service = TestBed.get(ShapeService);
         service.ignoreNextUp = false;
         service.isDown = false;
-        service.attr = {plotType: 0, lineThickness: 5, numberOfCorners: 3};
+        service.attr = { plotType: 0, lineThickness: 5, numberOfCorners: 3 };
     });
 
     it('should be created', () => {
@@ -47,7 +48,7 @@ describe('ShapeService', () => {
     });
 
     it('should set the attributes in the subscription', () => {
-        service.interaction.emitFormsAttributes({plotType: 0, lineThickness: 0, numberOfCorners: 0});
+        service.interaction.emitFormsAttributes({ plotType: 0, lineThickness: 0, numberOfCorners: 0 });
         const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
         service.updateAttributes();
         expect(spyInteraction).toHaveBeenCalled();
@@ -66,7 +67,7 @@ describe('ShapeService', () => {
         expect(service.currentPath).toContain(ptA);
 
         expect(spy).toHaveBeenCalled();
-    })
+    });
     it('should update the drawing on mouse up', () => {
         service.down(ptA); // pressing the mouse
         const spy = spyOn(service, 'updateDrawing');
@@ -78,33 +79,40 @@ describe('ShapeService', () => {
         const spy = spyOn(service, 'updateDrawing');
         service.up(ptA);
         expect(spy).toHaveBeenCalledTimes(0);
-    })
-    it('should not update the progress on mouse move', ()=>{
+    });
+    it('should not update the progress on mouse move', () => {
         service.isDown = false;
         const spy = spyOn(service, 'updateProgress');
         service.move(ptA);
         expect(spy).toHaveBeenCalledTimes(0);
-    })
-    it('should update the progress on mouse mouve', ()=>{
+    });
+    it('should update the progress on mouse mouve', () => {
         service.isDown = true;
         const spy = spyOn(service, 'updateProgress');
         service.move(ptA);
-        expect(spy).toHaveBeenCalled()
-    })
-    it('should set the width and the height', ()=>{
+        expect(spy).toHaveBeenCalled();
+    });
+    it('should set the width and the height', () => {
         service.setdimensions(ptArr);
-        expect(service.width).toEqual(ptB.x - ptA.x)
-        expect(service.height).toEqual(ptB.y - ptA.y)
-    })
+        expect(service.width).toEqual(ptB.x - ptA.x);
+        expect(service.height).toEqual(ptB.y - ptA.y);
+    });
+
     it('should not fill the shape', () => {
+        const NOFILL_MODE: number = 0;
+        service.attr.plotType = NOFILL_MODE;
         service.setAttributesToPath();
-        const expectedString = `"fill= none"` + `stroke-width" = ${service.attr.lineThickness}" stroke =" ${service.chosenColor.secColor}"/>`;
-        expect(service.svgString).toBe(expectedString)
-    })
-    it('should not have a stroke and fill the shape', ()=>{
-        service.attr = {plotType: 0, lineThickness: 5, numberOfCorners: 3 }
+        const FILL: string = 'fill="none"';
+
+        expect(service.svgString).toContain(FILL);
+    });
+    it('should not have a stroke and fill the shape', () => {
+        service.attr = { plotType: 1, lineThickness: 5, numberOfCorners: 3 };
         service.setAttributesToPath();
-        const expectedString = `"fill=" ${service.chosenColor.primColor}` + `stroke-width" = ${service.attr.lineThickness}"` + `"stroke = none"/>`;
-        expect(service.svgString).toBe(expectedString);
-    })
+        const STROKE_FILL: string = 'stroke="none"';
+        const FILL: string = 'fill="#000000ff"'; // base color
+
+        expect(service.svgString).toContain(STROKE_FILL);
+        expect(service.svgString).toContain(FILL);
+    });
 });
