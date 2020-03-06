@@ -9,7 +9,7 @@ import { ColorConvertingService } from '../colorPicker/color-converting.service'
 
 export class FakeInteractionService extends InteractionService {}
 
-fdescribe('ShapeService', () => {
+describe('ShapeService', () => {
     let service: ShapeService;
     let kbServiceStub: any;
     let ptA: Point;
