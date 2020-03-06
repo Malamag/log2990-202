@@ -32,6 +32,9 @@ export class InteractionService {
     showGrid = new Subject<boolean>();
     $showGrid = this.showGrid.asObservable();
 
+    convertSvg2Canvas = new Subject<boolean>();
+    $convertSvg2Canvas = this.convertSvg2Canvas.asObservable();
+
     constructor() {}
 
     emitSelectedTool(tool: string) {
@@ -72,5 +75,9 @@ export class InteractionService {
 
     emitGridVisibility(showGrid: boolean) {
         this.showGrid.next(showGrid);
+    }
+
+    emitSvgCanvasConversion(toCanvas: boolean) {
+        this.convertSvg2Canvas.next(toCanvas);
     }
 }
