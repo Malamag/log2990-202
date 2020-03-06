@@ -36,7 +36,7 @@ export class LineService extends DrawingTool {
 
   }
   // updating on key change
-  update(keyboard: KeyboardHandlerService) {
+  updateDown(keyboard: KeyboardHandlerService) {
 
     // only if the lineTool is currently affecting the canvas
     if (this.isDown) {
@@ -71,6 +71,11 @@ export class LineService extends DrawingTool {
       this.cancel();
     }
   }
+
+  // updating on key up
+  updateUp(keyCode : number) {
+    // nothing happens for line tool
+}
 
   // mouse down with lineTool in hand
   down(position: Point, mouseInsideWorkspace: boolean) {

@@ -30,8 +30,13 @@ export class PencilService extends DrawingTool {
     this.colorPick.emitColors()
   }
   // updating on key change
-  update(keyboard: KeyboardHandlerService) {
+  updateDown(keyboard: KeyboardHandlerService) {
     // keyboard has no effect on pencil
+  }
+
+  // updating on key up
+  updateUp(keyCode : number) {
+    // nothing happens for pencil tool
   }
 
   // mouse down with pencil in hand

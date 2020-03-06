@@ -10,7 +10,8 @@ export abstract class InputObserver {
     shortcut: number;
     selected: boolean;
     // Keyboard
-    abstract update(keyboard: KeyboardHandlerService): void;
+    abstract updateDown(keyboard: KeyboardHandlerService): void;
+    abstract updateUp(keyCode: number): void;
     abstract cancel(): void;
 
     // Mouse

@@ -46,11 +46,16 @@ export class ShapeService extends DrawingTool {
     }
 
     // updating on key change
-    update(keyboard: KeyboardHandlerService) {
+    updateDown(keyboard: KeyboardHandlerService) {
         // real time update
         if (this.isDown) {
             this.updateProgress();
         }
+    }
+
+    // updating on key up
+    updateUp(keyCode : number) {
+        // nothing happens for global shape
     }
 
     // mouse down with shape in hand

@@ -8,6 +8,7 @@ import { PencilService } from './pencil.service';
 import { RectangleService } from './rectangle.service';
 import { PolygonService } from './polygon.service';
 import { SelectionService } from './selection.service';
+import { EraserService } from './eraser.service';
 
 @Injectable({
     providedIn: 'root',
@@ -47,5 +48,9 @@ export class ToolCreator {
 
     CreateSelection(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,render:Renderer2, selectedRef: HTMLElement, canvas: HTMLElement): SelectionService {
         return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick,render, selectedRef, canvas);
+    }
+
+    CreateEraser(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,render:Renderer2, selectedRef: HTMLElement, canvas: HTMLElement): EraserService {
+        return new EraserService(this.inProgress, this.drawing, selected, interaction, colorPick,render, selectedRef, canvas);
     }
 }
