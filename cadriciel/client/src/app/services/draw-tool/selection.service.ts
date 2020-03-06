@@ -88,6 +88,13 @@ export class SelectionService extends ShapeService {
       }
     });
 
+    window.addEventListener("toolChange",(e:Event)=>{
+      for(let i = 0; i < this.drawing.childElementCount;i++){
+        this.selectedItems = [];
+        this.selectedRef.innerHTML = this.updateBoundingBox();
+      }
+    });
+
   }
 
   updateDown(keyboard: KeyboardHandlerService) {

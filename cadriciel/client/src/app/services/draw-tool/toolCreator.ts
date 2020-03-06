@@ -51,6 +51,6 @@ export class ToolCreator {
     }
 
     CreateEraser(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,render:Renderer2, selectedRef: HTMLElement, canvas: HTMLElement): EraserService {
-        return new EraserService(this.inProgress, this.drawing, selected, interaction, colorPick);
+        return new EraserService(this.inProgress, this.drawing, selected, interaction, colorPick,render, selectedRef, canvas);
     }
 }

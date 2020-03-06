@@ -109,6 +109,8 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
             if (toolName === 'Annuler' || toolName === 'Refaire') {
                 this.interactionToolsContainer.get('AnnulerRefaire').apply(toolName);
             } else if (this.toolsContainer.get(toolName)) {
+                let event = new Event("toolChange");
+                window.dispatchEvent(event);
                 this.closeTools(this.toolsContainer);
                 this.toolsContainer.get(toolName).selected = true;
             }
