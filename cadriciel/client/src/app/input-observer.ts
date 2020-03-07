@@ -2,7 +2,6 @@ import { Point } from './point';
 import { KeyboardHandlerService } from './services/keyboard-handler/keyboard-handler.service';
 
 export abstract class InputObserver {
-
     constructor(shortcut: number, selected: boolean) {
         this.shortcut = shortcut;
         this.selected = selected;

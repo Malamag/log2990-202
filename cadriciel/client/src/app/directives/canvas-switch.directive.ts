@@ -8,8 +8,8 @@ import { InteractionService } from '../services/service-interaction/interaction.
 export class CanvasSwitchDirective implements AfterViewInit {
     @Input('appCanvasRef') canvas: HTMLCanvasElement;
 
-    imageToConvert: SVGElement;
-    showCanvas: boolean = false;
+    private imageToConvert: SVGElement;
+    private showCanvas: boolean = false;
     private readonly noDisplay: string = 'none';
     private readonly display: string = 'block';
 
@@ -23,16 +23,15 @@ export class CanvasSwitchDirective implements AfterViewInit {
          */
         this.canvas.style.display = this.noDisplay;
         this.imageToConvert.style.display = this.display;
+        this.exService.exportInCanvas(this.imageToConvert, this.canvas);
 
         this.itService.$convertSvg2Canvas.subscribe((toCanvas: boolean) => {
+            console.log('signal recieved with ' + toCanvas);
             // no name and type set. as optionnal attributes. We dont want to download it
             if (toCanvas) {
                 this.exService.exportInCanvas(this.imageToConvert, this.canvas);
-                this.showCanvas = toCanvas;
-            } else {
-                this.showCanvas = !toCanvas;
             }
-
+            this.showCanvas = toCanvas;
             this.toggleSvgCanvas();
         });
     }
@@ -42,8 +41,8 @@ export class CanvasSwitchDirective implements AfterViewInit {
             this.canvas.style.display = this.display;
             this.imageToConvert.style.display = this.noDisplay;
         } else {
-            this.canvas.style.display = this.display;
-            this.imageToConvert.style.display = this.noDisplay;
+            this.canvas.style.display = this.noDisplay;
+            this.imageToConvert.style.display = this.display;
         }
     }
 }

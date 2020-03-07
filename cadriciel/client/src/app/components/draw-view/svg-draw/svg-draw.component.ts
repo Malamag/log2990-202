@@ -38,7 +38,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     showGrid: boolean = false;
 
-   // pixelMatrix: HTMLCanvasElement | undefined;
+    // pixelMatrix: HTMLCanvasElement | undefined;
 
     @ViewChild('inPrgress', { static: false }) inProgress: ElementRef;
     @ViewChild('canvas', { static: false }) svg: ElementRef;
@@ -95,7 +95,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         //this.initCanvas()
-        
+
         this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
         this.initGridVisibility();
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
@@ -121,6 +121,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.svg.nativeElement,
             this.workingSpace,
         );
+        const pipette = tc.CreatePipette(false, this.interaction, this.colorPick);
 
         this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
         this.toolsContainer.set('Rectangle', rect);
@@ -130,6 +131,8 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Ellipse', ellipse);
         this.toolsContainer.set('Polygone', polygon);
         this.toolsContainer.set('Selection', selection);
+        this.toolsContainer.set('Pipette', pipette);
+
         this.interaction.$cancelToolsObs.subscribe(sig => {
             if (sig) {
                 this.closeTools(this.toolsContainer);

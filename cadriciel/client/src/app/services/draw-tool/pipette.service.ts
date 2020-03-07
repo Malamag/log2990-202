@@ -7,4 +7,6 @@ export class PipetteService {
     constructor() {}
 
     getImageData() {}
+
+    emitSelectedColor() {}
 }
