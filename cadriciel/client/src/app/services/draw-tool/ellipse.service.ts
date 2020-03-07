@@ -21,41 +21,41 @@ export class EllipseService extends ShapeService {
     this.isSquare = false;
   }
 
-    // updating on key change
-    updateDown(keyboard: KeyboardHandlerService) {
-        // rectangle becomes square when shift is pressed
-        this.isSquare = keyboard.shiftDown;
+  // updating on key change
+  updateDown(keyboard: KeyboardHandlerService) {
+      // rectangle becomes square when shift is pressed
+      this.isSquare = keyboard.shiftDown;
 
-        super.updateDown(keyboard);
-    }
+      super.updateDown(keyboard);
+  }
 
-    // updating on key up
-    updateUp(keyCode : number) {
-        // nothing happens for ellipse tool
-    }
+  // updating on key up
+  updateUp(keyCode : number) {
+      // nothing happens for ellipse tool
+  }
 
-    setdimensions(p: Point[]) {
-        // if we need to make it square
-        // find top-left corner
+  setdimensions(p: Point[]) {
+      // if we need to make it square
+      // find top-left corner
 
-        super.setdimensions(p);
+      super.setdimensions(p);
 
-        if (this.isSquare) {
-            // get smallest absolute value between the width and the height
-            this.smallest = Math.abs(this.width) < Math.abs(this.height) ? Math.abs(this.width) : Math.abs(this.height);
-            // adjust width and height (keep corresponding sign)
-            this.width = this.smallest * Math.sign(this.width);
-            this.height = this.smallest * Math.sign(this.height);
+      if (this.isSquare) {
+          // get smallest absolute value between the width and the height
+          this.smallest = Math.abs(this.width) < Math.abs(this.height) ? Math.abs(this.width) : Math.abs(this.height);
+          // adjust width and height (keep corresponding sign)
+          this.width = this.smallest * Math.sign(this.width);
+          this.height = this.smallest * Math.sign(this.height);
 
-            // recalculate top-left corner
-            this.startX = this.width > 0 ? p[0].x : p[0].x - this.smallest;
-            this.startY = this.height > 0 ? p[0].y : p[0].y - this.smallest;
-        } else {
-            // Rectangle
-            this.startX = this.width > 0 ? p[0].x : p[p.length - 1].x;
-            this.startY = this.height > 0 ? p[0].y : p[p.length - 1].y;
-        }
-    }
+          // recalculate top-left corner
+          this.startX = this.width > 0 ? p[0].x : p[0].x - this.smallest;
+          this.startY = this.height > 0 ? p[0].y : p[0].y - this.smallest;
+      } else {
+          // Rectangle
+          this.startX = this.width > 0 ? p[0].x : p[p.length - 1].x;
+          this.startY = this.height > 0 ? p[0].y : p[p.length - 1].y;
+      }
+  }
 
   // updating on key change
   /*update(keyboard: KeyboardHandlerService) {
