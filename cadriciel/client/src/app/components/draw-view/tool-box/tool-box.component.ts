@@ -28,7 +28,7 @@ export class ToolBoxComponent implements OnInit {
         this.selectingToolsMap.set('r', 'Applicateur de couleur');
         this.selectingToolsMap.set('ctrl+z', 'Annuler');
         this.selectingToolsMap.set('ctrl+shift+z', 'Refaire');
-        this.selectingToolsMap.set('s', 'Selection');
+        this.selectingToolsMap.set('s', 'Sélectionner');
         this.selectingToolsMap.set('e', 'Efface');
         this.disableUndo = true;
         this.disableRedo = true;

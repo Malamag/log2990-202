@@ -98,7 +98,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         this.toolsContainer.set('Crayon', pencil);
         this.toolsContainer.set('Ellipse', ellipse);
         this.toolsContainer.set('Polygone', polygon);
-        this.toolsContainer.set('Selection', selection);
+        this.toolsContainer.set('Sélectionner', selection);
         this.toolsContainer.set('Efface', eraser);
 
         this.interaction.$cancelToolsObs.subscribe(sig => {
