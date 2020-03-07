@@ -44,6 +44,7 @@ export class EraserService extends DrawingTool {
       for(let i = 0; i < this.drawing.childElementCount; i++){
         let el = this.drawing.children[i];
         let status = el.getAttribute("isListening2");
+        this.render.setAttribute(el, "checkPreciseEdge","true");
         if(status !== "true"){
           this.render.setAttribute(el, "isListening2","true");
           this.render.listen(el,"mousemove", () =>{
@@ -69,7 +70,7 @@ export class EraserService extends DrawingTool {
           this.render.listen(el,"mousedown", () =>{
             //console.log("click");
             this.erase(el);
-            this.foundAnItem = false;
+            this.foundAnItem = true;
             this.render.setAttribute(el, "checkPreciseEdge","true");
           });
           this.render.listen(el,"mouseup", () =>{
@@ -138,9 +139,8 @@ export class EraserService extends DrawingTool {
 
       if(this.erasedSomething){
         this.interaction.emitDrawingDone();
-        console.log("now");
+        //console.log("now");
       }
-
       this.erasedSomething = false;
     }
   }
@@ -201,6 +201,8 @@ export class EraserService extends DrawingTool {
 
   // mouse move with pencil in hand
   move(position: Point) {
+
+    //console.log(this.erasedSomething);
 
     // only if the pencil is currently affecting the canvas
     if (true) {
