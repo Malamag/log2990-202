@@ -117,7 +117,7 @@ export class AerosolService extends DrawingTool{
 
   startPath(){
     
-    this.path = '<g name = "aerosol">';
+    this.path = '<g name = "aerosol" style="transform: translate(0px, 0px);" >';
     //this.path += ' <filter id="blur"> <feGaussianBlur in="SourceGraphic" stdDeviation="1" /> </filter>';
 
     this.lastPoint = new Point(0,0);
