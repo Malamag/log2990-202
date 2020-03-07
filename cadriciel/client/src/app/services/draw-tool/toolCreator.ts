@@ -59,6 +59,6 @@ export class ToolCreator {
     }
 
     CreatePipette(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): PipetteService {
-        return new PipetteService();
+        return new PipetteService(selected);
     }
 }

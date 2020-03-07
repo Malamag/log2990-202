@@ -39,7 +39,8 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
             if (toolExist) {
                 this.selectedTool = tool;
             }
-            this.interaction.emitSvgCanvasConversion(tool === 'Pipette');
+            const CALL_CONVERSION: boolean = tool === 'Pipette';
+            this.interaction.emitSvgCanvasConversion(CALL_CONVERSION);
         });
     }
     ngAfterViewInit() {
