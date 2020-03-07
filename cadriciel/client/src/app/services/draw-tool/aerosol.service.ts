@@ -93,6 +93,7 @@ export class AerosolService extends DrawingTool{
       if (insideWorkspace) {
         // add everything to the canvas
         this.updateDrawing();
+        this.sub.unsubscribe();
       }
     }
   }
