@@ -7,17 +7,19 @@ import { Point } from './point';
     providedIn: 'root',
 })
 export class PipetteService extends InputObserver {
+    constructor(selected: boolean) {
+        super(selected);
+    }
     update(keyboard: KeyboardHandlerService): void {}
     cancel(): void {}
-    down(position: Point, insideWorkspace?: boolean | undefined): void {}
+    down(position: Point, insideWorkspace?: boolean | undefined): void {
+        console.log(position);
+    }
     up(position: Point, insideWorkspace?: boolean | undefined): void {}
     move(position: Point): void {}
     doubleClick(position: Point, insideWorkspace?: boolean | undefined): void {}
     goingOutsideCanvas(position: Point): void {}
     goingInsideCanvas(position: Point): void {}
-    constructor(selected: boolean) {
-        super(selected);
-    }
 
     getImageData() {}
 
