@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { FormsAttribute } from '../attributes/attribute-form';
 import { LineAttributes } from '../attributes/line-attributes';
 import { ToolsAttributes } from '../attributes/tools-attribute';
+import { AerosolAttributes } from '../attributes/aerosol-attribute';
 
 @Injectable({
     providedIn: 'root',
@@ -20,6 +21,8 @@ export class InteractionService {
     $toolsAttributes = this.toolsAttributes.asObservable();
     lineAttributes = new Subject<LineAttributes>();
     $lineAttributes = this.lineAttributes.asObservable();
+    aerosolAttributes = new Subject<AerosolAttributes>()
+    $aerosolAttributes = this.aerosolAttributes.asObservable()
     cancelTools = new Subject<boolean>();
     $cancelToolsObs = this.cancelTools.asObservable();
 
@@ -48,6 +51,10 @@ export class InteractionService {
 
     emitToolsAttributes(attr: ToolsAttributes) {
         this.toolsAttributes.next(attr);
+    }
+
+    emitAerosolAttributes(attr: AerosolAttributes) {
+        this.aerosolAttributes.next(attr)
     }
 
     emitCancel(sig: boolean) {
