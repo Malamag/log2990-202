@@ -30,7 +30,15 @@ export class DoodleFetchService {
         return SVG_NODE;
     }
 
-    getSVGElementFromRef(el: ElementRef): Node {
+    getSVGElementFromRef(el: ElementRef): Node | HTMLElement {
         return el.nativeElement;
+    }
+
+    getDrawingString(): string | null {
+        this.gService.removeGrid();
+        const SVG_NODE = this.currentDraw.nativeElement;
+
+        this.gService.renderBack();
+        return SVG_NODE;
     }
 }
