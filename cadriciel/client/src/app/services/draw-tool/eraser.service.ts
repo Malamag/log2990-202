@@ -13,20 +13,20 @@ const DEFAULTTEXTURE = 0;
 })
 export class EraserService extends DrawingTool {
 
-  render:Renderer2;
+  render: Renderer2;
   attr: ToolsAttributes
 
-  foundAnItem : boolean;
+  foundAnItem: boolean;
 
-  erasedSomething : boolean;
+  erasedSomething: boolean;
 
   canvas: HTMLElement;
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,
-              render : Renderer2, selectedRef : HTMLElement, canvas : HTMLElement) {
+    render: Renderer2, selectedRef: HTMLElement, canvas: HTMLElement) {
 
     super(inProgess, drawing, selected, interaction, colorPick);
-    this.attr = {lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE}
+    this.attr = { lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE }
     this.updateColors()
     this.updateAttributes()
 
@@ -40,53 +40,53 @@ export class EraserService extends DrawingTool {
 
     this.inProgress.style.pointerEvents = "none";
 
-    window.addEventListener("newDrawing",(e:Event)=>{
-      for(let i = 0; i < this.drawing.childElementCount; i++){
+    window.addEventListener("newDrawing", (e: Event) => {
+      for (let i = 0; i < this.drawing.childElementCount; i++) {
         let el = this.drawing.children[i];
         let status = el.getAttribute("isListening2");
-        this.render.setAttribute(el, "checkPreciseEdge","true");
-        if(status !== "true"){
-          this.render.setAttribute(el, "isListening2","true");
-          this.render.listen(el,"mousemove", () =>{
-            //console.log("enter");
-            if(!this.foundAnItem){
+        this.render.setAttribute(el, "checkPreciseEdge", "true");
+        if (status !== "true") {
+          this.render.setAttribute(el, "isListening2", "true");
+          this.render.listen(el, "mousemove", () => {
+            console.log("enter");
+            if (!this.foundAnItem) {
               this.highlight(el);
-              this.render.setAttribute(el, "checkPreciseEdge","false");
+              this.render.setAttribute(el, "checkPreciseEdge", "false");
               this.foundAnItem = true;
-              if(this.isDown){
+              if (this.isDown) {
                 this.erase(el);
                 this.foundAnItem = false;
               }
             }
           });
-          this.render.listen(el,"mouseleave", () =>{
+          this.render.listen(el, "mouseleave", () => {
             //console.log("leaving");
-            if(this.foundAnItem){
+            if (this.foundAnItem) {
               this.unhighlight(el);
               this.foundAnItem = false;
-              this.render.setAttribute(el, "checkPreciseEdge","true");
+              this.render.setAttribute(el, "checkPreciseEdge", "true");
             }
           });
-          this.render.listen(el,"mousedown", () =>{
+          this.render.listen(el, "mousedown", () => {
             //console.log("click");
             this.erase(el);
-            this.foundAnItem = true;
-            this.render.setAttribute(el, "checkPreciseEdge","true");
+            this.foundAnItem = false;
+            this.render.setAttribute(el, "checkPreciseEdge", "true");
           });
-          this.render.listen(el,"mouseup", () =>{
-            if(!this.foundAnItem){
+          this.render.listen(el, "mouseup", () => {
+            if (!this.foundAnItem) {
               this.highlight(el);
-              this.render.setAttribute(el, "checkPreciseEdge","false");
-              this.foundAnItem = true;
+              this.render.setAttribute(el, "checkPreciseEdge", "false");
+              this.foundAnItem = false;
             }
           });
         }
       }
     });
 
-    window.addEventListener("toolChange",(e:Event)=>{
+    window.addEventListener("toolChange", (e: Event) => {
       this.foundAnItem = false;
-      for(let i = 0; i < this.drawing.childElementCount;i++){
+      for (let i = 0; i < this.drawing.childElementCount; i++) {
         this.unhighlight(this.drawing.children[i]);
       }
     });
@@ -95,7 +95,7 @@ export class EraserService extends DrawingTool {
   updateAttributes() {
     this.interaction.$toolsAttributes.subscribe((obj) => {
       if (obj) {
-        this.attr = {lineThickness: obj.lineThickness, texture: obj.texture}
+        this.attr = { lineThickness: obj.lineThickness, texture: obj.texture }
       }
     })
     this.colorPick.emitColors()
@@ -106,7 +106,7 @@ export class EraserService extends DrawingTool {
   }
 
   // updating on key up
-  updateUp(keyCode : number) {
+  updateUp(keyCode: number) {
     // nothing happens for eraser tool
   }
 
@@ -137,7 +137,7 @@ export class EraserService extends DrawingTool {
       // the pencil should not affect the canvas
       this.isDown = false;
 
-      if(this.erasedSomething){
+      if (this.erasedSomething) {
         this.interaction.emitDrawingDone();
         //console.log("now");
       }
@@ -145,55 +145,55 @@ export class EraserService extends DrawingTool {
     }
   }
 
-  erase(el:Element){
-    if(this.selected){
+  erase(el: Element) {
+    if (this.selected) {
       this.render.removeChild(el.parentElement, el);
       this.erasedSomething = true;
     }
   }
-  
-  // highlights a 'g' tag by adding a clone as a child
-  highlight(el : Element){
 
-    if(this.selected && el.firstElementChild && !el.firstElementChild.classList.contains("clone")){
-      let clone : Element = this.render.createElement("g","http://www.w3.org/2000/svg");
+  // highlights a 'g' tag by adding a clone as a child
+  highlight(el: Element) {
+
+    if (this.selected && el.firstElementChild && !el.firstElementChild.classList.contains("clone")) {
+      let clone: Element = this.render.createElement("g", "http://www.w3.org/2000/svg");
       (clone as HTMLElement).innerHTML = el.innerHTML;
-      for(let i = 0; i < el.childElementCount;i++){
-        let originalWidth : string | null = (el.children[i] as HTMLElement).getAttribute("stroke-width");
-        let originalWidthNumber = originalWidth? + originalWidth : 0;
-        let wider : number = Math.max(10,originalWidthNumber + 10);
+      for (let i = 0; i < el.childElementCount; i++) {
+        let originalWidth: string | null = (el.children[i] as HTMLElement).getAttribute("stroke-width");
+        let originalWidthNumber = originalWidth ? + originalWidth : 0;
+        let wider: number = Math.max(10, originalWidthNumber + 10);
         this.render.setAttribute(clone.children[i], "stroke-width", `${wider}`);
 
-        let originalStrokeColor : string | null = (el.children[i] as HTMLElement).getAttribute("stroke");
-        let originalFillColor : string | null = (el.children[i] as HTMLElement).getAttribute("fill");
+        let originalStrokeColor: string | null = (el.children[i] as HTMLElement).getAttribute("stroke");
+        let originalFillColor: string | null = (el.children[i] as HTMLElement).getAttribute("fill");
 
-        let refcolor : string | null = originalStrokeColor != "none"? originalStrokeColor : originalFillColor;
+        let refcolor: string | null = originalStrokeColor != "none" ? originalStrokeColor : originalFillColor;
 
-        let originalStrokeRGB : [number,number,number] = [0,0,0];
-        if(refcolor && refcolor != "none"){
-          originalStrokeRGB[0] = parseInt(refcolor[1] + refcolor[2],16);
-          originalStrokeRGB[1] = parseInt(refcolor[3] + refcolor[4],16);
-          originalStrokeRGB[2] = parseInt(refcolor[5] + refcolor[6],16);
+        let originalStrokeRGB: [number, number, number] = [0, 0, 0];
+        if (refcolor && refcolor != "none") {
+          originalStrokeRGB[0] = parseInt(refcolor[1] + refcolor[2], 16);
+          originalStrokeRGB[1] = parseInt(refcolor[3] + refcolor[4], 16);
+          originalStrokeRGB[2] = parseInt(refcolor[5] + refcolor[6], 16);
         }
 
-        let redHighlight : number = 255;
-        let originalToRed = originalStrokeRGB[0] > (255/4)*3;
-        if(originalToRed){
+        let redHighlight: number = 255;
+        let originalToRed = originalStrokeRGB[0] > (255 / 4) * 3;
+        if (originalToRed) {
           redHighlight = (originalStrokeRGB[0] / 4) * 3;
         }
 
         this.render.setAttribute(clone.children[i], "stroke", `rgb(${redHighlight},0,0)`);
       }
       this.render.setAttribute(clone, "class", "clone");
-      this.render.insertBefore(el, clone,el.firstElementChild);
+      this.render.insertBefore(el, clone, el.firstElementChild);
     }
   }
 
   //unhighlights the element by removing all of his "clone" children
-  unhighlight(el : Element){
+  unhighlight(el: Element) {
 
-    if(el.firstElementChild){
-      if(el.firstElementChild.classList.contains("clone")){
+    if (el.firstElementChild) {
+      if (el.firstElementChild.classList.contains("clone")) {
         this.render.removeChild(el, el.firstElementChild);
       }
     }
@@ -210,7 +210,7 @@ export class EraserService extends DrawingTool {
       // save mouse position
       this.currentPath.push(position);
 
-      while(this.currentPath.length > 3){
+      while (this.currentPath.length > 3) {
         this.currentPath.shift();
       }
 
@@ -230,91 +230,91 @@ export class EraserService extends DrawingTool {
     // nothing happens since we just update the preview
   }
 
-  checkIfTouching(){
+  checkIfTouching() {
 
     let canv = this.canvas;
-    let canvasBox = canv?canv.getBoundingClientRect():null;
-    let canvOffsetX = (canvasBox? canvasBox.left : 0);
-    let canvOffsetY = (canvasBox? canvasBox.top : 0);
+    let canvasBox = canv ? canv.getBoundingClientRect() : null;
+    let canvOffsetX = (canvasBox ? canvasBox.left : 0);
+    let canvOffsetY = (canvasBox ? canvasBox.top : 0);
 
     //console.log(`${canvOffsetX}, ${canvOffsetY}`);
-    
 
-    let w = Math.max(10,Math.abs(this.currentPath[this.currentPath.length-1].x - this.currentPath[0].x));
-    let h = Math.max(10,Math.abs(this.currentPath[this.currentPath.length-1].y - this.currentPath[0].y));
 
-    let dim = Math.max(w,h);
+    let w = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
+    let h = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
 
-    let tl = new Point(this.currentPath[this.currentPath.length-1].x - dim/2,this.currentPath[this.currentPath.length-1].y - dim/2);
+    let dim = Math.max(w, h);
+
+    let tl = new Point(this.currentPath[this.currentPath.length - 1].x - dim / 2, this.currentPath[this.currentPath.length - 1].y - dim / 2);
     let br = new Point(tl.x + dim, tl.y + dim);
 
-    for(let i = 0; i < this.drawing.childElementCount;i++){
+    for (let i = 0; i < this.drawing.childElementCount; i++) {
 
       let touching = false;
       let firstChild = this.drawing.children[i];
 
       // item bounding box
       let itemBox = firstChild.getBoundingClientRect();
-      let itemTopLeft:Point = new Point(itemBox.left - canvOffsetX, itemBox.top- canvOffsetY);
-      let itemBottomRight:Point = new Point(itemBox.right- canvOffsetX, itemBox.bottom- canvOffsetY);
+      let itemTopLeft: Point = new Point(itemBox.left - canvOffsetX, itemBox.top - canvOffsetY);
+      let itemBottomRight: Point = new Point(itemBox.right - canvOffsetX, itemBox.bottom - canvOffsetY);
 
-      if(!Point.rectOverlap(tl, br, itemTopLeft, itemBottomRight)){
+      if (!Point.rectOverlap(tl, br, itemTopLeft, itemBottomRight)) {
         this.unhighlight(firstChild);
         continue;
       }
 
-      if(firstChild.getAttribute("checkPreciseEdge") !== "true"){
+      if (firstChild.getAttribute("checkPreciseEdge") !== "true") {
         continue;
       }
 
       let objOffset = (this.drawing.children[i] as HTMLElement).style.transform;
-      let s = objOffset?objOffset.split(","):"";
+      let s = objOffset ? objOffset.split(",") : "";
       let objOffsetX = +(s[0].replace(/[^\d.-]/g, ''));
       let objOffsetY = +(s[1].replace(/[^\d.-]/g, ''));
 
-      for(let j = 0; j < firstChild.childElementCount;j++){
+      for (let j = 0; j < firstChild.childElementCount; j++) {
         let secondChild = firstChild.children[j];
 
         let width = (secondChild as HTMLElement).getAttribute("stroke-width");
         let offset = 0;
-        if(width){
+        if (width) {
           offset = +width;
         }
 
         let dim2 = 3 + offset;
 
-        if(secondChild.classList.contains("clone") || secondChild.tagName == "filter"){continue;}
+        if (secondChild.classList.contains("clone") || secondChild.tagName == "filter") { continue; }
 
         let path = secondChild as SVGPathElement;
         let lenght = path.getTotalLength();
         let inc = lenght / 300;
 
-        let closest : [Point,number] = [new Point(-1,-1),10000];
-        for(let a = 0; a < lenght; a+= inc){
-          let candidate = new Point(path.getPointAtLength(a).x + objOffsetX,path.getPointAtLength(a).y+objOffsetY);
-          let dist = Point.distance(this.currentPath[this.currentPath.length-1],candidate)
-          if(dist < closest[1]){
+        let closest: [Point, number] = [new Point(-1, -1), 10000];
+        for (let a = 0; a < lenght; a += inc) {
+          let candidate = new Point(path.getPointAtLength(a).x + objOffsetX, path.getPointAtLength(a).y + objOffsetY);
+          let dist = Point.distance(this.currentPath[this.currentPath.length - 1], candidate)
+          if (dist < closest[1]) {
             closest[0] = candidate;
             closest[1] = dist;
           }
         }
 
-        if(true){
+        if (true) {
           let good = closest[0];
           //console.log(good);
-          let tlp = new Point(good.x - dim2/2, good.y - dim2/2);
-            let brp = new Point(good.x + dim2/2, good.y +dim2/2);
-            if(Point.rectOverlap(tlp, brp, tl,br)){
-              touching = true;
-              break;
-            }
+          let tlp = new Point(good.x - dim2 / 2, good.y - dim2 / 2);
+          let brp = new Point(good.x + dim2 / 2, good.y + dim2 / 2);
+          if (Point.rectOverlap(tlp, brp, tl, br)) {
+            touching = true;
+            break;
+          }
         }
-        
+
         //for(let a = 0; a < points.length; a++){
-          
+
         //}
 
-        if(touching){
+        if (touching) {
           break;
         }
 
@@ -322,13 +322,13 @@ export class EraserService extends DrawingTool {
 
 
       //console.log(touching);
-      if(touching){
-        if(this.isDown){
+      if (touching) {
+        if (this.isDown) {
           this.erase(firstChild);
-        }else{
+        } else {
           this.highlight(firstChild);
         }
-      }else{
+      } else {
         this.unhighlight(firstChild);
       }
     }
@@ -353,12 +353,12 @@ export class EraserService extends DrawingTool {
     s = '<g style="transform: translate(0px, 0px);" name = "eraser-brush">';
 
 
-    let w = Math.max(10,Math.abs(p[p.length-1].x - p[0].x));
-    let h = Math.max(10,Math.abs(p[p.length-1].y - p[0].y));
+    let w = Math.max(10, Math.abs(p[p.length - 1].x - p[0].x));
+    let h = Math.max(10, Math.abs(p[p.length - 1].y - p[0].y));
 
-    let dim = Math.max(w,h);
+    let dim = Math.max(w, h);
 
-    s += `<rect x="${p[p.length-1].x - dim/2}" y="${p[p.length-1].y - dim/2}"`;
+    s += `<rect x="${p[p.length - 1].x - dim / 2}" y="${p[p.length - 1].y - dim / 2}"`;
     s += `width="${dim}" height="${dim}"`;
 
     s += `fill="white"`;

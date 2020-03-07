@@ -1,17 +1,17 @@
-import { Injectable, Renderer2} from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { ShapeService } from './shape.service';
 
-const OUTLINE_COLOR : string = "0, 102, 204, 0.9";
-const FILL_COLOR : string = "0, 102, 204, 0.3";
-const INVERTED_OUTLINE_COLOR : string = "204, 0, 102, 0.9";
-const INVERTED_FILL_COLOR : string = "204, 0, 102, 0.3";
+const OUTLINE_COLOR: string = "0, 102, 204, 0.9";
+const FILL_COLOR: string = "0, 102, 204, 0.3";
+const INVERTED_OUTLINE_COLOR: string = "204, 0, 102, 0.9";
+const INVERTED_FILL_COLOR: string = "204, 0, 102, 0.3";
 
-const NO_MOUSE_MOVEMENT_TOLERANCE : number = 5;
-const MIN_OFFSET_FOR_SELECTION : number = 10;
+const NO_MOUSE_MOVEMENT_TOLERANCE: number = 5;
+const MIN_OFFSET_FOR_SELECTION: number = 10;
 
 const START_ARROW_DELAY = 500;
 const ARROW_MOVEMENT_DELAY = 100;
@@ -22,30 +22,30 @@ const ARROW_MOVEMENT_DELAY = 100;
 
 export class SelectionService extends ShapeService {
 
-  render:Renderer2;
+  render: Renderer2;
   selectedRef: HTMLElement;
 
-  itemUnderMouse:any;
-  canMoveSelection : boolean;
-  foundAnItem :boolean;
-  selectedItems : boolean[];
-  invertedItems : boolean[];
-  movingSelection : boolean;
+  itemUnderMouse: any;
+  canMoveSelection: boolean;
+  foundAnItem: boolean;
+  selectedItems: boolean[];
+  invertedItems: boolean[];
+  movingSelection: boolean;
   canvas: HTMLElement
-  movedSelectionOnce :boolean;
-  movedMouseOnce : boolean;
-  inverted:boolean;
-  wrapperDimensions : [Point,Point];
+  movedSelectionOnce: boolean;
+  movedMouseOnce: boolean;
+  inverted: boolean;
+  wrapperDimensions: [Point, Point];
 
-  arrows :[boolean,boolean,boolean,boolean];
-  arrowTimers : [number, number,number,number];
-  singleUseArrows : [boolean,boolean,boolean,boolean];
-  existingLoop : boolean;
-  timeCount:number;
-  movedSelectionWithArrowsOnce:boolean;
+  arrows: [boolean, boolean, boolean, boolean];
+  arrowTimers: [number, number, number, number];
+  singleUseArrows: [boolean, boolean, boolean, boolean];
+  existingLoop: boolean;
+  timeCount: number;
+  movedSelectionWithArrowsOnce: boolean;
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService,
-              colorPick: ColorPickingService, render: Renderer2, selection: HTMLElement, canvas: HTMLElement) {
+    colorPick: ColorPickingService, render: Renderer2, selection: HTMLElement, canvas: HTMLElement) {
     super(inProgess, drawing, selected, interaction, colorPick);
 
     this.selectedItems = [];
@@ -60,26 +60,26 @@ export class SelectionService extends ShapeService {
     this.movedMouseOnce = false;
     this.inverted = false;
 
-    this.arrows = [false,false, false,false];
-    this.singleUseArrows = [false,false, false,false];
-    this.arrowTimers = [0,0,0,0];
+    this.arrows = [false, false, false, false];
+    this.singleUseArrows = [false, false, false, false];
+    this.arrowTimers = [0, 0, 0, 0];
     this.timeCount = 0;
     this.existingLoop = false;
     this.moveWithArrowsLoop();
     this.movedSelectionWithArrowsOnce = false;
-    
-    this.wrapperDimensions = [new Point(-1,-1),new Point(-1,-1)];
+
+    this.wrapperDimensions = [new Point(-1, -1), new Point(-1, -1)];
 
     this.selectedRef.style.pointerEvents = "none"; // ignore the bounding box on click
 
-    window.addEventListener("newDrawing",(e:Event)=>{
-      for(let i = 0; i < this.drawing.childElementCount; i++){
+    window.addEventListener("newDrawing", (e: Event) => {
+      for (let i = 0; i < this.drawing.childElementCount; i++) {
         let el = this.drawing.children[i];
         let status = el.getAttribute("isListening");
-        if(status !== "true"){
-          this.render.listen(el,"mousedown", () =>{
-            this.render.setAttribute(el, "isListening","true");
-            if(!this.foundAnItem){
+        if (status !== "true") {
+          this.render.listen(el, "mousedown", () => {
+            this.render.setAttribute(el, "isListening", "true");
+            if (!this.foundAnItem) {
               this.itemUnderMouse = i;
               this.foundAnItem = true;
             }
@@ -88,31 +88,32 @@ export class SelectionService extends ShapeService {
       }
     });
 
-    window.addEventListener("toolChange",(e:Event)=>{
-      for(let i = 0; i < this.drawing.childElementCount;i++){
+    window.addEventListener("toolChange", (e: Event) => {
+      for (let i = 0; i < this.drawing.childElementCount; i++) {
         this.selectedItems = [];
         this.selectedRef.innerHTML = this.updateBoundingBox();
       }
       this.selectedItems = [];
+      this.cancel();
     });
   }
 
   updateDown(keyboard: KeyboardHandlerService) {
 
     //CTRL-A SELECT ALL
-    if(keyboard.keyCode == 65 && keyboard.ctrlDown){
+    if (keyboard.keyCode == 65 && keyboard.ctrlDown) {
       this.selectedItems = [];
-      for(let i = 0; i < this.drawing.children.length;i++){
+      for (let i = 0; i < this.drawing.children.length; i++) {
         this.selectedItems[i] = true;
       }
       this.selectedRef.innerHTML = this.updateBoundingBox();
     }
 
-    if(!keyboard.released){
-      this.arrows[0] = keyboard.keyCode == 37? true : this.arrows[0];
-      this.arrows[1] = keyboard.keyCode == 38? true : this.arrows[1];
-      this.arrows[2] = keyboard.keyCode == 39? true : this.arrows[2];
-      this.arrows[3] = keyboard.keyCode == 40? true : this.arrows[3];
+    if (!keyboard.released) {
+      this.arrows[0] = keyboard.keyCode == 37 ? true : this.arrows[0];
+      this.arrows[1] = keyboard.keyCode == 38 ? true : this.arrows[1];
+      this.arrows[2] = keyboard.keyCode == 39 ? true : this.arrows[2];
+      this.arrows[3] = keyboard.keyCode == 40 ? true : this.arrows[3];
     }
 
     let singleLeft = this.arrows[0] && !this.singleUseArrows[0];
@@ -123,104 +124,109 @@ export class SelectionService extends ShapeService {
     this.moveWithArrowOnce(singleLeft, singleUp, singleRight, singleDown)
   }
 
-  moveWithArrowOnce(left:boolean, up : boolean, right:boolean, down:boolean){
+  moveWithArrowOnce(left: boolean, up: boolean, right: boolean, down: boolean) {
 
-    this.singleUseArrows[0] = left? true : this.singleUseArrows[0];
-    this.singleUseArrows[1] = up? true : this.singleUseArrows[1];
-    this.singleUseArrows[2] = right? true : this.singleUseArrows[2];
-    this.singleUseArrows[3] = down? true : this.singleUseArrows[3];
+    this.singleUseArrows[0] = left ? true : this.singleUseArrows[0];
+    this.singleUseArrows[1] = up ? true : this.singleUseArrows[1];
+    this.singleUseArrows[2] = right ? true : this.singleUseArrows[2];
+    this.singleUseArrows[3] = down ? true : this.singleUseArrows[3];
 
     let xoff = 0;
     let yoff = 0;
-    if(right){
+    if (right) {
       xoff += 3;
     }
-    if(left){
+    if (left) {
       xoff += -3;
     }
-    if(up){
+    if (up) {
       yoff += -3;
     }
-    if(down){
+    if (down) {
       yoff += 3;
     }
 
-    this.movedSelectionWithArrowsOnce = (xoff != 0 || yoff != 0);
-  
-    if(this.selectedItems.length > 0){
-      this.moveSelection(xoff,yoff);
+    this.movedSelectionWithArrowsOnce = this.movedSelectionWithArrowsOnce || (xoff != 0 || yoff != 0);
+
+    if (this.selectedItems.length > 0) {
+      this.moveSelection(xoff, yoff);
       this.selectedRef.innerHTML = this.updateBoundingBox();
     }
   }
 
-  moveWithArrowsLoop(){
+  moveWithArrowsLoop() {
 
     this.existingLoop = true;
 
-    if(this.arrowTimers.some(el => el >= START_ARROW_DELAY)){
+    if (this.arrowTimers.some(el => el >= START_ARROW_DELAY)) {
       let xoff = 0;
       let yoff = 0;
-      if(this.arrows[2]){
+      if (this.arrows[2]) {
         xoff += 3;
       }
-      if(this.arrows[0]){
+      if (this.arrows[0]) {
         xoff += -3;
       }
-      if(this.arrows[1]){
+      if (this.arrows[1]) {
         yoff += -3;
       }
-      if(this.arrows[3]){
+      if (this.arrows[3]) {
         yoff += 3;
       }
 
-      this.movedSelectionWithArrowsOnce = (xoff != 0 || yoff != 0);
-  
-      if(this.selectedItems.length > 0){
-        this.moveSelection(xoff,yoff);
+      this.movedSelectionWithArrowsOnce = this.movedSelectionWithArrowsOnce || (xoff != 0 || yoff != 0);
+
+      if (this.selectedItems.length > 0) {
+        this.moveSelection(xoff, yoff);
         this.selectedRef.innerHTML = this.updateBoundingBox();
         //console.log(new Date().getTime());
       }
     }
     setTimeout(() => {
       this.moveWithArrowsLoop();
-      for(let i = 0; i < this.arrowTimers.length;i++){
-        this.arrowTimers[i] = this.arrows[i]? this.arrowTimers[i] + ARROW_MOVEMENT_DELAY : this.arrowTimers[i];
+      for (let i = 0; i < this.arrowTimers.length; i++) {
+        this.arrowTimers[i] = this.arrows[i] ? this.arrowTimers[i] + ARROW_MOVEMENT_DELAY : this.arrowTimers[i];
       }
     }, ARROW_MOVEMENT_DELAY);
   }
 
   // updating on key up
-  updateUp(keyCode : number) {
+  updateUp(keyCode: number) {
 
-    if(keyCode == 37){
+    if (keyCode == 37) {
       this.arrows[0] = false;
       this.arrowTimers[0] = 0;
       this.singleUseArrows[0] = false;
     }
-    if(keyCode == 38){
+    if (keyCode == 38) {
       this.arrows[1] = false;
       this.arrowTimers[1] = 0;
       this.singleUseArrows[1] = false;
     }
-    if(keyCode == 39){
+    if (keyCode == 39) {
       this.arrows[2] = false;
       this.arrowTimers[2] = 0;
       this.singleUseArrows[2] = false;
     }
-    if(keyCode == 40){
+    if (keyCode == 40) {
       this.arrows[3] = false;
       this.arrowTimers[3] = 0;
       this.singleUseArrows[3] = false;
     }
 
     this.canMoveSelection = this.arrows.includes(true);
-    if(this.movedSelectionWithArrowsOnce && !this.arrows.includes(true)){
+
+    console.log('------------------');
+    console.log(this.arrows);
+    console.log(this.movedSelectionWithArrowsOnce);
+    if (this.movedSelectionWithArrowsOnce && !this.arrows.includes(true)) {
       this.movedSelectionWithArrowsOnce = false;
       this.interaction.emitDrawingDone();
+      console.log("now");
     }
   }
 
-  down(position: Point, insideWorkspace:boolean, isRightClick:boolean) {
+  down(position: Point, insideWorkspace: boolean, isRightClick: boolean) {
 
     // in case we changed tool while the mouse was down
     this.ignoreNextUp = false;
@@ -236,17 +242,17 @@ export class SelectionService extends ShapeService {
     this.inverted = isRightClick;
 
     // we need to know if we clicked in the bounding box to make sure we can move it accordingly
-    this.movingSelection = !this.inverted && Point.insideRectangle(position, this.wrapperDimensions[0],this.wrapperDimensions[1]);
-    
+    this.movingSelection = !this.inverted && Point.insideRectangle(position, this.wrapperDimensions[0], this.wrapperDimensions[1]);
+
     // on right-click, save the inverted selection state of each item
-    if(this.inverted){
-      for(let i = 0; i < this.selectedItems.length;i++){
+    if (this.inverted) {
+      for (let i = 0; i < this.selectedItems.length; i++) {
         this.invertedItems[i] = !this.selectedItems[i]
       }
     }
 
     // if there is an object under the click that is not already selected
-    if(this.itemUnderMouse!= null && !this.selectedItems[this.itemUnderMouse] && !this.inverted){
+    if (this.itemUnderMouse != null && !this.selectedItems[this.itemUnderMouse] && !this.inverted) {
       // unselect all items
       this.selectedItems = [];
       // select the focused one
@@ -268,22 +274,22 @@ export class SelectionService extends ShapeService {
       this.isDown = false;
 
       // check for small offset to make single item selection more permissive
-      if(Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length-1]) < NO_MOUSE_MOVEMENT_TOLERANCE){
+      if (Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length - 1]) < NO_MOUSE_MOVEMENT_TOLERANCE) {
 
-        if(!this.inverted){
+        if (!this.inverted) {
           // new selection, empty selection status
           this.selectedItems = [];
           this.invertedItems = [];
-        }else{
+        } else {
           // we're inverting, save the inverted selection status of each item
-          for(let i = 0; i < this.selectedItems.length;i++){
+          for (let i = 0; i < this.selectedItems.length; i++) {
             this.invertedItems[i] = !this.selectedItems[i]
           }
         }
 
         // adjust the focused item's selection status
-        if(this.itemUnderMouse!=null){
-          this.selectedItems[this.itemUnderMouse] = this.inverted? !this.selectedItems[this.itemUnderMouse] : true;
+        if (this.itemUnderMouse != null) {
+          this.selectedItems[this.itemUnderMouse] = this.inverted ? !this.selectedItems[this.itemUnderMouse] : true;
         }
       }
 
@@ -294,7 +300,7 @@ export class SelectionService extends ShapeService {
       this.selectedRef.innerHTML = this.updateBoundingBox();
 
       // if we moved a selection, emit the drawing for undo-redo
-      if(this.selectedItems.includes(true) && this.movingSelection && this.movedSelectionOnce){
+      if (this.selectedItems.includes(true) && this.movingSelection && this.movedSelectionOnce) {
         this.interaction.emitDrawingDone();
       }
 
@@ -314,12 +320,12 @@ export class SelectionService extends ShapeService {
     // only if the selectionTool is currently affecting the canvas
     if (this.isDown) {
 
-      if(this.movingSelection){
+      if (this.movingSelection) {
         this.movedSelectionOnce = true;
-  
-        let prevMousePosition = this.currentPath[this.currentPath.length-1];
+
+        let prevMousePosition = this.currentPath[this.currentPath.length - 1];
         let offset = new Point(position.x - prevMousePosition.x, position.y - prevMousePosition.y);
-  
+
         this.moveSelection(offset.x, offset.y);
       }
 
@@ -327,11 +333,11 @@ export class SelectionService extends ShapeService {
       this.currentPath.push(position);
 
       // if we're not trying to move an existing selection, we want to make a selection rectangle
-      if(!this.movingSelection){
+      if (!this.movingSelection) {
         // check for small offset to make single item selection more permissive
-        if(Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length-1]) > MIN_OFFSET_FOR_SELECTION){
+        if (Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length - 1]) > MIN_OFFSET_FOR_SELECTION) {
           // only on a normal selection
-          if(!this.inverted){
+          if (!this.inverted) {
             // we first need to empty the current selection
             this.selectedItems = [];
           }
@@ -346,54 +352,54 @@ export class SelectionService extends ShapeService {
     }
   }
 
-  updateBoundingBox(){
+  updateBoundingBox() {
 
-    if(!this.selected){
+    if (!this.selected) {
       this.selectedItems = [];
     }
 
     let canv = this.canvas
-    let canvasBox = canv?canv.getBoundingClientRect():null;
+    let canvasBox = canv ? canv.getBoundingClientRect() : null;
 
     // default values, is the value valid?
-    let minX:[number,boolean] = [1000000000,false];
-    let maxX:[number,boolean] = [-1,false];
-    let minY:[number,boolean] = [1000000000,false];
-    let maxY:[number,boolean] = [-1,false];
+    let minX: [number, boolean] = [1000000000, false];
+    let maxX: [number, boolean] = [-1, false];
+    let minY: [number, boolean] = [1000000000, false];
+    let maxY: [number, boolean] = [-1, false];
 
     // iterate through all items
-    for(let j = 0; j < Math.min(this.selectedItems.length,this.drawing.childElementCount);j++) {
+    for (let j = 0; j < Math.min(this.selectedItems.length, this.drawing.childElementCount); j++) {
 
       // ignore those who aren't selected
-      if(!this.selectedItems[j]){continue;}
+      if (!this.selectedItems[j]) { continue; }
 
       // iterate through every svg element
-      for(let i = 0; i < this.drawing.children[j].childElementCount;i++){
+      for (let i = 0; i < this.drawing.children[j].childElementCount; i++) {
 
         let current = this.drawing.children[j].children[i] as HTMLElement;
 
         // ignore the brush filters
-        if(current.tagName.toString() == "filter"){continue;}
+        if (current.tagName.toString() == "filter") { continue; }
 
         // offset due to the stroke width
         let childStrokeWidth = current.getAttribute("stroke-width");
-        let currentOffset = childStrokeWidth?+childStrokeWidth/2:0;
-  
+        let currentOffset = childStrokeWidth ? +childStrokeWidth / 2 : 0;
+
         // item bounding box
         let box = current.getBoundingClientRect();
-        let topLeft:Point = new Point(box.left - currentOffset, box.top - currentOffset);
-        let bottomRight:Point = new Point(box.right + currentOffset, box.bottom + currentOffset);
-  
+        let topLeft: Point = new Point(box.left - currentOffset, box.top - currentOffset);
+        let bottomRight: Point = new Point(box.right + currentOffset, box.bottom + currentOffset);
+
         // get smallest rectangle that includes every item
-        minX = topLeft.x<minX[0]? [topLeft.x,true]:[minX[0],minX[1]];
-        maxX = bottomRight.x>maxX[0]? [bottomRight.x,true]:[maxX[0],maxX[1]];
-        minY = topLeft.y<minY[0]? [topLeft.y,true]:[minY[0],minY[1]];
-        maxY = bottomRight.y>maxY[0]? [bottomRight.y,true]:[maxY[0],maxY[1]];
+        minX = topLeft.x < minX[0] ? [topLeft.x, true] : [minX[0], minX[1]];
+        maxX = bottomRight.x > maxX[0] ? [bottomRight.x, true] : [maxX[0], maxX[1]];
+        minY = topLeft.y < minY[0] ? [topLeft.y, true] : [minY[0], minY[1]];
+        maxY = bottomRight.y > maxY[0] ? [bottomRight.y, true] : [maxY[0], maxY[1]];
       }
     };
 
     // convert
-    if(canvasBox != null){
+    if (canvasBox != null) {
       minX[0] -= canvasBox.left;
       maxX[0] -= canvasBox.left;
       minY[0] -= canvasBox.top;
@@ -404,10 +410,10 @@ export class SelectionService extends ShapeService {
     this.wrapperDimensions[1] = new Point(maxX[0], maxY[0]);
 
     let wrapper = "";
-    if(minX[1] && maxX[1] && minY[1] && maxY[1]){
+    if (minX[1] && maxX[1] && minY[1] && maxY[1]) {
       wrapper += `<rect id="selection" x="${minX[0]}" y="${minY[0]}"`;
       wrapper += `width="${maxX[0] - minX[0]}" height="${maxY[0] - minY[0]}"`;
-  
+
       wrapper += `fill="rgba(0,120,215,0.3)"`;
       wrapper += `stroke-width="1" stroke="rgba(0,120,215,0.9)"/>`;
     }
@@ -416,40 +422,40 @@ export class SelectionService extends ShapeService {
   }
 
   // links the selection rectangle with the current drawing and manages the selected items
-  retrieveItemsInRect(){
+  retrieveItemsInRect() {
 
     let selectionRectangle = this.inProgress.lastElementChild;
     let items = this.drawing.children;
 
     // selection bounding box
-    let selectionBox = selectionRectangle?selectionRectangle.getBoundingClientRect():null;
-    let boxTopLeft:Point = new Point(selectionBox?selectionBox.left:-1, selectionBox?selectionBox.top:-1);
-    let boxBottomRight:Point = new Point(selectionBox?selectionBox.right:-1, selectionBox?selectionBox.bottom:-1);
+    let selectionBox = selectionRectangle ? selectionRectangle.getBoundingClientRect() : null;
+    let boxTopLeft: Point = new Point(selectionBox ? selectionBox.left : -1, selectionBox ? selectionBox.top : -1);
+    let boxBottomRight: Point = new Point(selectionBox ? selectionBox.right : -1, selectionBox ? selectionBox.bottom : -1);
 
-    for(let i = 0; i < items.length; i++){
+    for (let i = 0; i < items.length; i++) {
 
       // item bounding box
       let itemBox = items[i].getBoundingClientRect();
-      let itemTopLeft:Point = new Point(itemBox.left, itemBox.top);
-      let itemBottomRight:Point = new Point(itemBox.right, itemBox.bottom);
+      let itemTopLeft: Point = new Point(itemBox.left, itemBox.top);
+      let itemBottomRight: Point = new Point(itemBox.right, itemBox.bottom);
 
       // check if the two bounding box are overlapping
-      let inside:boolean = Point.rectOverlap(boxTopLeft, boxBottomRight, itemTopLeft, itemBottomRight);
+      let inside: boolean = Point.rectOverlap(boxTopLeft, boxBottomRight, itemTopLeft, itemBottomRight);
 
       // item is inside the selection rectangle -> select/unselect accordingly
-      if(inside){
-        if(this.inverted){
+      if (inside) {
+        if (this.inverted) {
           this.selectedItems[i] = this.invertedItems[i] == undefined ? true : this.invertedItems[i];
-        }else{
+        } else {
           this.selectedItems[i] = true;
           this.invertedItems[i] = false;
         }
       }
       // item is outside the selection rectangle -> select/unselect accordingly
-      else{
-        if(this.inverted){
+      else {
+        if (this.inverted) {
           this.selectedItems[i] = this.invertedItems[i] == undefined ? false : !this.invertedItems[i];
-        }else{
+        } else {
           this.selectedItems[i] = false;
           this.invertedItems[i] = true;
         }
@@ -458,25 +464,25 @@ export class SelectionService extends ShapeService {
   }
 
   // Moves the current selection by a number of pixels
-  moveSelection(xoff:number,yoff:number){
+  moveSelection(xoff: number, yoff: number) {
 
     // if there is at least 1 item selected
-    if(this.selectedItems.includes(true)){
+    if (this.selectedItems.includes(true)) {
 
       // iterate through all items
-      for(let i = 0; i < Math.min(this.selectedItems.length,this.drawing.childElementCount); i++){
+      for (let i = 0; i < Math.min(this.selectedItems.length, this.drawing.childElementCount); i++) {
 
         // ignore those who aren't selected
-        if(!this.selectedItems[i]){continue;}
+        if (!this.selectedItems[i]) { continue; }
 
         // get the current item's translate and add the offsets
         let current = (this.drawing.children[i] as HTMLElement).style.transform;
-        let s = current?current.split(","):"";
+        let s = current ? current.split(",") : "";
         let newX = +(s[0].replace(/[^\d.-]/g, '')) + xoff;
         let newY = +(s[1].replace(/[^\d.-]/g, '')) + yoff;
 
         // set the new values
-        this.render.setStyle(this.drawing.children[i],"transform",`translate(${newX}px,${newY}px)`);
+        this.render.setStyle(this.drawing.children[i], "transform", `translate(${newX}px,${newY}px)`);
       }
     }
   }
@@ -487,7 +493,7 @@ export class SelectionService extends ShapeService {
     let s = '';
 
     //We need at least 2 points
-    if(p.length < 2){
+    if (p.length < 2) {
       return s;
     }
 
@@ -512,8 +518,8 @@ export class SelectionService extends ShapeService {
     s += `<rect x="${startX}" y="${startY}"`;
     s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
 
-    s += `fill="rgba(${this.inverted? INVERTED_FILL_COLOR : FILL_COLOR})"`;
-    s += `stroke-width="5" stroke="rgba(${this.inverted? INVERTED_OUTLINE_COLOR : OUTLINE_COLOR})"`;
+    s += `fill="rgba(${this.inverted ? INVERTED_FILL_COLOR : FILL_COLOR})"`;
+    s += `stroke-width="5" stroke="rgba(${this.inverted ? INVERTED_OUTLINE_COLOR : OUTLINE_COLOR})"`;
     s += 'stroke-dasharray="5,5"/>';
 
     // end the divider
