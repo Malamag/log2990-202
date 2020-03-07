@@ -44,7 +44,14 @@ export class AerosolService extends DrawingTool{
 
   subscribe(){
     const srcInterval = interval(1000/this.attr.emissionPerSecond);
-    this.sub = srcInterval.subscribe(val => this.updateProgress());
+    this.sub = srcInterval.subscribe(val => {
+      if(this.isDown){
+        this.updateProgress()
+      }
+      else{
+        this.sub.unsubscribe();
+      }
+    });
   }
 
   // updating on key change
@@ -86,7 +93,6 @@ export class AerosolService extends DrawingTool{
       if (insideWorkspace) {
         // add everything to the canvas
         this.updateDrawing();
-        this.sub.unsubscribe();
       }
     }
   }
