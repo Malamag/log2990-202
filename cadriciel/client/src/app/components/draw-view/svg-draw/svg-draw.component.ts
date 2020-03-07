@@ -148,8 +148,11 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             if (toolName === 'Pipette') {
                 //... or, eventually, bucket tool
                 mouseHandler.svgCanvas = this.pixelMatrixRef.nativeElement;
-                mouseHandler.updateWindowSize();
+                //
+            } else {
+                mouseHandler.svgCanvas = this.svg.nativeElement;
             }
+            mouseHandler.updateWindowSize();
         });
 
         // Subscribe each tool to keyboard and mouse
