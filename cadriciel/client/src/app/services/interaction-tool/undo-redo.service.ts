@@ -13,7 +13,7 @@ export class UndoRedoService extends InteractionTool {
     }
     updateContainer() {
         this.interact.$drawingDone.subscribe(sig => {
-            if (sig && this.drawing.lastElementChild !== null) {
+            if (sig ) {
                 if (this.undone.length > 0) {
                     this.undone = [];
                 }
