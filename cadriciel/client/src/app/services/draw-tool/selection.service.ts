@@ -93,8 +93,8 @@ export class SelectionService extends ShapeService {
         this.selectedItems = [];
         this.selectedRef.innerHTML = this.updateBoundingBox();
       }
+      this.selectedItems = [];
     });
-
   }
 
   updateDown(keyboard: KeyboardHandlerService) {
@@ -310,17 +310,18 @@ export class SelectionService extends ShapeService {
   }
 
   move(position: Point) {
-    if(this.movingSelection){
-      this.movedSelectionOnce = true;
-
-      let prevMousePosition = this.currentPath[this.currentPath.length-1];
-      let offset = new Point(position.x - prevMousePosition.x, position.y - prevMousePosition.y);
-
-      this.moveSelection(offset.x, offset.y);
-    }
 
     // only if the selectionTool is currently affecting the canvas
     if (this.isDown) {
+
+      if(this.movingSelection){
+        this.movedSelectionOnce = true;
+  
+        let prevMousePosition = this.currentPath[this.currentPath.length-1];
+        let offset = new Point(position.x - prevMousePosition.x, position.y - prevMousePosition.y);
+  
+        this.moveSelection(offset.x, offset.y);
+      }
 
       // save mouse position
       this.currentPath.push(position);
@@ -346,6 +347,10 @@ export class SelectionService extends ShapeService {
   }
 
   updateBoundingBox(){
+
+    if(!this.selected){
+      this.selectedItems = [];
+    }
 
     let canv = this.canvas
     let canvasBox = canv?canv.getBoundingClientRect():null;
