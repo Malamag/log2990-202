@@ -18,6 +18,10 @@ export class EraserService extends DrawingTool {
 
   foundAnItem : boolean;
 
+  erasedSomething : boolean;
+
+  canvas: HTMLElement
+
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,
               render : Renderer2, selectedRef : HTMLElement, canvas : HTMLElement) {
 
@@ -26,9 +30,13 @@ export class EraserService extends DrawingTool {
     this.updateColors()
     this.updateAttributes()
 
+    this.canvas = canvas;
+
     this.render = render;
 
     this.foundAnItem = false;
+
+    this.erasedSomething = false;
 
     window.addEventListener("newDrawing",(e:Event)=>{
       for(let i = 0; i < this.drawing.childElementCount; i++){
@@ -38,14 +46,15 @@ export class EraserService extends DrawingTool {
           this.render.listen(el,"mouseenter", () =>{
             this.render.setAttribute(el, "isListening2","true");
             if(!this.foundAnItem){
-              this.highlight(el);
+              //this.highlight(el);
               this.foundAnItem = true;
+              //this.erase(el);
             }
           });
           this.render.listen(el,"mouseleave", () =>{
             this.render.setAttribute(el, "isListening2","true");
             if(this.foundAnItem){
-              this.unhighlight(el);
+              //this.unhighlight(el);
               this.foundAnItem = false;
             }
           });
@@ -92,6 +101,8 @@ export class EraserService extends DrawingTool {
     this.currentPath.push(position);
 
     this.updateProgress();
+
+    this.checkIfTouching();
   }
 
   // mouse up with pencil in hand
@@ -103,17 +114,26 @@ export class EraserService extends DrawingTool {
       // the pencil should not affect the canvas
       this.isDown = false;
 
-      // no path is created while outside the canvas
-      if (insideWorkspace) {
-        // add everything to the canvas
-        this.updateDrawing();
+      if(this.erasedSomething){
+        this.interaction.emitDrawingDone();
+        console.log("now");
       }
+
+      this.erasedSomething = false;
+    }
+  }
+
+  erase(el:Element){
+    if(this.isDown){
+      this.render.removeChild(el.parentElement, el);
+      this.erasedSomething = true;
     }
   }
   
+  // highlights a 'g' tag by adding a clone as a child
   highlight(el : Element){
 
-    if(this.selected && el.firstElementChild){
+    if(this.selected && el.firstElementChild && !el.firstElementChild.classList.contains("clone")){
       let clone : Element = this.render.createElement("g","http://www.w3.org/2000/svg");
       (clone as HTMLElement).innerHTML = el.innerHTML;
       for(let i = 0; i < el.childElementCount;i++){
@@ -147,8 +167,10 @@ export class EraserService extends DrawingTool {
     }
   }
 
+  //unhighlights the element by removing all of his "clone" children
   unhighlight(el : Element){
-    if(this.selected && el.firstElementChild){
+
+    if(el.firstElementChild){
       if(el.firstElementChild.classList.contains("clone")){
         this.render.removeChild(el, el.firstElementChild);
       }
@@ -159,12 +181,102 @@ export class EraserService extends DrawingTool {
   move(position: Point) {
 
     // only if the pencil is currently affecting the canvas
-    if (this.isDown) {
+    if (true) {
 
       // save mouse position
       this.currentPath.push(position);
 
+      while(this.currentPath.length > 3){
+        this.currentPath.shift();
+      }
+
       this.updateProgress();
+
+      this.checkIfTouching();
+    }
+  }
+
+  // when we go from inside to outside the canvas
+  goingOutsideCanvas() {
+    // nothing happens since we might want to readjust the shape once back in
+  }
+
+  // when we go from outside to inside the canvas
+  goingInsideCanvas() {
+    // nothing happens since we just update the preview
+  }
+
+  checkIfTouching(){
+
+    /*
+    let canv = this.canvas;
+    let canvasBox = canv?canv.getBoundingClientRect():null;
+    let canvOffsetX = (canvasBox? canvasBox.left : 0);
+    let canvOffsetY = (canvasBox? canvasBox.top : 0);
+    */
+
+    let w = Math.max(10,Math.abs(this.currentPath[this.currentPath.length-1].x - this.currentPath[0].x));
+    let h = Math.max(10,Math.abs(this.currentPath[this.currentPath.length-1].y - this.currentPath[0].y));
+
+    let dim = Math.max(w,h);
+
+    let tl = new Point(this.currentPath[this.currentPath.length-1].x - dim/2,this.currentPath[this.currentPath.length-1].y - dim/2);
+    let br = new Point(tl.x + dim, tl.y + dim);
+
+    for(let i = 0; i < this.drawing.childElementCount;i++){
+
+      let touching = false;
+      let firstChild = this.drawing.children[i];
+
+      for(let j = 0; j < firstChild.childElementCount;j++){
+        let secondChild = firstChild.children[j];
+
+        let width = (secondChild as HTMLElement).getAttribute("stroke-width");
+        let offset = 0;
+        if(width){
+          offset = +width;
+        }
+
+        let dim2 = 3 + offset;
+
+        if(secondChild.classList.contains("clone") || secondChild.tagName == "filter"){continue;}
+
+        let path = secondChild as SVGPathElement;
+        let lenght = path.getTotalLength();
+        let inc = lenght / 500;
+        let points = [];
+        for(let a = 0; a < lenght; a+= inc){
+          let candidate = new Point(path.getPointAtLength(a).x,path.getPointAtLength(a).y);
+          if(Point.distance(this.currentPath[this.currentPath.length-1],candidate) < 40){
+            points.push(new Point(path.getPointAtLength(a).x,path.getPointAtLength(a).y));
+          }
+        }
+        for(let a = 0; a < points.length; a++){
+          let tlp = new Point(points[a].x - dim2/2, points[a].y - dim2/2);
+          let brp = new Point(points[a].x + dim2/2, points[a].y +dim2/2);
+          if(Point.rectOverlap(tlp, brp, tl,br)){
+            touching = true;
+            break;
+          }
+        }
+
+        if(touching){
+          break;
+        }
+
+      }
+
+      if(touching){
+        if(this.isDown){
+          this.erase(firstChild);
+        }else{
+          this.highlight(firstChild);
+        }
+        //this.render.removeChild(firstChild.parentElement, firstChild);
+        // /console.log("TOUCHING");
+      }else{
+        this.unhighlight(firstChild);
+      }
     }
   }
 
@@ -184,26 +296,23 @@ export class EraserService extends DrawingTool {
     }
 
     // create a divider
-    s = '<g style="transform: translate(0px, 0px);" name = "pencil-stroke">';
+    s = '<g style="transform: translate(0px, 0px);" name = "eraser-brush">';
 
-    // start the path
-    s += '<path d="';
-    // move to first point
-    s += `M ${p[0].x} ${p[0].y} `;
-    // for each succeding point, connect it with a line
-    for (let i = 1; i < p.length; i++) {
-      s += `L ${p[i].x} ${p[i].y} `;
-    }
-    // set render attributes
-    s += `\" stroke="blue"`;
-    s += `stroke-width="${this.attr.lineThickness}"`;
-    s += 'fill="none"';
-    s += 'stroke-linecap="round"';
-    s += 'stroke-linejoin="round"/>';
-    // end the path
+
+    let w = Math.max(10,Math.abs(p[p.length-1].x - p[0].x));
+    let h = Math.max(10,Math.abs(p[p.length-1].y - p[0].y));
+
+    let dim = Math.max(w,h);
+
+    s += `<rect x="${p[p.length-1].x - dim/2}" y="${p[p.length-1].y - dim/2}"`;
+    s += `width="${dim}" height="${dim}"`;
+
+    s += `fill="white"`;
+    s += `stroke-width="1" stroke="black"`;
 
     // end the divider
     s += '</g>';
+
     return s;
   }
 }
