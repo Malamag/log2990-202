@@ -58,7 +58,7 @@ export class ToolCreator {
         return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick, render, selectedRef, canvas, workingSpace);
     }
 
-    CreatePipette(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): PipetteService {
-        return new PipetteService(selected);
+    CreatePipette(selected: boolean, canvas: HTMLCanvasElement): PipetteService {
+        return new PipetteService(selected, canvas);
     }
 }

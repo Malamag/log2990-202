@@ -7,8 +7,11 @@ import { Point } from './point';
     providedIn: 'root',
 })
 export class PipetteService extends InputObserver {
-    constructor(selected: boolean) {
+    htmlCanvasEl: HTMLCanvasElement;
+    constructor(selected: boolean, htmlCanvasEl: HTMLCanvasElement) {
         super(selected);
+        this.htmlCanvasEl = htmlCanvasEl;
+        console.log(this.htmlCanvasEl);
     }
     update(keyboard: KeyboardHandlerService): void {}
     cancel(): void {}

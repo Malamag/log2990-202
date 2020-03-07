@@ -121,7 +121,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.svg.nativeElement,
             this.workingSpace,
         );
-        const pipette = tc.CreatePipette(false, this.interaction, this.colorPick);
+        const pipette = tc.CreatePipette(false, this.pixelMatrixRef.nativeElement);
 
         this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
         this.toolsContainer.set('Rectangle', rect);
