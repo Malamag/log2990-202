@@ -19,7 +19,7 @@ export class LineService extends DrawingTool {
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
     super(inProgess, drawing, selected, interaction, colorPick);
-    this.attr = {junction : DEFAULTJUNCTION, lineThickness: DEFAULTLINETHICKNESS, junctionDiameter: DEFAULTJUNCTIONRADIUS};
+    this.attr = { junction: DEFAULTJUNCTION, lineThickness: DEFAULTLINETHICKNESS, junctionDiameter: DEFAULTJUNCTIONRADIUS };
     this.forcedAngle = false;
     this.currentPos = new Point(0, 0);
     this.updateAttributes()
@@ -30,7 +30,7 @@ export class LineService extends DrawingTool {
   updateAttributes() {
     this.interaction.$lineAttributes.subscribe((obj) => {
       if (obj) {
-        this.attr = {junction: obj.junction, lineThickness: obj.lineThickness, junctionDiameter: obj.junctionDiameter};
+        this.attr = { junction: obj.junction, lineThickness: obj.lineThickness, junctionDiameter: obj.junctionDiameter };
       }
     })
 
@@ -73,9 +73,9 @@ export class LineService extends DrawingTool {
   }
 
   // updating on key up
-  updateUp(keyCode : number) {
+  updateUp(keyCode: number) {
     // nothing happens for line tool
-}
+  }
 
   // mouse down with lineTool in hand
   down(position: Point, mouseInsideWorkspace: boolean) {
@@ -235,7 +235,7 @@ export class LineService extends DrawingTool {
         s += `<circle cx="${p[i].x}" cy="${p[i].y}"`;
         s += `r="${this.attr.junctionDiameter / 2}"`; // to get the radius
         s += 'stroke="none"';
-        s += `fill="#${this.chosenColor.primColor}"/>`;
+        s += `fill="${this.chosenColor.primColor}"/>`;
       }
     }
 

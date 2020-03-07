@@ -216,13 +216,9 @@ export class SelectionService extends ShapeService {
 
     this.canMoveSelection = this.arrows.includes(true);
 
-    console.log('------------------');
-    console.log(this.arrows);
-    console.log(this.movedSelectionWithArrowsOnce);
     if (this.movedSelectionWithArrowsOnce && !this.arrows.includes(true)) {
       this.movedSelectionWithArrowsOnce = false;
       this.interaction.emitDrawingDone();
-      console.log("now");
     }
   }
 

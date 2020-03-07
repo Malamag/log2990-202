@@ -11,7 +11,7 @@ const DEFAULTTEXTURE = 0;
 @Injectable({
   providedIn: 'root'
 })
-export class EraserService extends DrawingTool {
+export class ColorEditorService extends DrawingTool {
 
   render: Renderer2;
   attr: ToolsAttributes
@@ -21,6 +21,8 @@ export class EraserService extends DrawingTool {
   erasedSomething: boolean;
 
   canvas: HTMLElement;
+
+  isRightClick: boolean;
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,
     render: Renderer2, selectedRef: HTMLElement, canvas: HTMLElement) {
@@ -40,21 +42,23 @@ export class EraserService extends DrawingTool {
 
     this.inProgress.style.pointerEvents = "none";
 
+    this.isRightClick = false;
+
     window.addEventListener("newDrawing", (e: Event) => {
       for (let i = 0; i < this.drawing.childElementCount; i++) {
         let el = this.drawing.children[i];
-        let status = el.getAttribute("isListening2");
-        this.render.setAttribute(el, "checkPreciseEdge", "true");
+        let status = el.getAttribute("isListening3");
+        this.render.setAttribute(el, "checkPreciseEdge2", "true");
         if (status !== "true") {
-          this.render.setAttribute(el, "isListening2", "true");
+          this.render.setAttribute(el, "isListening3", "true");
           this.render.listen(el, "mousemove", () => {
             //console.log("enter");
             if (!this.foundAnItem) {
-              this.highlight(el);
-              this.render.setAttribute(el, "checkPreciseEdge", "false");
+              //this.highlight(el);
+              this.render.setAttribute(el, "checkPreciseEdge2", "false");
               this.foundAnItem = true;
               if (this.isDown) {
-                this.erase(el);
+                this.changeColor(el);
                 this.foundAnItem = false;
               }
             }
@@ -62,21 +66,20 @@ export class EraserService extends DrawingTool {
           this.render.listen(el, "mouseleave", () => {
             //console.log("leaving");
             if (this.foundAnItem) {
-              this.unhighlight(el);
+              //this.unhighlight(el);
               this.foundAnItem = false;
-              this.render.setAttribute(el, "checkPreciseEdge", "true");
+              this.render.setAttribute(el, "checkPreciseEdge2", "true");
             }
           });
           this.render.listen(el, "mousedown", () => {
-            //console.log("click");
-            this.erase(el);
+            this.changeColor(el);
             this.foundAnItem = false;
-            this.render.setAttribute(el, "checkPreciseEdge", "true");
+            this.render.setAttribute(el, "checkPreciseEdge2", "true");
           });
           this.render.listen(el, "mouseup", () => {
             if (!this.foundAnItem) {
-              this.highlight(el);
-              this.render.setAttribute(el, "checkPreciseEdge", "false");
+              //this.highlight(el);
+              this.render.setAttribute(el, "checkPreciseEdge2", "false");
               this.foundAnItem = false;
             }
           });
@@ -87,7 +90,7 @@ export class EraserService extends DrawingTool {
     window.addEventListener("toolChange", (e: Event) => {
       this.foundAnItem = false;
       for (let i = 0; i < this.drawing.childElementCount; i++) {
-        this.unhighlight(this.drawing.children[i]);
+        //this.unhighlight(this.drawing.children[i]);
       }
     });
 
@@ -111,7 +114,9 @@ export class EraserService extends DrawingTool {
   }
 
   // mouse down with pencil in hand
-  down(position: Point) {
+  down(position: Point, insideWorkspace: boolean, isRightClick: boolean) {
+
+    this.isRightClick = isRightClick;
 
     // in case we changed tool while the mouse was down
     this.ignoreNextUp = false;
@@ -145,59 +150,28 @@ export class EraserService extends DrawingTool {
     }
   }
 
-  erase(el: Element) {
+  changeColor(el: Element) {
     if (this.selected) {
-      this.render.removeChild(el.parentElement, el);
-      this.erasedSomething = true;
-    }
-  }
-
-  // highlights a 'g' tag by adding a clone as a child
-  highlight(el: Element) {
-
-    if (this.selected && el.firstElementChild && !el.firstElementChild.classList.contains("clone")) {
-      let clone: Element = this.render.createElement("g", "http://www.w3.org/2000/svg");
-      (clone as HTMLElement).innerHTML = el.innerHTML;
       for (let i = 0; i < el.childElementCount; i++) {
-        let originalWidth: string | null = (el.children[i] as HTMLElement).getAttribute("stroke-width");
-        let originalWidthNumber = originalWidth ? + originalWidth : 0;
-        let wider: number = Math.max(10, originalWidthNumber + 10);
-        this.render.setAttribute(clone.children[i], "stroke-width", `${wider}`);
-
-        //console.log(window.getComputedStyle(el.children[i]).getPropertyValue("stroke"));
-        let originalStrokeColor: string | null = (el.children[i] as HTMLElement).getAttribute("stroke");
-        let originalFillColor: string | null = (el.children[i] as HTMLElement).getAttribute("fill");
-        //248 256
-        let refcolor: string | null = originalStrokeColor != "none" ? originalStrokeColor : originalFillColor;
-
-        let originalStrokeRGB: [number, number, number] = [0, 0, 0];
-        if (refcolor && refcolor != "none") {
-          originalStrokeRGB[0] = parseInt(refcolor[1] + refcolor[2], 16);
-          originalStrokeRGB[1] = parseInt(refcolor[3] + refcolor[4], 16);
-          originalStrokeRGB[2] = parseInt(refcolor[5] + refcolor[6], 16);
+        let current = el.children[i];
+        if (current.tagName == "filter") { continue; }
+        if (this.isRightClick) {
+          this.changeBorder(current as HTMLElement);
+        } else {
+          this.changeFill(current as HTMLElement);
         }
-
-        let redHighlight: number = 255;
-        let originalToRed = originalStrokeRGB[0] > (255 / 4) * 3;
-        if (originalToRed) {
-          redHighlight = (originalStrokeRGB[0] / 4) * 3;
-        }
-
-        this.render.setAttribute(clone.children[i], "stroke", `rgb(${redHighlight},0,0)`);
       }
-      this.render.setAttribute(clone, "class", "clone");
-      this.render.insertBefore(el, clone, el.firstElementChild);
     }
   }
 
-  //unhighlights the element by removing all of his "clone" children
-  unhighlight(el: Element) {
+  changeBorder(el: HTMLElement) {
+    let newColor = el.getAttribute("stroke") != "none" ? this.chosenColor.secColor : "";
+    this.render.setAttribute(el, "stroke", newColor);
+  }
 
-    if (el.firstElementChild) {
-      if (el.firstElementChild.classList.contains("clone")) {
-        this.render.removeChild(el, el.firstElementChild);
-      }
-    }
+  changeFill(el: HTMLElement) {
+    let newColor = el.getAttribute("fill") != "none" ? this.chosenColor.primColor : "";
+    this.render.setAttribute(el, "fill", newColor);
   }
 
   // mouse move with pencil in hand
@@ -260,7 +234,7 @@ export class EraserService extends DrawingTool {
       let itemBottomRight: Point = new Point(itemBox.right - canvOffsetX, itemBox.bottom - canvOffsetY);
 
       if (!Point.rectOverlap(tl, br, itemTopLeft, itemBottomRight)) {
-        this.unhighlight(firstChild);
+        //this.unhighlight(firstChild);
         continue;
       }
 
@@ -325,12 +299,12 @@ export class EraserService extends DrawingTool {
       //console.log(touching);
       if (touching) {
         if (this.isDown) {
-          this.erase(firstChild);
+          this.changeColor(firstChild);
         } else {
-          this.highlight(firstChild);
+          //this.highlight(firstChild);
         }
       } else {
-        this.unhighlight(firstChild);
+        //this.unhighlight(firstChild);
       }
     }
   }
