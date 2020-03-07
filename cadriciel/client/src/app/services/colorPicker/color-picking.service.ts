@@ -34,7 +34,7 @@ export class ColorPickingService {
     }
     /************************ SETTERS SECTION ***************************/
     setColorsFromForm(primary: string, secondary: string, background: string) {
-        this.colors = new ChoosenColors(primary, secondary, background);
+        this.colors = { primColor: primary, secColor: secondary, backColor: background };
     }
     setColor(color: number[]): string {
         if (color.length < 3) {
@@ -60,15 +60,16 @@ export class ColorPickingService {
         }
     }
     setColorMode(event: MouseEvent): void {
-        if (this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE) {
-            switch (event.button) {
-                case 0:
-                    this.cData.colorMode = this.cData.PRIMARY_COLOR_MODE;
-                    break;
-                case 2:
-                    this.cData.colorMode = this.cData.SECONDARY_COLOR_MODE;
-                    break;
-            }
+        if (this.cData.colorMode === this.cData.BACKGROUND_COLOR_MODE) {
+            return;
+        }
+        switch (event.button) {
+            case 0:
+                this.cData.colorMode = this.cData.PRIMARY_COLOR_MODE;
+                break;
+            case 2:
+                this.cData.colorMode = this.cData.SECONDARY_COLOR_MODE;
+                break;
         }
     }
     // Set position of x and y of saturatio/lightness cursor
@@ -117,27 +118,28 @@ export class ColorPickingService {
     }
     // saturation/lightness selector
     slSelector(event: MouseEvent): void {
-        if (this.cData.isSLSelecting) {
-            const x: number = event.offsetX - 25;
-            const y: number = event.offsetY - 25;
-            this.setSLCursor(x, y);
-            this.cData.saturationSliderInput = x * 2;
-            this.cData.lightnessSliderInput = y * 2;
-            this.setSaturation(this.cData.saturationSliderInput);
-            let hsl: number[] = [
+        if (!this.cData.isSLSelecting) {
+            return;
+        }
+        const x: number = event.offsetX - 25;
+        const y: number = event.offsetY - 25;
+        this.setSLCursor(x, y);
+        this.cData.saturationSliderInput = x * 2;
+        this.cData.lightnessSliderInput = y * 2;
+        this.setSaturation(this.cData.saturationSliderInput);
+        let hsl: number[] = [
+            this.cData.currentHue,
+            this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
+            this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER,
+        ];
+        let color = this.setColor(
+            this.colorConvert.hslToRgb(
                 this.cData.currentHue,
                 this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
                 this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER,
-            ];
-            let color = this.setColor(
-                this.colorConvert.hslToRgb(
-                    this.cData.currentHue,
-                    this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
-                    this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER,
-                ),
-            );
-            this.updateDisplay(color, this.colorConvert.hexToRgba(color), hsl);
-        }
+            ),
+        );
+        this.updateDisplay(color, this.colorConvert.hexToRgba(color), hsl);
     }
     lastColorSelector(event: MouseEvent, lastColor: string): void {
         this.setColorMode(event);
@@ -149,17 +151,19 @@ export class ColorPickingService {
         event.preventDefault();
     }
     onSwapSVGMouseOver(): void {
-        if (this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE) {
-            this.cData.swapStrokeStyle = 'yellow';
+        if (this.cData.colorMode === this.cData.BACKGROUND_COLOR_MODE) {
+            return;
         }
+        this.cData.swapStrokeStyle = 'yellow';
     }
     onSwapSVGMouseLeave(): void {
         this.cData.swapStrokeStyle = 'white';
     }
     onSwapSVGMouseDown(): void {
-        if (this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE) {
-            this.cData.swapStrokeStyle = 'lightblue';
+        if (this.cData.colorMode === this.cData.BACKGROUND_COLOR_MODE) {
+            return;
         }
+        this.cData.swapStrokeStyle = 'lightblue';
     }
     onSwapSVGMouseUp(): void {
         this.cData.swapStrokeStyle = 'white';
@@ -170,46 +174,50 @@ export class ColorPickingService {
     }
     // Mouse up event function when mouse on a color selector
     colorSelectOnMouseUp(): void {
-        if (this.cData.isSLSelecting || this.cData.isHueSelecting) {
-            this.cData.rectOffsetFill = 'none';
-            this.cData.isHueSelecting = false;
-            this.cData.isSLSelecting = false;
-            switch (this.cData.colorMode) {
-                case this.cData.PRIMARY_COLOR_MODE:
-                    this.updateLastColor(this.cData.primaryColor);
-                    break;
-                case this.cData.SECONDARY_COLOR_MODE:
-                    this.updateLastColor(this.cData.secondaryColor);
-                    break;
-                case this.cData.BACKGROUND_COLOR_MODE:
-                    this.updateLastColor(this.cData.backgroundColor);
-                    break;
-            }
-            this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor, this.cData.backgroundColor);
-            this.emitColors();
+        if (!this.cData.isSLSelecting && !this.cData.isHueSelecting) {
+            return;
         }
+        this.cData.rectOffsetFill = 'none';
+        this.cData.isHueSelecting = false;
+        this.cData.isSLSelecting = false;
+        switch (this.cData.colorMode) {
+            case this.cData.PRIMARY_COLOR_MODE:
+                this.updateLastColor(this.cData.primaryColor);
+                break;
+            case this.cData.SECONDARY_COLOR_MODE:
+                this.updateLastColor(this.cData.secondaryColor);
+                break;
+            case this.cData.BACKGROUND_COLOR_MODE:
+                this.updateLastColor(this.cData.backgroundColor);
+                break;
+        }
+        this.setColorsFromForm(this.cData.primaryColor, this.cData.secondaryColor, this.cData.backgroundColor);
+        this.emitColors();
     }
     // Mouse down event function when mouse on hue selector
     hueSelectorOnMouseDown(event: MouseEvent): void {
-        if (!this.cData.isSLSelecting) {
-            this.cData.isHueSelecting = true;
-            this.cData.rectOffsetFill = 'white';
-            this.setColorMode(event);
-            this.hueSelector(event);
+        if (this.cData.isSLSelecting) {
+            return;
         }
+        this.cData.isHueSelecting = true;
+        this.cData.rectOffsetFill = 'white';
+        this.setColorMode(event);
+        this.hueSelector(event);
     }
     selectorOnMouseLeave(event: MouseEvent): void {
-        if (this.cData.isHueSelecting) {
-            this.hueSelector(event);
+        if (!this.cData.isHueSelecting) {
+            return;
         }
+        this.hueSelector(event);
     }
     // Mouse down event function when mouse on saturation/lightness selector
     slSelectorOnMouseDown(event: MouseEvent): void {
-        if (!this.cData.isHueSelecting) {
-            this.cData.isSLSelecting = true;
-            this.setColorMode(event);
-            this.slSelector(event);
+        if (this.cData.isHueSelecting) {
+            return;
         }
+        this.cData.isSLSelecting = true;
+        this.setColorMode(event);
+        this.slSelector(event);
     }
     // DISPLAY/UPDATE
     // Update last color table with a new color
@@ -289,18 +297,19 @@ export class ColorPickingService {
     }
     // Exchange primary and secondary value
     swapPrimarySecondary(): void {
-        if (this.cData.colorMode !== this.cData.BACKGROUND_COLOR_MODE) {
-            const tempColor: string = this.cData.primaryColor;
-            const tempAlpha: number = this.cData.primaryAlpha;
-
-            this.cData.primaryColor = this.cData.secondaryColor;
-            this.cData.primaryAlpha = this.cData.secondaryAlpha;
-
-            this.cData.secondaryColor = tempColor;
-            this.cData.secondaryAlpha = tempAlpha;
-            let color = this.selectDisplayColor();
-            this.updateDisplay(color);
+        if (this.cData.colorMode === this.cData.BACKGROUND_COLOR_MODE) {
+            return;
         }
+        const tempColor: string = this.cData.primaryColor;
+        const tempAlpha: number = this.cData.primaryAlpha;
+
+        this.cData.primaryColor = this.cData.secondaryColor;
+        this.cData.primaryAlpha = this.cData.secondaryAlpha;
+
+        this.cData.secondaryColor = tempColor;
+        this.cData.secondaryAlpha = tempAlpha;
+        let color = this.selectDisplayColor();
+        this.updateDisplay(color);
     }
     // INPUTS
     // validate if char is hexadecimal.

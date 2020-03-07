@@ -1,13 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
-import { FormsAttribute } from '../attributes/attribute-form';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 import { RectangleService } from './rectangle.service';
 
-export class fakeInteractionService extends InteractionService {}
+export class FakeInteractionService extends InteractionService {}
 
 describe('RectangleService', () => {
     let kbServiceStub: any;
@@ -34,7 +32,7 @@ describe('RectangleService', () => {
                 { provide: Number, useValue: 0 },
                 { provide: String, useValue: '' },
                 { provide: Boolean, useValue: true },
-                { provide: InteractionService, useClass: fakeInteractionService },
+                { provide: InteractionService, useClass: FakeInteractionService },
                 { provide: KeyboardHandlerService, useValue: kbServiceStub },
             ],
         });
@@ -42,16 +40,17 @@ describe('RectangleService', () => {
     });
 
     it('should be created', () => {
-        const service: RectangleService = TestBed.get(RectangleService);
-        expect(service).toBeTruthy();
+        const testservice: RectangleService = TestBed.get(RectangleService);
+        expect(testservice).toBeTruthy();
     });
 
     it('should set the attributes in the subscription', () => {
-        service.interaction.emitFormsAttributes(new FormsAttribute(0, 0, 0));
+        service.interaction.emitFormsAttributes({ plotType: 0, lineThickness: 0, numberOfCorners: 0 });
         const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
         service.updateAttributes();
         expect(spyInteraction).toHaveBeenCalled();
-        expect(service.attr).toBeDefined();
+        // tslint:disable-next-line: no-string-literal
+        expect(service['attr']).toBeDefined();
     });
 
     it('should update progress on move', () => {
@@ -98,14 +97,18 @@ describe('RectangleService', () => {
     });
 
     it('should create a valid rectangle svg from one point to another', () => {
-        const rect = service.createPath(ptArr);
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
         expect(rect).toContain('<rect');
     });
 
     it('should create a rectangle of the correct dimensions from mouse move', () => {
-        const rect = service.createPath(ptArr);
-        const expWidth = `width="${ptB.x - ptA.x}"`;
-        const expHeigth = `height="${ptB.y - ptA.y}"`;
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
+        const expWidth = `width="${ptBStub.x - ptAStub.x}"`;
+        const expHeigth = `height="${ptBStub.y - ptAStub.y}"`;
 
         expect(rect).toContain(expWidth);
         expect(rect).toContain(expHeigth);
@@ -113,8 +116,11 @@ describe('RectangleService', () => {
 
     it('should create a rectangle with the selected border thickness', () => {
         const thick = 1;
-        service.attr.lineThickness = thick; // simulated border thickness
-        const rect = service.createPath(ptArr);
+        // tslint:disable-next-line: no-string-literal
+        service['attr'].lineThickness = thick; // simulated border thickness
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
         const expTick = `stroke-width="${thick}"`;
         expect(rect).toContain(expTick);
     });
@@ -130,7 +136,9 @@ describe('RectangleService', () => {
     });
 
     it('should create a rectangle with corner at mouse start', () => {
-        const rect = service.createPath(ptArr);
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
 
         expect(rect).toContain(`x="${0}"`);
         expect(rect).toContain(`y="${0}"`);
@@ -138,9 +146,11 @@ describe('RectangleService', () => {
 
     it('should create a rectangle filled with the selected color', () => {
         const color = '#ffffff';
-        service.chosenColor = new ChoosenColors(color, color, color); // both prim. and sec.
+        service.chosenColor = { primColor: color, secColor: color, backColor: color }; // both prim. and sec.
 
-        const rect = service.createPath(ptArr);
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
         expect(rect).toContain(`fill="${color}"`);
     });
 
@@ -148,20 +158,24 @@ describe('RectangleService', () => {
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = new ChoosenColors(prim, sec, back);
-        const rect = service.createPath(ptArr);
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
 
         expect(rect).toContain(`stroke="${sec}"`);
     });
 
     it('should create only an outlined rectangle on plottype = 0', () => {
-        service.attr.plotType = 0; // init the plot type
+        // tslint:disable-next-line: no-string-literal
+        service['attr'].plotType = 0; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = new ChoosenColors(prim, sec, back);
-
-        const rect = service.createPath(ptArr);
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
 
         expect(rect).toContain(`fill="${'none'}"`); // no color for fill
 
@@ -169,27 +183,30 @@ describe('RectangleService', () => {
     });
 
     it('should create only a filled rectangle on plottype = 1', () => {
-        service.attr.plotType = 1; // init the plot type
+        // tslint:disable-next-line: no-string-literal
+        service['attr'].plotType = 1; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = new ChoosenColors(prim, sec, back);
-
-        const rect = service.createPath(ptArr);
-
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
         expect(rect).toContain(`fill="${prim}"`); // primary color fill
 
         expect(rect).toContain(`stroke="${'none'}"`);
     });
 
     it('should create a filled and outlined rectangle on plottype = 2', () => {
-        service.attr.plotType = 2; // init the plot type
+        // tslint:disable-next-line: no-string-literal
+        service['attr'].plotType = 2; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = new ChoosenColors(prim, sec, back);
-
-        const rect = service.createPath(ptArr);
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const rect = service.createPath([ptAStub, ptBStub]);
 
         expect(rect).toContain(`fill="${prim}"`); // no color for fill
 
@@ -205,7 +222,9 @@ describe('RectangleService', () => {
     });
 
     it('should be named rectangle', () => {
-        const path = service.createPath(ptArr);
+        const ptAStub = new Point(0,0);
+        const ptBStub = new Point(10,10)
+        const path = service.createPath([ptAStub, ptBStub]);
         const name = 'rectangle';
         expect(path).toContain(name);
     });

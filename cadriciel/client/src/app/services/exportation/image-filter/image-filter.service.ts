@@ -4,7 +4,7 @@ import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
     providedIn: 'root',
 })
 export class ImageFilterService {
-    ns: string = 'http://www.w3.org/2000/svg'; // svg namespace to get its proper attributes
+    private readonly ns: string = 'http://www.w3.org/2000/svg'; // svg namespace to get its proper attributes
 
     renderer: Renderer2;
     filterArray: SVGElement[];
@@ -78,16 +78,16 @@ export class ImageFilterService {
         FILTER.id = 'soft';
 
         const SOFT_EFFECT = this.renderer.createElement('feGaussianBlur', this.ns);
-        this.renderer.setAttribute(SOFT_EFFECT, 'stdDeviation', '2');
+        this.renderer.setAttribute(SOFT_EFFECT, 'stdDeviation', '4');
 
         const LIGHT_EFFECT = this.renderer.createElement('feColorMatrix');
         this.renderer.setAttribute(LIGHT_EFFECT, 'in', 'SourceGraphic');
         this.renderer.setAttribute(LIGHT_EFFECT, 'type', 'matrix');
         const VALUES: string =
-            '1.3 0 0 0 0' + //increases luminosity
-            '0 1.3 0 0 0' +
-            '0 0 1.3 0 0' +
-            '0 0 0 1.3 1';
+            '1.3 0 0 0 0 ' + //increases luminosity
+            '0 1.3 0 0 0 ' +
+            '0 0 1.3 0 0 ' +
+            '0 0 0 1.3 0';
 
         this.renderer.setAttribute(LIGHT_EFFECT, 'values', VALUES);
         this.renderer.appendChild(FILTER, SOFT_EFFECT);

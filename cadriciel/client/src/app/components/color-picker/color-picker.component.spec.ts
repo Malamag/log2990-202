@@ -1,10 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
-//import { ColorConvertingService } from 'src/app/services/colorPicker/color-converting.service';
-//import { ColorPickingService } from '../../services/colorPicker/color-picking.service';
 import { ColorPickerComponent } from './color-picker.component';
-
 describe('ColorPickerComponent', () => {
     let component: ColorPickerComponent;
     let fixture: ComponentFixture<ColorPickerComponent>
@@ -15,13 +11,11 @@ describe('ColorPickerComponent', () => {
         })
         .compileComponents();
     }));
-
     beforeEach(() => {
         fixture = TestBed.createComponent(ColorPickerComponent);
         component = fixture.componentInstance
         fixture.detectChanges();
     });
-
     it('should create', () => {
         expect(component).toBeTruthy()
     })
@@ -47,7 +41,7 @@ describe('ColorPickerComponent', () => {
         const SEC_COLOR = '#ffffffff';
         const BG_COLOR = '#00000000';
         //colorPicking.colorSubject.next(new ChoosenColors(PRIM_COLOR, SEC_COLOR,BG_COLOR));
-        component.colorPicking.colorSubject.next(new ChoosenColors(PRIM_COLOR, SEC_COLOR, BG_COLOR));
+        component.colorPicking.colorSubject.next({primColor: PRIM_COLOR, secColor: SEC_COLOR, backColor: BG_COLOR});
         component.initColors();
         expect(component.cData.primaryColor).toBe(PRIM_COLOR);
         expect(component.cData.secondaryColor).toBe(SEC_COLOR);
@@ -166,4 +160,3 @@ describe('ColorPickerComponent', () => {
         expect(swapSpy).toHaveBeenCalled();
     })
 })
-

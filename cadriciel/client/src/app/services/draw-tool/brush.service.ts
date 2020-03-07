@@ -5,6 +5,9 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { PencilService } from './pencil.service';
 import { Point } from './point';
 
+const DEFAULTLINETHICKNESS = 5;
+const DEFAULTTEXTURE = 0;
+
 @Injectable({
     providedIn: 'root',
 })
@@ -15,7 +18,7 @@ export class BrushService extends PencilService {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.updateColors();
         this.updateAttributes();
-        this.attr = new ToolsAttributes(this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTTEXTURE);
+        this.attr = {lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE};
         // values used as texture presets
         this.textures = [
             { type: 'blured', intensity: 5, frequency: 0 },
@@ -29,7 +32,7 @@ export class BrushService extends PencilService {
     updateAttributes() {
         this.interaction.$toolsAttributes.subscribe(obj => {
             if (obj) {
-                this.attr = new ToolsAttributes(obj.lineThickness, obj.texture);
+                this.attr = {lineThickness: obj.lineThickness, texture: obj.texture};
             }
         });
     }
@@ -51,7 +54,7 @@ export class BrushService extends PencilService {
         const frequency = (scale / (width / 10)) * this.textures[this.attr.texture].frequency;
 
         // create a divider
-        s = '<g name = "brush-stroke">';
+        s = '<g style="transform: translate(0px, 0px);" name = "brush-stroke">';
 
         // get a unique ID to make sure each stroke has it's own filter
         const uniqueID = new Date().getTime();

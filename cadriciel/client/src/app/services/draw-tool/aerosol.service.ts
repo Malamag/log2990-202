@@ -7,6 +7,9 @@ import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { AerosolAttributes } from '../attributes/aerosol-attribute';
 import { interval, Subscription } from 'rxjs';
 
+const DEFAULTEMISSIONPERSECOND = 50;
+const DEFAULTDIAMETER = 50;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,14 +23,11 @@ export class AerosolService extends DrawingTool{
 
   private path:string;
 
-  private sub: Subscription;  
+  private sub: Subscription;
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
     super(inProgess, drawing, selected, interaction, colorPick);
-    this.attr = new AerosolAttributes(
-      this.defaultValues.DEFAULTEMISSIONPERSECOND,
-      this.defaultValues.DEFAULTDIAMETER,
-    );
+    this.attr = { emissionPerSecond: DEFAULTEMISSIONPERSECOND,diameter: DEFAULTDIAMETER };
     this.updateColors();
     this.updateAttributes();
     this.lastPoint = new Point(0,0);
@@ -117,7 +117,7 @@ export class AerosolService extends DrawingTool{
 
   startPath(){
     
-    this.path = '<g name = "aerosol">';
+    this.path = '<g name = "aerosol" style="transform: translate(0px, 0px);" >';
     //this.path += ' <filter id="blur"> <feGaussianBlur in="SourceGraphic" stdDeviation="1" /> </filter>';
 
     this.lastPoint = new Point(0,0);

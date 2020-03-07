@@ -6,6 +6,9 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
 
+const DEFAULTJUNCTION = true;
+const DEFAULTJUNCTIONRADIUS = 6;
+const DEFAULTLINETHICKNESS = 5;
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +19,7 @@ export class LineService extends DrawingTool {
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
     super(inProgess, drawing, selected, interaction, colorPick);
-    this.attr = new LineAttributes(this.defaultValues.DEFAULTJUNCTION, this.defaultValues.DEFAULTLINETHICKNESS, this.defaultValues.DEFAULTJUNCTIONRADIUS);
+    this.attr = {junction : DEFAULTJUNCTION, lineThickness: DEFAULTLINETHICKNESS, junctionDiameter: DEFAULTJUNCTIONRADIUS};
     this.forcedAngle = false;
     this.currentPos = new Point(0, 0);
     this.updateAttributes()
@@ -27,7 +30,7 @@ export class LineService extends DrawingTool {
   updateAttributes() {
     this.interaction.$lineAttributes.subscribe((obj) => {
       if (obj) {
-        this.attr = new LineAttributes(obj.junction, obj.lineThickness, obj.junctionDiameter)
+        this.attr = {junction: obj.junction, lineThickness: obj.lineThickness, junctionDiameter: obj.junctionDiameter};
       }
     })
 
@@ -196,7 +199,7 @@ export class LineService extends DrawingTool {
     }
 
     // create a divider
-    s = '<g name = "line-segments">';
+    s = '<g style="transform: translate(0px, 0px);" name = "line-segments">';
 
     // start the path
     s += '<path d="';
@@ -227,7 +230,7 @@ export class LineService extends DrawingTool {
         s += `<circle cx="${p[i].x}" cy="${p[i].y}"`;
         s += `r="${this.attr.junctionDiameter / 2}"`; // to get the radius
         s += 'stroke="none"';
-        s += `fill="${this.chosenColor.primColor}"/>`;
+        s += `fill="#${this.chosenColor.primColor}"/>`;
       }
     }
 

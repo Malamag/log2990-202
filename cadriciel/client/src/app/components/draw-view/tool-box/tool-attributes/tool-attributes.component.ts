@@ -1,7 +1,4 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormsAttribute } from 'src/app/services/attributes/attribute-form';
-import { LineAttributes } from 'src/app/services/attributes/line-attributes';
-import { ToolsAttributes } from 'src/app/services/attributes/tools-attribute';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { AerosolAttributes } from 'src/app/services/attributes/aerosol-attribute';
 
@@ -14,10 +11,10 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
 
   lineThickness: number;
   texture: number;
-  numberCorners: number;
+  numberCorners: number; // not done
+  plotType: number;
   emissionPerSecond:number;
   diameter:number;
-  plotType: number;
   junction: boolean;
   junctionRadius: number;
   selectedTool: String;
@@ -58,22 +55,22 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
     this.updateForms(); // emit all after init
     this.updateLine();
     this.updateTools();
-    this.updateAerosol();
   }
 
   updateForms() {
-    // const attr : FormsAttribute = new FormsAttribute
-    this.interaction.emitFormsAttributes(new FormsAttribute(this.plotType, this.lineThickness, this.numberCorners));
+    this.interaction.emitFormsAttributes ({plotType: this.plotType, lineThickness: this.lineThickness,
+      numberOfCorners: this.numberCorners});
 
   }
 
   updateLine() {
-    this.interaction.emitLineAttributes(new LineAttributes(this.junction, this.lineThickness, this.junctionRadius));
+    this.interaction.emitLineAttributes({junction: this.junction, lineThickness: this.lineThickness,
+       junctionDiameter: this.junctionRadius});
 
   }
 
   updateTools() {
-    this.interaction.emitToolsAttributes(new ToolsAttributes(this.lineThickness, this.texture));
+    this.interaction.emitToolsAttributes({lineThickness: this.lineThickness, texture: this.texture});
 
   }
 

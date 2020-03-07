@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+
 import { Canvas } from 'src/app/models/Canvas.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
@@ -11,23 +11,24 @@ import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboa
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 
 @Component({
     selector: 'app-svg-draw',
     templateUrl: './svg-draw.component.html', // changed file type
     styleUrls: ['./svg-draw.component.scss'],
 })
-export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
+export class SvgDrawComponent implements OnInit, AfterViewInit {
     constructor(
         private canvBuilder: CanvasBuilderService,
         public interaction: InteractionService,
         public colorPick: ColorPickingService,
         private doodleFetch: DoodleFetchService,
         private render: Renderer2,
+        private gridService: GridRenderService,
     ) {}
     canvas: Canvas;
-    canvasSubscr: Subscription;
-    backgroundColorSub: Subscription;
+
     width: number;
     height: number;
     backColor: string;
@@ -35,10 +36,15 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     toolsContainer = new Map();
     interactionToolsContainer = new Map();
 
+    showGrid: boolean = false;
+
     @ViewChild('inPrgress', { static: false }) inProgress: ElementRef;
     @ViewChild('canvas', { static: false }) svg: ElementRef;
 
     @ViewChild('frame', { static: false }) frameRef: ElementRef;
+    @ViewChild('drawingSpace', { static: false }) drawingSpace: ElementRef;
+    @ViewChild('selectedItems', { static: false }) selectedItems: ElementRef;
+    @ViewChild('grid', { static: false }) gridRef: ElementRef;
 
     workingSpace: HTMLElement;
 
@@ -46,7 +52,6 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         this.interaction.$refObs.subscribe(ref => {
             this.workingSpace = ref.nativeElement;
         });
-
         this.initCanvas();
     }
 
@@ -57,13 +62,14 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     bgroundChangeSubscription() {
-        this.backgroundColorSub = this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
+        this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
             this.backColor = choosenColors.backColor;
+            this.gridService.updateColor(this.backColor);
         });
     }
 
     initCanvas() {
-        this.canvasSubscr = this.canvBuilder.canvSubject.subscribe((canvas: Canvas) => {
+        this.canvBuilder.canvSubject.subscribe((canvas: Canvas) => {
             if (canvas === undefined || canvas === null) {
                 canvas = this.canvBuilder.getDefCanvas();
             }
@@ -71,15 +77,29 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
             this.canvBuilder.whipeDraw(this.frameRef);
+            if (this.gridService.grid) {
+                this.gridService.removeGrid();
+                this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+            }
         });
         this.canvBuilder.emitCanvas();
     }
 
+    initGridVisibility() {
+        this.interaction.$showGrid.subscribe((show: boolean) => {
+            this.showGrid = show;
+        });
+    }
+
     ngAfterViewInit() {
+        //this.initCanvas()
+        this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+        this.initGridVisibility();
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
         const mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);
 
         // Create all the tools
+        //console.log(this.render);
         const tc = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
 
         const pencil = tc.CreatePencil(true, this.interaction, this.colorPick);
@@ -90,6 +110,15 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         const ellipse = tc.CreateEllipse(false, this.interaction, this.colorPick);
         const undoRedo: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
         const polygon = tc.CreatePolygon(false, this.interaction, this.colorPick);
+        const selection = tc.CreateSelection(
+            false,
+            this.interaction,
+            this.colorPick,
+            this.render,
+            this.selectedItems.nativeElement,
+            this.svg.nativeElement,
+            this.workingSpace,
+        );
 
         this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
         this.toolsContainer.set('Rectangle', rect);
@@ -99,6 +128,7 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
         this.toolsContainer.set('Aérosol', aerosol);
         this.toolsContainer.set('Ellipse', ellipse);
         this.toolsContainer.set('Polygone', polygon);
+        this.toolsContainer.set('Selection', selection);
         this.interaction.$cancelToolsObs.subscribe(sig => {
             if (sig) {
                 this.closeTools(this.toolsContainer);
@@ -149,10 +179,5 @@ export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
             this.doodleFetch.heightAttr = this.height;
         });
         this.bgroundChangeSubscription();
-    }
-
-    ngOnDestroy() {
-        // quand le component est détruit, la subscription n'existe plus
-        this.canvasSubscr.unsubscribe();
     }
 }
