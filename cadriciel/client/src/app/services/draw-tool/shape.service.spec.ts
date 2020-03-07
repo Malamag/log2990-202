@@ -54,12 +54,13 @@ describe('ShapeService', () => {
         expect(spyInteraction).toHaveBeenCalled();
         expect(service.attr).toBeDefined();
     });
+    /*
     it('should update progress on move', () => {
         const spy = spyOn(service, 'updateProgress');
         service.down(ptA); // simulating a mouse down at given point
         service.update(kbServiceStub);
         expect(spy).toHaveBeenCalled();
-    });
+    });*/
     it('should update the current path on mouse down', () => {
         const spy = spyOn(service, 'updateProgress');
         service.down(ptA);
