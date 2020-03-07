@@ -65,7 +65,7 @@ export class OptionBarComponent {
             this.openGallery();
             e.preventDefault();
         }
-        if (e.keyCode === G_KEY) {
+        if (e.keyCode === G_KEY && !e.ctrlKey) {
             this.toggleGrid();
         }
 
