@@ -29,7 +29,7 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
 
     this.numberCorners = 3; // for polygon
 
-    this.emissionPerSecond = 200;
+    this.emissionPerSecond = 50;
     this.diameter = 50;
 
     this.plotType = 2; // type 2 --> filled with border

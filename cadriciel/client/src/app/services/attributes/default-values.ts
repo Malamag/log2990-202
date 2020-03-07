@@ -18,7 +18,7 @@ export class DefaultAttributeValues {
         this.DEFAULTTEXTURE = 0
         this.DEFAULTPLOTTYPE = 2
         this.DEFAULTNUMBERCORNERS = 3
-        this.DEFAULTEMISSIONPERSECOND = 200
+        this.DEFAULTEMISSIONPERSECOND = 50
         this.DEFAULTDIAMETER = 50;
         this.DEFAULTPRIMARYCOLOR = 'ff0000ff'
         this.DEFAULTSECONDARYCOLOR = '000000'

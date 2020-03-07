@@ -40,7 +40,6 @@ export class AerosolService extends DrawingTool{
         this.attr = new AerosolAttributes(obj.emissionPerSecond, obj.diameter)
       }
     })
-    //this.colorPick.emitColors()
   }
 
   subscribe(){
@@ -111,7 +110,10 @@ export class AerosolService extends DrawingTool{
   }
 
   startPath(){
+    
     this.path = '<g name = "aerosol">';
+    //this.path += ' <filter id="blur"> <feGaussianBlur in="SourceGraphic" stdDeviation="1" /> </filter>';
+
     this.lastPoint = new Point(0,0);
   }
 
@@ -128,6 +130,7 @@ export class AerosolService extends DrawingTool{
       this.path += `r="${pointRadius}"`; // to get the radius
       this.path += 'stroke="none"';
       this.path += `fill="${this.chosenColor.primColor}"/>`;
+      //this.path +=  'filter="url(#blur)"/>';
     }   
     this.points = new Array(); 
 
@@ -139,7 +142,7 @@ export class AerosolService extends DrawingTool{
 
   generatePoint() {
     if(this.isDown){
-      //for (let j = 1; j < 5 && this.isDown ; j++) {
+      for (let j = 1; j < 5 && this.isDown ; j++) {
       let r = (this.attr.diameter / 2) * Math.sqrt(Math.random());
       let angle = Math.random() * 2 * Math.PI;
       for (let i = 1; i < 5 ; i++) {
@@ -149,5 +152,6 @@ export class AerosolService extends DrawingTool{
       }  
     }
   }
+}
 
 }
