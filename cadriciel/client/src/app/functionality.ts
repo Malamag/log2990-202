@@ -21,7 +21,7 @@ export const menuItems = [
     {
         name: 'Ouvrir la galerie de dessins',
         shortcutName: 'Ouvrir',
-        shortDescription: "Vous pouvez choisir d'ouvrir la galerie en tout temps lors de l'utilisation de l'application en choisissant l'icone de la galerie ou en appuyant sur ctrl+g sur votre clavier.",
+        shortDescription: "Vous pouvez choisir d'ouvrir la galerie en tout temps lors de l'utilisation de l'application en choisissant l'icone de la galerie ou en appuyant sur ctrl+G sur votre clavier.",
         description: " Cette option vous laisse visualiser votre dernier dessin enregistré sur le serveur. Aussi, elle vous donne l'option de supprimer des images du serveur en appuyant sur l'icone de la poubelle qui se trouve dans la carte du dessin que vous voulez supprimer. Aussi, elle vous donne la possibilité de modifier un dessin qui se trouve sur le serveur en appuyant sur l'icone de la flèhe qui se trouve dans la carte du dessin que vous voulez continuer",
         icon: 'camera',
     },
@@ -86,14 +86,14 @@ export const toolsItems = [
         shortcutName: 'Aérosol',
         shortDescription:
             "Cet outil vous permet de simuler un jet de peinture en aérosol en appuyant sur le clic gauche de la souris. En effet, plusieurs points de couleurs apparaissent lors du clic et le nombre de points augmentent si l’on maintient la touche.",
-        description: "Disponible sous peu!",
+        description: "Vous pouvez configurer le nombre d'émission du jet par seconde comme vous pouvez configurer le diamètre du jet via le panneau des attributs. Pour choisir l'Aérosol vous pouvez choisir l'icone via la barre des outils comme vous pouvez faire la touche A à partir de votre clavier.",
         icon: 'spray',
     },
     {
         name: 'Efface',
         shortcutName: 'Efface',
         shortDescription: "L’efface supprimera tout objet auquel il sera en contact lors du clic de souris.",
-        description: "Disponible sous peu!",
+        description: "Vous pouvez configurer la taille de l'efface à travers le panneau des attributs. Aussi, vous pouvez choisir l'efface via la barre des outils comme vous pouvez la chosir en faisant la touche E de votre clavier",
         icon: 'eraser',
     },
     {
@@ -110,7 +110,7 @@ export const toolsItems = [
         shortcutName: 'Rectangle',
         shortDescription:
             "En faisant un clic gauche, vous définissez un premier coin du rectangle. En vous déplaçant, un aperçu de la taille du rectangle est disponible et vous pouvez confirmer la création de l’objet en relâchant le clic de souris. De plus, en maintenant la touche Shift, il vous est possible d’uniformiser les côtés de votre rectangle afin de créer un carré.",
-        description: "Le type de tracé et l’épaisseur du trait de contour sont configurable dans le panneau d’attribut. Pour chosir d'utiliser l'outil rectangle, vous pouvez chosir le rectangle via la barre des outils ou appuyez sur la touche 1 de votre clavier",
+        description: "Le type de tracé et l’épaisseur du trait de contour sont configurables dans le panneau d’attribut. Pour chosir d'utiliser l'outil rectangle, vous pouvez chosir le rectangle via la barre des outils ou appuyez sur la touche 1 de votre clavier",
         icon: 'rectangle',
     },
     {
@@ -118,7 +118,7 @@ export const toolsItems = [
         shortcutName: 'Ellipse',
         shortDescription:
             "En faisant un clic gauche, vous définissez un premier coin de l’ellipse. En vous déplaçant, un aperçu de sa taille est disponible et vous pouvez confirmer la création de l’objet en relâchant le clic de souris. De plus, en maintenant la touche Shift, il vous est possible d’uniformiser le rayon de l’ellipse afin de créer un cercle.",
-        description: "Le type de tracé et l’épaisseur du trait de contour sont configurable dans le panneau d’attribut. Pour chosir d'utiliser l'outil ellipse, vous pouvez chosir l'ellipse via la barre des outils ou appuyez sur la touche 2 de votre clavier",
+        description: "Le type de tracé et l’épaisseur du trait de contour sont configurables dans le panneau d’attribut. Pour chosir d'utiliser l'outil ellipse, vous pouvez chosir l'ellipse via la barre des outils ou appuyez sur la touche 2 de votre clavier",
         icon: 'ellipse',
     },
     {
@@ -126,7 +126,7 @@ export const toolsItems = [
         shortcutName: 'Polygone',
         shortDescription:
             "En faisant un clic gauche, vous définissez un premier coin du polygone. En vous déplaçant, un aperçu de sa taille est disponible et vous pouvez confirmer la création de l’objet en relâchant le clic de souris. Les polygones créés sont toujours réguliers et convexe.",
-        description: "Le type de tracé ,l’épaisseur du trait de contour et le nombre de côté du polygonne sont configurable dans le panneau d’attribut. Pour chosir d'utiliser l'outil polygonne, vous pouvez chosir le hexagone via la barre des outils ou appuyez sur la touche 3 de votre clavier",
+        description: "Le type de tracé ,l’épaisseur du trait de contour et le nombre de côté du polygonne sont configurables dans le panneau d’attribut. Pour chosir d'utiliser l'outil polygonne, vous pouvez chosir le hexagone via la barre des outils ou appuyez sur la touche 3 de votre clavier",
         icon: 'hexagon',
     },
     {
@@ -134,7 +134,7 @@ export const toolsItems = [
         shortcutName: "Pipette",
         shortDescription:
             "La pipette est utilisé afin de retrouver facilement une couleur ayant déjà été utilisé dans le dessin. Effectivement, en sélectionnant une couleur sur le canvas, celle-ci remplacera la couleur que vous utilisez présentement.",
-        description: "Disponible sous peu!",
+        description: "Pour changer la couleur principale en utilsant la pipette vous devez faire un clic gauche avec votre souris et pour changer la couleur secondaire c'est à travers le clic droit de votre souris. Pour utiliser l'outils pipette, vous pouvez choisir l'icone de la pipette via la barre des outils comme vous pouvez la choisir en appuyant sur la touche I de votre clavier",
         icon: 'pipette',
     },
 
@@ -163,34 +163,34 @@ export const toolsItems = [
         shortDescription:
             "Cet outil vous permet de choisir une couleur primaire et une couleur secondaire qui se transmet pour chaque outil dessin de l’application.",
         description:
-            "L’outil de sélection des couleurs est séparé en trois parties. La première partie est la plus haute et vous permet de sélectionner la couleur souhaitée via une interface visuelle. L’anneau sert à choisir une teinte et le rectangle vous permet de choisir la clarté de la couleur. Pour sélectionner une couleur primaire, il vous suffit de faire un clic gauche sur la teinte souhaitée dans l’anneau ou le rectangle. Un clic droit sélectionne la couleur secondaire. La couleur primaire sélectionnée se retrouve en bas à gauche de l’anneau et du côté droit se trouve la couleur secondaire. Le bouton SWAP inverse les couleurs primaires et secondaires. En bas de l’interface visuelle de sélection des teintes se trouve la deuxième partie de l’outil et vous permet de configurer manuellement votre couleur selon un code RGB hexadécimal. La saturation, la luminosité et la transparence sont aussi configurable. La troisième et dernière partie constitue les dix petits rectangle tout au bas de l’outil de couleur et vous permet de sélectionner une couleur précédemment choisie.",
+            "L’outil de sélection des couleurs est séparé en trois parties. La première partie est la plus haute et vous permet de sélectionner la couleur souhaitée via une interface visuelle. L’anneau sert à choisir une teinte et le rectangle vous permet de choisir la clarté de la couleur. Pour sélectionner une couleur primaire, il vous suffit de faire un clic gauche sur la teinte souhaitée dans l’anneau ou le rectangle. Un clic droit sélectionne la couleur secondaire. La couleur primaire sélectionnée se retrouve en bas à gauche de l’anneau et du côté droit se trouve la couleur secondaire. Le bouton péremuter inverse les couleurs primaires et secondaires. En bas de l’interface visuelle de sélection des teintes se trouve la deuxième partie de l’outil et vous permet de configurer manuellement votre couleur selon un code RGB hexadécimal. La saturation, la luminosité et la transparence sont aussi configurable. La troisième et dernière partie constitue les dix petits rectangle tout au bas de l’outil de couleur et vous permet de sélectionner une couleur précédemment choisie. Aussi, vous pouvez chosir un des dix derniers couleurs utilisées récemment en appuyant sur une couleur de l'historique des couleurs",
         icon: 'color',
     },
     {
         name: 'Applicateur de couleur',
         shortcutName: 'Sceau',
         shortDescription:
-            "Cet outil vous permet de choisir une couleur primaire et une couleur secondaire qui se transmet pour chaque outil dessin de l’application.",
+            "Cet outil vous permet de changer la couleur d'un objet déjà existant sur la surface de dessin . En effet, vous pouvez appliquer la couleur principale à l'intérieur de l'objet et appliquer la couleur secondaire si l'objet possède un contour",
         description:
-            "L’outil de sélection des couleurs est séparé en trois parties. La première partie est la plus haute et vous permet de sélectionner la couleur souhaitée via une interface visuelle. L’anneau sert à choisir une teinte et le rectangle vous permet de choisir la clarté de la couleur. Pour sélectionner une couleur primaire, il vous suffit de faire un clic gauche sur la teinte souhaitée dans l’anneau ou le rectangle. Un clic droit sélectionne la couleur secondaire. La couleur primaire sélectionnée se retrouve en bas à gauche de l’anneau et du côté droit se trouve la couleur secondaire. Le bouton SWAP inverse les couleurs primaires et secondaires. En bas de l’interface visuelle de sélection des teintes se trouve la deuxième partie de l’outil et vous permet de configurer manuellement votre couleur selon un code RGB hexadécimal. La saturation, la luminosité et la transparence sont aussi configurable. La troisième et dernière partie constitue les dix petits rectangle tout au bas de l’outil de couleur et vous permet de sélectionner une couleur précédemment choisie.",
+            "Pour choisir l'applicateur de couleur vous pouvez choisir le sceau via la barre des outils comme vous pouvez l'utiliser en appuyant sur la touche R de votre clavier",
         icon: 'paint-bucket',
     },
     {
         name: 'Annuler',
         shortcutName: 'Annuler',
         shortDescription:
-            "Cet outil vous permet de choisir une couleur primaire et une couleur secondaire qui se transmet pour chaque outil dessin de l’application.",
+            "Cet ouil vous permet de revenir en arrière sur vos actions, si vous avez fait une action que vous ne voulez pas sur la surface de dessin.",
         description:
-            "L’outil de sélection des couleurs est séparé en trois parties. La première partie est la plus haute et vous permet de sélectionner la couleur souhaitée via une interface visuelle. L’anneau sert à choisir une teinte et le rectangle vous permet de choisir la clarté de la couleur. Pour sélectionner une couleur primaire, il vous suffit de faire un clic gauche sur la teinte souhaitée dans l’anneau ou le rectangle. Un clic droit sélectionne la couleur secondaire. La couleur primaire sélectionnée se retrouve en bas à gauche de l’anneau et du côté droit se trouve la couleur secondaire. Le bouton SWAP inverse les couleurs primaires et secondaires. En bas de l’interface visuelle de sélection des teintes se trouve la deuxième partie de l’outil et vous permet de configurer manuellement votre couleur selon un code RGB hexadécimal. La saturation, la luminosité et la transparence sont aussi configurable. La troisième et dernière partie constitue les dix petits rectangle tout au bas de l’outil de couleur et vous permet de sélectionner une couleur précédemment choisie.",
+            "Pour choisir d'annuler un de vos actions que vous avez fait vous pouvez chosir le boutton annuler via la barre des outils, comme vous pouvez appuyez sur la touche ctrl+z pour annuler une action.",
         icon: 'undo',
     },
     {
         name: 'Refaire',
         shortcutName: 'Refaire',
         shortDescription:
-            "Cet outil vous permet de choisir une couleur primaire et une couleur secondaire qui se transmet pour chaque outil dessin de l’application.",
+            "Cet outil vous permet de refaire une action que vous avez annuler auparavant. Notez que vous ne pouvez pas refaire une action si vous avez fait ajouter un autre objet ou appliquer une modification à un objet sur la surface de dessin après avoir annuler une action.",
         description:
-            "L’outil de sélection des couleurs est séparé en trois parties. La première partie est la plus haute et vous permet de sélectionner la couleur souhaitée via une interface visuelle. L’anneau sert à choisir une teinte et le rectangle vous permet de choisir la clarté de la couleur. Pour sélectionner une couleur primaire, il vous suffit de faire un clic gauche sur la teinte souhaitée dans l’anneau ou le rectangle. Un clic droit sélectionne la couleur secondaire. La couleur primaire sélectionnée se retrouve en bas à gauche de l’anneau et du côté droit se trouve la couleur secondaire. Le bouton SWAP inverse les couleurs primaires et secondaires. En bas de l’interface visuelle de sélection des teintes se trouve la deuxième partie de l’outil et vous permet de configurer manuellement votre couleur selon un code RGB hexadécimal. La saturation, la luminosité et la transparence sont aussi configurable. La troisième et dernière partie constitue les dix petits rectangle tout au bas de l’outil de couleur et vous permet de sélectionner une couleur précédemment choisie.",
+            "Pour choisir de refaire une action, vous pouvez choisir le boutton refaire via la barre des outils comme vous pouvez appuyer sur la touche ctrl+shift+z de votre clavier.",
         icon: 'redo',
     },
 ];
