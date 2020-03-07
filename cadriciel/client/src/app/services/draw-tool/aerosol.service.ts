@@ -5,7 +5,7 @@ import { Point } from './point';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { AerosolAttributes } from '../attributes/aerosol-attribute';
-import { interval/*, Subscription */} from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class AerosolService extends DrawingTool{
 
   private path:string;
 
-  //private sub: Subscription;  
+  private sub: Subscription;  
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
     super(inProgess, drawing, selected, interaction, colorPick);
@@ -32,9 +32,6 @@ export class AerosolService extends DrawingTool{
     this.updateAttributes();
     this.lastPoint = new Point(0,0);
     this.points = new Array();
-    this.startPath();
-    const srcInterval = interval(1000/this.attr.emissionPerSecond/20);
-    /*this.sub = */srcInterval.subscribe(val => this.generatePoint());
   }
 
   updateAttributes() {
@@ -43,7 +40,12 @@ export class AerosolService extends DrawingTool{
         this.attr = new AerosolAttributes(obj.emissionPerSecond, obj.diameter)
       }
     })
-    this.colorPick.emitColors()
+    //this.colorPick.emitColors()
+  }
+
+  subscribe(){
+    const srcInterval = interval(1000/this.attr.emissionPerSecond);
+    this.sub = srcInterval.subscribe(val => this.updateProgress());
   }
 
   // updating on key change
@@ -64,6 +66,10 @@ export class AerosolService extends DrawingTool{
     this.currentPath.push(position);
     this.currentPath.push(position);
   
+    this.subscribe();
+
+    this.startPath();
+
     this.updateProgress();
     
   }
@@ -81,6 +87,7 @@ export class AerosolService extends DrawingTool{
       if (insideWorkspace) {
         // add everything to the canvas
         this.updateDrawing();
+        this.sub.unsubscribe();
       }
     }
   }
@@ -94,7 +101,7 @@ export class AerosolService extends DrawingTool{
       // save mouse position
       this.currentPath.push(position);
 
-      this.updateProgress();
+      //this.updateProgress();
     }
   }
 
@@ -105,6 +112,7 @@ export class AerosolService extends DrawingTool{
 
   startPath(){
     this.path = '<g name = "aerosol">';
+    this.lastPoint = new Point(0,0);
   }
 
   // Creates an svg path that connects every points of currentPath with the pencil attributes
@@ -112,9 +120,9 @@ export class AerosolService extends DrawingTool{
 
     this.lastPoint = p[p.length-1]
 
-    //this.CreatePointCollection();
+    this.generatePoint();
 
-    const pointRadius = this.attr.diameter/50;
+    const pointRadius = this.attr.diameter/25;
     for(let i = 0; i < this.points.length; i++) {
       this.path += `<circle cx="${this.points[i].x}" cy="${this.points[i].y}"`;
       this.path += `r="${pointRadius}"`; // to get the radius
@@ -139,12 +147,6 @@ export class AerosolService extends DrawingTool{
         let y = this.lastPoint.y + r * Math.sin(angle*i);
         this.points.push(new Point(x,y));
       }  
-      this.down(this.lastPoint);
-    //}
-    }
-    else if (this.path !== '<g name = "aerosol">' ){
-      this.startPath();
-      //this.sub.unsubscribe();
     }
   }
 
