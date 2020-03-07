@@ -34,11 +34,11 @@ export class DoodleFetchService {
         return el.nativeElement;
     }
 
-    getDrawingString(): string | null {
+    getDrawingStringNoGrid(): string {
         this.gService.removeGrid();
-        const SVG_NODE = this.currentDraw.nativeElement;
+        const SVG_STR = this.currentDraw.nativeElement.outerHTML;
 
         this.gService.renderBack();
-        return SVG_NODE;
+        return SVG_STR;
     }
 }
