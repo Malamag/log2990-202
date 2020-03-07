@@ -5,8 +5,8 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { IndexService } from 'src/app/services/index/index.service';
-//import { Image } from '../../image';
-import { ImageData } from '../../imageData';
+import { Image } from '../../image';
+//import { ImageData } from '../../imageData';
 
 @Component({
   selector: 'app-save-form',
@@ -76,9 +76,9 @@ export class SaveFormComponent implements OnInit {
   }
   saveImage() {
     let id : string = new Date().getUTCMilliseconds() + '';
-    let image : ImageData = {id : id, name : 'TODO', tags : this.labels, svgElement : this.doodle };
+    let image : Image = {id : id,svgElement : this.doodle.textContent };
     //let metaData : ImageData = {id : image.id, name : "todo", tags : this.labels};
-    this.index.addImage(image);
+    this.index.saveImage(image);
     //this.index.saveImage(image);
     this.winService.closeWindow();
   }

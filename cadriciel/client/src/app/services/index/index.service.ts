@@ -20,6 +20,9 @@ export class IndexService {
  private readonly BASE_URL: string = 'http://localhost:3000/database/Images/';
   constructor(private http: HttpClient) {
   }
+
+  
+
   basicGet(): Observable<Message> {
       return this.http.get<Message>(this.BASE_URL).pipe(catchError(this.handleError<Message>('basicGet')));
   }
@@ -65,6 +68,6 @@ export class IndexService {
   }
 
   saveImage(image : Image) {
-    this.http.post<Image>('http://localhost:3000/database/saveImage', image, httpOptions).subscribe((data) => {});
+    this.http.post('http://localhost:3000/database/saveImage', image, httpOptions).subscribe((data) => {});
   }
 }

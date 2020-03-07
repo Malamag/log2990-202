@@ -6,8 +6,9 @@ import { Image } from '../Image';
 import fs from 'fs';
 //import data from '../data.json';
 import { MetaData } from '../metadata';
+//import * as dataTest from '../data.json';
 
-const DATABASE_URL = 'mongodb+srv://Equipe202:Equipe202@cluster0-kusq4.mongodb.net/test?retryWrites=true&w=majority'
+const DATABASE_URL = 'mongodb+srv://admin:admin@cluster0-py47c.mongodb.net/test?retryWrites=true&w=majority';
 const DATABASE_NAME = 'Equipe202_Database';
 const DATABASE_COLLECTION = 'Images';
 
@@ -25,15 +26,13 @@ export class DatabaseService {
             .then( ( client: MongoClient ) => {
                 this.collection = client.db( DATABASE_NAME ).collection( DATABASE_COLLECTION );
                 console.error( 'connexion ok ');
-                let jsonData = fs.readFileSync('../images.json');
-                let images = JSON.parse(jsonData.toString());
-                console.log(images);
+                //let jsonData = fs.readFileSync('../images.json');
+                //let images = JSON.parse(jsonData.toString());
+                
                 let obj = {table : [{}]};
                 obj.table.push({id:1,square:2});
-                let json = JSON.stringify(obj);
-                //let fss = require('fs');
-                fs.writeFile('../data.json',json,function(err){});
-                console.log(images);
+                
+                
             })
             .catch( () => { 
                 console.error( 'Erreur de connexion. Terminaison du processus' );
@@ -72,18 +71,18 @@ export class DatabaseService {
         //return tags.forEach( this.collection.find({}))
     //}
 
-    async addImage(imageData: ImageData): Promise<void>{
-        /*let metadata : MetaData = {id : imageData.id, name : imageData.name, tags : imageData.tags};
+    async addImage(imageData: MetaData): Promise<void>{
+        let metadata : MetaData = {id : imageData.id, name : imageData.name, tags : imageData.tags};
         this.collection.insertOne(metadata).catch((error: Error) => {
             throw error;
-        });*/
+        });
         let data = fs.readFileSync('../data.json');
         let images = JSON.parse(data.toString());
-        console.log(images);
-        images.data.push({id : imageData.id, svgElement : imageData.svgElement });
+        //console.log(images);
+        images.data.push({id : imageData.id});
         images.data = [{}];
-        fs.writeFile('../data.json',JSON.stringify(images),function(err){});
-        console.log(images);
+        //fs.writeFile('../data.json',JSON.stringify(images),function(err){});
+        //console.log(images);
     }
 
     async deleteImageById(imageId: string): Promise<void>{
@@ -109,20 +108,21 @@ export class DatabaseService {
     }
 
     async populateDB(){
-        let images: ImageData[] = [
-            {id: '1', name: 'one', tags: ["string"], svgElement : new Node},
-            {id: '2', name: 'two', tags: ["string"], svgElement : new Node},
-            {id: '3', name: 'three', tags: ["string"], svgElement : new Node},
-            {id: '4', name: 'four', tags: ["string"], svgElement : new Node}]
+        let images: MetaData[] = [
+            {id: '1', name: 'one', tags: ["string"], },
+            {id: '2', name: 'two', tags: ["string"], },
+            {id: '3', name: 'three', tags: ["string"],},
+            {id: '4', name: 'four', tags: ["string"],}]
         images.forEach((image) => {
             this.addImage(image);
         })
     }
     async saveImage(image : Image) {
         let jsonObj = {id : image.id, svgElement : image.svgElement };
-        fs.writeFileSync('../images.json',JSON.stringify(jsonObj));
-        let data = fs.readFileSync('../images.json');
+        fs.writeFileSync('../data.json',JSON.stringify(jsonObj));
+        let data = fs.readFileSync('../data.json');
         let images = JSON.parse(data.toString());
         console.log(images);
+        console.log(image.svgElement);
     }
 }

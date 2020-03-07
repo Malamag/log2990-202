@@ -81,6 +81,7 @@ export class DatabaseController {
                 res.sendStatus(Httpstatus.OK);
             })
             .catch((error: Error) => {
+                
                 res.status(Httpstatus.NOT_FOUND).send(error.message);
             });
         })
