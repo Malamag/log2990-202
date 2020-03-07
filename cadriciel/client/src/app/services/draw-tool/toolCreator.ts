@@ -9,6 +9,7 @@ import { RectangleService } from './rectangle.service';
 import { PolygonService } from './polygon.service';
 import { SelectionService } from './selection.service';
 import { EraserService } from './eraser.service';
+import { ColorEditorService } from './color-editor.service';
 
 @Injectable({
     providedIn: 'root',
@@ -46,11 +47,15 @@ export class ToolCreator {
         return new PolygonService(this.inProgress, this.drawing, selected, interaction, colorPick);
     }
 
-    CreateSelection(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,render:Renderer2, selectedRef: HTMLElement, canvas: HTMLElement): SelectionService {
-        return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick,render, selectedRef, canvas);
+    CreateSelection(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService, render: Renderer2, selectedRef: HTMLElement, canvas: HTMLElement): SelectionService {
+        return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick, render, selectedRef, canvas);
     }
 
-    CreateEraser(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,render:Renderer2, selectedRef: HTMLElement, canvas: HTMLElement): EraserService {
-        return new EraserService(this.inProgress, this.drawing, selected, interaction, colorPick,render, selectedRef, canvas);
+    CreateEraser(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService, render: Renderer2, selectedRef: HTMLElement, canvas: HTMLElement): EraserService {
+        return new EraserService(this.inProgress, this.drawing, selected, interaction, colorPick, render, selectedRef, canvas);
+    }
+
+    CreateColorEditor(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService, render: Renderer2, selectedRef: HTMLElement, canvas: HTMLElement): ColorEditorService {
+        return new ColorEditorService(this.inProgress, this.drawing, selected, interaction, colorPick, render, selectedRef, canvas);
     }
 }

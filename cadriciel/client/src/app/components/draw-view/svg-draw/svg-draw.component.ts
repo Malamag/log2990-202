@@ -26,7 +26,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         private doodleFetch: DoodleFetchService,
         private render: Renderer2,
         private gridService: GridRenderService,
-    ) {}
+    ) { }
     canvas: Canvas;
 
     width: number;
@@ -105,8 +105,9 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         const ellipse = tc.CreateEllipse(false, this.interaction, this.colorPick);
         const undoRedo: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
         const polygon = tc.CreatePolygon(false, this.interaction, this.colorPick);
-        const selection = tc.CreateSelection(false, this.interaction, this.colorPick,this.render, this.selectedItems.nativeElement, this.svg.nativeElement);
-        const eraser = tc.CreateEraser(false, this.interaction, this.colorPick,this.render, this.selectedItems.nativeElement, this.svg.nativeElement);
+        const selection = tc.CreateSelection(false, this.interaction, this.colorPick, this.render, this.selectedItems.nativeElement, this.svg.nativeElement);
+        const eraser = tc.CreateEraser(false, this.interaction, this.colorPick, this.render, this.selectedItems.nativeElement, this.svg.nativeElement);
+        const colorEditor = tc.CreateColorEditor(false, this.interaction, this.colorPick, this.render, this.selectedItems.nativeElement, this.svg.nativeElement);
 
         this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
         this.toolsContainer.set('Rectangle', rect);
@@ -117,6 +118,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Polygone', polygon);
         this.toolsContainer.set('Sélectionner', selection);
         this.toolsContainer.set('Efface', eraser);
+        this.toolsContainer.set('ApplicateurCouleur', colorEditor);
 
         this.interaction.$cancelToolsObs.subscribe(sig => {
             if (sig) {
@@ -140,33 +142,33 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             mouseHandler.addObserver(element);
         });
 
-        window.addEventListener('resize', function() {
+        window.addEventListener('resize', function () {
             mouseHandler.updateWindowSize();
         });
 
         // Mouse listeners
-        window.addEventListener('mousemove', function(e) {
+        window.addEventListener('mousemove', function (e) {
             mouseHandler.move(e);
         });
-        window.addEventListener('mousedown', function(e) {
+        window.addEventListener('mousedown', function (e) {
             e.preventDefault();
             mouseHandler.down(e);
         });
 
-        window.addEventListener('mouseup', function(e) {
+        window.addEventListener('mouseup', function (e) {
             mouseHandler.up(e);
         });
 
         // Prevent right-click menu
-        window.oncontextmenu = (e:MouseEvent) => {
+        window.oncontextmenu = (e: MouseEvent) => {
             e.preventDefault();
         };
 
         // Keyboard listeners
-        window.addEventListener('keydown', function(e) {
+        window.addEventListener('keydown', function (e) {
             keyboardHandler.logkey(e);
         });
-        window.addEventListener('keyup', function(e) {
+        window.addEventListener('keyup', function (e) {
             keyboardHandler.reset(e);
         });
         window.dispatchEvent(new Event('resize'));
