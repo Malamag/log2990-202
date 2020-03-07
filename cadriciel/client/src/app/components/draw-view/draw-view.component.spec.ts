@@ -6,6 +6,8 @@ import { SvgDrawComponent } from './svg-draw/svg-draw.component';
 import { ToolAttributesComponent } from './tool-box/tool-attributes/tool-attributes.component';
 import { ToolBoxComponent } from './tool-box/tool-box.component';
 
+import { HttpClientModule } from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
     MatButtonModule,
@@ -18,7 +20,6 @@ import {
     MatTooltipModule,
 } from '@angular/material';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
-import { HttpClientModule } from '@angular/common/http';
 
 describe('DrawViewComponent', () => {
     let component: DrawViewComponent;
@@ -26,7 +27,14 @@ describe('DrawViewComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [DrawViewComponent, OptionBarComponent, ToolBoxComponent, ToolAttributesComponent, SvgDrawComponent, ColorPickerComponent],
+            declarations: [
+                DrawViewComponent,
+                OptionBarComponent,
+                ToolBoxComponent,
+                ToolAttributesComponent,
+                SvgDrawComponent,
+                ColorPickerComponent,
+            ],
             providers: [{ provide: menuItems, toolsItems, welcomeItem }, { provide: MatDialog }],
             imports: [
                 MatButtonModule,
@@ -40,12 +48,14 @@ describe('DrawViewComponent', () => {
                 MatRadioModule,
                 HttpClientModule,
             ],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
     }));
 
-    beforeEach(() => {
+    beforeEach(async () => {
         fixture = TestBed.createComponent(DrawViewComponent);
         component = fixture.componentInstance;
+        await fixture.whenStable();
         fixture.detectChanges();
     });
 
