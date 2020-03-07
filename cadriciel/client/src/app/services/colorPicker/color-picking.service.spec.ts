@@ -161,6 +161,11 @@ describe('ColorPickingService', () => {
     });
 
     it('slSelector should call functions and set values to attributes', () => {
+        service.cData.saturationSliderInput= 1;
+        service.cData.currentHue = 0;
+        service.cData.POURCENT_MODIFIER =  100;
+        service.cData.lightnessSliderInput = 1;
+        
         const spySL = spyOn(service, 'setSLCursor');
         const spyColor = spyOn(service, 'setColor');
         const spyUpdate = spyOn(service, 'updateDisplay');
@@ -377,9 +382,9 @@ describe('ColorPickingService', () => {
 
     it('should update the last color', () => {
         service.cData.lastColorRects[service.cData.lastColorRects.length - 1].fill = 'ff000000';
-        const color = 'ffffffff';
+        const color = 'fffffff';
         service.updateLastColor(color);
-        expect(service.cData.lastColorRects[service.cData.lastColorRects.length - 1].fill).toBe(color);
+        expect(service.cData.lastColorRects[0].fill).toBe(color);
     });
 
     it('update display should call functions', () => {
@@ -556,7 +561,7 @@ describe('ColorPickingService', () => {
         service.cData.colorMode = service.cData.SECONDARY_COLOR_MODE;
         const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex')
         const result = service.writeHexColor(service.cData.GREEN_INPUT_FIELD);
-        let expectedResult = '#' + service.cData.greenHexInput + service.cData.hexColorInput.substring(0, 2)+service.cData.hexColorInput.substring(4,6);
+        let expectedResult = '#' + service.cData.hexColorInput.substring(0, 2) + service.cData.greenHexInput +service.cData.hexColorInput.substring(4,6);
         expectedResult += serviceStub.colorConvert.alphaRGBToHex(service.cData.secondaryAlpha);
         expect(result).toBe(expectedResult);
         expect(service.cData.secondaryColor).toBe(expectedResult);
@@ -570,7 +575,7 @@ describe('ColorPickingService', () => {
         service.cData.colorMode = service.cData.BACKGROUND_COLOR_MODE;
         const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex');
         const result = service.writeHexColor(service.cData.BLUE_INPUT_FIELD);
-        let expectedResult = '#' + service.cData.blueHexInput + service.cData.hexColorInput.substring(0, 4);
+        let expectedResult = '#'  + service.cData.hexColorInput.substring(0, 4) + service.cData.blueHexInput;
         expectedResult += serviceStub.colorConvert.alphaRGBToHex(service.cData.backgroundColorAlpha);
         expect(result).toBe(expectedResult);
         expect(service.cData.backgroundColor).toBe(expectedResult);
@@ -593,6 +598,7 @@ describe('ColorPickingService', () => {
         const saturationSpy = spyOn(service,'setSaturation');
         const displaySpy = spyOn(service, 'updateDisplay');
         const lastColorSpy = spyOn(service, 'updateLastColor');
+        service.onSLSliderInput();
         expect(hslSpy).toHaveBeenCalled();
         expect(setSpy).toHaveBeenCalled();
         expect(saturationSpy).toHaveBeenCalled();

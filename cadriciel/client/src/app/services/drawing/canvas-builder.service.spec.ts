@@ -12,7 +12,7 @@ describe('CanvasBuilderService', () => {
     TestBed.configureTestingModule({
       declarations: [SvgDrawComponent]
     }).compileComponents();
-    service = new CanvasBuilderService();
+    service = TestBed.get(CanvasBuilderService);
   });
 
   it('should be created', () => {
@@ -21,7 +21,7 @@ describe('CanvasBuilderService', () => {
   });
 
   it('should create a canvas from form data', () => {
-    const CANVAS: Canvas = new Canvas(50, 50, '#ffffff'); // validators in NewDrawComponent filtering bad inputs
+    const CANVAS: Canvas = {canvasWidth: 50, canvasHeight: 50, canvasColor: '#ffffff'}; // validators in NewDrawComponent filtering bad inputs
     service.setCanvasFromForm(50, 50, 'ffffff');
     expect(service.newCanvas).toEqual(CANVAS);
   });
