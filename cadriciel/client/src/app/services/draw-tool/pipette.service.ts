@@ -1,30 +1,51 @@
 import { Injectable } from '@angular/core';
 import { InputObserver } from './input-observer';
-import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
+
 import { Point } from './point';
+import { ColorPickingService } from '../colorPicker/color-picking.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class PipetteService extends InputObserver {
     htmlCanvasEl: HTMLCanvasElement;
-    constructor(selected: boolean, htmlCanvasEl: HTMLCanvasElement) {
+    cPick: ColorPickingService;
+    clickedColor: Uint8ClampedArray;
+    constructor(selected: boolean, htmlCanvasEl: HTMLCanvasElement, colorPicking: ColorPickingService) {
         super(selected);
         this.htmlCanvasEl = htmlCanvasEl;
-        console.log(this.htmlCanvasEl);
+        this.cPick = colorPicking;
     }
-    update(keyboard: KeyboardHandlerService): void {}
-    cancel(): void {}
+
     down(position: Point, insideWorkspace?: boolean | undefined): void {
         console.log(position);
+        let ctx = this.htmlCanvasEl.getContext('2d');
+        if (ctx) {
+            this.clickedColor = ctx.getImageData(position.x, position.y, 1, 1).data;
+            console.log(this.buildImageData());
+        }
     }
     up(position: Point, insideWorkspace?: boolean | undefined): void {}
-    move(position: Point): void {}
-    doubleClick(position: Point, insideWorkspace?: boolean | undefined): void {}
-    goingOutsideCanvas(position: Point): void {}
-    goingInsideCanvas(position: Point): void {}
+    move(position: Point): void {
+        /**
+         * Could refresh a small color box
+         */
+    }
 
-    getImageData() {}
+    buildImageData(): string {
+        let str: string = '#';
+        this.clickedColor.forEach((color: number) => {
+            str += this.cPick.colorConvert.rgbToHex(color);
+        });
+
+        return str;
+    }
 
     emitSelectedColor() {}
+
+    doubleClick(): void {}
+    goingOutsideCanvas(): void {}
+    goingInsideCanvas(): void {}
+    update(): void {}
+    cancel(): void {}
 }
