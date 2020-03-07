@@ -17,7 +17,6 @@ export class PreviewBoxComponent implements OnInit, AfterViewInit {
     constructor(render: Renderer2) {
         this.render = render;
     }
-
     ngOnInit() {
         const SCALE = 3; // will appear 3 times smaller than the original
         this.scaleSVG(SCALE);

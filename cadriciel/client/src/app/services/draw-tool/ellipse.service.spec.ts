@@ -11,9 +11,7 @@ describe('EllipseService', () => {
     let ptA: Point;
     let ptB: Point;
     let ptArr: Point[];
-    let ptAStub: Point
-    let ptBStub : Point
-    let ptArrStub : Point[]
+
     beforeEach(() => {
         kbServiceStub = {
             shiftDown: true,
@@ -23,9 +21,7 @@ describe('EllipseService', () => {
         ptA = new Point(0, 0); // using a point to test position functions
         ptB = new Point(1, 2);
         ptArr = [ptA, ptB];
-        ptAStub = new Point(0,0);
-        ptBStub = new Point(10,10);
-        ptArrStub = [ptAStub, ptBStub]
+
         TestBed.configureTestingModule({
             providers: [
                 EllipseService,
@@ -42,6 +38,7 @@ describe('EllipseService', () => {
     });
 
     it('should be created', () => {
+        const service: EllipseService = TestBed.get(EllipseService);
         expect(service).toBeTruthy();
     });
 
@@ -97,19 +94,19 @@ describe('EllipseService', () => {
     });
 
     it('should create a valid rectangle svg from one point to another', () => {
-        const rect = service.createPath(ptArrStub, false);
+        const rect = service.createPath(ptArr, false);
         expect(rect).toContain('<rect');
     });
 
     it('should create a valid ellipse svg from one point to another', () => {
-        const rect = service.createPath(ptArrStub, false);
+        const rect = service.createPath(ptArr, false);
         expect(rect).toContain('<ellipse');
     });
 
     it('should create a rectangle of the correct dimensions from mouse move', () => {
-        const rect = service.createPath(ptArrStub, false);
-        const expWidth = `width="${ptBStub.x - ptAStub.x+ service.attr.lineThickness}"`;
-        const expHeigth = `height="${ptBStub.y - ptAStub.y + service.attr.lineThickness}"`;
+        const rect = service.createPath(ptArr, false);
+        const expWidth = `width="${ptB.x - ptA.x}"`;
+        const expHeigth = `height="${ptB.y - ptA.y}"`;
 
         expect(rect).toContain(expWidth);
         expect(rect).toContain(expHeigth);
@@ -118,7 +115,7 @@ describe('EllipseService', () => {
     it('should create a rectangle with the selected border thickness', () => {
         const thick = 1;
         service.attr.lineThickness = thick; // simulated border thickness
-        const rect = service.createPath(ptArrStub, false);
+        const rect = service.createPath(ptArr, false);
         const expTick = `stroke-width="${thick}"`;
         expect(rect).toContain(expTick);
     });
@@ -134,17 +131,17 @@ describe('EllipseService', () => {
     });
 
     it('should create a rectangle with corner at mouse start', () => {
-        const rect = service.createPath(ptArrStub, false);
+        const rect = service.createPath(ptArr, false);
 
-        expect(rect).toContain('<g name = "ellipse" style="transform: translate(0px, 0px);"><ellipse cx="5" cy="5" rx="5" ry="5"" fill="#000000ff"stroke-width="5" stroke="#ff0000ff"/><rect x="-2.5" y="-2.5"width="15" height="15"style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"stroke-width="5" stroke-dasharray="4"/></g>');
-        expect(rect).toContain('<g name = "ellipse" style="transform: translate(0px, 0px);"><ellipse cx="5" cy="5" rx="5" ry="5"" fill="#000000ff"stroke-width="5" stroke="#ff0000ff"/><rect x="-2.5" y="-2.5"width="15" height="15"style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"stroke-width="5" stroke-dasharray="4"/></g>');
+        expect(rect).toContain(`x="${0}"`);
+        expect(rect).toContain(`y="${0}"`);
     });
 
     it('should create a rectangle filled with the selected color', () => {
         const color = '#ffffff';
         service.chosenColor = {primColor: color, secColor: color, backColor: color}; // both prim. and sec.
 
-        const rect = service.createPath(ptArrStub, false);
+        const rect = service.createPath(ptArr, false);
         expect(rect).toContain(`fill="${color}"`);
     });
 
@@ -153,7 +150,7 @@ describe('EllipseService', () => {
         const sec = '#ffffff';
         const back = '#ffffff';
         service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
-        const rect = service.createPath(ptArrStub, false);
+        const rect = service.createPath(ptArr, false);
 
         expect(rect).toContain(`stroke="${sec}"`);
     });
@@ -165,7 +162,7 @@ describe('EllipseService', () => {
         const back = '#ffffff';
         service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
 
-        const rect = service.createPath(ptArrStub, false);
+        const rect = service.createPath(ptArr, false);
 
         expect(rect).toContain(`fill="${'none'}"`); // no color for fill
 
@@ -179,7 +176,7 @@ describe('EllipseService', () => {
         const back = '#ffffff';
         service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
 
-        const rect = service.createPath(ptArrStub, false);
+        const rect = service.createPath(ptArr, false);
 
         expect(rect).toContain(`fill="${prim}"`); // primary color fill
 
@@ -193,7 +190,7 @@ describe('EllipseService', () => {
         const back = '#ffffff';
         service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
 
-        const rect = service.createPath(ptArrStub, false);
+        const rect = service.createPath(ptArr, false);
 
         expect(rect).toContain(`fill="${prim}"`); // no color for fill
 
@@ -209,7 +206,7 @@ describe('EllipseService', () => {
     });
 
     it('should be named ellipse', () => {
-        const path = service.createPath(ptArrStub, false);
+        const path = service.createPath(ptArr, false);
         const name = 'ellipse';
         expect(path).toContain(name);
     });

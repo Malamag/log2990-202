@@ -35,8 +35,6 @@ import {
     MatToolbarModule,
     MatTooltipModule,
     MatCardModule,
-    MatChipsModule,
-    MatAutocompleteModule, 
     MatSlideToggleModule,
 } from '@angular/material';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
@@ -89,8 +87,6 @@ import { CanvasSwitchDirective } from './directives/canvas-switch.directive';
         MatSlideToggleModule,
         AppRoutingModule,
         MatCardModule,
-        MatChipsModule,
-        MatAutocompleteModule,
     ],
     providers: [CanvasBuilderService, ModalWindowService, ColorConvertingService, ColorPickingService, ExportService],
 

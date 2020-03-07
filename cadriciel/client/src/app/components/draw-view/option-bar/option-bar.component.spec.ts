@@ -26,13 +26,8 @@ describe('OptionBarComponent', () => {
     let kbService: KeyboardHandlerService;
     let fakeKbEvent: any;
     let gridRenderStub: any;
-    let fakeKeyboardEventGrid: any
 
     beforeEach(async(() => {
-        fakeKeyboardEventGrid ={
-            ctrlKey: false,
-            keyCode: 71
-        }
         winServiceStub = {
             openWindow: () => 0,
         };
@@ -161,7 +156,7 @@ describe('OptionBarComponent', () => {
     it('should call grid toggle when G is pressed', () => {
         fakeKbEvent.keyCode = G;
         const spy = spyOn(component, 'toggleGrid');
-        component.setShortcutEvent(fakeKeyboardEventGrid);
+        component.setShortcutEvent(fakeKbEvent);
         expect(spy).toHaveBeenCalled();
     });
 

@@ -10,16 +10,16 @@ import { ShapeService } from './shape.service';
 
 export class PolygonService extends ShapeService {
 
-  displayPolygon: boolean  // False if polygon is too small
+  private displayPolygon: boolean  // False if polygon is too small
 
   // Point for the middle of the perimeter
-  middleX: number;
-  middleY: number;
+  private middleX: number;
+  private middleY: number;
   // min and max values for x
-  leftPoint: number;
-  rightPoint: number;
+  private leftPoint: number;
+  private rightPoint: number;
   // All corners of the polygon
-  corners: Point[];
+  private corners: Point[];
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
               interaction: InteractionService, colorPick: ColorPickingService) {
@@ -34,23 +34,15 @@ export class PolygonService extends ShapeService {
   createPath(p: Point[], removePerimeter: boolean) {
 
     // We need at least 2 points
-    //if (p.length < 2) {
-    //  return '';
-    //}
-
-    this.setdimensions(p);
-
-    //The Polygon won't display if smaller than 10px -> 10 chosen by ergonomy
-    const MinValue = 10;
-    if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
-      return '';
-    }      
-
+    if (p.length < 2) {
+      return this.svgString;
+    }
+    
     // Set the polygon's corners
     this.setCorners(p);
 
     // create a divider
-    this.svgString = '<g name = "polygon" style="transform: translate(0px, 0px);" >';
+    this.svgString = '<g name = "polygon">';
 
     // set all points used as corners for the polygon
     this.svgString += '<polygon points="';
@@ -59,6 +51,12 @@ export class PolygonService extends ShapeService {
     }
 
     this.setAttributesToPath();
+    // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
+    //this.stroke = (this.attr.plotType === 0 || this.attr.plotType === 2) ? `${this.chosenColor.secColor}` : 'none';
+    //this.fill = (this.attr.plotType === 1 || this.attr.plotType === 2) ? `${this.chosenColor.primColor}` : 'none';
+
+    //this.svgString += `" fill="${this.fill}"`;
+    //this.svgString += `stroke-width="${this.attr.lineThickness}" stroke="${this.stroke}"/>`;
 
     this.createPerimeter(removePerimeter);
 
@@ -100,6 +98,8 @@ export class PolygonService extends ShapeService {
   }
 
   setCorners(p: Point[]) {
+
+    this.setdimensions(p);
 
     // Initilize values used for determining the other polygon's corners
     let rotateAngle = 3 * Math.PI / 2;

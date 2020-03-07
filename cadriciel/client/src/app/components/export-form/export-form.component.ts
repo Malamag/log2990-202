@@ -62,6 +62,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
 
     ngAfterContentInit() {
         this.doodle = this.doodleFetch.getDrawingWithoutGrid();
+        console.log(this.doodle);
     }
 
     onSubmit() {

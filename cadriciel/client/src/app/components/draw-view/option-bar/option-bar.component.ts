@@ -11,7 +11,6 @@ import { UserManualComponent } from '../../user-manual/user-manual.component';
 import { GalleryComponent } from '../../gallery/gallery.component';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 
-
 @Component({
     selector: 'app-option-bar',
     templateUrl: './option-bar.component.html',
@@ -65,7 +64,7 @@ export class OptionBarComponent {
             this.openGallery();
             e.preventDefault();
         }
-        if (e.keyCode === G_KEY && !e.ctrlKey) {
+        if (e.keyCode === G_KEY) {
             this.toggleGrid();
         }
 

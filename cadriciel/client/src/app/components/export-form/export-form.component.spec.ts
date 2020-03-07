@@ -24,7 +24,7 @@ describe('ExportFormComponent', () => {
     beforeEach(async(() => {
         dFetchStub = {
             askForDoodle: () => 0,
-            getDrawingWithoutGrid: () => 0,
+            getDrawing: () => 0,
         };
 
         TestBed.configureTestingModule({

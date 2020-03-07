@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { menuItems, toolsItems, welcomeItem } from '../../functionality';
 
@@ -8,7 +8,7 @@ import { menuItems, toolsItems, welcomeItem } from '../../functionality';
   styleUrls: ['./user-manual.component.scss'],
 })
 
-export class UserManualComponent  {
+export class UserManualComponent implements OnInit {
 
   // Initialize functionalities
   toolsItems = toolsItems;
@@ -24,6 +24,9 @@ export class UserManualComponent  {
   activeButton: any = this.welcomeItem[0];
 
   constructor(public dialogRef: MatDialogRef<UserManualComponent>) { }
+
+  ngOnInit() {
+  }
 
   closeModal() {  // Close the dialog window of the guide
     this.dialogRef.close();
