@@ -1,24 +1,31 @@
-#gallery{
-    //overflow-x:scroll;
+.gallery {
+    /*overflow-x: scroll;*/
     overflow-y: scroll;
-    max-height: 75vh;
-    max-width: 75vw;
-    background-color: transparent;
+    height: 90vh;
+    width: 90vw;
+    background-color: #313131;
 }
-div.header{
+.header {
+    width: 99%;
+}
+mat-card {
     position: relative;
-    float: right;
-    
-}
-div.drawing{
-    border-color: black;
-    background-color: transparent;
-    height: auto;
-    width: auto;
-    margin-right: 2px;
-    display: inline-block;
-}
-div.drawingContainer{
-    display: inline-block;
+    align-items: baseline;
 
+    border-color: lightskyblue;
+    border-width: 2px;
+    margin-right: 5px;
+    float: left;
+    margin-bottom: 5px;
+}
+#cards-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+#chip-container {
+    width: 100%;
+}
+h1 {
+    text-align: center;
+    margin: 0;
 }

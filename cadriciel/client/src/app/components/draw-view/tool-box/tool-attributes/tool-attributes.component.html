@@ -1,8 +1,10 @@
 <p *ngIf="!'Choisir Couleur'"> {{selectedTool}}</p>
 <div [ngSwitch]= "selectedTool">
-    <div *ngSwitchCase = " 'Rectangle' " (mouseleave) ="updateForms()">
+
+    <!-- for the shapes-->
+    <div *ngSwitchCase = " selectedTool === 'Rectangle' || selectedTool === 'Ellipse' || selectedTool === 'Polygone'  ? selectedTool : ''  " (mouseleave) ="updateForms()">
         <label> Épaisseur du contour: {{lineThickness}} px </label>
-        <mat-slider thumbLabel type="range" min= "1" max= "50" [(ngModel)] = "lineThickness"  ></mat-slider> <br>
+        <mat-slider thumbLabel type="range" min= "1" max= "30" [(ngModel)] = "lineThickness"  ></mat-slider> <br>
         
         <label> Type de tracé </label> <br>
         <mat-radio-group> <br>
@@ -11,31 +13,14 @@
             <mat-radio-button [value]="1" (click) = "plotType= 1"> Plein </mat-radio-button> <br>
         </mat-radio-group>
         <br>
+        <!-- sides for the polygon-->
+        <div *ngSwitchCase = " 'Polygone' " (mouseleave) ="updateForms()">
+            <label> Nombre de côtés</label>
+            <mat-slider thumbLabel tickInterval="1" type="range" min= "3" max = "12" [(ngModel)] = "numberCorners"> </mat-slider><br>
+        </div>
+    </div>
+    
 
-    </div>
-    <div *ngSwitchCase = " 'Ellipse' " (mouseleave) ="updateForms()">
-        <label> Trait de contour (px) </label>
-        <mat-slider thumbLabel type="range" min= "1" max= "30" [(ngModel)] = "lineThickness"  ></mat-slider> <br>
-        <label> Type de tracé </label> <br>
-        <mat-radio-group>
-            <mat-radio-button [value]="2" [checked]="true" (click) = "plotType =2"> Plein avec contour</mat-radio-button> <br><br>
-            <mat-radio-button [value]="0" (click) = "plotType = 0"> Contour</mat-radio-button> <br><br>
-            <mat-radio-button [value]="1" (click) = "plotType= 1"> Plein </mat-radio-button> <br>
-        </mat-radio-group>
-        
-    </div>
-    <div *ngSwitchCase = " 'Polygone' " (mouseleave) ="updateForms()">
-        <label> Épaisseur du contour: {{lineThickness}} px </label>
-        <mat-slider thumbLabel type="range"  min= "0" max= "50" [(ngModel)] = "lineThickness"  ></mat-slider> <br>
-        <label> Type de tracé </label> <br>
-        <mat-radio-group> <br>
-            <mat-radio-button [value]="2" [checked]="true" (click) = "plotType =2"> Plein avec contour</mat-radio-button> <br><br>
-            <mat-radio-button [value]="0" (click) = "plotType = 0"> Contour</mat-radio-button> <br><br>
-            <mat-radio-button [value]="1" (click) = "plotType= 1"> Plein </mat-radio-button> <br>
-        </mat-radio-group>
-        <br><label> Nombre de côtés</label>
-        <mat-slider thumbLabel tickInterval="1" type="range" min= "3" max = "12" [(ngModel)] = "numberCorners"> </mat-slider><br>
-    </div>
     <!-- for the prencil-->
     <div *ngSwitchCase = " 'Crayon' "(mouseleave) ="updateTools()">
         <label> Épaisseur du trait: {{lineThickness}} px </label>
@@ -50,20 +35,20 @@
             <mat-radio-button [value]="0" [checked]="true" (click) = "texture = 0">Flou
                 <img src="../../../../../assets/images/flou.png">
             </mat-radio-button>
-            <br>
+            <br><br>
             <mat-radio-button [value]="1" (click) ="texture = 1"> Bruit 1
             <img src="../../../../../assets/images/bruit1.png">
             </mat-radio-button> 
-            <br>
+            <br><br>
             <mat-radio-button [value]="2" (click) = "texture = 2"> Bruit 2 
                 <img src="../../../../../assets/images/bruit2.png"> 
-            </mat-radio-button> <br>
+            </mat-radio-button> <br><br>
             <mat-radio-button [value]="3" (click) = "texture =3"> Bruit 3 
                 <img src="../../../../../assets/images/bruit3.png"> 
-            </mat-radio-button> <br>
+            </mat-radio-button> <br><br>
             <mat-radio-button [value]="4" (click) = "texture =4"> Bruit 4 
                 <img src="../../../../../assets/images/bruit4.png">
-            </mat-radio-button> <br>
+            </mat-radio-button> <br><br>
         </mat-radio-group>
         
     </div>

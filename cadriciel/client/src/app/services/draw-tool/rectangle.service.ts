@@ -1,13 +1,14 @@
+import { Injectable } from '@angular/core';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 import { ShapeService } from './shape.service';
-import { Injectable } from '@angular/core';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root'
 })
+
 export class RectangleService extends ShapeService {
     public isSquare: boolean;
 
@@ -53,34 +54,32 @@ export class RectangleService extends ShapeService {
 
     // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
     createPath(p: Point[], removePerimeter?: boolean) {
-        let s = '';
+      this.setdimensions(p);
 
-        if (p.length >= 2) {
-            this.setdimensions(p);
-
-            // create a divider
-            s = '<g style="transform: translate(0px, 0px);" name = "rectangle">';
-
-            // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
-            const stroke = this.attr.plotType === 0 || this.attr.plotType === 2 ? `${this.chosenColor.secColor}` : 'none';
-            const fill = this.attr.plotType === 1 || this.attr.plotType === 2 ? `${this.chosenColor.primColor}` : 'none';
-
-            // set render attributes for the svg rect
-            s += `<rect x="${this.startX}" y="${this.startY}"`;
-            s += `width="${Math.abs(this.width)}" height="${Math.abs(this.height)}"`;
-
-            s += `fill="${fill}"`;
-            s += `stroke-width="${this.attr.lineThickness}" stroke="${stroke}"/>`;
-
-            // end the divider
-            s += '</g>';
-
-            // can't have rectangle with 0 width or height
-            if (this.width === 0 || this.height === 0) {
-                s = '';
-            }
-        }
-
-        return s;
+      //The Rectangle won't display if smaller than 10 -> minValue chosen by ergonomy
+      let MinValue = 10;
+      if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
+        return '';
+      } 
+  
+      // create a divider
+      this.svgString = '<g name = "rectangle" style="transform: translate(0px, 0px);">';
+  
+      // set render attributes for the svg rect
+      this.svgString += `<rect x="${this.startX}" y="${this.startY}"`;
+      this.svgString += `width="${Math.abs(this.width)}" height="${Math.abs(this.height)}"`;
+  
+      this.setAttributesToPath();
+  
+      // end the divider
+      this.svgString += '</g>'
+  
+      // can't have rectangle with 0 width or height
+      if (this.width === 0 || this.height === 0) {
+        this.svgString = '';
+      }    
+  
+      return this.svgString;
     }
 }
+

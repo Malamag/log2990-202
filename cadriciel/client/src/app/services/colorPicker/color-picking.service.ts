@@ -34,13 +34,12 @@ export class ColorPickingService {
     }
     /************************ SETTERS SECTION ***************************/
     setColorsFromForm(primary: string, secondary: string, background: string) {
-        this.colors = {primColor: primary, secColor: secondary, backColor: background};
+        this.colors = { primColor: primary, secColor: secondary, backColor: background };
     }
     setColor(color: number[]): string {
         if (color.length < 3) {
             return '';
-        } 
-        else {
+        } else {
             let newColor: string =
                 '#' + this.colorConvert.rgbToHex(color[0]) + this.colorConvert.rgbToHex(color[1]) + this.colorConvert.rgbToHex(color[2]);
             switch (this.cData.colorMode) {
@@ -62,7 +61,7 @@ export class ColorPickingService {
     }
     setColorMode(event: MouseEvent): void {
         if (this.cData.colorMode === this.cData.BACKGROUND_COLOR_MODE) {
-            return;   
+            return;
         }
         switch (event.button) {
             case 0:
@@ -198,7 +197,7 @@ export class ColorPickingService {
     // Mouse down event function when mouse on hue selector
     hueSelectorOnMouseDown(event: MouseEvent): void {
         if (this.cData.isSLSelecting) {
-            return
+            return;
         }
         this.cData.isHueSelecting = true;
         this.cData.rectOffsetFill = 'white';

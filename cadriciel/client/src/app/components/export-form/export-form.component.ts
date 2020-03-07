@@ -61,14 +61,17 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit() {
-        this.doodle = this.doodleFetch.getDrawing();
+        this.doodle = this.doodleFetch.getDrawingWithoutGrid();
+        console.log(this.doodle);
     }
 
     onSubmit() {
         const FORMVAL = this.exportForm.value;
         const TYPE = FORMVAL.formatSel;
         const NAME = FORMVAL.doodleName;
+
         this.exportation(NAME, TYPE);
+
         this.closeForm();
     }
 
