@@ -110,10 +110,10 @@ export class SelectionService extends ShapeService {
     }
 
     if (!keyboard.released) {
-      this.arrows[0] = keyboard.keyCode == 37 ? true : this.arrows[0];
-      this.arrows[1] = keyboard.keyCode == 38 ? true : this.arrows[1];
-      this.arrows[2] = keyboard.keyCode == 39 ? true : this.arrows[2];
-      this.arrows[3] = keyboard.keyCode == 40 ? true : this.arrows[3];
+      this.arrows[0] = keyboard.keyCode === 37 ? true : this.arrows[0];
+      this.arrows[1] = keyboard.keyCode === 38 ? true : this.arrows[1];
+      this.arrows[2] = keyboard.keyCode === 39 ? true : this.arrows[2];
+      this.arrows[3] = keyboard.keyCode === 40 ? true : this.arrows[3];
     }
 
     let singleLeft = this.arrows[0] && !this.singleUseArrows[0];
@@ -193,22 +193,22 @@ export class SelectionService extends ShapeService {
   // updating on key up
   updateUp(keyCode: number) {
 
-    if (keyCode == 37) {
+    if (keyCode === 37) {
       this.arrows[0] = false;
       this.arrowTimers[0] = 0;
       this.singleUseArrows[0] = false;
     }
-    if (keyCode == 38) {
+    if (keyCode === 38) {
       this.arrows[1] = false;
       this.arrowTimers[1] = 0;
       this.singleUseArrows[1] = false;
     }
-    if (keyCode == 39) {
+    if (keyCode === 39) {
       this.arrows[2] = false;
       this.arrowTimers[2] = 0;
       this.singleUseArrows[2] = false;
     }
-    if (keyCode == 40) {
+    if (keyCode === 40) {
       this.arrows[3] = false;
       this.arrowTimers[3] = 0;
       this.singleUseArrows[3] = false;
