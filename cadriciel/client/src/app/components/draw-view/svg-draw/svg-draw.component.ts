@@ -47,7 +47,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     @ViewChild('drawingSpace', { static: false }) drawingSpace: ElementRef;
     @ViewChild('selectedItems', { static: false }) selectedItems: ElementRef;
     @ViewChild('grid', { static: false }) gridRef: ElementRef;
-    //@ViewChild('pixelField', { static: false }) pixelMatrixRef: ElementRef;
+    @ViewChild('pixelField', { static: false }) pixelMatrixRef: ElementRef;
     workingSpace: HTMLElement;
 
     ngOnInit() {
@@ -144,6 +144,11 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             } else if (this.toolsContainer.get(toolName)) {
                 this.closeTools(this.toolsContainer);
                 this.toolsContainer.get(toolName).selected = true;
+            }
+            if (toolName === 'Pipette') {
+                //... or, eventually, bucket tool
+                mouseHandler.svgCanvas = this.pixelMatrixRef.nativeElement;
+                mouseHandler.updateWindowSize();
             }
         });
 
