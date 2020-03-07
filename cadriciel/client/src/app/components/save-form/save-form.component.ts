@@ -6,13 +6,15 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { IndexService } from 'src/app/services/index/index.service';
 import { Image } from '../../image';
-//import { ImageData } from '../../imageData';
 
+
+//import { ImageData } from '../../imageData';
 @Component({
   selector: 'app-save-form',
   templateUrl: './save-form.component.html',
   styleUrls: ['./save-form.component.scss']
 })
+
 export class SaveFormComponent implements OnInit {
   saveForm: FormGroup;
   constructor(private winService: ModalWindowService, private formBuilder: FormBuilder, private doodleFetch: DoodleFetchService,private index: IndexService) { }
@@ -41,7 +43,7 @@ export class SaveFormComponent implements OnInit {
   }
 
   ngAfterContentInit() {
-    this.doodle = this.doodleFetch.getDrawing();
+    this.doodle = this.doodleFetch.getDrawingWithoutGrid();
 }
 
 
@@ -76,7 +78,10 @@ export class SaveFormComponent implements OnInit {
   }
   saveImage() {
     let id : string = new Date().getUTCMilliseconds() + '';
-    let image : Image = {id : id,svgElement : this.doodle.textContent };
+    let doodleString = this.doodleFetch.getHtmlContent();
+    
+    
+    let image : Image = {id : id,svgElement : doodleString };
     //let metaData : ImageData = {id : image.id, name : "todo", tags : this.labels};
     this.index.saveImage(image);
     //this.index.saveImage(image);

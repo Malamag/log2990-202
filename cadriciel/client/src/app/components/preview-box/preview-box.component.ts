@@ -19,23 +19,20 @@ export class PreviewBoxComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        const SCALE = 3;
+        const SCALE = 3; // will appear 3 times smaller than the original
         this.scaleSVG(SCALE);
     }
 
     ngAfterViewInit() {
-        this.initBox();
+        this.render.appendChild(this.previewBoxRef.nativeElement, this.draw);
     }
 
     scaleSVG(scaleFacor: number) {
         const VIEWBOX_W = this.svgW;
         const VIEWBOX_H = this.svgH;
-        this.viewBoxStr = `0 0 ${VIEWBOX_W} ${VIEWBOX_H}`;
-        this.svgW = this.svgW / scaleFacor;
-        this.svgH = this.svgH / scaleFacor;
-    }
+        this.viewBoxStr = `0 0 ${VIEWBOX_W} ${VIEWBOX_H}`; // Viewing the whole svg...
 
-    initBox() {
-        this.render.appendChild(this.previewBoxRef.nativeElement, this.draw);
+        this.svgW = this.svgW / scaleFacor;
+        this.svgH = this.svgH / scaleFacor; // ...but with scaled children
     }
 }

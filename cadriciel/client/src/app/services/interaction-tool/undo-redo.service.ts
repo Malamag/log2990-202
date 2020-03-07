@@ -17,13 +17,7 @@ export class UndoRedoService extends InteractionTool {
                 if (this.undone.length > 0) {
                     this.undone = [];
                 }
-
-                const children = this.drawing.children;
-                const list: Element[] = [];
-                for (let i = 0; i < children.length; ++i) {
-                    list.push(children[i]);
-                }
-                this.done.push(list);
+                this.done.push(this.drawing.innerHTML);
                 this.updateButtons();
             }
         });
@@ -32,7 +26,7 @@ export class UndoRedoService extends InteractionTool {
         this.interact.$canvasRedone.subscribe(sig =>{
             if(sig){
                 this.done = [];
-                this.undone = []
+                this.undone = [];
             }
             
         })
@@ -47,9 +41,9 @@ export class UndoRedoService extends InteractionTool {
             this.undone.push(elem);
         }
         if (this.done.length) {
-            this.done[this.done.length - 1].forEach(elem => {
-                this.render.appendChild(this.drawing, elem);
-            });
+            this.drawing.innerHTML = this.done[this.done.length-1]
+            let event = new Event("newDrawing");
+            window.dispatchEvent(event);
         }
     }
     redo() {
@@ -61,9 +55,10 @@ export class UndoRedoService extends InteractionTool {
         if (elem) {
             this.done.push(elem);
         }
-        this.done[this.done.length - 1].forEach(elem => {
-            this.render.appendChild(this.drawing, elem);
-        });
+        this.drawing.innerHTML = this.done[this.done.length-1]
+        let event = new Event("newDrawing");
+        window.dispatchEvent(event);
+        
     }
 
     apply(name: string) {

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { BrushService } from './brush.service';
@@ -7,6 +7,7 @@ import { LineService } from './line.service';
 import { PencilService } from './pencil.service';
 import { RectangleService } from './rectangle.service';
 import { PolygonService } from './polygon.service';
+import { SelectionService } from './selection.service';
 
 @Injectable({
     providedIn: 'root',
@@ -42,5 +43,9 @@ export class ToolCreator {
 
     CreatePolygon(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): PolygonService {
         return new PolygonService(this.inProgress, this.drawing, selected, interaction, colorPick);
+    }
+
+    CreateSelection(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,render:Renderer2, selectedRef: HTMLElement, canvas: HTMLElement, workingSpace: HTMLElement): SelectionService {
+        return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick,render, selectedRef, canvas, workingSpace);
     }
 }

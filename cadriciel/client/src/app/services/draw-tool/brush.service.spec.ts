@@ -2,8 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { BrushService } from './brush.service';
 
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
-import { ToolsAttributes } from '../attributes/tools-attribute';
+
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
@@ -40,7 +39,7 @@ describe('BrushService', () => {
     });
 
     it('should set the attributes in the subscription', () => {
-        service.interaction.emitToolsAttributes(new ToolsAttributes(0, 0)); // emit fake
+        service.interaction.emitToolsAttributes({lineThickness: 0, texture: 0}); // emit fake
         const spyInteraction = spyOn(service.interaction.$toolsAttributes, 'subscribe');
         service.updateAttributes();
         expect(spyInteraction).toHaveBeenCalled();
@@ -66,7 +65,7 @@ describe('BrushService', () => {
         const prim = '#ffffff';
         const sec = '#000000';
         const back = '#ffffff';
-        service.chosenColor = new ChoosenColors(prim, sec, back);
+        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
 
         const path = service.createPath(ptArr);
 

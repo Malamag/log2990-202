@@ -123,6 +123,6 @@ export class DatabaseService {
         let data = fs.readFileSync('../data.json');
         let images = JSON.parse(data.toString());
         console.log(images);
-        console.log(image.svgElement);
+        //console.log(image.svgElement);
     }
 }

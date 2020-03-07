@@ -5,7 +5,13 @@ import { ImageFilterService } from './image-filter.service';
 describe('ImageFilterService', () => {
     let service: ImageFilterService;
     let doodle: any;
-    beforeEach(() => TestBed.configureTestingModule({}));
+    let filterStub: any;
+    beforeEach(() => {
+        filterStub = {
+            id: 0,
+        };
+        TestBed.configureTestingModule({});
+    });
     beforeEach(() => {
         service = TestBed.get(ImageFilterService);
         service.currentFilter = service.createBNWFilter();
@@ -19,56 +25,58 @@ describe('ImageFilterService', () => {
         expect(creatorSpy).toHaveBeenCalled();
     });
     it('create BNW filter should set attributes and append child', () => {
-        const initSpy = spyOn(service, 'filterInit');
+        service.filterInit = jasmine.createSpy().and.returnValue(filterStub);
+
         const creatorSpy = spyOn(service.renderer, 'createElement');
         const modifierSpy = spyOn(service.renderer, 'setAttribute');
         const appendSpy = spyOn(service.renderer, 'appendChild');
         service.createBNWFilter();
-        expect(initSpy).toHaveBeenCalled();
+
         expect(creatorSpy).toHaveBeenCalled();
         expect(modifierSpy).toHaveBeenCalled();
         expect(appendSpy).toHaveBeenCalled();
     });
     it('create Hue Rotate filter should set attributes and append a child', () => {
-        const initSpy = spyOn(service, 'filterInit');
+        service.filterInit = jasmine.createSpy().and.returnValue(filterStub);
+
         const creatorSpy = spyOn(service.renderer, 'createElement');
         const modifierSpy = spyOn(service.renderer, 'setAttribute');
         const appendSpy = spyOn(service.renderer, 'appendChild');
         service.createHueRotateFilter();
-        expect(initSpy).toHaveBeenCalled();
+
         expect(creatorSpy).toHaveBeenCalled();
         expect(modifierSpy).toHaveBeenCalled();
         expect(appendSpy).toHaveBeenCalled();
     });
     it('create noise filter should set attrbutes and append two children', () => {
-        const initSpy = spyOn(service, 'filterInit');
+        service.filterInit = jasmine.createSpy().and.returnValue(filterStub);
         const creatorSpy = spyOn(service.renderer, 'createElement');
         const modifierSpy = spyOn(service.renderer, 'setAttribute');
         const appendSpy = spyOn(service.renderer, 'appendChild');
         service.createNoiseFilter();
-        expect(initSpy).toHaveBeenCalled();
+
         expect(creatorSpy).toHaveBeenCalled();
         expect(modifierSpy).toHaveBeenCalled();
         expect(appendSpy).toHaveBeenCalledTimes(2);
     });
     it('create soft filter should create elements, set attributes and append children', () => {
-        const initSpy = spyOn(service, 'filterInit');
+        service.filterInit = jasmine.createSpy().and.returnValue(filterStub);
         const creatorSpy = spyOn(service.renderer, 'createElement');
         const modifierSpy = spyOn(service.renderer, 'setAttribute');
         const appendSpy = spyOn(service.renderer, 'appendChild');
         service.createSoftFilter();
-        expect(initSpy).toHaveBeenCalled();
+
         expect(creatorSpy).toHaveBeenCalled();
         expect(modifierSpy).toHaveBeenCalled();
         expect(appendSpy).toHaveBeenCalled();
     });
     it('create texture filter should create elements, set attributes and append children', () => {
-        const initSpy = spyOn(service, 'filterInit');
+        service.filterInit = jasmine.createSpy().and.returnValue(filterStub);
         const creatorSpy = spyOn(service.renderer, 'createElement');
         const modifierSpy = spyOn(service.renderer, 'setAttribute');
         const appendSpy = spyOn(service.renderer, 'appendChild');
         service.createTextureFilter();
-        expect(initSpy).toHaveBeenCalled();
+
         expect(creatorSpy).toHaveBeenCalled();
         expect(modifierSpy).toHaveBeenCalled();
         expect(appendSpy).toHaveBeenCalled();
