@@ -3,6 +3,7 @@ import { InputObserver } from './input-observer';
 
 import { Point } from './point';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
+import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 
 @Injectable({
     providedIn: 'root',
@@ -17,12 +18,15 @@ export class PipetteService extends InputObserver {
         this.cPick = colorPicking;
     }
 
-    down(position: Point, insideWorkspace?: boolean | undefined): void {
+    down(position: Point, insideWorkspace?: boolean | undefined, isRightClick?: boolean): void {
         console.log(position);
         let ctx = this.htmlCanvasEl.getContext('2d');
         if (ctx) {
             this.clickedColor = ctx.getImageData(position.x, position.y, 1, 1).data;
             console.log(this.buildImageData());
+        }
+        if (isRightClick) {
+            console.log('allo from rightclick');
         }
     }
     up(position: Point, insideWorkspace?: boolean | undefined): void {}
@@ -48,4 +52,6 @@ export class PipetteService extends InputObserver {
     goingInsideCanvas(): void {}
     update(): void {}
     cancel(): void {}
+    updateDown(keyboard: KeyboardHandlerService): void {}
+    updateUp(keyCode: number): void {}
 }
