@@ -174,12 +174,11 @@ export class SelectionService extends ShapeService {
         yoff += 3;
       }
 
-      this.movedSelectionWithArrowsOnce = this.movedSelectionWithArrowsOnce || (xoff != 0 || yoff != 0);
+      this.movedSelectionWithArrowsOnce = this.movedSelectionWithArrowsOnce || (xoff !== 0 || yoff !== 0);
 
       if (this.selectedItems.length > 0) {
         this.moveSelection(xoff, yoff);
         this.selectedRef.innerHTML = this.updateBoundingBox();
-        //console.log(new Date().getTime());
       }
     }
     setTimeout(() => {
@@ -264,51 +263,51 @@ export class SelectionService extends ShapeService {
   up(position: Point) {
 
     // in case we changed tool while the mouse was down
-    if (!this.ignoreNextUp) {
-
-      // the selection should not affect the canvas
-      this.isDown = false;
-
-      // check for small offset to make single item selection more permissive
-      if (Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length - 1]) < NO_MOUSE_MOVEMENT_TOLERANCE) {
-
-        if (!this.inverted) {
-          // new selection, empty selection status
-          this.selectedItems = [];
-          this.invertedItems = [];
-        } else {
-          // we're inverting, save the inverted selection status of each item
-          for (let i = 0; i < this.selectedItems.length; i++) {
-            this.invertedItems[i] = !this.selectedItems[i]
-          }
-        }
-
-        // adjust the focused item's selection status
-        if (this.itemUnderMouse != null) {
-          this.selectedItems[this.itemUnderMouse] = this.inverted ? !this.selectedItems[this.itemUnderMouse] : true;
-        }
-      }
-
-      // reset focused item
-      this.itemUnderMouse = null;
-      this.foundAnItem = false;
-
-      this.selectedRef.innerHTML = this.updateBoundingBox();
-
-      // if we moved a selection, emit the drawing for undo-redo
-      if (this.selectedItems.includes(true) && this.movingSelection && this.movedSelectionOnce) {
-        this.interaction.emitDrawingDone();
-      }
-
-      // reset mouse offset status
-      this.movedSelectionOnce = false;
-      this.movedMouseOnce = false;
-      this.movingSelection = false;
-
-      // clear selection rectangle
-      this.currentPath = [];
-      this.inProgress.innerHTML = "";
+    if (this.ignoreNextUp) {
+      return;
     }
+    // the selection should not affect the canvas
+    this.isDown = false;
+
+    // check for small offset to make single item selection more permissive
+    if (Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length - 1]) < NO_MOUSE_MOVEMENT_TOLERANCE) {
+
+      if (!this.inverted) {
+        // new selection, empty selection status
+        this.selectedItems = [];
+        this.invertedItems = [];
+      } else {
+        // we're inverting, save the inverted selection status of each item
+        for (let i = 0; i < this.selectedItems.length; i++) {
+          this.invertedItems[i] = !this.selectedItems[i]
+        }
+      }
+
+      // adjust the focused item's selection status
+      if (this.itemUnderMouse != null) {
+        this.selectedItems[this.itemUnderMouse] = this.inverted ? !this.selectedItems[this.itemUnderMouse] : true;
+      }
+    }
+
+    // reset focused item
+    this.itemUnderMouse = null;
+    this.foundAnItem = false;
+
+    this.selectedRef.innerHTML = this.updateBoundingBox();
+
+    // if we moved a selection, emit the drawing for undo-redo
+    if (this.selectedItems.includes(true) && this.movingSelection && this.movedSelectionOnce) {
+      this.interaction.emitDrawingDone();
+    }
+
+    // reset mouse offset status
+    this.movedSelectionOnce = false;
+    this.movedMouseOnce = false;
+    this.movingSelection = false;
+
+    // clear selection rectangle
+    this.currentPath = [];
+    this.inProgress.innerHTML = "";
   }
 
   move(position: Point) {

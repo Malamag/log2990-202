@@ -11,10 +11,17 @@ fdescribe('SelectionService', () => {
     let service: SelectionService
     let render: Renderer2;
     let select: any
-    
+    let firstChild: any
     beforeEach(() => {
+        firstChild ={
+            getBoundingClientRect : () => 0,
+        }
         select = {
-            children: ['1','2','3'],
+            children: [firstChild, firstChild],
+            style: {
+                pointerEvents: "none",
+            },
+            getBoundingClientRect :  () => 0,
         }
         TestBed.configureTestingModule({
             providers: [{ provide: Point },
@@ -114,9 +121,9 @@ fdescribe('SelectionService', () => {
     it('should move the selection to the right and to the down direction', () => {
         service.arrows[2] = true;
         service.arrows[3] = true;
+        service.selectedItems = [true, true];
         const spyMove = spyOn(service, 'moveSelection');
         const spyRect = spyOn(service, 'updateBoundingBox')
-        service.selectedItems = [true, true];
         service.moveWithArrowsLoop()
         expect(service.existingLoop).toBeTruthy()
         expect(spyMove).toHaveBeenCalled()
@@ -160,4 +167,70 @@ fdescribe('SelectionService', () => {
         expect(service.singleUseArrows[3]).toBeFalsy()
     })
     
+    it(' should include the points to the current path twice and set some attributes' , () => {
+        const POINT = new Point(0, 0 );
+        const RIGHTCLICK = true;
+        const insideWorkingSpace = false;
+        const pushSpy = spyOn(service.currentPath, 'push');
+        const updateSpy = spyOn(service, 'updateProgress');
+        service.selectedItems = [true, true]
+        service.down(POINT, insideWorkingSpace, RIGHTCLICK);
+        for(let i = 0; i < service.selectedItems.length; ++i){
+            expect(service.invertedItems[i]).toBeFalsy()
+        }
+        expect(service.ignoreNextUp).toBeFalsy()
+        expect(service.isDown).toBeTruthy()
+        expect(service.inverted).toBeTruthy()
+        expect(pushSpy).toHaveBeenCalledTimes(2)
+        expect(updateSpy).toHaveBeenCalled()
+        expect(service.movingSelection).toBeFalsy()
+    })
+
+    it('should empty the selected array and set some attributes', () => {
+        service.itemUnderMouse = 3;
+        service.selectedItems[3] = false
+        const rightClick = false;
+        const POINT = new Point(0, 0 );
+        const insideWorkingSpace = false;
+        service.down(POINT, insideWorkingSpace, rightClick);
+        expect(service.selectedItems[3]).toBeTruthy()
+        expect(service.movingSelection).toBeTruthy()
+    })
+    it('isDown atrribuute should be truthy and not call functions', () => {
+        service.ignoreNextUp = true;
+        service.isDown = true;
+        const updateSpy = spyOn(service, 'updateBoundingBox');
+        service.up(new Point(0, 0))
+        expect(service.isDown).toBeTruthy();
+        expect(updateSpy).toHaveBeenCalledTimes(0);
+    })
+    it('should set some attributes and emit the drawing', () => {
+        service.currentPath[0] = new Point(0, 0);
+        service.currentPath.push(new Point(10, 10));
+        service.inverted = true;
+        service.ignoreNextUp = false;
+        service.selectedItems = [true, true, true, true]
+        service.movingSelection = true;
+        service.movedSelectionOnce = true;
+        service.itemUnderMouse = 3;
+        const emitSpy = spyOn(service.interaction, 'emitDrawingDone')
+        service.up(new Point(0, 0))
+        expect(service.isDown).toBeFalsy()
+        for(let i = 0; i < service.selectedItems.length; ++i){
+            expect(service.invertedItems[i]).toBeFalsy()
+        }
+        expect(emitSpy).toHaveBeenCalled()
+        expect(service.itemUnderMouse).toBeNull()
+        expect(service.currentPath.length).toEqual(0)
+        expect(service.selectedItems[3]).toBeTruthy()
+    })
+    it('should empty the selected items array and the inverted items', () => {
+        service.currentPath[0] = new Point(0, 0);
+        service.currentPath.push(new Point(10, 10));
+        service.inverted = false;
+        service.itemUnderMouse = 3;
+        service.up(new Point(0, 0));
+        expect(service.invertedItems).toEqual([]);
+    })
 });
+
