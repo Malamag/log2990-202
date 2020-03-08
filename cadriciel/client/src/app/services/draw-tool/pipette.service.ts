@@ -10,32 +10,37 @@ import { ColorPickingService } from '../colorPicker/color-picking.service';
 export class PipetteService extends InputObserver {
     htmlCanvasEl: HTMLCanvasElement;
     cPick: ColorPickingService;
-    clickedColor: Uint8ClampedArray;
+    clickedColor: Uint8ClampedArray | number[];
     colorStr: string = '';
+    private canvasContext: CanvasRenderingContext2D | null;
+
     constructor(selected: boolean, htmlCanvasEl: HTMLCanvasElement, colorPicking: ColorPickingService) {
         super(selected);
         this.htmlCanvasEl = htmlCanvasEl;
         this.cPick = colorPicking;
+        this.canvasContext = this.htmlCanvasEl.getContext('2d');
     }
 
     down(position: Point, insideWorkspace?: boolean | undefined, isRightClick?: boolean): void {
-        const CTX = this.htmlCanvasEl.getContext('2d');
-
-        if (CTX) {
-            this.clickedColor = CTX.getImageData(position.x, position.y, 1, 1).data;
-            this.colorStr = this.buildImageData();
-        }
-
+        this.imgDataConversion(position);
         if (this.colorStr) {
             this.emitSelectedColor(this.colorStr, isRightClick);
         }
     }
 
-    up(position: Point, insideWorkspace?: boolean | undefined): void {}
     move(position: Point): void {
         /**
          * Could refresh a small color box
          */
+        this.imgDataConversion(position);
+        //emits to a small preview box
+    }
+
+    private imgDataConversion(position: Point) {
+        if (this.canvasContext) {
+            this.clickedColor = this.canvasContext.getImageData(position.x, position.y, 1, 1).data;
+            this.colorStr = this.buildImageData();
+        }
     }
 
     buildImageData(): string {
@@ -63,11 +68,12 @@ export class PipetteService extends InputObserver {
         this.cPick.updateDisplay(color);
     }
 
+    update(): void {}
     doubleClick(): void {} // no behavior defned for the methods below
     goingOutsideCanvas(): void {}
     goingInsideCanvas(): void {}
-    update(): void {}
     cancel(): void {}
     updateDown(): void {}
-    updateUp(keyCode: number): void {}
+    updateUp(): void {}
+    up(): void {}
 }
