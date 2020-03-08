@@ -80,10 +80,12 @@ export class GridRenderService {
         this.renderVerticalLines(this.defSteps);
 
         this.hGridLines.forEach((hLine: SVGLineElement) => {
+            hLine.style.pointerEvents = 'none';
             this.render.appendChild(this.grid, hLine);
         });
 
         this.vGridLines.forEach((vLine: SVGLineElement) => {
+            vLine.style.pointerEvents = 'none';
             this.render.appendChild(this.grid, vLine);
         });
         this.updateColor(color);
