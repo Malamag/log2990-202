@@ -73,6 +73,19 @@ export class DatabaseService {
     //}
 
     async deleteImageById(imageId: string): Promise<void> {
+        fs.readFile('../data.json', function (err, data) {
+            // Convert string (old data) to JSON
+            let drawingsList = JSON.parse(data.toString());
+
+            drawingsList.drawings = drawingsList.drawings.filter((data: Image) => { return data.id !== imageId });
+            // Convert JSON to string
+            let listToJson = JSON.stringify(drawingsList);
+            // Replace all data in the data.json with new ones
+            fs.writeFile("../data.json", listToJson, function (err) {
+                if (err) throw err;
+                console.log('The "data to append" was appended to file!');
+            });
+        });
         return this.collection.findOneAndDelete({ id: imageId })
             .then(() => { })
             .catch((error: Error) => {
@@ -111,13 +124,11 @@ export class DatabaseService {
             // Convert string (old data) to JSON
             let drawingsList = JSON.parse(data.toString());
             let jsonObj = { id: imageData.id, svgElement: imageData.svgElement };
-            console.log(jsonObj.svgElement);
             // Add new data to my drawings list
             drawingsList.drawings.push(jsonObj);
 
             // Convert JSON to string
             let listToJson = JSON.stringify(drawingsList);
-            //console.log(listToJson);
             // Replace all data in the data.json with new ones
             fs.writeFile("../data.json", listToJson, function (err) {
                 if (err) throw err;
