@@ -40,50 +40,6 @@ export class EraserService extends DrawingTool {
 
     this.inProgress.style.pointerEvents = "none";
 
-    window.addEventListener("newDrawing", (e: Event) => {
-      for (let i = 0; i < this.drawing.childElementCount; i++) {
-        let el = this.drawing.children[i];
-        let status = el.getAttribute("isListening2");
-        this.render.setAttribute(el, "checkPreciseEdge", "true");
-        if (status !== "true") {
-          this.render.setAttribute(el, "isListening2", "true");
-          this.render.listen(el, "mousemove", () => {
-            //console.log("enter");
-            if (!this.foundAnItem) {
-              this.highlight(el);
-              this.render.setAttribute(el, "checkPreciseEdge", "false");
-              this.foundAnItem = true;
-              if (this.isDown) {
-                this.erase(el);
-                this.foundAnItem = false;
-              }
-            }
-          });
-          this.render.listen(el, "mouseleave", () => {
-            //console.log("leaving");
-            if (this.foundAnItem) {
-              this.unhighlight(el);
-              this.foundAnItem = false;
-              this.render.setAttribute(el, "checkPreciseEdge", "true");
-            }
-          });
-          this.render.listen(el, "mousedown", () => {
-            //console.log("click");
-            this.erase(el);
-            this.foundAnItem = false;
-            this.render.setAttribute(el, "checkPreciseEdge", "true");
-          });
-          this.render.listen(el, "mouseup", () => {
-            if (!this.foundAnItem) {
-              this.highlight(el);
-              this.render.setAttribute(el, "checkPreciseEdge", "false");
-              this.foundAnItem = false;
-            }
-          });
-        }
-      }
-    });
-
     window.addEventListener("toolChange", (e: Event) => {
       this.foundAnItem = false;
       for (let i = 0; i < this.drawing.childElementCount; i++) {
@@ -238,9 +194,6 @@ export class EraserService extends DrawingTool {
     let canvOffsetX = (canvasBox ? canvasBox.left : 0);
     let canvOffsetY = (canvasBox ? canvasBox.top : 0);
 
-    //console.log(`${canvOffsetX}, ${canvOffsetY}`);
-
-
     let w = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
     let h = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
 
@@ -249,7 +202,7 @@ export class EraserService extends DrawingTool {
     let tl = new Point(this.currentPath[this.currentPath.length - 1].x - dim / 2, this.currentPath[this.currentPath.length - 1].y - dim / 2);
     let br = new Point(tl.x + dim, tl.y + dim);
 
-    for (let i = 0; i < this.drawing.childElementCount; i++) {
+    for (let i = this.drawing.childElementCount - 1; i >= 0; i--) {
 
       let touching = false;
       let firstChild = this.drawing.children[i];
@@ -261,10 +214,6 @@ export class EraserService extends DrawingTool {
 
       if (!Point.rectOverlap(tl, br, itemTopLeft, itemBottomRight)) {
         this.unhighlight(firstChild);
-        continue;
-      }
-
-      if (firstChild.getAttribute("checkPreciseEdge") !== "true") {
         continue;
       }
 
@@ -282,43 +231,27 @@ export class EraserService extends DrawingTool {
           offset = +width;
         }
 
-        let dim2 = 3 + offset;
+        //let dim2 = 3 + offset;
 
         if (secondChild.classList.contains("clone") || secondChild.tagName == "filter") { continue; }
 
-        let path = secondChild as SVGPathElement;
-        let lenght = path.getTotalLength();
-        let inc = lenght / 300;
+        if (this.inProgress.firstElementChild) {
+          let test = this.inProgress.firstElementChild.firstElementChild as SVGGeometryElement;
+          let l = test.getTotalLength();
 
-        let closest: [Point, number] = [new Point(-1, -1), 10000];
-        for (let a = 0; a < lenght; a += inc) {
-          let candidate = new Point(path.getPointAtLength(a).x + objOffsetX, path.getPointAtLength(a).y + objOffsetY);
-          let dist = Point.distance(this.currentPath[this.currentPath.length - 1], candidate)
-          if (dist < closest[1]) {
-            closest[0] = candidate;
-            closest[1] = dist;
+          let path = secondChild as SVGGeometryElement;
+
+          for (let v = 0; v < l; v += dim / 10) {
+
+            let testPoint = test.getPointAtLength(v);
+            testPoint.x -= objOffsetX;
+            testPoint.y -= objOffsetY;
+            if (path.isPointInStroke(testPoint) || (path.isPointInFill(testPoint) && secondChild.getAttribute("fill") != "none")) {
+              touching = true;
+              break;
+            }
           }
         }
-
-        if (true) {
-          let good = closest[0];
-          //console.log(good);
-          let tlp = new Point(good.x - dim2 / 2, good.y - dim2 / 2);
-          let brp = new Point(good.x + dim2 / 2, good.y + dim2 / 2);
-          if (Point.rectOverlap(tlp, brp, tl, br)) {
-            touching = true;
-            break;
-          }
-        }
-
-        //for(let a = 0; a < points.length; a++){
-
-        //}
-
-        if (touching) {
-          break;
-        }
-
       }
 
 
@@ -328,7 +261,13 @@ export class EraserService extends DrawingTool {
           this.erase(firstChild);
         } else {
           this.highlight(firstChild);
+          for (let k = 0; k < this.drawing.childElementCount; k++) {
+            if (k != i) {
+              this.unhighlight(this.drawing.children[k]);
+            }
+          }
         }
+        break;
       } else {
         this.unhighlight(firstChild);
       }

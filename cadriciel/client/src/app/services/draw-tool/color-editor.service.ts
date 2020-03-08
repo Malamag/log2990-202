@@ -165,12 +165,13 @@ export class ColorEditorService extends DrawingTool {
   }
 
   changeBorder(el: HTMLElement) {
-    let newColor = el.getAttribute("stroke") != "none" ? this.chosenColor.secColor : "";
+    let newColor = el.getAttribute("stroke") != "none" ? this.chosenColor.secColor : "none";
     this.render.setAttribute(el, "stroke", newColor);
   }
 
   changeFill(el: HTMLElement) {
-    let newColor = el.getAttribute("fill") != "none" ? this.chosenColor.primColor : "";
+    console.log(el.getAttribute("fill"));
+    let newColor = el.getAttribute("fill") != "none" ? this.chosenColor.primColor : "none";
     this.render.setAttribute(el, "fill", newColor);
   }
 
