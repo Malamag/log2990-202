@@ -78,8 +78,7 @@ export class SaveFormComponent implements OnInit {
   }
   saveImage() {
     let id : string = new Date().getUTCMilliseconds() + '';
-    let doodleString = this.doodleFetch.getHtmlContent();
-    
+    let doodleString = this.doodleFetch.getDrawingStringNoGrid();
     
     let image : Image = {id : id,svgElement : doodleString };
     //let metaData : ImageData = {id : image.id, name : "todo", tags : this.labels};

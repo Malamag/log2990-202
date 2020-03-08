@@ -21,9 +21,7 @@ export class DoodleFetchService {
         this.ask.next(true); // we are telling the svg draw component that we want to access the doodle
     }
 
-    getHtmlContent(){
-        return this.currentDraw.nativeElement.outerHTML;
-    }
+   
 
     getDrawingWithoutGrid(): Node {
         // returns a deep copy of the svg element.
