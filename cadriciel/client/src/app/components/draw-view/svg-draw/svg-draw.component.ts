@@ -94,15 +94,12 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        //this.initCanvas()
-
         this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
         this.initGridVisibility();
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
-        const mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);
+        const mouseHandler = new MouseHandlerService(this.svg.nativeElement);
 
-        // Create all the tools
-        //console.log(this.render);
+        // create all the tools
         const tc = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
 
         const pencil = tc.CreatePencil(true, this.interaction, this.colorPick);
@@ -122,7 +119,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.svg.nativeElement,
             this.workingSpace,
         );
-        const pipette = tc.CreatePipette(false, this.pixelMatrixRef.nativeElement, this.colorPick);
+        const pipette = tc.CreatePipette(false, this.pixelMatrixRef.nativeElement, this.interaction, this.colorPick);
 
         this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
         this.toolsContainer.set('Rectangle', rect);

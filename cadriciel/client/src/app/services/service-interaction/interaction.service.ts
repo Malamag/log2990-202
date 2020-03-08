@@ -21,8 +21,8 @@ export class InteractionService {
     $toolsAttributes = this.toolsAttributes.asObservable();
     lineAttributes = new Subject<LineAttributes>();
     $lineAttributes = this.lineAttributes.asObservable();
-    aerosolAttributes = new Subject<AerosolAttributes>()
-    $aerosolAttributes = this.aerosolAttributes.asObservable()
+    aerosolAttributes = new Subject<AerosolAttributes>();
+    $aerosolAttributes = this.aerosolAttributes.asObservable();
     cancelTools = new Subject<boolean>();
     $cancelToolsObs = this.cancelTools.asObservable();
 
@@ -37,6 +37,9 @@ export class InteractionService {
 
     convertSvg2Canvas = new Subject<boolean>();
     $convertSvg2Canvas = this.convertSvg2Canvas.asObservable();
+
+    previewColor = new Subject<string>();
+    $previewColor = this.previewColor.asObservable();
 
     constructor() {}
 
@@ -57,7 +60,7 @@ export class InteractionService {
     }
 
     emitAerosolAttributes(attr: AerosolAttributes) {
-        this.aerosolAttributes.next(attr)
+        this.aerosolAttributes.next(attr);
     }
 
     emitCancel(sig: boolean) {
@@ -86,5 +89,9 @@ export class InteractionService {
 
     emitSvgCanvasConversion(toCanvas: boolean) {
         this.convertSvg2Canvas.next(toCanvas);
+    }
+
+    emitPreviewColor(colorToEmit: string) {
+        this.previewColor.next(colorToEmit);
     }
 }

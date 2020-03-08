@@ -18,6 +18,8 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
     junctionRadius: number;
     selectedTool: String;
     tools: string[] = [];
+
+    pipettePreviewFill: string;
     constructor(public interaction: InteractionService) {
         this.tools = ['Rectangle', 'Ligne', 'Pinceau', 'Crayon', 'Sélection de couleur', 'Ellipse', 'Polygone', 'Pipette', 'Aérosol'];
         this.lineThickness = 5; // 5px thick line
@@ -31,7 +33,7 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
         this.plotType = 2; // type 2 --> filled with border
         this.junction = true; // with junction dots of 6 px size
         this.junctionRadius = 6;
-        this.selectedTool = 'Pencil';
+        this.selectedTool = 'Crayon';
     }
 
     ngOnInit() {
@@ -47,6 +49,10 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
             }
             const CALL_CONVERSION: boolean = tool === 'Pipette';
             this.interaction.emitSvgCanvasConversion(CALL_CONVERSION);
+        });
+
+        this.interaction.$previewColor.subscribe((color: string) => {
+            this.pipettePreviewFill = color; // updates the preview box for the pipette tool
         });
     }
     ngAfterViewInit() {

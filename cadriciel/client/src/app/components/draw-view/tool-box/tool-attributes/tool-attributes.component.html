@@ -25,6 +25,19 @@
 
     <div *ngSwitchCase="'Pipette'">
         <label>Pipette de couleur</label>
+        <br />
+        <br />
+        <svg id="pipette-prev" width="100%">
+            <rect
+                x="25%"
+                width="100px"
+                height="100px"
+                [style.fill]="pipettePreviewFill"
+                stroke-width="3"
+                style="stroke-opacity: .5;"
+                stroke="white"
+            />
+        </svg>
     </div>
 
     <!-- for the prencil-->

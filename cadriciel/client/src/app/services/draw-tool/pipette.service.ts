@@ -3,6 +3,7 @@ import { InputObserver } from './input-observer';
 
 import { Point } from './point';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
+import { InteractionService } from '../service-interaction/interaction.service';
 
 @Injectable({
     providedIn: 'root',
@@ -10,14 +11,16 @@ import { ColorPickingService } from '../colorPicker/color-picking.service';
 export class PipetteService extends InputObserver {
     htmlCanvasEl: HTMLCanvasElement;
     cPick: ColorPickingService;
+    interact: InteractionService;
     clickedColor: Uint8ClampedArray | number[];
     colorStr: string = '';
     private canvasContext: CanvasRenderingContext2D | null;
 
-    constructor(selected: boolean, htmlCanvasEl: HTMLCanvasElement, colorPicking: ColorPickingService) {
+    constructor(selected: boolean, htmlCanvasEl: HTMLCanvasElement, interaction: InteractionService, colorPicking: ColorPickingService) {
         super(selected);
         this.htmlCanvasEl = htmlCanvasEl;
         this.cPick = colorPicking;
+        this.interact = interaction;
         this.canvasContext = this.htmlCanvasEl.getContext('2d');
     }
 
@@ -29,11 +32,8 @@ export class PipetteService extends InputObserver {
     }
 
     move(position: Point): void {
-        /**
-         * Could refresh a small color box
-         */
         this.imgDataConversion(position);
-        //emits to a small preview box
+        this.interact.emitPreviewColor(this.colorStr); //emits to a small preview box in toolsAttributes
     }
 
     private imgDataConversion(position: Point) {
