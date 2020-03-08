@@ -93,6 +93,7 @@ export class AerosolService extends DrawingTool{
       if (insideWorkspace) {
         // add everything to the canvas
         this.updateDrawing();
+        this.sub.unsubscribe();
       }
     }
   }
@@ -149,15 +150,15 @@ export class AerosolService extends DrawingTool{
   generatePoint() {
     if(this.isDown){
       for (let j = 1; j < 5 && this.isDown ; j++) {
-      let r = (this.attr.diameter / 2) * Math.sqrt(Math.random());
-      let angle = Math.random() * 2 * Math.PI;
-      for (let i = 1; i < 5 ; i++) {
-        let x = this.lastPoint.x + r * Math.cos(angle*i);
-        let y = this.lastPoint.y + r * Math.sin(angle*i);
-        this.points.push(new Point(x,y));
-      }  
+        let r = (this.attr.diameter / 2) * Math.sqrt(Math.random());
+        let angle = Math.random() * 2 * Math.PI;
+        for (let i = 1; i < 5 ; i++) {
+          let x = this.lastPoint.x + r * Math.cos(angle*i);
+          let y = this.lastPoint.y + r * Math.sin(angle*i);
+          this.points.push(new Point(x,y));
+        }  
+      }
     }
   }
-}
 
 }
