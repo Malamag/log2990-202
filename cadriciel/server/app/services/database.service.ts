@@ -118,11 +118,22 @@ export class DatabaseService {
         })
     }
     async saveImage(image : Image) {
-        let jsonObj = {id : image.id, svgElement : image.svgElement };
-        fs.writeFileSync('../data.json',JSON.stringify(jsonObj));
-        let data = fs.readFileSync('../data.json');
-        let images = JSON.parse(data.toString());
-        console.log(images);
-        //console.log(image.svgElement);
+        fs.readFile('../data.json', function (err, data) {
+            // Convert string (old data) to JSON
+            let drawingsList = JSON.parse(data.toString());
+            let jsonObj = {id : image.id, svgElement : image.svgElement };
+            
+            // Add new data to my drawings list
+            drawingsList.drawings.push(jsonObj);
+         
+            // Convert JSON to string
+            let listToJson= JSON.stringify(drawingsList);
+            //console.log(listToJson);
+            // Replace all data in the data.json with new ones
+            fs.writeFile("../data.json", listToJson, function(err){
+              if (err) throw err;
+              console.log('The "data to append" was appended to file!');
+            });
+          });
     }
 }
