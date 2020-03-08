@@ -79,12 +79,12 @@ export class SaveFormComponent implements OnInit {
   saveImage() {
     let id : string = new Date().getUTCMilliseconds() + '';
     let doodleString = this.doodleFetch.getDrawingStringNoGrid();
-    doodleString = doodleString.replace('name="canvas"', '#canvas');
-    doodleString = doodleString.replace('id="drawingSpace"', '#drawingSpace');
-    doodleString = doodleString.replace('id="grid"', '#grid');
-    doodleString = doodleString.replace('id="frame"', '#frame');
-    doodleString = doodleString.replace('id="inPrgress"', '#inPrgress');
-    doodleString = doodleString.replace('id = "selectedItems"', '#selectedItems');
+    doodleString = doodleString.replace('name="canvas"', 'name="canvas" #canvas');
+    doodleString = doodleString.replace('id="drawingSpace"', 'id="drawingSpace" #drawingSpace');
+    doodleString = doodleString.replace('id="grid"', 'id="grid" #grid');
+    doodleString = doodleString.replace('id="frame"', 'id="frame" #frame');
+    doodleString = doodleString.replace('id="inPrgress"', 'id="inPrgress" #inPrgress');
+    doodleString = doodleString.replace('id="selectedItems"', 'id="selectedItems" #selectedItems');
     let image : Image = {id : id,svgElement : doodleString};
     this.index.saveImage(image);
     this.winService.closeWindow();

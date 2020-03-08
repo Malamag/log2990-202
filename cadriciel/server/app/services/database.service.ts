@@ -122,7 +122,7 @@ export class DatabaseService {
             // Convert string (old data) to JSON
             let drawingsList = JSON.parse(data.toString());
             let jsonObj = {id : image.id, svgElement : image.svgElement };
-            
+            console.log(jsonObj.svgElement);
             // Add new data to my drawings list
             drawingsList.drawings.push(jsonObj);
          
