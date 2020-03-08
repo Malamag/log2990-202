@@ -5,7 +5,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { IndexService } from 'src/app/services/index/index.service';
-import { Image } from '../../image';
+import { ImageData } from '../../imageData';
 
 
 //import { ImageData } from '../../imageData';
@@ -17,8 +17,8 @@ import { Image } from '../../image';
 
 export class SaveFormComponent implements OnInit {
   saveForm: FormGroup;
-  constructor(private winService: ModalWindowService, private formBuilder: FormBuilder, private doodleFetch: DoodleFetchService,private index: IndexService) { }
-  readonly LabelsNumberCap :number = 20;
+  constructor(private winService: ModalWindowService, private formBuilder: FormBuilder, private doodleFetch: DoodleFetchService, private index: IndexService) { }
+  readonly LabelsNumberCap: number = 20;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   labels: string[];
   selectable: boolean;
@@ -38,13 +38,13 @@ export class SaveFormComponent implements OnInit {
     this.containsSymbols = false;
     this.labelsIsFull = false;
     this.doodleFetch.askForDoodle();
-        this.cWidth = this.doodleFetch.widthAttr;
-        this.cHeigth = this.doodleFetch.heightAttr;
+    this.cWidth = this.doodleFetch.widthAttr;
+    this.cHeigth = this.doodleFetch.heightAttr;
   }
 
   ngAfterContentInit() {
     this.doodle = this.doodleFetch.getDrawingWithoutGrid();
-}
+  }
 
 
   initForm() {
@@ -58,7 +58,7 @@ export class SaveFormComponent implements OnInit {
     const value = event.value;
     this.containsSymbols = this.format.test(event.value);
     this.labelsIsFull = this.labels.length >= this.LabelsNumberCap;
-    
+
     if ((value || '').trim() && !this.containsSymbols && !this.labelsIsFull) {
       this.labels.push(value.trim());
     }
@@ -77,7 +77,7 @@ export class SaveFormComponent implements OnInit {
     this.labelsIsFull = this.labels.length >= this.LabelsNumberCap;
   }
   saveImage() {
-    let id : string = new Date().getUTCMilliseconds() + '';
+    let id: string = new Date().getUTCMilliseconds() + '';
     let doodleString = this.doodleFetch.getDrawingStringNoGrid();
     doodleString = doodleString.replace('name="canvas"', 'name="canvas" #canvas');
     doodleString = doodleString.replace('id="drawingSpace"', 'id="drawingSpace" #drawingSpace');
@@ -85,8 +85,8 @@ export class SaveFormComponent implements OnInit {
     doodleString = doodleString.replace('id="frame"', 'id="frame" #frame');
     doodleString = doodleString.replace('id="inPrgress"', 'id="inPrgress" #inPrgress');
     doodleString = doodleString.replace('id="selectedItems"', 'id="selectedItems" #selectedItems');
-    let image : Image = {id : id,svgElement : doodleString};
-    this.index.saveImage(image);
+    let imageData: ImageData = { id: id, name: "TODO", tags: this.labels, svgElement: doodleString };
+    this.index.saveImage(imageData);
     this.winService.closeWindow();
   }
   closeForm() {

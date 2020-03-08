@@ -1,7 +1,7 @@
 
 export interface ImageData {
-    id : string;
-    svgElement : Node,
-    name : string,
-    tags : string[]
+    id: string;
+    svgElement: string,
+    name: string,
+    tags: string[]
 }
