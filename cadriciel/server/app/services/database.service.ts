@@ -94,6 +94,21 @@ export class DatabaseService {
     }
 
     async modifyImage(imageData: ImageData): Promise<void> {
+        fs.readFile('../data.json', function (err, data) {
+            // Convert string (old data) to JSON
+            let drawingsList = JSON.parse(data.toString());
+            let jsonObj = { id: imageData.id, svgElement: imageData.svgElement };
+            drawingsList.drawings = drawingsList.drawings.filter((data: Image) => { return data.id !== imageData.id });
+            // Add new data to my drawings list
+            drawingsList.drawings.push(jsonObj);
+            // Convert JSON to string
+            let listToJson = JSON.stringify(drawingsList);
+            // Replace all data in the data.json with new ones
+            fs.writeFile("../data.json", listToJson, function (err) {
+                if (err) throw err;
+                console.log('The "data to append" was appended to file!');
+            });
+        });
         let filterQuery: FilterQuery<ImageData> = { id: imageData.id };
         let udateQuery: UpdateQuery<ImageData> = {
             $set: {
