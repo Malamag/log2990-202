@@ -3,7 +3,9 @@ import { Component } from '@angular/core';
 import { CanvasSwitchDirective } from './canvas-switch.directive';
 
 @Component({
-    template: `<canvas #testRef></canvas><svg appCanvasSwitch [appCanvasRef]="testRef"><rect width="25" height="50" fill="blue"></svg>`,
+    template: `
+        <canvas #testRef></canvas><svg appCanvasSwitch [appCanvasRef]="testRef"><rect width="25" height="50" fill="blue" /></svg>
+    `,
 })
 class TestCanvasSwitchComponent {}
 
