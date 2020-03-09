@@ -10,6 +10,8 @@ import { PolygonService } from './polygon.service';
 import { SelectionService } from './selection.service';
 import { PipetteService } from './pipette.service';
 import { AerosolService } from './aerosol.service';
+import { EraserService } from './eraser.service';
+import { ColorEditorService } from './color-editor.service';
 
 @Injectable({
     providedIn: 'root',
@@ -58,11 +60,31 @@ export class ToolCreator {
         render: Renderer2,
         selectedRef: HTMLElement,
         canvas: HTMLElement,
-        workingSpace: HTMLElement,
     ): SelectionService {
-        return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick, render, selectedRef, canvas, workingSpace);
+        return new SelectionService(this.inProgress, this.drawing, selected, interaction, colorPick, render, selectedRef, canvas);
     }
 
+    CreateEraser(
+        selected: boolean,
+        interaction: InteractionService,
+        colorPick: ColorPickingService,
+        render: Renderer2,
+        selectedRef: HTMLElement,
+        canvas: HTMLElement,
+    ): EraserService {
+        return new EraserService(this.inProgress, this.drawing, selected, interaction, colorPick, render, selectedRef, canvas);
+    }
+
+    CreateColorEditor(
+        selected: boolean,
+        interaction: InteractionService,
+        colorPick: ColorPickingService,
+        render: Renderer2,
+        selectedRef: HTMLElement,
+        canvas: HTMLElement,
+    ): ColorEditorService {
+        return new ColorEditorService(this.inProgress, this.drawing, selected, interaction, colorPick, render, selectedRef, canvas);
+    }
     CreatePipette(selected: boolean, canvas: HTMLCanvasElement, interaction: InteractionService, colorPick: ColorPickingService): PipetteService {
         return new PipetteService(selected, canvas, interaction, colorPick);
     }

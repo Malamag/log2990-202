@@ -51,15 +51,13 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     workingSpace: HTMLElement;
 
     ngOnInit() {
-        this.interaction.$refObs.subscribe(ref => {
-            this.workingSpace = ref.nativeElement;
-        });
         this.initCanvas();
     }
 
     closeTools(map: Map<string, DrawingTool>) {
         map.forEach(el => {
             el.selected = false;
+            el.cancel();
         });
     }
 
@@ -117,7 +115,22 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.render,
             this.selectedItems.nativeElement,
             this.svg.nativeElement,
-            this.workingSpace,
+        );
+        const eraser = tc.CreateEraser(
+            false,
+            this.interaction,
+            this.colorPick,
+            this.render,
+            this.selectedItems.nativeElement,
+            this.svg.nativeElement,
+        );
+        const colorEditor = tc.CreateColorEditor(
+            false,
+            this.interaction,
+            this.colorPick,
+            this.render,
+            this.selectedItems.nativeElement,
+            this.svg.nativeElement,
         );
         const pipette = tc.CreatePipette(false, this.pixelMatrixRef.nativeElement, this.interaction, this.colorPick);
 
@@ -129,7 +142,9 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Aérosol', aerosol);
         this.toolsContainer.set('Ellipse', ellipse);
         this.toolsContainer.set('Polygone', polygon);
-        this.toolsContainer.set('Selection', selection);
+        this.toolsContainer.set('Sélectionner', selection);
+        this.toolsContainer.set('Efface', eraser);
+        this.toolsContainer.set('ApplicateurCouleur', colorEditor);
         this.toolsContainer.set('Pipette', pipette);
 
         this.interaction.$cancelToolsObs.subscribe(sig => {
@@ -141,6 +156,8 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             if (toolName === 'Annuler' || toolName === 'Refaire') {
                 this.interactionToolsContainer.get('AnnulerRefaire').apply(toolName);
             } else if (this.toolsContainer.get(toolName)) {
+                let event = new Event('toolChange');
+                window.dispatchEvent(event);
                 this.closeTools(this.toolsContainer);
                 this.toolsContainer.get(toolName).selected = true;
             }
@@ -169,11 +186,18 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             mouseHandler.move(e);
         });
         window.addEventListener('mousedown', function(e) {
+            e.preventDefault();
             mouseHandler.down(e);
         });
+
         window.addEventListener('mouseup', function(e) {
             mouseHandler.up(e);
         });
+
+        // Prevent right-click menu
+        window.oncontextmenu = (e: MouseEvent) => {
+            e.preventDefault();
+        };
 
         // Keyboard listeners
         window.addEventListener('keydown', function(e) {

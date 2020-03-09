@@ -68,7 +68,6 @@ export class PipetteService extends InputObserver {
         this.cPick.updateDisplay(color);
     }
 
-    update(): void {}
     doubleClick(): void {} // no behavior defned for the methods below
     goingOutsideCanvas(): void {}
     goingInsideCanvas(): void {}

@@ -9,6 +9,8 @@ import { Injectable } from '@angular/core';
     providedIn: 'root',
 })
 export class RectangleService extends ShapeService {
+    updateDown(keyboard: KeyboardHandlerService): void {}
+    updateUp(keyCode: number): void {}
     public isSquare: boolean;
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {

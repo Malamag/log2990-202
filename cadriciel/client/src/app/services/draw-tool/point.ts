@@ -21,4 +21,10 @@ export class Point {
 
     return !(oneIsOnTheSide || oneIsAbove);
   }
+
+  static insideRectangle(p:Point, tl:Point, br:Point){
+    let downRight = p.x > tl.x && p.y > tl.y;
+    let upLeft = p.x < br.x && p.y < br.y;
+    return downRight && upLeft;
+  }
 }

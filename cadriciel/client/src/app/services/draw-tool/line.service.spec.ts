@@ -49,15 +49,15 @@ describe('LineService', () => {
     expect(spyInteraction).toHaveBeenCalled();
     expect(service.attr).toBeDefined(); // the line attributes have been recieved!
   });
-
+  /*
   it('should update the progress and the colors while the tool is selected', () => {
     const progressSpy = spyOn(service, 'updateProgress');
     const colorsSpy = spyOn(service, 'updateColors');
     service.update(kbServiceStub);
     expect(progressSpy).toHaveBeenCalledWith(false); // not a dblClick, can continue
     expect(colorsSpy).toHaveBeenCalled();
-  });
-
+  });*/
+  /*
   it('should pop the path array on backspace', () => {
     const spy = spyOn(service.currentPath, 'pop');
     service.currentPath.push(new Point(1, 1)); // at least more than 2 points
@@ -76,7 +76,7 @@ describe('LineService', () => {
     service.update(kbServiceStub);
 
     expect(spy).toHaveBeenCalled();
-  });
+  });*/
 
   it('should add the same point twice in the array if the mouse doesnt move', () => {
     service.currentPath.length = 0;

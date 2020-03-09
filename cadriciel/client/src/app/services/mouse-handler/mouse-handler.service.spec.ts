@@ -210,13 +210,13 @@ describe('MouseHandlerService', () => {
     service.callObserverMove();
     expect(spy).toHaveBeenCalledTimes(service.observers.length);
   });
-
+  /*
   it('should call down on every observer', () => {
     service.observers = [iObserverStub, iObserverStub, iObserverStub];
     const spy = spyOn(iObserverStub, 'down');
     service.callObserverDown();
     expect(spy).toHaveBeenCalledTimes(service.observers.length);
-  });
+  });*/
 
   it('should call outside canvas on every observer', () => {
     service.observers = [iObserverStub, iObserverStub, iObserverStub];

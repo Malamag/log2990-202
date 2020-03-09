@@ -11,6 +11,7 @@ export class KeyboardHandlerService {
     shiftDown: boolean;
     toolObservers: InputObserver[];
     toolshortcuts: number[];
+    released: boolean;
 
     // viewObservers:any[];
 
@@ -18,15 +19,22 @@ export class KeyboardHandlerService {
         this.keyString = '';
         this.keyCode = -1;
         this.toolObservers = [];
+        this.released = false;
     }
 
     addToolObserver(newObserver: InputObserver) {
         this.toolObservers.push(newObserver);
     }
 
-    updateToolObservers() {
+    updateDownToolObservers() {
         this.toolObservers.forEach(element => {
-            element.update(this);
+            element.updateDown(this);
+        });
+    }
+
+    updateUpToolObservers(keyCode: number) {
+        this.toolObservers.forEach(element => {
+            element.updateUp(keyCode);
         });
     }
 
@@ -41,17 +49,27 @@ export class KeyboardHandlerService {
     }
 
     logkey(e: KeyboardEvent) {
+        this.released = false;
+
         this.keyString = e.key;
         this.keyCode = e.keyCode;
         this.ctrlDown = e.ctrlKey;
         this.shiftDown = e.shiftKey;
         // this.checkForToolChange();
-        this.updateToolObservers();
+        this.updateDownToolObservers();
     }
 
     reset(e: KeyboardEvent) {
+        // update on key release
+
+        this.released = true;
+
+        this.updateUpToolObservers(e.keyCode);
+
         const SHIFT_CODE = 16;
         const CTRL_CODE = 17;
+
+        this.updateDownToolObservers();
 
         if (e.keyCode == CTRL_CODE) {
             this.ctrlDown = false;
@@ -61,6 +79,7 @@ export class KeyboardHandlerService {
         }
         this.keyString = '';
         this.keyCode = -1; // back to invalid keycode (default)
-        this.updateToolObservers();
+
+        this.updateDownToolObservers();
     }
 }
