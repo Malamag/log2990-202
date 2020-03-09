@@ -7,7 +7,7 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 
 export class FakeInteractionService extends InteractionService{} 
 
-fdescribe('SelectionService', () => {
+describe('SelectionService', () => {
     let service: SelectionService
     let render: Renderer2;
     let select: any
