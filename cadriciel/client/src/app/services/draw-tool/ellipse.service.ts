@@ -20,7 +20,7 @@ export class EllipseService extends ShapeService {
     }
 
     // updating on key change
-    update(keyboard: KeyboardHandlerService) {
+    updateDown(keyboard: KeyboardHandlerService) {
         // rectangle becomes square when shift is pressed
         this.isSquare = keyboard.shiftDown;
 

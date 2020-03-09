@@ -9,7 +9,6 @@ import { Injectable } from '@angular/core';
     providedIn: 'root',
 })
 export class RectangleService extends ShapeService {
-    updateDown(keyboard: KeyboardHandlerService): void {}
     updateUp(keyCode: number): void {}
     public isSquare: boolean;
 
@@ -18,7 +17,7 @@ export class RectangleService extends ShapeService {
         this.isSquare = false;
     }
     // updating on key change
-    update(keyboard: KeyboardHandlerService) {
+    updateDown(keyboard: KeyboardHandlerService) {
         // rectangle becomes square when shift is pressed
         this.isSquare = keyboard.shiftDown;
 
