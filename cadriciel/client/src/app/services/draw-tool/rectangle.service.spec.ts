@@ -45,11 +45,11 @@ describe('RectangleService', () => {
     });
 
     it('should set the attributes in the subscription', () => {
-        service.interaction.emitFormsAttributes({plotType: 0, lineThickness: 0, numberOfCorners: 0});
+        service.interaction.emitFormsAttributes({ plotType: 0, lineThickness: 0, numberOfCorners: 0 });
         const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
         service.updateAttributes();
         expect(spyInteraction).toHaveBeenCalled();
-        expect(service.attr).toBeDefined();
+        expect(service['attr']).toBeDefined();
     });
 
     /*it('should update progress on move', () => {
@@ -111,7 +111,7 @@ describe('RectangleService', () => {
 
     it('should create a rectangle with the selected border thickness', () => {
         const thick = 1;
-        service.attr.lineThickness = thick; // simulated border thickness
+        service['attr'].lineThickness = thick; // simulated border thickness
         const rect = service.createPath(ptArr);
         const expTick = `stroke-width="${thick}"`;
         expect(rect).toContain(expTick);
@@ -136,7 +136,7 @@ describe('RectangleService', () => {
 
     it('should create a rectangle filled with the selected color', () => {
         const color = '#ffffff';
-        service.chosenColor = {primColor: color, secColor: color, backColor: color}; // both prim. and sec.
+        service.chosenColor = { primColor: color, secColor: color, backColor: color }; // both prim. and sec.
 
         const rect = service.createPath(ptArr);
         expect(rect).toContain(`fill="${color}"`);
@@ -146,18 +146,18 @@ describe('RectangleService', () => {
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
         const rect = service.createPath(ptArr);
 
         expect(rect).toContain(`stroke="${sec}"`);
     });
 
     it('should create only an outlined rectangle on plottype = 0', () => {
-        service.attr.plotType = 0; // init the plot type
+        service['attr'].plotType = 0; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
 
         const rect = service.createPath(ptArr);
 
@@ -167,11 +167,11 @@ describe('RectangleService', () => {
     });
 
     it('should create only a filled rectangle on plottype = 1', () => {
-        service.attr.plotType = 1; // init the plot type
+        service['attr'].plotType = 1; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
 
         const rect = service.createPath(ptArr);
 
@@ -181,11 +181,11 @@ describe('RectangleService', () => {
     });
 
     it('should create a filled and outlined rectangle on plottype = 2', () => {
-        service.attr.plotType = 2; // init the plot type
+        service['attr'].plotType = 2; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
 
         const rect = service.createPath(ptArr);
 

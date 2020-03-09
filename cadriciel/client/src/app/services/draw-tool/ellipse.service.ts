@@ -24,7 +24,7 @@ export class EllipseService extends ShapeService {
         // rectangle becomes square when shift is pressed
         this.isSquare = keyboard.shiftDown;
 
-        super.update(keyboard);
+        super.updateDown(keyboard);
     }
 
     setdimensions(p: Point[]) {
