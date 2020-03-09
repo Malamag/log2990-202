@@ -31,7 +31,6 @@ export class CanvasSwitchDirective implements AfterViewInit {
             this.imageToConvert = this.element.nativeElement;
             if (toCanvas) {
                 setTimeout(() => {
-                    console.log(this.imageToConvert);
                     this.exService.exportInCanvas(this.imageToConvert, this.canvas);
                 }, 1); // gives enough time for the image to load in the exportInCanvas method
             }
