@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Point } from './point';
 
-fdescribe('Point', () => {
+describe('Point', () => {
     let point : Point
     beforeEach(() => {
         TestBed.configureTestingModule({});
@@ -15,9 +15,11 @@ fdescribe('Point', () => {
     it('should return the expected distance', () => {
         const p1 = new Point(0 , 0);
         const p2 = new Point(10 , 10);
+        const sqrtSpy = spyOn(Math, 'sqrt')
         const expectedResult = Math.sqrt(200);
         const result = Point.distance(p1, p2);
         expect(result).toEqual(expectedResult);
+        expect(sqrtSpy).toHaveBeenCalled()
     })
 
     it('should return a new point with the expected values', ()=> {

@@ -7,7 +7,7 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 
 export class FakeInteractionService extends InteractionService{} 
 
-describe('SelectionService', () => {
+fdescribe('SelectionService', () => {
     let service: SelectionService
     let render: Renderer2;
     let select: any
@@ -272,13 +272,24 @@ describe('SelectionService', () => {
         let ret = service.updateBoundingBox()
         expect(ret).toBe('')
     })
+
+
     it('should call set style of renderer', () => {
-        service.selectedItems = [true, true, true, true]
+        service.selectedItems = [true, true, false, true]
         const styleSpy = jasmine.createSpy('setStyle')
+        service.drawing.innerHTML = '<div> hello world </div>';
         service.moveSelection(10, 10);
         expect(styleSpy).toHaveBeenCalled()
     })
 
+    it('should select items', () => {
+        service.drawing.innerHTML = '<div> hello world </div>';
+        service.inverted = true;
+        Point.rectOverlap = jasmine.createSpy().and.returnValue(true);
+        service.retrieveItemsInRect();
+        expect(service.selectedItems[0]).toBeTruthy()
+        expect(service.invertedItems[0]).toBeTruthy()
+    })
     it('should return an empty string', () => {
         const point = new Point(0 , 0);
         const pointContainer = [point];

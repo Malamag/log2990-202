@@ -441,7 +441,7 @@ export class SelectionService extends ShapeService {
       // item is inside the selection rectangle -> select/unselect accordingly
       if (inside) {
         if (this.inverted) {
-          this.selectedItems[i] = this.invertedItems[i] == undefined ? true : this.invertedItems[i];
+          this.selectedItems[i] = this.invertedItems[i] === undefined ? true : this.invertedItems[i];
         } else {
           this.selectedItems[i] = true;
           this.invertedItems[i] = false;
@@ -450,7 +450,7 @@ export class SelectionService extends ShapeService {
       // item is outside the selection rectangle -> select/unselect accordingly
       else {
         if (this.inverted) {
-          this.selectedItems[i] = this.invertedItems[i] == undefined ? false : !this.invertedItems[i];
+          this.selectedItems[i] = this.invertedItems[i] === undefined ? false : !this.invertedItems[i];
         } else {
           this.selectedItems[i] = false;
           this.invertedItems[i] = true;
