@@ -21,7 +21,18 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
 
     pipettePreviewFill: string;
     constructor(public interaction: InteractionService) {
-        this.tools = ['Rectangle', 'Ligne', 'Pinceau', 'Crayon', 'Sélection de couleur', 'Ellipse', 'Polygone', 'Pipette', 'Aérosol'];
+        this.tools = [
+            'Rectangle',
+            'Ligne',
+            'Pinceau',
+            'Crayon',
+            'Sélection de couleur',
+            'Ellipse',
+            'Polygone',
+            'Pipette',
+            'Aérosol',
+            'ApplicateurCouleur',
+        ];
         this.lineThickness = 5; // 5px thick line
         this.texture = 0; // blur texture
 

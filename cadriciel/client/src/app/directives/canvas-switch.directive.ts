@@ -28,9 +28,13 @@ export class CanvasSwitchDirective implements AfterViewInit {
         this.itService.$convertSvg2Canvas.subscribe((toCanvas: boolean) => {
             console.log('signal recieved with ' + toCanvas);
             // no name and type set. as optionnal attributes. We dont want to download it
+
             if (toCanvas) {
-                this.exService.exportInCanvas(this.imageToConvert, this.canvas);
+                setTimeout(() => {
+                    this.exService.exportInCanvas(this.imageToConvert, this.canvas);
+                }, 1); // gives enough time for the image to load in the exportInCanvas method
             }
+
             this.showCanvas = toCanvas;
             this.toggleSvgCanvas();
         });

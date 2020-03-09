@@ -37,6 +37,7 @@ export class InteractionService {
 
     convertSvg2Canvas = new Subject<boolean>();
     $convertSvg2Canvas = this.convertSvg2Canvas.asObservable();
+    isCanvas: boolean = false;
 
     previewColor = new Subject<string>();
     $previewColor = this.previewColor.asObservable();
@@ -88,6 +89,7 @@ export class InteractionService {
     }
 
     emitSvgCanvasConversion(toCanvas: boolean) {
+        this.isCanvas = toCanvas;
         this.convertSvg2Canvas.next(toCanvas);
     }
 
