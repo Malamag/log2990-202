@@ -84,9 +84,13 @@ export class OptionBarComponent {
     }
 
     openNewDrawForm() {
+        const OLD_STATE: boolean = this.interaction.isCanvas;
+        this.interaction.emitSvgCanvasConversion(false);
         if (window.confirm('Un dessin est déjà en cours. Voulez-vous continuer?')) {
             this.winService.openWindow(NewDrawComponent);
+            return;
         }
+        this.interaction.emitSvgCanvasConversion(OLD_STATE);
     }
 
     openUserGuide() {
@@ -94,27 +98,47 @@ export class OptionBarComponent {
     }
 
     openExportForm() {
+        const OPENING_WAIT: number = 5; // waiting for the window to be loaded before returning to oldstate
+        const OLD_STATE: boolean = this.interaction.isCanvas;
+        console.log(OLD_STATE);
+        this.interaction.emitSvgCanvasConversion(false);
         this.winService.openWindow(ExportFormComponent);
+        setTimeout(() => {
+            this.interaction.emitSvgCanvasConversion(OLD_STATE);
+        }, OPENING_WAIT);
     }
 
     sendSigKill() {
         this.interaction.emitCancel(true);
     }
     openGallery() {
+        const OLD_STATE: boolean = this.interaction.isCanvas;
+        this.interaction.emitSvgCanvasConversion(false);
         if (confirm('Un dessin est déjà en cours. Voulez-vous continuer?')) {
             this.winService.openWindow(GalleryComponent);
+            return;
         }
+        this.interaction.emitSvgCanvasConversion(OLD_STATE);
     }
     toggleGrid() {
+        const OLD_STATE: boolean = this.interaction.isCanvas;
+        this.interaction.emitSvgCanvasConversion(false);
         this.gridSelected = !this.gridSelected;
         this.gridService.toggleGridVisibility(this.gridSelected);
+        this.interaction.emitSvgCanvasConversion(OLD_STATE);
     }
 
     updateSpacing() {
+        const OLD_STATE: boolean = this.interaction.isCanvas;
+        this.interaction.emitSvgCanvasConversion(false);
         this.gridService.updateSpacing(this.stepVal);
+        this.interaction.emitSvgCanvasConversion(OLD_STATE);
     }
 
     updateAlpha() {
+        const OLD_STATE: boolean = this.interaction.isCanvas;
+        this.interaction.emitSvgCanvasConversion(false);
         this.gridService.updateTransparency(this.alphaVal);
+        this.interaction.emitSvgCanvasConversion(OLD_STATE);
     }
 }
