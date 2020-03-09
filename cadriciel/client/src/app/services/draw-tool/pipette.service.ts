@@ -36,7 +36,7 @@ export class PipetteService extends InputObserver {
         this.interact.emitPreviewColor(this.colorStr); //emits to a small preview box in toolsAttributes
     }
 
-    private imgDataConversion(position: Point) {
+    imgDataConversion(position: Point) {
         if (this.canvasContext) {
             this.clickedColor = this.canvasContext.getImageData(position.x, position.y, 1, 1).data;
             this.colorStr = this.buildImageData();
