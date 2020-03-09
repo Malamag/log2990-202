@@ -229,8 +229,8 @@ export class EraserService extends DrawingTool {
         let offset = 0;
         if (width) {
           offset = +width;
-        }
-
+        } // only to be able to run the tests 
+        else {offset = offset}
         //let dim2 = 3 + offset;
 
         if (secondChild.classList.contains("clone") || secondChild.tagName == "filter") { continue; }

@@ -313,38 +313,39 @@ export class SelectionService extends ShapeService {
   move(position: Point) {
 
     // only if the selectionTool is currently affecting the canvas
-    if (this.isDown) {
-
-      if (this.movingSelection) {
-        this.movedSelectionOnce = true;
-
-        let prevMousePosition = this.currentPath[this.currentPath.length - 1];
-        let offset = new Point(position.x - prevMousePosition.x, position.y - prevMousePosition.y);
-
-        this.moveSelection(offset.x, offset.y);
-      }
-
-      // save mouse position
-      this.currentPath.push(position);
-
-      // if we're not trying to move an existing selection, we want to make a selection rectangle
-      if (!this.movingSelection) {
-        // check for small offset to make single item selection more permissive
-        if (Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length - 1]) > MIN_OFFSET_FOR_SELECTION) {
-          // only on a normal selection
-          if (!this.inverted) {
-            // we first need to empty the current selection
-            this.selectedItems = [];
-          }
-          // get every item that intersects with the selection rectangle
-          this.retrieveItemsInRect();
-        }
-
-        this.updateProgress();
-      }
-
-      this.selectedRef.innerHTML = this.updateBoundingBox();
+    if (!this.isDown) {
+      return;
     }
+
+    if (this.movingSelection) {
+      this.movedSelectionOnce = true;
+
+      let prevMousePosition = this.currentPath[this.currentPath.length - 1];
+      let offset = new Point(position.x - prevMousePosition.x, position.y - prevMousePosition.y);
+
+      this.moveSelection(offset.x, offset.y);
+    }
+
+    // save mouse position
+    this.currentPath.push(position);
+
+    // if we're not trying to move an existing selection, we want to make a selection rectangle
+    if (!this.movingSelection) {
+      // check for small offset to make single item selection more permissive
+      if (Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length - 1]) > MIN_OFFSET_FOR_SELECTION) {
+        // only on a normal selection
+        if (!this.inverted) {
+          // we first need to empty the current selection
+          this.selectedItems = [];
+        }
+        // get every item that intersects with the selection rectangle
+        this.retrieveItemsInRect();
+      }
+
+      this.updateProgress();
+    }
+
+    this.selectedRef.innerHTML = this.updateBoundingBox();
   }
 
   updateBoundingBox() {
