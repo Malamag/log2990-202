@@ -16,14 +16,14 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class IndexService {
-  private readonly BASE_URL: string = 'http://localhost:3000/database/Images/';
+  private readonly DATABASE_URL: string = 'http://localhost:3000/database/Images/';
   constructor(private http: HttpClient) {
   }
 
 
 
   basicGet(): Observable<Message> {
-    return this.http.get<Message>(this.BASE_URL).pipe(catchError(this.handleError<Message>('basicGet')));
+    return this.http.get<Message>(this.DATABASE_URL).pipe(catchError(this.handleError<Message>('basicGet')));
   }
   private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
     return (error: Error): Observable<T> => {
@@ -31,23 +31,18 @@ export class IndexService {
     };
   }
   getAllImages(): Observable<ImageData[]> {
-    return this.http.get<ImageData[]>(this.BASE_URL);
+    return this.http.get<ImageData[]>(this.DATABASE_URL);
   }
-  getImageById(imageId: string): ImageData {
-    let ret: ImageData = { id: '', name: '', tags: [], svgElement: "" };
-    this.http.get<ImageData>(this.BASE_URL + imageId).subscribe((data) => {
-      ret = { id: data.id, name: data.name, tags: data.tags, svgElement: data.svgElement };
-    });
-
-    return ret;
+  getImagesByTags(tags: string[]): Observable<ImageData[]> {
+    return this.http.get<ImageData[]>(this.DATABASE_URL + tags);
   }
 
   deleteImageById(imageId: string) {
-    this.http.delete<ImageData>(this.BASE_URL + imageId, httpOptions).subscribe((data) => { });
+    this.http.delete<ImageData>(this.DATABASE_URL + imageId, httpOptions).subscribe((data) => { });
   }
   modifyImage(imageData: ImageData) {
     httpOptions.headers = httpOptions.headers.set('Authorization', 'my-new-auth-token');
-    this.http.patch<ImageData>(this.BASE_URL, imageData, httpOptions).subscribe((data) => { })
+    this.http.patch<ImageData>(this.DATABASE_URL, imageData, httpOptions).subscribe((data) => { })
   }
 
   pupolatedBd() {

@@ -2,12 +2,12 @@ import { Component, OnInit, Renderer2, ViewChild, ElementRef, AfterViewInit } fr
 import { fakeImages } from './fake_images';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import {IndexService} from './../../services/index/index.service'
-import{ImageData} from'../../imageData'
+import { IndexService } from './../../services/index/index.service'
+import { ImageData } from '../../imageData'
 import { FormControl } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { map, startWith } from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -30,24 +30,25 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     filteredTags: Observable<string[]>;
     tagCtrl = new FormControl();
     render: Renderer2;
-    @ViewChild('cardsContainer',{static:false}) cardsContainer: ElementRef
-    @ViewChild('tagInput', {static: false}) tagInput: ElementRef<HTMLInputElement>
-    @ViewChild('auto', {static: false}) autoComplete: MatAutocomplete;
+    @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef
+    @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>
+    @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
     constructor(private index: IndexService, render: Renderer2) {
         this.render = render;
-        this.index.pupolatedBd();
+        //this.index.pupolatedBd();
         this.possibleTags = [];
         this.filteredTags = this.tagCtrl.valueChanges.pipe(
             startWith(null),
-            map((tag: string | null) => tag? this.filter(tag): this.possibleTags.slice())
+            map((tag: string | null) => tag ? this.filter(tag) : this.possibleTags.slice())
         )
     }
 
     ngOnInit() {
         //this.getAllImages();
     }
-    ngAfterViewInit(){
-        this.getAllImages();
+    ngAfterViewInit() {
+        //this.getAllImages();
+        this.getImagesByTags(['red', 'allo']);
     }
     blockEvent(ev: KeyboardEvent) {
         ev.stopPropagation();
@@ -67,7 +68,7 @@ export class GalleryComponent implements OnInit, AfterViewInit {
             this.tags.push(VAL);
         }
         // resets the input after insertion
-        if(INPUT){
+        if (INPUT) {
             INPUT.value = ' ';
         }
         this.tagCtrl.setValue(null);
@@ -79,39 +80,48 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     }
     delete(id: string) {
         this.index.deleteImageById(id);
-        
+
         this.getAllImages();
     }
 
-    async getAllImages(){
+    async getAllImages() {
         const text = this.showMessage();
         this.drawings = await this.index.getAllImages()
         this.render.removeChild(this.cardsContainer, text);
         this.drawings.subscribe((data) => {
-           this.getAllTags(data);
-       })
-       
+            this.getAllTags(data);
+        })
+
     }
-    getAllTags(imageContainer: ImageData[]): void{ 
-        imageContainer.forEach(image=>{
-            for(let i = 0; i< image.tags.length; ++i){
+    async getImagesByTags(tags: string[]) {
+        const text = this.showMessage();
+        this.drawings = await this.index.getImagesByTags(tags);
+        this.render.removeChild(this.cardsContainer, text);
+        this.drawings.subscribe((data) => {
+            this.getAllTags(data);
+        })
+
+    }
+    getAllTags(imageContainer: ImageData[]): void {
+        imageContainer.forEach(image => {
+            for (let i = 0; i < image.tags.length; ++i) {
                 let tagExist: boolean = false;
-                for(let j =0; j< this.possibleTags.length; ++j){
-                    if(image.tags[i]=== this.possibleTags[j]){
+                for (let j = 0; j < this.possibleTags.length; ++j) {
+                    if (image.tags[i] === this.possibleTags[j]) {
                         tagExist = true;
                     }
                 }
-                if(!tagExist) {this.possibleTags.push(image.tags[i])}
+                if (!tagExist) { this.possibleTags.push(image.tags[i]) }
             }
         })
     }
     //source: https://material.angular.io/components/chips/examples
-    selected(event: MatAutocompleteSelectedEvent){
+    selected(event: MatAutocompleteSelectedEvent) {
         this.tags.push(event.option.value);
-        this.tagInput.nativeElement.value ='';
+        this.tagInput.nativeElement.value = '';
         this.tagCtrl.setValue(null);
     }
-    private filter(value: string): string[]{
+    private filter(value: string): string[] {
         const filterValue = value.toLowerCase()
         return this.possibleTags.filter(tag => tag.toLowerCase().indexOf(filterValue) === 0)
     }

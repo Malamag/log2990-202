@@ -30,9 +30,10 @@ export class DatabaseController {
                 });
         })
 
-        this.router.get("/Images/:id", async (req: Request, res: Response, next: NextFunction) => {
-            this.databaseService.getImageById(req.body.id)
-                .then((imageData: ImageData) => {
+        this.router.get("/Images/:tags", async (req: Request, res: Response, next: NextFunction) => {
+            console.log('yo');
+            this.databaseService.getImagesByTags(req.params.tags)
+                .then((imageData: ImageData[]) => {
                     res.json(imageData);
                 })
                 .catch((error: Error) => {
