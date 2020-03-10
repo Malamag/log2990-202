@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { InputObserver } from './input-observer';
-
-import { Point } from './point';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
+import { InputObserver } from './input-observer';
+import { Point } from './point';
 
 @Injectable({
     providedIn: 'root',
@@ -13,7 +12,7 @@ export class PipetteService extends InputObserver {
     cPick: ColorPickingService;
     interact: InteractionService;
     clickedColor: Uint8ClampedArray | number[];
-    colorStr: string = '';
+    colorStr = '';
     private canvasContext: CanvasRenderingContext2D | null;
 
     constructor(selected: boolean, htmlCanvasEl: HTMLCanvasElement, interaction: InteractionService, colorPicking: ColorPickingService) {
@@ -33,7 +32,7 @@ export class PipetteService extends InputObserver {
 
     move(position: Point): void {
         this.imgDataConversion(position);
-        this.interact.emitPreviewColor(this.colorStr); //emits to a small preview box in toolsAttributes
+        this.interact.emitPreviewColor(this.colorStr); // emits to a small preview box in toolsAttributes
     }
 
     imgDataConversion(position: Point) {
@@ -44,7 +43,7 @@ export class PipetteService extends InputObserver {
     }
 
     buildImageData(): string {
-        let str: string = '#';
+        let str = '#';
         this.clickedColor.forEach((color: number) => {
             str += this.cPick.colorConvert.rgbToHex(color);
         });
@@ -68,11 +67,25 @@ export class PipetteService extends InputObserver {
         this.cPick.updateDisplay(color);
     }
 
-    doubleClick(): void {} // no behavior defned for the methods below
-    goingOutsideCanvas(): void {}
-    goingInsideCanvas(): void {}
-    cancel(): void {}
-    updateDown(): void {}
-    updateUp(): void {}
-    up(): void {}
+    doubleClick(): void {
+        /*no behavior for double click*/
+    }
+    goingOutsideCanvas(): void {
+        /*Nothing happens when going outside canvas*/
+    }
+    goingInsideCanvas(): void {
+        /*Nothing specific happens when going inside canvas*/
+    }
+    cancel(): void {
+        /*Nothing specific happens on cancel */
+    }
+    updateDown(): void {
+        /*Nothing to update during mouse down. Color is sent on click*/
+    }
+    updateUp(): void {
+        /*Nothing to update during mouse up. Color is sent on click*/
+    }
+    up(): void {
+        /*Nothing to specific during mouse up*/
+    }
 }
