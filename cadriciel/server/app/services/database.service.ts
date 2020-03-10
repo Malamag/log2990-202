@@ -33,20 +33,9 @@ export class DatabaseService {
     }
 
     async getAllImages(): Promise<ImageData[]> {
-        let jsonData = fs.readFileSync('../data.json');
-        let drawingsList = JSON.parse(jsonData.toString());
         return this.collection.find({}).toArray()
             .then((metaData: MetaData[]) => {
-                let imageData: ImageData[] = [];
-                metaData.forEach((data: MetaData) => {
-                    let image: Image = drawingsList.drawings.filter((drawing: Image) => { return drawing.id === data.id });
-                    try {
-                        imageData.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
-                    } catch (error) {
-                        console.log('Invalide id');
-                    }
-                })
-                return imageData;
+                return this.getImages(metaData);
             })
             .catch((error: Error) => {
                 throw error;
@@ -55,19 +44,9 @@ export class DatabaseService {
 
     async getImagesByTags(tags: string): Promise<ImageData[]> {
         let tagsArray = this.stringToArray(tags);
-        let jsonData = fs.readFileSync('../data.json');
-        let drawingsList = JSON.parse(jsonData.toString());
         return this.collection.find({}).toArray()
             .then((metaData: MetaData[]) => {
-                let buffer: ImageData[] = [];
-                metaData.forEach((data: MetaData) => {
-                    let image: Image = drawingsList.drawings.filter((drawing: Image) => { return drawing.id === data.id });
-                    try {
-                        buffer.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
-                    } catch (error) {
-                        console.log('Invalide id');
-                    }
-                })
+                let buffer: ImageData[] = this.getImages(metaData);
                 if (tags === 'none') {
                     return buffer;
                 }
@@ -77,7 +56,6 @@ export class DatabaseService {
                     tagsArray.forEach((tag) => {
                         if (this.searchTag(tag, data.tags)) {
                             asTag = true;
-                            //console.log(tags.match(tag));
                         }
                     })
                     if (asTag) {
@@ -89,6 +67,21 @@ export class DatabaseService {
             .catch((error: Error) => {
                 throw error;
             });
+    }
+
+    getImages(metaData: MetaData[]): ImageData[] {
+        let imageData: ImageData[] = [];
+        let jsonData = fs.readFileSync('../data.json');
+        let drawingsList = JSON.parse(jsonData.toString());
+        metaData.forEach((data: MetaData) => {
+            let image: Image = drawingsList.drawings.filter((drawing: Image) => { return drawing.id === data.id });
+            try {
+                imageData.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
+            } catch (error) {
+                console.log('Invalide id');
+            }
+        })
+        return imageData;
     }
     searchTag(tag: string, tags: string[]): boolean {
         let isFound: boolean = false;
