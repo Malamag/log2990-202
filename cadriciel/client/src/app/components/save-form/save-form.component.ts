@@ -85,7 +85,7 @@ export class SaveFormComponent implements OnInit {
     doodleString = doodleString.replace('id="frame"', 'id="frame" #frame');
     doodleString = doodleString.replace('id="inPrgress"', 'id="inPrgress" #inPrgress');
     doodleString = doodleString.replace('id="selectedItems"', 'id="selectedItems" #selectedItems');
-    let imageData: ImageData = { id: id, name: "TODO", tags: this.labels, svgElement: doodleString };
+    let imageData: ImageData = { id: id, name: this.saveForm.value.doodleName, tags: this.labels, svgElement: doodleString };
     this.index.saveImage(imageData);
     this.winService.closeWindow();
   }
