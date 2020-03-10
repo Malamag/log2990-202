@@ -36,17 +36,19 @@ describe('DoodleFetchService', () => {
         service.askForDoodle();
         expect(spy).toHaveBeenCalled();
     });
-    /* Faire passer ce vilain garçon - cannot read property cloneNode of undefined
-    it('should return the drawing by doing a deep-copy on it', () => {
-        const spy = spyOn(service, 'getSVGElementFromRef');
-
-        service.currentDraw = elementStub;
-        service.getDrawing();
-        expect(spy).toHaveBeenCalled();
-    });*/
 
     it('should return a native element from a reference', () => {
         const NATIVE_ELEM = service.getSVGElementFromRef(elementStub);
         expect(NATIVE_ELEM).toEqual(nativeElemStub);
+    });
+
+    it('should remove the grid when getting the doodle and put it back', () => {
+        const spyRem = spyOn(service['gService'], 'removeGrid');
+        const spyRenderBack = spyOn(service['gService'], 'renderBack');
+        service.getSVGElementFromRef = jasmine.createSpy().and.returnValue(nativeElemStub);
+        service.getDrawingWithoutGrid();
+        expect(spyRem).toHaveBeenCalledBefore(spyRenderBack);
+        expect(service.getSVGElementFromRef).toHaveBeenCalledBefore(spyRenderBack);
+        expect(spyRenderBack).toHaveBeenCalled();
     });
 });
