@@ -24,6 +24,7 @@ export class DatabaseService {
             .then((client: MongoClient) => {
                 this.collection = client.db(DATABASE_NAME).collection(DATABASE_COLLECTION);
                 console.error('connexion ok ');
+                this.getImagesByTags('red,al');
             })
             .catch(() => {
                 console.error('Erreur de connexion. Terminaison du processus');
@@ -39,7 +40,11 @@ export class DatabaseService {
                 let imageData: ImageData[] = [];
                 metaData.forEach((data: MetaData) => {
                     let image: Image = drawingsList.drawings.filter((drawing: Image) => { return drawing.id === data.id });
-                    imageData.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
+                    try {
+                        imageData.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
+                    } catch (error) {
+                        console.log('Invalide id');
+                    }
                 })
                 return imageData;
             })
@@ -49,51 +54,67 @@ export class DatabaseService {
     }
 
     async getImagesByTags(tags: string): Promise<ImageData[]> {
-        let tagsArray: string[] = this.stringToArray(tags);
+        let tagsArray = this.stringToArray(tags);
         let jsonData = fs.readFileSync('../data.json');
         let drawingsList = JSON.parse(jsonData.toString());
         return this.collection.find({}).toArray()
             .then((metaData: MetaData[]) => {
-
                 let buffer: ImageData[] = [];
                 metaData.forEach((data: MetaData) => {
-                    console.log('yolo');
                     let image: Image = drawingsList.drawings.filter((drawing: Image) => { return drawing.id === data.id });
-                    buffer.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
-                    console.log('yo');
+                    try {
+                        buffer.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
+                    } catch (error) {
+                        console.log('Invalide id');
+                    }
                 })
+                if (tags === 'none') {
+                    return buffer;
+                }
                 let imageData: ImageData[] = [];
                 buffer.forEach((data: ImageData) => {
                     let asTag: boolean = false;
-                    data.tags.forEach((tag) => {
-                        if (tagsArray.includes(tag)) {
+                    tagsArray.forEach((tag) => {
+                        if (this.searchTag(tag, data.tags)) {
                             asTag = true;
+                            //console.log(tags.match(tag));
                         }
                     })
                     if (asTag) {
                         imageData.push(data);
                     }
                 });
-                //console.log(imageData);
                 return imageData;
             })
             .catch((error: Error) => {
                 throw error;
             });
     }
+    searchTag(tag: string, tags: string[]): boolean {
+        let isFound: boolean = false;
+        for (let i: number = 0; i < tags.length; i++) {
+            let startPos: number = 0;
+            for (let j: number = tag.length; j <= tags[i].length; j++) {
+                isFound = tag === tags[i].substring(startPos, j);
+                startPos++;
+                if (isFound) { break };
+            }
+        }
+        return isFound;
+    }
     stringToArray(str: string): string[] {
         let buffer: string[] = [];
         let pos: number = 0;
-        let s: string = "";
+        let s: string = '';
         while (pos < str.length) {
             if (str.charAt(pos) === ',') {
                 buffer.push(s);
-                s = "";
+                s = '';
             }
             else {
                 s += str.charAt(pos);
             }
-            pos++;
+            pos++
         }
         buffer.push(s);
         return buffer;

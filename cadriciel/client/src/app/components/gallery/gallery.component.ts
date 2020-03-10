@@ -48,7 +48,7 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     }
     ngAfterViewInit() {
         //this.getAllImages();
-        this.getImagesByTags(['red']);
+        this.getImagesByTags(['none']);
     }
     blockEvent(ev: KeyboardEvent) {
         ev.stopPropagation();
