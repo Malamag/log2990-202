@@ -1,17 +1,17 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
+import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
-import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { ShapeService } from './shape.service';
 
-const OUTLINE_COLOR: string = "0, 102, 204, 0.9";
-const FILL_COLOR: string = "0, 102, 204, 0.3";
-const INVERTED_OUTLINE_COLOR: string = "204, 0, 102, 0.9";
-const INVERTED_FILL_COLOR: string = "204, 0, 102, 0.3";
+const OUTLINE_COLOR = '0, 102, 204, 0.9';
+const FILL_COLOR = '0, 102, 204, 0.3';
+const INVERTED_OUTLINE_COLOR = '204, 0, 102, 0.9';
+const INVERTED_FILL_COLOR = '204, 0, 102, 0.3';
 
-const NO_MOUSE_MOVEMENT_TOLERANCE: number = 5;
-const MIN_OFFSET_FOR_SELECTION: number = 10;
+const NO_MOUSE_MOVEMENT_TOLERANCE = 5;
+const MIN_OFFSET_FOR_SELECTION = 10;
 
 const START_ARROW_DELAY = 500;
 const ARROW_MOVEMENT_DELAY = 100;
@@ -31,7 +31,7 @@ export class SelectionService extends ShapeService {
   selectedItems: boolean[];
   invertedItems: boolean[];
   movingSelection: boolean;
-  canvas: HTMLElement
+  canvas: HTMLElement;
   movedSelectionOnce: boolean;
   movedMouseOnce: boolean;
   inverted: boolean;
@@ -45,7 +45,7 @@ export class SelectionService extends ShapeService {
   movedSelectionWithArrowsOnce: boolean;
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService,
-    colorPick: ColorPickingService, render: Renderer2, selection: HTMLElement, canvas: HTMLElement) {
+              colorPick: ColorPickingService, render: Renderer2, selection: HTMLElement, canvas: HTMLElement) {
     super(inProgess, drawing, selected, interaction, colorPick);
 
     this.selectedItems = [];
@@ -70,15 +70,15 @@ export class SelectionService extends ShapeService {
 
     this.wrapperDimensions = [new Point(-1, -1), new Point(-1, -1)];
 
-    this.selectedRef.style.pointerEvents = "none"; // ignore the bounding box on click
+    this.selectedRef.style.pointerEvents = 'none'; // ignore the bounding box on click
 
-    window.addEventListener("newDrawing", (e: Event) => {
+    window.addEventListener('newDrawing', (e: Event) => {
       for (let i = 0; i < this.drawing.childElementCount; i++) {
-        let el = this.drawing.children[i];
-        let status = el.getAttribute("isListening");
-        if (status !== "true") {
-          this.render.listen(el, "mousedown", () => {
-            this.render.setAttribute(el, "isListening", "true");
+        const el = this.drawing.children[i];
+        const status = el.getAttribute('isListening');
+        if (status !== 'true') {
+          this.render.listen(el, 'mousedown', () => {
+            this.render.setAttribute(el, 'isListening', 'true');
             if (!this.foundAnItem) {
               this.itemUnderMouse = i;
               this.foundAnItem = true;
@@ -88,7 +88,7 @@ export class SelectionService extends ShapeService {
       }
     });
 
-    window.addEventListener("toolChange", (e: Event) => {
+    window.addEventListener('toolChange', (e: Event) => {
       for (let i = 0; i < this.drawing.childElementCount; i++) {
         this.selectedItems = [];
         this.selectedRef.innerHTML = this.updateBoundingBox();
@@ -100,7 +100,7 @@ export class SelectionService extends ShapeService {
 
   updateDown(keyboard: KeyboardHandlerService) {
 
-    //CTRL-A SELECT ALL
+    // CTRL-A SELECT ALL
     if (keyboard.keyCode == 65 && keyboard.ctrlDown) {
       this.selectedItems = [];
       for (let i = 0; i < this.drawing.children.length; i++) {
@@ -116,12 +116,12 @@ export class SelectionService extends ShapeService {
       this.arrows[3] = keyboard.keyCode === 40 ? true : this.arrows[3];
     }
 
-    let singleLeft = this.arrows[0] && !this.singleUseArrows[0];
-    let singleUp = this.arrows[1] && !this.singleUseArrows[1];
-    let singleRight = this.arrows[2] && !this.singleUseArrows[2];
-    let singleDown = this.arrows[3] && !this.singleUseArrows[3];
+    const singleLeft = this.arrows[0] && !this.singleUseArrows[0];
+    const singleUp = this.arrows[1] && !this.singleUseArrows[1];
+    const singleRight = this.arrows[2] && !this.singleUseArrows[2];
+    const singleDown = this.arrows[3] && !this.singleUseArrows[3];
 
-    this.moveWithArrowOnce(singleLeft, singleUp, singleRight, singleDown)
+    this.moveWithArrowOnce(singleLeft, singleUp, singleRight, singleDown);
   }
 
   moveWithArrowOnce(left: boolean, up: boolean, right: boolean, down: boolean) {
@@ -158,7 +158,7 @@ export class SelectionService extends ShapeService {
 
     this.existingLoop = true;
 
-    if (this.arrowTimers.some(el => el >= START_ARROW_DELAY)) {
+    if (this.arrowTimers.some((el) => el >= START_ARROW_DELAY)) {
       let xoff = 0;
       let yoff = 0;
       if (this.arrows[2]) {
@@ -242,7 +242,7 @@ export class SelectionService extends ShapeService {
     // on right-click, save the inverted selection state of each item
     if (this.inverted) {
       for (let i = 0; i < this.selectedItems.length; i++) {
-        this.invertedItems[i] = !this.selectedItems[i]
+        this.invertedItems[i] = !this.selectedItems[i];
       }
     }
 
@@ -279,7 +279,7 @@ export class SelectionService extends ShapeService {
       } else {
         // we're inverting, save the inverted selection status of each item
         for (let i = 0; i < this.selectedItems.length; i++) {
-          this.invertedItems[i] = !this.selectedItems[i]
+          this.invertedItems[i] = !this.selectedItems[i];
         }
       }
 
@@ -307,7 +307,7 @@ export class SelectionService extends ShapeService {
 
     // clear selection rectangle
     this.currentPath = [];
-    this.inProgress.innerHTML = "";
+    this.inProgress.innerHTML = '';
   }
 
   move(position: Point) {
@@ -318,8 +318,8 @@ export class SelectionService extends ShapeService {
       if (this.movingSelection) {
         this.movedSelectionOnce = true;
 
-        let prevMousePosition = this.currentPath[this.currentPath.length - 1];
-        let offset = new Point(position.x - prevMousePosition.x, position.y - prevMousePosition.y);
+        const prevMousePosition = this.currentPath[this.currentPath.length - 1];
+        const offset = new Point(position.x - prevMousePosition.x, position.y - prevMousePosition.y);
 
         this.moveSelection(offset.x, offset.y);
       }
@@ -353,8 +353,8 @@ export class SelectionService extends ShapeService {
       this.selectedItems = [];
     }
 
-    let canv = this.canvas
-    let canvasBox = canv ? canv.getBoundingClientRect() : null;
+    const canv = this.canvas;
+    const canvasBox = canv ? canv.getBoundingClientRect() : null;
 
     // default values, is the value valid?
     let minX: [number, boolean] = [1000000000, false];
@@ -371,19 +371,19 @@ export class SelectionService extends ShapeService {
       // iterate through every svg element
       for (let i = 0; i < this.drawing.children[j].childElementCount; i++) {
 
-        let current = this.drawing.children[j].children[i] as HTMLElement;
+        const current = this.drawing.children[j].children[i] as HTMLElement;
 
         // ignore the brush filters
-        if (current.tagName.toString() == "filter") { continue; }
+        if (current.tagName.toString() == 'filter') { continue; }
 
         // offset due to the stroke width
-        let childStrokeWidth = current.getAttribute("stroke-width");
-        let currentOffset = childStrokeWidth ? +childStrokeWidth / 2 : 0;
+        const childStrokeWidth = current.getAttribute('stroke-width');
+        const currentOffset = childStrokeWidth ? +childStrokeWidth / 2 : 0;
 
         // item bounding box
-        let box = current.getBoundingClientRect();
-        let topLeft: Point = new Point(box.left - currentOffset, box.top - currentOffset);
-        let bottomRight: Point = new Point(box.right + currentOffset, box.bottom + currentOffset);
+        const box = current.getBoundingClientRect();
+        const topLeft: Point = new Point(box.left - currentOffset, box.top - currentOffset);
+        const bottomRight: Point = new Point(box.right + currentOffset, box.bottom + currentOffset);
 
         // get smallest rectangle that includes every item
         minX = topLeft.x < minX[0] ? [topLeft.x, true] : [minX[0], minX[1]];
@@ -391,7 +391,7 @@ export class SelectionService extends ShapeService {
         minY = topLeft.y < minY[0] ? [topLeft.y, true] : [minY[0], minY[1]];
         maxY = bottomRight.y > maxY[0] ? [bottomRight.y, true] : [maxY[0], maxY[1]];
       }
-    };
+    }
 
     // convert
     if (canvasBox != null) {
@@ -404,13 +404,13 @@ export class SelectionService extends ShapeService {
     this.wrapperDimensions[0] = new Point(minX[0], minY[0]);
     this.wrapperDimensions[1] = new Point(maxX[0], maxY[0]);
 
-    let wrapper = "";
+    let wrapper = '';
     if (minX[1] && maxX[1] && minY[1] && maxY[1]) {
       wrapper += `<rect id="selection" x="${minX[0]}" y="${minY[0]}"`;
       wrapper += `width="${maxX[0] - minX[0]}" height="${maxY[0] - minY[0]}"`;
 
-      wrapper += `fill="rgba(0,120,215,0.3)"`;
-      wrapper += `stroke-width="1" stroke="rgba(0,120,215,0.9)"/>`;
+      wrapper += 'fill="rgba(0,120,215,0.3)"';
+      wrapper += 'stroke-width="1" stroke="rgba(0,120,215,0.9)"/>';
     }
 
     return wrapper;
@@ -419,23 +419,23 @@ export class SelectionService extends ShapeService {
   // links the selection rectangle with the current drawing and manages the selected items
   retrieveItemsInRect() {
 
-    let selectionRectangle = this.inProgress.lastElementChild;
-    let items = this.drawing.children;
+    const selectionRectangle = this.inProgress.lastElementChild;
+    const items = this.drawing.children;
 
     // selection bounding box
-    let selectionBox = selectionRectangle ? selectionRectangle.getBoundingClientRect() : null;
-    let boxTopLeft: Point = new Point(selectionBox ? selectionBox.left : -1, selectionBox ? selectionBox.top : -1);
-    let boxBottomRight: Point = new Point(selectionBox ? selectionBox.right : -1, selectionBox ? selectionBox.bottom : -1);
+    const selectionBox = selectionRectangle ? selectionRectangle.getBoundingClientRect() : null;
+    const boxTopLeft: Point = new Point(selectionBox ? selectionBox.left : -1, selectionBox ? selectionBox.top : -1);
+    const boxBottomRight: Point = new Point(selectionBox ? selectionBox.right : -1, selectionBox ? selectionBox.bottom : -1);
 
     for (let i = 0; i < items.length; i++) {
 
       // item bounding box
-      let itemBox = items[i].getBoundingClientRect();
-      let itemTopLeft: Point = new Point(itemBox.left, itemBox.top);
-      let itemBottomRight: Point = new Point(itemBox.right, itemBox.bottom);
+      const itemBox = items[i].getBoundingClientRect();
+      const itemTopLeft: Point = new Point(itemBox.left, itemBox.top);
+      const itemBottomRight: Point = new Point(itemBox.right, itemBox.bottom);
 
       // check if the two bounding box are overlapping
-      let inside: boolean = Point.rectOverlap(boxTopLeft, boxBottomRight, itemTopLeft, itemBottomRight);
+      const inside: boolean = Point.rectOverlap(boxTopLeft, boxBottomRight, itemTopLeft, itemBottomRight);
 
       // item is inside the selection rectangle -> select/unselect accordingly
       if (inside) {
@@ -445,9 +445,7 @@ export class SelectionService extends ShapeService {
           this.selectedItems[i] = true;
           this.invertedItems[i] = false;
         }
-      }
-      // item is outside the selection rectangle -> select/unselect accordingly
-      else {
+      } else {
         if (this.inverted) {
           this.selectedItems[i] = this.invertedItems[i] == undefined ? false : !this.invertedItems[i];
         } else {
@@ -471,13 +469,13 @@ export class SelectionService extends ShapeService {
         if (!this.selectedItems[i]) { continue; }
 
         // get the current item's translate and add the offsets
-        let current = (this.drawing.children[i] as HTMLElement).style.transform;
-        let s = current ? current.split(",") : "";
-        let newX = +(s[0].replace(/[^\d.-]/g, '')) + xoff;
-        let newY = +(s[1].replace(/[^\d.-]/g, '')) + yoff;
+        const current = (this.drawing.children[i] as HTMLElement).style.transform;
+        const s = current ? current.split(',') : '';
+        const newX = +(s[0].replace(/[^\d.-]/g, '')) + xoff;
+        const newY = +(s[1].replace(/[^\d.-]/g, '')) + yoff;
 
         // set the new values
-        this.render.setStyle(this.drawing.children[i], "transform", `translate(${newX}px,${newY}px)`);
+        this.render.setStyle(this.drawing.children[i], 'transform', `translate(${newX}px,${newY}px)`);
       }
     }
   }
@@ -487,7 +485,7 @@ export class SelectionService extends ShapeService {
 
     let s = '';
 
-    //We need at least 2 points
+    // We need at least 2 points
     if (p.length < 2) {
       return s;
     }
@@ -499,12 +497,12 @@ export class SelectionService extends ShapeService {
     const p2y = p[p.length - 1].y;
 
     // calculate the width and height of the rectangle
-    let w = p2x - p1x;
-    let h = p2y - p1y;
+    const w = p2x - p1x;
+    const h = p2y - p1y;
 
     // find top-left corner
-    let startX = w > 0 ? p[0].x : p[p.length - 1].x;
-    let startY = h > 0 ? p[0].y : p[p.length - 1].y;
+    const startX = w > 0 ? p[0].x : p[p.length - 1].x;
+    const startY = h > 0 ? p[0].y : p[p.length - 1].y;
 
     // create a divider
     s = '<g name = "selection-perimeter">';
@@ -518,7 +516,7 @@ export class SelectionService extends ShapeService {
     s += 'stroke-dasharray="5,5"/>';
 
     // end the divider
-    s += '</g>'
+    s += '</g>';
 
     // can't have rectangle with 0 width or height
     if (w == 0 || h == 0) {

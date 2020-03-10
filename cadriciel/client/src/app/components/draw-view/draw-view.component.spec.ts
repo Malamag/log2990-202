@@ -6,6 +6,7 @@ import { SvgDrawComponent } from './svg-draw/svg-draw.component';
 import { ToolAttributesComponent } from './tool-box/tool-attributes/tool-attributes.component';
 import { ToolBoxComponent } from './tool-box/tool-box.component';
 
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
     MatButtonModule,
@@ -18,7 +19,6 @@ import {
     MatTooltipModule,
 } from '@angular/material';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
-import { HttpClientModule } from '@angular/common/http';
 
 describe('DrawViewComponent', () => {
     let component: DrawViewComponent;

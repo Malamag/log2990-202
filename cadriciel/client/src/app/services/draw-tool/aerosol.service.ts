@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { DrawingTool } from './drawingTool';
-import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
-import { Point } from './point';
-import { InteractionService } from '../service-interaction/interaction.service';
-import { ColorPickingService } from '../colorPicker/color-picking.service';
-import { AerosolAttributes } from '../attributes/aerosol-attribute';
 import { interval, Subscription } from 'rxjs';
+import { AerosolAttributes } from '../attributes/aerosol-attribute';
+import { ColorPickingService } from '../colorPicker/color-picking.service';
+import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
+import { InteractionService } from '../service-interaction/interaction.service';
+import { DrawingTool } from './drawingTool';
+import { Point } from './point';
 
 const DEFAULTEMISSIONPERSECOND = 50;
 const DEFAULTDIAMETER = 50;
@@ -14,17 +14,6 @@ const DEFAULTDIAMETER = 50;
     providedIn: 'root',
 })
 export class AerosolService extends DrawingTool {
-    updateDown(keyboard: KeyboardHandlerService): void {}
-    updateUp(keyCode: number): void {}
-    private attr: AerosolAttributes;
-
-    private lastPoint: Point;
-
-    private points: Point[];
-
-    private path: string;
-
-    private sub: Subscription;
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
         super(inProgess, drawing, selected, interaction, colorPick);
@@ -34,9 +23,20 @@ export class AerosolService extends DrawingTool {
         this.lastPoint = new Point(0, 0);
         this.points = new Array();
     }
+    private attr: AerosolAttributes;
+
+    private lastPoint: Point;
+
+    private points: Point[];
+
+    private path: string;
+
+    private sub: Subscription;
+    updateDown(keyboard: KeyboardHandlerService): void {}
+    updateUp(keyCode: number): void {}
 
     updateAttributes() {
-        this.interaction.$aerosolAttributes.subscribe(obj => {
+        this.interaction.$aerosolAttributes.subscribe((obj) => {
             if (obj) {
                 this.attr = new AerosolAttributes(obj.emissionPerSecond, obj.diameter);
             }
@@ -45,7 +45,7 @@ export class AerosolService extends DrawingTool {
 
     subscribe() {
         const srcInterval = interval(1000 / this.attr.emissionPerSecond);
-        this.sub = srcInterval.subscribe(val => {
+        this.sub = srcInterval.subscribe((val) => {
             if (this.isDown) {
                 this.updateProgress();
             } else {
@@ -96,7 +96,7 @@ export class AerosolService extends DrawingTool {
             // save mouse position
             this.currentPath.push(position);
 
-            //this.updateProgress();
+            // this.updateProgress();
         }
     }
 
@@ -107,7 +107,7 @@ export class AerosolService extends DrawingTool {
 
     startPath() {
         this.path = '<g name = "aerosol" style="transform: translate(0px, 0px);" >';
-        //this.path += ' <filter id="blur"> <feGaussianBlur in="SourceGraphic" stdDeviation="1" /> </filter>';
+        // this.path += ' <filter id="blur"> <feGaussianBlur in="SourceGraphic" stdDeviation="1" /> </filter>';
 
         this.lastPoint = new Point(0, 0);
     }
@@ -124,7 +124,7 @@ export class AerosolService extends DrawingTool {
             this.path += `r="${pointRadius}"`; // to get the radius
             this.path += 'stroke="none"';
             this.path += `fill="${this.chosenColor.primColor}"/>`;
-            //this.path +=  'filter="url(#blur)"/>';
+            // this.path +=  'filter="url(#blur)"/>';
         }
         this.points = new Array();
 
@@ -137,11 +137,11 @@ export class AerosolService extends DrawingTool {
     generatePoint() {
         if (this.isDown) {
             for (let j = 1; j < 5 && this.isDown; j++) {
-                let r = (this.attr.diameter / 2) * Math.sqrt(Math.random());
-                let angle = Math.random() * 2 * Math.PI;
+                const r = (this.attr.diameter / 2) * Math.sqrt(Math.random());
+                const angle = Math.random() * 2 * Math.PI;
                 for (let i = 1; i < 5; i++) {
-                    let x = this.lastPoint.x + r * Math.cos(angle * i);
-                    let y = this.lastPoint.y + r * Math.sin(angle * i);
+                    const x = this.lastPoint.x + r * Math.cos(angle * i);
+                    const y = this.lastPoint.y + r * Math.sin(angle * i);
                     this.points.push(new Point(x, y));
                 }
             }

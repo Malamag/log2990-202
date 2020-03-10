@@ -2,9 +2,9 @@ import { ComponentType } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ExportFormComponent } from 'src/app/components/export-form/export-form.component';
+import { GalleryComponent } from 'src/app/components/gallery/gallery.component';
 import { NewDrawComponent } from 'src/app/components/new-draw/new-draw.component';
 import { UserManualComponent } from 'src/app/components/user-manual/user-manual.component';
-import { GalleryComponent } from 'src/app/components/gallery/gallery.component';
 
 @Injectable({
     providedIn: 'root',

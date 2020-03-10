@@ -19,4 +19,4 @@ export const fakeImages = [
         tag: 'blabla',
         image: 'https://i.pinimg.com/originals/15/8b/ed/158bed9819e4fccf7e18a5eeeaf79c6b.png'
     },
-]
+];

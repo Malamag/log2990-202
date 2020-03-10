@@ -1,9 +1,9 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { AerosolAttributes } from '../attributes/aerosol-attribute';
 import { FormsAttribute } from '../attributes/attribute-form';
 import { LineAttributes } from '../attributes/line-attributes';
 import { ToolsAttributes } from '../attributes/tools-attribute';
-import { AerosolAttributes } from '../attributes/aerosol-attribute';
 
 @Injectable({
     providedIn: 'root',
@@ -37,7 +37,7 @@ export class InteractionService {
 
     convertSvg2Canvas = new Subject<boolean>();
     $convertSvg2Canvas = this.convertSvg2Canvas.asObservable();
-    isCanvas: boolean = false;
+    isCanvas = false;
 
     previewColor = new Subject<string>();
     $previewColor = this.previewColor.asObservable();

@@ -12,22 +12,22 @@ const DEFAULTTEXTURE = 0;
   providedIn: 'root'
 })
 export class PencilService extends DrawingTool {
-  attr: ToolsAttributes
+  attr: ToolsAttributes;
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
 
     super(inProgess, drawing, selected, interaction, colorPick);
-    this.attr = {lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE}
-    this.updateColors()
-    this.updateAttributes()
+    this.attr = {lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE};
+    this.updateColors();
+    this.updateAttributes();
   }
   updateAttributes() {
     this.interaction.$toolsAttributes.subscribe((obj) => {
       if (obj) {
-        this.attr = {lineThickness: obj.lineThickness, texture: obj.texture}
+        this.attr = {lineThickness: obj.lineThickness, texture: obj.texture};
       }
-    })
-    this.colorPick.emitColors()
+    });
+    this.colorPick.emitColors();
   }
   // updating on key change
   updateDown(keyboard: KeyboardHandlerService) {
@@ -35,7 +35,7 @@ export class PencilService extends DrawingTool {
   }
 
   // updating on key up
-  updateUp(keyCode : number) {
+  updateUp(keyCode: number) {
     // nothing happens for pencil tool
   }
 

@@ -19,11 +19,10 @@ export abstract class DrawingTool extends InputObserver {
     ignoreNextUp: boolean;
     inProgress: HTMLElement;
     drawing: HTMLElement;
-    interaction: InteractionService
-    colorPick: ColorPickingService
-    chosenColor: ChoosenColors
-    colorSub: Subscription
-    
+    interaction: InteractionService;
+    colorPick: ColorPickingService;
+    chosenColor: ChoosenColors;
+    colorSub: Subscription;
 
     abstract createPath(path: Point[], doubleClickCheck?: boolean, removePerimeter?: boolean): void;
 
@@ -36,17 +35,17 @@ export abstract class DrawingTool extends InputObserver {
 
       this.isDown = false;
       this.currentPath = [];
-      this.colorPick = colorPick
+      this.colorPick = colorPick;
 
       this.ignoreNextUp = false;
       this.chosenColor = {primColor: DEFAULTPRIMARYCOLOR, secColor: DEFAULTSECONDARYCOLOR ,
-        backColor: DEFAULTBACKCOLOR}
+        backColor: DEFAULTBACKCOLOR};
     }
 
     updateColors() {
       const DEFPRIM = '#000000ff';
       const DEFSEC = '#ff0000ff';
-      const DEFBACK ="#ff0000ff";
+      const DEFBACK = '#ff0000ff';
       this.colorSub = this.colorPick.colorSubject.subscribe(
         (color: ChoosenColors) => {
           if (color === undefined) {
@@ -54,10 +53,10 @@ export abstract class DrawingTool extends InputObserver {
           }
           this.chosenColor  = {primColor: color.primColor, secColor: color.secColor, backColor: color.backColor};
         });
-      this.colorPick.emitColors()
+      this.colorPick.emitColors();
     }
 
-    abstract updateAttributes(): void
+    abstract updateAttributes(): void;
 
     // cancel the current progress
     cancel() {
@@ -91,7 +90,7 @@ export abstract class DrawingTool extends InputObserver {
       // add it to the main drawing
       this.drawing.innerHTML += d;
 
-      let event = new Event("newDrawing");
+      const event = new Event('newDrawing');
       window.dispatchEvent(event);
 
       this.interaction.emitDrawingDone();

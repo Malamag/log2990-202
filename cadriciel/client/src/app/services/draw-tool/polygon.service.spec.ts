@@ -1,36 +1,36 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PolygonService } from './polygon.service';
-//import { FormsAttribute } from '../attributes/attribute-form';
-//import { Point } from './point';
-//import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+// import { FormsAttribute } from '../attributes/attribute-form';
+// import { Point } from './point';
+// import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 
 describe('PolygonService', () => {
 
-  //let service: PolygonService;
-  //let ptA: Point;
-  //let ptB: Point;
-  //let ptArr: Point[];
+  // let service: PolygonService;
+  // let ptA: Point;
+  // let ptB: Point;
+  // let ptArr: Point[];
 
-  beforeEach(()  => { 
+  beforeEach(()  => {
 
-    //ptA = new Point(0, 0); // using a point to test position functions
-    //ptB = new Point(1, 2);
-    //ptArr = [ptA, ptB];
+    // ptA = new Point(0, 0); // using a point to test position functions
+    // ptB = new Point(1, 2);
+    // ptArr = [ptA, ptB];
 
     TestBed.configureTestingModule({
       providers: [
         PolygonService,
-        //{provide: Point},
+        // {provide: Point},
         {provide: HTMLElement, useValue: {}},
         {provide: Number, useValue: 0},
         {provide: String, useValue: ''},
         {provide: Boolean, useValue: true}]
     });
-    //service = TestBed.get(PolygonService);
+    // service = TestBed.get(PolygonService);
   });
 
- /* 
+ /*
   it('should be created', () => {
     const service: PolygonService = TestBed.get(PolygonService);
     expect(service).toBeTruthy();

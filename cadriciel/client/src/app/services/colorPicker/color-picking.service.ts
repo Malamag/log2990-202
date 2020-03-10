@@ -106,7 +106,7 @@ export class ColorPickingService {
         if (this.cData.isHueSelecting) {
             hue = this.computeHue(event);
             this.cData.currentHue = Math.round(hue);
-            let color = this.setColor(
+            const color = this.setColor(
                 this.colorConvert.hslToRgb(
                     hue,
                     this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
@@ -127,12 +127,12 @@ export class ColorPickingService {
         this.cData.saturationSliderInput = x * 2;
         this.cData.lightnessSliderInput = y * 2;
         this.setSaturation(this.cData.saturationSliderInput);
-        let hsl: number[] = [
+        const hsl: number[] = [
             this.cData.currentHue,
             this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
             this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER,
         ];
-        let color = this.setColor(
+        const color = this.setColor(
             this.colorConvert.hslToRgb(
                 this.cData.currentHue,
                 this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
@@ -143,7 +143,7 @@ export class ColorPickingService {
     }
     lastColorSelector(event: MouseEvent, lastColor: string): void {
         this.setColorMode(event);
-        let color = this.setColor(this.colorConvert.hexToRgba(lastColor));
+        const color = this.setColor(this.colorConvert.hexToRgba(lastColor));
         this.updateDisplay(color);
     }
     /************************ EVENTS SECTION ***************************/
@@ -256,9 +256,9 @@ export class ColorPickingService {
         this.cData.opacitySliderInput = Math.round(rgb[3] * this.cData.POURCENT_MODIFIER);
     }
     updateDisplayHSL(hsl: number[]): void {
-        let newSaturation: number = Math.round(hsl[1] * this.cData.POURCENT_MODIFIER);
+        const newSaturation: number = Math.round(hsl[1] * this.cData.POURCENT_MODIFIER);
         this.cData.lightnessSliderInput = Math.round(hsl[2] * this.cData.POURCENT_MODIFIER);
-        let lightnessMinMax =
+        const lightnessMinMax =
             this.cData.lightnessSliderInput === this.cData.MIN_LIGHTNESS_VALUE ||
             this.cData.lightnessSliderInput === this.cData.MAX_LIGHTNESS_VALUE * this.cData.POURCENT_MODIFIER;
         if (!lightnessMinMax) {
@@ -276,7 +276,7 @@ export class ColorPickingService {
     }
     // Change color display between primary , secondary and background
     swapInputDisplay() {
-        let color = this.selectDisplayColor();
+        const color = this.selectDisplayColor();
         this.updateDisplay(color);
     }
     // udapte display with current value
@@ -308,7 +308,7 @@ export class ColorPickingService {
 
         this.cData.secondaryColor = tempColor;
         this.cData.secondaryAlpha = tempAlpha;
-        let color = this.selectDisplayColor();
+        const color = this.selectDisplayColor();
         this.updateDisplay(color);
     }
     // INPUTS
@@ -316,11 +316,11 @@ export class ColorPickingService {
     validateHexInput(event: KeyboardEvent, hexLength: number, hex: string): void {
         event.stopPropagation();
         this.cData.isValideInput = false;
-        //left/right arrow/delete
+        // left/right arrow/delete
         if (event.which === 37 || event.which === 39 || event.which === 46) {
             return;
         }
-        //if not backspace
+        // if not backspace
         if (event.which !== 8) {
             if (hex.length === hexLength) {
                 event.preventDefault();
@@ -340,7 +340,7 @@ export class ColorPickingService {
      **/
     onHexInput(hexLength: number, hex: string, hexInputField: string): void {
         if (hex.length === hexLength && this.cData.isValideInput) {
-            let newColor: string = this.writeHexColor(hexInputField);
+            const newColor: string = this.writeHexColor(hexInputField);
             this.updateDisplay(newColor);
             this.updateLastColor(newColor);
             this.cData.isValideInput = false;
@@ -386,7 +386,7 @@ export class ColorPickingService {
             this.cData.saturationSliderInput / this.cData.POURCENT_MODIFIER,
             this.cData.lightnessSliderInput / this.cData.POURCENT_MODIFIER,
         );
-        let newColor = this.setColor(rgb);
+        const newColor = this.setColor(rgb);
         this.setSaturation(this.cData.saturationSliderInput);
         this.updateDisplay(newColor);
         this.updateLastColor(newColor);

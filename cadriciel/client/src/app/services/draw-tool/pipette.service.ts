@@ -12,7 +12,8 @@ export class PipetteService extends InputObserver {
     cPick: ColorPickingService;
     interact: InteractionService;
     clickedColor: Uint8ClampedArray | number[];
-    colorStr = '';
+    colorStr: string;
+
     private canvasContext: CanvasRenderingContext2D | null;
 
     constructor(selected: boolean, htmlCanvasEl: HTMLCanvasElement, interaction: InteractionService, colorPicking: ColorPickingService) {
@@ -21,6 +22,7 @@ export class PipetteService extends InputObserver {
         this.cPick = colorPicking;
         this.interact = interaction;
         this.canvasContext = this.htmlCanvasEl.getContext('2d');
+        this.colorStr = '';
     }
 
     down(position: Point, insideWorkspace?: boolean | undefined, isRightClick?: boolean): void {
@@ -35,7 +37,7 @@ export class PipetteService extends InputObserver {
         this.interact.emitPreviewColor(this.colorStr); // emits to a small preview box in toolsAttributes
     }
 
-    imgDataConversion(position: Point) {
+    imgDataConversion(position: Point): void {
         if (this.canvasContext) {
             this.clickedColor = this.canvasContext.getImageData(position.x, position.y, 1, 1).data;
             this.colorStr = this.buildImageData();
@@ -51,7 +53,7 @@ export class PipetteService extends InputObserver {
         return str;
     }
 
-    emitSelectedColor(color: string, rightClick?: boolean) {
+    emitSelectedColor(color: string, rightClick?: boolean): void {
         const BACK_COLOR: string = this.cPick.cData.backgroundColor;
         const PRIM_COLOR = this.cPick.cData.primaryColor;
         const SEC_COLOR = this.cPick.cData.secondaryColor;

@@ -36,7 +36,7 @@ describe('CanvasBuilderService', () => {
   it('should whipe an existing doodle', () => {
     const elem: ElementRef = new ElementRef(SvgDrawComponent);
     const draw: String = '<rect />';
-    elem.nativeElement.innerHTML = draw
+    elem.nativeElement.innerHTML = draw;
 
     service.whipeDraw(elem);
     expect(elem.nativeElement.innerHTML).not.toContain(draw);

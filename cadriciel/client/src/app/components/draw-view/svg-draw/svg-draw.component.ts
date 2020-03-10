@@ -1,17 +1,17 @@
 import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 import { Canvas } from 'src/app/models/Canvas.model';
+import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
 import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
-import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 
 @Component({
     selector: 'app-svg-draw',
@@ -36,7 +36,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     toolsContainer = new Map();
     interactionToolsContainer = new Map();
 
-    showGrid: boolean = false;
+    showGrid = false;
 
     // pixelMatrix: HTMLCanvasElement | undefined;
 
@@ -55,7 +55,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     }
 
     closeTools(map: Map<string, DrawingTool>) {
-        map.forEach(el => {
+        map.forEach((el) => {
             el.selected = false;
             el.cancel();
         });
@@ -147,22 +147,22 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('ApplicateurCouleur', colorEditor);
         this.toolsContainer.set('Pipette', pipette);
 
-        this.interaction.$cancelToolsObs.subscribe(sig => {
+        this.interaction.$cancelToolsObs.subscribe((sig) => {
             if (sig) {
                 this.closeTools(this.toolsContainer);
             }
         });
-        this.interaction.$selectedTool.subscribe(toolName => {
+        this.interaction.$selectedTool.subscribe((toolName) => {
             if (toolName === 'Annuler' || toolName === 'Refaire') {
                 this.interactionToolsContainer.get('AnnulerRefaire').apply(toolName);
             } else if (this.toolsContainer.get(toolName)) {
-                let event = new Event('toolChange');
+                const event = new Event('toolChange');
                 window.dispatchEvent(event);
                 this.closeTools(this.toolsContainer);
                 this.toolsContainer.get(toolName).selected = true;
             }
             if (toolName === 'Pipette') {
-                //... or, eventually, bucket tool
+                // ... or, eventually, bucket tool
                 mouseHandler.svgCanvas = this.pixelMatrixRef.nativeElement;
                 //
             } else {
@@ -172,7 +172,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         });
 
         // Subscribe each tool to keyboard and mouse
-        this.toolsContainer.forEach(element => {
+        this.toolsContainer.forEach((element) => {
             keyboardHandler.addToolObserver(element);
             mouseHandler.addObserver(element);
         });

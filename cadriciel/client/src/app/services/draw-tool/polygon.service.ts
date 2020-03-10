@@ -48,11 +48,11 @@ export class PolygonService extends ShapeService {
 
         this.setAttributesToPath();
         // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
-        //this.stroke = (this.attr.plotType === 0 || this.attr.plotType === 2) ? `${this.chosenColor.secColor}` : 'none';
-        //this.fill = (this.attr.plotType === 1 || this.attr.plotType === 2) ? `${this.chosenColor.primColor}` : 'none';
+        // this.stroke = (this.attr.plotType === 0 || this.attr.plotType === 2) ? `${this.chosenColor.secColor}` : 'none';
+        // this.fill = (this.attr.plotType === 1 || this.attr.plotType === 2) ? `${this.chosenColor.primColor}` : 'none';
 
-        //this.svgString += `" fill="${this.fill}"`;
-        //this.svgString += `stroke-width="${this.attr.lineThickness}" stroke="${this.stroke}"/>`;
+        // this.svgString += `" fill="${this.fill}"`;
+        // this.svgString += `stroke-width="${this.attr.lineThickness}" stroke="${this.stroke}"/>`;
 
         this.createPerimeter(removePerimeter);
 

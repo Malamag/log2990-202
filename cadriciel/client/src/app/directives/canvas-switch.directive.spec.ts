@@ -1,9 +1,9 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component, ElementRef } from '@angular/core';
-import { CanvasSwitchDirective } from './canvas-switch.directive';
-import { InteractionService } from '../services/service-interaction/interaction.service';
-import { ExportService } from '../services/exportation/export.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ExportService } from '../services/exportation/export.service';
+import { InteractionService } from '../services/service-interaction/interaction.service';
+import { CanvasSwitchDirective } from './canvas-switch.directive';
 
 @Component({
     // building a fake component for test purposes
@@ -67,7 +67,7 @@ describe('CanvasSwitchDirective', () => {
 
     it('should export in canvas at first initialisation', () => {
         dir.canvas = htmlElementStub;
-        const spy = spyOn(dir['exService'], 'exportInCanvas');
+        const spy = spyOn(dir.exService, 'exportInCanvas');
         dir.ngAfterViewInit();
         expect(spy).toHaveBeenCalled();
     });
@@ -75,16 +75,16 @@ describe('CanvasSwitchDirective', () => {
     it('should set the image to convert in subscription execution', () => {
         dir.ngAfterViewInit();
         itService.emitSvgCanvasConversion(true);
-        expect(dir['imageToConvert']).toEqual(dir['element'].nativeElement);
+        expect(dir.imageToConvert).toEqual(dir.element.nativeElement);
     });
 
     it('should call the svg to html canvas exportation method on positive conversion boolean', () => {
         jasmine.clock().install(); // the spied function is in a timer
-        const CALL_NUM: number = 2;
-        const spy = spyOn(dir['exService'], 'exportInCanvas');
+        const CALL_NUM = 2;
+        const spy = spyOn(dir.exService, 'exportInCanvas');
         dir.ngAfterViewInit();
         itService.emitSvgCanvasConversion(true);
-        const TIME: number = 50; // arbitrary 'large' amount of ms
+        const TIME = 50; // arbitrary 'large' amount of ms
         jasmine.clock().tick(TIME);
         expect(spy).toHaveBeenCalledTimes(CALL_NUM); // called in subscription and on AfterViewInit
         jasmine.clock().uninstall();
@@ -92,11 +92,11 @@ describe('CanvasSwitchDirective', () => {
 
     it('should not call the svg to html canvas exportation method on negative conversion boolean', () => {
         jasmine.clock().install(); // the spied function is in a timer
-        const CALL_NUM: number = 1;
-        const spy = spyOn(dir['exService'], 'exportInCanvas');
+        const CALL_NUM = 1;
+        const spy = spyOn(dir.exService, 'exportInCanvas');
         dir.ngAfterViewInit();
         itService.emitSvgCanvasConversion(false);
-        const TIME: number = 50;
+        const TIME = 50;
         jasmine.clock().tick(TIME);
         expect(spy).toHaveBeenCalledTimes(CALL_NUM); // called on AfterViewInit only
         jasmine.clock().uninstall();
@@ -110,27 +110,27 @@ describe('CanvasSwitchDirective', () => {
     });
 
     it('should set the showCanvas attribute to the proper subscription value', () => {
-        dir['showCanvas'] = false;
+        dir.showCanvas = false;
         dir.ngAfterViewInit();
         itService.emitSvgCanvasConversion(true);
-        expect(dir['showCanvas']).toBe(true);
+        expect(dir.showCanvas).toBe(true);
     });
 
     it('should show the canvas and hide the svg on true showCanvas boolean', () => {
-        dir['showCanvas'] = true;
-        const NO_DISPLAY: string = 'none';
-        const DISPLAY: string = 'block';
+        dir.showCanvas = true;
+        const NO_DISPLAY = 'none';
+        const DISPLAY = 'block';
         dir.toggleSvgCanvas();
-        expect(dir['canvas'].style.display).toEqual(DISPLAY);
-        expect(dir['imageToConvert'].style.display).toEqual(NO_DISPLAY);
+        expect(dir.canvas.style.display).toEqual(DISPLAY);
+        expect(dir.imageToConvert.style.display).toEqual(NO_DISPLAY);
     });
 
     it('should not show the canvas and hide the svg on false showCanvas boolean', () => {
-        dir['showCanvas'] = false;
-        const NO_DISPLAY: string = 'none';
-        const DISPLAY: string = 'block';
+        dir.showCanvas = false;
+        const NO_DISPLAY = 'none';
+        const DISPLAY = 'block';
         dir.toggleSvgCanvas();
-        expect(dir['canvas'].style.display).toEqual(NO_DISPLAY);
-        expect(dir['imageToConvert'].style.display).toEqual(DISPLAY);
+        expect(dir.canvas.style.display).toEqual(NO_DISPLAY);
+        expect(dir.imageToConvert.style.display).toEqual(DISPLAY);
     });
 });

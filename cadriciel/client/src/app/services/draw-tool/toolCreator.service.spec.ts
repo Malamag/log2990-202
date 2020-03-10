@@ -35,7 +35,7 @@ describe('ToolCreator', () => {
       rgbToHsl: () => [],
       cData: colorData,
       alphaRGBToHex: () => ''
-    }
+    };
 
     TestBed.configureTestingModule({
       providers: [

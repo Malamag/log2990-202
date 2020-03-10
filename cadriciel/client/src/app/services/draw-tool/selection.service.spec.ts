@@ -1,9 +1,9 @@
-import { TestBed } from '@angular/core/testing';
 import { Renderer2 } from '@angular/core';
-import { SelectionService } from './selection.service';
+import { TestBed } from '@angular/core/testing';
+import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
-import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
+import { SelectionService } from './selection.service';
 
 export class FakeInteractionService extends InteractionService {}
 

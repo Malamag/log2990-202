@@ -1,17 +1,17 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
+import { AerosolService } from './aerosol.service';
 import { BrushService } from './brush.service';
+import { ColorEditorService } from './color-editor.service';
 import { EllipseService } from './ellipse.service';
+import { EraserService } from './eraser.service';
 import { LineService } from './line.service';
 import { PencilService } from './pencil.service';
-import { RectangleService } from './rectangle.service';
-import { PolygonService } from './polygon.service';
-import { SelectionService } from './selection.service';
 import { PipetteService } from './pipette.service';
-import { AerosolService } from './aerosol.service';
-import { EraserService } from './eraser.service';
-import { ColorEditorService } from './color-editor.service';
+import { PolygonService } from './polygon.service';
+import { RectangleService } from './rectangle.service';
+import { SelectionService } from './selection.service';
 
 @Injectable({
     providedIn: 'root',

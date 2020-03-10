@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import {
     MatButtonModule,
     MatFormFieldModule,
@@ -9,10 +11,8 @@ import {
     MatToolbarModule,
     MatTooltipModule,
 } from '@angular/material';
-import { ToolBoxComponent } from './tool-box.component';
 import { ColorPickerComponent } from '../../color-picker/color-picker.component';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { ToolBoxComponent } from './tool-box.component';
 
 describe('ToolBoxComponent', () => {
     let component: ToolBoxComponent;

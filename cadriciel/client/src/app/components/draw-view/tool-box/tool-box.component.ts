@@ -49,7 +49,7 @@ export class ToolBoxComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.interactionService.$enableDisableButtons.subscribe(disableContainer => {
+        this.interactionService.$enableDisableButtons.subscribe((disableContainer) => {
             this.disableUndo = disableContainer[0];
             this.disableRedo = disableContainer[1];
         });

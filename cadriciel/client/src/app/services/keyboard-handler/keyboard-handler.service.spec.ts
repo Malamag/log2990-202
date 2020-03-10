@@ -98,7 +98,7 @@ describe('KeyboardHandlerService', () => {
     });
 
     it('should get the key information and the observers must be updated and the change check is done', () => {
-        
+
         const mockKey: KeyboardEvent = new KeyboardEvent('keydown', {
             key: 'Shift',
             ctrlKey: false,
@@ -112,11 +112,10 @@ describe('KeyboardHandlerService', () => {
         expect(service.ctrlDown).toBeFalsy();
         expect(service.shiftDown).toBeTruthy();
 
-        
     });
 
     it('on reset the keyboard attributes are reseted and the tools have been updated', () => {
-        
+
         // let initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
         const mockKey: KeyboardEvent = new KeyboardEvent('keyup', {
             key: 'Shift',
@@ -130,7 +129,7 @@ describe('KeyboardHandlerService', () => {
         expect(service.keyCode).toBe(-1);
 
         expect(service.shiftDown).toBeTruthy();
-        
+
     });
 
     it('should toggle the ctrlDown boolean on pressed ctrl', () => {

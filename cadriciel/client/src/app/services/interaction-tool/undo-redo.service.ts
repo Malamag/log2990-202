@@ -12,7 +12,7 @@ export class UndoRedoService extends InteractionTool {
         this.updateContainer();
     }
     updateContainer() {
-        this.interact.$drawingDone.subscribe(sig => {
+        this.interact.$drawingDone.subscribe((sig) => {
             if (sig) {
                 if (this.undone.length > 0) {
                     this.undone = [];
@@ -22,14 +22,14 @@ export class UndoRedoService extends InteractionTool {
             }
         });
     }
-    updateDoneContainer(){
-        this.interact.$canvasRedone.subscribe(sig =>{
-            if(sig){
+    updateDoneContainer() {
+        this.interact.$canvasRedone.subscribe((sig) => {
+            if (sig) {
                 this.done = [];
                 this.undone = [];
             }
-            
-        })
+
+        });
     }
     undo() {
         if (!this.done.length) {
@@ -41,8 +41,8 @@ export class UndoRedoService extends InteractionTool {
             this.undone.push(elem);
         }
         if (this.done.length) {
-            this.drawing.innerHTML = this.done[this.done.length-1]
-            let event = new Event("newDrawing");
+            this.drawing.innerHTML = this.done[this.done.length - 1];
+            const event = new Event('newDrawing');
             window.dispatchEvent(event);
         }
     }
@@ -56,10 +56,10 @@ export class UndoRedoService extends InteractionTool {
         if (elem != undefined) {
             this.done.push(elem);
         }
-        this.drawing.innerHTML = this.done[this.done.length-1]
-        let event = new Event("newDrawing");
+        this.drawing.innerHTML = this.done[this.done.length - 1];
+        const event = new Event('newDrawing');
         window.dispatchEvent(event);
-        
+
     }
 
     apply(name: string) {

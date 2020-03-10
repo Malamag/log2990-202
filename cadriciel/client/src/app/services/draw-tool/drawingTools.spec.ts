@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
-import {DrawingTool} from './drawingTool'
+import {DrawingTool} from './drawingTool';
 import { Point } from './point';
 
 export class fakeCpService extends ColorPickingService {}
@@ -101,7 +101,7 @@ describe('drawingTools', () => {
         service.createPath = () => 'test';
         const spy = spyOn(service, 'updateDrawing');
         service.goingOutsideCanvas(new Point(0, 0)); // random point
-        expect(spy).toHaveBeenCalled()
+        expect(spy).toHaveBeenCalled();
     });
 
   it('should continue drawing when mouse goes back in canvas', () => {

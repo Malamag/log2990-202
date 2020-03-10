@@ -24,21 +24,21 @@ describe('MouseHandlerService', () => {
       goingInsideCanvas: (pt: Point) => 0,
       up: (pt: Point) => 0,
       doubleClick: () => 0
-    }
+    };
 
     clientRectStub = {
       left: 0,
       right: 0,
       bottom: 0,
       top: 0
-    }
+    };
 
     mouseEventStub = {
       x: 0,
       y: 0
-    }
+    };
 
-    htmlElemStub = {getBoundingClientRect: () => new DOMRect()}
+    htmlElemStub = {getBoundingClientRect: () => new DOMRect()};
 
     TestBed.configureTestingModule({
       providers: [

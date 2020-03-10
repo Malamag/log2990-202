@@ -41,7 +41,7 @@ export class CanvasBuilderService {
 
     emitCanvas(): void {
         this.canvSubject.next(this.newCanvas);
-        this.interact.emitCanvasRedone()
+        this.interact.emitCanvasRedone();
     }
 
     getPalleteAttributes() {

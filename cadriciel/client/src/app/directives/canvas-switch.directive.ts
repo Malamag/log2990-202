@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
 import { ExportService } from '../services/exportation/export.service';
 import { InteractionService } from '../services/service-interaction/interaction.service';
 
@@ -9,7 +9,7 @@ export class CanvasSwitchDirective implements AfterViewInit {
     @Input('appCanvasRef') canvas: HTMLCanvasElement;
 
     private imageToConvert: SVGElement;
-    private showCanvas: boolean = false;
+    private showCanvas = false;
     private readonly noDisplay: string = 'none';
     private readonly display: string = 'block';
 
@@ -26,7 +26,7 @@ export class CanvasSwitchDirective implements AfterViewInit {
         this.exService.exportInCanvas(this.imageToConvert, this.canvas);
 
         this.itService.$convertSvg2Canvas.subscribe((toCanvas: boolean) => {
-            //console.log('signal recieved with ' + toCanvas);
+            // console.log('signal recieved with ' + toCanvas);
             // no name and type set. as optionnal attributes. We dont want to download it
             this.imageToConvert = this.element.nativeElement;
             if (toCanvas) {

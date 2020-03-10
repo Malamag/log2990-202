@@ -13,7 +13,7 @@ describe('UserManualComponent', () => {
   beforeEach(async(() => {
     fakeDialog = {
       close: () => 0
-    }
+    };
     TestBed.configureTestingModule({
 
       declarations: [ UserManualComponent, UserManualContentComponent ],

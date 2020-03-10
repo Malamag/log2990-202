@@ -40,7 +40,7 @@ export class ShapeService extends DrawingTool {
         this.fill = '';
     }
     updateAttributes() {
-        this.interaction.$formsAttributes.subscribe(obj => {
+        this.interaction.$formsAttributes.subscribe((obj) => {
             if (obj) {
                 // Getting attributes for a shape
                 this.attr = { plotType: obj.plotType, lineThickness: obj.lineThickness, numberOfCorners: obj.numberOfCorners };

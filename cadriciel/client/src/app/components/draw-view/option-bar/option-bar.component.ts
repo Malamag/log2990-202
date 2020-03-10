@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Canvas } from 'src/app/models/Canvas.model';
+import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { menuItems } from '../../../functionality';
 import { ExportFormComponent } from '../../export-form/export-form.component';
+import { GalleryComponent } from '../../gallery/gallery.component';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
-import { GalleryComponent } from '../../gallery/gallery.component';
-import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 
 @Component({
     selector: 'app-option-bar',
@@ -20,9 +20,9 @@ export class OptionBarComponent {
     funcMenu = menuItems;
     canvasSub: Subscription;
     currentCanvas: Canvas;
-    gridSelected: boolean = false;
+    gridSelected = false;
     stepVal: number;
-    alphaVal: number = 100;
+    alphaVal = 100;
     readonly maxStepVal: number = 90;
     readonly minStepVal: number = 10;
 
@@ -32,22 +32,22 @@ export class OptionBarComponent {
         private kbHandler: KeyboardHandlerService,
         private gridService: GridRenderService,
     ) {
-        window.addEventListener('keydown', e => {
+        window.addEventListener('keydown', (e) => {
             this.setShortcutEvent(e);
         });
         this.stepVal = this.gridService.defSteps;
     }
 
     setShortcutEvent(e: KeyboardEvent) {
-        const O_KEY: number = 79; // keycode for letter o
-        const E_KEY: number = 69;
+        const O_KEY = 79; // keycode for letter o
+        const E_KEY = 69;
         const G_KEY = 71;
-        const NUMPAD_PLUS: number = 107;
-        const NUMPAD_MINUS: number = 109;
-        const DASH: number = 189; // minus sign
-        const EQUAL: number = 187; // plus sign located on the equal key (shift-equal)
+        const NUMPAD_PLUS = 107;
+        const NUMPAD_MINUS = 109;
+        const DASH = 189; // minus sign
+        const EQUAL = 187; // plus sign located on the equal key (shift-equal)
 
-        const STEP: number = 5;
+        const STEP = 5;
         this.kbHandler.logkey(e);
 
         if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === O_KEY) {
@@ -98,7 +98,7 @@ export class OptionBarComponent {
     }
 
     openExportForm() {
-        const OPENING_WAIT: number = 5; // waiting for the window to be loaded before returning to oldstate
+        const OPENING_WAIT = 5; // waiting for the window to be loaded before returning to oldstate
         const OLD_STATE: boolean = this.interaction.isCanvas;
         console.log(OLD_STATE);
         this.interaction.emitSvgCanvasConversion(false);

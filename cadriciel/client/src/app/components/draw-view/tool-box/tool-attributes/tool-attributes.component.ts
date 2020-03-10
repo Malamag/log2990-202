@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { AerosolAttributes } from 'src/app/services/attributes/aerosol-attribute';
+import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 
 @Component({
     selector: 'app-tool-attributes',
@@ -48,9 +48,9 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     ngOnInit() {
-        this.interaction.$selectedTool.subscribe(tool => {
+        this.interaction.$selectedTool.subscribe((tool) => {
             let toolExist = false;
-            this.tools.forEach(el => {
+            this.tools.forEach((el) => {
                 if (el === tool) {
                     toolExist = true;
                 }

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ExportService } from './export.service';
 import { ElementRef } from '@angular/core';
+import { ExportService } from './export.service';
 
 describe('ExportService', () => {
     let service: ExportService;

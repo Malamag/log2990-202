@@ -27,20 +27,20 @@ export class KeyboardHandlerService {
     }
 
     updateDownToolObservers() {
-        this.toolObservers.forEach(element => {
+        this.toolObservers.forEach((element) => {
             element.updateDown(this);
         });
     }
 
     updateUpToolObservers(keyCode: number) {
-        this.toolObservers.forEach(element => {
+        this.toolObservers.forEach((element) => {
             element.updateUp(keyCode);
         });
     }
 
     checkForToolChange() {
         if (this.toolshortcuts.includes(this.keyCode)) {
-            this.toolObservers.forEach(element => {
+            this.toolObservers.forEach((element) => {
                 element.cancel();
                 element.selected = false;
             });

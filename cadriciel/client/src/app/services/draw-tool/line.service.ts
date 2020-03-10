@@ -27,7 +27,7 @@ export class LineService extends DrawingTool {
     }
 
     updateAttributes() {
-        this.interaction.$lineAttributes.subscribe(obj => {
+        this.interaction.$lineAttributes.subscribe((obj) => {
             if (obj) {
                 this.attr = { junction: obj.junction, lineThickness: obj.lineThickness, junctionDiameter: obj.junctionDiameter };
             }

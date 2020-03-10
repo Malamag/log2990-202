@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 
 import { BrushService } from './brush.service';
 
-
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';

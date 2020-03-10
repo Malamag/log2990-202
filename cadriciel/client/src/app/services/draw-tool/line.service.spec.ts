@@ -5,7 +5,7 @@ import { LineService } from './line.service';
 import { Point } from './point';
 
 describe('LineService', () => {
-  let service: LineService
+  let service: LineService;
   let ptA: Point;
   let ptB: Point;
   let ptArr: Point[];
@@ -16,7 +16,7 @@ describe('LineService', () => {
     kbServiceStub = {
       shiftDown: true,
       keyCode: 8 // backspace
-    }
+    };
 
     TestBed.configureTestingModule({
       providers: [
@@ -276,7 +276,7 @@ describe('LineService', () => {
 
     const NEW_Y = 0;
     expect(REDIR.y).toEqual(NEW_Y); // without calculating the new x value, we can assume the point is well positionned by the forced y
-  })
+  });
 
   it('should redirect the point to a forced angle of 45 degrees', () => {
     const PTA = new Point(0, 0);

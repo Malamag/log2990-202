@@ -52,15 +52,15 @@ export class ColorEditorService extends DrawingTool {
 
         window.addEventListener('newDrawing', (e: Event) => {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
-                let el = this.drawing.children[i];
-                let status = el.getAttribute('isListening3');
+                const el = this.drawing.children[i];
+                const status = el.getAttribute('isListening3');
                 this.render.setAttribute(el, 'checkPreciseEdge2', 'true');
                 if (status !== 'true') {
                     this.render.setAttribute(el, 'isListening3', 'true');
                     this.render.listen(el, 'mousemove', () => {
-                        //console.log("enter");
+                        // console.log("enter");
                         if (!this.foundAnItem) {
-                            //this.highlight(el);
+                            // this.highlight(el);
                             this.render.setAttribute(el, 'checkPreciseEdge2', 'false');
                             this.foundAnItem = true;
                             if (this.isDown) {
@@ -70,9 +70,9 @@ export class ColorEditorService extends DrawingTool {
                         }
                     });
                     this.render.listen(el, 'mouseleave', () => {
-                        //console.log("leaving");
+                        // console.log("leaving");
                         if (this.foundAnItem) {
-                            //this.unhighlight(el);
+                            // this.unhighlight(el);
                             this.foundAnItem = false;
                             this.render.setAttribute(el, 'checkPreciseEdge2', 'true');
                         }
@@ -84,7 +84,7 @@ export class ColorEditorService extends DrawingTool {
                     });
                     this.render.listen(el, 'mouseup', () => {
                         if (!this.foundAnItem) {
-                            //this.highlight(el);
+                            // this.highlight(el);
                             this.render.setAttribute(el, 'checkPreciseEdge2', 'false');
                             this.foundAnItem = false;
                         }
@@ -96,12 +96,12 @@ export class ColorEditorService extends DrawingTool {
         window.addEventListener('toolChange', (e: Event) => {
             this.foundAnItem = false;
             for (let i = 0; i < this.drawing.childElementCount; i++) {
-                //this.unhighlight(this.drawing.children[i]);
+                // this.unhighlight(this.drawing.children[i]);
             }
         });
     }
     updateAttributes() {
-        this.interaction.$toolsAttributes.subscribe(obj => {
+        this.interaction.$toolsAttributes.subscribe((obj) => {
             if (obj) {
                 this.attr = { lineThickness: obj.lineThickness, texture: obj.texture };
             }
@@ -146,7 +146,7 @@ export class ColorEditorService extends DrawingTool {
 
             if (this.erasedSomething) {
                 this.interaction.emitDrawingDone();
-                //console.log("now");
+                // console.log("now");
             }
             this.erasedSomething = false;
         }
@@ -155,7 +155,7 @@ export class ColorEditorService extends DrawingTool {
     changeColor(el: Element) {
         if (this.selected) {
             for (let i = 0; i < el.childElementCount; i++) {
-                let current = el.children[i];
+                const current = el.children[i];
                 if (current.tagName == 'filter') {
                     continue;
                 }
@@ -169,18 +169,18 @@ export class ColorEditorService extends DrawingTool {
     }
 
     changeBorder(el: HTMLElement) {
-        let newColor = el.getAttribute('stroke') != 'none' ? this.chosenColor.secColor : '';
+        const newColor = el.getAttribute('stroke') != 'none' ? this.chosenColor.secColor : '';
         this.render.setAttribute(el, 'stroke', newColor);
     }
 
     changeFill(el: HTMLElement) {
-        let newColor = el.getAttribute('fill') != 'none' ? this.chosenColor.primColor : '';
+        const newColor = el.getAttribute('fill') != 'none' ? this.chosenColor.primColor : '';
         this.render.setAttribute(el, 'fill', newColor);
     }
 
     // mouse move with pencil in hand
     move(position: Point) {
-        //console.log(this.erasedSomething);
+        // console.log(this.erasedSomething);
 
         // only if the pencil is currently affecting the canvas
         if (true) {
@@ -208,32 +208,32 @@ export class ColorEditorService extends DrawingTool {
     }
 
     checkIfTouching() {
-        let canv = this.canvas;
-        let canvasBox = canv ? canv.getBoundingClientRect() : null;
-        let canvOffsetX = canvasBox ? canvasBox.left : 0;
-        let canvOffsetY = canvasBox ? canvasBox.top : 0;
+        const canv = this.canvas;
+        const canvasBox = canv ? canv.getBoundingClientRect() : null;
+        const canvOffsetX = canvasBox ? canvasBox.left : 0;
+        const canvOffsetY = canvasBox ? canvasBox.top : 0;
 
-        //console.log(`${canvOffsetX}, ${canvOffsetY}`);
+        // console.log(`${canvOffsetX}, ${canvOffsetY}`);
 
-        let w = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
-        let h = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
+        const w = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
+        const h = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
 
-        let dim = Math.max(w, h);
+        const dim = Math.max(w, h);
 
-        let tl = new Point(this.currentPath[this.currentPath.length - 1].x - dim / 2, this.currentPath[this.currentPath.length - 1].y - dim / 2);
-        let br = new Point(tl.x + dim, tl.y + dim);
+        const tl = new Point(this.currentPath[this.currentPath.length - 1].x - dim / 2, this.currentPath[this.currentPath.length - 1].y - dim / 2);
+        const br = new Point(tl.x + dim, tl.y + dim);
 
         for (let i = 0; i < this.drawing.childElementCount; i++) {
             let touching = false;
-            let firstChild = this.drawing.children[i];
+            const firstChild = this.drawing.children[i];
 
             // item bounding box
-            let itemBox = firstChild.getBoundingClientRect();
-            let itemTopLeft: Point = new Point(itemBox.left - canvOffsetX, itemBox.top - canvOffsetY);
-            let itemBottomRight: Point = new Point(itemBox.right - canvOffsetX, itemBox.bottom - canvOffsetY);
+            const itemBox = firstChild.getBoundingClientRect();
+            const itemTopLeft: Point = new Point(itemBox.left - canvOffsetX, itemBox.top - canvOffsetY);
+            const itemBottomRight: Point = new Point(itemBox.right - canvOffsetX, itemBox.bottom - canvOffsetY);
 
             if (!Point.rectOverlap(tl, br, itemTopLeft, itemBottomRight)) {
-                //this.unhighlight(firstChild);
+                // this.unhighlight(firstChild);
                 continue;
             }
 
@@ -241,34 +241,34 @@ export class ColorEditorService extends DrawingTool {
                 continue;
             }
 
-            let objOffset = (this.drawing.children[i] as HTMLElement).style.transform;
-            let s = objOffset ? objOffset.split(',') : '';
-            let objOffsetX = +s[0].replace(/[^\d.-]/g, '');
-            let objOffsetY = +s[1].replace(/[^\d.-]/g, '');
+            const objOffset = (this.drawing.children[i] as HTMLElement).style.transform;
+            const s = objOffset ? objOffset.split(',') : '';
+            const objOffsetX = +s[0].replace(/[^\d.-]/g, '');
+            const objOffsetY = +s[1].replace(/[^\d.-]/g, '');
 
             for (let j = 0; j < firstChild.childElementCount; j++) {
-                let secondChild = firstChild.children[j];
+                const secondChild = firstChild.children[j];
 
-                let width = (secondChild as HTMLElement).getAttribute('stroke-width');
+                const width = (secondChild as HTMLElement).getAttribute('stroke-width');
                 let offset = 0;
                 if (width) {
                     offset = +width;
                 }
 
-                let dim2 = 3 + offset;
+                const dim2 = 3 + offset;
 
                 if (secondChild.classList.contains('clone') || secondChild.tagName == 'filter') {
                     continue;
                 }
 
-                let path = secondChild as SVGPathElement;
-                let lenght = path.getTotalLength();
-                let inc = lenght / 300;
+                const path = secondChild as SVGPathElement;
+                const lenght = path.getTotalLength();
+                const inc = lenght / 300;
 
-                let closest: [Point, number] = [new Point(-1, -1), 10000];
+                const closest: [Point, number] = [new Point(-1, -1), 10000];
                 for (let a = 0; a < lenght; a += inc) {
-                    let candidate = new Point(path.getPointAtLength(a).x + objOffsetX, path.getPointAtLength(a).y + objOffsetY);
-                    let dist = Point.distance(this.currentPath[this.currentPath.length - 1], candidate);
+                    const candidate = new Point(path.getPointAtLength(a).x + objOffsetX, path.getPointAtLength(a).y + objOffsetY);
+                    const dist = Point.distance(this.currentPath[this.currentPath.length - 1], candidate);
                     if (dist < closest[1]) {
                         closest[0] = candidate;
                         closest[1] = dist;
@@ -276,34 +276,34 @@ export class ColorEditorService extends DrawingTool {
                 }
 
                 if (true) {
-                    let good = closest[0];
-                    //console.log(good);
-                    let tlp = new Point(good.x - dim2 / 2, good.y - dim2 / 2);
-                    let brp = new Point(good.x + dim2 / 2, good.y + dim2 / 2);
+                    const good = closest[0];
+                    // console.log(good);
+                    const tlp = new Point(good.x - dim2 / 2, good.y - dim2 / 2);
+                    const brp = new Point(good.x + dim2 / 2, good.y + dim2 / 2);
                     if (Point.rectOverlap(tlp, brp, tl, br)) {
                         touching = true;
                         break;
                     }
                 }
 
-                //for(let a = 0; a < points.length; a++){
+                // for(let a = 0; a < points.length; a++){
 
-                //}
+                // }
 
                 if (touching) {
                     break;
                 }
             }
 
-            //console.log(touching);
+            // console.log(touching);
             if (touching) {
                 if (this.isDown) {
                     this.changeColor(firstChild);
                 } else {
-                    //this.highlight(firstChild);
+                    // this.highlight(firstChild);
                 }
             } else {
-                //this.unhighlight(firstChild);
+                // this.unhighlight(firstChild);
             }
         }
     }
@@ -325,16 +325,16 @@ export class ColorEditorService extends DrawingTool {
         // create a divider
         s = '<g style="transform: translate(0px, 0px);" name = "eraser-brush">';
 
-        let w = Math.max(10, Math.abs(p[p.length - 1].x - p[0].x));
-        let h = Math.max(10, Math.abs(p[p.length - 1].y - p[0].y));
+        const w = Math.max(10, Math.abs(p[p.length - 1].x - p[0].x));
+        const h = Math.max(10, Math.abs(p[p.length - 1].y - p[0].y));
 
-        let dim = Math.max(w, h);
+        const dim = Math.max(w, h);
 
         s += `<rect x="${p[p.length - 1].x - dim / 2}" y="${p[p.length - 1].y - dim / 2}"`;
         s += `width="${dim}" height="${dim}"`;
 
-        s += `fill="white"`;
-        s += `stroke-width="1" stroke="black"`;
+        s += 'fill="white"';
+        s += 'stroke-width="1" stroke="black"';
 
         // end the divider
         s += '</g>';

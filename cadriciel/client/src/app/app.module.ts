@@ -3,7 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { ColorPickerComponent } from './components/color-picker/color-picker.component';
 import { DrawViewComponent } from './components/draw-view/draw-view.component';
@@ -15,14 +18,12 @@ import { ColorConvertingService } from './services/colorPicker/color-converting.
 import { ColorPickingService } from './services/colorPicker/color-picking.service';
 import { CanvasBuilderService } from './services/drawing/canvas-builder.service';
 import { ModalWindowService } from './services/window-handler/modal-window.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { MatIconRegistry } from '@angular/material/icon';
-import { AppRoutingModule } from './app-routing.module';
 
 /*import material*/
 import {
     MatButtonModule,
     MatButtonToggleModule,
+    MatCardModule,
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
@@ -31,21 +32,20 @@ import {
     MatSelectModule,
     MatSidenavModule,
     MatSliderModule,
+    MatSlideToggleModule,
     MatSnackBarModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatCardModule,
-    MatSlideToggleModule,
 } from '@angular/material';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
 import { SvgDrawComponent } from './components/draw-view/svg-draw/svg-draw.component';
 import { ToolAttributesComponent } from './components/draw-view/tool-box/tool-attributes/tool-attributes.component';
 import { ToolBoxComponent } from './components/draw-view/tool-box/tool-box.component';
-import { GalleryComponent } from './components/gallery/gallery.component';
 import { ExportFormComponent } from './components/export-form/export-form.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
 import { PreviewBoxComponent } from './components/preview-box/preview-box.component';
-import { ExportService } from './services/exportation/export.service';
 import { CanvasSwitchDirective } from './directives/canvas-switch.directive';
+import { ExportService } from './services/exportation/export.service';
 
 @NgModule({
     declarations: [

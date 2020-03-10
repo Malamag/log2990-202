@@ -12,8 +12,8 @@ export class GridRenderService {
     private vGridLines: SVGLineElement[] = [];
     private hGridLines: SVGLineElement[] = [];
 
-    gridAlpha: string = 'ff';
-    gridColor: string = '#000000';
+    gridAlpha = 'ff';
+    gridColor = '#000000';
 
     drawHeight: number;
     drawWidth: number;
@@ -109,7 +109,7 @@ export class GridRenderService {
     }
 
     updateTransparency(alphaPercent: number) {
-        const PERCENT: number = 100;
+        const PERCENT = 100;
         const ALPHA_VAL: number = alphaPercent / PERCENT;
 
         this.gridAlpha = this.colConv.alphaRGBToHex(ALPHA_VAL);
@@ -120,11 +120,11 @@ export class GridRenderService {
         const RGBA: number[] = this.colConv.hexToRgba(bgColor);
         const LIMIT = 128;
 
-        //the grid color must be changed to become visible if the background is too dark
+        // the grid color must be changed to become visible if the background is too dark
         const DARK_BG: boolean = RGBA[0] < LIMIT && RGBA[1] < LIMIT && RGBA[2] < LIMIT;
 
-        const WHITE: string = '#ffffff';
-        const BLACK: string = '#000000';
+        const WHITE = '#ffffff';
+        const BLACK = '#000000';
 
         if (DARK_BG) {
             this.gridColor = WHITE;

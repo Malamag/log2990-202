@@ -119,7 +119,7 @@ export class MouseHandlerService {
 
     callObserverMove() {
         // console.log("MOVING");
-        this.observers.forEach(element => {
+        this.observers.forEach((element) => {
             if (element.selected) {
                 element.move(this.mouseCanvasPosition);
             }
@@ -128,7 +128,7 @@ export class MouseHandlerService {
 
     callObserverDown(isRightClick: boolean) {
         // console.log("DOWN");
-        this.observers.forEach(element => {
+        this.observers.forEach((element) => {
             if (element.selected) {
                 element.down(this.mouseCanvasPosition, this.insideWorkspace, isRightClick);
             }
@@ -137,7 +137,7 @@ export class MouseHandlerService {
 
     callObserverOutsideCanvas() {
         // console.log("OutsideCanvas");
-        this.observers.forEach(element => {
+        this.observers.forEach((element) => {
             if (element.selected) {
                 element.goingOutsideCanvas(this.mouseCanvasPosition);
             }
@@ -146,7 +146,7 @@ export class MouseHandlerService {
 
     callObserverInsideCanvas() {
         // console.log("InsideCanvas");
-        this.observers.forEach(element => {
+        this.observers.forEach((element) => {
             if (element.selected) {
                 element.goingInsideCanvas(this.mouseCanvasPosition);
             }
@@ -155,7 +155,7 @@ export class MouseHandlerService {
 
     callObserverUp() {
         // console.log("UP");
-        this.observers.forEach(element => {
+        this.observers.forEach((element) => {
             if (element.selected) {
                 element.up(this.mouseCanvasPosition, this.insideWorkspace);
             }
@@ -164,7 +164,7 @@ export class MouseHandlerService {
 
     callObserverDoubleClick() {
         // console.log("DOUBLECLICK");
-        this.observers.forEach(element => {
+        this.observers.forEach((element) => {
             if (element.selected) {
                 element.doubleClick(this.mouseCanvasPosition, this.insideWorkspace);
             }

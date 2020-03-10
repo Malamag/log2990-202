@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DoodleFetchService } from './doodle-fetch.service';
 import { ElementRef } from '@angular/core';
+import { DoodleFetchService } from './doodle-fetch.service';
 
 describe('DoodleFetchService', () => {
     let service: DoodleFetchService;
@@ -43,8 +43,8 @@ describe('DoodleFetchService', () => {
     });
 
     it('should remove the grid when getting the doodle and put it back', () => {
-        const spyRem = spyOn(service['gService'], 'removeGrid');
-        const spyRenderBack = spyOn(service['gService'], 'renderBack');
+        const spyRem = spyOn(service.gService, 'removeGrid');
+        const spyRenderBack = spyOn(service.gService, 'renderBack');
         service.getSVGElementFromRef = jasmine.createSpy().and.returnValue(nativeElemStub);
         service.getDrawingWithoutGrid();
         expect(spyRem).toHaveBeenCalledBefore(spyRenderBack);

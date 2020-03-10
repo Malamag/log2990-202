@@ -1,9 +1,8 @@
-//import { HttpClient } from '@angular/common/http';
+// import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-//import { Observable, of } from 'rxjs';
-//import { catchError } from 'rxjs/operators';
-//import { Message } from '../../../../../common/communication/message';
-
+// import { Observable, of } from 'rxjs';
+// import { catchError } from 'rxjs/operators';
+// import { Message } from '../../../../../common/communication/message';
 
 @Injectable({
   providedIn: 'root'

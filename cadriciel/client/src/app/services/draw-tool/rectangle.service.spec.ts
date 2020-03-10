@@ -49,7 +49,7 @@ describe('RectangleService', () => {
         const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
         service.updateAttributes();
         expect(spyInteraction).toHaveBeenCalled();
-        expect(service['attr']).toBeDefined();
+        expect(service.attr).toBeDefined();
     });
 
     /*it('should update progress on move', () => {
@@ -111,7 +111,7 @@ describe('RectangleService', () => {
 
     it('should create a rectangle with the selected border thickness', () => {
         const thick = 1;
-        service['attr'].lineThickness = thick; // simulated border thickness
+        service.attr.lineThickness = thick; // simulated border thickness
         const rect = service.createPath(ptArr);
         const expTick = `stroke-width="${thick}"`;
         expect(rect).toContain(expTick);
@@ -153,7 +153,7 @@ describe('RectangleService', () => {
     });
 
     it('should create only an outlined rectangle on plottype = 0', () => {
-        service['attr'].plotType = 0; // init the plot type
+        service.attr.plotType = 0; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
@@ -167,7 +167,7 @@ describe('RectangleService', () => {
     });
 
     it('should create only a filled rectangle on plottype = 1', () => {
-        service['attr'].plotType = 1; // init the plot type
+        service.attr.plotType = 1; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
@@ -181,7 +181,7 @@ describe('RectangleService', () => {
     });
 
     it('should create a filled and outlined rectangle on plottype = 2', () => {
-        service['attr'].plotType = 2; // init the plot type
+        service.attr.plotType = 2; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
