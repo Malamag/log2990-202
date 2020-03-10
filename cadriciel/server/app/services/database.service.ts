@@ -54,10 +54,13 @@ export class DatabaseService {
         let drawingsList = JSON.parse(jsonData.toString());
         return this.collection.find({}).toArray()
             .then((metaData: MetaData[]) => {
+
                 let buffer: ImageData[] = [];
                 metaData.forEach((data: MetaData) => {
+                    console.log('yolo');
                     let image: Image = drawingsList.drawings.filter((drawing: Image) => { return drawing.id === data.id });
                     buffer.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
+                    console.log('yo');
                 })
                 let imageData: ImageData[] = [];
                 buffer.forEach((data: ImageData) => {
@@ -71,6 +74,7 @@ export class DatabaseService {
                         imageData.push(data);
                     }
                 });
+                //console.log(imageData);
                 return imageData;
             })
             .catch((error: Error) => {
@@ -92,7 +96,6 @@ export class DatabaseService {
             pos++;
         }
         buffer.push(s);
-        console.log(buffer);
         return buffer;
     }
     async deleteImageById(imageId: string): Promise<void> {
@@ -154,7 +157,7 @@ export class DatabaseService {
             { id: '3', name: 'three', tags: ["string"], svgElement: '' },
             { id: '4', name: 'four', tags: ["string"], svgElement: '' }]
         images.forEach((image) => {
-            this.saveImage(image);
+            //this.saveImage(image);
         })
     }
     async saveImage(imageData: ImageData) {
