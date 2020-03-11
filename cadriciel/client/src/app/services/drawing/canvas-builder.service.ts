@@ -11,9 +11,11 @@ import { InteractionService } from '../service-interaction/interaction.service';
 })
 export class CanvasBuilderService {
     newCanvas: Canvas;
-    canvSubject = new Subject<Canvas>(); // using rxjs to emit the created canvas to another component
+    canvSubject: Subject<Canvas>; // using rxjs to emit the created canvas to another component
 
-    constructor(private interact: InteractionService) {}
+    constructor(private interact: InteractionService) {
+        this.canvSubject = new Subject<Canvas>(); // using rxjs to emit the created canvas to another component
+    }
 
     getDefWidth(): number {
         const DIV = 1.18;
@@ -32,11 +34,11 @@ export class CanvasBuilderService {
 
     setCanvasFromForm(widthInput: number, heightInput: number, colorInput: string): void {
         colorInput = '#' + colorInput;
-        this.newCanvas = {canvasWidth: widthInput, canvasHeight: heightInput, canvasColor: colorInput}; // a fresh draw is always clean
+        this.newCanvas = { canvasWidth: widthInput, canvasHeight: heightInput, canvasColor: colorInput }; // a fresh draw is always clean
     }
 
     getDefCanvas(): Canvas {
-        return {canvasWidth: this.getDefWidth(), canvasHeight: this.getDefHeight(), canvasColor: this.getDefColor()};
+        return { canvasWidth: this.getDefWidth(), canvasHeight: this.getDefHeight(), canvasColor: this.getDefColor() };
     }
 
     emitCanvas(): void {
@@ -44,11 +46,12 @@ export class CanvasBuilderService {
         this.interact.emitCanvasRedone();
     }
 
-    getPalleteAttributes() {
+    getPalleteAttributes(): {} {
         const CENTERX = 30; // Centre cx, defines spaces between color palette dots
         let space = CENTERX;
-        for (let i = 0; i < colorCircles.length; ++i) {
-            colorCircles[i].cx = space; // modifies palette array containing only 0 values
+
+        for (const color of colorCircles) {
+            color.cx = space; // modifies palette array containing only 0 values
             space += CENTERX;
         }
         return colorCircles;

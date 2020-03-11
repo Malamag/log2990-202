@@ -5,7 +5,9 @@ import { DoodleFetchService } from './doodle-fetch.service';
 
 describe('DoodleFetchService', () => {
     let service: DoodleFetchService;
+    // tslint:disable-next-line: no-any
     let nativeElemStub: any;
+    // tslint:disable-next-line: no-any
     let elementStub: any;
     beforeEach(() => {
         nativeElemStub = {
@@ -27,8 +29,8 @@ describe('DoodleFetchService', () => {
     });
 
     it('should be created', () => {
-        const service: DoodleFetchService = TestBed.get(DoodleFetchService);
-        expect(service).toBeTruthy();
+        const testService: DoodleFetchService = TestBed.get(DoodleFetchService);
+        expect(testService).toBeTruthy();
     });
 
     it('should emit a signal when asking for the doodle', () => {
@@ -43,8 +45,10 @@ describe('DoodleFetchService', () => {
     });
 
     it('should remove the grid when getting the doodle and put it back', () => {
-        const spyRem = spyOn(service.gService, 'removeGrid');
-        const spyRenderBack = spyOn(service.gService, 'renderBack');
+        // tslint:disable-next-line: no-string-literal
+        const spyRem = spyOn(service['gService'], 'removeGrid');
+        // tslint:disable-next-line: no-string-literal
+        const spyRenderBack = spyOn(service['gService'], 'renderBack');
         service.getSVGElementFromRef = jasmine.createSpy().and.returnValue(nativeElemStub);
         service.getDrawingWithoutGrid();
         expect(spyRem).toHaveBeenCalledBefore(spyRenderBack);
