@@ -1,16 +1,18 @@
-<div  class="form-container">
+<div class="form-container">
     <h1>Nouveau dessin</h1>
-    <div  class="drawForm">
-        <form [formGroup]="newDrawForm" (ngSubmit)="onSubmit()"> <!--TODO: ng submit function-->
+    <div class="drawForm">
+        <form [formGroup]="newDrawForm" (ngSubmit)="onSubmit()">
+            <!--TODO: ng submit function-->
 
-            <mat-form-field >
+            <mat-form-field>
                 <mat-label for="canvWidth">Largeur (px)</mat-label>
-                <input matInput type="text" formControlName="canvWidth"  [value]="width" (keydown)="blockEvent($event)">
+                <input matInput type="text" formControlName="canvWidth" [value]="width" (keydown)="blockEvent($event)">
             </mat-form-field>
 
-            <mat-form-field >
+            <mat-form-field>
                 <mat-label for="canvHeight">Hauteur (px)</mat-label>
-                <input matInput type="text" formControlName="canvHeight" [value]="height" (keydown)="blockEvent($event)">
+                <input matInput type="text" formControlName="canvHeight" [value]="height"
+                    (keydown)="blockEvent($event)">
             </mat-form-field>
 
             <mat-form-field>
@@ -19,21 +21,22 @@
             </mat-form-field>
 
             <p *ngIf="(canvWidth && canvWidth.invalid) || 
-            (canvHeight && canvHeight.invalid)" class="warnMessage"> <!--Cas géré si canv* est null-->
+            (canvHeight && canvHeight.invalid)" class="warnMessage">
+                <!--Cas géré si canv* est null-->
                 Veuillez entrer un entier positif
-            </p> 
+            </p>
             <p *ngIf="canvColor && canvColor.invalid" class="warnMessage">
                 Valeur hexadécimale invalide!
             </p>
-
-            <svg id="palette">
+            <app-mini-color-picker></app-mini-color-picker>
+            <!--<svg id="palette">
                 <circle *ngFor="let attr of paletteArray" class="paletteElem"
                 [style.cx]=attr.cx cy="12" r="12" [style.fill]=attr.color (click)="updateColor(attr.color)"></circle>
-            </svg>
+            </svg>-->
 
-            <button mat-raised-button color="primary" id="submitButton"
-            type="submit" [disabled]="newDrawForm.invalid">C'est parti!</button>
-            
+            <button mat-raised-button color="primary" id="submitButton" type="submit"
+                [disabled]="newDrawForm.invalid">C'est parti!</button>
+
         </form>
         <div>
             <button mat-button id="quitButton" (click)="closeModalForm()">Cancel</button>
@@ -42,5 +45,3 @@
     </div>
 
 </div>
-
-

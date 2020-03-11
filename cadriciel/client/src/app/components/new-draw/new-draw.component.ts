@@ -9,7 +9,7 @@ import { CanvasBuilderService } from '../../services/drawing/canvas-builder.serv
   templateUrl: './new-draw.component.html',
   styleUrls: ['./new-draw.component.scss']
 })
-export class NewDrawComponent  implements OnInit  {
+export class NewDrawComponent implements OnInit {
   paletteArray = this.canvasBuilder.getPalleteAttributes();
 
   newDrawForm: FormGroup;
@@ -20,9 +20,9 @@ export class NewDrawComponent  implements OnInit  {
   inputEntered: boolean;
 
   constructor(private formBuilder: FormBuilder,
-              private canvasBuilder: CanvasBuilderService,
-              private winService: ModalWindowService,
-              private router: Router) {
+    private canvasBuilder: CanvasBuilderService,
+    private winService: ModalWindowService,
+    private router: Router) {
 
   }
 
@@ -93,7 +93,7 @@ export class NewDrawComponent  implements OnInit  {
 
   updateColor(newColor: string) {
     this.color = newColor.slice(1); // removes the '#'
-    this.newDrawForm.patchValue({canvColor: this.color}); // updates value for form
+    this.newDrawForm.patchValue({ canvColor: this.color }); // updates value for form
   }
 
 }

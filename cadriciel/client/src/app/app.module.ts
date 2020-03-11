@@ -36,7 +36,7 @@ import {
     MatTooltipModule,
     MatCardModule,
     MatChipsModule,
-    MatAutocompleteModule, 
+    MatAutocompleteModule,
     MatSlideToggleModule,
 } from '@angular/material';
 import { OptionBarComponent } from './components/draw-view/option-bar/option-bar.component';
@@ -48,6 +48,7 @@ import { ExportFormComponent } from './components/export-form/export-form.compon
 import { PreviewBoxComponent } from './components/preview-box/preview-box.component';
 import { ExportService } from './services/exportation/export.service';
 import { SaveFormComponent } from './components/save-form/save-form.component';
+import { MiniColorPickerComponent } from './components/color-picker/mini-color-picker/mini-color-picker.component';
 
 @NgModule({
     declarations: [
@@ -66,6 +67,7 @@ import { SaveFormComponent } from './components/save-form/save-form.component';
         ExportFormComponent,
         PreviewBoxComponent,
         SaveFormComponent,
+        MiniColorPickerComponent,
     ],
     imports: [
         BrowserModule,
@@ -95,8 +97,8 @@ import { SaveFormComponent } from './components/save-form/save-form.component';
     providers: [CanvasBuilderService, ModalWindowService, ColorConvertingService, ColorPickingService, ExportService],
 
     bootstrap: [AppComponent],
-    entryComponents: [NewDrawComponent, UserManualComponent,GalleryComponent, OptionBarComponent, 
-        ColorPickerComponent,ExportFormComponent, PreviewBoxComponent, SaveFormComponent] // components added dynamically
+    entryComponents: [NewDrawComponent, UserManualComponent, GalleryComponent, OptionBarComponent,
+        ColorPickerComponent, ExportFormComponent, PreviewBoxComponent, SaveFormComponent, MiniColorPickerComponent] // components added dynamically
 
 })
 export class AppModule {
