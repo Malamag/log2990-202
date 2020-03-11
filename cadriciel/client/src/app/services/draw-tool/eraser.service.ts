@@ -3,7 +3,7 @@ import { ToolsAttributes } from '../attributes/tools-attribute';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
-import { DrawingTool } from './drawingTool';
+import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
 const DEFAULTLINETHICKNESS = 5;
@@ -97,7 +97,7 @@ export class EraserService extends DrawingTool {
             }
         });
     }
-    updateAttributes() {
+    updateAttributes(): void {
         this.interaction.$toolsAttributes.subscribe((obj) => {
             if (obj) {
                 this.attr = { lineThickness: obj.lineThickness, texture: obj.texture };
@@ -106,17 +106,17 @@ export class EraserService extends DrawingTool {
         this.colorPick.emitColors();
     }
     // updating on key change
-    updateDown(keyboard: KeyboardHandlerService) {
+    updateDown(keyboard: KeyboardHandlerService): void {
         // keyboard has no effect on pencil
     }
 
     // updating on key up
-    updateUp(keyCode: number) {
+    updateUp(keyCode: number): void {
         // nothing happens for eraser tool
     }
 
     // mouse down with pencil in hand
-    down(position: Point) {
+    down(position: Point): void {
         // in case we changed tool while the mouse was down
         this.ignoreNextUp = false;
 
@@ -133,7 +133,7 @@ export class EraserService extends DrawingTool {
     }
 
     // mouse up with pencil in hand
-    up(position: Point, insideWorkspace: boolean) {
+    up(position: Point, insideWorkspace: boolean): void {
         // in case we changed tool while the mouse was down
         if (!this.ignoreNextUp) {
             // the pencil should not affect the canvas
@@ -147,7 +147,7 @@ export class EraserService extends DrawingTool {
         }
     }
 
-    erase(el: Element) {
+    erase(el: Element): void {
         if (this.selected) {
             this.render.removeChild(el.parentElement, el);
             this.erasedSomething = true;
@@ -155,7 +155,7 @@ export class EraserService extends DrawingTool {
     }
 
     // highlights a 'g' tag by adding a clone as a child
-    highlight(el: Element) {
+    highlight(el: Element): void {
         if (this.selected && el.firstElementChild && !el.firstElementChild.classList.contains('clone')) {
             const clone: Element = this.render.createElement('g', 'http://www.w3.org/2000/svg');
             (clone as HTMLElement).innerHTML = el.innerHTML;
@@ -169,10 +169,10 @@ export class EraserService extends DrawingTool {
                 const originalStrokeColor: string | null = (el.children[i] as HTMLElement).getAttribute('stroke');
                 const originalFillColor: string | null = (el.children[i] as HTMLElement).getAttribute('fill');
                 // 248 256
-                const refcolor: string | null = originalStrokeColor != 'none' ? originalStrokeColor : originalFillColor;
+                const refcolor: string | null = originalStrokeColor !== 'none' ? originalStrokeColor : originalFillColor;
 
                 const originalStrokeRGB: [number, number, number] = [0, 0, 0];
-                if (refcolor && refcolor != 'none') {
+                if (refcolor && refcolor !== 'none') {
                     originalStrokeRGB[0] = parseInt(refcolor[1] + refcolor[2], 16);
                     originalStrokeRGB[1] = parseInt(refcolor[3] + refcolor[4], 16);
                     originalStrokeRGB[2] = parseInt(refcolor[5] + refcolor[6], 16);
@@ -192,7 +192,7 @@ export class EraserService extends DrawingTool {
     }
 
     // unhighlights the element by removing all of his "clone" children
-    unhighlight(el: Element) {
+    unhighlight(el: Element): void {
         if (el.firstElementChild) {
             if (el.firstElementChild.classList.contains('clone')) {
                 this.render.removeChild(el, el.firstElementChild);
@@ -201,7 +201,7 @@ export class EraserService extends DrawingTool {
     }
 
     // mouse move with pencil in hand
-    move(position: Point) {
+    move(position: Point): void {
         // console.log(this.erasedSomething);
 
         // only if the pencil is currently affecting the canvas
@@ -220,16 +220,16 @@ export class EraserService extends DrawingTool {
     }
 
     // when we go from inside to outside the canvas
-    goingOutsideCanvas() {
+    goingOutsideCanvas(): void {
         // nothing happens since we might want to readjust the shape once back in
     }
 
     // when we go from outside to inside the canvas
-    goingInsideCanvas() {
+    goingInsideCanvas(): void {
         // nothing happens since we just update the preview
     }
 
-    checkIfTouching() {
+    checkIfTouching(): void {
         const canv = this.canvas;
         const canvasBox = canv ? canv.getBoundingClientRect() : null;
         const canvOffsetX = canvasBox ? canvasBox.left : 0;
@@ -331,12 +331,12 @@ export class EraserService extends DrawingTool {
     }
 
     // mouse doubleClick with pencil in hand
-    doubleClick(position: Point) {
+    doubleClick(position: Point): void {
         // since its down -> up -> down -> up -> doubleClick, nothing more happens for the pencil
     }
 
     // Creates an svg path that connects every points of currentPath with the pencil attributes
-    createPath(p: Point[]) {
+    createPath(p: Point[]): string {
         let s = '';
 
         // We need at least 2 points

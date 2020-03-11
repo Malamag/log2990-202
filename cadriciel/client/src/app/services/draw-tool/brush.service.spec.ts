@@ -6,13 +6,14 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 
-export class fakeInteractionService extends InteractionService {}
+export class FakeInteractionService extends InteractionService { }
 
 describe('BrushService', () => {
     let service: BrushService;
     let ptA: Point;
     let ptB: Point;
     let ptArr: Point[];
+    // tslint:disable-next-line: no-any
     let kbServiceStub: any;
 
     beforeEach(() => {
@@ -33,12 +34,12 @@ describe('BrushService', () => {
     });
 
     it('should be created', () => {
-        const service: BrushService = TestBed.get(BrushService);
-        expect(service).toBeTruthy();
+        const testService: BrushService = TestBed.get(BrushService);
+        expect(testService).toBeTruthy();
     });
 
     it('should set the attributes in the subscription', () => {
-        service.interaction.emitToolsAttributes({lineThickness: 0, texture: 0}); // emit fake
+        service.interaction.emitToolsAttributes({ lineThickness: 0, texture: 0 }); // emit fake
         const spyInteraction = spyOn(service.interaction.$toolsAttributes, 'subscribe');
         service.updateAttributes();
         expect(spyInteraction).toHaveBeenCalled();
@@ -64,7 +65,7 @@ describe('BrushService', () => {
         const prim = '#ffffff';
         const sec = '#000000';
         const back = '#ffffff';
-        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
 
         const path = service.createPath(ptArr);
 
@@ -123,7 +124,8 @@ describe('BrushService', () => {
         expect(filter).toContain(`scale="${W * SCALE}"`);
 
         // offset check, as set in brush.service.ts
-        expect(filter).toContain(`<feOffset in="turbulence" dx="${(-W * SCALE) / 4}" dy="${(-W * SCALE) / 4}"/>`);
+        const DIVIDER = 4;
+        expect(filter).toContain(`<feOffset in="turbulence" dx="${(-W * SCALE) / DIVIDER}" dy="${(-W * SCALE) / DIVIDER}"/>`);
     });
 
     it('should apply a blured texture', () => {

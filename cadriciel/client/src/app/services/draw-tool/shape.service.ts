@@ -3,7 +3,7 @@ import { FormsAttribute } from '../attributes/attribute-form';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
-import { DrawingTool } from './drawingTool';
+import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 const DEFAULTPLOTTYPE = 2;
 const DEFAULTNUMBERCORNERS = 3;

@@ -10,15 +10,15 @@ export class DrawViewComponent implements AfterViewInit {
     // I doubt if we can delete these two
     @ViewChild('workingSpace', { static: false }) workingSpaceRef: ElementRef;
 
-    constructor(public interaction: InteractionService) {}
+    constructor(public interaction: InteractionService) { }
 
-    ngAfterViewInit() {
+    ngAfterViewInit(): void {
         this.interaction.emitRef(this.workingSpaceRef);
     }
 
-    adaptWindowSize() {
+    adaptWindowSize(): void {
         window.dispatchEvent(new Event('resize'));
     }
 
-    /**Cette fonction peut à la limite être mise dans un service... */
+    /*Cette fonction peut à la limite être mise dans un service... */
 }

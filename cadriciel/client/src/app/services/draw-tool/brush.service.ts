@@ -14,7 +14,12 @@ const DEFAULTTEXTURE = 0;
 export class BrushService extends PencilService {
     textures: { type: string; intensity: number; frequency: number }[];
     attr: ToolsAttributes;
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(
+        inProgess: HTMLElement,
+        drawing: HTMLElement,
+        selected: boolean,
+        interaction: InteractionService,
+        colorPick: ColorPickingService) {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.updateColors();
         this.updateAttributes();
@@ -29,7 +34,7 @@ export class BrushService extends PencilService {
         ];
     }
 
-    updateAttributes() {
+    updateAttributes(): void {
         this.interaction.$toolsAttributes.subscribe((obj) => {
             if (obj) {
                 this.attr = { lineThickness: obj.lineThickness, texture: obj.texture };
@@ -38,7 +43,7 @@ export class BrushService extends PencilService {
     }
 
     // Creates an svg path that connects every points of currentPath and creates a filter with the brush attributes
-    createPath(p: Point[]) {
+    createPath(p: Point[]): string {
         let s = '';
 
         // We need at least 2 points
@@ -51,7 +56,8 @@ export class BrushService extends PencilService {
         let scale = this.textures[this.attr.texture].intensity;
 
         // "normalize" the frequency to keep a constant render no mather the width or scale
-        const frequency = (scale / (width / 10)) * this.textures[this.attr.texture].frequency;
+        const DIV = 10;
+        const frequency = (scale / (width / DIV)) * this.textures[this.attr.texture].frequency;
 
         // create a divider
         s = '<g style="transform: translate(0px, 0px);" name = "brush-stroke">';
@@ -60,11 +66,12 @@ export class BrushService extends PencilService {
         const uniqueID = new Date().getTime();
 
         // create the corresponding svg filter
-        if (this.textures[this.attr.texture].type == 'blured') {
+        if (this.textures[this.attr.texture].type === 'blured') {
             s += this.createBluredFilter(scale, uniqueID);
-        } else if (this.textures[this.attr.texture].type == 'noise') {
+        } else if (this.textures[this.attr.texture].type === 'noise') {
             // we use a displacement map so we need to resize the brush to keep the overall width
-            scale = width / (100 / scale / (100 / width));
+            const DISPLACEMENT = 100;
+            scale = width / (DISPLACEMENT / scale / (DISPLACEMENT / width));
             s += this.createNoiseFilter(width, scale, frequency, uniqueID);
             width = width - (width * scale) / 2;
         }
@@ -90,7 +97,7 @@ export class BrushService extends PencilService {
     }
 
     // creates an svg filter with gaussian blur
-    createBluredFilter(scale: number, ID: number) {
+    createBluredFilter(scale: number, ID: number): string {
         let filter = '';
 
         // filter
@@ -105,7 +112,7 @@ export class BrushService extends PencilService {
     }
 
     // create an svg filter with a displacement map (turbulence)
-    createNoiseFilter(width: number, scale: number, frequency: number, ID: number) {
+    createNoiseFilter(width: number, scale: number, frequency: number, ID: number): string {
         let filter = '';
 
         // filter
@@ -119,7 +126,8 @@ export class BrushService extends PencilService {
         filter += 'xChannelSelector="R" yChannelSelector="G" result="turbulence"/>';
 
         // offset to recenter the stroke after the displacement
-        filter += `<feOffset in="turbulence" dx="${(-width * scale) / 4}" dy="${(-width * scale) / 4}"/>`;
+        const OFFSET = 4;
+        filter += `<feOffset in="turbulence" dx="${(-width * scale) / OFFSET}" dy="${(-width * scale) / OFFSET}"/>`;
 
         filter += '</filter>';
 

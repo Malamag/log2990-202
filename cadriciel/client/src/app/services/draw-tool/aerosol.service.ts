@@ -4,7 +4,7 @@ import { AerosolAttributes } from '../attributes/aerosol-attribute';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
-import { DrawingTool } from './drawingTool';
+import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
 const DEFAULTEMISSIONPERSECOND = 50;
@@ -15,7 +15,12 @@ const DEFAULTDIAMETER = 50;
 })
 export class AerosolService extends DrawingTool {
 
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(
+        inProgess: HTMLElement,
+        drawing: HTMLElement,
+        selected: boolean,
+        interaction: InteractionService,
+        colorPick: ColorPickingService) {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.attr = { emissionPerSecond: DEFAULTEMISSIONPERSECOND, diameter: DEFAULTDIAMETER };
         this.updateColors();
@@ -32,10 +37,15 @@ export class AerosolService extends DrawingTool {
     private path: string;
 
     private sub: Subscription;
-    updateDown(keyboard: KeyboardHandlerService): void {}
-    updateUp(keyCode: number): void {}
+    updateDown(keyboard: KeyboardHandlerService): void {
+        /*No defined behavior  */
+    }
 
-    updateAttributes() {
+    updateUp(keyCode: number): void {
+        /*No defined behavior  */
+    }
+
+    updateAttributes(): void {
         this.interaction.$aerosolAttributes.subscribe((obj) => {
             if (obj) {
                 this.attr = new AerosolAttributes(obj.emissionPerSecond, obj.diameter);
@@ -43,8 +53,9 @@ export class AerosolService extends DrawingTool {
         });
     }
 
-    subscribe() {
-        const srcInterval = interval(1000 / this.attr.emissionPerSecond);
+    subscribe(): void {
+        const INTERVAL_DIV = 1000;
+        const srcInterval = interval(INTERVAL_DIV / this.attr.emissionPerSecond);
         this.sub = srcInterval.subscribe((val) => {
             if (this.isDown) {
                 this.updateProgress();
@@ -55,7 +66,7 @@ export class AerosolService extends DrawingTool {
     }
 
     // mouse down with pencil in hand
-    down(position: Point) {
+    down(position: Point): void {
         // in case we changed tool while the mouse was down
         this.ignoreNextUp = false;
 
@@ -74,7 +85,7 @@ export class AerosolService extends DrawingTool {
     }
 
     // mouse up with pencil in hand
-    up(position: Point, insideWorkspace: boolean) {
+    up(position: Point, insideWorkspace: boolean): void {
         // in case we changed tool while the mouse was down
         if (!this.ignoreNextUp) {
             // the pencil should not affect the canvas
@@ -90,7 +101,7 @@ export class AerosolService extends DrawingTool {
     }
 
     // mouse move with pencil in hand
-    move(position: Point) {
+    move(position: Point): void {
         // only if the pencil is currently affecting the canvas
         if (this.isDown) {
             // save mouse position
@@ -101,11 +112,11 @@ export class AerosolService extends DrawingTool {
     }
 
     // mouse doubleClick with pencil in hand
-    doubleClick(position: Point) {
+    doubleClick(position: Point): void {
         // since its down -> up -> down -> up -> doubleClick, nothing more happens for the pencil
     }
 
-    startPath() {
+    startPath(): void {
         this.path = '<g name = "aerosol" style="transform: translate(0px, 0px);" >';
         // this.path += ' <filter id="blur"> <feGaussianBlur in="SourceGraphic" stdDeviation="1" /> </filter>';
 
@@ -113,12 +124,15 @@ export class AerosolService extends DrawingTool {
     }
 
     // Creates an svg path that connects every points of currentPath with the pencil attributes
-    createPath(p: Point[]) {
+    createPath(p: Point[]): string {
         this.lastPoint = p[p.length - 1];
 
         this.generatePoint();
+        const RADIUS_DIV = 25;
 
-        const pointRadius = this.attr.diameter / 25;
+        const pointRadius = this.attr.diameter / RADIUS_DIV;
+
+        // tslint:disable-next-line: prefer-for-of -> we want to keep track of the index
         for (let i = 0; i < this.points.length; i++) {
             this.path += `<circle cx="${this.points[i].x}" cy="${this.points[i].y}"`;
             this.path += `r="${pointRadius}"`; // to get the radius
@@ -134,12 +148,13 @@ export class AerosolService extends DrawingTool {
         return s;
     }
 
-    generatePoint() {
+    generatePoint(): void {
+        const PT_NUM = 5;
         if (this.isDown) {
-            for (let j = 1; j < 5 && this.isDown; j++) {
+            for (let j = 1; j < PT_NUM && this.isDown; j++) {
                 const r = (this.attr.diameter / 2) * Math.sqrt(Math.random());
                 const angle = Math.random() * 2 * Math.PI;
-                for (let i = 1; i < 5; i++) {
+                for (let i = 1; i < PT_NUM; i++) {
                     const x = this.lastPoint.x + r * Math.cos(angle * i);
                     const y = this.lastPoint.y + r * Math.sin(angle * i);
                     this.points.push(new Point(x, y));

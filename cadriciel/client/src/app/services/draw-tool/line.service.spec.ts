@@ -10,6 +10,7 @@ describe('LineService', () => {
   let ptB: Point;
   let ptArr: Point[];
 
+  // tslint:disable-next-line: no-any
   let kbServiceStub: any;
   beforeEach(() => {
 
@@ -20,11 +21,11 @@ describe('LineService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        {provide: String, useValue: ''},
-        {provide: Boolean, useValue: true},
-        {provide: Number, useValue: 0},
-        {provide: HTMLElement, useValue: {}},
-        {provide: KeyboardHandlerService, useValue: kbServiceStub}]
+        { provide: String, useValue: '' },
+        { provide: Boolean, useValue: true },
+        { provide: Number, useValue: 0 },
+        { provide: HTMLElement, useValue: {} },
+        { provide: KeyboardHandlerService, useValue: kbServiceStub }]
     });
 
     ptA = new Point(0, 0); // using a point to test position functions
@@ -36,12 +37,12 @@ describe('LineService', () => {
   });
 
   it('should be created', () => {
-    const service: LineService = TestBed.get(LineService);
-    expect(service).toBeTruthy();
+    const testService: LineService = TestBed.get(LineService);
+    expect(testService).toBeTruthy();
   });
 
   it('should set the attributes in the subscription', () => {
-    service.interaction.emitLineAttributes({junction: true, lineThickness: 0, junctionDiameter: 0}); // arbitrary line attr
+    service.interaction.emitLineAttributes({ junction: true, lineThickness: 0, junctionDiameter: 0 }); // arbitrary line attr
 
     const spyInteraction = spyOn(service.interaction.$lineAttributes, 'subscribe');
     service.updateAttributes();
@@ -230,7 +231,7 @@ describe('LineService', () => {
     const PRIM = '#ffffff';
     const SEC = '#000000';
     const back = '#ffffff';
-    service.chosenColor = {primColor: PRIM, secColor: SEC, backColor: back};
+    service.chosenColor = { primColor: PRIM, secColor: SEC, backColor: back };
     const line = service.createPath(ptArr, false);
     expect(line).toContain(`"stroke="${PRIM}"`);
   });
@@ -270,7 +271,8 @@ describe('LineService', () => {
 
   it('should redirect the point to a forced angle of 0 degrees', () => {
     const PTA = new Point(0, 0);
-    const PTB = new Point(1, 0.25);
+    const X_FORCE_COORD = 0.25;
+    const PTB = new Point(1, X_FORCE_COORD);
 
     const REDIR = service.pointAtForcedAngle(PTA, PTB);
 
@@ -280,7 +282,8 @@ describe('LineService', () => {
 
   it('should redirect the point to a forced angle of 45 degrees', () => {
     const PTA = new Point(0, 0);
-    const PTB = new Point(1, 0.85);
+    const Y_FORCE_COORD = 0.85;
+    const PTB = new Point(1, Y_FORCE_COORD);
 
     const REDIR = service.pointAtForcedAngle(PTA, PTB);
 
@@ -290,7 +293,8 @@ describe('LineService', () => {
 
   it('should redirect the point to a forced angle of 90 degrees', () => {
     const PTA = new Point(0, 0);
-    const PTB = new Point(0.25, 1);
+    const X_FORCE_COORD = 0.25;
+    const PTB = new Point(X_FORCE_COORD, 1);
 
     const REDIR = service.pointAtForcedAngle(PTA, PTB);
 
@@ -300,7 +304,10 @@ describe('LineService', () => {
 
   it('should redirect the point to a forced angle of 135 degrees', () => {
     const PTA = new Point(0, 0);
-    const PTB = new Point(-1, 0.9);
+
+    const Y_FORCE_COORD = 0.9;
+    // tslint:disable-next-line: no-magic-numbers -> just let the -1 as invalid
+    const PTB = new Point(-1, Y_FORCE_COORD);
 
     const REDIR = service.pointAtForcedAngle(PTA, PTB);
 
@@ -310,7 +317,9 @@ describe('LineService', () => {
 
   it('should redirect the point to a forced angle of 225 degrees', () => {
     const PTA = new Point(0, 0);
-    const PTB = new Point(-1, -0.9);
+    const Y_FORCE_COORD = -0.9;
+    // tslint:disable-next-line: no-magic-numbers
+    const PTB = new Point(-1, Y_FORCE_COORD);
 
     const REDIR = service.pointAtForcedAngle(PTA, PTB);
     const NEW_Y = -1;

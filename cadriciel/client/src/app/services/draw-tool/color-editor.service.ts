@@ -3,7 +3,7 @@ import { ToolsAttributes } from '../attributes/tools-attribute';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
-import { DrawingTool } from './drawingTool';
+import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
 const DEFAULTLINETHICKNESS = 5;
@@ -100,7 +100,7 @@ export class ColorEditorService extends DrawingTool {
             }
         });
     }
-    updateAttributes() {
+    updateAttributes(): void {
         this.interaction.$toolsAttributes.subscribe((obj) => {
             if (obj) {
                 this.attr = { lineThickness: obj.lineThickness, texture: obj.texture };
@@ -109,17 +109,17 @@ export class ColorEditorService extends DrawingTool {
         this.colorPick.emitColors();
     }
     // updating on key change
-    updateDown(keyboard: KeyboardHandlerService) {
+    updateDown(keyboard: KeyboardHandlerService): void {
         // keyboard has no effect on pencil
     }
 
     // updating on key up
-    updateUp(keyCode: number) {
+    updateUp(keyCode: number): void {
         // nothing happens for eraser tool
     }
 
     // mouse down with pencil in hand
-    down(position: Point, insideWorkspace: boolean, isRightClick: boolean) {
+    down(position: Point, insideWorkspace: boolean, isRightClick: boolean): void {
         this.isRightClick = isRightClick;
 
         // in case we changed tool while the mouse was down
@@ -138,7 +138,7 @@ export class ColorEditorService extends DrawingTool {
     }
 
     // mouse up with pencil in hand
-    up(position: Point, insideWorkspace: boolean) {
+    up(position: Point, insideWorkspace: boolean): void {
         // in case we changed tool while the mouse was down
         if (!this.ignoreNextUp) {
             // the pencil should not affect the canvas
@@ -152,11 +152,11 @@ export class ColorEditorService extends DrawingTool {
         }
     }
 
-    changeColor(el: Element) {
+    changeColor(el: Element): void {
         if (this.selected) {
             for (let i = 0; i < el.childElementCount; i++) {
                 const current = el.children[i];
-                if (current.tagName == 'filter') {
+                if (current.tagName === 'filter') {
                     continue;
                 }
                 if (this.isRightClick) {
@@ -168,26 +168,27 @@ export class ColorEditorService extends DrawingTool {
         }
     }
 
-    changeBorder(el: HTMLElement) {
-        const newColor = el.getAttribute('stroke') != 'none' ? this.chosenColor.secColor : '';
+    changeBorder(el: HTMLElement): void {
+        const newColor = el.getAttribute('stroke') !== 'none' ? this.chosenColor.secColor : '';
         this.render.setAttribute(el, 'stroke', newColor);
     }
 
-    changeFill(el: HTMLElement) {
-        const newColor = el.getAttribute('fill') != 'none' ? this.chosenColor.primColor : '';
+    changeFill(el: HTMLElement): void {
+        const newColor = el.getAttribute('fill') !== 'none' ? this.chosenColor.primColor : '';
         this.render.setAttribute(el, 'fill', newColor);
     }
 
     // mouse move with pencil in hand
-    move(position: Point) {
+    move(position: Point): void {
         // console.log(this.erasedSomething);
 
         // only if the pencil is currently affecting the canvas
+        const MAX_LEN = 3;
         if (true) {
             // save mouse position
             this.currentPath.push(position);
 
-            while (this.currentPath.length > 3) {
+            while (this.currentPath.length > MAX_LEN) {
                 this.currentPath.shift();
             }
 
@@ -198,25 +199,26 @@ export class ColorEditorService extends DrawingTool {
     }
 
     // when we go from inside to outside the canvas
-    goingOutsideCanvas() {
+    goingOutsideCanvas(): void {
         // nothing happens since we might want to readjust the shape once back in
     }
 
     // when we go from outside to inside the canvas
-    goingInsideCanvas() {
+    goingInsideCanvas(): void {
         // nothing happens since we just update the preview
     }
 
-    checkIfTouching() {
+    checkIfTouching(): void {
         const canv = this.canvas;
         const canvasBox = canv ? canv.getBoundingClientRect() : null;
         const canvOffsetX = canvasBox ? canvasBox.left : 0;
         const canvOffsetY = canvasBox ? canvasBox.top : 0;
 
         // console.log(`${canvOffsetX}, ${canvOffsetY}`);
+        const OFFSET = 10;
 
-        const w = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
-        const h = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
+        const w = Math.max(OFFSET, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
+        const h = Math.max(OFFSET, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
 
         const dim = Math.max(w, h);
 
@@ -257,7 +259,7 @@ export class ColorEditorService extends DrawingTool {
 
                 const dim2 = 3 + offset;
 
-                if (secondChild.classList.contains('clone') || secondChild.tagName == 'filter') {
+                if (secondChild.classList.contains('clone') || secondChild.tagName === 'filter') {
                     continue;
                 }
 
@@ -265,7 +267,9 @@ export class ColorEditorService extends DrawingTool {
                 const lenght = path.getTotalLength();
                 const inc = lenght / 300;
 
-                const closest: [Point, number] = [new Point(-1, -1), 10000];
+                const BAD_COORD = -1;
+                const MAX = 10000;
+                const closest: [Point, number] = [new Point(BAD_COORD, BAD_COORD), MAX];
                 for (let a = 0; a < lenght; a += inc) {
                     const candidate = new Point(path.getPointAtLength(a).x + objOffsetX, path.getPointAtLength(a).y + objOffsetY);
                     const dist = Point.distance(this.currentPath[this.currentPath.length - 1], candidate);
@@ -309,12 +313,12 @@ export class ColorEditorService extends DrawingTool {
     }
 
     // mouse doubleClick with pencil in hand
-    doubleClick(position: Point) {
+    doubleClick(position: Point): void {
         // since its down -> up -> down -> up -> doubleClick, nothing more happens for the pencil
     }
 
     // Creates an svg path that connects every points of currentPath with the pencil attributes
-    createPath(p: Point[]) {
+    createPath(p: Point[]): string {
         let s = '';
 
         // We need at least 2 points
@@ -322,11 +326,12 @@ export class ColorEditorService extends DrawingTool {
             return s;
         }
 
+        const OFFSET = 10;
         // create a divider
         s = '<g style="transform: translate(0px, 0px);" name = "eraser-brush">';
 
-        const w = Math.max(10, Math.abs(p[p.length - 1].x - p[0].x));
-        const h = Math.max(10, Math.abs(p[p.length - 1].y - p[0].y));
+        const w = Math.max(OFFSET, Math.abs(p[p.length - 1].x - p[0].x));
+        const h = Math.max(OFFSET, Math.abs(p[p.length - 1].y - p[0].y));
 
         const dim = Math.max(w, h);
 

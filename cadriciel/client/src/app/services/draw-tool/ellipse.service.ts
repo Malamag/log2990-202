@@ -14,20 +14,25 @@ export class EllipseService extends ShapeService {
 
     attr: FormsAttribute;
 
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(
+        inProgess: HTMLElement,
+        drawing: HTMLElement,
+        selected: boolean,
+        interaction: InteractionService,
+        colorPick: ColorPickingService) {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.isSquare = false;
     }
 
     // updating on key change
-    updateDown(keyboard: KeyboardHandlerService) {
+    updateDown(keyboard: KeyboardHandlerService): void {
         // rectangle becomes square when shift is pressed
         this.isSquare = keyboard.shiftDown;
 
         super.updateDown(keyboard);
     }
 
-    setdimensions(p: Point[]) {
+    setdimensions(p: Point[]): void {
         // if we need to make it square
         // find top-left corner
 
@@ -51,7 +56,7 @@ export class EllipseService extends ShapeService {
     }
 
     // Creates an svg rect that connects the first and last points of currentPath with the ellipse attributes and a perimeter
-    createPath(p: Point[], removePerimeter: boolean) {
+    createPath(p: Point[], removePerimeter: boolean): string {
         let s = '';
 
         // We need at least 2 points
@@ -65,8 +70,8 @@ export class EllipseService extends ShapeService {
         s += '<g style="transform: translate(0px, 0px);" name = "ellipse">';
 
         // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
-        const stroke = this.attr.plotType == 0 || this.attr.plotType == 2 ? `${this.chosenColor.secColor}` : 'none';
-        const fill = this.attr.plotType == 1 || this.attr.plotType == 2 ? `${this.chosenColor.primColor}` : 'none';
+        const stroke = this.attr.plotType === 0 || this.attr.plotType === 2 ? `${this.chosenColor.secColor}` : 'none';
+        const fill = this.attr.plotType === 1 || this.attr.plotType === 2 ? `${this.chosenColor.primColor}` : 'none';
 
         // set render attributes for the svg ellipse
         s += `<ellipse cx="${this.startX + Math.abs(this.width / 2)}" cy="${this.startY + Math.abs(this.height / 2)}" rx="${Math.abs(
@@ -87,7 +92,7 @@ export class EllipseService extends ShapeService {
         s += '</g>';
 
         // can't have ellipse with 0 width or height
-        if (this.width == 0 || this.height == 0) {
+        if (this.width === 0 || this.height === 0) {
             s = '';
         }
 

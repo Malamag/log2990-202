@@ -3,7 +3,7 @@ import { LineAttributes } from '../attributes/line-attributes';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
-import { DrawingTool } from './drawingTool';
+import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
 const DEFAULTJUNCTION = true;
@@ -17,7 +17,12 @@ export class LineService extends DrawingTool {
     currentPos: Point;
     attr: LineAttributes;
 
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(
+        inProgess: HTMLElement,
+        drawing: HTMLElement,
+        selected: boolean,
+        interaction: InteractionService,
+        colorPick: ColorPickingService) {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.attr = { junction: DEFAULTJUNCTION, lineThickness: DEFAULTLINETHICKNESS, junctionDiameter: DEFAULTJUNCTIONRADIUS };
         this.forcedAngle = false;
@@ -26,7 +31,7 @@ export class LineService extends DrawingTool {
         this.updateColors();
     }
 
-    updateAttributes() {
+    updateAttributes(): void {
         this.interaction.$lineAttributes.subscribe((obj) => {
             if (obj) {
                 this.attr = { junction: obj.junction, lineThickness: obj.lineThickness, junctionDiameter: obj.junctionDiameter };
@@ -34,7 +39,7 @@ export class LineService extends DrawingTool {
         });
     }
     // updating on key change
-    updateDown(keyboard: KeyboardHandlerService) {
+    updateDown(keyboard: KeyboardHandlerService): void {
         // only if the lineTool is currently affecting the canvas
         if (this.isDown) {
             // lines are fixed at 45 degrees angle when shift is pressed
@@ -45,8 +50,9 @@ export class LineService extends DrawingTool {
             this.updateColors();
         }
 
-        // backspace -- WE SHOULD PROBABLY USE A MAP INSTEAD --
-        if (keyboard.keyCode == 8) {
+        // backspace keycode
+        const BCKSPACE = 8;
+        if (keyboard.keyCode === BCKSPACE) {
             // always keep 2 points
             if (this.currentPath.length > 2) {
                 // remove second last point
@@ -58,20 +64,21 @@ export class LineService extends DrawingTool {
             }
         }
 
-        // escape -- WE SHOULD PROBABLY USE A MAP INSTEAD --
-        if (keyboard.keyCode == 27) {
+        // escape keycode
+        const ESCAPE = 27;
+        if (keyboard.keyCode === ESCAPE) {
             // cancel progress
             this.cancel();
         }
     }
 
     // updating on key up
-    updateUp(keyCode: number) {
+    updateUp(keyCode: number): void {
         // nothing happens for line tool
     }
 
     // mouse down with lineTool in hand
-    down(position: Point, mouseInsideWorkspace: boolean) {
+    down(position: Point, mouseInsideWorkspace: boolean): void {
         // in case we changed tool while the mouse was down
         this.ignoreNextUp = false;
 
@@ -82,7 +89,7 @@ export class LineService extends DrawingTool {
         this.currentPos = position;
 
         // add the same point twice in case the mouse doesnt move on first point
-        if (this.currentPath.length == 0) {
+        if (this.currentPath.length === 0) {
             this.currentPath.push(position);
         }
         this.currentPath.push(position);
@@ -92,19 +99,19 @@ export class LineService extends DrawingTool {
     }
 
     // mouse up with line in hand
-    up(position: Point) {
+    up(position: Point): void {
         // nothing happens
     }
 
     // mouse move with line in hand
-    move(position: Point) {
+    move(position: Point): void {
         // only if the lineTool is currently affecting the canvas
         if (this.isDown) {
             // save currentPosition for real time update when we go from forced to loose angle
             this.currentPos = position;
 
             // we only have one point, add a new one
-            if (this.currentPath.length == 1) {
+            if (this.currentPath.length === 1) {
                 this.currentPath.push(position);
             } else {
                 this.currentPath[this.currentPath.length - 1] = position;
@@ -116,11 +123,12 @@ export class LineService extends DrawingTool {
     }
 
     // mouse doubleClick with line in hand
-    doubleClick(position: Point, mouseInsideWorkspace: boolean) {
+    doubleClick(position: Point, mouseInsideWorkspace: boolean): void {
         // we can only end a line inside the canvas
         if (mouseInsideWorkspace) {
             // we need 4 or more points in path because origin (1) + current (1) + double click (2) = 4 is the minimum
-            if (this.currentPath.length >= 4) {
+            const MIN_PTS = 4;
+            if (this.currentPath.length >= MIN_PTS) {
                 // only if double click is valid
                 if (mouseInsideWorkspace) {
                     // the pencil should not affect the canvas
@@ -146,18 +154,18 @@ export class LineService extends DrawingTool {
     }
 
     // when we go from inside to outside the canvas
-    goingOutsideCanvas(position: Point) {
+    goingOutsideCanvas(position: Point): void {
         // nothing happens since we don't want to end the preview
     }
 
     // when we go from outside to inside the canvas
-    goingInsideCanvas(position: Point) {
+    goingInsideCanvas(position: Point): void {
         // nothing happens since we keep updating the preview
     }
 
     // Creates an svg path that connects every points of currentPath
     // and adds svg circles on junctions if needed with the line attributes
-    createPath(p: Point[], wasDoubleClick: boolean) {
+    createPath(p: Point[], wasDoubleClick: boolean): string {
         let s = '';
 
         // We need at least 2 points
@@ -210,7 +218,7 @@ export class LineService extends DrawingTool {
         s += 'fill="none"';
         s += 'stroke-linecap="round"';
         s += 'stroke-linejoin="round" />';
-        // close the path
+        // close the pathvoid
 
         // if we need to show the line junctions
         if (this.attr.junction) {
@@ -227,7 +235,7 @@ export class LineService extends DrawingTool {
         return s;
     }
 
-    pointAtForcedAngle(firstPoint: Point, secondPoint: Point) {
+    pointAtForcedAngle(firstPoint: Point, secondPoint: Point): Point {
         // x and y variation
         let xDelta = secondPoint.x - firstPoint.x;
         let yDelta = secondPoint.y - firstPoint.y;

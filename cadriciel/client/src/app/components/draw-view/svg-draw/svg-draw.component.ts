@@ -4,7 +4,7 @@ import { Canvas } from 'src/app/models/Canvas.model';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
+import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
 import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
@@ -26,7 +26,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         private doodleFetch: DoodleFetchService,
         private render: Renderer2,
         private gridService: GridRenderService,
-    ) {}
+    ) { }
     canvas: Canvas;
 
     width: number;
@@ -50,25 +50,25 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     @ViewChild('pixelField', { static: false }) pixelMatrixRef: ElementRef;
     workingSpace: HTMLElement;
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.initCanvas();
     }
 
-    closeTools(map: Map<string, DrawingTool>) {
+    closeTools(map: Map<string, DrawingTool>): void {
         map.forEach((el) => {
             el.selected = false;
             el.cancel();
         });
     }
 
-    bgroundChangeSubscription() {
+    bgroundChangeSubscription(): void {
         this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
             this.backColor = choosenColors.backColor;
             this.gridService.updateColor(this.backColor);
         });
     }
 
-    initCanvas() {
+    initCanvas(): void {
         this.canvBuilder.canvSubject.subscribe((canvas: Canvas) => {
             if (canvas === undefined || canvas === null) {
                 canvas = this.canvBuilder.getDefCanvas();
@@ -85,13 +85,13 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.canvBuilder.emitCanvas();
     }
 
-    initGridVisibility() {
+    initGridVisibility(): void {
         this.interaction.$showGrid.subscribe((show: boolean) => {
             this.showGrid = show;
         });
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit(): void {
         this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
         this.initGridVisibility();
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
@@ -177,20 +177,20 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             mouseHandler.addObserver(element);
         });
 
-        window.addEventListener('resize', function() {
+        window.addEventListener('resize', () => {
             mouseHandler.updateWindowSize();
         });
 
         // Mouse listeners
-        window.addEventListener('mousemove', function(e) {
+        window.addEventListener('mousemove', (e) => {
             mouseHandler.move(e);
         });
-        window.addEventListener('mousedown', function(e) {
+        window.addEventListener('mousedown', (e) => {
             e.preventDefault();
             mouseHandler.down(e);
         });
 
-        window.addEventListener('mouseup', function(e) {
+        window.addEventListener('mouseup', (e) => {
             mouseHandler.up(e);
         });
 
@@ -200,10 +200,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         };
 
         // Keyboard listeners
-        window.addEventListener('keydown', function(e) {
+        window.addEventListener('keydown', (e) => {
             keyboardHandler.logkey(e);
         });
-        window.addEventListener('keyup', function(e) {
+        window.addEventListener('keyup', (e) => {
             keyboardHandler.reset(e);
         });
         window.dispatchEvent(new Event('resize'));

@@ -2,11 +2,11 @@ import { TestBed } from '@angular/core/testing';
 
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
-import {DrawingTool} from './drawingTool';
+import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
-export class fakeCpService extends ColorPickingService {}
-export class fakeItService extends InteractionService {}
+export class fakeCpService extends ColorPickingService { }
+export class fakeItService extends InteractionService { }
 
 describe('drawingTools', () => {
 
@@ -16,11 +16,11 @@ describe('drawingTools', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        {provide: HTMLElement, useValue: {}},
-        {provide: Boolean, useValue: false},
-        {provide: Number, useValue: 0},
-        {provide: String, useValue: ''},
-        {provide: InteractionService, useValue: {}}]
+        { provide: HTMLElement, useValue: {} },
+        { provide: Boolean, useValue: false },
+        { provide: Number, useValue: 0 },
+        { provide: String, useValue: '' },
+        { provide: InteractionService, useValue: {} }]
     });
 
     service = TestBed.get(DrawingTool);
@@ -37,7 +37,7 @@ describe('drawingTools', () => {
     const PRIM = '#ffffff';
     const SEC = '#000000';
     const back = '#ffffff';
-    service.colorPick.colors = {primColor: PRIM, secColor: SEC, backColor: back};
+    service.colorPick.colors = { primColor: PRIM, secColor: SEC, backColor: back };
 
     service.updateColors();
     expect(spy).toHaveBeenCalled();
@@ -50,7 +50,7 @@ describe('drawingTools', () => {
     const PRIM = '#ffff00';
     const SEC = '#0000ff';
     const back = '#ffffff';
-    service.colorPick.colors = {primColor: PRIM, secColor: SEC, backColor: back}; // color init in service
+    service.colorPick.colors = { primColor: PRIM, secColor: SEC, backColor: back }; // color init in service
 
     service.updateColors();
     expect(service.chosenColor).toEqual(service.colorPick.colors); // checking the assignation
@@ -64,55 +64,55 @@ describe('drawingTools', () => {
     service.updateColors();
     expect(service.chosenColor.primColor).toEqual(DEF_PRIM); // checking the assignation
     expect(service.chosenColor.secColor).toEqual(DEF_SEC);
-   });
+  });
 
   it('should empty the progress innerhtml on cancel', () => {
-        service.inProgress.innerHTML = 'test';
-        service.cancel();
-        expect(service.inProgress.innerHTML).toEqual(''); // no svg elements
-   });
+    service.inProgress.innerHTML = 'test';
+    service.cancel();
+    expect(service.inProgress.innerHTML).toEqual(''); // no svg elements
+  });
 
   it('should assing the newly created form/path in the html', () => {
-        service.currentPath = [new Point(0, 0), new Point(1, 1)]; // adding points to avoid having an empty array of progress
-        service.createPath = () => 'test'; // stub fn
-        service.updateProgress();
-        const EMPTY = '';
-        const inner: string = service.inProgress.innerHTML;
-        expect(inner).not.toBe(EMPTY);
+    service.currentPath = [new Point(0, 0), new Point(1, 1)]; // adding points to avoid having an empty array of progress
+    service.createPath = () => 'test'; // stub fn
+    service.updateProgress();
+    const EMPTY = '';
+    const inner: string = service.inProgress.innerHTML;
+    expect(inner).not.toBe(EMPTY);
 
-   });
+  });
 
   it('should add the progress to the main drawing and refresh the current progress', () => {
-        service.currentPath = [new Point(0, 0), new Point(1, 1)]; // adding points to avoid having an empty array of progress
-        service.createPath = () => 'test'; // stub function
-        service.updateDrawing();
+    service.currentPath = [new Point(0, 0), new Point(1, 1)]; // adding points to avoid having an empty array of progress
+    service.createPath = () => 'test'; // stub function
+    service.updateDrawing();
 
-        const EMPTY = '';
+    const EMPTY = '';
 
-        expect(service.drawing).toBeDefined(); // we dont want to have an empty innerhtml
+    expect(service.drawing).toBeDefined(); // we dont want to have an empty innerhtml
 
-        expect(service.inProgress.innerHTML).toEqual(EMPTY);
-        expect(service.currentPath.length).toEqual(0); // progress refresh check
+    expect(service.inProgress.innerHTML).toEqual(EMPTY);
+    expect(service.currentPath.length).toEqual(0); // progress refresh check
 
-    });
+  });
 
   it('should update the drawing if the mouse is going outside canvas', () => {
-        service.isDown = true;
-        service.createPath = () => 'test';
-        const spy = spyOn(service, 'updateDrawing');
-        service.goingOutsideCanvas(new Point(0, 0)); // random point
-        expect(spy).toHaveBeenCalled();
-    });
+    service.isDown = true;
+    service.createPath = () => 'test';
+    const spy = spyOn(service, 'updateDrawing');
+    service.goingOutsideCanvas(new Point(0, 0)); // random point
+    expect(spy).toHaveBeenCalled();
+  });
 
   it('should continue drawing when mouse goes back in canvas', () => {
-        service.isDown = true; // tool selected and in use
-        service.down = () => 0; // defining a function for test purpose
-        service.createPath = () => 'test';
-        const spy = spyOn(service, 'down');
-        const PT = new Point(0, 0); // a point in our canvas, arbitrary
-        service.goingInsideCanvas(PT);
-        expect(spy).toHaveBeenCalledWith(PT);
+    service.isDown = true; // tool selected and in use
+    service.down = () => 0; // defining a function for test purpose
+    service.createPath = () => 'test';
+    const spy = spyOn(service, 'down');
+    const PT = new Point(0, 0); // a point in our canvas, arbitrary
+    service.goingInsideCanvas(PT);
+    expect(spy).toHaveBeenCalledWith(PT);
 
-    });
+  });
 
 });

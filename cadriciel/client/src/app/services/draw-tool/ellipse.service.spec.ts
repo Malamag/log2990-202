@@ -4,8 +4,10 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { EllipseService } from './ellipse.service';
 import { Point } from './point';
 
-export class fakeInteractionService extends InteractionService {}
+export class FakeInteractionService extends InteractionService { }
 describe('EllipseService', () => {
+
+    // tslint:disable-next-line: no-any
     let kbServiceStub: any;
     let service: EllipseService;
     let ptA: Point;
@@ -30,7 +32,7 @@ describe('EllipseService', () => {
                 { provide: Number, useValue: 0 },
                 { provide: String, useValue: '' },
                 { provide: Boolean, useValue: true },
-                { provide: InteractionService, useClass: fakeInteractionService },
+                { provide: InteractionService, useClass: FakeInteractionService },
                 { provide: KeyboardHandlerService, useValue: kbServiceStub },
             ],
         });
@@ -38,12 +40,12 @@ describe('EllipseService', () => {
     });
 
     it('should be created', () => {
-        const service: EllipseService = TestBed.get(EllipseService);
-        expect(service).toBeTruthy();
+        const testService: EllipseService = TestBed.get(EllipseService);
+        expect(testService).toBeTruthy();
     });
 
     it('should set the attributes in the subscription', () => {
-        service.interaction.emitFormsAttributes({plotType: 0, lineThickness: 0, numberOfCorners: 0});
+        service.interaction.emitFormsAttributes({ plotType: 0, lineThickness: 0, numberOfCorners: 0 });
         const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
         service.updateAttributes();
         expect(spyInteraction).toHaveBeenCalled();
@@ -139,7 +141,7 @@ describe('EllipseService', () => {
 
     it('should create a rectangle filled with the selected color', () => {
         const color = '#ffffff';
-        service.chosenColor = {primColor: color, secColor: color, backColor: color}; // both prim. and sec.
+        service.chosenColor = { primColor: color, secColor: color, backColor: color }; // both prim. and sec.
 
         const rect = service.createPath(ptArr, false);
         expect(rect).toContain(`fill="${color}"`);
@@ -149,7 +151,7 @@ describe('EllipseService', () => {
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
         const rect = service.createPath(ptArr, false);
 
         expect(rect).toContain(`stroke="${sec}"`);
@@ -160,7 +162,7 @@ describe('EllipseService', () => {
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
 
         const rect = service.createPath(ptArr, false);
 
@@ -174,7 +176,7 @@ describe('EllipseService', () => {
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
 
         const rect = service.createPath(ptArr, false);
 
@@ -188,7 +190,7 @@ describe('EllipseService', () => {
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
+        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
 
         const rect = service.createPath(ptArr, false);
 
