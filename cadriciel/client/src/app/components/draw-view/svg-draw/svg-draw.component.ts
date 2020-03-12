@@ -5,7 +5,7 @@ import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
-import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
+import { ToolCreator } from 'src/app/services/draw-tool/tool-creator';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.service';

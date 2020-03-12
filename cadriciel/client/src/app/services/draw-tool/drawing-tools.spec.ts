@@ -1,12 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
-
-export class fakeCpService extends ColorPickingService { }
-export class fakeItService extends InteractionService { }
 
 describe('drawingTools', () => {
 
@@ -27,8 +23,8 @@ describe('drawingTools', () => {
   });
 
   it('should be created', () => {
-    const service: DrawingTool = TestBed.get(DrawingTool);
-    expect(service).toBeTruthy();
+    const testService: DrawingTool = TestBed.get(DrawingTool);
+    expect(testService).toBeTruthy();
   });
 
   it('should call a subscription to the choosen colors and emit it', () => {

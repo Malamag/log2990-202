@@ -45,7 +45,7 @@ export class SelectionService extends ShapeService {
   movedSelectionWithArrowsOnce: boolean;
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService,
-              colorPick: ColorPickingService, render: Renderer2, selection: HTMLElement, canvas: HTMLElement) {
+    colorPick: ColorPickingService, render: Renderer2, selection: HTMLElement, canvas: HTMLElement) {
     super(inProgess, drawing, selected, interaction, colorPick);
 
     this.selectedItems = [];
@@ -98,7 +98,7 @@ export class SelectionService extends ShapeService {
     });
   }
 
-  updateDown(keyboard: KeyboardHandlerService) {
+  updateDown(keyboard: KeyboardHandlerService): void {
 
     // CTRL-A SELECT ALL
     if (keyboard.keyCode == 65 && keyboard.ctrlDown) {
@@ -124,7 +124,7 @@ export class SelectionService extends ShapeService {
     this.moveWithArrowOnce(singleLeft, singleUp, singleRight, singleDown);
   }
 
-  moveWithArrowOnce(left: boolean, up: boolean, right: boolean, down: boolean) {
+  moveWithArrowOnce(left: boolean, up: boolean, right: boolean, down: boolean): void {
 
     this.singleUseArrows[0] = left ? true : this.singleUseArrows[0];
     this.singleUseArrows[1] = up ? true : this.singleUseArrows[1];
@@ -146,7 +146,7 @@ export class SelectionService extends ShapeService {
       yoff += 3;
     }
 
-    this.movedSelectionWithArrowsOnce = this.movedSelectionWithArrowsOnce || (xoff != 0 || yoff != 0);
+    this.movedSelectionWithArrowsOnce = this.movedSelectionWithArrowsOnce || (xoff !== 0 || yoff !== 0);
 
     if (this.selectedItems.length > 0) {
       this.moveSelection(xoff, yoff);
@@ -154,7 +154,7 @@ export class SelectionService extends ShapeService {
     }
   }
 
-  moveWithArrowsLoop() {
+  moveWithArrowsLoop(): void {
 
     this.existingLoop = true;
 
@@ -190,7 +190,7 @@ export class SelectionService extends ShapeService {
   }
 
   // updating on key up
-  updateUp(keyCode: number) {
+  updateUp(keyCode: number): void {
 
     if (keyCode === 37) {
       this.arrows[0] = false;
@@ -221,7 +221,7 @@ export class SelectionService extends ShapeService {
     }
   }
 
-  down(position: Point, insideWorkspace: boolean, isRightClick: boolean) {
+  down(position: Point, insideWorkspace: boolean, isRightClick: boolean): void {
 
     // in case we changed tool while the mouse was down
     this.ignoreNextUp = false;
@@ -260,7 +260,7 @@ export class SelectionService extends ShapeService {
   }
 
   // mouse up with selection in hand
-  up(position: Point) {
+  up(position: Point): void {
 
     // in case we changed tool while the mouse was down
     if (this.ignoreNextUp) {
@@ -310,7 +310,7 @@ export class SelectionService extends ShapeService {
     this.inProgress.innerHTML = '';
   }
 
-  move(position: Point) {
+  move(position: Point): void {
 
     // only if the selectionTool is currently affecting the canvas
     if (this.isDown) {
@@ -417,7 +417,7 @@ export class SelectionService extends ShapeService {
   }
 
   // links the selection rectangle with the current drawing and manages the selected items
-  retrieveItemsInRect() {
+  retrieveItemsInRect(): void {
 
     const selectionRectangle = this.inProgress.lastElementChild;
     const items = this.drawing.children;
@@ -457,7 +457,7 @@ export class SelectionService extends ShapeService {
   }
 
   // Moves the current selection by a number of pixels
-  moveSelection(xoff: number, yoff: number) {
+  moveSelection(xoff: number, yoff: number): void {
 
     // if there is at least 1 item selected
     if (this.selectedItems.includes(true)) {
@@ -481,7 +481,7 @@ export class SelectionService extends ShapeService {
   }
 
   // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
-  createPath(p: Point[]) {
+  createPath(p: Point[]): string {
 
     let s = '';
 
@@ -519,7 +519,7 @@ export class SelectionService extends ShapeService {
     s += '</g>';
 
     // can't have rectangle with 0 width or height
-    if (w == 0 || h == 0) {
+    if (w === 0 || h === 0) {
       s = '';
     }
 

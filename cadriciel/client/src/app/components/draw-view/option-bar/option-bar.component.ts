@@ -17,12 +17,12 @@ import { UserManualComponent } from '../../user-manual/user-manual.component';
     styleUrls: ['./option-bar.component.scss'],
 })
 export class OptionBarComponent {
-    funcMenu = menuItems;
+    funcMenu: {};
     canvasSub: Subscription;
     currentCanvas: Canvas;
-    gridSelected = false;
+    gridSelected: boolean;
     stepVal: number;
-    alphaVal = 100;
+    alphaVal: number;
     readonly maxStepVal: number = 90;
     readonly minStepVal: number = 10;
 
@@ -30,15 +30,22 @@ export class OptionBarComponent {
         public winService: ModalWindowService,
         public interaction: InteractionService,
         private kbHandler: KeyboardHandlerService,
-        private gridService: GridRenderService,
+        public gridService: GridRenderService,
     ) {
+
+        this.funcMenu = menuItems;
+        this.gridSelected = false;
+
+        const DEF_GRID_ALPHA = 100;
+        this.alphaVal = DEF_GRID_ALPHA;
+
         window.addEventListener('keydown', (e) => {
             this.setShortcutEvent(e);
         });
         this.stepVal = this.gridService.defSteps;
     }
 
-    setShortcutEvent(e: KeyboardEvent) {
+    setShortcutEvent(e: KeyboardEvent): void {
         const O_KEY = 79; // keycode for letter o
         const E_KEY = 69;
         const G_KEY = 71;
@@ -64,6 +71,7 @@ export class OptionBarComponent {
             this.openGallery();
             e.preventDefault();
         }
+        // tslint:disable-next-line: deprecation
         if (e.keyCode === G_KEY) {
             this.toggleGrid();
         }
@@ -83,7 +91,7 @@ export class OptionBarComponent {
         }
     }
 
-    openNewDrawForm() {
+    openNewDrawForm(): void {
         const OLD_STATE: boolean = this.interaction.isCanvas;
         this.interaction.emitSvgCanvasConversion(false);
         if (window.confirm('Un dessin est déjà en cours. Voulez-vous continuer?')) {
@@ -93,11 +101,11 @@ export class OptionBarComponent {
         this.interaction.emitSvgCanvasConversion(OLD_STATE);
     }
 
-    openUserGuide() {
+    openUserGuide(): void {
         this.winService.openWindow(UserManualComponent);
     }
 
-    openExportForm() {
+    openExportForm(): void {
         const OPENING_WAIT = 5; // waiting for the window to be loaded before returning to oldstate
         const OLD_STATE: boolean = this.interaction.isCanvas;
         console.log(OLD_STATE);
@@ -108,10 +116,10 @@ export class OptionBarComponent {
         }, OPENING_WAIT);
     }
 
-    sendSigKill() {
+    sendSigKill(): void {
         this.interaction.emitCancel(true);
     }
-    openGallery() {
+    openGallery(): void {
         const OLD_STATE: boolean = this.interaction.isCanvas;
         this.interaction.emitSvgCanvasConversion(false);
         if (confirm('Un dessin est déjà en cours. Voulez-vous continuer?')) {
@@ -120,7 +128,7 @@ export class OptionBarComponent {
         }
         this.interaction.emitSvgCanvasConversion(OLD_STATE);
     }
-    toggleGrid() {
+    toggleGrid(): void {
         const OLD_STATE: boolean = this.interaction.isCanvas;
         this.interaction.emitSvgCanvasConversion(false);
         this.gridSelected = !this.gridSelected;
@@ -128,14 +136,14 @@ export class OptionBarComponent {
         this.interaction.emitSvgCanvasConversion(OLD_STATE);
     }
 
-    updateSpacing() {
+    updateSpacing(): void {
         const OLD_STATE: boolean = this.interaction.isCanvas;
         this.interaction.emitSvgCanvasConversion(false);
         this.gridService.updateSpacing(this.stepVal);
         this.interaction.emitSvgCanvasConversion(OLD_STATE);
     }
 
-    updateAlpha() {
+    updateAlpha(): void {
         const OLD_STATE: boolean = this.interaction.isCanvas;
         this.interaction.emitSvgCanvasConversion(false);
         this.gridService.updateTransparency(this.alphaVal);

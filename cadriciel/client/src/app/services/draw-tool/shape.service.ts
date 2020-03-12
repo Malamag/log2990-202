@@ -25,7 +25,12 @@ export class ShapeService extends DrawingTool {
     // Attribute for createPath
     stroke: string;
     fill: string;
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(
+        inProgess: HTMLElement,
+        drawing: HTMLElement,
+        selected: boolean,
+        interaction: InteractionService,
+        colorPick: ColorPickingService) {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.attr = { plotType: DEFAULTPLOTTYPE, lineThickness: DEFAULTLINETHICKNESS, numberOfCorners: DEFAULTNUMBERCORNERS };
         this.updateColors();
@@ -39,7 +44,7 @@ export class ShapeService extends DrawingTool {
         this.stroke = '';
         this.fill = '';
     }
-    updateAttributes() {
+    updateAttributes(): void {
         this.interaction.$formsAttributes.subscribe((obj) => {
             if (obj) {
                 // Getting attributes for a shape
@@ -48,7 +53,7 @@ export class ShapeService extends DrawingTool {
         });
     }
     // updating on key change
-    updateDown(keyboard: KeyboardHandlerService) {
+    updateDown(keyboard: KeyboardHandlerService): void {
         // real time update
         if (!this.isDown) {
             return;
@@ -57,12 +62,12 @@ export class ShapeService extends DrawingTool {
     }
 
     // updating on key up
-    updateUp(keyCode: number) {
+    updateUp(keyCode: number): void {
         // nothing happens for global shape
     }
 
     // mouse down with shape in hand
-    down(position: Point, insideWorkspace?: boolean, isRightClick?: boolean) {
+    down(position: Point, insideWorkspace?: boolean, isRightClick?: boolean): void {
         // in case we changed tool while the mouse was down
         this.ignoreNextUp = false;
         // the shape should affect the canvas
@@ -73,7 +78,7 @@ export class ShapeService extends DrawingTool {
         this.updateProgress();
     }
     // mouse up with shape in hand
-    up(position: Point) {
+    up(position: Point): void {
         // in case we changed tool while the mouse was down
         if (this.ignoreNextUp) {
             return;
@@ -84,7 +89,7 @@ export class ShapeService extends DrawingTool {
         this.updateDrawing(true);
     }
     // mouse move with shape in hand
-    move(position: Point) {
+    move(position: Point): void {
         // only if the shapeTool is currently affecting the canvas
         if (!this.isDown) {
             return;
@@ -94,18 +99,18 @@ export class ShapeService extends DrawingTool {
         this.updateProgress();
     }
     // mouse doubleClick with rectangle in hand
-    doubleClick(position: Point) {
+    doubleClick(position: Point): void {
         // since its down -> up -> down -> up -> doubleClick, nothing more happens for the rectangle
     }
     // when we go from inside to outside the canvas
-    goingOutsideCanvas() {
+    goingOutsideCanvas(): void {
         // nothing happens since we might want to readjust the shape once back in
     }
     // when we go from outside to inside the canvas
-    goingInsideCanvas() {
+    goingInsideCanvas(): void {
         // nothing happens since we just update the preview
     }
-    setdimensions(p: Point[]) {
+    setdimensions(p: Point[]): void {
         // first and last points
         const P1X = p[0].x;
         const P1Y = p[0].y;
@@ -116,10 +121,10 @@ export class ShapeService extends DrawingTool {
         this.height = P2Y - P1Y;
     }
     // Creates an svg shape
-    createPath(p: Point[], removePerimeter?: boolean) {
+    createPath(p: Point[], removePerimeter?: boolean): void {
         // Shape is only virtual, so we do not create a path
     }
-    setAttributesToPath() {
+    setAttributesToPath(): void {
         // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
         this.stroke = this.attr.plotType === 0 || this.attr.plotType === 2 ? `${this.chosenColor.secColor}` : 'none';
         this.fill = this.attr.plotType === 1 || this.attr.plotType === 2 ? `${this.chosenColor.primColor}` : 'none';

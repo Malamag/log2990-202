@@ -22,9 +22,12 @@ import { OptionBarComponent } from './option-bar.component';
 describe('OptionBarComponent', () => {
     let component: OptionBarComponent;
     let fixture: ComponentFixture<OptionBarComponent>;
+    // tslint:disable-next-line: no-any
     let winServiceStub: any;
     let kbService: KeyboardHandlerService;
+    // tslint:disable-next-line: no-any
     let fakeKbEvent: any;
+    // tslint:disable-next-line: no-any
     let gridRenderStub: any;
 
     beforeEach(async(() => {
@@ -74,7 +77,8 @@ describe('OptionBarComponent', () => {
 
     it('should add observers on construction', () => {
         const spy = spyOn(window, 'addEventListener');
-        new OptionBarComponent(winServiceStub, new InteractionService(), new KeyboardHandlerService(), gridRenderStub);
+        const TEST_SERVICE = new OptionBarComponent(winServiceStub, new InteractionService(), new KeyboardHandlerService(), gridRenderStub);
+        expect(TEST_SERVICE).toBeTruthy();
         expect(spy).toHaveBeenCalled();
     });
 
@@ -173,6 +177,7 @@ describe('OptionBarComponent', () => {
         const BASE_VAL = 10;
         component.stepVal = BASE_VAL;
         const SPACE_ADD = 5;
+
         const spy = spyOn(component.gridService, 'updateSpacing');
         component.setShortcutEvent(fakeKbEvent);
         expect(spy).toHaveBeenCalled();
@@ -185,6 +190,7 @@ describe('OptionBarComponent', () => {
         const BASE_VAL = 30;
         component.stepVal = BASE_VAL;
         const SPACE_MINUS = 5;
+
         const spy = spyOn(component.gridService, 'updateSpacing');
         component.setShortcutEvent(fakeKbEvent);
         expect(spy).toHaveBeenCalled();

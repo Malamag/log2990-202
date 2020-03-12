@@ -4,6 +4,8 @@ import { GridRenderService } from './grid-render.service';
 
 describe('GridRenderService', () => {
     let service: GridRenderService;
+    const FULL_HEX = 255;
+    // tslint:disable-next-line: no-any
     let svgElemStub: any;
     beforeEach(() => {
         svgElemStub = {
@@ -19,8 +21,8 @@ describe('GridRenderService', () => {
     });
 
     it('should be created', () => {
-        const service: GridRenderService = TestBed.get(GridRenderService);
-        expect(service).toBeTruthy();
+        const testService: GridRenderService = TestBed.get(GridRenderService);
+        expect(testService).toBeTruthy();
     });
 
     it('should render a verical line with its attributes', () => {
@@ -60,7 +62,9 @@ describe('GridRenderService', () => {
         const STEP = 5;
         const HEIGHT = 200;
         service.drawHeight = HEIGHT;
-        const spy = spyOn(service.hGridLines, 'push');
+
+        // tslint:disable-next-line: no-string-literal
+        const spy = spyOn(service['hGridLines'], 'push');
         service.renderHorizontalLines(STEP);
 
         expect(spy).toHaveBeenCalledTimes(HEIGHT / STEP);
@@ -83,7 +87,8 @@ describe('GridRenderService', () => {
         const STEP = 10;
         const WIDTH = 400;
         service.drawWidth = WIDTH;
-        const spy = spyOn(service.vGridLines, 'push');
+        // tslint:disable-next-line: no-string-literal
+        const spy = spyOn(service['vGridLines'], 'push');
         service.renderVerticalLines(STEP);
 
         expect(spy).toHaveBeenCalledTimes(WIDTH / STEP);
@@ -138,8 +143,10 @@ describe('GridRenderService', () => {
         service.grid = svgElemStub;
 
         for (let i = 0; i < ELEM_NUM; ++i) {
-            service.hGridLines.push(svgElemStub);
-            service.vGridLines.push(svgElemStub);
+            // tslint:disable-next-line: no-string-literal
+            service['hGridLines'].push(svgElemStub);
+            // tslint:disable-next-line: no-string-literal
+            service['vGridLines'].push(svgElemStub);
         }
         const spy = spyOn(service.render, 'setAttribute');
         service.updateSpacing(SPACE);
@@ -149,7 +156,8 @@ describe('GridRenderService', () => {
     it('should update line transparency with alpha hex input', () => {
         const ALPHA_PERCENT = 70;
 
-        const colorSpy = spyOn(service.colConv, 'alphaRGBToHex');
+        // tslint:disable-next-line: no-string-literal
+        const colorSpy = spyOn(service['colConv'], 'alphaRGBToHex');
         service.updateTransparency(ALPHA_PERCENT);
         expect(colorSpy).toHaveBeenCalled();
     });
@@ -164,15 +172,19 @@ describe('GridRenderService', () => {
 
     it('should convert hex bg color to rgba on color update', () => {
         const BG_COLOR = '#ffffffff';
-        service.colConv.hexToRgba = jasmine.createSpy().and.returnValue([255, 255, 255, 255]);
+        // tslint:disable-next-line: no-string-literal
+        service['colConv'].hexToRgba = jasmine.createSpy().and.returnValue([FULL_HEX, FULL_HEX, FULL_HEX, FULL_HEX]);
         service.updateColor(BG_COLOR);
-        expect(service.colConv.hexToRgba).toHaveBeenCalledWith(BG_COLOR);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['colConv'].hexToRgba).toHaveBeenCalledWith(BG_COLOR);
     });
 
     it('should turn change the grid color to white if the background is too dark', () => {
-        const BG_RBGA: number[] = [127, 127, 127, 255];
+        const DARK_VAL = 127;
+        const BG_RBGA: number[] = [DARK_VAL, DARK_VAL, DARK_VAL, FULL_HEX];
         const FAKE_BG_COLOR = '#88888888'; // only to serve as a valid attribute to our function
-        service.colConv.hexToRgba = jasmine.createSpy().and.returnValue(BG_RBGA);
+        // tslint:disable-next-line: no-string-literal
+        service['colConv'].hexToRgba = jasmine.createSpy().and.returnValue(BG_RBGA);
         const GRID_ALPHA = 'ff';
         service.gridAlpha = GRID_ALPHA;
         const WHITE = '#ffffff';
@@ -183,9 +195,11 @@ describe('GridRenderService', () => {
     });
 
     it('should turn change the grid color to black if the background is too pale', () => {
-        const BG_RBGA: number[] = [129, 129, 255, 255];
+        const PALE_VAL = 129;
+        const BG_RBGA: number[] = [PALE_VAL, PALE_VAL, FULL_HEX, FULL_HEX];
         const FAKE_BG_COLOR = '#88888888'; // only to serve as a valid attribute to our function
-        service.colConv.hexToRgba = jasmine.createSpy().and.returnValue(BG_RBGA);
+        // tslint:disable-next-line: no-string-literal
+        service['colConv'].hexToRgba = jasmine.createSpy().and.returnValue(BG_RBGA);
 
         const GRID_ALPHA = 'ff';
         service.gridAlpha = GRID_ALPHA;
@@ -204,7 +218,8 @@ describe('GridRenderService', () => {
     });
 
     it('should emit a signal with grid visibility boolean on toggle', () => {
-        const spy = spyOn(service.itService, 'emitGridVisibility');
+        // tslint:disable-next-line: no-string-literal
+        const spy = spyOn(service['itService'], 'emitGridVisibility');
         const SHOW = true;
         service.toggleGridVisibility(SHOW);
         expect(spy).toHaveBeenCalledWith(SHOW);
@@ -216,8 +231,10 @@ describe('GridRenderService', () => {
         service.grid = svgElemStub;
 
         for (let i = 0; i < ELEM_NUM; ++i) {
-            service.hGridLines.push(svgElemStub);
-            service.vGridLines.push(svgElemStub);
+            // tslint:disable-next-line: no-string-literal
+            service['hGridLines'].push(svgElemStub);
+            // tslint:disable-next-line: no-string-literal
+            service['vGridLines'].push(svgElemStub);
         }
 
         const spy = spyOn(service.render, 'setAttribute');
@@ -241,8 +258,10 @@ describe('GridRenderService', () => {
         service.grid = svgElemStub;
 
         for (let i = 0; i < ELEM_NUM; ++i) {
-            service.hGridLines.push(svgElemStub);
-            service.vGridLines.push(svgElemStub);
+            // tslint:disable-next-line: no-string-literal
+            service['hGridLines'].push(svgElemStub);
+            // tslint:disable-next-line: no-string-literal
+            service['vGridLines'].push(svgElemStub);
         }
 
         const spy = spyOn(service.render, 'appendChild');
