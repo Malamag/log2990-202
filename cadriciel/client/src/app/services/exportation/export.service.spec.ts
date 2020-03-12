@@ -17,7 +17,7 @@ describe('ExportService', () => {
         };
         nativeElemStub = {
             toDataURL: (data: string) => 0,
-            getContext: (ctx: string) => 2, // true in an if-clause
+            getContext: (ctx: string) => ctxStub, // true in an if-clause
         };
         elementStub = {
             nativeElement: nativeElemStub,
@@ -27,6 +27,7 @@ describe('ExportService', () => {
                 { provide: Node, useValue: elementStub },
                 { provide: SVGElement, useValue: elementStub },
                 { provide: ElementRef, useValue: elementStub },
+                { provide: HTMLCanvasElement, useValue: nativeElemStub },
                 { provide: CanvasRenderingContext2D, useValue: ctxStub },
             ],
         });
@@ -60,13 +61,13 @@ describe('ExportService', () => {
 
         const spy = spyOn(service, 'download');
 
-        service.exportCanvas(NAME, TYPE, elementStub);
+        service.exportCanvas(NAME, TYPE, nativeElemStub);
         expect(spy).toHaveBeenCalledWith(NAME, TYPE, 0);
     });
 
     it('should produce an url during exportation', () => {
         const spy = spyOn(service, 'svgToURL');
-        service.exportInCanvas(elementStub, elementStub);
+        service.exportInCanvas(elementStub, nativeElemStub);
         expect(spy).toHaveBeenCalledWith(elementStub);
     });
 
@@ -74,7 +75,7 @@ describe('ExportService', () => {
         const spy = spyOn(service, 'loadImageInCanvas');
         service.svgToURL = () => '';
 
-        service.exportInCanvas(elementStub, elementStub);
+        service.exportInCanvas(elementStub, nativeElemStub);
         expect(spy).toHaveBeenCalled();
     });
 

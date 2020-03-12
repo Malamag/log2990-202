@@ -1,12 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { menuItems, toolsItems, welcomeItem } from '../../functionality';
-import { DrawViewComponent } from './draw-view.component';
-import { OptionBarComponent } from './option-bar/option-bar.component';
-import { SvgDrawComponent } from './svg-draw/svg-draw.component';
-import { ToolAttributesComponent } from './tool-box/tool-attributes/tool-attributes.component';
-import { ToolBoxComponent } from './tool-box/tool-box.component';
-
 import { HttpClientModule } from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
     MatButtonModule,
@@ -18,7 +12,14 @@ import {
     MatToolbarModule,
     MatTooltipModule,
 } from '@angular/material';
+import { menuItems, toolsItems, welcomeItem } from '../../functionality';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
+import { DrawViewComponent } from './draw-view.component';
+import { OptionBarComponent } from './option-bar/option-bar.component';
+import { SvgDrawComponent } from './svg-draw/svg-draw.component';
+import { ToolAttributesComponent } from './tool-box/tool-attributes/tool-attributes.component';
+import { ToolBoxComponent } from './tool-box/tool-box.component';
+import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';
 
 describe('DrawViewComponent', () => {
     let component: DrawViewComponent;
@@ -26,7 +27,14 @@ describe('DrawViewComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [DrawViewComponent, OptionBarComponent, ToolBoxComponent, ToolAttributesComponent, SvgDrawComponent, ColorPickerComponent],
+            declarations: [
+                DrawViewComponent,
+                OptionBarComponent,
+                ToolBoxComponent,
+                ToolAttributesComponent,
+                SvgDrawComponent,
+                ColorPickerComponent,
+            ],
             providers: [{ provide: menuItems, toolsItems, welcomeItem }, { provide: MatDialog }],
             imports: [
                 MatButtonModule,
@@ -40,6 +48,7 @@ describe('DrawViewComponent', () => {
                 MatRadioModule,
                 HttpClientModule,
             ],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
         }).compileComponents();
     }));
 
