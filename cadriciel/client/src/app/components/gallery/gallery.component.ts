@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 
 @Component({
     selector: 'app-gallery',
@@ -29,10 +30,11 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     filteredTags: Observable<string[]>;
     tagCtrl = new FormControl();
     render: Renderer2;
+    text: Element;
     @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef;
     @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
-    constructor(private index: IndexService, render: Renderer2) {
+    constructor(private index: IndexService, render: Renderer2, private doodle: DoodleFetchService) {
         this.render = render;
         this.possibleTags = [];
         this.filteredTags = this.tagCtrl.valueChanges.pipe(
@@ -45,7 +47,6 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     ngOnInit() {}
     ngAfterViewInit() {
         this.getAllImages();
-        //this.getImagesByTags(['none']);
     }
     blockEvent(ev: KeyboardEvent) {
         ev.stopPropagation();
@@ -71,9 +72,8 @@ export class GalleryComponent implements OnInit, AfterViewInit {
         this.tagCtrl.setValue(null);
     }
     showMessage() {
-        const text = this.render.createText('en cours de chargement');
-        this.render.appendChild(this.cardsContainer.nativeElement, text);
-        return text;
+        this.text = this.render.createText('en cours de chargement');
+        this.render.appendChild(this.cardsContainer.nativeElement, this.text);
     }
     delete(id: string) {
         this.index.deleteImageById(id);
@@ -82,29 +82,29 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     }
 
     getAllImages() {
-        const text = this.showMessage();
+        this.showMessage();
         this.drawings = this.index.getAllImages();
-        this.render.removeChild(this.cardsContainer, text);
+        this.render.removeChild(this.cardsContainer, this.text);
         this.drawings.subscribe(data => {
-            console.log(data[0].svgElement);
             if (data.length === 0) {
-                const txt = this.render.createText('Aucun dessin ne se trouve sur le serveur');
-                this.render.appendChild(this.cardsContainer.nativeElement, txt);
+                this.render.removeChild(this.cardsContainer.nativeElement, this.text);
+                this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
+                this.render.appendChild(this.cardsContainer.nativeElement, this.text);
             }
-            this.getAllTags(data);
         });
     }
     getImagesByTags() {
         if (!this.tags.length) {
             this.getAllImages();
         }
-        const text = this.showMessage();
+        this.showMessage();
         this.drawings = this.index.getImagesByTags(this.tags);
-        this.render.removeChild(this.cardsContainer, text);
+        this.render.removeChild(this.cardsContainer, this.text);
         this.drawings.subscribe(data => {
             if (data.length === 0) {
-                const txt = this.render.createText('Aucun dessin correspond a vos critères de recherche');
-                this.render.appendChild(this.cardsContainer.nativeElement, txt);
+                this.render.removeChild(this.cardsContainer, this.text);
+                this.text = this.render.createText('Aucun dessin correspond a vos critères de recherche');
+                this.render.appendChild(this.cardsContainer.nativeElement, this.text);
             }
         });
     }
@@ -123,7 +123,7 @@ export class GalleryComponent implements OnInit, AfterViewInit {
             }
         });
     }
-    //source: https://material.angular.io/components/chips/examples
+    // source: https://material.angular.io/components/chips/examples
     selected(event: MatAutocompleteSelectedEvent) {
         this.tags.push(event.option.value);
         this.tagInput.nativeElement.value = '';
@@ -132,5 +132,13 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     private filter(value: string): string[] {
         const filterValue = value.toLowerCase();
         return this.possibleTags.filter(tag => tag.toLowerCase().indexOf(filterValue) === 0);
+    }
+    continueDrawing(img: string) {
+        console.log(img);
+        this.doodle.askForDoodle();
+        console.log(this.doodle.currentDraw.nativeElement);
+        this.doodle.currentDraw.nativeElement.outerHTML = img;
+        console.log('/*******************************/');
+        console.log(this.doodle.currentDraw.nativeElement);
     }
 }
