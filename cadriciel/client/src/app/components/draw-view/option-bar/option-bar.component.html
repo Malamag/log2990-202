@@ -1,57 +1,47 @@
 <mat-toolbar class="topToolBar">
     <div>
-        <button class="topBtn" mat-mini-fab color="primary" matTooltip="{{ funcMenu[0].name }}" (click)="openNewDrawForm()" (click)="sendSigKill()">
+        <button class="topBtn" mat-mini-fab color="primary" matTooltip="{{ funcMenu[0].name }}"
+            (click)="openNewDrawForm()" (click)="sendSigKill()">
             <mat-icon class="topIcon"> {{ funcMenu[0].icon }}</mat-icon>
         </button>
-        <button class="topBtn" mat-mini-fab color="primary" matTooltip="{{ funcMenu[1].name }}" (click)="openGallery()" (click)="sendSigKill()">
+        <button class="topBtn" mat-mini-fab color="primary" matTooltip="{{ funcMenu[1].name }}" (click)="openGallery()"
+            (click)="sendSigKill()">
             <mat-icon class="topIcon"> {{ funcMenu[1].icon }}</mat-icon>
         </button>
 
-        <button class="topBtn" mat-mini-fab color="primary" matTooltip="{{ funcMenu[2].name }}" (click)="openUserGuide()" (click)="sendSigKill()">
+        <button class="topBtn" mat-mini-fab color="primary" matTooltip="{{ funcMenu[2].name }}"
+            (click)="openUserGuide()" (click)="sendSigKill()">
             <mat-icon class="topIcon"> {{ funcMenu[2].icon }}</mat-icon>
         </button>
-        <button class="topBtn" mat-mini-fab color="primary" matTooltip="{{ funcMenu[3].name }}" (click)="openNewDrawForm()" (click)="sendSigKill()">
+        <button class="topBtn" mat-mini-fab color="primary" matTooltip="{{ funcMenu[3].name }}"
+            (click)="openNewDrawForm()" (click)="sendSigKill()">
             <mat-icon class="topIcon"> {{ funcMenu[3].icon }}</mat-icon>
         </button>
 
-        <button class="topBtn" mat-mini-fab color="primary" matTooltip="{{ funcMenu[4].name }}" (click)="openExportForm()" (click)="sendSigKill()">
+        <button class="topBtn" mat-mini-fab color="primary" matTooltip="{{ funcMenu[4].name }}"
+            (click)="openExportForm()" (click)="sendSigKill()">
             <mat-icon class="topIcon">{{ funcMenu[4].icon }}</mat-icon>
         </button>
 
-        <button class="topBtn" mat-mini-fab color="primary" matTooltip={{funcMenu[4].name}} (click)="openSaveForm()" (click)="sendSigKill()">
+        <button class="topBtn" mat-mini-fab color="primary" matTooltip={{funcMenu[4].name}} (click)="openSaveForm()"
+            (click)="sendSigKill()">
             <mat-icon class="topIcon">redo</mat-icon>
         </button>
-        
+
     </div>
 
     <div [ngStyle]="{ visibility: gridSelected === true ? 'visible' : 'hidden' }" id="sliders-container">
         <div class="slider-label">
             <mat-icon>straighten</mat-icon>
         </div>
-        <mat-slider
-            thumbLabel
-            type="range"
-            step="5"
-            tickInterval="1"
-            min="10"
-            max="90"
-            [(ngModel)]="stepVal"
-            (ngModelChange)="updateSpacing()"
-        ></mat-slider>
+        <mat-slider thumbLabel type="range" step="5" tickInterval="1" min="10" max="90" [(ngModel)]="stepVal"
+            (ngModelChange)="updateSpacing()"></mat-slider>
         <span class="slider-val">{{ stepVal }}px</span>
 
         <mat-icon class="slider-label">tonality</mat-icon>
 
-        <mat-slider
-            thumbLabel
-            type="range"
-            step="5"
-            tickInterval="1"
-            min="15"
-            max="100"
-            [(ngModel)]="alphaVal"
-            (ngModelChange)="updateAlpha()"
-        ></mat-slider>
+        <mat-slider thumbLabel type="range" step="5" tickInterval="1" min="15" max="100" [(ngModel)]="alphaVal"
+            (ngModelChange)="updateAlpha()"></mat-slider>
         <span class="slider-val">{{ alphaVal }}%</span>
     </div>
     <mat-slide-toggle [checked]="gridSelected" id="grid-toggle" (change)="toggleGrid($event)">

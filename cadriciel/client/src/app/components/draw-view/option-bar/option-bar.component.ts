@@ -65,7 +65,7 @@ export class OptionBarComponent {
             e.preventDefault(); // default behavior prevented
         }
 
-        
+
         if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === E_KEY) {
             this.openExportForm();
             e.preventDefault();

@@ -10,7 +10,7 @@ export class DrawViewComponent implements AfterViewInit {
     // I doubt if we can delete these two
     @ViewChild('workingSpace', { static: false }) workingSpaceRef: ElementRef;
 
-    constructor(public interaction: InteractionService) {}
+    constructor(public interaction: InteractionService) { }
 
     ngAfterViewInit() {
         this.interaction.emitRef(this.workingSpaceRef);
