@@ -3,7 +3,7 @@ import { InputObserver } from '../draw-tool/input-observer';
 import { Point } from '../draw-tool/point';
 import { MouseHandlerService } from './mouse-handler.service';
 
-fdescribe('MouseHandlerService', () => {
+describe('MouseHandlerService', () => {
     // tslint:disable-next-line: no-any
     let iObserverStub: any;
     // tslint:disable-next-line: no-any
