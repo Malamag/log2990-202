@@ -37,6 +37,7 @@ describe('NewDrawComponent', () => {
         component = fixture.componentInstance;
         fixture.detectChanges();
         router = TestBed.get(Router);
+        router.navigate = jasmine.createSpy().and.returnValue(0);
         canvasBuilder = TestBed.get(CanvasBuilderService);
     });
 
@@ -59,10 +60,9 @@ describe('NewDrawComponent', () => {
     });
 
     it('should open draw-view on submit', () => {
-        const navigateSpy = spyOn(router, 'navigate'); // Spy on the navigate function of the router
         const submitButton = fixture.debugElement.query(By.css('button[type=submit]')).nativeElement; // Find the submit button
         submitButton.click(); // Create new click event on the submitButton
-        expect(navigateSpy).toHaveBeenCalledWith(['/vue']); // Look if we navigate to the drawing screen
+        expect(router.navigate).toHaveBeenCalledWith(['/vue']); // Look if we navigate to the drawing screen
     });
 
     it('should send the correct values when submitted', () => {
