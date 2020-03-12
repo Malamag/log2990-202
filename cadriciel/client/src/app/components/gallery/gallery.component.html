@@ -20,7 +20,7 @@
                 (matChipInputTokenEnd)="addTag($event)"
                 (keydown)= "blockEvent($event)"
             />
-            <button id="filter-btn" mat-stroked-button color="primary">Filtrer</button>
+            <button id="filter-btn" mat-stroked-button color="primary" (click) = "getImagesByTags()">Filtrer</button>
         </mat-chip-list>
         <mat-autocomplete #auto = "matAutocomplete" (optionSlected)= "selected($event)">
             <mat-option *ngFor= "let tag of filteredTags |async "[value] = "tag">

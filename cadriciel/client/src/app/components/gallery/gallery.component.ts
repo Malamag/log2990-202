@@ -35,20 +35,18 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
     constructor(private index: IndexService, render: Renderer2) {
         this.render = render;
-        //this.index.pupolatedBd();
         this.possibleTags = [];
         this.filteredTags = this.tagCtrl.valueChanges.pipe(
             startWith(null),
             map((tag: string | null) => tag ? this.filter(tag) : this.possibleTags.slice())
         )
+        this.tags = [];
     }
 
-    ngOnInit() {
-        //this.getAllImages();
-    }
+    ngOnInit() {}
     ngAfterViewInit() {
-        //this.getAllImages();
-        this.getImagesByTags(['none']);
+        this.getAllImages();
+        //this.getImagesByTags(['none']);
     }
     blockEvent(ev: KeyboardEvent) {
         ev.stopPropagation();
@@ -84,18 +82,19 @@ export class GalleryComponent implements OnInit, AfterViewInit {
         this.getAllImages();
     }
 
-    async getAllImages() {
+    getAllImages() {
         const text = this.showMessage();
-        this.drawings = await this.index.getAllImages()
+        this.drawings = this.index.getAllImages()
         this.render.removeChild(this.cardsContainer, text);
         this.drawings.subscribe((data) => {
             this.getAllTags(data);
         })
 
     }
-    async getImagesByTags(tags: string[]) {
+    getImagesByTags() {
+        if(!this.tags.length){this.getAllImages()}
         const text = this.showMessage();
-        this.drawings = await this.index.getImagesByTags(tags);
+        this.drawings = this.index.getImagesByTags(this.tags);
         this.render.removeChild(this.cardsContainer, text);
         this.drawings.subscribe((data) => {
             this.getAllTags(data);
