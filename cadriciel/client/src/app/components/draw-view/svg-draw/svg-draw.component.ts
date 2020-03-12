@@ -1,5 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Canvas } from 'src/app/models/Canvas.model';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
@@ -18,7 +17,7 @@ import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handl
     templateUrl: './svg-draw.component.html', // changed file type
     styleUrls: ['./svg-draw.component.scss'],
 })
-export class SvgDrawComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SvgDrawComponent implements OnInit, AfterViewInit {
     mySubscription: any;
     constructor(
         private canvBuilder: CanvasBuilderService,
@@ -27,19 +26,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit, OnDestroy {
         private doodleFetch: DoodleFetchService,
         private render: Renderer2,
         private gridService: GridRenderService,
-        private router: Router,
-    ) {
-        this.router.routeReuseStrategy.shouldReuseRoute = () => {
-            return false;
-        };
-        this.mySubscription = this.router.events.subscribe(event => {
-            if (event instanceof NavigationEnd) {
-                this.canvBuilder.emitCanvas();
-                // Trick the Router into believing it's last link wasn't previously loaded
-                this.router.navigated = false;
-            }
-        });
-    }
+    ) {}
     canvas: Canvas;
 
     width: number;
@@ -58,7 +45,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('drawingSpace', { static: false }) drawingSpace: ElementRef;
     @ViewChild('selectedItems', { static: false }) selectedItems: ElementRef;
     @ViewChild('grid', { static: false }) gridRef: ElementRef;
-
+    @ViewChild('container', { static: false }) cntRef: ElementRef;
     workingSpace: HTMLElement;
 
     ngOnInit() {
@@ -190,17 +177,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit, OnDestroy {
             this.doodleFetch.widthAttr = this.width;
             this.doodleFetch.heightAttr = this.height;
         });
+
         this.bgroundChangeSubscription();
-    }
-
-    routingTest() {
-        this.svg.nativeElement.outerHTML = `<svg _ngcontent-qyk-c5="" id="canvas" name="canvas" #canvas xmlns="http://www.w3.org/2000/svg" style="width: 914px; height: 592px;"><rect _ngcontent-qyk-c5="" height="100%" id="drawingSpace" #drawingSpace width="100%" style="fill: rgb(255, 255, 255);"></rect><g _ngcontent-qyk-c5="" id="grid" #grid ng-reflect-ng-style="[object Object]" style="display: none;"></g><g _ngcontent-qyk-c5="" name="filters"></g><g _ngcontent-qyk-c5="" id="frame" #frame name="drawing"></g><g _ngcontent-qyk-c5="" id="inPrgress" #inPrgress name="in-progress"></g><g _ngcontent-qyk-c5="" id="selectedItems" #selectedItems name="selected-items"></g></svg>`;
-
-        console.log('routing...');
-        this.router.navigate(['/vue']);
-    }
-
-    ngOnDestroy() {
-        this.mySubscription.unsubscribe();
     }
 }
