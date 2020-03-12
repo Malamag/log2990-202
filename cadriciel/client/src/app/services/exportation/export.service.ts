@@ -14,7 +14,6 @@ export class ExportService {
 
     svgToURL(svgElement: Node): string {
         const data = this.xmlSerializer.serializeToString(svgElement);
-        console.log('data' + data);
         const blob = new Blob([data], { type: 'image/svg+xml' });
         const domurl = window.URL;
         const url = domurl.createObjectURL(blob);

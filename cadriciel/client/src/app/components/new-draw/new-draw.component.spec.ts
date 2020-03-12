@@ -14,7 +14,13 @@ describe('NewDrawComponent', () => {
     let router: Router;
     let canvasBuilder: CanvasBuilderService;
 
+    // tslint:disable-next-line: no-any
+    let kbEventStub: any;
+
     beforeEach(async(() => {
+        kbEventStub = {
+            stopPropagation: () => 0,
+        };
         TestBed.configureTestingModule({
             declarations: [NewDrawComponent],
             imports: [
@@ -28,7 +34,7 @@ describe('NewDrawComponent', () => {
                 MatDialogModule,
                 RouterTestingModule,
             ],
-            providers: [By],
+            providers: [By, { provide: KeyboardEvent, useValue: kbEventStub }],
         }).compileComponents();
     }));
 
@@ -138,6 +144,19 @@ describe('NewDrawComponent', () => {
         setInputValue('input[formControlName=canvColor]', 'fetkhf'); // Put random characters in color
         const submitButton = fixture.debugElement.query(By.css('button[type=submit]')); // Find the submit button
         expect(submitButton.nativeElement.disabled).toBeTruthy(); // Look if the submit button is disabled
+    });
+
+    it('should block events with stop propagation', () => {
+        const spy = spyOn(kbEventStub, 'stopPropagation');
+        component.blockEvent(kbEventStub);
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should update the new color for the form on change', () => {
+        const NEW_COLOR = '#0f0f0f';
+        const spy = spyOn(component.newDrawForm, 'patchValue');
+        component.updateColor(NEW_COLOR);
+        expect(spy).toHaveBeenCalled();
     });
 
     // tslint:disable-next-line: only-arrow-functions
