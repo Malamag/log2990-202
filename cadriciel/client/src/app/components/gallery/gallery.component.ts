@@ -87,6 +87,10 @@ export class GalleryComponent implements OnInit, AfterViewInit {
         this.drawings = this.index.getAllImages()
         this.render.removeChild(this.cardsContainer, text);
         this.drawings.subscribe((data) => {
+            if(data.length === 0){
+                const txt = this.render.createText('Aucun dessin ne se trouve sur le serveur');
+                this.render.appendChild(this.cardsContainer.nativeElement, txt);
+            }
             this.getAllTags(data);
         })
 
@@ -97,14 +101,17 @@ export class GalleryComponent implements OnInit, AfterViewInit {
         this.drawings = this.index.getImagesByTags(this.tags);
         this.render.removeChild(this.cardsContainer, text);
         this.drawings.subscribe((data) => {
-            this.getAllTags(data);
+            if(data.length === 0){
+                const txt = this.render.createText('Aucun dessin correspond a vos critères de recherche');
+                this.render.appendChild(this.cardsContainer.nativeElement, txt);
+            }
         })
 
     }
     getAllTags(imageContainer: ImageData[]): void {
         imageContainer.forEach(image => {
             for (let i = 0; i < image.tags.length; ++i) {
-                let tagExist: boolean = false;
+                let tagExist = false;
                 for (let j = 0; j < this.possibleTags.length; ++j) {
                     if (image.tags[i] === this.possibleTags[j]) {
                         tagExist = true;
