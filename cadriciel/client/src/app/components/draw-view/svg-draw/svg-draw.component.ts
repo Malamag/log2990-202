@@ -29,12 +29,12 @@ export class SvgDrawComponent implements OnInit, AfterViewInit, OnDestroy {
         private gridService: GridRenderService,
         private router: Router,
     ) {
-        this.canvBuilder.emitCanvas();
         this.router.routeReuseStrategy.shouldReuseRoute = () => {
             return false;
         };
         this.mySubscription = this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
+                this.canvBuilder.emitCanvas();
                 // Trick the Router into believing it's last link wasn't previously loaded
                 this.router.navigated = false;
             }
@@ -76,8 +76,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit, OnDestroy {
 
     bgroundChangeSubscription() {
         this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
-            this.backColor = choosenColors.backColor;
-            this.gridService.updateColor(this.backColor);
+            if (choosenColors) {
+                this.backColor = choosenColors.backColor;
+                this.gridService.updateColor(this.backColor);
+            }
         });
     }
 
@@ -92,8 +94,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit, OnDestroy {
             this.backColor = canvas.canvasColor;
             this.canvBuilder.whipeDraw(this.frameRef);
             if (this.gridService.grid) {
-                this.gridService.removeGrid();
-                this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+                if (this.gridRef) {
+                    this.gridService.removeGrid();
+                    this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+                }
             }
         });
         this.canvBuilder.emitCanvas();
@@ -106,14 +110,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        //this.initCanvas()
         this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
         this.initGridVisibility();
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
         const mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);
-
-        // Create all the tools
-        //console.log(this.render);
         const tc = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
 
         const pencil = tc.CreatePencil(true, this.interaction, this.colorPick);
