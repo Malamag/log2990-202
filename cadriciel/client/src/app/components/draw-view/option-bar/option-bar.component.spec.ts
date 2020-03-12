@@ -76,10 +76,10 @@ describe('OptionBarComponent', () => {
     });
 
     it('should add observers on construction', () => {
-        const spy = spyOn(window, 'addEventListener');
+        window.addEventListener = jasmine.createSpy().and.callThrough();
         const TEST_SERVICE = new OptionBarComponent(winServiceStub, new InteractionService(), new KeyboardHandlerService(), gridRenderStub);
         expect(TEST_SERVICE).toBeTruthy();
-        expect(spy).toHaveBeenCalled();
+        expect(window.addEventListener).toHaveBeenCalled();
     });
 
     it('should open the new form modal window on ctrl+o', () => {
@@ -116,13 +116,6 @@ describe('OptionBarComponent', () => {
         const spy = spyOn(component, 'openNewDrawForm');
         component.setShortcutEvent(fakeKbEvent);
         expect(spy).toHaveBeenCalled();
-    });
-
-    it('shortcut verif should be called on new ev listener', () => {
-        const spy = spyOn(component, 'setShortcutEvent');
-        const ev = new KeyboardEvent('keydown');
-        window.dispatchEvent(ev);
-        expect(spy).toHaveBeenCalledWith(ev);
     });
 
     it('should open a modal for the export form window', () => {
@@ -263,5 +256,12 @@ describe('OptionBarComponent', () => {
         component.alphaVal = ALPHA_VAL;
         component.updateAlpha();
         expect(spy).toHaveBeenCalledWith(ALPHA_VAL);
+    });
+
+    it('should emit the svgToCanvas conversion to old state on gallery cancel', () => {
+        window.confirm = jasmine.createSpy().and.returnValue(false);
+        const spy = spyOn(component.interaction, 'emitSvgCanvasConversion');
+        component.openGallery();
+        expect(spy).toHaveBeenCalled();
     });
 });

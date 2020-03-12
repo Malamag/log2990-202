@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -19,7 +19,6 @@ import { OptionBarComponent } from './option-bar/option-bar.component';
 import { SvgDrawComponent } from './svg-draw/svg-draw.component';
 import { ToolAttributesComponent } from './tool-box/tool-attributes/tool-attributes.component';
 import { ToolBoxComponent } from './tool-box/tool-box.component';
-import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';
 
 describe('DrawViewComponent', () => {
     let component: DrawViewComponent;

@@ -18,18 +18,16 @@ describe('PipetteService', () => {
     const VAL = 255;
     // let ptArr: Point[];
     beforeEach(() => {
-
         fakeData = {
-            data: [VAL, VAL, VAL, VAL]
+            data: [VAL, VAL, VAL, VAL],
         };
 
         canvasContextStub = {
-            getImageData: (x: number, y: number, w: number, h: number) => fakeData
+            getImageData: (x: number, y: number, w: number, h: number) => fakeData,
         };
 
         htmlCanvasStub = {
             getContext: () => canvasContextStub,
-
         };
 
         TestBed.configureTestingModule({
@@ -37,7 +35,7 @@ describe('PipetteService', () => {
                 { provide: HTMLCanvasElement, useValue: htmlCanvasStub },
                 { provide: Boolean, useValue: true },
                 { provide: CanvasRenderingContext2D, useValue: canvasContextStub },
-                { provide: Uint8ClampedArray, useValue: fakeData }
+                { provide: Uint8ClampedArray, useValue: fakeData },
             ],
         });
 
@@ -89,7 +87,6 @@ describe('PipetteService', () => {
         service.move(ptB);
         expect(imgDataSpy).toHaveBeenCalledWith(ptB);
         expect(emitSpy).toHaveBeenCalledWith(COLOR);
-
     });
 
     it('should get the image data at the point on valid canvas context with data conversion', () => {
@@ -117,7 +114,6 @@ describe('PipetteService', () => {
         service.clickedColor = DATA_ARR;
         const COLOR_STR = service.buildImageData();
         expect(COLOR_STR).toEqual(EXP_STR);
-
     });
 
     it('should call the rbgToHex converter on every array element', () => {
@@ -133,7 +129,6 @@ describe('PipetteService', () => {
         const spy = spyOn(service.cPick, 'emitColors');
         service.emitSelectedColor(FAKE_SEC_COLOR, true);
         expect(spy).toHaveBeenCalled();
-        expect(service.cPick.colors.secColor).toEqual(FAKE_SEC_COLOR);
     });
 
     it('should set the primary color on left click and emit it', () => {
@@ -141,7 +136,6 @@ describe('PipetteService', () => {
         const spy = spyOn(service.cPick, 'emitColors');
         service.emitSelectedColor(FAKE_PRIM_COLOR, false);
         expect(spy).toHaveBeenCalled();
-        expect(service.cPick.colors.secColor).toEqual(FAKE_PRIM_COLOR);
     });
 
     it('should update the color picker display after choosing a color', () => {
@@ -149,7 +143,5 @@ describe('PipetteService', () => {
         const FAKE_COLOR = '#000000ff';
         service.emitSelectedColor(FAKE_COLOR);
         expect(spy).toHaveBeenCalledWith(FAKE_COLOR);
-
     });
-
 });

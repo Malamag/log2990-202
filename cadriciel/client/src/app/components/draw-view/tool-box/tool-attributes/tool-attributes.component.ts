@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { AerosolAttributes } from 'src/app/services/attributes/aerosol-attribute';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 
@@ -7,7 +7,7 @@ import { InteractionService } from 'src/app/services/service-interaction/interac
     templateUrl: './tool-attributes.component.html',
     styleUrls: ['./tool-attributes.component.scss'],
 })
-export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ToolAttributesComponent implements OnInit, AfterViewInit {
     lineThickness: number;
     texture: number;
     numberCorners: number; // not done
@@ -16,7 +16,7 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
     diameter: number;
     junction: boolean;
     junctionRadius: number;
-    selectedTool: String;
+    selectedTool: string;
     tools: string[] = [];
 
     pipettePreviewFill: string;
@@ -33,24 +33,31 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
             'Aérosol',
             'ApplicateurCouleur',
         ];
-        this.lineThickness = 5; // 5px thick line
-        this.texture = 0; // blur texture
+        const DEF_THICK = 5;
+        const DEF_TEXTURE = 0;
+        const DEF_POLYGONE_CORNERS = 3;
+        const DEF_EMISSIONS = 50;
+        const DEF_DIAMETER = 50;
+        const DEF_PLOTTYPE = 2;
+        const DEF_JUNCTION_RAD = 6;
+        this.lineThickness = DEF_THICK; // 5px thick line
+        this.texture = DEF_TEXTURE; // blur texture
 
-        this.numberCorners = 3; // for polygon
+        this.numberCorners = DEF_POLYGONE_CORNERS; // for polygon
 
-        this.emissionPerSecond = 50;
-        this.diameter = 50;
+        this.emissionPerSecond = DEF_EMISSIONS;
+        this.diameter = DEF_DIAMETER;
 
-        this.plotType = 2; // type 2 --> filled with border
+        this.plotType = DEF_PLOTTYPE; // type 2 --> filled with border
         this.junction = true; // with junction dots of 6 px size
-        this.junctionRadius = 6;
+        this.junctionRadius = DEF_JUNCTION_RAD;
         this.selectedTool = 'Crayon';
     }
 
-    ngOnInit() {
-        this.interaction.$selectedTool.subscribe((tool) => {
+    ngOnInit(): void {
+        this.interaction.$selectedTool.subscribe((tool: string) => {
             let toolExist = false;
-            this.tools.forEach((el) => {
+            this.tools.forEach((el: string) => {
                 if (el === tool) {
                     toolExist = true;
                 }
@@ -66,7 +73,7 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
             this.pipettePreviewFill = color; // updates the preview box for the pipette tool
         });
     }
-    ngAfterViewInit() {
+    ngAfterViewInit(): void {
         // default values
 
         this.updateForms(); // emit all after init
@@ -74,25 +81,31 @@ export class ToolAttributesComponent implements OnInit, OnDestroy, AfterViewInit
         this.updateTools();
     }
 
-    updateForms() {
-        this.interaction.emitFormsAttributes({ plotType: this.plotType, lineThickness: this.lineThickness, numberOfCorners: this.numberCorners });
+    updateForms(): void {
+        this.interaction.emitFormsAttributes({
+            plotType: this.plotType,
+            lineThickness: this.lineThickness,
+            numberOfCorners: this.numberCorners,
+        });
     }
 
-    updateLine() {
-        this.interaction.emitLineAttributes({ junction: this.junction, lineThickness: this.lineThickness, junctionDiameter: this.junctionRadius });
+    updateLine(): void {
+        this.interaction.emitLineAttributes({
+            junction: this.junction,
+            lineThickness: this.lineThickness,
+            junctionDiameter: this.junctionRadius,
+        });
     }
 
-    updateTools() {
+    updateTools(): void {
         this.interaction.emitToolsAttributes({ lineThickness: this.lineThickness, texture: this.texture });
     }
 
-    updateAerosol() {
+    updateAerosol(): void {
         this.interaction.emitAerosolAttributes(new AerosolAttributes(this.emissionPerSecond, this.diameter));
     }
 
-    resize() {
+    resize(): void {
         window.dispatchEvent(new Event('resize'));
     }
-
-    ngOnDestroy() {}
 }

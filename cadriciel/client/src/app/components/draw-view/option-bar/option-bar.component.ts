@@ -32,14 +32,13 @@ export class OptionBarComponent {
         private kbHandler: KeyboardHandlerService,
         public gridService: GridRenderService,
     ) {
-
         this.funcMenu = menuItems;
         this.gridSelected = false;
 
         const DEF_GRID_ALPHA = 100;
         this.alphaVal = DEF_GRID_ALPHA;
 
-        window.addEventListener('keydown', (e) => {
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
             this.setShortcutEvent(e);
         });
         this.stepVal = this.gridService.defSteps;

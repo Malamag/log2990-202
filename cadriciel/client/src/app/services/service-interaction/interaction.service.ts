@@ -9,7 +9,7 @@ import { ToolsAttributes } from '../attributes/tools-attribute';
     providedIn: 'root',
 })
 export class InteractionService {
-    selectedTool = new Subject<String>();
+    selectedTool = new Subject<string>();
     $selectedTool = this.selectedTool.asObservable();
     formsAttributes = new Subject<FormsAttribute>();
     $formsAttributes = this.formsAttributes.asObservable();
