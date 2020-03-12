@@ -5,8 +5,11 @@ import { ExportService } from './export.service';
 
 describe('ExportService', () => {
     let service: ExportService;
+    // tslint:disable-next-line: no-any
     let elementStub: any;
+    // tslint:disable-next-line: no-any
     let nativeElemStub: any;
+    // tslint:disable-next-line: no-any
     let ctxStub: any;
     beforeEach(() => {
         ctxStub = {
@@ -31,8 +34,8 @@ describe('ExportService', () => {
     });
 
     it('should be created', () => {
-        const service: ExportService = TestBed.get(ExportService);
-        expect(service).toBeTruthy();
+        const testService: ExportService = TestBed.get(ExportService);
+        expect(testService).toBeTruthy();
     });
 
     it('should create an url from an svg element', () => {
@@ -41,12 +44,6 @@ describe('ExportService', () => {
         const URL = service.svgToURL(elementStub);
         expect(URL).toBeDefined();
     });
-
-    /*it('should build a download link with renderer', () => {
-        const spy = spyOn(service.render, 'createElement');
-        service.download('fakeName', 'png', 'www.polymtl.com');
-        expect(spy).toHaveBeenCalled();
-    });*/
 
     it('should export canvas in svg from image url', () => {
         const TYPE = 'svg';

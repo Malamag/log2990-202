@@ -18,7 +18,7 @@ export class ExportService {
         return url;
     }
 
-    download(name: string, format: string, src: string) {
+    download(name: string, format: string, src: string): void {
         // https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
 
         const downloadLink = this.render.createElement('a');
@@ -29,13 +29,16 @@ export class ExportService {
         this.render.removeChild(document.body, downloadLink);
     }
 
-    exportCanvas(name: string, type: string, canvasRef: HTMLCanvasElement) {
+    exportCanvas(name: string, type: string, canvasRef: HTMLCanvasElement): void {
         // https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
-
-        type === 'svg' ? this.download(name, type, this.imageURL) : this.download(name, type, canvasRef.toDataURL(`image/${type}`)); // else, use canvas conversion
+        if (type === 'svg') {
+            this.download(name, type, this.imageURL);
+        } else {
+            this.download(name, type, canvasRef.toDataURL(`image/${type}`)); // else, use canvas conversion
+        }
     }
 
-    exportInCanvas(svgElem: Node, canvasRef: HTMLCanvasElement, name?: string, type?: string) {
+    exportInCanvas(svgElem: Node, canvasRef: HTMLCanvasElement, name?: string, type?: string): void {
         // https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
 
         const CTX: CanvasRenderingContext2D | null = canvasRef.getContext('2d');
@@ -46,7 +49,13 @@ export class ExportService {
         }
     }
 
-    loadImageInCanvas(image: HTMLImageElement, ctx: CanvasRenderingContext2D, canvasRef: HTMLCanvasElement, imgName?: string, imgType?: string) {
+    loadImageInCanvas(
+        image: HTMLImageElement,
+        ctx: CanvasRenderingContext2D,
+        canvasRef: HTMLCanvasElement,
+        imgName?: string,
+        imgType?: string,
+    ): void {
         image.onload = () => {
             ctx.drawImage(image, 0, 0);
             if (imgName && imgType) {

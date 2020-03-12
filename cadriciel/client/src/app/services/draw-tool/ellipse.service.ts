@@ -19,7 +19,8 @@ export class EllipseService extends ShapeService {
         drawing: HTMLElement,
         selected: boolean,
         interaction: InteractionService,
-        colorPick: ColorPickingService) {
+        colorPick: ColorPickingService,
+    ) {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.isSquare = false;
     }

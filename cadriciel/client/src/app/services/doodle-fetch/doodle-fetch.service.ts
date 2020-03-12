@@ -17,7 +17,7 @@ export class DoodleFetchService {
         this.ask = new Subject<boolean>();
     }
 
-    askForDoodle() {
+    askForDoodle(): void {
         this.ask.next(true); // we are telling the svg draw component that we want to access the doodle
     }
 

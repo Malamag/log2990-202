@@ -119,7 +119,7 @@ export class ImageFilterService {
         return FILTER_ARRAY;
     }
 
-    toggleFilter(doodle: Node, filterNum: number) {
+    toggleFilter(doodle: Node, filterNum: number): void {
         const NO_FILTER_INDEX = -1;
 
         if (filterNum === NO_FILTER_INDEX) {
