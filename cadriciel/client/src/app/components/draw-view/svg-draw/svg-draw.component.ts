@@ -1,24 +1,25 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { Canvas } from 'src/app/models/Canvas.model';
+import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
 import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
-import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 
 @Component({
     selector: 'app-svg-draw',
     templateUrl: './svg-draw.component.html', // changed file type
     styleUrls: ['./svg-draw.component.scss'],
 })
-export class SvgDrawComponent implements OnInit, AfterViewInit {
+export class SvgDrawComponent implements OnInit, AfterViewInit, OnDestroy {
+    mySubscription: any;
     constructor(
         private canvBuilder: CanvasBuilderService,
         public interaction: InteractionService,
@@ -26,7 +27,19 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         private doodleFetch: DoodleFetchService,
         private render: Renderer2,
         private gridService: GridRenderService,
-    ) {}
+        private router: Router,
+    ) {
+        this.canvBuilder.emitCanvas();
+        this.router.routeReuseStrategy.shouldReuseRoute = () => {
+            return false;
+        };
+        this.mySubscription = this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                // Trick the Router into believing it's last link wasn't previously loaded
+                this.router.navigated = false;
+            }
+        });
+    }
     canvas: Canvas;
 
     width: number;
@@ -73,6 +86,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             if (canvas === undefined || canvas === null) {
                 canvas = this.canvBuilder.getDefCanvas();
             }
+
             this.width = canvas.canvasWidth;
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
@@ -177,5 +191,16 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.doodleFetch.heightAttr = this.height;
         });
         this.bgroundChangeSubscription();
+    }
+
+    routingTest() {
+        this.svg.nativeElement.outerHTML = `<svg _ngcontent-qyk-c5="" id="canvas" name="canvas" #canvas xmlns="http://www.w3.org/2000/svg" style="width: 914px; height: 592px;"><rect _ngcontent-qyk-c5="" height="100%" id="drawingSpace" #drawingSpace width="100%" style="fill: rgb(255, 255, 255);"></rect><g _ngcontent-qyk-c5="" id="grid" #grid ng-reflect-ng-style="[object Object]" style="display: none;"></g><g _ngcontent-qyk-c5="" name="filters"></g><g _ngcontent-qyk-c5="" id="frame" #frame name="drawing"></g><g _ngcontent-qyk-c5="" id="inPrgress" #inPrgress name="in-progress"></g><g _ngcontent-qyk-c5="" id="selectedItems" #selectedItems name="selected-items"></g></svg>`;
+
+        console.log('routing...');
+        this.router.navigate(['/vue']);
+    }
+
+    ngOnDestroy() {
+        this.mySubscription.unsubscribe();
     }
 }

@@ -2,13 +2,12 @@ import { Component, OnInit, Renderer2, ViewChild, ElementRef, AfterViewInit } fr
 import { fakeImages } from './fake_images';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { IndexService } from './../../services/index/index.service'
-import { ImageData } from '../../imageData'
+import { IndexService } from './../../services/index/index.service';
+import { ImageData } from '../../imageData';
 import { FormControl } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-
 
 @Component({
     selector: 'app-gallery',
@@ -30,16 +29,16 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     filteredTags: Observable<string[]>;
     tagCtrl = new FormControl();
     render: Renderer2;
-    @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef
-    @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>
+    @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef;
+    @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
     constructor(private index: IndexService, render: Renderer2) {
         this.render = render;
         this.possibleTags = [];
         this.filteredTags = this.tagCtrl.valueChanges.pipe(
             startWith(null),
-            map((tag: string | null) => tag ? this.filter(tag) : this.possibleTags.slice())
-        )
+            map((tag: string | null) => (tag ? this.filter(tag) : this.possibleTags.slice())),
+        );
         this.tags = [];
     }
 
@@ -84,29 +83,30 @@ export class GalleryComponent implements OnInit, AfterViewInit {
 
     getAllImages() {
         const text = this.showMessage();
-        this.drawings = this.index.getAllImages()
+        this.drawings = this.index.getAllImages();
         this.render.removeChild(this.cardsContainer, text);
-        this.drawings.subscribe((data) => {
-            if(data.length === 0){
+        this.drawings.subscribe(data => {
+            console.log(data[0].svgElement);
+            if (data.length === 0) {
                 const txt = this.render.createText('Aucun dessin ne se trouve sur le serveur');
                 this.render.appendChild(this.cardsContainer.nativeElement, txt);
             }
             this.getAllTags(data);
-        })
-
+        });
     }
     getImagesByTags() {
-        if(!this.tags.length){this.getAllImages()}
+        if (!this.tags.length) {
+            this.getAllImages();
+        }
         const text = this.showMessage();
         this.drawings = this.index.getImagesByTags(this.tags);
         this.render.removeChild(this.cardsContainer, text);
-        this.drawings.subscribe((data) => {
-            if(data.length === 0){
+        this.drawings.subscribe(data => {
+            if (data.length === 0) {
                 const txt = this.render.createText('Aucun dessin correspond a vos critères de recherche');
                 this.render.appendChild(this.cardsContainer.nativeElement, txt);
             }
-        })
-
+        });
     }
     getAllTags(imageContainer: ImageData[]): void {
         imageContainer.forEach(image => {
@@ -117,9 +117,11 @@ export class GalleryComponent implements OnInit, AfterViewInit {
                         tagExist = true;
                     }
                 }
-                if (!tagExist) { this.possibleTags.push(image.tags[i]) }
+                if (!tagExist) {
+                    this.possibleTags.push(image.tags[i]);
+                }
             }
-        })
+        });
     }
     //source: https://material.angular.io/components/chips/examples
     selected(event: MatAutocompleteSelectedEvent) {
@@ -128,7 +130,7 @@ export class GalleryComponent implements OnInit, AfterViewInit {
         this.tagCtrl.setValue(null);
     }
     private filter(value: string): string[] {
-        const filterValue = value.toLowerCase()
-        return this.possibleTags.filter(tag => tag.toLowerCase().indexOf(filterValue) === 0)
+        const filterValue = value.toLowerCase();
+        return this.possibleTags.filter(tag => tag.toLowerCase().indexOf(filterValue) === 0);
     }
 }
