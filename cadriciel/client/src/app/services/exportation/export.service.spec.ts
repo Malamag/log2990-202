@@ -11,7 +11,17 @@ describe('ExportService', () => {
     let nativeElemStub: any;
     // tslint:disable-next-line: no-any
     let ctxStub: any;
+    // tslint:disable-next-line: no-any
+    let fakeDownload: any;
+    // tslint:disable-next-line: no-any
+
     beforeEach(() => {
+        fakeDownload = {
+            click: () => 0,
+            href: '',
+            download: '',
+        };
+
         ctxStub = {
             drawImage: (img: CanvasImageSource, dx: number, dy: number) => 1,
         };
@@ -24,7 +34,7 @@ describe('ExportService', () => {
         };
         TestBed.configureTestingModule({
             providers: [
-                { provide: Node, useValue: elementStub },
+                { provide: Node, useValue: nativeElemStub },
                 { provide: SVGElement, useValue: elementStub },
                 { provide: ElementRef, useValue: elementStub },
                 { provide: HTMLCanvasElement, useValue: nativeElemStub },
@@ -102,5 +112,24 @@ describe('ExportService', () => {
         IMG.dispatchEvent(new Event('load'));
         service.loadImageInCanvas(IMG, ctxStub, elementStub, NAME, TYPE);
         expect(spy).toHaveBeenCalled();
+    });
+
+    it('should create and manage a download link using renderer', () => {
+        const SRC = 'fakeSRC';
+        const NAME = 'test dessin';
+        const FORMAT = 'png';
+        service.render.createElement = jasmine.createSpy().and.returnValue(fakeDownload);
+        service.render.appendChild = jasmine.createSpy().and.returnValue(0);
+        service.render.removeChild = jasmine.createSpy().and.returnValue(0);
+        service.download(NAME, FORMAT, SRC);
+        expect(service.render.createElement).toHaveBeenCalled();
+        expect(service.render.appendChild).toHaveBeenCalled();
+        expect(service.render.removeChild).toHaveBeenCalled();
+    });
+
+    it('should return a valid URL', () => {
+        service.xmlSerializer.serializeToString = jasmine.createSpy().and.returnValue('test');
+        const TEST_URL = service.svgToURL(elementStub);
+        expect(TEST_URL).toBeDefined();
     });
 });

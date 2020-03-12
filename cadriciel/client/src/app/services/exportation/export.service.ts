@@ -6,12 +6,14 @@ import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 export class ExportService {
     imageURL: string;
     render: Renderer2;
+    xmlSerializer: XMLSerializer;
     constructor(rendererFact: RendererFactory2) {
         this.render = rendererFact.createRenderer(null, null);
+        this.xmlSerializer = new XMLSerializer();
     }
 
     svgToURL(svgElement: Node): string {
-        const data = new XMLSerializer().serializeToString(svgElement);
+        const data = this.xmlSerializer.serializeToString(svgElement);
         const blob = new Blob([data], { type: 'image/svg+xml' });
         const domurl = window.URL;
         const url = domurl.createObjectURL(blob);
