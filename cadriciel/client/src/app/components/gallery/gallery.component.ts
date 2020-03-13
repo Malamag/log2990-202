@@ -1,14 +1,14 @@
-import { Component, OnInit, Renderer2, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { fakeImages } from './fake_images';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { IndexService } from './../../services/index/index.service'
-import { ImageData } from '../../imageData'
 import { FormControl } from '@angular/forms';
-import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
-import { map, startWith } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { COMMA, ENTER} from '@angular/cdk/keycodes';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
+import { ImageData } from '../../imageData'
+import { fakeImages } from './fake_images';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { IndexService } from './../../services/index/index.service'
 
 
 @Component({
@@ -130,14 +130,13 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     }
     private filter(value: string): string[] {
         const filterValue = value.toLowerCase()
-        return this.possibleTags.filter(tag => tag.toLowerCase().indexOf(filterValue) === 0)
+        return this.possibleTags.filter((tag) => tag.toLowerCase().indexOf(filterValue) === 0)
     }
     continueDrawing(img: string){
-        console.log(img);
         this.doodle.askForDoodle();
         console.log(this.doodle.currentDraw.nativeElement)
-        this.doodle.currentDraw.nativeElement.outerHTML = img;
-        console.log('/*******************************/');
-        console.log(this.doodle.currentDraw.nativeElement);
+        /*this.doodle.currentDraw.nativeElement.outerHTML = img;
+        console.log('/******************************');
+        console.log(this.doodle.currentDraw.nativeElement);*/
     }
 }
