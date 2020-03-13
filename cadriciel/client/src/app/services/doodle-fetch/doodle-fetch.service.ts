@@ -1,6 +1,7 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GridRenderService } from '../grid/grid-render.service';
+import { SVGData } from '../../../svgData'
 
 @Injectable({
     providedIn: 'root',
@@ -21,7 +22,7 @@ export class DoodleFetchService {
         this.ask.next(true); // we are telling the svg draw component that we want to access the doodle
     }
 
-   
+
 
     getDrawingWithoutGrid(): Node {
         // returns a deep copy of the svg element.
@@ -36,11 +37,26 @@ export class DoodleFetchService {
         return el.nativeElement;
     }
 
-    getDrawingStringNoGrid(): string {
+    getDrawingStringNoGrid(): SVGData {
         this.gService.removeGrid();
-        const SVG_STR = this.currentDraw.nativeElement.outerHTML;
-
+        //const SVG_STR = this.currentDraw.nativeElement.outerHTML;
+        let innerHTML: string[] = [];
+        let el: Element = this.currentDraw.nativeElement;
+        //let temp = el.attributes.getNamedItem('style');
+        //svgData.push(el.attributes.getNamedItem('style'));
+        let childs: HTMLCollection = el.children;
+        for (let i = 0; i < childs.length; i++) {
+            try {
+                innerHTML.push(childs[i].innerHTML);
+            }
+            catch{
+                innerHTML.push("");
+                console.log("Empty InnerHTML");
+            }
+        }
+        const SVG_DATA: SVGData = { canvasStyle: el.getAttribute('style'), bgColor: childs[0].getAttribute('style'), innerHTML: innerHTML };
+        console.log(SVG_DATA);
         this.gService.renderBack();
-        return SVG_STR;
+        return SVG_DATA;
     }
 }

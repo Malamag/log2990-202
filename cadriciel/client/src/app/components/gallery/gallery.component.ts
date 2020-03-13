@@ -89,6 +89,7 @@ export class GalleryComponent implements OnInit, AfterViewInit {
         this.drawings = await this.index.getAllImages()
         this.render.removeChild(this.cardsContainer, text);
         this.drawings.subscribe((data) => {
+            console.log(data);
             this.getAllTags(data);
         })
 
@@ -98,6 +99,7 @@ export class GalleryComponent implements OnInit, AfterViewInit {
         this.drawings = await this.index.getImagesByTags(tags);
         this.render.removeChild(this.cardsContainer, text);
         this.drawings.subscribe((data) => {
+            console.log(data);
             this.getAllTags(data);
         })
 
