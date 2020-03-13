@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { IndexService } from './../../services/index/index.service'
 import { SVGData } from 'src/svgData';
+import { ShownData } from 'src/app/shownData';
 
 
 @Component({
@@ -26,6 +27,7 @@ import { SVGData } from 'src/svgData';
 export class GalleryComponent implements AfterViewInit {
     fakeImage = fakeImages;
     drawings: Observable<ImageData[]>;
+    shownDrawings : ShownData[] = [];
     readonly inputTagSeparators: number[] = [ENTER, COMMA];
     tags: string[] = [];
     private possibleTags: string[];
@@ -92,7 +94,15 @@ export class GalleryComponent implements AfterViewInit {
                 this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
             }
-            this.getAllTags(data);
+            else{
+                data.forEach((im) => {
+                    const svg = this.createSVG(im.svgElement);
+                    this.shownDrawings.push({id: im.id, svgElement: svg[2], name: im.name, tags: im.tags,
+                        data: im.svgElement, width: svg[0], height: svg[1]});
+                })
+                this.getAllTags(data);
+            }
+            
         })
 
     }
@@ -108,6 +118,13 @@ export class GalleryComponent implements AfterViewInit {
                 this.render.removeChild(this.cardsContainer, this.text);
                 this.text = this.render.createText('Aucun dessin correspond a vos critères de recherche');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
+            }
+            else{
+                data.forEach((im) => {
+                    const svg = this.createSVG(im.svgElement);
+                    this.shownDrawings.push({id: im.id, svgElement: svg[2], name: im.name, tags: im.tags,
+                         data: im.svgElement, width: svg[0], height: svg[1]});
+                })
             }
         });
     }
@@ -140,17 +157,40 @@ export class GalleryComponent implements AfterViewInit {
         this.doodle.askForDoodle();
         const el = this.doodle.currentDraw.nativeElement;
         if(data.canvasStyle !== null) {
-            this.render.setAttribute(el, 'width', data.canvasStyle.substring(7, 12))
-            this.render.setAttribute(el, 'height', data.canvasStyle.substring(23,27));
+            this.render.setAttribute(el, 'width', data.canvasStyle.substring(7, 13))
+            this.render.setAttribute(el, 'height', data.canvasStyle.substring(23, 28));
         }
         const childs: HTMLCollection = el.children;
         for(let i = 0; i < childs.length; ++i) {
-            if (i === 0 && data.bgColor !== null) {this.render.setAttribute(childs[i], 'fill', data.bgColor)}
+            if (i === 0 && data.bgColor !== null) {childs[i].setAttributeNS('http://www.w3.org/2000/svg', 'fill', data.bgColor)};
             if (data.innerHTML[i] === undefined) {
                 childs[i].innerHTML = '';
             } else {
                 childs[i].innerHTML = data.innerHTML[i]
             }
         }
+    }
+    createSVG(data: SVGData) {
+        let variables : [number, number, any] = [0, 0, 3] 
+        const svg = this.render.createElement('svg','http://www.w3.org/2000/svg');
+        if(data.canvasStyle !== null) {
+            this.render.setAttribute(svg, 'width', data.canvasStyle.substring(7, 13))
+            console.log(data.canvasStyle.substring(7, 13))
+            variables[0] = +data.canvasStyle.substring(7, 11); 
+            this.render.setAttribute(svg, 'height', data.canvasStyle.substring(23, 28));
+            variables[1] = + data.canvasStyle.substring(23, 26);
+        }
+        const rect = this.render.createElement('rect', 'svg');
+        if (data.bgColor !== null) {this.render.setAttribute(rect, 'fill', data.bgColor)}
+        this.render.setAttribute(rect, 'height', '100%');
+        this.render.setAttribute(rect, 'width', '100%');
+        this.render.appendChild(svg, rect);
+        const tag = this.render.createElement('g', 'svg');
+        for(let i = 0; i < data.innerHTML.length; ++i){
+            if(data.innerHTML[i] !== '' || data.innerHTML[i] !== undefined ) { tag.innerHTML = data.innerHTML[i]}
+        }
+        this.render.appendChild(svg, tag);
+        variables[2] = svg;
+        return variables;
     }
 }

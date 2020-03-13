@@ -1,6 +1,10 @@
-export interface shownData {
+import { SVGData } from '../svgData'
+export interface ShownData {
     id: string;
-    svgElement: XMLDocument,
+    svgElement: Element,
     name: string,
-    tags: string[]
+    tags: string[],
+    data: SVGData,
+    width: number,
+    height: number,
 }

@@ -30,18 +30,21 @@
     </mat-form-field>
 
     <div id="cards-container" #cardsContainer>
-        <mat-card class="drawing" *ngFor="let drawing of drawings | async">
+        <mat-card class="drawing" *ngFor="let drawing of shownDrawings">
             <mat-card-header>
                 <mat-card-title> {{ drawing.name }} </mat-card-title>
                 <mat-card-subtitle> {{ drawing.tags }} </mat-card-subtitle>
             </mat-card-header>
+            <!---
             <img mat-card-image src='https://cdn.instructables.com/F1F/IFEN/GW88TP3T/F1FIFENGW88TP3T.LARGE.jpg?auto=webp&fit=bounds' />
+            -->
+            <app-preview-box [draw] = "drawing.svgElement" [svgW] = drawing.width [svgH] = drawing.height> </app-preview-box>
             <mat-card-actions>
                 <button mat-stroked-button color="warn" (click)= "delete(drawing.id)">
                     <mat-icon matTooltip="Supprimer"> delete </mat-icon>
                 </button>
                 <button mat-stroked-button color="basic">
-                    <mat-icon matTooltip="Continuer dessin" (click) = "continueDrawing(drawing.svgElement)"> arrow_right_alt</mat-icon>
+                    <mat-icon matTooltip="Continuer dessin" (click) = "continueDrawing(drawing.data)"> arrow_right_alt</mat-icon>
                 </button>
             </mat-card-actions>
         </mat-card>
