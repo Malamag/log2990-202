@@ -185,11 +185,12 @@ export class GalleryComponent implements AfterViewInit {
         console.log(data.bgColor.substring(5, 24)) }
         this.render.setAttribute(rect, 'height', '100%');
         this.render.setAttribute(rect, 'width', '100%');
-        this.render.appendChild(svg, rect);
+        
         const tag = this.render.createElement('g');
         for(let i = 0; i < data.innerHTML.length; ++i){
-            if(data.innerHTML[i] !== '' || data.innerHTML[i] !== undefined ) { tag.innerHTML = data.innerHTML[i]}
+            tag.innerHTML += data.innerHTML[i]
         }
+        this.render.appendChild(svg, rect);
         this.render.appendChild(svg, tag);
         variables[2] = svg;
         return variables;
