@@ -162,7 +162,7 @@ export class GalleryComponent implements AfterViewInit {
         }
         const childs: HTMLCollection = el.children;
         for(let i = 0; i < childs.length; ++i) {
-            if (i === 0 && data.bgColor !== null) {childs[i].setAttributeNS('http://www.w3.org/2000/svg', 'fill', data.bgColor)};
+            if (i === 0 && data.bgColor !== null) {childs[i].setAttributeNS('http://www.w3.org/2000/svg', 'fill', data.bgColor.substring(6, 24))};
             if (data.innerHTML[i] === undefined) {
                 childs[i].innerHTML = '';
             } else {
@@ -181,11 +181,12 @@ export class GalleryComponent implements AfterViewInit {
             variables[1] = + data.canvasStyle.substring(23, 26);
         }
         const rect = this.render.createElement('rect', 'svg');
-        if (data.bgColor !== null) {this.render.setAttribute(rect, 'fill', data.bgColor)}
+        if (data.bgColor !== null) {this.render.setAttribute(rect, 'fill', data.bgColor.substring(6, 24));
+        console.log(data.bgColor.substring(5, 24)) }
         this.render.setAttribute(rect, 'height', '100%');
         this.render.setAttribute(rect, 'width', '100%');
         this.render.appendChild(svg, rect);
-        const tag = this.render.createElement('g', 'svg');
+        const tag = this.render.createElement('g');
         for(let i = 0; i < data.innerHTML.length; ++i){
             if(data.innerHTML[i] !== '' || data.innerHTML[i] !== undefined ) { tag.innerHTML = data.innerHTML[i]}
         }
