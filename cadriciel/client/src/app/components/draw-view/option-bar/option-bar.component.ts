@@ -114,6 +114,7 @@ export class OptionBarComponent {
             return;
         }
     }
+
     toggleGrid(): void {
         this.gridSelected = !this.gridSelected;
         this.gridService.toggleGridVisibility(this.gridSelected);

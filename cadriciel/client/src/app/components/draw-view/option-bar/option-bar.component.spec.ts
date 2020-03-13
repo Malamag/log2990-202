@@ -258,10 +258,18 @@ describe('OptionBarComponent', () => {
         expect(spy).toHaveBeenCalledWith(ALPHA_VAL);
     });
 
-    it('should emit the svgToCanvas conversion to old state on gallery cancel', () => {
-        window.confirm = jasmine.createSpy().and.returnValue(false);
-        const spy = spyOn(component.interaction, 'emitSvgCanvasConversion');
-        component.openGallery();
+    it('should set the shortcut on keyboard event', () => {
+        const spy = spyOn(component, 'setShortcutEvent');
+        const TEST_COMPONENT = new OptionBarComponent(winServiceStub, new InteractionService(), kbService, gridRenderStub);
+        window.dispatchEvent(new KeyboardEvent('keydown'));
+        expect(TEST_COMPONENT).toBeTruthy();
         expect(spy).toHaveBeenCalled();
+    });
+
+    it('should not open the galley when user chooses to cancel action', () => {
+        window.confirm = jasmine.createSpy().and.returnValue(false); // cancel action
+        const spy = spyOn(component.winService, 'openWindow');
+        component.openGallery();
+        expect(spy).not.toHaveBeenCalled();
     });
 });
