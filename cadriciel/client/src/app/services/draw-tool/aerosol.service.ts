@@ -14,13 +14,13 @@ const DEFAULTDIAMETER = 50;
     providedIn: 'root',
 })
 export class AerosolService extends DrawingTool {
-
     constructor(
         inProgess: HTMLElement,
         drawing: HTMLElement,
         selected: boolean,
         interaction: InteractionService,
-        colorPick: ColorPickingService) {
+        colorPick: ColorPickingService,
+    ) {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.attr = { emissionPerSecond: DEFAULTEMISSIONPERSECOND, diameter: DEFAULTDIAMETER };
         this.updateColors();
@@ -35,7 +35,6 @@ export class AerosolService extends DrawingTool {
     private points: Point[];
 
     private path: string;
-    private pointsPath: string;
 
     private sub: Subscription;
     
@@ -58,7 +57,7 @@ export class AerosolService extends DrawingTool {
     subscribe(): void {
         const INTERVAL_DIV = 1000;
         const srcInterval = interval(INTERVAL_DIV / this.attr.emissionPerSecond);
-        this.sub = srcInterval.subscribe((val) => {
+        this.sub = srcInterval.subscribe(() => {
             if (this.isDown) {
                 this.updateProgress();
             } else {
@@ -81,7 +80,8 @@ export class AerosolService extends DrawingTool {
 
         this.subscribe();
 
-        this.startPath();
+        this.lastPoint = new Point(0, 0);
+        this.points = new Array();
 
         this.updateProgress();
     }
@@ -118,13 +118,6 @@ export class AerosolService extends DrawingTool {
         // since its down -> up -> down -> up -> doubleClick, nothing more happens for the pencil
     }
 
-    startPath(): void {
-        this.path = '<g name = "aerosol" style="transform: translate(0px, 0px);" >';
-        // this.path += ' <filter id="blur"> <feGaussianBlur in="SourceGraphic" stdDeviation="1" /> </filter>';
-        this.pointsPath = '';
-        this.lastPoint = new Point(0, 0);
-    }
-
     // Creates an svg path that connects every points of currentPath with the pencil attributes
     createPath(p: Point[]): string {
         this.lastPoint = p[p.length - 1];
@@ -133,7 +126,7 @@ export class AerosolService extends DrawingTool {
 
         // create a divider
         this.path = '<g name = "aerosol" style="transform: translate(0px, 0px);" >';
-        
+
         // start the path
         this.path += ' <path d="';
         // move to the first point
@@ -143,34 +136,37 @@ export class AerosolService extends DrawingTool {
             this.path += `L ${p[i].x} ${p[i].y} `;
         }
         // set render attributes
-        this.path += `"stroke="none" stroke-width="${this.attr.diameter}"`;
-        this.path += 'fill="none" stroke-linecap="round" stroke-linejoin="round" />';
+        this.path += ` stroke="none" stroke-width="${this.attr.diameter}"`;
+        this.path += ' fill="none" stroke-linecap="round" stroke-linejoin="round" />';
 
-
-        const RADIUS_DIV = 25;
+        const RADIUS_DIV = 100;
 
         const pointRadius = this.attr.diameter / RADIUS_DIV;
 
+        // this.path = "";
+        let dString = '';
+        const LINE_LENGTH = 1;
         // tslint:disable-next-line: prefer-for-of -> we want to keep track of the index
         for (let i = 0; i < this.points.length; i++) {
-            this.pointsPath += ` <circle class="points" cx="${this.points[i].x}" cy="${this.points[i].y}"`;
-            this.pointsPath += ` r="${pointRadius}"`; // to get the radius
-            this.pointsPath += ' stroke="none"';
-            this.pointsPath += ` fill="${this.chosenColor.primColor}"/>`;
-            // this.path +=  'filter="url(#blur)"/>';
+            dString += ` M ${this.points[i].x} ${this.points[i].y}`;
+            dString += ` L ${this.points[i].x + LINE_LENGTH} ${this.points[i].y + LINE_LENGTH}`;
         }
-        this.path += this.pointsPath;
-        this.points = new Array();
-        // end the divider
-        let s = this.path;
-        s += '</g>';
-        return s;
+        dString += ' z';
+        // this.points = new Array();
+        this.path += ' <path';
+        this.path += ` d="${dString}"`;
+        this.path += ` stroke="${this.chosenColor.primColor}"`;
+        this.path += ' stroke-linejoin="round"';
+        this.path += ` stroke-width="${pointRadius}"`;
+        this.path += ' fill="none" /> </g>';
+
+        return this.path;
     }
 
     generatePoint(): void {
         const PT_NUM = 5;
         if (this.isDown) {
-            for (let j = 1; j < PT_NUM && this.isDown; j++) {
+            for (let j = 1; j < this.attr.diameter / 5 && this.isDown; j++) {
                 const r = (this.attr.diameter / 2) * Math.sqrt(Math.random());
                 const angle = Math.random() * 2 * Math.PI;
                 for (let i = 1; i < PT_NUM; i++) {
