@@ -1,6 +1,5 @@
 import { Component, ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { ExportService } from '../services/exportation/export.service';
 import { InteractionService } from '../services/service-interaction/interaction.service';
 import { CanvasSwitchDirective } from './canvas-switch.directive';
@@ -9,8 +8,8 @@ import { CanvasSwitchDirective } from './canvas-switch.directive';
     // building a fake component for test purposes
     template: `
         <canvas #testRef></canvas>
-        <svg appCanvasSwitch [appCanvasRef]="testRef">
-            <rect width="25" height="50" fill="blue" />
+        <svg appCanvasSwitch [width]="200" [height]="100">
+            <rect width="100%" height="100%" fill="blue" />
         </svg>
     `,
 })
@@ -43,6 +42,7 @@ describe('CanvasSwitchDirective', () => {
             style: {
                 display: 'none',
             },
+            getContext: () => 0,
         };
         elemStub = {
             nativeElement: htmlElementStub,
@@ -64,7 +64,11 @@ describe('CanvasSwitchDirective', () => {
         component = fixture.componentInstance;
 
         dir = new CanvasSwitchDirective(elemStub, exServiceStub, itService, rdStub);
-        dir.canvas = fixture.debugElement.query(By.css('canvas')).nativeElement;
+        const TEST_WIDTH = 200;
+        const TEST_HEIGHT = 100;
+        dir.width = TEST_WIDTH;
+        dir.height = TEST_HEIGHT;
+        dir.canvas = htmlElementStub;
     });
 
     it('should create an instance', () => {
@@ -72,14 +76,6 @@ describe('CanvasSwitchDirective', () => {
         const directive = new CanvasSwitchDirective(elemStub, exServiceStub, itService, rdStub);
         expect(directive).toBeTruthy();
         expect(dir).toBeTruthy();
-    });
-
-    it('should export in canvas at first initialisation', () => {
-        dir.canvas = htmlElementStub;
-        // tslint:disable-next-line: no-string-literal
-        const spy = spyOn(dir['exService'], 'exportInCanvas');
-        dir.ngAfterViewInit();
-        expect(spy).toHaveBeenCalled();
     });
 
     it('should set the image to convert in subscription execution', () => {
@@ -91,27 +87,27 @@ describe('CanvasSwitchDirective', () => {
 
     it('should call the svg to html canvas exportation method on positive conversion boolean', () => {
         jasmine.clock().install(); // the spied function is in a timer
-        const CALL_NUM = 2;
+
         // tslint:disable-next-line: no-string-literal
         const spy = spyOn(dir['exService'], 'exportInCanvas');
         dir.ngAfterViewInit();
         itService.emitSvgCanvasConversion(true);
         const TIME = 50; // arbitrary 'large' amount of ms
         jasmine.clock().tick(TIME);
-        expect(spy).toHaveBeenCalledTimes(CALL_NUM); // called in subscription and on AfterViewInit
+        expect(spy).toHaveBeenCalled(); // called in subscription and on AfterViewInit
         jasmine.clock().uninstall();
     });
 
     it('should not call the svg to html canvas exportation method on negative conversion boolean', () => {
         jasmine.clock().install(); // the spied function is in a timer
-        const CALL_NUM = 1;
+
         // tslint:disable-next-line: no-string-literal
         const spy = spyOn(dir['exService'], 'exportInCanvas');
         dir.ngAfterViewInit();
         itService.emitSvgCanvasConversion(false);
         const TIME = 50;
         jasmine.clock().tick(TIME);
-        expect(spy).toHaveBeenCalledTimes(CALL_NUM); // called on AfterViewInit only
+        expect(spy).not.toHaveBeenCalled(); // called on AfterViewInit only
         jasmine.clock().uninstall();
     });
 });
