@@ -1,6 +1,6 @@
 <!--Needs to be hidden the rest of the time!-->
-<canvas #pixelField [width]="width" [height]="height"></canvas>
-<svg #canvas id="canvas" [style.width]="width" [style.height]="height" appCanvasSwitch [appCanvasRef]="pixelField">
+
+<svg #canvas id="canvas" [style.width]="width" [style.height]="height" appCanvasSwitch [width]="width" [height]="height">
     <rect width="100%" height="100%" [style.fill]="backColor" #drawingSpace />
 
     <g name="filters"></g>

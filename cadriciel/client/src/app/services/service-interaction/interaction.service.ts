@@ -49,6 +49,9 @@ export class InteractionService {
     previewColor = new Subject<string>();
     $previewColor = this.previewColor.asObservable();
 
+    canvasContext = new Subject<CanvasRenderingContext2D>();
+    $canvasContext = this.canvasContext.asObservable();
+
     constructor() {
         this.isCanvas = false;
     }
@@ -104,5 +107,12 @@ export class InteractionService {
 
     emitPreviewColor(colorToEmit: string): void {
         this.previewColor.next(colorToEmit);
+    }
+
+    emitCanvasContext(canvas: HTMLCanvasElement): void {
+        const CTX = canvas.getContext('2d');
+        if (CTX) {
+            this.canvasContext.next(CTX);
+        }
     }
 }

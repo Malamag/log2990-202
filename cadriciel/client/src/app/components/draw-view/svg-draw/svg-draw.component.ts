@@ -13,6 +13,7 @@ import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.ser
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
+import { PipetteService } from 'src/app/services/draw-tool/pipette.service';
 
 @Component({
     selector: 'app-svg-draw',
@@ -21,6 +22,7 @@ import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handl
 })
 export class SvgDrawComponent implements OnInit, AfterViewInit {
     showGrid: boolean;
+    pipette: PipetteService; // needed in the canvas switch directive as an Input element
     constructor(
         private canvBuilder: CanvasBuilderService,
         public interaction: InteractionService,
@@ -47,7 +49,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     @ViewChild('drawingSpace', { static: false }) drawingSpace: ElementRef;
     @ViewChild('selectedItems', { static: false }) selectedItems: ElementRef;
     @ViewChild('grid', { static: false }) gridRef: ElementRef;
-    @ViewChild('pixelField', { static: false }) pixelMatrixRef: ElementRef;
+
     workingSpace: HTMLElement;
 
     ngOnInit(): void {
@@ -137,7 +139,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.svg.nativeElement,
         );
 
-        const pipette = tc.CreatePipette(false, this.pixelMatrixRef.nativeElement, this.interaction, this.colorPick);
+        this.pipette = tc.CreatePipette(false, this.interaction, this.colorPick);
 
         this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
         this.toolsContainer.set('Rectangle', rect);
@@ -150,7 +152,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Sélectionner', selection);
         this.toolsContainer.set('Efface', eraser);
         this.toolsContainer.set('ApplicateurCouleur', colorEditor);
-        this.toolsContainer.set('Pipette', pipette);
+        this.toolsContainer.set('Pipette', this.pipette);
 
         this.interaction.$cancelToolsObs.subscribe((sig: boolean) => {
             if (sig) {
@@ -167,13 +169,13 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
                 this.closeTools(this.toolsContainer);
                 this.toolsContainer.get(toolName).selected = true;
             }
-            if (toolName === 'Pipette') {
+            /* if (toolName === 'Pipette') {
                 // ... or, eventually, bucket tool
                 mouseHandler.svgCanvas = this.pixelMatrixRef.nativeElement;
                 //
             } else {
                 mouseHandler.svgCanvas = this.svg.nativeElement;
-            }
+            }*/
             mouseHandler.updateWindowSize();
         });
 

@@ -8,21 +8,23 @@ import { Point } from './point';
     providedIn: 'root',
 })
 export class PipetteService extends InputObserver {
-    htmlCanvasEl: HTMLCanvasElement;
     cPick: ColorPickingService;
     interact: InteractionService;
     clickedColor: Uint8ClampedArray | number[];
     colorStr: string;
 
-    private canvasContext: CanvasRenderingContext2D | null;
+    canvasContext: CanvasRenderingContext2D | null;
 
-    constructor(selected: boolean, htmlCanvasEl: HTMLCanvasElement, interaction: InteractionService, colorPicking: ColorPickingService) {
+    constructor(selected: boolean, interaction: InteractionService, colorPicking: ColorPickingService) {
         super(selected);
-        this.htmlCanvasEl = htmlCanvasEl;
+
         this.cPick = colorPicking;
         this.interact = interaction;
-        this.canvasContext = this.htmlCanvasEl.getContext('2d');
+
         this.colorStr = '';
+        this.interact.$canvasContext.subscribe((context: CanvasRenderingContext2D) => {
+            this.canvasContext = context;
+        });
     }
 
     down(position: Point, insideWorkspace?: boolean | undefined, isRightClick?: boolean): void {
