@@ -99,4 +99,27 @@ describe('ToolAttributesComponent', () => {
         component.ngOnInit();
         expect(component.selectedTool).toBe('Rectangle');
     });
+
+    it('should change the pipette preview fill in the subscription', () => {
+        const COLOR_TEST = '#fffffff';
+        component.interaction.emitPreviewColor(COLOR_TEST);
+        component.ngOnInit(); // initializes the subscription
+
+        expect(component.pipettePreviewFill).toEqual(COLOR_TEST);
+    });
+
+    it('should emit the aerosol attributes on update', () => {
+        const spy = spyOn(component.interaction, 'emitAerosolAttributes');
+        component.updateAerosol();
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should not set the selected tool if it doesnt exist', () => {
+        const DEF = 'Crayon';
+        const BAD_TOOL = 'Ciseaux';
+        component.interaction.emitSelectedTool(BAD_TOOL);
+        component.ngOnInit();
+
+        expect(component.selectedTool).toEqual(DEF);
+    });
 });
