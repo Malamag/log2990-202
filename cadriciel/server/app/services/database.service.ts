@@ -24,7 +24,6 @@ export class DatabaseService {
             .then((client: MongoClient) => {
                 this.collection = client.db(DATABASE_NAME).collection(DATABASE_COLLECTION);
                 console.error('connexion ok ');
-                this.getImagesByTags('red,al');
             })
             .catch(() => {
                 console.error('Erreur de connexion. Terminaison du processus');
@@ -175,25 +174,86 @@ export class DatabaseService {
         })*/
     }
     async saveImage(imageData: ImageData) {
-        fs.readFile('../data.json', function (err, data) {
-            // Convert string (old data) to JSON
-            let drawingsList = JSON.parse(data.toString());
-            let jsonObj = { id: imageData.id, svgElement: imageData.svgElement };
-            // Add new data to my drawings list
-            drawingsList.drawings.push(jsonObj);
+        this.validateImageData(imageData)
+            .then((data) => {
+                let image: ImageData;
+                if (data !== null) {
+                    image = data;
+                }
+                else {
+                    throw ("Invalide image data");
+                }
+                fs.readFile('../data.json', function (err, data) {
+                    // Convert string (old data) to JSON
+                    let drawingsList = JSON.parse(data.toString());
+                    let jsonObj = { id: image.id, svgElement: image.svgElement };
+                    // Add new data to my drawings list
+                    drawingsList.drawings.push(jsonObj);
+                    // Convert JSON to string
+                    let listToJson = JSON.stringify(drawingsList);
+                    // Replace all data in the data.json with new ones
+                    fs.writeFile("../data.json", listToJson, function (err) {
+                        if (err) throw err;
+                        console.log('The "data to append" was appended to file!');
+                    });
+                });
+                let metadata: MetaData = { id: image.id, name: image.name, tags: image.tags };
+                this.collection.insertOne(metadata).catch((error: Error) => {
+                    throw error;
+                });
+            })
+            .catch(() => {
+                console.log("Invalide image data");
+            })
 
-            // Convert JSON to string
-            let listToJson = JSON.stringify(drawingsList);
-            // Replace all data in the data.json with new ones
-            fs.writeFile("../data.json", listToJson, function (err) {
-                if (err) throw err;
-                console.log('The "data to append" was appended to file!');
-            });
-        });
-        let metadata: MetaData = { id: imageData.id, name: imageData.name, tags: imageData.tags };
-        this.collection.insertOne(metadata).catch((error: Error) => {
-            throw error;
-        });
     }
 
+    validateImageData(imageData: ImageData): Promise<ImageData | null> {
+        return this.getAllImages()
+            .then((data) => {
+                console.log(data.length)
+                if (data.length >= 1000) {
+                    return null;
+                }
+                while (!this.validateId(imageData.id, data)) {
+                    //Generate a new id
+                    imageData.id = new Date().getUTCMilliseconds() + '';
+                }
+                console.log(imageData.name.length);
+                if (!this.validateName(imageData.name)) {
+                    console.log("Empty name");
+                    return null;
+                }
+                if (!this.validateTags(imageData.tags)) {
+                    console.log("Invalide tags");
+                    return null;
+                }
+                return imageData;
+            })
+    }
+    validateId(id: string, data: ImageData[]): boolean {
+        if (data.filter((image: ImageData) => {
+            return image.id === id;
+        }).length) {
+            console.log("ID not unique");
+            return false;
+        }
+        else {
+            console.log("ID is unique");
+            return true;
+        }
+    }
+    validateName(name: string): boolean {
+        return (name.length > 0 && name !== null);
+    }
+    validateTags(tags: string[]): boolean {
+        let validTags: boolean = true;
+        let format = new RegExp(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/);
+        tags.forEach((tag) => {
+            if (format.test(tag)) {
+                validTags = false;
+            }
+        })
+        return validTags;
+    }
 }

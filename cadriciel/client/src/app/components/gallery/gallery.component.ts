@@ -128,8 +128,8 @@ export class GalleryComponent implements AfterViewInit {
             else{
                 data.forEach((im) => {
                     const svg = this.createSVG(im.svgElement);
-                    this.shownDrawings.push({id: im.id, svgElement: svg[2], name: im.name, tags: im.tags,
-                         data: im.svgElement, width: svg[0], height: svg[1]});
+                    this.shownDrawings.push({id: im.id, svgElement: svg, name: im.name, tags: im.tags,
+                         data: im.svgElement, width: +im.svgElement.width, height: +im.svgElement.height});
                 })
             }
         });
@@ -162,10 +162,8 @@ export class GalleryComponent implements AfterViewInit {
     continueDrawing(data: SVGData) {
         this.doodle.askForDoodle();
         const el = this.doodle.currentDraw.nativeElement;
-        if(data.canvasStyle !== null) {
-            this.render.setAttribute(el, 'width', data.canvasStyle.substring(7, 13))
-            this.render.setAttribute(el, 'height', data.canvasStyle.substring(23, 28));
-        }
+        this.render.setAttribute(el, 'width', data.width)
+        this.render.setAttribute(el, 'height', data.height);
         const childs: HTMLCollection = el.children;
         for(let i = 0; i < childs.length; ++i) {
             if (i === 0 && data.bgColor !== null) {childs[i].setAttributeNS('http://www.w3.org/2000/svg', 'fill', data.bgColor.substring(6, 24))};
@@ -176,15 +174,10 @@ export class GalleryComponent implements AfterViewInit {
             }
         }
     }
-    createSVG(data: SVGData) {
-        const variables : [number, number, any] = [0, 0, 3] 
+    createSVG(data: SVGData) { 
         const svg = this.render.createElement('svg','http://www.w3.org/2000/svg');
-        if(data.canvasStyle !== null) {
-            this.render.setAttribute(svg, 'width', data.canvasStyle.substring(7, 13))
-            variables[0] = +data.canvasStyle.substring(7, 11); 
-            this.render.setAttribute(svg, 'height', data.canvasStyle.substring(23, 28));
-            variables[1] = + data.canvasStyle.substring(23, 26);
-        }
+        this.render.setAttribute(svg, 'width', data.width) 
+        this.render.setAttribute(svg, 'height', data.height);
         const rect = this.render.createElement('rect', 'svg');
         if (data.bgColor !== null) {this.render.setAttribute(rect, 'fill', data.bgColor.substring(6, 24))};
         this.render.setAttribute(rect, 'height', '100%');
@@ -196,7 +189,6 @@ export class GalleryComponent implements AfterViewInit {
         }
         this.render.appendChild(svg, rect);
         this.render.appendChild(svg, tag);
-        variables[2] = svg;
-        return variables;
+        return svg;
     }
 }

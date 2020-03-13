@@ -1,5 +1,6 @@
 export interface SVGData {
-    canvasStyle: string | null
+    height: string;
+    width: string;
     bgColor: string | null;
-    innerHTML: string[]
+    innerHTML: string[];
 }
