@@ -103,9 +103,6 @@ import { ExportService } from './services/exportation/export.service';
 })
 export class AppModule {
     constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
-        iconRegistry.addSvgIcon('redo', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/redo.svg'));
-        iconRegistry.addSvgIcon('undo', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/undo.svg'));
-
         iconRegistry.addSvgIcon('brush', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/brush.svg'));
         iconRegistry.addSvgIcon('calligraphie', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/calligraphie.svg'));
 

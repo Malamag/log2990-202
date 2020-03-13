@@ -5,6 +5,7 @@ import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
+import { InputObserver } from 'src/app/services/draw-tool/input-observer';
 import { ToolCreator } from 'src/app/services/draw-tool/tool-creator';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
@@ -19,6 +20,7 @@ import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handl
     styleUrls: ['./svg-draw.component.scss'],
 })
 export class SvgDrawComponent implements OnInit, AfterViewInit {
+    showGrid: boolean;
     constructor(
         private canvBuilder: CanvasBuilderService,
         public interaction: InteractionService,
@@ -26,7 +28,9 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         private doodleFetch: DoodleFetchService,
         private render: Renderer2,
         private gridService: GridRenderService,
-    ) { }
+    ) {
+        this.showGrid = false;
+    }
     canvas: Canvas;
 
     width: number;
@@ -35,10 +39,6 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     toolsContainer = new Map();
     interactionToolsContainer = new Map();
-
-    showGrid = false;
-
-    // pixelMatrix: HTMLCanvasElement | undefined;
 
     @ViewChild('inPrgress', { static: false }) inProgress: ElementRef;
     @ViewChild('canvas', { static: false }) svg: ElementRef;
@@ -55,7 +55,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     }
 
     closeTools(map: Map<string, DrawingTool>): void {
-        map.forEach((el) => {
+        map.forEach((el: DrawingTool) => {
             el.selected = false;
             el.cancel();
         });
@@ -63,8 +63,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     bgroundChangeSubscription(): void {
         this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
-            this.backColor = choosenColors.backColor;
-            this.gridService.updateColor(this.backColor);
+            if (choosenColors) {
+                this.backColor = choosenColors.backColor;
+                this.gridService.updateColor(this.backColor);
+            }
         });
     }
 
@@ -116,6 +118,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.selectedItems.nativeElement,
             this.svg.nativeElement,
         );
+
         const eraser = tc.CreateEraser(
             false,
             this.interaction,
@@ -124,6 +127,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.selectedItems.nativeElement,
             this.svg.nativeElement,
         );
+
         const colorEditor = tc.CreateColorEditor(
             false,
             this.interaction,
@@ -132,6 +136,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.selectedItems.nativeElement,
             this.svg.nativeElement,
         );
+
         const pipette = tc.CreatePipette(false, this.pixelMatrixRef.nativeElement, this.interaction, this.colorPick);
 
         this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
@@ -147,12 +152,13 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('ApplicateurCouleur', colorEditor);
         this.toolsContainer.set('Pipette', pipette);
 
-        this.interaction.$cancelToolsObs.subscribe((sig) => {
+        this.interaction.$cancelToolsObs.subscribe((sig: boolean) => {
             if (sig) {
                 this.closeTools(this.toolsContainer);
             }
         });
-        this.interaction.$selectedTool.subscribe((toolName) => {
+
+        this.interaction.$selectedTool.subscribe((toolName: string) => {
             if (toolName === 'Annuler' || toolName === 'Refaire') {
                 this.interactionToolsContainer.get('AnnulerRefaire').apply(toolName);
             } else if (this.toolsContainer.get(toolName)) {
@@ -172,7 +178,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         });
 
         // Subscribe each tool to keyboard and mouse
-        this.toolsContainer.forEach((element) => {
+        this.toolsContainer.forEach((element: InputObserver) => {
             keyboardHandler.addToolObserver(element);
             mouseHandler.addObserver(element);
         });
@@ -182,15 +188,15 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         });
 
         // Mouse listeners
-        window.addEventListener('mousemove', (e) => {
+        window.addEventListener('mousemove', (e: MouseEvent) => {
             mouseHandler.move(e);
         });
-        window.addEventListener('mousedown', (e) => {
+        window.addEventListener('mousedown', (e: MouseEvent) => {
             e.preventDefault();
             mouseHandler.down(e);
         });
 
-        window.addEventListener('mouseup', (e) => {
+        window.addEventListener('mouseup', (e: MouseEvent) => {
             mouseHandler.up(e);
         });
 
@@ -200,12 +206,13 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         };
 
         // Keyboard listeners
-        window.addEventListener('keydown', (e) => {
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
             keyboardHandler.logkey(e);
         });
-        window.addEventListener('keyup', (e) => {
+        window.addEventListener('keyup', (e: KeyboardEvent) => {
             keyboardHandler.reset(e);
         });
+
         window.dispatchEvent(new Event('resize'));
 
         this.doodleFetch.ask.subscribe(() => {

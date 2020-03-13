@@ -19,14 +19,19 @@ const color = 'white';
 describe('SvgDrawComponent', () => {
     let component: SvgDrawComponent;
     let fixture: ComponentFixture<SvgDrawComponent>;
+    // tslint:disable-next-line: no-any
     let mouseHandlerStub: any;
+    // tslint:disable-next-line: no-any
     let kbHandlerStub: any;
 
+    // tslint:disable-next-line: no-any
     let rendererStub: any;
+    // tslint:disable-next-line: no-any
     let gridServiceStub: any;
     let dFetch: DoodleFetchService;
 
     beforeEach(async(() => {
+        rendererStub = {};
         mouseHandlerStub = {
             move: () => 0,
             down: () => 0,

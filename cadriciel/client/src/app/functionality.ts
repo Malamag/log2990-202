@@ -13,7 +13,8 @@ export const menuItems = [
     {
         name: 'Créer un nouveau dessin',
         shortcutName: 'Créer',
-        shortDescription: "Cette option vous permet d'ouvrir un nouvel espace de dessin selon la taille et la couleur de fond de votre choix.",
+        shortDescription:
+            "Cette option vous permet d'ouvrir un nouvel espace de dessin selon la taille et la couleur de fond de votre choix.",
         description:
             "La largeur et la hauteur sont en pixel et sont automatiquement générés selon la taille de votre fenêtre. Pour la couleur, la couleur blanche est par défaut, mais celle-ci peut être changé par n'importe quelle autre couleur notée en hexadécimal ou avec nos couleurs prédéfinies.",
         icon: 'add_circle',
@@ -179,10 +180,23 @@ export const toolsItems = [
     {
         name: 'Annuler',
         shortcutName: 'Annuler',
-        shortDescription:
-            'Cet outil vous permet de choisir une couleur primaire et une couleur secondaire qui se transmet pour chaque outil dessin de l’application.',
-        description:
-            'L’outil de sélection des couleurs est séparé en trois parties. La première partie est la plus haute et vous permet de sélectionner la couleur souhaitée via une interface visuelle. L’anneau sert à choisir une teinte et le rectangle vous permet de choisir la clarté de la couleur. Pour sélectionner une couleur primaire, il vous suffit de faire un clic gauche sur la teinte souhaitée dans l’anneau ou le rectangle. Un clic droit sélectionne la couleur secondaire. La couleur primaire sélectionnée se retrouve en bas à gauche de l’anneau et du côté droit se trouve la couleur secondaire. Le bouton SWAP inverse les couleurs primaires et secondaires. En bas de l’interface visuelle de sélection des teintes se trouve la deuxième partie de l’outil et vous permet de configurer manuellement votre couleur selon un code RGB hexadécimal. La saturation, la luminosité et la transparence sont aussi configurable. La troisième et dernière partie constitue les dix petits rectangle tout au bas de l’outil de couleur et vous permet de sélectionner une couleur précédemment choisie.',
+        shortDescription: `Cet outil vous permet de choisir une couleur 
+            primaire et une couleur secondaire qui se transmet pour chaque outil dessin de l’application.`,
+        description: `L’outil de sélection des couleurs est séparé en trois parties. 
+            La première partie est la plus haute et vous permet de sélectionner
+            la couleur souhaitée via une interface visuelle. L’anneau sert à
+            choisir une teinte et le rectangle vous permet de choisir la clarté
+            de la couleur. Pour sélectionner une couleur primaire, il vous suffit
+            de faire un clic gauche sur la teinte souhaitée dans l’anneau ou le
+            rectangle. Un clic droit sélectionne la couleur secondaire. La couleur
+            primaire sélectionnée se retrouve en bas à gauche de l’anneau et du
+            côté droit se trouve la couleur secondaire. Le bouton SWAP inverse
+            les couleurs primaires et secondaires. En bas de l’interface visuelle
+            de sélection des teintes se trouve la deuxième partie de l’outil et vous
+            permet de configurer manuellement votre couleur selon un code RGB hexadécimal.
+            La saturation, la luminosité et la transparence sont aussi configurable.
+            La troisième et dernière partie constitue les dix petits rectangle
+            tout au bas de l’outil de couleur et vous permet de sélectionner une couleur précédemment choisie.`,
         icon: 'undo',
     },
     {
@@ -193,19 +207,5 @@ export const toolsItems = [
         description:
             'L’outil de sélection des couleurs est séparé en trois parties. La première partie est la plus haute et vous permet de sélectionner la couleur souhaitée via une interface visuelle. L’anneau sert à choisir une teinte et le rectangle vous permet de choisir la clarté de la couleur. Pour sélectionner une couleur primaire, il vous suffit de faire un clic gauche sur la teinte souhaitée dans l’anneau ou le rectangle. Un clic droit sélectionne la couleur secondaire. La couleur primaire sélectionnée se retrouve en bas à gauche de l’anneau et du côté droit se trouve la couleur secondaire. Le bouton SWAP inverse les couleurs primaires et secondaires. En bas de l’interface visuelle de sélection des teintes se trouve la deuxième partie de l’outil et vous permet de configurer manuellement votre couleur selon un code RGB hexadécimal. La saturation, la luminosité et la transparence sont aussi configurable. La troisième et dernière partie constitue les dix petits rectangle tout au bas de l’outil de couleur et vous permet de sélectionner une couleur précédemment choisie.',
         icon: 'redo',
-    },
-    {
-        name: 'Annuler',
-        shortcutName: 'Annuler',
-        shortDescription: 'Cet outil vous permet de choisir une couleur primaire et une couleur secondaire qui se transmet pour chaque outil dessin de l’application.',
-        description: 'L’outil de sélection des couleurs est séparé en trois parties. La première partie est la plus haute et vous permet de sélectionner la couleur souhaitée via une interface visuelle. L’anneau sert à choisir une teinte et le rectangle vous permet de choisir la clarté de la couleur. Pour sélectionner une couleur primaire, il vous suffit de faire un clic gauche sur la teinte souhaitée dans l’anneau ou le rectangle. Un clic droit sélectionne la couleur secondaire. La couleur primaire sélectionnée se retrouve en bas à gauche de l’anneau et du côté droit se trouve la couleur secondaire. Le bouton SWAP inverse les couleurs primaires et secondaires. En bas de l’interface visuelle de sélection des teintes se trouve la deuxième partie de l’outil et vous permet de configurer manuellement votre couleur selon un code RGB hexadécimal. La saturation, la luminosité et la transparence sont aussi configurable. La troisième et dernière partie constitue les dix petits rectangle tout au bas de l’outil de couleur et vous permet de sélectionner une couleur précédemment choisie.',
-        icon: '../../../assets/images/undo.png',
-    },
-    {
-        name: 'Refaire',
-        shortcutName: 'Refaire',
-        shortDescription: 'Cet outil vous permet de choisir une couleur primaire et une couleur secondaire qui se transmet pour chaque outil dessin de l’application.',
-        description: 'L’outil de sélection des couleurs est séparé en trois parties. La première partie est la plus haute et vous permet de sélectionner la couleur souhaitée via une interface visuelle. L’anneau sert à choisir une teinte et le rectangle vous permet de choisir la clarté de la couleur. Pour sélectionner une couleur primaire, il vous suffit de faire un clic gauche sur la teinte souhaitée dans l’anneau ou le rectangle. Un clic droit sélectionne la couleur secondaire. La couleur primaire sélectionnée se retrouve en bas à gauche de l’anneau et du côté droit se trouve la couleur secondaire. Le bouton SWAP inverse les couleurs primaires et secondaires. En bas de l’interface visuelle de sélection des teintes se trouve la deuxième partie de l’outil et vous permet de configurer manuellement votre couleur selon un code RGB hexadécimal. La saturation, la luminosité et la transparence sont aussi configurable. La troisième et dernière partie constitue les dix petits rectangle tout au bas de l’outil de couleur et vous permet de sélectionner une couleur précédemment choisie.',
-        icon: '../../../assets/images/redo.png',
     },
 ];
