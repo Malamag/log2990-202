@@ -38,7 +38,7 @@ export class GalleryComponent implements AfterViewInit {
     @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef;
     @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
-    constructor(private index: IndexService, render: Renderer2, private doodle: DoodleFetchService) {
+    constructor(public index: IndexService, render: Renderer2, private doodle: DoodleFetchService) {
         this.render = render;
         this.possibleTags = [];
         this.filteredTags = this.tagCtrl.valueChanges.pipe(
@@ -186,9 +186,10 @@ export class GalleryComponent implements AfterViewInit {
             variables[1] = + data.canvasStyle.substring(23, 26);
         }
         const rect = this.render.createElement('rect', 'svg');
-        if (data.bgColor !== null) {this.render.setAttribute(rect, 'fill', data.bgColor.substring(6, 24));}
+        if (data.bgColor !== null) {this.render.setAttribute(rect, 'fill', data.bgColor.substring(6, 24))};
         this.render.setAttribute(rect, 'height', '100%');
         this.render.setAttribute(rect, 'width', '100%');
+        
         const tag = this.render.createElement('g');
         for(let i = 0; i < data.innerHTML.length; ++i){
             tag.innerHTML += data.innerHTML[i]
