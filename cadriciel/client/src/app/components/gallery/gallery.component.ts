@@ -79,12 +79,18 @@ export class GalleryComponent implements AfterViewInit {
         this.render.appendChild(this.cardsContainer.nativeElement, this.text);
     }
     delete(id: string): void {
-        this.index.deleteImageById(id);
+        try {
+            this.index.deleteImageById(id);
+        }
+        catch(error){
+            this.text = this.render.createText("l'élément ne peut pas être effacé car il n'existe pas sur le serveur")
+        }
 
         this.getAllImages();
     }
 
     getAllImages(): void {
+        this.shownDrawings = []
         this.showMessage();
         this.drawings = this.index.getAllImages();
         this.render.removeChild(this.cardsContainer, this.text);
@@ -171,21 +177,18 @@ export class GalleryComponent implements AfterViewInit {
         }
     }
     createSVG(data: SVGData) {
-        let variables : [number, number, any] = [0, 0, 3] 
+        const variables : [number, number, any] = [0, 0, 3] 
         const svg = this.render.createElement('svg','http://www.w3.org/2000/svg');
         if(data.canvasStyle !== null) {
             this.render.setAttribute(svg, 'width', data.canvasStyle.substring(7, 13))
-            console.log(data.canvasStyle.substring(7, 13))
             variables[0] = +data.canvasStyle.substring(7, 11); 
             this.render.setAttribute(svg, 'height', data.canvasStyle.substring(23, 28));
             variables[1] = + data.canvasStyle.substring(23, 26);
         }
         const rect = this.render.createElement('rect', 'svg');
-        if (data.bgColor !== null) {this.render.setAttribute(rect, 'fill', data.bgColor.substring(6, 24));
-        console.log(data.bgColor.substring(5, 24)) }
+        if (data.bgColor !== null) {this.render.setAttribute(rect, 'fill', data.bgColor.substring(6, 24));}
         this.render.setAttribute(rect, 'height', '100%');
         this.render.setAttribute(rect, 'width', '100%');
-        
         const tag = this.render.createElement('g');
         for(let i = 0; i < data.innerHTML.length; ++i){
             tag.innerHTML += data.innerHTML[i]
