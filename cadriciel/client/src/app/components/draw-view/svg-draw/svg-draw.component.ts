@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-
 import { Canvas } from 'src/app/models/Canvas.model';
 import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
 import { InputObserver } from 'src/app/services/draw-tool/input-observer';
+import { PipetteService } from 'src/app/services/draw-tool/pipette.service';
 import { ToolCreator } from 'src/app/services/draw-tool/tool-creator';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
@@ -13,7 +13,6 @@ import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.ser
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
-import { PipetteService } from 'src/app/services/draw-tool/pipette.service';
 
 @Component({
     selector: 'app-svg-draw',

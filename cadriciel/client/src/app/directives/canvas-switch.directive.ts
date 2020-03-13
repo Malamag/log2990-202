@@ -1,11 +1,11 @@
-import { AfterViewInit, Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input, Renderer2 } from '@angular/core';
 import { ExportService } from '../services/exportation/export.service';
 import { InteractionService } from '../services/service-interaction/interaction.service';
 
 @Directive({
     selector: '[appCanvasSwitch]',
 })
-export class CanvasSwitchDirective implements AfterViewInit, OnInit {
+export class CanvasSwitchDirective implements AfterViewInit {
     @Input() width: number;
     @Input() height: number;
 
@@ -19,10 +19,6 @@ export class CanvasSwitchDirective implements AfterViewInit, OnInit {
         private itService: InteractionService,
         private renderer: Renderer2,
     ) {
-        this.imageToConvert = this.element.nativeElement;
-    }
-
-    ngOnInit(): void {
         this.canvas = this.renderer.createElement('canvas');
     }
 

@@ -14,7 +14,7 @@ import { CanvasSwitchDirective } from './canvas-switch.directive';
         </svg>
     `,
 })
-class TestCanvasSwitchComponent { }
+class TestCanvasSwitchComponent {}
 /*
 This method for testing directives is inspired from
 ASIM. 2020. 'Testing Directives'. [En ligne]: https://codecraft.tv/courses/angular/unit-testing/directives/
@@ -32,7 +32,13 @@ describe('CanvasSwitchDirective', () => {
 
     let itService: InteractionService;
     let dir: CanvasSwitchDirective;
+    // tslint:disable-next-line: no-any
+    let rdStub: any;
     beforeEach(() => {
+        rdStub = {
+            createElement: () => htmlElementStub,
+            setAttribute: () => 0,
+        };
         htmlElementStub = {
             style: {
                 display: 'none',
@@ -57,13 +63,13 @@ describe('CanvasSwitchDirective', () => {
         fixture = TestBed.createComponent(TestCanvasSwitchComponent);
         component = fixture.componentInstance;
 
-        dir = new CanvasSwitchDirective(elemStub, exServiceStub, itService);
+        dir = new CanvasSwitchDirective(elemStub, exServiceStub, itService, rdStub);
         dir.canvas = fixture.debugElement.query(By.css('canvas')).nativeElement;
     });
 
     it('should create an instance', () => {
         expect(component).toBeTruthy();
-        const directive = new CanvasSwitchDirective(elemStub, exServiceStub, itService);
+        const directive = new CanvasSwitchDirective(elemStub, exServiceStub, itService, rdStub);
         expect(directive).toBeTruthy();
         expect(dir).toBeTruthy();
     });
@@ -107,43 +113,5 @@ describe('CanvasSwitchDirective', () => {
         jasmine.clock().tick(TIME);
         expect(spy).toHaveBeenCalledTimes(CALL_NUM); // called on AfterViewInit only
         jasmine.clock().uninstall();
-    });
-
-    it('should call the canvas - svg display toggle on subscription activation', () => {
-        const spy = spyOn(dir, 'toggleSvgCanvas');
-        dir.ngAfterViewInit();
-        itService.emitSvgCanvasConversion(true);
-        expect(spy).toHaveBeenCalled();
-    });
-
-    it('should set the showCanvas attribute to the proper subscription value', () => {
-        // tslint:disable-next-line: no-string-literal
-        dir['showCanvas'] = false;
-        dir.ngAfterViewInit();
-        itService.emitSvgCanvasConversion(true);
-        // tslint:disable-next-line: no-string-literal
-        expect(dir['showCanvas']).toBe(true);
-    });
-
-    it('should show the canvas and hide the svg on true showCanvas boolean', () => {
-        // tslint:disable-next-line: no-string-literal
-        dir['showCanvas'] = true;
-        const NO_DISPLAY = 'none';
-        const DISPLAY = 'block';
-        dir.toggleSvgCanvas();
-        expect(dir.canvas.style.display).toEqual(DISPLAY);
-        // tslint:disable-next-line: no-string-literal
-        expect(dir['imageToConvert'].style.display).toEqual(NO_DISPLAY);
-    });
-
-    it('should not show the canvas and hide the svg on false showCanvas boolean', () => {
-        // tslint:disable-next-line: no-string-literal
-        dir['showCanvas'] = false;
-        const NO_DISPLAY = 'none';
-        const DISPLAY = 'block';
-        dir.toggleSvgCanvas();
-        expect(dir.canvas.style.display).toEqual(NO_DISPLAY);
-        // tslint:disable-next-line: no-string-literal
-        expect(dir['imageToConvert'].style.display).toEqual(DISPLAY);
     });
 });

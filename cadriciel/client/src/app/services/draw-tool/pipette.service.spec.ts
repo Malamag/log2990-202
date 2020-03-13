@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
@@ -50,19 +51,12 @@ describe('PipetteService', () => {
         expect(testService).toBeTruthy();
     });
 
-    it('should get canvas context on service construction', () => {
-        const spy = spyOn(htmlCanvasStub, 'getContext');
-        const PIPETTE: PipetteService = new PipetteService(
-            true,
-            htmlCanvasStub,
-            new InteractionService(),
-            new ColorPickingService(new ColorConvertingService()),
-        );
-        expect(spy).toHaveBeenCalled();
-        expect(PIPETTE).toBeTruthy();
+    it('should get canvas context in subscription', () => {
+        const IT_SERVICE = new InteractionService();
 
-        /* tslint:disable:no-string-literal */
-        expect(service['canvasContext']).not.toBeNull();
+        const PIP_TEST = new PipetteService(true, IT_SERVICE, new ColorPickingService(new ColorConvertingService()));
+        IT_SERVICE.emitCanvasContext(htmlCanvasStub);
+        expect(PIP_TEST.canvasContext).toEqual(canvasContextStub);
     });
 
     it('should call image data conversion on mouse down', () => {
@@ -90,7 +84,9 @@ describe('PipetteService', () => {
     });
 
     it('should get the image data at the point on valid canvas context with data conversion', () => {
+        // tslint:disable-next-line: no-string-literal
         service['canvasContext'] = canvasContextStub;
+
         canvasContextStub.getImageData = jasmine.createSpy().and.returnValue(fakeData);
         const buildSpy = spyOn(service, 'buildImageData');
         const SQUARE_SIZE = 1; // 1px
@@ -100,6 +96,7 @@ describe('PipetteService', () => {
     });
 
     it('should not get the image data on null canvas context', () => {
+        // tslint:disable-next-line: no-string-literal
         service['canvasContext'] = null;
         canvasContextStub.getImageData = jasmine.createSpy().and.returnValue(fakeData);
         const buildSpy = spyOn(service, 'buildImageData');
@@ -143,5 +140,13 @@ describe('PipetteService', () => {
         const FAKE_COLOR = '#000000ff';
         service.emitSelectedColor(FAKE_COLOR);
         expect(spy).toHaveBeenCalledWith(FAKE_COLOR);
+    });
+
+    it('should have a canvas context subscription in its constructor', () => {
+        const IT_SERVICE = new InteractionService();
+        const spy = spyOn(IT_SERVICE.$canvasContext, 'subscribe');
+        const PIP_TEST = new PipetteService(true, IT_SERVICE, new ColorPickingService(new ColorConvertingService()));
+        expect(PIP_TEST).toBeTruthy();
+        expect(spy).toHaveBeenCalled();
     });
 });
