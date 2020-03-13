@@ -1,17 +1,16 @@
 import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-
 import { Canvas } from 'src/app/models/Canvas.model';
+import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
 import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
 import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
-import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 
 @Component({
     selector: 'app-svg-draw',
@@ -19,6 +18,7 @@ import { GridRenderService } from 'src/app/services/grid/grid-render.service';
     styleUrls: ['./svg-draw.component.scss'],
 })
 export class SvgDrawComponent implements OnInit, AfterViewInit {
+    mySubscription: any;
     constructor(
         private canvBuilder: CanvasBuilderService,
         public interaction: InteractionService,
@@ -45,7 +45,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     @ViewChild('drawingSpace', { static: false }) drawingSpace: ElementRef;
     @ViewChild('selectedItems', { static: false }) selectedItems: ElementRef;
     @ViewChild('grid', { static: false }) gridRef: ElementRef;
-
+    @ViewChild('container', { static: false }) cntRef: ElementRef;
     workingSpace: HTMLElement;
 
     ngOnInit() {
@@ -63,8 +63,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     bgroundChangeSubscription() {
         this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
-            this.backColor = choosenColors.backColor;
-            this.gridService.updateColor(this.backColor);
+            if (choosenColors) {
+                this.backColor = choosenColors.backColor;
+                this.gridService.updateColor(this.backColor);
+            }
         });
     }
 
@@ -73,13 +75,16 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             if (canvas === undefined || canvas === null) {
                 canvas = this.canvBuilder.getDefCanvas();
             }
+
             this.width = canvas.canvasWidth;
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
             this.canvBuilder.whipeDraw(this.frameRef);
             if (this.gridService.grid) {
-                this.gridService.removeGrid();
-                this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+                if (this.gridRef) {
+                    this.gridService.removeGrid();
+                    this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+                }
             }
         });
         this.canvBuilder.emitCanvas();
@@ -92,14 +97,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        //this.initCanvas()
         this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
         this.initGridVisibility();
         const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
         const mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);
-
-        // Create all the tools
-        //console.log(this.render);
         const tc = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
 
         const pencil = tc.CreatePencil(true, this.interaction, this.colorPick);
@@ -176,6 +177,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.doodleFetch.widthAttr = this.width;
             this.doodleFetch.heightAttr = this.height;
         });
+
         this.bgroundChangeSubscription();
     }
 }

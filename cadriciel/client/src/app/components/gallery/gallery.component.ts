@@ -22,7 +22,7 @@ import { IndexService } from './../../services/index/index.service'
  * in the Angular Material documentation on Chips elements. SOURCE:
  * Angular Material (Google). "Chips" (01/03/2020). En ligne: https://material.angular.io/components/chips/examples
  */
-export class GalleryComponent implements OnInit, AfterViewInit {
+export class GalleryComponent implements AfterViewInit {
     fakeImage = fakeImages;
     drawings: Observable<ImageData[]>;
     readonly inputTagSeparators: number[] = [ENTER, COMMA];
@@ -31,28 +31,27 @@ export class GalleryComponent implements OnInit, AfterViewInit {
     filteredTags: Observable<string[]>;
     tagCtrl = new FormControl();
     render: Renderer2;
-    text : Element;
-    @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef
-    @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>
+    text: Element;
+    @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef;
+    @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
     constructor(private index: IndexService, render: Renderer2, private doodle: DoodleFetchService) {
         this.render = render;
         this.possibleTags = [];
         this.filteredTags = this.tagCtrl.valueChanges.pipe(
             startWith(null),
-            map((tag: string | null) => tag ? this.filter(tag) : this.possibleTags.slice())
-        )
+            map((tag: string | null) => (tag ? this.filter(tag) : this.possibleTags.slice())),
+        );
         this.tags = [];
     }
 
-    ngOnInit() {}
-    ngAfterViewInit() {
+    ngAfterViewInit(): void {
         this.getAllImages();
     }
-    blockEvent(ev: KeyboardEvent) {
+    blockEvent(ev: KeyboardEvent): void {
         ev.stopPropagation();
     }
-    removeTag(tag: string) {
+    removeTag(tag: string): void {
         const INDEX: number = this.tags.indexOf(tag);
         if (INDEX >= 0) {
             // making sure the tag exists in the array
@@ -60,7 +59,7 @@ export class GalleryComponent implements OnInit, AfterViewInit {
         }
     }
 
-    addTag(tagAdd: MatChipInputEvent) {
+    addTag(tagAdd: MatChipInputEvent): void {
         const INPUT: HTMLInputElement = tagAdd.input;
         const VAL: string = tagAdd.value;
         if (VAL !== '') {
@@ -72,22 +71,22 @@ export class GalleryComponent implements OnInit, AfterViewInit {
         }
         this.tagCtrl.setValue(null);
     }
-    showMessage() {
+    showMessage(): void {
         this.text = this.render.createText('en cours de chargement');
         this.render.appendChild(this.cardsContainer.nativeElement, this.text);
     }
-    delete(id: string) {
+    delete(id: string): void {
         this.index.deleteImageById(id);
 
         this.getAllImages();
     }
 
-    getAllImages() {
+    getAllImages(): void {
         this.showMessage();
-        this.drawings = this.index.getAllImages()
+        this.drawings = this.index.getAllImages();
         this.render.removeChild(this.cardsContainer, this.text);
-        this.drawings.subscribe((data) => {
-            if(data.length === 0){
+        this.drawings.subscribe((data: ImageData[]) => {
+            if (data.length === 0) {
                 this.render.removeChild(this.cardsContainer.nativeElement, this.text);
                 this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
@@ -96,22 +95,23 @@ export class GalleryComponent implements OnInit, AfterViewInit {
         })
 
     }
-    getImagesByTags() {
-        if(!this.tags.length){this.getAllImages()}
+    getImagesByTags(): void {
+        if (!this.tags.length) {
+            this.getAllImages();
+        }
         this.showMessage();
         this.drawings = this.index.getImagesByTags(this.tags);
         this.render.removeChild(this.cardsContainer, this.text);
-        this.drawings.subscribe((data) => {
-            if(data.length === 0){
+        this.drawings.subscribe((data: ImageData[]) => {
+            if (data.length === 0) {
                 this.render.removeChild(this.cardsContainer, this.text);
                 this.text = this.render.createText('Aucun dessin correspond a vos critères de recherche');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
             }
-        })
-
+        });
     }
     getAllTags(imageContainer: ImageData[]): void {
-        imageContainer.forEach((image) => {
+        imageContainer.forEach(image => {
             for (let i = 0; i < image.tags.length; ++i) {
                 let tagExist = false;
                 for (let j = 0; j < this.possibleTags.length; ++j) {
@@ -119,12 +119,14 @@ export class GalleryComponent implements OnInit, AfterViewInit {
                         tagExist = true;
                     }
                 }
-                if (!tagExist) { this.possibleTags.push(image.tags[i]) }
+                if (!tagExist) {
+                    this.possibleTags.push(image.tags[i]);
+                }
             }
-        })
+        });
     }
-    //source: https://material.angular.io/components/chips/examples
-    selected(event: MatAutocompleteSelectedEvent) {
+    // source: https://material.angular.io/components/chips/examples
+    selected(event: MatAutocompleteSelectedEvent): void {
         this.tags.push(event.option.value);
         this.tagInput.nativeElement.value = '';
         this.tagCtrl.setValue(null);
