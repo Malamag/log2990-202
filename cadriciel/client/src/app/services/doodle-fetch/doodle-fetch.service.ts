@@ -39,11 +39,8 @@ export class DoodleFetchService {
 
     getDrawingStringNoGrid(): SVGData {
         this.gService.removeGrid();
-        //const SVG_STR = this.currentDraw.nativeElement.outerHTML;
         let innerHTML: string[] = [];
         let el: Element = this.currentDraw.nativeElement;
-        //let temp = el.attributes.getNamedItem('style');
-        //svgData.push(el.attributes.getNamedItem('style'));
         let childs: HTMLCollection = el.children;
         for (let i = 0; i < childs.length; i++) {
             try {
