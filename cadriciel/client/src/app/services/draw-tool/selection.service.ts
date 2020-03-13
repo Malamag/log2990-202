@@ -4,6 +4,7 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { ShapeService } from './shape.service';
+import { ElementInfo } from './element-info.service';
 
 const OUTLINE_COLOR: string = "0, 102, 204, 0.9";
 const FILL_COLOR: string = "0, 102, 204, 0.3";
@@ -407,11 +408,28 @@ export class SelectionService extends ShapeService {
 
     let wrapper = "";
     if (minX[1] && maxX[1] && minY[1] && maxY[1]) {
+
+      let w = maxX[0] - minX[0];
+      let h = maxY[0] - minY[0];
+
       wrapper += `<rect id="selection" x="${minX[0]}" y="${minY[0]}"`;
-      wrapper += `width="${maxX[0] - minX[0]}" height="${maxY[0] - minY[0]}"`;
+      wrapper += `width="${w}" height="${h}"`;
 
       wrapper += `fill="rgba(0,120,215,0.3)"`;
       wrapper += `stroke-width="1" stroke="rgba(0,120,215,0.9)"/>`;
+
+      let controlPoints = "";
+      controlPoints += `<circle cx="${minX[0] + w / 2}" cy="${minY[0]}" r="7" fill="rgba(0,120,215)" />`;
+      controlPoints += `<circle cx="${minX[0] + w / 2}" cy="${maxY[0]}" r="7" fill="rgba(255,120,215)" />`;
+      controlPoints += `<circle cx="${minX[0]}" cy="${minY[0] + h / 2}" r="7" fill="rgba(0,120,215)" />`;
+      controlPoints += `<circle cx="${maxX[0]}" cy="${minY[0] + h / 2}" r="7" fill="rgba(0,120,215)" />`;
+
+      controlPoints += `<circle cx="${minX[0] + w / 2}" cy="${minY[0]}" r="5" stroke="white" stroke-width="2" fill="rgba(0,120,215)" />`;
+      controlPoints += `<circle cx="${minX[0] + w / 2}" cy="${maxY[0]}" r="5" stroke="white" stroke-width="2" fill="rgba(0,120,215)" />`;
+      controlPoints += `<circle cx="${minX[0]}" cy="${minY[0] + h / 2}" r="5" stroke="white" stroke-width="2" fill="rgba(0,120,215)" />`;
+      controlPoints += `<circle cx="${maxX[0]}" cy="${minY[0] + h / 2}" r="5" stroke="white" stroke-width="2" fill="rgba(0,120,215)" />`;
+
+      wrapper += controlPoints;
     }
 
     return wrapper;
@@ -472,10 +490,8 @@ export class SelectionService extends ShapeService {
         if (!this.selectedItems[i]) { continue; }
 
         // get the current item's translate and add the offsets
-        let current = (this.drawing.children[i] as HTMLElement).style.transform;
-        let s = current ? current.split(",") : "";
-        let newX = +(s[0].replace(/[^\d.-]/g, '')) + xoff;
-        let newY = +(s[1].replace(/[^\d.-]/g, '')) + yoff;
+        let newX = ElementInfo.translate(this.drawing.children[i]).x + xoff;
+        let newY = ElementInfo.translate(this.drawing.children[i]).y + yoff;
 
         // set the new values
         this.render.setStyle(this.drawing.children[i], "transform", `translate(${newX}px,${newY}px)`);

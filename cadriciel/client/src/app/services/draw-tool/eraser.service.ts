@@ -230,10 +230,10 @@ export class EraserService extends DrawingTool {
         if (width) {
           offset = +width;
         } // only to be able to run the tests 
-        else {offset = offset}
+        else { offset = offset }
         //let dim2 = 3 + offset;
 
-        if (secondChild.classList.contains("clone") || secondChild.tagName == "filter") { continue; }
+        if (secondChild.classList.contains("clone") || secondChild.classList.contains("noHighlights") || secondChild.tagName == "filter") { continue; }
 
         if (this.inProgress.firstElementChild) {
           let test = this.inProgress.firstElementChild.firstElementChild as SVGGeometryElement;
@@ -254,8 +254,6 @@ export class EraserService extends DrawingTool {
         }
       }
 
-
-      //console.log(touching);
       if (touching) {
         if (this.isDown) {
           this.erase(firstChild);

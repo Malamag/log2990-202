@@ -24,6 +24,8 @@ export class ColorEditorService extends DrawingTool {
 
   isRightClick: boolean;
 
+  changedColorOnce: boolean;
+
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,
     render: Renderer2, selectedRef: HTMLElement, canvas: HTMLElement) {
 
@@ -31,6 +33,8 @@ export class ColorEditorService extends DrawingTool {
     this.attr = { lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE }
     this.updateColors()
     this.updateAttributes()
+
+    this.changedColorOnce = false;
 
     this.canvas = canvas;
 
@@ -43,49 +47,6 @@ export class ColorEditorService extends DrawingTool {
     this.inProgress.style.pointerEvents = "none";
 
     this.isRightClick = false;
-
-    window.addEventListener("newDrawing", (e: Event) => {
-      for (let i = 0; i < this.drawing.childElementCount; i++) {
-        let el = this.drawing.children[i];
-        let status = el.getAttribute("isListening3");
-        this.render.setAttribute(el, "checkPreciseEdge2", "true");
-        if (status !== "true") {
-          this.render.setAttribute(el, "isListening3", "true");
-          this.render.listen(el, "mousemove", () => {
-            //console.log("enter");
-            if (!this.foundAnItem) {
-              //this.highlight(el);
-              this.render.setAttribute(el, "checkPreciseEdge2", "false");
-              this.foundAnItem = true;
-              if (this.isDown) {
-                this.changeColor(el);
-                this.foundAnItem = false;
-              }
-            }
-          });
-          this.render.listen(el, "mouseleave", () => {
-            //console.log("leaving");
-            if (this.foundAnItem) {
-              //this.unhighlight(el);
-              this.foundAnItem = false;
-              this.render.setAttribute(el, "checkPreciseEdge2", "true");
-            }
-          });
-          this.render.listen(el, "mousedown", () => {
-            this.changeColor(el);
-            this.foundAnItem = false;
-            this.render.setAttribute(el, "checkPreciseEdge2", "true");
-          });
-          this.render.listen(el, "mouseup", () => {
-            if (!this.foundAnItem) {
-              //this.highlight(el);
-              this.render.setAttribute(el, "checkPreciseEdge2", "false");
-              this.foundAnItem = false;
-            }
-          });
-        }
-      }
-    });
 
     window.addEventListener("toolChange", (e: Event) => {
       this.foundAnItem = false;
@@ -142,16 +103,16 @@ export class ColorEditorService extends DrawingTool {
       // the pencil should not affect the canvas
       this.isDown = false;
 
-      if (this.erasedSomething) {
+      if (this.changedColorOnce) {
         this.interaction.emitDrawingDone();
-        //console.log("now");
       }
-      this.erasedSomething = false;
+      this.changedColorOnce = false;
     }
   }
 
   changeColor(el: Element) {
     if (this.selected) {
+      console.log(this.isRightClick);
       for (let i = 0; i < el.childElementCount; i++) {
         let current = el.children[i];
         if (current.tagName == "filter") { continue; }
@@ -165,14 +126,17 @@ export class ColorEditorService extends DrawingTool {
   }
 
   changeBorder(el: HTMLElement) {
-    let newColor = el.getAttribute("stroke") != "none" ? this.chosenColor.secColor : "none";
-    this.render.setAttribute(el, "stroke", newColor);
+    if (el.getAttribute("stroke") != this.chosenColor.secColor && el.getAttribute("stroke") != "none") {
+      this.render.setAttribute(el, "stroke", this.chosenColor.secColor);
+      this.changedColorOnce = true;
+    }
   }
 
   changeFill(el: HTMLElement) {
-    console.log(el.getAttribute("fill"));
-    let newColor = el.getAttribute("fill") != "none" ? this.chosenColor.primColor : "none";
-    this.render.setAttribute(el, "fill", newColor);
+    if (el.getAttribute("fill") != this.chosenColor.primColor && el.getAttribute("fill") != "none") {
+      this.render.setAttribute(el, "fill", this.chosenColor.primColor);
+      this.changedColorOnce = true;
+    }
   }
 
   // mouse move with pencil in hand
@@ -208,40 +172,15 @@ export class ColorEditorService extends DrawingTool {
 
   checkIfTouching() {
 
-    let canv = this.canvas;
-    let canvasBox = canv ? canv.getBoundingClientRect() : null;
-    let canvOffsetX = (canvasBox ? canvasBox.left : 0);
-    let canvOffsetY = (canvasBox ? canvasBox.top : 0);
-
-    //console.log(`${canvOffsetX}, ${canvOffsetY}`);
-
-
     let w = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
     let h = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
 
     let dim = Math.max(w, h);
 
-    let tl = new Point(this.currentPath[this.currentPath.length - 1].x - dim / 2, this.currentPath[this.currentPath.length - 1].y - dim / 2);
-    let br = new Point(tl.x + dim, tl.y + dim);
-
-    for (let i = 0; i < this.drawing.childElementCount; i++) {
+    for (let i = this.drawing.childElementCount - 1; i >= 0; i--) {
 
       let touching = false;
       let firstChild = this.drawing.children[i];
-
-      // item bounding box
-      let itemBox = firstChild.getBoundingClientRect();
-      let itemTopLeft: Point = new Point(itemBox.left - canvOffsetX, itemBox.top - canvOffsetY);
-      let itemBottomRight: Point = new Point(itemBox.right - canvOffsetX, itemBox.bottom - canvOffsetY);
-
-      if (!Point.rectOverlap(tl, br, itemTopLeft, itemBottomRight)) {
-        //this.unhighlight(firstChild);
-        continue;
-      }
-
-      if (firstChild.getAttribute("checkPreciseEdge") !== "true") {
-        continue;
-      }
 
       let objOffset = (this.drawing.children[i] as HTMLElement).style.transform;
       let s = objOffset ? objOffset.split(",") : "";
@@ -255,57 +194,36 @@ export class ColorEditorService extends DrawingTool {
         let offset = 0;
         if (width) {
           offset = +width;
-        }
+        } // only to be able to run the tests 
+        else { offset = offset }
+        //let dim2 = 3 + offset;
 
-        let dim2 = 3 + offset;
+        if (secondChild.classList.contains("clone") || secondChild.classList.contains("noHighlights") || secondChild.tagName == "filter") { continue; }
 
-        if (secondChild.classList.contains("clone") || secondChild.tagName == "filter") { continue; }
+        if (this.inProgress.firstElementChild) {
+          let test = this.inProgress.firstElementChild.firstElementChild as SVGGeometryElement;
+          let l = test.getTotalLength();
 
-        let path = secondChild as SVGPathElement;
-        let lenght = path.getTotalLength();
-        let inc = lenght / 300;
+          let path = secondChild as SVGGeometryElement;
 
-        let closest: [Point, number] = [new Point(-1, -1), 10000];
-        for (let a = 0; a < lenght; a += inc) {
-          let candidate = new Point(path.getPointAtLength(a).x + objOffsetX, path.getPointAtLength(a).y + objOffsetY);
-          let dist = Point.distance(this.currentPath[this.currentPath.length - 1], candidate)
-          if (dist < closest[1]) {
-            closest[0] = candidate;
-            closest[1] = dist;
+          for (let v = 0; v < l; v += dim / 10) {
+
+            let testPoint = test.getPointAtLength(v);
+            testPoint.x -= objOffsetX;
+            testPoint.y -= objOffsetY;
+            if (path.isPointInStroke(testPoint) || (path.isPointInFill(testPoint) && secondChild.getAttribute("fill") != "none")) {
+              touching = true;
+              break;
+            }
           }
         }
-
-        if (true) {
-          let good = closest[0];
-          //console.log(good);
-          let tlp = new Point(good.x - dim2 / 2, good.y - dim2 / 2);
-          let brp = new Point(good.x + dim2 / 2, good.y + dim2 / 2);
-          if (Point.rectOverlap(tlp, brp, tl, br)) {
-            touching = true;
-            break;
-          }
-        }
-
-        //for(let a = 0; a < points.length; a++){
-
-        //}
-
-        if (touching) {
-          break;
-        }
-
       }
 
-
-      //console.log(touching);
       if (touching) {
         if (this.isDown) {
           this.changeColor(firstChild);
-        } else {
-          //this.highlight(firstChild);
         }
-      } else {
-        //this.unhighlight(firstChild);
+        break;
       }
     }
   }
@@ -337,8 +255,8 @@ export class ColorEditorService extends DrawingTool {
     s += `<rect x="${p[p.length - 1].x - dim / 2}" y="${p[p.length - 1].y - dim / 2}"`;
     s += `width="${dim}" height="${dim}"`;
 
-    s += `fill="white"`;
-    s += `stroke-width="1" stroke="black"`;
+    s += `fill="${this.chosenColor.primColor}"`;
+    s += `stroke-width="3" stroke="${this.chosenColor.secColor}"`;
 
     // end the divider
     s += '</g>';
