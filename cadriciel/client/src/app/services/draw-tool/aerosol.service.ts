@@ -35,8 +35,10 @@ export class AerosolService extends DrawingTool {
     private points: Point[];
 
     private path: string;
+    private pointsPath: string;
 
     private sub: Subscription;
+    
     updateDown(keyboard: KeyboardHandlerService): void {
         /*No defined behavior  */
     }
@@ -119,7 +121,7 @@ export class AerosolService extends DrawingTool {
     startPath(): void {
         this.path = '<g name = "aerosol" style="transform: translate(0px, 0px);" >';
         // this.path += ' <filter id="blur"> <feGaussianBlur in="SourceGraphic" stdDeviation="1" /> </filter>';
-
+        this.pointsPath = '';
         this.lastPoint = new Point(0, 0);
     }
 
@@ -128,20 +130,37 @@ export class AerosolService extends DrawingTool {
         this.lastPoint = p[p.length - 1];
 
         this.generatePoint();
+
+        // create a divider
+        this.path = '<g name = "aerosol" style="transform: translate(0px, 0px);" >';
+        
+        // start the path
+        this.path += ' <path d="';
+        // move to the first point
+        this.path += `M ${p[0].x} ${p[0].y} `;
+        // for each succeding point, connect it with a line
+        for (let i = 1; i < p.length; i++) {
+            this.path += `L ${p[i].x} ${p[i].y} `;
+        }
+        // set render attributes
+        this.path += `"stroke="none" stroke-width="${this.attr.diameter}"`;
+        this.path += 'fill="none" stroke-linecap="round" stroke-linejoin="round" />';
+
+
         const RADIUS_DIV = 25;
 
         const pointRadius = this.attr.diameter / RADIUS_DIV;
 
         // tslint:disable-next-line: prefer-for-of -> we want to keep track of the index
         for (let i = 0; i < this.points.length; i++) {
-            this.path += `<circle cx="${this.points[i].x}" cy="${this.points[i].y}"`;
-            this.path += `r="${pointRadius}"`; // to get the radius
-            this.path += 'stroke="none"';
-            this.path += `fill="${this.chosenColor.primColor}"/>`;
+            this.pointsPath += ` <circle class="points" cx="${this.points[i].x}" cy="${this.points[i].y}"`;
+            this.pointsPath += ` r="${pointRadius}"`; // to get the radius
+            this.pointsPath += ' stroke="none"';
+            this.pointsPath += ` fill="${this.chosenColor.primColor}"/>`;
             // this.path +=  'filter="url(#blur)"/>';
         }
+        this.path += this.pointsPath;
         this.points = new Array();
-
         // end the divider
         let s = this.path;
         s += '</g>';
