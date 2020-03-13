@@ -51,7 +51,7 @@ export class DoodleFetchService {
                 console.log("Empty InnerHTML");
             }
         }
-        const SVG_DATA: SVGData = { canvasStyle: el.getAttribute('style'), bgColor: childs[0].getAttribute('style'), innerHTML: innerHTML };
+        const SVG_DATA: SVGData = { width: this.widthAttr + '', height: this.heightAttr + '', bgColor: childs[0].getAttribute('style'), innerHTML: innerHTML };
         console.log(SVG_DATA);
         this.gService.renderBack();
         return SVG_DATA;
