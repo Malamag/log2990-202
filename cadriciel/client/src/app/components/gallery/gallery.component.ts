@@ -92,6 +92,7 @@ export class GalleryComponent implements OnInit, AfterViewInit {
                 this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
             }
+            this.getAllTags(data);
         })
 
     }

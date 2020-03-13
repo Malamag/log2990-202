@@ -165,14 +165,14 @@ export class DatabaseService {
     }
 
     async populateDB() {
-        let images: ImageData[] = [
+        /*let images: ImageData[] = [
             { id: '1', name: 'one', tags: ["string"], svgElement: "" },
             { id: '2', name: 'two', tags: ["string"], svgElement: '' },
             { id: '3', name: 'three', tags: ["string"], svgElement: '' },
             { id: '4', name: 'four', tags: ["string"], svgElement: '' }]
         images.forEach((image) => {
             //this.saveImage(image);
-        })
+        })*/
     }
     async saveImage(imageData: ImageData) {
         fs.readFile('../data.json', function (err, data) {
