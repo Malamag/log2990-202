@@ -1,6 +1,6 @@
 import { FormControl } from '@angular/forms';
 import { COMMA, ENTER} from '@angular/cdk/keycodes';
-import { Component, OnInit, Renderer2, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Renderer2, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { ImageData } from '../../imageData'
 import { fakeImages } from './fake_images';
@@ -9,6 +9,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { IndexService } from './../../services/index/index.service'
+import { SVGData } from 'src/svgData';
 
 
 @Component({
@@ -135,11 +136,21 @@ export class GalleryComponent implements AfterViewInit {
         const filterValue = value.toLowerCase()
         return this.possibleTags.filter((tag) => tag.toLowerCase().indexOf(filterValue) === 0)
     }
-    continueDrawing(img: string){
+    continueDrawing(data: SVGData) {
         this.doodle.askForDoodle();
-        console.log(this.doodle.currentDraw.nativeElement)
-        /*this.doodle.currentDraw.nativeElement.outerHTML = img;
-        console.log('/******************************');
-        console.log(this.doodle.currentDraw.nativeElement);*/
+        const el = this.doodle.currentDraw.nativeElement;
+        if(data.canvasStyle !== null) {
+            this.render.setAttribute(el, 'width', data.canvasStyle.substring(7, 12))
+            this.render.setAttribute(el, 'height', data.canvasStyle.substring(23,27));
+        }
+        const childs: HTMLCollection = el.children;
+        for(let i = 0; i < childs.length; ++i) {
+            if (i === 0 && data.bgColor !== null) {this.render.setAttribute(childs[i], 'fill', data.bgColor)}
+            if (data.innerHTML[i] === undefined) {
+                childs[i].innerHTML = '';
+            } else {
+                childs[i].innerHTML = data.innerHTML[i]
+            }
+        }
     }
 }
