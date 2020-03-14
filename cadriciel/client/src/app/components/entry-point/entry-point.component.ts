@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import { menuItems } from '../../functionality';
 import { ModalWindowService } from '../../services/window-handler/modal-window.service';
+import { GalleryComponent } from '../gallery/gallery.component';
 import { NewDrawComponent } from '../new-draw/new-draw.component';
 import { UserManualComponent } from '../user-manual/user-manual.component';
 
@@ -38,6 +39,10 @@ export class EntryPointComponent implements OnInit {
     this.winService.openWindow(NewDrawComponent);
   }
 
+  openGallery() {
+    this.winService.openWindow(GalleryComponent);
+  }
+
   execute(shortcutName: string) {
     switch (shortcutName) {
       case 'Créer': {
@@ -46,6 +51,7 @@ export class EntryPointComponent implements OnInit {
       }
       case 'Ouvrir': {
         // statements;
+        this.openGallery();
         break;
      }
      case 'Guide': {

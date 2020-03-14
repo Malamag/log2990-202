@@ -1,0 +1,24 @@
+<div class ="gallery">
+  <div id ="header">
+    <div #filterContainer>
+      <input type = "text" [(ngModel)] = "filter">
+    </div>
+    <button (click)= "addFilter()"> Ajouter filtre </button>
+    <button> Appliquer Filtre </button>
+  </div>
+  <div id = "drawingContainer">
+    <div class = "drawings" *ngFor ="let im of fakeImage">
+      <div id ="drawing">
+        <header>
+          <title> {{im.title}}</title>
+          <sub> {{im.tag}}</sub>
+        </header>
+        <img src = {{im.image}}>
+        <footer>
+          <button> Supprimer </button>
+          <button>Continuer dessin </button>
+        </footer>
+      </div>
+    </div>
+  </div>  
+</div>

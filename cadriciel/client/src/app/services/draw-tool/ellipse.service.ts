@@ -23,12 +23,12 @@ export class EllipseService extends ShapeService {
   }
 
   // updating on key change
-  update(keyboard: KeyboardHandlerService) {
+  updateDown(keyboard: KeyboardHandlerService) {
 
     // rectangle becomes square when shift is pressed
     this.isSquare = keyboard.shiftDown;
 
-    super.update(keyboard);
+    super.updateDown(keyboard);
   }
 
   setdimensions(p: Point[]) {
@@ -61,13 +61,19 @@ export class EllipseService extends ShapeService {
 
     this.setdimensions(p);
 
+    // We need at least 2 points
+    if (p.length < 2) {
+        return this.svgString;
+    }
+
     //The Ellipse won't display if smaller than 10 -> minValue chosen by ergonomy
-    let MinValue = 10;
-    if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
-      return '';
-    } 
+    //let MinValue = 10;
+    //if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
+    //  return '';
+    //} 
+
     //For eliminating bug with large lineThickness and small area
-    MinValue = this.attr.lineThickness;
+    let MinValue = this.attr.lineThickness;
     if ((this.attr.plotType !== 1) && Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
       return '';
     }   

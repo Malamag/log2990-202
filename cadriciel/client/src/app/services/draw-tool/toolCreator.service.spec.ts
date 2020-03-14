@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import {colorData} from 'src/app/components/color-picker/color-data';
+import { colorData } from 'src/app/components/color-picker/color-data';
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
@@ -8,10 +8,10 @@ import { BrushService } from './brush.service';
 import { LineService } from './line.service';
 import { PencilService } from './pencil.service';
 import { RectangleService } from './rectangle.service';
-import { ToolCreator } from './toolCreator';
+import { ToolCreator } from './tool-creator';
 
-export class fakeCpService extends ColorPickingService {}
-export class fakeItService extends InteractionService {}
+export class fakeCpService extends ColorPickingService { }
+export class fakeItService extends InteractionService { }
 
 describe('ToolCreator', () => {
   // let elem: HTMLElement;
@@ -35,19 +35,19 @@ describe('ToolCreator', () => {
       rgbToHsl: () => [],
       cData: colorData,
       alphaRGBToHex: () => ''
-    }
+    };
 
     TestBed.configureTestingModule({
       providers: [
         ToolCreator,
-        {provide: HTMLElement, useValue: {}},
-        {provide: PencilService, useValue: penSpy},
-        {provide: RectangleService, useValue: rectSpy},
-        {provide: BrushService, useValue: brushSpy},
-        {provide: LineService, useValue: lineSpy},
-        {provide: InteractionService, useValue: fakeItService},
-        {provide: ColorPickingService, useValue: fakeCpService},
-        {provide: ColorConvertingService, useValue: colorConvertingStub}]
+        { provide: HTMLElement, useValue: {} },
+        { provide: PencilService, useValue: penSpy },
+        { provide: RectangleService, useValue: rectSpy },
+        { provide: BrushService, useValue: brushSpy },
+        { provide: LineService, useValue: lineSpy },
+        { provide: InteractionService, useValue: fakeItService },
+        { provide: ColorPickingService, useValue: fakeCpService },
+        { provide: ColorConvertingService, useValue: colorConvertingStub }]
     });
 
     service = TestBed.get(ToolCreator);

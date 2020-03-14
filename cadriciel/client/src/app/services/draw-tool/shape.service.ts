@@ -3,38 +3,42 @@ import { FormsAttribute } from '../attributes/attribute-form';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
-import { DrawingTool } from './drawingTool';
+import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
+
+const DEFAULTPLOTTYPE = 2;
+const DEFAULTNUMBERCORNERS = 3;
+const DEFAULTLINETHICKNESS = 5;
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class ShapeService extends DrawingTool {
 
   protected attr: FormsAttribute;
 
   // Shape's dimensions
-  public width: number;
-  public height: number;
-  public smallest: number;  // used for getting the smallest value between height and width
+  protected width: number;
+  protected height: number;
+  protected smallest: number;  // used for getting the smallest value between height and width
 
   // First point in x and y when first clicked
-  public startX: number;
-  public startY: number;
+  protected startX: number;
+  protected startY: number;
   
   //String for createPath
-  public svgString:string;
+  protected svgString:string;
 
   //Attribute for createPath
-  public stroke:string;
-  public fill:string;
+  protected stroke:string;
+  protected fill:string;
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
               interaction: InteractionService, colorPick: ColorPickingService) {
 
     super(inProgess, drawing, selected, interaction, colorPick);
-    this.attr = new FormsAttribute(this.defaultValues.DEFAULTPLOTTYPE, this.defaultValues.DEFAULTLINETHICKNESS, 
-                                   this.defaultValues.DEFAULTNUMBERCORNERS);
+    this.attr = { plotType: DEFAULTPLOTTYPE, lineThickness: DEFAULTLINETHICKNESS, numberOfCorners: DEFAULTNUMBERCORNERS };
     this.updateColors();
     this.updateAttributes();
     this.width = 0;
@@ -47,25 +51,30 @@ export class ShapeService extends DrawingTool {
     this.fill = '';
   }
 
-  updateAttributes() {
+  updateAttributes(): void {
     this.interaction.$formsAttributes.subscribe((obj) => {
-      if (obj) {  // Getting attributes for a shape
-        this.attr = new FormsAttribute(obj.plotType, obj.lineThickness, obj.numberOfCorners);
-      }
+        if (obj) {
+            // Getting attributes for a shape
+            this.attr = { plotType: obj.plotType, lineThickness: obj.lineThickness, numberOfCorners: obj.numberOfCorners };
+        }
     });
   }
 
-  // updating on key change
-  update(keyboard: KeyboardHandlerService) {
-
+  // updating on key down
+  updateDown(keyboard: KeyboardHandlerService): void {
     // real time update
     if (this.isDown) {
       this.updateProgress();
     }
   }
 
+  // updating on key up
+  updateUp(keyCode: number): void {
+    // nothing happens for global shape
+}
+
   // mouse down with shape in hand
-  down(position: Point) {
+  down(position: Point, insideWorkspace?: boolean, isRightClick?: boolean): void {
 
     // in case we changed tool while the mouse was down
     this.ignoreNextUp = false;
@@ -81,7 +90,7 @@ export class ShapeService extends DrawingTool {
   }
 
   // mouse up with shape in hand
-  up(position: Point) {
+  up(position: Point): void {
 
     // in case we changed tool while the mouse was down
     if (!this.ignoreNextUp) {
@@ -95,7 +104,7 @@ export class ShapeService extends DrawingTool {
   }
 
   // mouse move with shape in hand
-  move(position: Point) {
+  move(position: Point): void {
 
     // only if the shapeTool is currently affecting the canvas
     if (this.isDown) {
@@ -108,17 +117,17 @@ export class ShapeService extends DrawingTool {
   }
 
   // mouse doubleClick with rectangle in hand
-  doubleClick(position: Point) {
+  doubleClick(position: Point): void {
     // since its down -> up -> down -> up -> doubleClick, nothing more happens for the rectangle
   }
 
   // when we go from inside to outside the canvas
-  goingOutsideCanvas() {
+  goingOutsideCanvas(): void {
     // nothing happens since we might want to readjust the shape once back in
   }
 
   // when we go from outside to inside the canvas
-  goingInsideCanvas() {
+  goingInsideCanvas(): void {
     // nothing happens since we just update the preview
   }
 
@@ -135,11 +144,11 @@ export class ShapeService extends DrawingTool {
   }
 
   // Creates an svg shape
-  createPath(p: Point[], removePerimeter?: boolean) {
+  createPath(p: Point[], removePerimeter?: boolean): void {
     // Shape is only virtual, so we do not create a path
   }
 
-  setAttributesToPath() {
+  setAttributesToPath(): void {
     // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
     this.stroke = (this.attr.plotType === 0 || this.attr.plotType === 2) ? `${this.chosenColor.secColor}` : 'none';
     this.fill = (this.attr.plotType === 1 || this.attr.plotType === 2) ? `${this.chosenColor.primColor}` : 'none';

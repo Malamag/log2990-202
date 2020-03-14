@@ -1,0 +1,24 @@
+#gallery{
+    //overflow-x:scroll;
+    overflow-y: scroll;
+    max-height: 75vh;
+    max-width: 75vw;
+    background-color: transparent;
+}
+div.header{
+    position: relative;
+    float: right;
+    
+}
+div.drawing{
+    border-color: black;
+    background-color: transparent;
+    height: auto;
+    width: auto;
+    margin-right: 2px;
+    display: inline-block;
+}
+div.drawingContainer{
+    display: inline-block;
+
+}

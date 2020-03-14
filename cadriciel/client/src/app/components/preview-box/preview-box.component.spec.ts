@@ -1,39 +1,45 @@
+import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { SvgDrawComponent } from '../draw-view/svg-draw/svg-draw.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ExportFormComponent } from '../export-form/export-form.component';
 import { PreviewBoxComponent } from './preview-box.component';
 
 describe('PreviewBoxComponent', () => {
-  let component: PreviewBoxComponent;
-  let fixture: ComponentFixture<PreviewBoxComponent>;
-  let dFetchStub: any;
+    let component: PreviewBoxComponent;
+    let fixture: ComponentFixture<PreviewBoxComponent>;
+    let rdStub: any;
+    beforeEach(async(() => {
+        rdStub = {
+            appendChild: () => 0,
+        };
+        TestBed.configureTestingModule({
+            declarations: [PreviewBoxComponent, ExportFormComponent],
+            imports: [ReactiveFormsModule, FormsModule],
+            providers: [{ provide: Renderer2, useValue: rdStub }],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA],
+        }).compileComponents();
+    }));
 
-  beforeEach(async(() => {
+    beforeEach(() => {
+        fixture = TestBed.createComponent(PreviewBoxComponent);
+        component = fixture.componentInstance;
+        component.render = rdStub;
+        fixture.detectChanges();
+    });
 
-    dFetchStub = {
-      askForDoodle: () => 0,
-      getDrawing: () => undefined
-    }
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 
-    TestBed.configureTestingModule({
-      declarations: [ PreviewBoxComponent, SvgDrawComponent ],
-      providers: [
-        {provide: DoodleFetchService, useValue: dFetchStub}
-      ]
-    })
-    .compileComponents();
-  }));
+    it('should scale the svg on initialisation', () => {
+        const spy = spyOn(component, 'scaleSVG');
+        component.ngOnInit();
+        expect(spy).toHaveBeenCalled();
+    });
 
-  beforeEach(() => {
-    dFetchStub.askForDoodle();
-    fixture = TestBed.createComponent(PreviewBoxComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-
-    expect(component).toBeTruthy();
-  });
+    it('should initialize the preview box after getting a reference to the svg', () => {
+        const spy = spyOn(component.render, 'appendChild');
+        component.ngAfterViewInit();
+        expect(spy).toHaveBeenCalledWith(component.previewBoxRef.nativeElement, component.draw);
+    });
 });

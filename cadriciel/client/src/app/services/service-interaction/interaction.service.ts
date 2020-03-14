@@ -1,60 +1,118 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { AerosolAttributes } from '../attributes/aerosol-attribute';
 import { FormsAttribute } from '../attributes/attribute-form';
 import { LineAttributes } from '../attributes/line-attributes';
 import { ToolsAttributes } from '../attributes/tools-attribute';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class InteractionService {
-  selectedTool = new Subject<String>();
-  $selectedTool = this.selectedTool.asObservable();
-  formsAttributes = new Subject<FormsAttribute>()
-  $formsAttributes = this.formsAttributes.asObservable()
-  drawingDone = new Subject<boolean>();
-  $drawingDone = this.drawingDone.asObservable()
-  enableDisableButtons = new Subject<boolean[]>()
-  $enableDisableButtons = this.enableDisableButtons.asObservable()
-  toolsAttributes = new Subject<ToolsAttributes>()
-  $toolsAttributes = this.toolsAttributes.asObservable()
-  lineAttributes = new Subject<LineAttributes>()
-  $lineAttributes = this.lineAttributes.asObservable()
-  cancelTools = new Subject<boolean>()
-  $cancelToolsObs = this.cancelTools.asObservable()
+    selectedTool = new Subject<string>();
+    $selectedTool = this.selectedTool.asObservable();
 
-  ref = new Subject<ElementRef>()
-  $refObs = this.ref.asObservable()
+    formsAttributes = new Subject<FormsAttribute>();
+    $formsAttributes = this.formsAttributes.asObservable();
 
-  constructor() { }
+    drawingDone = new Subject<boolean>();
+    $drawingDone = this.drawingDone.asObservable();
 
-  emitSelectedTool(tool: string) {
-    this.selectedTool.next(tool);
-  }
+    enableDisableButtons = new Subject<boolean[]>();
+    $enableDisableButtons = this.enableDisableButtons.asObservable();
 
-  emitLineAttributes(attr: LineAttributes) {
-    this.lineAttributes.next(attr)
-  }
+    toolsAttributes = new Subject<ToolsAttributes>();
+    $toolsAttributes = this.toolsAttributes.asObservable();
 
-  emitFormsAttributes(attr: FormsAttribute) {
-    this.formsAttributes.next(attr)
-  }
+    lineAttributes = new Subject<LineAttributes>();
+    $lineAttributes = this.lineAttributes.asObservable();
 
-  emitToolsAttributes(attr: ToolsAttributes) {
-    this.toolsAttributes.next(attr)
-  }
+    aerosolAttributes = new Subject<AerosolAttributes>();
+    $aerosolAttributes = this.aerosolAttributes.asObservable();
 
-  emitCancel(sig: boolean) {
-    this.cancelTools.next(sig)
-  }
-  emitRef(el: ElementRef) {
+    cancelTools = new Subject<boolean>();
+    $cancelToolsObs = this.cancelTools.asObservable();
 
-    this.ref.next(el)
-  }
-  emitDrawingDone() {
-    this.drawingDone.next(true);
-  }
-  emitEnableDisable(disableContainer: boolean[]) {
-    this.enableDisableButtons.next(disableContainer);
-  }
+    ref = new Subject<ElementRef>();
+    $refObs = this.ref.asObservable();
+
+    canvasRedone = new Subject<boolean>();
+    $canvasRedone = this.canvasRedone.asObservable();
+
+    showGrid = new Subject<boolean>();
+    $showGrid = this.showGrid.asObservable();
+
+    convertSvg2Canvas = new Subject<boolean>();
+    $convertSvg2Canvas = this.convertSvg2Canvas.asObservable();
+    isCanvas: boolean;
+
+    previewColor = new Subject<string>();
+    $previewColor = this.previewColor.asObservable();
+
+    canvasContext = new Subject<CanvasRenderingContext2D>();
+    $canvasContext = this.canvasContext.asObservable();
+
+    constructor() {
+        this.isCanvas = false;
+    }
+
+    emitSelectedTool(tool: string): void {
+        this.selectedTool.next(tool);
+    }
+
+    emitLineAttributes(attr: LineAttributes): void {
+        this.lineAttributes.next(attr);
+    }
+
+    emitFormsAttributes(attr: FormsAttribute): void {
+        this.formsAttributes.next(attr);
+    }
+
+    emitToolsAttributes(attr: ToolsAttributes): void {
+        this.toolsAttributes.next(attr);
+    }
+
+    emitAerosolAttributes(attr: AerosolAttributes): void {
+        this.aerosolAttributes.next(attr);
+    }
+
+    emitCancel(sig: boolean): void {
+        this.cancelTools.next(sig);
+    }
+
+    emitRef(el: ElementRef): void {
+        this.ref.next(el);
+    }
+
+    emitDrawingDone(): void {
+        this.drawingDone.next(true);
+    }
+
+    emitEnableDisable(disableContainer: boolean[]): void {
+        this.enableDisableButtons.next(disableContainer);
+    }
+
+    emitCanvasRedone(): void {
+        this.canvasRedone.next(true);
+    }
+
+    emitGridVisibility(showGrid: boolean): void {
+        this.showGrid.next(showGrid);
+    }
+
+    emitSvgCanvasConversion(toCanvas: boolean): void {
+        this.isCanvas = toCanvas;
+        this.convertSvg2Canvas.next(toCanvas);
+    }
+
+    emitPreviewColor(colorToEmit: string): void {
+        this.previewColor.next(colorToEmit);
+    }
+
+    emitCanvasContext(canvas: HTMLCanvasElement): void {
+        const CTX = canvas.getContext('2d');
+        if (CTX) {
+            this.canvasContext.next(CTX);
+        }
+    }
 }

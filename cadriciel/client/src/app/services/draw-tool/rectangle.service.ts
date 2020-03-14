@@ -21,13 +21,15 @@ export class RectangleService extends ShapeService {
 
   }
   // updating on key change
-  update(keyboard: KeyboardHandlerService) {
+  updateDown(keyboard: KeyboardHandlerService) {
 
     // rectangle becomes square when shift is pressed
     this.isSquare = keyboard.shiftDown;
 
-    super.update(keyboard);
+    super.updateDown(keyboard);
   }
+
+  updateUp(keyCode: number): void {}
 
   setdimensions(p: Point[]) {
       // if we need to make it square
@@ -57,11 +59,15 @@ export class RectangleService extends ShapeService {
 
     this.setdimensions(p);
 
+    if (p.length <= 2) {
+        return '';
+    }
+
     //The Rectangle won't display if smaller than 10 -> minValue chosen by ergonomy
-    let MinValue = 10;
-    if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
-      return '';
-    } 
+    //let MinValue = 10;
+    //if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
+    //  return '';
+    //} 
 
     // create a divider
     this.svgString = '<g name = "rectangle" style="transform: translate(0px, 0px);">';

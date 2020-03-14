@@ -1,3 +1,5 @@
-export class ChoosenColors {
-    constructor(public primColor: string, public secColor: string) {}
+export interface ChoosenColors {
+    primColor: string;
+    secColor: string;
+    backColor: string;
 }

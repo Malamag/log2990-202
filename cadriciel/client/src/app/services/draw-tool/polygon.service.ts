@@ -34,17 +34,17 @@ export class PolygonService extends ShapeService {
   createPath(p: Point[], removePerimeter: boolean) {
 
     // We need at least 2 points
-    //if (p.length < 2) {
-    //  return '';
-    //}
+    if (p.length < 2) {
+      return '';
+    }
 
     this.setdimensions(p);
 
     //The Polygon won't display if smaller than 10px -> 10 chosen by ergonomy
-    const MinValue = 10;
-    if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
-      return '';
-    }      
+    //const MinValue = 10;
+    //if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
+    //  return '';
+    //}      
 
     // Set the polygon's corners
     this.setCorners(p);
