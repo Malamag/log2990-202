@@ -181,7 +181,7 @@ export class GalleryComponent implements AfterViewInit {
         this.tagInput.nativeElement.value = '';
         this.tagCtrl.setValue(null);
     }
-    private filter(value: string): string[] {
+    filter(value: string): string[] {
         const filterValue = value.toLowerCase();
         return this.possibleTags.filter((tag: string) => tag.toLowerCase().indexOf(filterValue) === 0);
     }
@@ -222,8 +222,10 @@ export class GalleryComponent implements AfterViewInit {
 
         for (let i = 0; i < data.innerHTML.length; ++i) {
             const tag = this.render.createElement('g', 'http://www.w3.org/2000/svg');
-            tag.innerHTML = data.innerHTML[i];
-            this.render.appendChild(svg, tag);
+            if (tag !== undefined){
+                tag.innerHTML = data.innerHTML[i];
+                this.render.appendChild(svg, tag);
+            }
         }
 
         return svg;

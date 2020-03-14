@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 import { GalleryComponent } from './gallery.component';
 import { SVGData } from 'src/svgData';
 import { ImageData } from '../../imageData'
+import {MatDialogModule} from '@angular/material'
 
 fdescribe('GalleryComponent', () => {
     let component: GalleryComponent;
@@ -28,6 +29,7 @@ fdescribe('GalleryComponent', () => {
         MatInputModule,
         HttpClientModule,
         BrowserAnimationsModule,
+        MatDialogModule,
       ],
         }).compileComponents();
     }));
@@ -177,5 +179,20 @@ fdescribe('GalleryComponent', () => {
         expect(askSpy).toHaveBeenCalled()
         expect(emitSpy).toHaveBeenCalled()
     })
-    
+    it('should create an svg with renderer', () => {
+        const svgData: SVGData = {height: '2500', width : '1080', bgColor: 'white', innerHTML: ['hello', 'hello']}
+        const createSpy = spyOn(component.render, 'createElement');
+        const attributeSpy = spyOn(component.render, 'setAttribute');
+        const appendSpy = spyOn(component.render, 'appendChild');
+        component.createSVG(svgData);
+        expect(createSpy).toHaveBeenCalledTimes(4);
+        expect(attributeSpy).toHaveBeenCalledTimes(5);
+        expect(appendSpy).toHaveBeenCalled();
+    })
+    it('should lower case the value and filter the value from possible tags container', () => {
+        const value = 'black';
+        const filterSpy = spyOn(component.possibleTags, 'filter')
+        component.filter(value);
+        expect(filterSpy).toHaveBeenCalled()
+    })
 });
