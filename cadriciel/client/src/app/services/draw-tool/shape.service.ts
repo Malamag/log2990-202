@@ -6,6 +6,7 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
+// Default attributes of shapes
 const DEFAULTPLOTTYPE = 2;
 const DEFAULTNUMBERCORNERS = 3;
 const DEFAULTLINETHICKNESS = 5;
@@ -35,7 +36,7 @@ export class ShapeService extends DrawingTool {
     protected fill: string;
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
-        interaction: InteractionService, colorPick: ColorPickingService) {
+                interaction: InteractionService, colorPick: ColorPickingService) {
 
         super(inProgess, drawing, selected, interaction, colorPick);
         this.attr = { plotType: DEFAULTPLOTTYPE, lineThickness: DEFAULTLINETHICKNESS, numberOfCorners: DEFAULTNUMBERCORNERS };
@@ -131,7 +132,7 @@ export class ShapeService extends DrawingTool {
         // nothing happens since we just update the preview
     }
 
-    setdimensions(p: Point[]) {
+    setdimensions(p: Point[]): void {
         // first and last points
         const P1X = p[0].x;
         const P1Y = p[0].y;

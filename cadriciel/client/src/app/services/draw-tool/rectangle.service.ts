@@ -11,17 +11,17 @@ import { ShapeService } from './shape.service';
 
 export class RectangleService extends ShapeService {
 
-    public isSquare: boolean;
+    private isSquare: boolean;
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
-        interaction: InteractionService, colorPick: ColorPickingService) {
+                interaction: InteractionService, colorPick: ColorPickingService) {
 
         super(inProgess, drawing, selected, interaction, colorPick);
         this.isSquare = false;
 
     }
     // updating on key change
-    updateDown(keyboard: KeyboardHandlerService) {
+    updateDown(keyboard: KeyboardHandlerService): void {
 
         // rectangle becomes square when shift is pressed
         this.isSquare = keyboard.shiftDown;
@@ -29,9 +29,7 @@ export class RectangleService extends ShapeService {
         super.updateDown(keyboard);
     }
 
-    updateUp(keyCode: number): void { }
-
-    setdimensions(p: Point[]) {
+    setdimensions(p: Point[]): void {
         // if we need to make it square
         // find top-left corner
 
@@ -47,15 +45,14 @@ export class RectangleService extends ShapeService {
             // recalculate top-left corner
             this.startX = this.width > 0 ? p[0].x : p[0].x - this.smallest;
             this.startY = this.height > 0 ? p[0].y : p[0].y - this.smallest;
-        }
-        else {  // Rectangle
+        } else {  // Rectangle
             this.startX = this.width > 0 ? p[0].x : p[p.length - 1].x;
             this.startY = this.height > 0 ? p[0].y : p[p.length - 1].y;
         }
     }
 
     // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
-    createPath(p: Point[], removePerimeter?: boolean) {
+    createPath(p: Point[], removePerimeter?: boolean): string {
 
         this.setdimensions(p);
 
@@ -63,11 +60,11 @@ export class RectangleService extends ShapeService {
             return '';
         }
 
-        //The Rectangle won't display if smaller than 10 -> minValue chosen by ergonomy
-        //let MinValue = 10;
-        //if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
-        //  return '';
-        //} 
+        // The Rectangle won't display if smaller than 10 -> minValue chosen by ergonomy
+        // let MinValue = 10;
+        // if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
+        //   return '';
+        // }
 
         // create a divider
         this.svgString = '<g name = "rectangle" style="transform: translate(0px, 0px);">';
@@ -79,7 +76,7 @@ export class RectangleService extends ShapeService {
         this.setAttributesToPath();
 
         // end the divider
-        this.svgString += '</g>'
+        this.svgString += '</g>';
 
         // can't have rectangle with 0 width or height
         if (this.width === 0 || this.height === 0) {

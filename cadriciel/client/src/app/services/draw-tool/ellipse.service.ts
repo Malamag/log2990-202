@@ -14,16 +14,17 @@ export class EllipseService extends ShapeService {
 
     isSquare: boolean;
 
-    attr: FormsAttribute
+    attr: FormsAttribute;
 
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
+                interaction: InteractionService, colorPick: ColorPickingService) {
 
         super(inProgess, drawing, selected, interaction, colorPick);
         this.isSquare = false;
     }
 
     // updating on key change
-    updateDown(keyboard: KeyboardHandlerService) {
+    updateDown(keyboard: KeyboardHandlerService): void {
 
         // rectangle becomes square when shift is pressed
         this.isSquare = keyboard.shiftDown;
@@ -31,7 +32,7 @@ export class EllipseService extends ShapeService {
         super.updateDown(keyboard);
     }
 
-    setdimensions(p: Point[]) {
+    setdimensions(p: Point[]): void {
         // if we need to make it square
         // find top-left corner
 
@@ -47,15 +48,15 @@ export class EllipseService extends ShapeService {
             // recalculate top-left corner
             this.startX = this.width > 0 ? p[0].x : p[0].x - this.smallest;
             this.startY = this.height > 0 ? p[0].y : p[0].y - this.smallest;
-        }
-        else {  // Rectangle
+        } else {
+            // Circle
             this.startX = this.width > 0 ? p[0].x : p[p.length - 1].x;
             this.startY = this.height > 0 ? p[0].y : p[p.length - 1].y;
         }
     }
 
     // Creates an svg rect that connects the first and last points of currentPath with the ellipse attributes and a perimeter
-    createPath(p: Point[], removePerimeter: boolean) {
+    createPath(p: Point[], removePerimeter: boolean): string {
 
         this.svgString = '';
 
@@ -66,15 +67,9 @@ export class EllipseService extends ShapeService {
             return this.svgString;
         }
 
-        //The Ellipse won't display if smaller than 10 -> minValue chosen by ergonomy
-        //let MinValue = 10;
-        //if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
-        //  return '';
-        //} 
-
-        //For eliminating bug with large lineThickness and small area
-        let MinValue = this.attr.lineThickness;
-        if ((this.attr.plotType !== 1) && Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
+        // For eliminating bug with large lineThickness and small area
+        if ((this.attr.plotType !== 1) && Math.abs(this.width) < this.attr.lineThickness
+                                        && Math.abs(this.height) < this.attr.lineThickness) {
             return '';
         }
 
@@ -82,7 +77,8 @@ export class EllipseService extends ShapeService {
         this.svgString += '<g name = "ellipse" style="transform: translate(0px, 0px);">';
 
         // set render attributes for the svg ellipse
-        this.svgString += `<ellipse cx="${this.startX + Math.abs(this.width / 2)}" cy="${this.startY + Math.abs(this.height / 2)}" rx="${Math.abs(this.width / 2)}" ry="${Math.abs(this.height / 2)}"`;
+        this.svgString += `<ellipse cx="${this.startX + Math.abs(this.width / 2)}" cy="${this.startY + Math.abs(this.height / 2)}"
+                                    rx="${Math.abs(this.width / 2)}" ry="${Math.abs(this.height / 2)}"`;
 
         this.setAttributesToPath();
 
@@ -105,7 +101,7 @@ export class EllipseService extends ShapeService {
         }
 
         // end the divider
-        this.svgString += '</g>'
+        this.svgString += '</g>';
 
         // can't have ellipse with 0 width or height
         if (this.width === 0 || this.height === 0) {
