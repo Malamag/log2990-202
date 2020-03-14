@@ -28,7 +28,7 @@ export class GalleryComponent implements AfterViewInit {
     shownDrawings: ShownData[] = [];
     readonly inputTagSeparators: number[] = [ENTER, COMMA];
     tags: string[] = [];
-    private possibleTags: string[];
+    possibleTags: string[];
     filteredTags: Observable<string[]>;
     tagCtrl = new FormControl();
     render: Renderer2;
@@ -36,7 +36,7 @@ export class GalleryComponent implements AfterViewInit {
     @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef;
     @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
-    constructor(public index: IndexService, render: Renderer2, private doodle: DoodleFetchService, private interact: InteractionService) {
+    constructor(public index: IndexService, render: Renderer2, public doodle: DoodleFetchService, public interact: InteractionService) {
         this.render = render;
         this.possibleTags = [];
         this.filteredTags = this.tagCtrl.valueChanges.pipe(
@@ -83,7 +83,7 @@ export class GalleryComponent implements AfterViewInit {
             this.text = this.render.createText("l'élément ne peut pas être effacé car il n'existe pas sur le serveur");
         }
 
-        //this.getAllImages();
+        // this.getAllImages();
         for (let i = 0; i < this.shownDrawings.length; ++i) {
             if (id === this.shownDrawings[i].id) {
                 this.shownDrawings.splice(i, 1);
@@ -106,7 +106,7 @@ export class GalleryComponent implements AfterViewInit {
                 this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
             } else {
-                data.forEach(im => {
+                data.forEach((im: ImageData) => {
                     const svg = this.createSVG(im.svgElement);
                     this.shownDrawings.push({
                         id: im.id,
@@ -151,7 +151,7 @@ export class GalleryComponent implements AfterViewInit {
         });
     }
     getAllTags(imageContainer: ImageData[]): void {
-        imageContainer.forEach(image => {
+        imageContainer.forEach((image: ImageData) => {
             for (let i = 0; i < image.tags.length; ++i) {
                 let tagExist = false;
                 for (let j = 0; j < this.possibleTags.length; ++j) {
@@ -173,7 +173,7 @@ export class GalleryComponent implements AfterViewInit {
     }
     private filter(value: string): string[] {
         const filterValue = value.toLowerCase();
-        return this.possibleTags.filter(tag => tag.toLowerCase().indexOf(filterValue) === 0);
+        return this.possibleTags.filter((tag: string) => tag.toLowerCase().indexOf(filterValue) === 0);
     }
     continueDrawing(data: SVGData) {
         this.doodle.askForDoodle();
