@@ -1,17 +1,16 @@
-import { FormControl } from '@angular/forms';
 import { COMMA, ENTER} from '@angular/cdk/keycodes';
-import { Component, Renderer2, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { ImageData } from '../../imageData'
-import { fakeImages } from './fake_images';
+import { AfterViewInit, Component, ElementRef , Renderer2, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { IndexService } from './../../services/index/index.service'
-import { SVGData } from 'src/svgData';
-import { ShownData } from 'src/app/shownData';
+import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
+import { ShownData } from 'src/app/shownData';
+import { SVGData } from 'src/svgData';
+import { ImageData } from '../../imageData'
+import { IndexService } from './../../services/index/index.service'
 
 
 @Component({
@@ -26,7 +25,6 @@ import { InteractionService } from 'src/app/services/service-interaction/interac
  * Angular Material (Google). "Chips" (01/03/2020). En ligne: https://material.angular.io/components/chips/examples
  */
 export class GalleryComponent implements AfterViewInit {
-    fakeImage = fakeImages;
     drawings: Observable<ImageData[]>;
     shownDrawings : ShownData[] = [];
     readonly inputTagSeparators: number[] = [ENTER, COMMA];
@@ -82,18 +80,17 @@ export class GalleryComponent implements AfterViewInit {
     delete(id: string): void {
         try {
             this.index.deleteImageById(id);
-        }
-        catch(error){
+        } catch(error) {
             this.text = this.render.createText("l'élément ne peut pas être effacé car il n'existe pas sur le serveur")
         }
 
         //this.getAllImages();
-        for(let i = 0; i< this.shownDrawings.length; ++i){
-            if(id === this.shownDrawings[i].id){
+        for(let i = 0; i< this.shownDrawings.length; ++i) {
+            if(id === this.shownDrawings[i].id) {
                 this.shownDrawings.splice(i, 1);
             }
         }
-        if(this.shownDrawings.length === 0){
+        if(this.shownDrawings.length === 0) {
             this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
             this.render.appendChild(this.cardsContainer.nativeElement, this.text);
         }
@@ -109,8 +106,7 @@ export class GalleryComponent implements AfterViewInit {
                 this.render.removeChild(this.cardsContainer.nativeElement, this.text);
                 this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
-            }
-            else{
+            } else {
                 data.forEach((im) => {
                     const svg = this.createSVG(im.svgElement);
                     this.shownDrawings.push({id: im.id, svgElement: svg, name: im.name, tags: im.tags,
@@ -118,7 +114,6 @@ export class GalleryComponent implements AfterViewInit {
                 })
                 this.getAllTags(data);
             }
-            
         })
 
     }
@@ -134,8 +129,7 @@ export class GalleryComponent implements AfterViewInit {
                 this.render.removeChild(this.cardsContainer, this.text);
                 this.text = this.render.createText('Aucun dessin correspond a vos critères de recherche');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
-            }
-            else{
+            } else {
                 data.forEach((im) => {
                     const svg = this.createSVG(im.svgElement);
                     this.shownDrawings.push({id: im.id, svgElement: svg, name: im.name, tags: im.tags,
@@ -185,17 +179,16 @@ export class GalleryComponent implements AfterViewInit {
         }
         this.interact.emitCanvasRedone()
     }
-    createSVG(data: SVGData) { 
+    createSVG(data: SVGData) {
         const svg = this.render.createElement('svg','http://www.w3.org/2000/svg');
-        this.render.setAttribute(svg, 'width', data.width) 
+        this.render.setAttribute(svg, 'width', data.width);
         this.render.setAttribute(svg, 'height', data.height);
         const rect = this.render.createElement('rect', 'svg');
         if (data.bgColor !== null) {this.render.setAttribute(rect, 'fill', data.bgColor.substring(6, 24))};
         this.render.setAttribute(rect, 'height', '100%');
         this.render.setAttribute(rect, 'width', '100%');
-        
         const tag = this.render.createElement('g');
-        for(let i = 0; i < data.innerHTML.length; ++i){
+        for(let i = 0; i < data.innerHTML.length; ++i) {
             tag.innerHTML += data.innerHTML[i]
         }
         this.render.appendChild(svg, rect);
