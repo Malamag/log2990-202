@@ -11,6 +11,7 @@ import { map, startWith } from 'rxjs/operators';
 import { IndexService } from './../../services/index/index.service'
 import { SVGData } from 'src/svgData';
 import { ShownData } from 'src/app/shownData';
+import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 
 
 @Component({
@@ -38,7 +39,7 @@ export class GalleryComponent implements AfterViewInit {
     @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef;
     @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
-    constructor(public index: IndexService, render: Renderer2, private doodle: DoodleFetchService) {
+    constructor(public index: IndexService, render: Renderer2, private doodle: DoodleFetchService, private interact: InteractionService) {
         this.render = render;
         this.possibleTags = [];
         this.filteredTags = this.tagCtrl.valueChanges.pipe(
@@ -103,8 +104,8 @@ export class GalleryComponent implements AfterViewInit {
             else{
                 data.forEach((im) => {
                     const svg = this.createSVG(im.svgElement);
-                    this.shownDrawings.push({id: im.id, svgElement: svg[2], name: im.name, tags: im.tags,
-                        data: im.svgElement, width: svg[0], height: svg[1]});
+                    this.shownDrawings.push({id: im.id, svgElement: svg, name: im.name, tags: im.tags,
+                         data: im.svgElement, width: +im.svgElement.width, height: +im.svgElement.height});
                 })
                 this.getAllTags(data);
             }
@@ -166,13 +167,14 @@ export class GalleryComponent implements AfterViewInit {
         this.render.setAttribute(el, 'height', data.height);
         const childs: HTMLCollection = el.children;
         for(let i = 0; i < childs.length; ++i) {
-            if (i === 0 && data.bgColor !== null) {childs[i].setAttributeNS('http://www.w3.org/2000/svg', 'fill', data.bgColor.substring(6, 24))};
+            if (i === 0 && data.bgColor !== null) {childs[i].setAttribute('fill', data.bgColor.substring(6, 24))};
             if (data.innerHTML[i] === undefined) {
                 childs[i].innerHTML = '';
             } else {
                 childs[i].innerHTML = data.innerHTML[i]
             }
         }
+        this.interact.emitCanvasRedone()
     }
     createSVG(data: SVGData) { 
         const svg = this.render.createElement('svg','http://www.w3.org/2000/svg');
@@ -188,7 +190,7 @@ export class GalleryComponent implements AfterViewInit {
             tag.innerHTML += data.innerHTML[i]
         }
         this.render.appendChild(svg, rect);
-        this.render.appendChild(svg, tag);
+        this.render.appendChild(rect, tag);
         return svg;
     }
 }
