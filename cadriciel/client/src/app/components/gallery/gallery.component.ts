@@ -200,10 +200,8 @@ export class GalleryComponent implements AfterViewInit {
             }
         }
 
-        if (data.bgColor) {
-            const CANVAS_ATTRS: Canvas = { canvasWidth: +data.width, canvasHeight: +data.height, canvasColor: data.bgColor };
-            this.interact.emitGridAttributes(CANVAS_ATTRS);
-        }
+        const CANVAS_ATTRS: Canvas = { canvasWidth: +data.width, canvasHeight: +data.height, canvasColor: '#ffffffff' };
+        this.interact.emitGridAttributes(CANVAS_ATTRS);
 
         this.interact.emitCanvasRedone();
     }

@@ -184,7 +184,9 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     reinitGridFromSub() {
         this.interaction.$canvasAttributes.subscribe((newDoodle: Canvas) => {
+            this.gridService.removeGrid();
             this.gridService.initGrid(this.gridRef.nativeElement, newDoodle.canvasWidth, newDoodle.canvasHeight, newDoodle.canvasColor);
+            console.log(newDoodle);
         });
     }
 }
