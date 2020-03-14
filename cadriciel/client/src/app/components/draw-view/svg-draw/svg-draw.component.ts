@@ -94,6 +94,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.interaction.$showGrid.subscribe((show: boolean) => {
             this.showGrid = show;
         });
+        this.reinitGridFromSub();
     }
 
     ngAfterViewInit() {
@@ -179,5 +180,11 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         });
 
         this.bgroundChangeSubscription();
+    }
+
+    reinitGridFromSub() {
+        this.interaction.$canvasAttributes.subscribe((newDoodle: Canvas) => {
+            this.gridService.initGrid(this.gridRef.nativeElement, newDoodle.canvasWidth, newDoodle.canvasHeight, newDoodle.canvasColor);
+        });
     }
 }

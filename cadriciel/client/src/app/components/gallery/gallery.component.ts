@@ -11,6 +11,8 @@ import { ShownData } from 'src/app/shownData';
 import { SVGData } from 'src/svgData';
 import { ImageData } from '../../imageData';
 import { IndexService } from './../../services/index/index.service';
+import { GridRenderService } from 'src/app/services/grid/grid-render.service';
+import { Canvas } from 'src/app/models/Canvas.model';
 
 @Component({
     selector: 'app-gallery',
@@ -36,7 +38,13 @@ export class GalleryComponent implements AfterViewInit {
     @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef;
     @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
-    constructor(public index: IndexService, render: Renderer2, public doodle: DoodleFetchService, public interact: InteractionService) {
+    constructor(
+        public index: IndexService,
+        render: Renderer2,
+        public doodle: DoodleFetchService,
+        public interact: InteractionService,
+        public gridService: GridRenderService,
+    ) {
         this.render = render;
         this.possibleTags = [];
         this.filteredTags = this.tagCtrl.valueChanges.pipe(
@@ -135,7 +143,7 @@ export class GalleryComponent implements AfterViewInit {
                 this.text = this.render.createText('Aucun dessin correspond a vos critères de recherche');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
             } else {
-                data.forEach(im => {
+                data.forEach((im: ImageData) => {
                     const svg = this.createSVG(im.svgElement);
                     this.shownDrawings.push({
                         id: im.id,
@@ -191,6 +199,12 @@ export class GalleryComponent implements AfterViewInit {
                 childs[i].innerHTML = data.innerHTML[i];
             }
         }
+
+        if (data.bgColor) {
+            const CANVAS_ATTRS: Canvas = { canvasWidth: +data.width, canvasHeight: +data.height, canvasColor: data.bgColor };
+            this.interact.emitGridAttributes(CANVAS_ATTRS);
+        }
+
         this.interact.emitCanvasRedone();
     }
     createSVG(data: SVGData) {

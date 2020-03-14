@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { FormsAttribute } from '../attributes/attribute-form';
 import { LineAttributes } from '../attributes/line-attributes';
 import { ToolsAttributes } from '../attributes/tools-attribute';
+import { Canvas } from 'src/app/models/Canvas.model';
 
 @Injectable({
     providedIn: 'root',
@@ -31,6 +32,9 @@ export class InteractionService {
 
     showGrid = new Subject<boolean>();
     $showGrid = this.showGrid.asObservable();
+
+    canvasAttributes = new Subject<Canvas>();
+    $canvasAttributes = this.canvasAttributes.asObservable();
 
     constructor() {}
 
@@ -72,5 +76,9 @@ export class InteractionService {
 
     emitGridVisibility(showGrid: boolean) {
         this.showGrid.next(showGrid);
+    }
+
+    emitGridAttributes(attr: Canvas) {
+        this.canvasAttributes.next(attr);
     }
 }

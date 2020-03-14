@@ -1,22 +1,21 @@
+import fs from 'fs';
 import { injectable } from 'inversify';
-import { ImageData } from '../imageData';
-import { Collection, MongoClient, MongoClientOptions, UpdateQuery, FilterQuery } from 'mongodb';
+import { Collection, FilterQuery, MongoClient, MongoClientOptions, UpdateQuery } from 'mongodb';
 import 'reflect-metadata';
 import { Image } from '../Image';
-import fs from 'fs';
+import { ImageData } from '../imageData';
 import { MetaData } from '../metadata';
 
 const DATABASE_URL = 'mongodb+srv://Equipe202:Equipe202@cluster0-kusq4.mongodb.net/test?retryWrites=true&w=majority';
 const DATABASE_NAME = 'Equipe202_Database';
 const DATABASE_COLLECTION = 'Images';
 
-
 @injectable()
 export class DatabaseService {
     collection: Collection<MetaData>;
     private options: MongoClientOptions = {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
     };
 
     constructor() {
@@ -27,12 +26,14 @@ export class DatabaseService {
             })
             .catch(() => {
                 console.error('Erreur de connexion. Terminaison du processus');
-                //process.exit(1);
+                // process.exit(1);
             });
     }
 
     async getAllImages(): Promise<ImageData[]> {
-        return this.collection.find({}).toArray()
+        return this.collection
+            .find({})
+            .toArray()
             .then((metaData: MetaData[]) => {
                 return this.getImages(metaData);
             })
@@ -42,21 +43,23 @@ export class DatabaseService {
     }
 
     async getImagesByTags(tags: string): Promise<ImageData[]> {
-        let tagsArray = this.stringToArray(tags);
-        return this.collection.find({}).toArray()
+        const tagsArray = this.stringToArray(tags);
+        return this.collection
+            .find({})
+            .toArray()
             .then((metaData: MetaData[]) => {
-                let buffer: ImageData[] = this.getImages(metaData);
+                const buffer: ImageData[] = this.getImages(metaData);
                 if (tags === 'none') {
                     return buffer;
                 }
-                let imageData: ImageData[] = [];
+                const imageData: ImageData[] = [];
                 buffer.forEach((data: ImageData) => {
-                    let asTag: boolean = false;
-                    tagsArray.forEach((tag) => {
+                    let asTag = false;
+                    tagsArray.forEach(tag => {
                         if (this.searchTag(tag, data.tags)) {
                             asTag = true;
                         }
-                    })
+                    });
                     if (asTag) {
                         imageData.push(data);
                     }
@@ -69,95 +72,108 @@ export class DatabaseService {
     }
 
     getImages(metaData: MetaData[]): ImageData[] {
-        let imageData: ImageData[] = [];
-        let jsonData = fs.readFileSync('../data.json');
-        let drawingsList = JSON.parse(jsonData.toString());
+        const imageData: ImageData[] = [];
+        const jsonData = fs.readFileSync('../data.json');
+        const drawingsList = JSON.parse(jsonData.toString());
         metaData.forEach((data: MetaData) => {
-            let image: Image = drawingsList.drawings.filter((drawing: Image) => { return drawing.id === data.id });
+            const image: Image = drawingsList.drawings.filter((drawing: Image) => {
+                return drawing.id === data.id;
+            });
             try {
                 imageData.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
             } catch (error) {
                 console.log('Invalide id');
             }
-        })
+        });
         return imageData;
     }
     searchTag(tag: string, tags: string[]): boolean {
-        let isFound: boolean = false;
-        for (let i: number = 0; i < tags.length; i++) {
-            let startPos: number = 0;
+        let isFound = false;
+        for (let i = 0; i < tags.length; i++) {
+            let startPos = 0;
             for (let j: number = tag.length; j <= tags[i].length; j++) {
                 isFound = tag === tags[i].substring(startPos, j);
                 startPos++;
-                if (isFound) { break };
+                if (isFound) {
+                    break;
+                }
             }
         }
         return isFound;
     }
     stringToArray(str: string): string[] {
-        let buffer: string[] = [];
-        let pos: number = 0;
-        let s: string = '';
+        const buffer: string[] = [];
+        let pos = 0;
+        let s = '';
         while (pos < str.length) {
             if (str.charAt(pos) === ',') {
                 buffer.push(s);
                 s = '';
-            }
-            else {
+            } else {
                 s += str.charAt(pos);
             }
-            pos++
+            pos++;
         }
         buffer.push(s);
         return buffer;
     }
     async deleteImageById(imageId: string): Promise<void> {
-        fs.readFile('../data.json', function (err, data) {
+        fs.readFile('../data.json', function(err, data) {
             // Convert string (old data) to JSON
-            let drawingsList = JSON.parse(data.toString());
+            const drawingsList = JSON.parse(data.toString());
 
-            drawingsList.drawings = drawingsList.drawings.filter((data: Image) => { return data.id !== imageId });
+            drawingsList.drawings = drawingsList.drawings.filter((data: Image) => {
+                return data.id !== imageId;
+            });
             // Convert JSON to string
-            let listToJson = JSON.stringify(drawingsList);
+            const listToJson = JSON.stringify(drawingsList);
             // Replace all data in the data.json with new ones
-            fs.writeFile("../data.json", listToJson, function (err) {
-                if (err) throw err;
+            fs.writeFile('../data.json', listToJson, function(err) {
+                if (err) {
+                    throw err;
+                }
                 console.log('The "data to append" was appended to file!');
             });
         });
-        return this.collection.findOneAndDelete({ id: imageId })
-            .then(() => { })
+        return this.collection
+            .findOneAndDelete({ id: imageId })
+            .then(() => {})
             .catch((error: Error) => {
                 throw new Error("Impposible de supprimer l'image");
             });
     }
 
     async modifyImage(imageData: ImageData): Promise<void> {
-        fs.readFile('../data.json', function (err, data) {
+        fs.readFile('../data.json', function(err, data) {
             // Convert string (old data) to JSON
-            let drawingsList = JSON.parse(data.toString());
-            let jsonObj = { id: imageData.id, svgElement: imageData.svgElement };
-            drawingsList.drawings = drawingsList.drawings.filter((data: Image) => { return data.id !== imageData.id });
+            const drawingsList = JSON.parse(data.toString());
+            const jsonObj = { id: imageData.id, svgElement: imageData.svgElement };
+            drawingsList.drawings = drawingsList.drawings.filter((data: Image) => {
+                return data.id !== imageData.id;
+            });
             // Add new data to my drawings list
             drawingsList.drawings.push(jsonObj);
             // Convert JSON to string
-            let listToJson = JSON.stringify(drawingsList);
+            const listToJson = JSON.stringify(drawingsList);
             // Replace all data in the data.json with new ones
-            fs.writeFile("../data.json", listToJson, function (err) {
-                if (err) throw err;
+            fs.writeFile('../data.json', listToJson, function(err) {
+                if (err) {
+                    throw err;
+                }
                 console.log('The "data to append" was appended to file!');
             });
         });
-        let filterQuery: FilterQuery<ImageData> = { id: imageData.id };
-        let udateQuery: UpdateQuery<ImageData> = {
+        const filterQuery: FilterQuery<ImageData> = { id: imageData.id };
+        const udateQuery: UpdateQuery<ImageData> = {
             $set: {
                 id: imageData.id,
                 name: imageData.name,
-                tags: imageData.tags
-            }
-        }
-        this.collection.updateOne(filterQuery, udateQuery)
-            .then(() => { })
+                tags: imageData.tags,
+            },
+        };
+        this.collection
+            .updateOne(filterQuery, udateQuery)
+            .then(() => {})
             .catch(() => {
                 throw new Error("Impossible de mette à jour l'image");
             });
@@ -175,85 +191,85 @@ export class DatabaseService {
     }
     async saveImage(imageData: ImageData) {
         this.validateImageData(imageData)
-            .then((data) => {
+            .then(data => {
                 let image: ImageData;
                 if (data !== null) {
                     image = data;
+                } else {
+                    throw new Error('Invalide image data');
                 }
-                else {
-                    throw ("Invalide image data");
-                }
-                fs.readFile('../data.json', function (err, data) {
+                fs.readFile('../data.json', function(err, data) {
                     // Convert string (old data) to JSON
-                    let drawingsList = JSON.parse(data.toString());
-                    let jsonObj = { id: image.id, svgElement: image.svgElement };
+                    const drawingsList = JSON.parse(data.toString());
+                    const jsonObj = { id: image.id, svgElement: image.svgElement };
                     // Add new data to my drawings list
                     drawingsList.drawings.push(jsonObj);
                     // Convert JSON to string
-                    let listToJson = JSON.stringify(drawingsList);
+                    const listToJson = JSON.stringify(drawingsList);
                     // Replace all data in the data.json with new ones
-                    fs.writeFile("../data.json", listToJson, function (err) {
-                        if (err) throw err;
+                    fs.writeFile('../data.json', listToJson, function(err) {
+                        if (err) {
+                            throw err;
+                        }
                         console.log('The "data to append" was appended to file!');
                     });
                 });
-                let metadata: MetaData = { id: image.id, name: image.name, tags: image.tags };
+                const metadata: MetaData = { id: image.id, name: image.name, tags: image.tags };
                 this.collection.insertOne(metadata).catch((error: Error) => {
                     throw error;
                 });
             })
             .catch(() => {
-                console.log("Invalide image data");
-            })
-
+                console.log('Invalide image data');
+            });
     }
 
     validateImageData(imageData: ImageData): Promise<ImageData | null> {
-        return this.getAllImages()
-            .then((data) => {
-                console.log(data.length)
-                if (data.length >= 1000) {
-                    return null;
-                }
-                while (!this.validateId(imageData.id, data)) {
-                    //Generate a new id
-                    imageData.id = new Date().getUTCMilliseconds() + '';
-                }
-                console.log(imageData.name.length);
-                if (!this.validateName(imageData.name)) {
-                    console.log("Empty name");
-                    return null;
-                }
-                if (!this.validateTags(imageData.tags)) {
-                    console.log("Invalide tags");
-                    return null;
-                }
-                return imageData;
-            })
+        return this.getAllImages().then(data => {
+            console.log(data.length);
+            if (data.length >= 1000) {
+                return null;
+            }
+            while (!this.validateId(imageData.id, data)) {
+                // Generate a new id
+                imageData.id = new Date().getUTCMilliseconds() + '';
+            }
+            console.log(imageData.name.length);
+            if (!this.validateName(imageData.name)) {
+                console.log('Empty name');
+                return null;
+            }
+            if (!this.validateTags(imageData.tags)) {
+                console.log('Invalide tags');
+                return null;
+            }
+            return imageData;
+        });
     }
     validateId(id: string, data: ImageData[]): boolean {
-        if (data.filter((image: ImageData) => {
-            return image.id === id;
-        }).length) {
-            console.log("ID not unique");
+        if (
+            data.filter((image: ImageData) => {
+                return image.id === id;
+            }).length
+        ) {
+            console.log('ID not unique');
             return false;
-        }
-        else {
-            console.log("ID is unique");
+        } else {
+            console.log('ID is unique');
             return true;
         }
     }
     validateName(name: string): boolean {
-        return (name.length > 0 && name !== null);
+        return name.length > 0 && name !== null;
     }
     validateTags(tags: string[]): boolean {
-        let validTags: boolean = true;
-        let format = new RegExp(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/);
-        tags.forEach((tag) => {
+        let validTags = true;
+        const format = new RegExp(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/);
+        tags.forEach(tag => {
             if (format.test(tag)) {
                 validTags = false;
             }
-        })
+        });
         return validTags;
     }
 }
