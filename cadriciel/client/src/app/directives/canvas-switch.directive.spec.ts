@@ -110,4 +110,20 @@ describe('CanvasSwitchDirective', () => {
         expect(spy).not.toHaveBeenCalled(); // called on AfterViewInit only
         jasmine.clock().uninstall();
     });
+
+    it('should create a canvas element in the subscription', () => {
+        // tslint:disable-next-line: no-string-literal
+        const spy = spyOn(dir['renderer'], 'createElement');
+        dir.ngAfterViewInit();
+        itService.emitSvgCanvasConversion(true);
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should set the canvas attributes in subscription', () => {
+        // tslint:disable-next-line: no-string-literal
+        const spy = spyOn(dir['renderer'], 'setAttribute');
+        dir.ngAfterViewInit();
+        itService.emitSvgCanvasConversion(true);
+        expect(spy).toHaveBeenCalled();
+    });
 });

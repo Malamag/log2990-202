@@ -18,9 +18,7 @@ export class CanvasSwitchDirective implements AfterViewInit {
         private exService: ExportService,
         private itService: InteractionService,
         private renderer: Renderer2,
-    ) {
-        this.canvas = this.renderer.createElement('canvas');
-    }
+    ) {}
 
     ngAfterViewInit(): void {
         /**
@@ -28,19 +26,18 @@ export class CanvasSwitchDirective implements AfterViewInit {
          */
 
         this.itService.$convertSvg2Canvas.subscribe((toCanvas: boolean) => {
-            // console.log('signal recieved with ' + toCanvas);
-            // no name and type set. as optionnal attributes. We dont want to download it
-
-            this.imageToConvert = this.element.nativeElement;
-
-            this.itService.emitCanvasContext(this.canvas);
-            this.renderer.setAttribute(this.canvas, 'width', this.width.toString());
-            this.renderer.setAttribute(this.canvas, 'height', this.height.toString());
-
             if (toCanvas) {
+                this.imageToConvert = this.element.nativeElement;
+                this.canvas = this.renderer.createElement('canvas');
+                this.itService.emitCanvasContext(this.canvas);
+                this.renderer.setAttribute(this.canvas, 'width', this.width.toString());
+                this.renderer.setAttribute(this.canvas, 'height', this.height.toString());
+                const LOAD_TIME = 25;
                 setTimeout(() => {
+                    // no name and type set. as optionnal attributes. We dont want to download it
+
                     this.exService.exportInCanvas(this.imageToConvert, this.canvas);
-                }, 1); // gives enough time for the image to load in the exportInCanvas method
+                }, LOAD_TIME); // gives enough time for the image to load in the exportInCanvas method
             }
         });
     }
