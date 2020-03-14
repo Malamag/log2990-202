@@ -87,7 +87,16 @@ export class GalleryComponent implements AfterViewInit {
             this.text = this.render.createText("l'élément ne peut pas être effacé car il n'existe pas sur le serveur")
         }
 
-        this.getAllImages();
+        //this.getAllImages();
+        for(let i = 0; i< this.shownDrawings.length; ++i){
+            if(id === this.shownDrawings[i].id){
+                this.shownDrawings.splice(i, 1);
+            }
+        }
+        if(this.shownDrawings.length === 0){
+            this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
+            this.render.appendChild(this.cardsContainer.nativeElement, this.text);
+        }
     }
 
     getAllImages(): void {
