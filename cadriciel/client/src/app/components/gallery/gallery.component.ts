@@ -13,6 +13,7 @@ import { ImageData } from '../../imageData';
 import { IndexService } from './../../services/index/index.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { Canvas } from 'src/app/models/Canvas.model';
+import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 
 @Component({
     selector: 'app-gallery',
@@ -44,6 +45,7 @@ export class GalleryComponent implements AfterViewInit {
         public doodle: DoodleFetchService,
         public interact: InteractionService,
         public gridService: GridRenderService,
+        public winService: ModalWindowService,
     ) {
         this.render = render;
         this.possibleTags = [];
@@ -204,6 +206,7 @@ export class GalleryComponent implements AfterViewInit {
         this.interact.emitGridAttributes(CANVAS_ATTRS);
 
         this.interact.emitCanvasRedone();
+        this.winService.closeWindow();
     }
     createSVG(data: SVGData) {
         const svg = this.render.createElement('svg', 'http://www.w3.org/2000/svg');
