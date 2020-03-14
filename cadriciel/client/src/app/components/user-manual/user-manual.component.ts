@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { menuItems, toolsItems, welcomeItem } from '../../functionality';
-import {IconsService} from '../../icons.service'
+import {IconsService} from '../../services/icons.service'
 @Component({
     selector: 'app-user-manual',
     templateUrl: './user-manual.component.html',

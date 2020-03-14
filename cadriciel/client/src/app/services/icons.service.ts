@@ -25,5 +25,6 @@ export class IconsService {
     iconRegistry.addSvgIcon('redo', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/redo.svg'));
     iconRegistry.addSvgIcon('undo', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/undo.svg'));
     iconRegistry.addSvgIcon('paint-bucket', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/paint-bucket.svg'));
+    iconRegistry.addSvgIcon('waterDrop', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/water.svg'));
 }
 }

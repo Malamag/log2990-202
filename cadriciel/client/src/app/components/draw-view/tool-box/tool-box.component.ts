@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { toolsItems } from '../../../functionality';
-import {IconsService} from '../../../icons.service'
+import {IconsService} from '../../../services/icons.service'
 @Component({
     selector: 'app-tool-box',
     templateUrl: './tool-box.component.html',
