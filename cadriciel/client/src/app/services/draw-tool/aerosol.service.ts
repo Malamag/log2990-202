@@ -37,7 +37,7 @@ export class AerosolService extends DrawingTool {
     private path: string;
 
     private sub: Subscription;
-    
+
     updateDown(keyboard: KeyboardHandlerService): void {
         /*No defined behavior  */
     }
@@ -47,7 +47,7 @@ export class AerosolService extends DrawingTool {
     }
 
     updateAttributes(): void {
-        this.interaction.$aerosolAttributes.subscribe((obj) => {
+        this.interaction.$aerosolAttributes.subscribe((obj: AerosolAttributes) => {
             if (obj) {
                 this.attr = new AerosolAttributes(obj.emissionPerSecond, obj.diameter);
             }
@@ -133,10 +133,10 @@ export class AerosolService extends DrawingTool {
         this.path += `M ${p[0].x} ${p[0].y} `;
         // for each succeding point, connect it with a line
         for (let i = 1; i < p.length; i++) {
-            this.path += `L ${p[i].x} ${p[i].y} `;
+            this.path += `L ${p[i].x} ${p[i].y}`;
         }
         // set render attributes
-        this.path += ` stroke="none" stroke-width="${this.attr.diameter}"`;
+        this.path += `"stroke="none" stroke-width="${this.attr.diameter}"`;
         this.path += ' fill="none" stroke-linecap="round" stroke-linejoin="round" />';
 
         const RADIUS_DIV = 100;
@@ -166,7 +166,7 @@ export class AerosolService extends DrawingTool {
     generatePoint(): void {
         const PT_NUM = 5;
         if (this.isDown) {
-            for (let j = 1; j < this.attr.diameter / 5 && this.isDown; j++) {
+            for (let j = 1; j < this.attr.diameter / PT_NUM && this.isDown; j++) {
                 const r = (this.attr.diameter / 2) * Math.sqrt(Math.random());
                 const angle = Math.random() * 2 * Math.PI;
                 for (let i = 1; i < PT_NUM; i++) {
