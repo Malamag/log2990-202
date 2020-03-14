@@ -25,7 +25,13 @@ export class ShapeService extends DrawingTool {
     // Attribute for createPath
     stroke: string;
     fill: string;
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(
+        inProgess: HTMLElement,
+        drawing: HTMLElement,
+        selected: boolean,
+        interaction: InteractionService,
+        colorPick: ColorPickingService,
+    ) {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.attr = { plotType: DEFAULTPLOTTYPE, lineThickness: DEFAULTLINETHICKNESS, numberOfCorners: DEFAULTNUMBERCORNERS };
         this.updateColors();
@@ -51,7 +57,7 @@ export class ShapeService extends DrawingTool {
     update(keyboard: KeyboardHandlerService) {
         // real time update
         if (!this.isDown) {
-            return
+            return;
         }
         this.updateProgress();
     }
@@ -70,7 +76,7 @@ export class ShapeService extends DrawingTool {
     up(position: Point) {
         // in case we changed tool while the mouse was down
         if (this.ignoreNextUp) {
-            return
+            return;
         }
         // the shape should not affect the canvas
         this.isDown = false;
@@ -81,7 +87,7 @@ export class ShapeService extends DrawingTool {
     move(position: Point) {
         // only if the shapeTool is currently affecting the canvas
         if (!this.isDown) {
-            return
+            return;
         }
         // save mouse position
         this.currentPath.push(position);
@@ -119,7 +125,7 @@ export class ShapeService extends DrawingTool {
         this.fill = this.attr.plotType === 1 || this.attr.plotType === 2 ? `${this.chosenColor.primColor}` : 'none';
         // this.svgString += ` fill="${this.fill}"`;
         // this.svgString += ` stroke-width="${this.attr.lineThickness}" stroke="${this.stroke}"/>`;
-        this.svgString += `" fill="${this.fill}"`;
+        this.svgString += `fill="${this.fill}"`;
         this.svgString += `stroke-width="${this.attr.lineThickness}" stroke="${this.stroke}"/>`;
     }
 }

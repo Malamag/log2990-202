@@ -1,5 +1,5 @@
-import { COMMA, ENTER} from '@angular/cdk/keycodes';
-import { AfterViewInit, Component, ElementRef , Renderer2, ViewChild } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -9,9 +9,8 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ShownData } from 'src/app/shownData';
 import { SVGData } from 'src/svgData';
-import { ImageData } from '../../imageData'
-import { IndexService } from './../../services/index/index.service'
-
+import { ImageData } from '../../imageData';
+import { IndexService } from './../../services/index/index.service';
 
 @Component({
     selector: 'app-gallery',
@@ -26,7 +25,7 @@ import { IndexService } from './../../services/index/index.service'
  */
 export class GalleryComponent implements AfterViewInit {
     drawings: Observable<ImageData[]>;
-    shownDrawings : ShownData[] = [];
+    shownDrawings: ShownData[] = [];
     readonly inputTagSeparators: number[] = [ENTER, COMMA];
     tags: string[] = [];
     private possibleTags: string[];
@@ -80,24 +79,24 @@ export class GalleryComponent implements AfterViewInit {
     delete(id: string): void {
         try {
             this.index.deleteImageById(id);
-        } catch(error) {
-            this.text = this.render.createText("l'élément ne peut pas être effacé car il n'existe pas sur le serveur")
+        } catch (error) {
+            this.text = this.render.createText("l'élément ne peut pas être effacé car il n'existe pas sur le serveur");
         }
 
         //this.getAllImages();
-        for(let i = 0; i< this.shownDrawings.length; ++i) {
-            if(id === this.shownDrawings[i].id) {
+        for (let i = 0; i < this.shownDrawings.length; ++i) {
+            if (id === this.shownDrawings[i].id) {
                 this.shownDrawings.splice(i, 1);
             }
         }
-        if(this.shownDrawings.length === 0) {
+        if (this.shownDrawings.length === 0) {
             this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
             this.render.appendChild(this.cardsContainer.nativeElement, this.text);
         }
     }
 
     getAllImages(): void {
-        this.shownDrawings = []
+        this.shownDrawings = [];
         this.showMessage();
         this.drawings = this.index.getAllImages();
         this.render.removeChild(this.cardsContainer, this.text);
@@ -107,15 +106,21 @@ export class GalleryComponent implements AfterViewInit {
                 this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
             } else {
-                data.forEach((im) => {
+                data.forEach(im => {
                     const svg = this.createSVG(im.svgElement);
-                    this.shownDrawings.push({id: im.id, svgElement: svg, name: im.name, tags: im.tags,
-                         data: im.svgElement, width: +im.svgElement.width, height: +im.svgElement.height});
-                })
+                    this.shownDrawings.push({
+                        id: im.id,
+                        svgElement: svg,
+                        name: im.name,
+                        tags: im.tags,
+                        data: im.svgElement,
+                        width: +im.svgElement.width,
+                        height: +im.svgElement.height,
+                    });
+                });
                 this.getAllTags(data);
             }
-        })
-
+        });
     }
     getImagesByTags(): void {
         if (!this.tags.length) {
@@ -130,11 +135,18 @@ export class GalleryComponent implements AfterViewInit {
                 this.text = this.render.createText('Aucun dessin correspond a vos critères de recherche');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
             } else {
-                data.forEach((im) => {
+                data.forEach(im => {
                     const svg = this.createSVG(im.svgElement);
-                    this.shownDrawings.push({id: im.id, svgElement: svg, name: im.name, tags: im.tags,
-                         data: im.svgElement, width: +im.svgElement.width, height: +im.svgElement.height});
-                })
+                    this.shownDrawings.push({
+                        id: im.id,
+                        svgElement: svg,
+                        name: im.name,
+                        tags: im.tags,
+                        data: im.svgElement,
+                        width: +im.svgElement.width,
+                        height: +im.svgElement.height,
+                    });
+                });
             }
         });
     }
@@ -160,39 +172,45 @@ export class GalleryComponent implements AfterViewInit {
         this.tagCtrl.setValue(null);
     }
     private filter(value: string): string[] {
-        const filterValue = value.toLowerCase()
-        return this.possibleTags.filter((tag) => tag.toLowerCase().indexOf(filterValue) === 0)
+        const filterValue = value.toLowerCase();
+        return this.possibleTags.filter(tag => tag.toLowerCase().indexOf(filterValue) === 0);
     }
     continueDrawing(data: SVGData) {
         this.doodle.askForDoodle();
         const el = this.doodle.currentDraw.nativeElement;
-        this.render.setAttribute(el, 'width', data.width)
+        this.render.setAttribute(el, 'width', data.width);
         this.render.setAttribute(el, 'height', data.height);
         const childs: HTMLCollection = el.children;
-        for(let i = 0; i < childs.length; ++i) {
-            if (i === 0 && data.bgColor !== null) {childs[i].setAttribute('fill', data.bgColor.substring(6, 24))};
+        for (let i = 0; i < childs.length; ++i) {
+            if (i === 0 && data.bgColor !== null) {
+                childs[i].setAttribute('fill', data.bgColor.substring(6, 24));
+            }
             if (data.innerHTML[i] === undefined) {
                 childs[i].innerHTML = '';
             } else {
-                childs[i].innerHTML = data.innerHTML[i]
+                childs[i].innerHTML = data.innerHTML[i];
             }
         }
-        this.interact.emitCanvasRedone()
+        this.interact.emitCanvasRedone();
     }
     createSVG(data: SVGData) {
-        const svg = this.render.createElement('svg','http://www.w3.org/2000/svg');
+        const svg = this.render.createElement('svg', 'http://www.w3.org/2000/svg');
         this.render.setAttribute(svg, 'width', data.width);
         this.render.setAttribute(svg, 'height', data.height);
         const rect = this.render.createElement('rect', 'svg');
-        if (data.bgColor !== null) {this.render.setAttribute(rect, 'fill', data.bgColor.substring(6, 24))};
+        if (data.bgColor !== null) {
+            this.render.setAttribute(rect, 'fill', data.bgColor.substring(6, 24));
+        }
         this.render.setAttribute(rect, 'height', '100%');
         this.render.setAttribute(rect, 'width', '100%');
-        const tag = this.render.createElement('g');
-        for(let i = 0; i < data.innerHTML.length; ++i) {
-            tag.innerHTML += data.innerHTML[i]
-        }
         this.render.appendChild(svg, rect);
-        this.render.appendChild(rect, tag);
+
+        for (let i = 0; i < data.innerHTML.length; ++i) {
+            const tag = this.render.createElement('g', 'http://www.w3.org/2000/svg');
+            tag.innerHTML = data.innerHTML[i];
+            this.render.appendChild(svg, tag);
+        }
+
         return svg;
     }
 }
