@@ -40,11 +40,11 @@ export class PolygonService extends ShapeService {
 
     this.setdimensions(p);
 
-    //The Polygon won't display if smaller than 10px -> 10 chosen by ergonomy
-    //const MinValue = 10;
-    //if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
-    //  return '';
-    //}      
+    // The Polygon won't display if smaller than 10px -> 10 chosen by ergonomy
+    // const MinValue = 10;
+    // if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
+    //   return '';
+    // }
 
     // Set the polygon's corners
     this.setCorners(p);
@@ -57,6 +57,7 @@ export class PolygonService extends ShapeService {
     for (let i = 0; i < this.attr.numberOfCorners; i++){
       this.svgString += ` ${this.corners[i].x},${this.corners[i].y}`;
     }
+    this.svgString += '"';
 
     this.setAttributesToPath();
 
@@ -69,7 +70,6 @@ export class PolygonService extends ShapeService {
     if (!this.displayPolygon) {
       this.svgString = '';
     }
-    
 
     return this.svgString;
   }
@@ -87,14 +87,12 @@ export class PolygonService extends ShapeService {
 
     if (this.width > 0) {
       this.middleX = this.startX + this.smallest / 2;
-    }
-    else {
+    } else {
       this.middleX = this.startX - this.smallest / 2;
     }
     if (this.height > 0) {
       this.middleY = this.startY + this.smallest / 2;
-    }
-    else {
+    } else {
       this.middleY = this.startY - this.smallest / 2;
     }
   }
@@ -112,22 +110,19 @@ export class PolygonService extends ShapeService {
       // Assigning length for x and y sides depending on the axis
       if (this.width > 0) {
         x = this.middleX - this.smallest * Math.cos(rotateAngle) / 2;
-      }
-      else {
+      } else {
         x = this.middleX + this.smallest * Math.cos(rotateAngle) / 2;
       }
       if (this.height > 0) {
         y = this.middleY + this.smallest * Math.sin(rotateAngle) / 2;
-      }
-      else {
+      } else {
         y = this.middleY - this.smallest * Math.sin(rotateAngle) / 2;
       }
 
       // Assigning max and min for x
       if (this.leftPoint > x) {
         this.leftPoint = x;
-      }
-      else if (this.rightPoint < x) {
+      } else if (this.rightPoint < x) {
         this.rightPoint = x;
       }
 
@@ -139,8 +134,7 @@ export class PolygonService extends ShapeService {
     // can't have rectangle with 0 width or height
     if (this.width === 0 || this.height === 0) {
       this.displayPolygon = false;
-    }
-    else {
+    } else {
       this.displayPolygon = true;
     }
 

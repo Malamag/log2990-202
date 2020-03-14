@@ -26,13 +26,13 @@ export class ShapeService extends DrawingTool {
   // First point in x and y when first clicked
   protected startX: number;
   protected startY: number;
-  
-  //String for createPath
-  protected svgString:string;
 
-  //Attribute for createPath
-  protected stroke:string;
-  protected fill:string;
+  // String for createPath
+  protected svgString: string;
+
+  // Attribute for createPath
+  protected stroke: string;
+  protected fill: string;
 
   constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
               interaction: InteractionService, colorPick: ColorPickingService) {
@@ -52,7 +52,7 @@ export class ShapeService extends DrawingTool {
   }
 
   updateAttributes(): void {
-    this.interaction.$formsAttributes.subscribe((obj) => {
+    this.interaction.$formsAttributes.subscribe((obj: FormsAttribute) => {
         if (obj) {
             // Getting attributes for a shape
             this.attr = { plotType: obj.plotType, lineThickness: obj.lineThickness, numberOfCorners: obj.numberOfCorners };
@@ -153,11 +153,9 @@ export class ShapeService extends DrawingTool {
     this.stroke = (this.attr.plotType === 0 || this.attr.plotType === 2) ? `${this.chosenColor.secColor}` : 'none';
     this.fill = (this.attr.plotType === 1 || this.attr.plotType === 2) ? `${this.chosenColor.primColor}` : 'none';
 
-    //this.svgString += ` fill="${this.fill}"`;
-    //this.svgString += ` stroke-width="${this.attr.lineThickness}" stroke="${this.stroke}"/>`;
+    this.svgString += ` fill="${this.fill}"`;
+    this.svgString += ` stroke-width="${this.attr.lineThickness}" stroke="${this.stroke}"/>`;
 
-    this.svgString += `" fill="${this.fill}"`;
-    this.svgString += `stroke-width="${this.attr.lineThickness}" stroke="${this.stroke}"/>`;
   }
 
 }
