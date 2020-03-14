@@ -44,7 +44,9 @@ export class SaveFormComponent implements OnInit {
     this.doodle = this.doodleFetch.getDrawingWithoutGrid();
   }
 
-
+  blockEvent(ev: KeyboardEvent): void {
+    ev.stopPropagation();
+  }
   initForm() {
     this.saveForm = this.formBuilder.group({
       doodleName: ['Dessin sans titre', Validators.required],

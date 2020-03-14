@@ -5,15 +5,15 @@ import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { Canvas } from 'src/app/models/Canvas.model';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
+import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
+import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ShownData } from 'src/app/shownData';
 import { SVGData } from 'src/svgData';
 import { ImageData } from '../../imageData';
 import { IndexService } from './../../services/index/index.service';
-import { GridRenderService } from 'src/app/services/grid/grid-render.service';
-import { Canvas } from 'src/app/models/Canvas.model';
-import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 
 @Component({
     selector: 'app-gallery',
