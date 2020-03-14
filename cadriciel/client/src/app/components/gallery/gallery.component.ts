@@ -29,7 +29,7 @@ export class GalleryComponent implements AfterViewInit {
     shownDrawings : ShownData[] = [];
     readonly inputTagSeparators: number[] = [ENTER, COMMA];
     tags: string[] = [];
-    private possibleTags: string[];
+    possibleTags: string[];
     filteredTags: Observable<string[]>;
     tagCtrl = new FormControl();
     render: Renderer2;
@@ -37,7 +37,7 @@ export class GalleryComponent implements AfterViewInit {
     @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef;
     @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
-    constructor(public index: IndexService, render: Renderer2, private doodle: DoodleFetchService, private interact: InteractionService) {
+    constructor(public index: IndexService, render: Renderer2, public doodle: DoodleFetchService, public interact: InteractionService) {
         this.render = render;
         this.possibleTags = [];
         this.filteredTags = this.tagCtrl.valueChanges.pipe(
@@ -83,14 +83,12 @@ export class GalleryComponent implements AfterViewInit {
         } catch(error) {
             this.text = this.render.createText("l'élément ne peut pas être effacé car il n'existe pas sur le serveur")
         }
-
-        //this.getAllImages();
-        for(let i = 0; i< this.shownDrawings.length; ++i) {
+        for( let i = 0; i < this.shownDrawings.length; ++i) {
             if(id === this.shownDrawings[i].id) {
                 this.shownDrawings.splice(i, 1);
             }
         }
-        if(this.shownDrawings.length === 0) {
+        if (this.shownDrawings.length === 0) {
             this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
             this.render.appendChild(this.cardsContainer.nativeElement, this.text);
         }
@@ -139,7 +137,7 @@ export class GalleryComponent implements AfterViewInit {
         });
     }
     getAllTags(imageContainer: ImageData[]): void {
-        imageContainer.forEach(image => {
+        imageContainer.forEach((image) => {
             for (let i = 0; i < image.tags.length; ++i) {
                 let tagExist = false;
                 for (let j = 0; j < this.possibleTags.length; ++j) {
@@ -169,7 +167,7 @@ export class GalleryComponent implements AfterViewInit {
         this.render.setAttribute(el, 'width', data.width)
         this.render.setAttribute(el, 'height', data.height);
         const childs: HTMLCollection = el.children;
-        for(let i = 0; i < childs.length; ++i) {
+        for (let i = 0; i < childs.length; ++i) {
             if (i === 0 && data.bgColor !== null) {childs[i].setAttribute('fill', data.bgColor.substring(6, 24))};
             if (data.innerHTML[i] === undefined) {
                 childs[i].innerHTML = '';
@@ -188,7 +186,7 @@ export class GalleryComponent implements AfterViewInit {
         this.render.setAttribute(rect, 'height', '100%');
         this.render.setAttribute(rect, 'width', '100%');
         const tag = this.render.createElement('g');
-        for(let i = 0; i < data.innerHTML.length; ++i) {
+        for (let i = 0; i < data.innerHTML.length; ++i) {
             tag.innerHTML += data.innerHTML[i]
         }
         this.render.appendChild(svg, rect);
