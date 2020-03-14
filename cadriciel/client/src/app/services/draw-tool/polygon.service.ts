@@ -5,10 +5,12 @@ import { Point } from './point';
 import { ShapeService } from './shape.service';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
+
 export class PolygonService extends ShapeService {
-    private displayPolygon: boolean; // False if polygon is too small
+
+    private displayPolygon: boolean  // False if polygon is too small
 
     // Point for the middle of the perimeter
     private middleX: number;
@@ -19,7 +21,8 @@ export class PolygonService extends ShapeService {
     // All corners of the polygon
     private corners: Point[];
 
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
+        interaction: InteractionService, colorPick: ColorPickingService) {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.displayPolygon = false;
         this.leftPoint = 0;
@@ -29,35 +32,39 @@ export class PolygonService extends ShapeService {
 
     // Creates an svg polygon that connects the first and last points of currentPath with the rectangle attributes
     createPath(p: Point[], removePerimeter: boolean) {
+
         // We need at least 2 points
         if (p.length < 2) {
-            return this.svgString;
+            return '';
         }
+
+        this.setdimensions(p);
+
+        // The Polygon won't display if smaller than 10px -> 10 chosen by ergonomy
+        // const MinValue = 10;
+        // if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
+        //   return '';
+        // }
 
         // Set the polygon's corners
         this.setCorners(p);
 
         // create a divider
-        this.svgString = '<g name = "polygon">';
+        this.svgString = '<g name = "polygon" style="transform: translate(0px, 0px);" >';
 
         // set all points used as corners for the polygon
         this.svgString += '<polygon points="';
         for (let i = 0; i < this.attr.numberOfCorners; i++) {
             this.svgString += ` ${this.corners[i].x},${this.corners[i].y}`;
         }
+        this.svgString += '"';
 
         this.setAttributesToPath();
-        // get fill and outline stroke attributes from renderMode (outline, fill, outline + fill)
-        // this.stroke = (this.attr.plotType === 0 || this.attr.plotType === 2) ? `${this.chosenColor.secColor}` : 'none';
-        // this.fill = (this.attr.plotType === 1 || this.attr.plotType === 2) ? `${this.chosenColor.primColor}` : 'none';
-
-        // this.svgString += `" fill="${this.fill}"`;
-        // this.svgString += `stroke-width="${this.attr.lineThickness}" stroke="${this.stroke}"/>`;
 
         this.createPerimeter(removePerimeter);
 
         // end the divider
-        this.svgString += '</g>';
+        this.svgString += '</g>'
 
         // need to display?
         if (!this.displayPolygon) {
@@ -68,6 +75,7 @@ export class PolygonService extends ShapeService {
     }
 
     setdimensions(p: Point[]) {
+
         super.setdimensions(p);
 
         this.startX = p[0].x;
@@ -90,10 +98,9 @@ export class PolygonService extends ShapeService {
     }
 
     setCorners(p: Point[]) {
-        this.setdimensions(p);
 
         // Initilize values used for determining the other polygon's corners
-        let rotateAngle = (3 * Math.PI) / 2;
+        let rotateAngle = 3 * Math.PI / 2;
         let x;
         let y;
         this.leftPoint = this.middleX;
@@ -102,14 +109,14 @@ export class PolygonService extends ShapeService {
             // Formula for the outside angles of the polygon : 2*PI/n
             // Assigning length for x and y sides depending on the axis
             if (this.width > 0) {
-                x = this.middleX - (this.smallest * Math.cos(rotateAngle)) / 2;
+                x = this.middleX - this.smallest * Math.cos(rotateAngle) / 2;
             } else {
-                x = this.middleX + (this.smallest * Math.cos(rotateAngle)) / 2;
+                x = this.middleX + this.smallest * Math.cos(rotateAngle) / 2;
             }
             if (this.height > 0) {
-                y = this.middleY + (this.smallest * Math.sin(rotateAngle)) / 2;
+                y = this.middleY + this.smallest * Math.sin(rotateAngle) / 2;
             } else {
-                y = this.middleY - (this.smallest * Math.sin(rotateAngle)) / 2;
+                y = this.middleY - this.smallest * Math.sin(rotateAngle) / 2;
             }
 
             // Assigning max and min for x
@@ -121,7 +128,7 @@ export class PolygonService extends ShapeService {
 
             // Put new point in the array of corners
             this.corners[i] = new Point(x, y);
-            rotateAngle += (2 * Math.PI) / this.attr.numberOfCorners;
+            rotateAngle += (2 * Math.PI / this.attr.numberOfCorners);
         }
 
         // can't have rectangle with 0 width or height
@@ -163,4 +170,5 @@ export class PolygonService extends ShapeService {
             }
         }
     }
+
 }

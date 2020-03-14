@@ -52,7 +52,7 @@ export class AerosolService extends DrawingTool {
     updateAttributes(): void {
         this.interaction.$aerosolAttributes.subscribe((obj: AerosolAttributes) => {
             if (obj) {
-                this.attr = new AerosolAttributes(obj.emissionPerSecond, obj.diameter);
+                this.attr = { emissionPerSecond: obj.emissionPerSecond, diameter: obj.diameter };
             }
         });
     }
@@ -175,20 +175,20 @@ export class AerosolService extends DrawingTool {
     // for it not having to highlight every lines of the aerosol path
     createInvisiblePath(p: Point[]): void {
 
-         // start the path
-         this.path += ' <path d="';
-         // move to the first point
-         this.path += `M ${p[0].x} ${p[0].y} `;
-         // for each succeding point, connect it with a line
-         for (let i = 1; i < p.length; i++) {
-             this.path += `L ${p[i].x} ${p[i].y} `;
-         }
-         // finish d path
-         this.path += ' " ';
+        // start the path
+        this.path += ' <path d="';
+        // move to the first point
+        this.path += `M ${p[0].x} ${p[0].y} `;
+        // for each succeding point, connect it with a line
+        for (let i = 1; i < p.length; i++) {
+            this.path += `L ${p[i].x} ${p[i].y} `;
+        }
+        // finish d path
+        this.path += ' " ';
 
-         // set render attributes
-         this.path += ` stroke="none" stroke-width="${this.attr.diameter}"`;
-         this.path += ' fill="none" stroke-linecap="round" stroke-linejoin="round" />';
+        // set render attributes
+        this.path += ` stroke="none" stroke-width="${this.attr.diameter}"`;
+        this.path += ' fill="none" stroke-linecap="round" stroke-linejoin="round" />';
 
     }
 
