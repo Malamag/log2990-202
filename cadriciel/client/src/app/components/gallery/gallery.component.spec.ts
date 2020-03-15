@@ -10,7 +10,7 @@ import { SVGData } from 'src/svgData';
 import { ImageData } from '../../imageData'
 import {MatDialogModule, MatProgressSpinnerModule} from '@angular/material'
 
-fdescribe('GalleryComponent', () => {
+describe('GalleryComponent', () => {
     let component: GalleryComponent;
     let fixture: ComponentFixture<GalleryComponent>;
     let tagAdd: any;
