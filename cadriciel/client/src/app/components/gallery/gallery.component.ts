@@ -84,6 +84,7 @@ export class GalleryComponent implements AfterViewInit {
     }
     showMessage(): void {
         this.text = this.render.createText('en cours de chargement');
+
         this.render.appendChild(this.cardsContainer.nativeElement, this.text);
     }
     delete(id: string): void {
@@ -223,7 +224,7 @@ export class GalleryComponent implements AfterViewInit {
 
         for (let i = 0; i < data.innerHTML.length; ++i) {
             const tag = this.render.createElement('g', 'http://www.w3.org/2000/svg');
-            if (tag !== undefined){
+            if (tag !== undefined) {
                 tag.innerHTML = data.innerHTML[i];
                 this.render.appendChild(svg, tag);
             }
