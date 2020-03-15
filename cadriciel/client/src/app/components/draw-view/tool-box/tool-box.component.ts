@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { toolsItems } from '../../../functionality';
+import {IconsService} from '../../../services/icons.service'
 @Component({
     selector: 'app-tool-box',
     templateUrl: './tool-box.component.html',
@@ -17,7 +18,7 @@ export class ToolBoxComponent implements OnInit {
     @ViewChild('toolsOptionsRef', { static: false }) navBarRef: ElementRef;
     selectingToolsMap = new Map();
 
-    constructor(public interactionService: InteractionService) {
+    constructor(public interactionService: InteractionService, public icons: IconsService) {
         this.selectingToolsMap.set('1', 'Rectangle');
         this.selectingToolsMap.set('c', 'Crayon');
         this.selectingToolsMap.set('w', 'Pinceau');
@@ -27,7 +28,10 @@ export class ToolBoxComponent implements OnInit {
         this.selectingToolsMap.set('r', 'Applicateur de couleur');
         this.selectingToolsMap.set('ctrl+z', 'Annuler');
         this.selectingToolsMap.set('ctrl+shift+z', 'Refaire');
-        this.selectingToolsMap.set('s', 'Selection');
+        this.selectingToolsMap.set('s', 'Sélectionner');
+        this.selectingToolsMap.set('e', 'Efface');
+        this.selectingToolsMap.set('r', 'ApplicateurCouleur');
+        this.selectingToolsMap.set('i', 'Pipette');
         this.disableUndo = true;
         this.disableRedo = true;
     }
@@ -46,7 +50,7 @@ export class ToolBoxComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.interactionService.$enableDisableButtons.subscribe(disableContainer => {
+        this.interactionService.$enableDisableButtons.subscribe((disableContainer) => {
             this.disableUndo = disableContainer[0];
             this.disableRedo = disableContainer[1];
         });

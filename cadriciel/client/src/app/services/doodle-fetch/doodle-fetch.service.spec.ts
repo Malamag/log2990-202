@@ -1,11 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DoodleFetchService } from './doodle-fetch.service';
 import { ElementRef } from '@angular/core';
+import { DoodleFetchService } from './doodle-fetch.service';
 
 describe('DoodleFetchService', () => {
     let service: DoodleFetchService;
+    // tslint:disable-next-line: no-any
     let nativeElemStub: any;
+    // tslint:disable-next-line: no-any
     let elementStub: any;
     beforeEach(() => {
         nativeElemStub = {
@@ -27,8 +29,8 @@ describe('DoodleFetchService', () => {
     });
 
     it('should be created', () => {
-        const service: DoodleFetchService = TestBed.get(DoodleFetchService);
-        expect(service).toBeTruthy();
+        const testService: DoodleFetchService = TestBed.get(DoodleFetchService);
+        expect(testService).toBeTruthy();
     });
 
     it('should emit a signal when asking for the doodle', () => {
@@ -36,17 +38,21 @@ describe('DoodleFetchService', () => {
         service.askForDoodle();
         expect(spy).toHaveBeenCalled();
     });
-    /* Faire passer ce vilain garçon - cannot read property cloneNode of undefined
-    it('should return the drawing by doing a deep-copy on it', () => {
-        const spy = spyOn(service, 'getSVGElementFromRef');
-
-        service.currentDraw = elementStub;
-        service.getDrawing();
-        expect(spy).toHaveBeenCalled();
-    });*/
 
     it('should return a native element from a reference', () => {
         const NATIVE_ELEM = service.getSVGElementFromRef(elementStub);
         expect(NATIVE_ELEM).toEqual(nativeElemStub);
+    });
+
+    it('should remove the grid when getting the doodle and put it back', () => {
+        // tslint:disable-next-line: no-string-literal
+        const spyRem = spyOn(service['gService'], 'removeGrid');
+        // tslint:disable-next-line: no-string-literal
+        const spyRenderBack = spyOn(service['gService'], 'renderBack');
+        service.getSVGElementFromRef = jasmine.createSpy().and.returnValue(nativeElemStub);
+        service.getDrawingWithoutGrid();
+        expect(spyRem).toHaveBeenCalledBefore(spyRenderBack);
+        expect(service.getSVGElementFromRef).toHaveBeenCalledBefore(spyRenderBack);
+        expect(spyRenderBack).toHaveBeenCalled();
     });
 });

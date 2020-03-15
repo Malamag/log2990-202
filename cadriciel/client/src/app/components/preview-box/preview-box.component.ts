@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, Renderer2, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'app-preview-box',
@@ -17,7 +17,6 @@ export class PreviewBoxComponent implements OnInit, AfterViewInit {
     constructor(render: Renderer2) {
         this.render = render;
     }
-
     ngOnInit() {
         const SCALE = 3; // will appear 3 times smaller than the original
         this.scaleSVG(SCALE);

@@ -29,7 +29,7 @@
 
     <div id="cards-container" #cardsContainer>
         <mat-card class="drawing" *ngFor="let drawing of shownDrawings">
-            <div *ngIf = "shownDrawings.length === 0; else elseBlock">
+            <div *ngIf="shownDrawings.length === 0; else elseBlock">
                 <mat-progress-spinner></mat-progress-spinner>
             </div>
             <ng-template #elseBlock>
@@ -50,7 +50,6 @@
                     </button>
                 </mat-card-actions>
             </ng-template>
-            
         </mat-card>
     </div>
 </div>

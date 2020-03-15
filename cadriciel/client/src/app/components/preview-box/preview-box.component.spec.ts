@@ -1,8 +1,8 @@
-import { async, TestBed, ComponentFixture } from '@angular/core/testing';
-import { PreviewBoxComponent } from './preview-box.component';
-import { Renderer2, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExportFormComponent } from '../export-form/export-form.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { PreviewBoxComponent } from './preview-box.component';
 
 describe('PreviewBoxComponent', () => {
     let component: PreviewBoxComponent;

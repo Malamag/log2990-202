@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FilteringService } from './filtering.service';
+import { IconsService } from './icons.service';
 
-describe('FilteringService', () => {
+describe('IconsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: FilteringService = TestBed.get(FilteringService);
+    const service: IconsService = TestBed.get(IconsService);
     expect(service).toBeTruthy();
   });
 });

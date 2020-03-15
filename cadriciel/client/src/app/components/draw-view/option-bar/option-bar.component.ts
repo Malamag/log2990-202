@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Canvas } from 'src/app/models/Canvas.model';
+import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { menuItems } from '../../../functionality';
 import { ExportFormComponent } from '../../export-form/export-form.component';
-import { NewDrawComponent } from '../../new-draw/new-draw.component';
-import { UserManualComponent } from '../../user-manual/user-manual.component';
 import { GalleryComponent } from '../../gallery/gallery.component';
-import { SaveFormComponent } from '../../save-form/save-form.component'
-import { GridRenderService } from 'src/app/services/grid/grid-render.service';
+import { NewDrawComponent } from '../../new-draw/new-draw.component';
+import { SaveFormComponent } from '../../save-form/save-form.component';
+import { UserManualComponent } from '../../user-manual/user-manual.component';
 
 
 @Component({
@@ -19,12 +19,12 @@ import { GridRenderService } from 'src/app/services/grid/grid-render.service';
     styleUrls: ['./option-bar.component.scss'],
 })
 export class OptionBarComponent {
-    funcMenu = menuItems;
+    funcMenu: {};
     canvasSub: Subscription;
     currentCanvas: Canvas;
-    gridSelected: boolean = false;
+    gridSelected: boolean;
     stepVal: number;
-    alphaVal: number = 100;
+    alphaVal: number;
     readonly maxStepVal: number = 90;
     readonly minStepVal: number = 10;
 
@@ -32,17 +32,23 @@ export class OptionBarComponent {
         public winService: ModalWindowService,
         public interaction: InteractionService,
         private kbHandler: KeyboardHandlerService,
-        private gridService: GridRenderService,
+        public gridService: GridRenderService,
     ) {
-        window.addEventListener('keydown', e => {
+        this.funcMenu = menuItems;
+        this.gridSelected = false;
+
+        const DEF_GRID_ALPHA = 100;
+        this.alphaVal = DEF_GRID_ALPHA;
+
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
             this.setShortcutEvent(e);
         });
         this.stepVal = this.gridService.defSteps;
     }
 
-    setShortcutEvent(e: KeyboardEvent) {
-        const O_KEY: number = 79; // keycode for letter o
-        const E_KEY: number = 69;
+    setShortcutEvent(e: KeyboardEvent): void {
+        const O_KEY = 79; // keycode for letter o
+        const E_KEY = 69;
         const G_KEY = 71;
         const S_KEY = 83;
         const NUMPAD_PLUS: number = 107;
@@ -50,7 +56,7 @@ export class OptionBarComponent {
         const DASH: number = 189; // minus sign
         const EQUAL: number = 187; // plus sign located on the equal key (shift-equal)
 
-        const STEP: number = 5;
+        const STEP = 5;
         this.kbHandler.logkey(e);
 
         if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === O_KEY) {
@@ -74,7 +80,8 @@ export class OptionBarComponent {
             this.openGallery();
             e.preventDefault();
         }
-        if (e.keyCode === G_KEY && !e.ctrlKey) {
+        // tslint:disable-next-line: deprecation
+        if (e.keyCode === G_KEY) {
             this.toggleGrid();
         }
 
@@ -93,42 +100,47 @@ export class OptionBarComponent {
         }
     }
 
-    openNewDrawForm() {
+    openNewDrawForm(): void {
         if (window.confirm('Un dessin est déjà en cours. Voulez-vous continuer?')) {
             this.winService.openWindow(NewDrawComponent);
+            return;
         }
     }
 
-    openUserGuide() {
+    openUserGuide(): void {
         this.winService.openWindow(UserManualComponent);
     }
 
-    openExportForm() {
+    openExportForm(): void {
         this.winService.openWindow(ExportFormComponent);
     }
 
-    openSaveForm() {
+    openSaveForm(): void {
         this.winService.openWindow(SaveFormComponent);
     }
 
-    sendSigKill() {
+
+    sendSigKill(): void {
         this.interaction.emitCancel(true);
     }
-    openGallery() {
+    openGallery(): void {
         if (confirm('Un dessin est déjà en cours. Voulez-vous continuer?')) {
             this.winService.openWindow(GalleryComponent);
+            return;
         }
     }
-    toggleGrid() {
+
+    toggleGrid(): void {
         this.gridSelected = !this.gridSelected;
         this.gridService.toggleGridVisibility(this.gridSelected);
     }
 
-    updateSpacing() {
+    updateSpacing(): void {
+        this.interaction.emitSvgCanvasConversion(false);
         this.gridService.updateSpacing(this.stepVal);
     }
 
-    updateAlpha() {
+    updateAlpha(): void {
         this.gridService.updateTransparency(this.alphaVal);
     }
 }

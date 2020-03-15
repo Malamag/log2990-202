@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import { menuItems } from '../../functionality';
 import { ModalWindowService } from '../../services/window-handler/modal-window.service';
+import { GalleryComponent } from '../gallery/gallery.component';
 import { NewDrawComponent } from '../new-draw/new-draw.component';
 import { UserManualComponent } from '../user-manual/user-manual.component';
-import { GalleryComponent } from '../gallery/gallery.component';
 
 @Component({
   selector: 'app-entry-point',
@@ -39,7 +39,7 @@ export class EntryPointComponent implements OnInit {
     this.winService.openWindow(NewDrawComponent);
   }
 
-  openGallery(){
+  openGallery() {
     this.winService.openWindow(GalleryComponent);
   }
 

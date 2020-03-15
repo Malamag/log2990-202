@@ -1,29 +1,43 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ExportService } from './export.service';
 import { ElementRef } from '@angular/core';
+import { ExportService } from './export.service';
 
 describe('ExportService', () => {
     let service: ExportService;
+    // tslint:disable-next-line: no-any
     let elementStub: any;
+    // tslint:disable-next-line: no-any
     let nativeElemStub: any;
+    // tslint:disable-next-line: no-any
     let ctxStub: any;
+    // tslint:disable-next-line: no-any
+    let fakeDownload: any;
+    // tslint:disable-next-line: no-any
+
     beforeEach(() => {
+        fakeDownload = {
+            click: () => 0,
+            href: '',
+            download: '',
+        };
+
         ctxStub = {
             drawImage: (img: CanvasImageSource, dx: number, dy: number) => 1,
         };
         nativeElemStub = {
             toDataURL: (data: string) => 0,
-            getContext: (ctx: string) => 2, // true in an if-clause
+            getContext: (ctx: string) => ctxStub, // true in an if-clause
         };
         elementStub = {
             nativeElement: nativeElemStub,
         };
         TestBed.configureTestingModule({
             providers: [
-                { provide: Node, useValue: elementStub },
+                { provide: Node, useValue: nativeElemStub },
                 { provide: SVGElement, useValue: elementStub },
                 { provide: ElementRef, useValue: elementStub },
+                { provide: HTMLCanvasElement, useValue: nativeElemStub },
                 { provide: CanvasRenderingContext2D, useValue: ctxStub },
             ],
         });
@@ -31,8 +45,8 @@ describe('ExportService', () => {
     });
 
     it('should be created', () => {
-        const service: ExportService = TestBed.get(ExportService);
-        expect(service).toBeTruthy();
+        const testService: ExportService = TestBed.get(ExportService);
+        expect(testService).toBeTruthy();
     });
 
     it('should create an url from an svg element', () => {
@@ -41,12 +55,6 @@ describe('ExportService', () => {
         const URL = service.svgToURL(elementStub);
         expect(URL).toBeDefined();
     });
-
-    /*it('should build a download link with renderer', () => {
-        const spy = spyOn(service.render, 'createElement');
-        service.download('fakeName', 'png', 'www.polymtl.com');
-        expect(spy).toHaveBeenCalled();
-    });*/
 
     it('should export canvas in svg from image url', () => {
         const TYPE = 'svg';
@@ -63,13 +71,13 @@ describe('ExportService', () => {
 
         const spy = spyOn(service, 'download');
 
-        service.exportCanvas(NAME, TYPE, elementStub);
+        service.exportCanvas(NAME, TYPE, nativeElemStub);
         expect(spy).toHaveBeenCalledWith(NAME, TYPE, 0);
     });
 
     it('should produce an url during exportation', () => {
         const spy = spyOn(service, 'svgToURL');
-        service.exportInCanvas(elementStub, elementStub);
+        service.exportInCanvas(elementStub, nativeElemStub);
         expect(spy).toHaveBeenCalledWith(elementStub);
     });
 
@@ -77,7 +85,7 @@ describe('ExportService', () => {
         const spy = spyOn(service, 'loadImageInCanvas');
         service.svgToURL = () => '';
 
-        service.exportInCanvas(elementStub, elementStub);
+        service.exportInCanvas(elementStub, nativeElemStub);
         expect(spy).toHaveBeenCalled();
     });
 
@@ -104,5 +112,24 @@ describe('ExportService', () => {
         IMG.dispatchEvent(new Event('load'));
         service.loadImageInCanvas(IMG, ctxStub, elementStub, NAME, TYPE);
         expect(spy).toHaveBeenCalled();
+    });
+
+    it('should create and manage a download link using renderer', () => {
+        const SRC = 'fakeSRC';
+        const NAME = 'test dessin';
+        const FORMAT = 'png';
+        service.render.createElement = jasmine.createSpy().and.returnValue(fakeDownload);
+        service.render.appendChild = jasmine.createSpy().and.returnValue(0);
+        service.render.removeChild = jasmine.createSpy().and.returnValue(0);
+        service.download(NAME, FORMAT, SRC);
+        expect(service.render.createElement).toHaveBeenCalled();
+        expect(service.render.appendChild).toHaveBeenCalled();
+        expect(service.render.removeChild).toHaveBeenCalled();
+    });
+
+    it('should return a valid URL', () => {
+        service.xmlSerializer.serializeToString = jasmine.createSpy().and.returnValue('test');
+        const TEST_URL = service.svgToURL(elementStub);
+        expect(TEST_URL).toBeDefined();
     });
 });
