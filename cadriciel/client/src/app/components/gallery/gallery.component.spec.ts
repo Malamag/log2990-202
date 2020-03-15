@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
 import { GalleryComponent } from './gallery.component';
 import { SVGData } from 'src/svgData';
 import { ImageData } from '../../imageData'
-import {MatDialogModule} from '@angular/material'
+import {MatDialogModule, MatProgressSpinnerModule} from '@angular/material'
 
 fdescribe('GalleryComponent', () => {
     let component: GalleryComponent;
@@ -30,6 +30,7 @@ fdescribe('GalleryComponent', () => {
         HttpClientModule,
         BrowserAnimationsModule,
         MatDialogModule,
+        MatProgressSpinnerModule,
       ],
         }).compileComponents();
     }));
