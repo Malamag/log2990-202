@@ -118,7 +118,7 @@ export class DatabaseService {
         return buffer;
     }
     async deleteImageById(imageId: string): Promise<void> {
-        fs.readFile('../data.json', function(err, data) {
+        fs.readFile('../data.json', function (err, data) {
             // Convert string (old data) to JSON
             const drawingsList = JSON.parse(data.toString());
 
@@ -128,7 +128,7 @@ export class DatabaseService {
             // Convert JSON to string
             const listToJson = JSON.stringify(drawingsList);
             // Replace all data in the data.json with new ones
-            fs.writeFile('../data.json', listToJson, function(err) {
+            fs.writeFile('../data.json', listToJson, function (err) {
                 if (err) {
                     throw err;
                 }
@@ -137,14 +137,14 @@ export class DatabaseService {
         });
         return this.collection
             .findOneAndDelete({ id: imageId })
-            .then(() => {})
+            .then(() => { })
             .catch((error: Error) => {
                 throw new Error("Impposible de supprimer l'image");
             });
     }
 
     async modifyImage(imageData: ImageData): Promise<void> {
-        fs.readFile('../data.json', function(err, data) {
+        fs.readFile('../data.json', function (err, data) {
             // Convert string (old data) to JSON
             const drawingsList = JSON.parse(data.toString());
             const jsonObj = { id: imageData.id, svgElement: imageData.svgElement };
@@ -156,7 +156,7 @@ export class DatabaseService {
             // Convert JSON to string
             const listToJson = JSON.stringify(drawingsList);
             // Replace all data in the data.json with new ones
-            fs.writeFile('../data.json', listToJson, function(err) {
+            fs.writeFile('../data.json', listToJson, function (err) {
                 if (err) {
                     throw err;
                 }
@@ -173,7 +173,7 @@ export class DatabaseService {
         };
         this.collection
             .updateOne(filterQuery, udateQuery)
-            .then(() => {})
+            .then(() => { })
             .catch(() => {
                 throw new Error("Impossible de mette à jour l'image");
             });
@@ -198,7 +198,7 @@ export class DatabaseService {
                 } else {
                     throw new Error('Invalide image data');
                 }
-                fs.readFile('../data.json', function(err, data) {
+                fs.readFile('../data.json', function (err, data) {
                     // Convert string (old data) to JSON
                     const drawingsList = JSON.parse(data.toString());
                     const jsonObj = { id: image.id, svgElement: image.svgElement };
@@ -207,7 +207,7 @@ export class DatabaseService {
                     // Convert JSON to string
                     const listToJson = JSON.stringify(drawingsList);
                     // Replace all data in the data.json with new ones
-                    fs.writeFile('../data.json', listToJson, function(err) {
+                    fs.writeFile('../data.json', listToJson, function (err) {
                         if (err) {
                             throw err;
                         }

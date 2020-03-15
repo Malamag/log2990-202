@@ -1,13 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { menuItems, toolsItems, welcomeItem } from '../../functionality';
-import { DrawViewComponent } from './draw-view.component';
-import { OptionBarComponent } from './option-bar/option-bar.component';
-import { SvgDrawComponent } from './svg-draw/svg-draw.component';
-import { ToolAttributesComponent } from './tool-box/tool-attributes/tool-attributes.component';
-import { ToolBoxComponent } from './tool-box/tool-box.component';
-
 import { HttpClientModule } from '@angular/common/http';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
     MatButtonModule,
@@ -19,7 +12,13 @@ import {
     MatToolbarModule,
     MatTooltipModule,
 } from '@angular/material';
+import { menuItems, toolsItems, welcomeItem } from '../../functionality';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
+import { DrawViewComponent } from './draw-view.component';
+import { OptionBarComponent } from './option-bar/option-bar.component';
+import { SvgDrawComponent } from './svg-draw/svg-draw.component';
+import { ToolAttributesComponent } from './tool-box/tool-attributes/tool-attributes.component';
+import { ToolBoxComponent } from './tool-box/tool-box.component';
 
 describe('DrawViewComponent', () => {
     let component: DrawViewComponent;
@@ -48,14 +47,13 @@ describe('DrawViewComponent', () => {
                 MatRadioModule,
                 HttpClientModule,
             ],
-            schemas: [CUSTOM_ELEMENTS_SCHEMA],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
         }).compileComponents();
     }));
 
-    beforeEach(async () => {
+    beforeEach(() => {
         fixture = TestBed.createComponent(DrawViewComponent);
         component = fixture.componentInstance;
-        await fixture.whenStable();
         fixture.detectChanges();
     });
 

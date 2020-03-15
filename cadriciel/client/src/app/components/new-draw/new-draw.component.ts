@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ColorConvertingService } from 'src/app/services/colorPicker/color-converting.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { CanvasBuilderService } from '../../services/drawing/canvas-builder.service';
 import { colorData } from '../color-picker/color-data'
-import { ColorConvertingService } from 'src/app/services/colorPicker/color-converting.service';
 
 @Component({
   selector: 'app-new-draw',
   templateUrl: './new-draw.component.html',
-  styleUrls: ['./new-draw.component.scss']
+  styleUrls: ['./new-draw.component.scss'],
 })
 export class NewDrawComponent implements OnInit {
   paletteArray = this.canvasBuilder.getPalleteAttributes();
@@ -105,7 +105,7 @@ export class NewDrawComponent implements OnInit {
   }
 
   updateColor() {
-    this.color = this.hsvToHex(this.hue, this.saturation / this.svMaxValue, this.value / this.svMaxValue).slice(1);// removes the '#'
+    this.color = this.hsvToHex(this.hue, this.saturation / this.svMaxValue, this.value / this.svMaxValue).slice(1); // removes the '#'
     this.newDrawForm.patchValue({ canvColor: this.color }); // updates value for form
   }
 
@@ -135,7 +135,7 @@ export class NewDrawComponent implements OnInit {
     }
   }
   hsvToHex(H: number, S: number, V: number): string {
-    let hex: string = '';
+    let hex = '';
     const rgb: number[] = [-1, -1, -1];
 
     const C: number = S * V;

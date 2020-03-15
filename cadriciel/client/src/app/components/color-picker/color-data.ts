@@ -34,26 +34,26 @@ export const colorData = {
     isValideInput: false,
     rectOffsetFill: 'none',
     swapStrokeStyle: 'white',
-    //Ascii table number of hex
+    // Ascii table number of hex
     hexNumber: [
-        48, //0
-        49, //1
-        50, //2
-        51, //3
-        52, //4
-        53, //5
-        54, //6
-        55, //7
-        56, //8
-        57, //9
-        65, //a
-        66, //b
-        67, //c
-        68, //d
-        69, //e
-        70, //f
+        48, // 0
+        49, // 1
+        50, // 2
+        51, // 3
+        52, // 4
+        53, // 5
+        54, // 6
+        55, // 7
+        56, // 8
+        57, // 9
+        65, // a
+        66, // b
+        67, // c
+        68, // d
+        69, // e
+        70, // f
         8,
-    ], //backspace
+    ], // backspace
     lastColorRects: [
         { x: 110, y: 25, fill: 'none', stroke: 'none' },
         { x: 130, y: 25, fill: 'none', stroke: 'none' },

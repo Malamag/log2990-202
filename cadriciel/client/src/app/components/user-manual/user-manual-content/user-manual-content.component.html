@@ -25,7 +25,7 @@
 
     <div *ngFor="let i of toolsItems">
         <div *ngIf="(activeButton === i)">
-            <h2 id="title">{{i.name}} <mat-icon svgIcon ={{i.icon}}> </mat-icon></h2>
+            <h2 id="title">{{i.name}} <mat-icon svgIcon = {{i.icon}}></mat-icon> </h2>
             <hr>
             <p id="shortDescription">
                 {{i.shortDescription}}</p>

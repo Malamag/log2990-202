@@ -1,21 +1,21 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ExportFormComponent } from './export-form.component';
-
-import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { SvgDrawComponent } from '../draw-view/svg-draw/svg-draw.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CanvasSwitchDirective } from 'src/app/directives/canvas-switch.directive';
+import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { ExportService } from 'src/app/services/exportation/export.service';
 import { ImageFilterService } from 'src/app/services/exportation/image-filter/image-filter.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
+import { SvgDrawComponent } from '../draw-view/svg-draw/svg-draw.component';
+import { ExportFormComponent } from './export-form.component';
 
 describe('ExportFormComponent', () => {
     let component: ExportFormComponent;
     let fixture: ComponentFixture<ExportFormComponent>;
+    // tslint:disable-next-line: no-any
     let dFetchStub: any;
     let expService: ExportService;
     let imgFilterService: ImageFilterService;
@@ -28,7 +28,7 @@ describe('ExportFormComponent', () => {
         };
 
         TestBed.configureTestingModule({
-            declarations: [ExportFormComponent, SvgDrawComponent],
+            declarations: [ExportFormComponent, SvgDrawComponent, CanvasSwitchDirective],
             imports: [
                 MatDialogModule,
                 MatFormFieldModule,
