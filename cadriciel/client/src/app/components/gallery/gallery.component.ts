@@ -106,11 +106,11 @@ export class GalleryComponent implements AfterViewInit {
     }
 
     getAllImages(): void {
-        this.shownDrawings = [];
         this.showMessage();
         this.drawings = this.index.getAllImages();
         this.render.removeChild(this.cardsContainer, this.text);
         this.drawings.subscribe((data: ImageData[]) => {
+            this.shownDrawings = [];
             if (data.length === 0) {
                 this.render.removeChild(this.cardsContainer.nativeElement, this.text);
                 this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
@@ -133,6 +133,7 @@ export class GalleryComponent implements AfterViewInit {
         });
     }
     getImagesByTags(): void {
+        this.render.removeChild(this.cardsContainer, this.text);
         if (!this.tags.length) {
             this.getAllImages();
         }
@@ -140,8 +141,8 @@ export class GalleryComponent implements AfterViewInit {
         this.drawings = this.index.getImagesByTags(this.tags);
         this.render.removeChild(this.cardsContainer, this.text);
         this.drawings.subscribe((data: ImageData[]) => {
+            this.shownDrawings = [];
             if (data.length === 0) {
-                this.render.removeChild(this.cardsContainer, this.text);
                 this.text = this.render.createText('Aucun dessin correspond a vos critères de recherche');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
             } else {
