@@ -1,3 +1,5 @@
+import { E, G, O, S } from '@angular/cdk/keycodes';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
     MatButtonModule,
@@ -6,17 +8,15 @@ import {
     MatSliderModule,
     MatSlideToggleModule,
     MatToolbarModule,
-    MatTooltipModule,
+    MatTooltipModule
 } from '@angular/material';
-
-import { E, G, O } from '@angular/cdk/keycodes';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ExportFormComponent } from '../../export-form/export-form.component';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
+import { SaveFormComponent } from '../../save-form/save-form.component';
 import { OptionBarComponent } from './option-bar.component';
 
 describe('OptionBarComponent', () => {
@@ -260,16 +260,30 @@ describe('OptionBarComponent', () => {
 
     it('should set the shortcut on keyboard event', () => {
         const spy = spyOn(component, 'setShortcutEvent');
-        const TEST_COMPONENT = new OptionBarComponent(winServiceStub, new InteractionService(), kbService, gridRenderStub);
         window.dispatchEvent(new KeyboardEvent('keydown'));
+        const TEST_COMPONENT = new OptionBarComponent(winServiceStub, new InteractionService(), kbService, gridRenderStub);
+
         expect(TEST_COMPONENT).toBeTruthy();
         expect(spy).toHaveBeenCalled();
     });
 
-    it('should not open the galley when user chooses to cancel action', () => {
+    it('should not open the gallery when user chooses to cancel action', () => {
         window.confirm = jasmine.createSpy().and.returnValue(false); // cancel action
         const spy = spyOn(component.winService, 'openWindow');
         component.openGallery();
         expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should open the save form on ctrl+s', () => {
+        fakeKbEvent.keyCode = S; // ctrldown already true
+        const spy = spyOn(component, 'openSaveForm');
+        component.setShortcutEvent(fakeKbEvent);
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should open the save form using the window handler', () => {
+        const spy = spyOn(component.winService, 'openWindow');
+        component.openSaveForm();
+        expect(spy).toHaveBeenCalledWith(SaveFormComponent);
     });
 });

@@ -5,9 +5,10 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 import { RectangleService } from './rectangle.service';
 
-export class fakeInteractionService extends InteractionService {}
+export class FakeInteractionService extends InteractionService { }
 
 describe('RectangleService', () => {
+    // tslint:disable-next-line: no-any
     let kbServiceStub: any;
     let service: RectangleService;
     let ptA: Point;
@@ -32,7 +33,7 @@ describe('RectangleService', () => {
                 { provide: Number, useValue: 0 },
                 { provide: String, useValue: '' },
                 { provide: Boolean, useValue: true },
-                { provide: InteractionService, useClass: fakeInteractionService },
+                { provide: InteractionService, useClass: FakeInteractionService },
                 { provide: KeyboardHandlerService, useValue: kbServiceStub },
             ],
         });
@@ -40,8 +41,8 @@ describe('RectangleService', () => {
     });
 
     it('should be created', () => {
-        const service: RectangleService = TestBed.get(RectangleService);
-        expect(service).toBeTruthy();
+        const testService: RectangleService = TestBed.get(RectangleService);
+        expect(testService).toBeTruthy();
     });
 
     it('should set the attributes in the subscription', () => {
@@ -49,7 +50,8 @@ describe('RectangleService', () => {
         const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
         service.updateAttributes();
         expect(spyInteraction).toHaveBeenCalled();
-        expect(service.attr).toBeDefined();
+        // tslint:disable-next-line: no-string-literal
+        expect(service['attr']).toBeDefined();
     });
 
     /*it('should update progress on move', () => {
@@ -111,7 +113,8 @@ describe('RectangleService', () => {
 
     it('should create a rectangle with the selected border thickness', () => {
         const thick = 1;
-        service.attr.lineThickness = thick; // simulated border thickness
+        // tslint:disable-next-line: no-string-literal
+        service['attr'].lineThickness = thick; // simulated border thickness
         const rect = service.createPath(ptArr);
         const expTick = `stroke-width="${thick}"`;
         expect(rect).toContain(expTick);
@@ -121,7 +124,8 @@ describe('RectangleService', () => {
         const newArr = [new Point(0, 0), new Point(1, 1)]; // forcing a square
         const fakeSquare = service.createPath(newArr);
 
-        service.isSquare = true;
+        // tslint:disable-next-line: no-string-literal
+        service['isSquare'] = true;
         const square = service.createPath(ptArr);
 
         expect(square).toEqual(fakeSquare);
@@ -153,7 +157,8 @@ describe('RectangleService', () => {
     });
 
     it('should create only an outlined rectangle on plottype = 0', () => {
-        service.attr.plotType = 0; // init the plot type
+        // tslint:disable-next-line: no-string-literal
+        service['attr'].plotType = 0; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
@@ -167,7 +172,8 @@ describe('RectangleService', () => {
     });
 
     it('should create only a filled rectangle on plottype = 1', () => {
-        service.attr.plotType = 1; // init the plot type
+        // tslint:disable-next-line: no-string-literal
+        service['attr'].plotType = 1; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
@@ -181,7 +187,8 @@ describe('RectangleService', () => {
     });
 
     it('should create a filled and outlined rectangle on plottype = 2', () => {
-        service.attr.plotType = 2; // init the plot type
+        // tslint:disable-next-line: no-string-literal
+        service['attr'].plotType = 2; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
