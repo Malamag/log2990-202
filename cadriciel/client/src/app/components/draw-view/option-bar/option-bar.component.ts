@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Canvas } from 'src/app/models/Canvas.model';
+import { Canvas } from 'src/app/models/canvas.model';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';

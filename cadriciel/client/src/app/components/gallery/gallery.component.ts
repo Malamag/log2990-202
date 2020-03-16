@@ -5,8 +5,9 @@ import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { Canvas } from 'src/app/models/Canvas.model';
+import { Canvas } from 'src/app/models/canvas.model';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
+import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
@@ -33,7 +34,7 @@ export class GalleryComponent implements AfterViewInit {
     tags: string[] = [];
     possibleTags: string[];
     filteredTags: Observable<string[]>;
-    tagCtrl = new FormControl();
+    tagCtrl: FormControl = new FormControl();
     render: Renderer2;
     text: Element;
     @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef;
@@ -46,6 +47,7 @@ export class GalleryComponent implements AfterViewInit {
         public interact: InteractionService,
         public gridService: GridRenderService,
         public winService: ModalWindowService,
+        public canvasBuilder: CanvasBuilderService
     ) {
         this.render = render;
         this.possibleTags = [];
@@ -183,11 +185,13 @@ export class GalleryComponent implements AfterViewInit {
         this.tagInput.nativeElement.value = '';
         this.tagCtrl.setValue(null);
     }
+
     filter(value: string): string[] {
         const filterValue = value.toLowerCase();
         return this.possibleTags.filter((tag: string) => tag.toLowerCase().indexOf(filterValue) === 0);
     }
-    continueDrawing(data: SVGData) {
+
+    continueDrawing(data: SVGData): void {
         this.doodle.askForDoodle();
         const el = this.doodle.currentDraw.nativeElement;
         this.render.setAttribute(el, 'width', data.width);
@@ -206,10 +210,13 @@ export class GalleryComponent implements AfterViewInit {
 
         const CANVAS_ATTRS: Canvas = { canvasWidth: +data.width, canvasHeight: +data.height, canvasColor: '#ffffffff' };
         this.interact.emitGridAttributes(CANVAS_ATTRS);
+        this.canvasBuilder.newCanvas = CANVAS_ATTRS;
+        this.canvasBuilder.newCanvas.whipeAll = false;
+        this.canvasBuilder.emitCanvas();
 
-        this.interact.emitCanvasRedone();
         this.winService.closeWindow();
     }
+
     createSVG(data: SVGData) {
         const svg = this.render.createElement('svg', 'http://www.w3.org/2000/svg');
         this.render.setAttribute(svg, 'width', data.width);

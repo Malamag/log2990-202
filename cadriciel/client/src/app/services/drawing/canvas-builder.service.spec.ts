@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ElementRef } from '@angular/core';
 import { SvgDrawComponent } from 'src/app/components/draw-view/svg-draw/svg-draw.component';
-import { Canvas } from '../../models/Canvas.model';
+import { Canvas } from '../../models/canvas.model';
 
 import { CanvasBuilderService } from './canvas-builder.service';
 

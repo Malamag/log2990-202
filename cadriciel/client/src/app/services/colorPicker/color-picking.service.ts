@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { colorData } from '../../components/color-picker/color-data';
-import { ChoosenColors } from '../../models/ChoosenColors.model';
+import { ChoosenColors } from '../../models/choosen-colors.model';
 import { ColorConvertingService } from './color-converting.service';
 
 /*-----------------------------Color valur table-----------------------------------------*
@@ -26,7 +26,7 @@ export class ColorPickingService {
 
     colors: ChoosenColors;
     colorSubject = new Subject<ChoosenColors>(); // le constuire à qqpart
-    constructor(public colorConvert: ColorConvertingService) {}
+    constructor(public colorConvert: ColorConvertingService) { }
 
     emitColors(): void {
         // observerved-observer design pattern

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { ChoosenColors } from 'src/app/models/choosen-colors.model';
 import { ColorPickingService } from '../../services/colorPicker/color-picking.service';
 import { colorData } from './color-data';
 
@@ -13,7 +13,7 @@ export class ColorPickerComponent implements OnInit {
     cData = colorData;
     colorSubsc: Subscription;
 
-    constructor(public colorPicking: ColorPickingService) {}
+    constructor(public colorPicking: ColorPickingService) { }
 
     ngOnInit() {
         this.initColors();

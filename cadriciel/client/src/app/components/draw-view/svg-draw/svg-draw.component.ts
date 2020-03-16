@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { Canvas } from 'src/app/models/Canvas.model';
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { Canvas } from 'src/app/models/canvas.model';
+import { ChoosenColors } from 'src/app/models/choosen-colors.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
@@ -80,7 +80,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.width = canvas.canvasWidth;
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
-            this.canvBuilder.whipeDraw(this.frameRef);
+            if (canvas.whipeAll === true || canvas.whipeAll === undefined) {
+                this.canvBuilder.whipeDraw(this.frameRef);
+            }
+
             if (this.gridService.grid) {
                 if (this.gridRef) {
                     this.gridService.removeGrid();
@@ -172,13 +175,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
                 this.closeTools(this.toolsContainer);
                 this.toolsContainer.get(toolName).selected = true;
             }
-            /* if (toolName === 'Pipette') {
-                // ... or, eventually, bucket tool
-                mouseHandler.svgCanvas = this.pixelMatrixRef.nativeElement;
-                //
-            } else {
-                mouseHandler.svgCanvas = this.svg.nativeElement;
-            }*/
+
             mouseHandler.updateWindowSize();
         });
 
@@ -229,7 +226,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.bgroundChangeSubscription();
     }
 
-    reinitGridFromSub() {
+    reinitGridFromSub(): void {
         this.interaction.$canvasAttributes.subscribe((newDoodle: Canvas) => {
             this.gridService.removeGrid();
             this.gridService.initGrid(this.gridRef.nativeElement, newDoodle.canvasWidth, newDoodle.canvasHeight, newDoodle.canvasColor);

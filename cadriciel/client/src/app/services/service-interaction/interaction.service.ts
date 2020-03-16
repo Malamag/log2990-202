@@ -1,6 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Canvas } from 'src/app/models/Canvas.model';
+import { Canvas } from 'src/app/models/canvas.model';
 import { AerosolAttributes } from '../attributes/aerosol-attribute';
 import { FormsAttribute } from '../attributes/attribute-form';
 import { LineAttributes } from '../attributes/line-attributes';

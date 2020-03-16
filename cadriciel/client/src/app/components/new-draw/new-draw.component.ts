@@ -32,10 +32,10 @@ export class NewDrawComponent implements OnInit {
   inputEntered: boolean;
 
   constructor(private formBuilder: FormBuilder,
-              private canvasBuilder: CanvasBuilderService,
-              private winService: ModalWindowService,
-              private router: Router,
-              private colorConvert: ColorConvertingService) {
+    private canvasBuilder: CanvasBuilderService,
+    private winService: ModalWindowService,
+    private router: Router,
+    private colorConvert: ColorConvertingService) {
 
   }
 
