@@ -9,7 +9,6 @@ import { SVGData } from 'src/svgData';
 import { ImageData } from '../../imageData';
 import { GalleryComponent } from './gallery.component';
 
-
 describe('GalleryComponent', () => {
     let component: GalleryComponent;
     let fixture: ComponentFixture<GalleryComponent>;

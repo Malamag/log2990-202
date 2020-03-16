@@ -1,4 +1,4 @@
 export interface Image {
-    id : string;
-    svgElement : string;
+    id: string;
+    svgElement: string;
 }

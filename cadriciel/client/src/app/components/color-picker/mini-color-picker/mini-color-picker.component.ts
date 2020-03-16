@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-//import { Subscription } from 'rxjs';
-//import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
-import { colorData } from '../color-data';
-//import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
-import { ColorConvertingService } from 'src/app/services/colorPicker/color-converting.service';
 import { Subject } from 'rxjs';
+// import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
+import { ColorConvertingService } from 'src/app/services/colorPicker/color-converting.service';
+// import { Subscription } from 'rxjs';
+// import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { colorData } from '../color-data';
 
 @Component({
     selector: 'app-mini-color-picker',
@@ -63,7 +63,7 @@ export class MiniColorPickerComponent implements OnInit {
         }
     }
     hsvToHex(H: number, S: number, V: number): string {
-        let hex: string = '';
+        let hex = '';
         const rgb: number[] = [-1, -1, -1];
 
         const C: number = S * V;

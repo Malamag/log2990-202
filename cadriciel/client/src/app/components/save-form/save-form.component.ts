@@ -82,9 +82,9 @@ export class SaveFormComponent implements OnInit {
     this.labelsIsFull = this.labels.length >= this.LabelsNumberCap;
   }
   saveImage() {
-    let id: string = new Date().getUTCMilliseconds() + '';
-    let doodleString = this.doodleFetch.getDrawingStringNoGrid();
-    let imageData: ImageData = { id: id, name: this.saveForm.value.doodleName, tags: this.labels, svgElement: doodleString };
+    const id: string = new Date().getUTCMilliseconds() + '';
+    const doodleString = this.doodleFetch.getDrawingStringNoGrid();
+    const imageData: ImageData = { id, name: this.saveForm.value.doodleName, tags: this.labels, svgElement: doodleString };
     this.index.saveImage(imageData);
     this.winService.closeWindow();
 
@@ -92,6 +92,5 @@ export class SaveFormComponent implements OnInit {
   closeForm() {
     this.winService.closeWindow();
   }
-
 
 }

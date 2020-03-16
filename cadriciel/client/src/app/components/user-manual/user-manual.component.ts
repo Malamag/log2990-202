@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { menuItems, toolsItems, welcomeItem } from '../../functionality';
-import {IconsService} from '../../services/icons.service'
+import {IconsService} from '../../services/icons.service';
 @Component({
     selector: 'app-user-manual',
     templateUrl: './user-manual.component.html',
@@ -21,7 +21,7 @@ export class UserManualComponent {
     func: any[];
     activeButton: any;
 
-    constructor(public dialogRef: MatDialogRef<UserManualComponent>, public icons : IconsService) {
+    constructor(public dialogRef: MatDialogRef<UserManualComponent>, public icons: IconsService) {
         this.toolsItems = toolsItems;
         this.menuItems = menuItems;
         this.welcomeItem = welcomeItem;

@@ -50,10 +50,10 @@ export class OptionBarComponent {
         const E_KEY = 69;
         const G_KEY = 71;
         const S_KEY = 83;
-        const NUMPAD_PLUS: number = 107;
-        const NUMPAD_MINUS: number = 109;
-        const DASH: number = 189; // minus sign
-        const EQUAL: number = 187; // plus sign located on the equal key (shift-equal)
+        const NUMPAD_PLUS = 107;
+        const NUMPAD_MINUS = 109;
+        const DASH = 189; // minus sign
+        const EQUAL = 187; // plus sign located on the equal key (shift-equal)
 
         const STEP = 5;
         this.kbHandler.logkey(e);
@@ -69,7 +69,6 @@ export class OptionBarComponent {
             this.openSaveForm();
             e.preventDefault(); // default behavior prevented
         }
-
 
         if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === E_KEY) {
             this.openExportForm();

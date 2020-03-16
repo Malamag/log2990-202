@@ -29,8 +29,6 @@ import { CanvasBuilderService } from './services/drawing/canvas-builder.service'
 import { ExportService } from './services/exportation/export.service';
 import { ModalWindowService } from './services/window-handler/modal-window.service';
 
-
-
 @NgModule({
     declarations: [
         AppComponent,

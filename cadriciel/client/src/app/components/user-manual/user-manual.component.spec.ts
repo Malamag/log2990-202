@@ -1,5 +1,5 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule, MatDialogModule, MatDialogRef, MatIconModule } from '@angular/material';
 import { toolsItems, welcomeItem } from 'src/app/functionality';
 import { UserManualContentComponent } from './user-manual-content/user-manual-content.component';

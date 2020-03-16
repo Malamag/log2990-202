@@ -22,7 +22,7 @@ describe('IndexService', () => {
     );
     afterEach(() => {
         httpClientSpy.patch.calls.reset();
-    })
+    });
     it('should return expected message (HttpClient called once)', inject([IndexService], (service: IndexService) => {
         const expectedMessage: Message = { body: 'Hello', title: 'World' };
         httpClientSpy.get.and.returnValue(of(expectedMessage));
@@ -35,41 +35,41 @@ describe('IndexService', () => {
         expect(httpClientSpy.get.calls.count()).toBe(1, 'one call');
     }));
     it('should return the expected iamgeData informations', inject([IndexService], (service: IndexService) => {
-        const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] }
-        const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] }
+        const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
         httpClientSpy.get.and.returnValue(of([expectedData]));
         service.getAllImages().subscribe((data) => {
-            expect(data).toEqual([expectedData])
-        })
+            expect(data).toEqual([expectedData]);
+        });
     }));
     it('should get the expected data', inject([IndexService], (service: IndexService) => {
-        const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] }
-        const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] }
+        const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
         httpClientSpy.get.and.returnValue(of([expectedData]));
-        const tags = ['hello', 'new']
+        const tags = ['hello', 'new'];
         service.getImagesByTags(tags).subscribe((data) => {
-            expect(data).toEqual([expectedData])
-        })
-    }))
+            expect(data).toEqual([expectedData]);
+        });
+    }));
     it('should throw an error in the console', inject([IndexService], (service: IndexService) => {
         httpClientSpy.delete.and.throwError('failed to delete');
         const id = '570';
         expect(service.deleteImageById(id)).toThrowError('failed to delete');
-    }))
+    }));
     it('should display a feedback', inject([IndexService], (service: IndexService) => {
         const spy = spyOn(service, 'displayFeedback');
         const id = '570';
-        const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] }
-        const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] }
-        httpClientSpy.delete.and.returnValue(of([expectedData]))
+        const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
+        httpClientSpy.delete.and.returnValue(of([expectedData]));
         service.deleteImageById(id);
-        expect(spy).toHaveBeenCalled()
-    }))
+        expect(spy).toHaveBeenCalled();
+    }));
     it('should patch the information', inject([IndexService], (service: IndexService) => {
-        const spy = spyOn(httpClientSpy, 'patch')
-        const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] }
-        const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] }
-        service.modifyImage(expectedData)
-        expect(spy).toHaveBeenCalled()
-    }))
+        const spy = spyOn(httpClientSpy, 'patch');
+        const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
+        service.modifyImage(expectedData);
+        expect(spy).toHaveBeenCalled();
+    }));
 });

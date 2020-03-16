@@ -36,7 +36,7 @@ export class ShapeService extends DrawingTool {
     protected fill: string;
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
-        interaction: InteractionService, colorPick: ColorPickingService) {
+                interaction: InteractionService, colorPick: ColorPickingService) {
 
         super(inProgess, drawing, selected, interaction, colorPick);
         this.attr = { plotType: DEFAULTPLOTTYPE, lineThickness: DEFAULTLINETHICKNESS, numberOfCorners: DEFAULTNUMBERCORNERS };

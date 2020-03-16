@@ -180,9 +180,9 @@ export const toolsItems = [
     {
         name: 'Annuler',
         shortcutName: 'Annuler',
-        shortDescription: `Cet outil vous permet de choisir une couleur 
+        shortDescription: `Cet outil vous permet de choisir une couleur
             primaire et une couleur secondaire qui se transmet pour chaque outil dessin de l’application.`,
-        description: `L’outil de sélection des couleurs est séparé en trois parties. 
+        description: `L’outil de sélection des couleurs est séparé en trois parties.
             La première partie est la plus haute et vous permet de sélectionner
             la couleur souhaitée via une interface visuelle. L’anneau sert à
             choisir une teinte et le rectangle vous permet de choisir la clarté

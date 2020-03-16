@@ -1,7 +1,7 @@
-import { SVGData } from '../svgData'
+import { SVGData } from '../svgData';
 export interface ImageData {
     id: string;
-    svgElement: SVGData,
-    name: string,
-    tags: string[]
+    svgElement: SVGData;
+    name: string;
+    tags: string[];
 }
