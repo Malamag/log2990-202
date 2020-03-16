@@ -46,53 +46,75 @@ export class OptionBarComponent {
     }
 
     setShortcutEvent(e: KeyboardEvent): void {
-        const O_KEY = 79; // keycode for letter o
-        const E_KEY = 69;
-        const G_KEY = 71;
-        const S_KEY = 83;
-        const NUMPAD_PLUS = 107;
-        const NUMPAD_MINUS = 109;
-        const DASH = 189; // minus sign
-        const EQUAL = 187; // plus sign located on the equal key (shift-equal)
-
         const STEP = 5;
         this.kbHandler.logkey(e);
+        this.setNewDrawFormKeyBind(e);
+        this.setSaveFormKeyBind(e);
+        this.setExportFormKeyBind(e);
+        this.setGalleryKeyBind(e);
+        this.setGridKeyBind();
+        this.setGridIncreaseKeyBind(STEP);
+        this.setGridDecreaseKeyBind(STEP);
+    }
 
+    private setNewDrawFormKeyBind(e: KeyboardEvent): void {
+        const O_KEY = 79; // keycode for letter o
         if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === O_KEY) {
             // ctrl+o opens the form!
             this.openNewDrawForm();
             e.preventDefault(); // default behavior prevented
         }
+    }
 
+    private setSaveFormKeyBind(e: KeyboardEvent): void {
+        const S_KEY = 83;
         if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === S_KEY) {
             // ctrl+o opens the form!
             this.openSaveForm();
             e.preventDefault(); // default behavior prevented
         }
+    }
 
+    private setExportFormKeyBind(e: KeyboardEvent): void {
+        const E_KEY = 69;
         if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === E_KEY) {
             this.openExportForm();
             e.preventDefault();
         }
+    }
+
+    private setGalleryKeyBind(e: KeyboardEvent): void {
+        const G_KEY = 71;
         if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === G_KEY) {
             this.openGallery();
             e.preventDefault();
         }
-        // tslint:disable-next-line: deprecation
-        if (e.keyCode === G_KEY) {
+    }
+
+    private setGridKeyBind(): void {
+        const G_KEY = 71;
+        if (this.kbHandler.keyCode === G_KEY) {
             this.toggleGrid();
         }
+    }
 
+    private setGridIncreaseKeyBind(step: number): void {
+        const EQUAL = 187; // plus sign located on the equal key (shift-equal)
+        const NUMPAD_PLUS = 107;
         if (this.kbHandler.keyCode === NUMPAD_PLUS || (this.kbHandler.shiftDown && this.kbHandler.keyCode === EQUAL)) {
             if (this.stepVal < this.maxStepVal) {
-                this.stepVal += STEP;
+                this.stepVal += step;
                 this.gridService.updateSpacing(this.stepVal);
             }
         }
+    }
 
+    private setGridDecreaseKeyBind(step: number): void {
+        const NUMPAD_MINUS = 109;
+        const DASH = 189; // minus sign
         if (this.kbHandler.keyCode === NUMPAD_MINUS || this.kbHandler.keyCode === DASH) {
             if (this.stepVal > this.minStepVal) {
-                this.stepVal -= STEP;
+                this.stepVal -= step;
                 this.gridService.updateSpacing(this.stepVal);
             }
         }

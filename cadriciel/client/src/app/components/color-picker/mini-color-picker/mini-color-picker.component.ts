@@ -13,61 +13,83 @@ import { colorData } from '../color-data';
 })
 export class MiniColorPickerComponent implements OnInit {
     cData = colorData;
-    offsetY = 10;
-    offsetX = 25;
-    svMaxValue = 100;
-    hueCursorWidth = 6;
-    color = '#ffffff';
-    hue = 0;
-    saturation = 0;
-    value = 100;
-    svCursorPos = { x: this.saturation, y: this.svMaxValue - this.value };
-    isHueSelecting = false;
-    isSVSelecting = false;
-    colorSubject = new Subject<string>();
-    constructor(private colorconvert: ColorConvertingService) { }
+    offsetY: number;
+    offsetX: number;
+    svMaxValue: number;
+    hueCursorWidth: number;
+    color: string;
+    hue: number;
+    saturation: number;
+    value: number;
+    svCursorPos: {};
+    isHueSelecting: boolean;
+    isSVSelecting: boolean;
+    colorSubject: Subject<string>;
+    constructor(private colorconvert: ColorConvertingService) {
+        this.offsetY = 10;
+        this.offsetX = 25;
+        this.svMaxValue = 100;
+        this.hueCursorWidth = 6;
+        this.color = '#ffffff';
+        this.hue = 0;
+        this.saturation = 0;
+        this.value = 100;
+        this.svCursorPos = { x: this.saturation, y: this.svMaxValue - this.value };
+        this.isHueSelecting = false;
+        this.isSVSelecting = false;
+        this.colorSubject = new Subject<string>();
+    }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.emitColor();
     }
-    emitColor() {
+
+    emitColor(): void {
         this.colorSubject.next(this.color);
     }
-    setColor() {
+
+    setColor(): void {
         this.color = this.hsvToHex(this.hue, this.saturation / this.svMaxValue, this.value / this.svMaxValue);
         this.emitColor();
     }
-    onMouseDownHue(event: MouseEvent) {
+
+    onMouseDownHue(event: MouseEvent): void {
         this.isHueSelecting = true;
         this.hueSelect(event);
     }
-    onMouseDownSV(event: MouseEvent) {
+
+    onMouseDownSV(event: MouseEvent): void {
         this.isSVSelecting = true;
         this.svSelect(event);
     }
-    onMouseUp() {
+
+    onMouseUp(): void {
         this.isHueSelecting = false;
         this.isSVSelecting = false;
     }
-    hueSelect(event: MouseEvent) {
+
+    hueSelect(event: MouseEvent): void {
         if (this.isHueSelecting) {
             this.hue = Math.round((event.offsetY - this.offsetY) * (this.cData.MAX_HUE_VALUE / this.svMaxValue));
             this.setColor();
         }
     }
-    svSelect(event: MouseEvent) {
+    svSelect(event: MouseEvent): void {
         if (this.isSVSelecting) {
             this.saturation = event.offsetX - this.offsetX;
             this.value = this.svMaxValue - (event.offsetY - this.offsetY);
             this.setColor();
         }
     }
+
     hsvToHex(H: number, S: number, V: number): string {
         let hex = '';
-        const rgb: number[] = [-1, -1, -1];
+        // tslint:disable-next-line: no-magic-numbers
+        const rgb: number[] = [-1, -1, -1]; // invalid index
 
+        const DIV = 6; // Value used in the formula
         const C: number = S * V;
-        const X: number = C * (1 - Math.abs(((H / (this.cData.MAX_HUE_VALUE / 6)) % 2) - 1));
+        const X: number = C * (1 - Math.abs(((H / (this.cData.MAX_HUE_VALUE / DIV)) % 2) - 1));
         const m: number = V - C;
 
         let R: number = this.cData.MIN_RGB_VALUE;
@@ -75,7 +97,7 @@ export class MiniColorPickerComponent implements OnInit {
         let B: number = this.cData.MIN_RGB_VALUE;
 
         // Math formula for conversion
-        if (this.cData.MIN_HUE_VALUE <= H && H < this.cData.MAX_HUE_VALUE / 6) {
+        if (this.cData.MIN_HUE_VALUE <= H && H < this.cData.MAX_HUE_VALUE / DIV) {
             R = C;
             G = X;
             B = this.cData.MIN_RGB_VALUE;
@@ -107,11 +129,14 @@ export class MiniColorPickerComponent implements OnInit {
         hex = '#' + this.colorconvert.rgbToHex(rgb[0]) + this.colorconvert.rgbToHex(rgb[1]) + this.colorconvert.rgbToHex(rgb[2]);
         return hex;
     }
-    get hueCursorStyles(): any {
-        return { transform: 'translateY(' + ((Math.round(this.hue * (this.svMaxValue / this.cData.MAX_HUE_VALUE))) + (this.offsetY - this.hueCursorWidth / 2)) + 'px)' };
+    get hueCursorStyles(): {} {
+        return {
+            transform: 'translateY(' +
+                ((Math.round(this.hue * (this.svMaxValue / this.cData.MAX_HUE_VALUE))) + (this.offsetY - this.hueCursorWidth / 2)) + 'px)'
+        };
     }
 
-    get svCursorStyles(): any {
+    get svCursorStyles(): {} {
         return { transform: 'translate(' + this.saturation + 'px,' + (this.svMaxValue - this.value) + 'px)' };
     }
 }
