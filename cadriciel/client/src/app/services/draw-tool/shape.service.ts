@@ -17,11 +17,11 @@ const DEFAULTLINETHICKNESS = 5;
 
 export class ShapeService extends DrawingTool {
 
-    protected attr: FormsAttribute;
+    attr: FormsAttribute;
 
     // Shape's dimensions
-    protected width: number;
-    protected height: number;
+    width: number;
+    height: number;
     protected smallest: number;  // used for getting the smallest value between height and width
 
     // First point in x and y when first clicked
@@ -29,7 +29,7 @@ export class ShapeService extends DrawingTool {
     protected startY: number;
 
     // String for createPath
-    protected svgString: string;
+    svgString: string;
 
     // Attribute for createPath
     protected stroke: string;

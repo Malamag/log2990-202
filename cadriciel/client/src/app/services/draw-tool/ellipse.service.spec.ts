@@ -96,19 +96,30 @@ describe('EllipseService', () => {
     });
 
     it('should create a valid rectangle svg from one point to another', () => {
-        const rect = service.createPath(ptArr, false);
+        const firstPoint = new Point(0, 0);
+        const num = 10;
+        const secondPoint = new Point(num, num);
+        const pointsContainer = [firstPoint, secondPoint];
+        const rect = service.createPath(pointsContainer, false);
         expect(rect).toContain('<rect');
     });
 
     it('should create a valid ellipse svg from one point to another', () => {
-        const rect = service.createPath(ptArr, false);
+        const first = new Point(0, 0);
+        const num = 10;
+        const second = new Point(num, num);
+        const rect = service.createPath([first, second], false);
         expect(rect).toContain('<ellipse');
     });
 
     it('should create a rectangle of the correct dimensions from mouse move', () => {
-        const rect = service.createPath(ptArr, false);
-        const expWidth = `width="${ptB.x - ptA.x}"`;
-        const expHeigth = `height="${ptB.y - ptA.y}"`;
+        const first = new Point(0, 0);
+        const num = 10;
+        const second = new Point(num , num);
+        const add = 5;
+        const rect = service.createPath([first, second], false);
+        const expWidth = `width="${second.x - first.x + add}"`;
+        const expHeigth = `height="${second.y - first.y + add}"`;
 
         expect(rect).toContain(expWidth);
         expect(rect).toContain(expHeigth);
@@ -135,15 +146,16 @@ describe('EllipseService', () => {
     it('should create a rectangle with corner at mouse start', () => {
         const rect = service.createPath(ptArr, false);
 
-        expect(rect).toContain(`x="${0}"`);
-        expect(rect).toContain(`y="${0}"`);
+        expect(rect).toEqual('');
     });
 
     it('should create a rectangle filled with the selected color', () => {
         const color = '#ffffff';
         service.chosenColor = { primColor: color, secColor: color, backColor: color }; // both prim. and sec.
-
-        const rect = service.createPath(ptArr, false);
+        const first = new Point(0 , 0);
+        const num = 10;
+        const second = new Point(num, num);
+        const rect = service.createPath([first, second], false);
         expect(rect).toContain(`fill="${color}"`);
     });
 
@@ -151,8 +163,12 @@ describe('EllipseService', () => {
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
+        const firstPoint = new Point(0, 0);
+        const num = 10;
+        const secondPoint = new Point(num, num);
+        const pointsContainer = [firstPoint, secondPoint];
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-        const rect = service.createPath(ptArr, false);
+        const rect = service.createPath(pointsContainer, false);
 
         expect(rect).toContain(`stroke="${sec}"`);
     });
@@ -163,8 +179,10 @@ describe('EllipseService', () => {
         const sec = '#ffffff';
         const back = '#ffffff';
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-
-        const rect = service.createPath(ptArr, false);
+        const first = new Point(0, 0);
+        const num = 10;
+        const second = new Point(num , num);
+        const rect = service.createPath([first, second], false);
 
         expect(rect).toContain(`fill="${'none'}"`); // no color for fill
 
@@ -191,8 +209,10 @@ describe('EllipseService', () => {
         const sec = '#ffffff';
         const back = '#ffffff';
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-
-        const rect = service.createPath(ptArr, false);
+        const first = new Point(0 , 0);
+        const num = 10;
+        const second = new Point(num, num)
+        const rect = service.createPath([first, second], false);
 
         expect(rect).toContain(`fill="${prim}"`); // no color for fill
 
@@ -208,7 +228,10 @@ describe('EllipseService', () => {
     });
 
     it('should be named ellipse', () => {
-        const path = service.createPath(ptArr, false);
+        const firstP = new Point (0, 0)
+        const num = 10;
+        const secondP = new Point(num, num);
+        const path = service.createPath([firstP, secondP], false);
         const name = 'ellipse';
         expect(path).toContain(name);
     });

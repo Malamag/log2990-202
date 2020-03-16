@@ -11,7 +11,7 @@ import { ShapeService } from './shape.service';
 
 export class RectangleService extends ShapeService {
 
-    private isSquare: boolean;
+    isSquare: boolean;
 
     constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
                 interaction: InteractionService, colorPick: ColorPickingService) {

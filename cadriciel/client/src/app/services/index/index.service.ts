@@ -19,7 +19,7 @@ const httpOptions = {
 })
 export class IndexService {
     private readonly DATABASE_URL: string = 'http://localhost:3000/database/Images/';
-    constructor(public http: HttpClient, private snackBar: MatSnackBar) { }
+    constructor(public http: HttpClient, public snackBar: MatSnackBar) { }
 
     basicGet(): Observable<Message> {
         return this.http.get<Message>(this.DATABASE_URL).pipe(catchError(this.handleError<Message>('basicGet')));

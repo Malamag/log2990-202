@@ -66,10 +66,32 @@ describe('IndexService', () => {
         expect(spy).toHaveBeenCalled();
     }));
     it('should patch the information', inject([IndexService], (service: IndexService) => {
+        httpClientSpy.patch.calls.reset();
         const spy = spyOn(httpClientSpy, 'patch');
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
         service.modifyImage(expectedData);
         expect(spy).toHaveBeenCalled();
     }));
+    it('should display a positive feedback', inject([IndexService], (service: IndexService) => {
+        const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
+        httpClientSpy.post.and.returnValue(of(expectedData));
+        const spy = spyOn(service, 'displayFeedback');
+        service.saveImage(expectedData);
+        expect(spy).toHaveBeenCalled()
+    }));
+    it('should throw an error', inject([IndexService], (service: IndexService) => {
+        const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
+        const error = 'error while saving';
+        httpClientSpy.post.and.throwError(error);
+        expect(service.saveImage(expectedData)).toThrow('Error : ' + error);
+    }));
+    it('should open a snack bar', inject([IndexService], (service: IndexService) => {
+        const openSpy = spyOn(service.snackBar, 'open');
+        const feedback = 'hello';
+        service.displayFeedback(feedback);
+        expect(openSpy).toHaveBeenCalled();
+    }))
 });

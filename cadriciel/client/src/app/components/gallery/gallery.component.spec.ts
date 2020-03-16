@@ -1,8 +1,11 @@
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { MatAutocompleteModule, MatCardModule, MatChipsModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatProgressSpinnerModule, MatSelectModule, MatSnackBarModule } from '@angular/material';
+import { MatAutocompleteModule, MatCardModule,
+     MatChipsModule, MatDialogModule,
+      MatFormFieldModule, MatIconModule,
+       MatInputModule, MatProgressSpinnerModule,
+        MatSelectModule, MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Subject } from 'rxjs';
 import { SVGData } from 'src/svgData';
@@ -12,7 +15,9 @@ import { GalleryComponent } from './gallery.component';
 describe('GalleryComponent', () => {
     let component: GalleryComponent;
     let fixture: ComponentFixture<GalleryComponent>;
+    // tslint:disable-next-line: no-any
     let tagAdd: any;
+    // tslint:disable-next-line: no-any
     let fakeEvent: any;
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -31,7 +36,6 @@ describe('GalleryComponent', () => {
                     MatDialogModule,
                     MatProgressSpinnerModule,
                     MatSnackBarModule,
-                    FormsModule
                 ],
         }).compileComponents();
     }));

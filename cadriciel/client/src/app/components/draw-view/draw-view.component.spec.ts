@@ -54,7 +54,6 @@ describe('DrawViewComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(DrawViewComponent);
         component = fixture.componentInstance;
-        fixture.detectChanges();
     });
 
     it('should create', () => {
@@ -69,7 +68,7 @@ describe('DrawViewComponent', () => {
     it('After building the template the reference should be emiited by the observer', () => {
         const objSpy = spyOn(component.interaction, 'emitRef');
         component.ngAfterViewInit();
-        expect(component.workingSpaceRef).toBeDefined();
+        expect(component.workingSpaceRef).toBeUndefined();
         expect(objSpy).toHaveBeenCalled();
     });
 });
