@@ -14,7 +14,7 @@ describe('RectangleService', () => {
     let ptA: Point;
     let ptB: Point;
     let ptArr: Point[];
-
+    let ptC: Point;
     beforeEach(() => {
         kbServiceStub = {
             shiftDown: true,
@@ -23,7 +23,8 @@ describe('RectangleService', () => {
 
         ptA = new Point(0, 0); // using a point to test position functions
         ptB = new Point(1, 2);
-        ptArr = [ptA, ptB];
+        ptC = new Point(1 , 2);
+        ptArr = [ptA, ptB, ptC];
 
         TestBed.configureTestingModule({
             providers: [
@@ -121,7 +122,7 @@ describe('RectangleService', () => {
     });
 
     it('should render a square on pressed shift key', () => {
-        const newArr = [new Point(0, 0), new Point(1, 1)]; // forcing a square
+        const newArr = [new Point(0, 0), new Point(1, 2), new Point(1, 1)]; // forcing a square
         const fakeSquare = service.createPath(newArr);
 
         // tslint:disable-next-line: no-string-literal
