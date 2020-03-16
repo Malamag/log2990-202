@@ -27,4 +27,4 @@ export const colorCircles = [
         cx: 0,
         color: '#8f00ff'
     }
-]
+];

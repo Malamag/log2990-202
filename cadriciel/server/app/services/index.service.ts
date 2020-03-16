@@ -6,7 +6,7 @@ import { DateService } from './date.service';
 
 @injectable()
 export class IndexService {
-    constructor(@inject(Types.DateService) private dateService: DateService,) {}
+    constructor(@inject(Types.DateService) private dateService: DateService) { }
 
     about(): Message {
         return {

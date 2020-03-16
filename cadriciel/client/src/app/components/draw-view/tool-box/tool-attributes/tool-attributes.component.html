@@ -1,145 +1,171 @@
-<p *ngIf="!'Choisir Couleur'"> {{selectedTool}}</p>
-<div [ngSwitch]= "selectedTool">
-
+<p *ngIf="!'Choisir Couleur'">{{ selectedTool }}</p>
+<div [ngSwitch]="selectedTool">
     <!-- for the shapes-->
-    <div *ngSwitchCase = " selectedTool === 'Rectangle' || selectedTool === 'Ellipse' || selectedTool === 'Polygone'  ? selectedTool : ''  " (mouseleave) ="updateForms()">
-        <label> Épaisseur du contour: {{lineThickness}} px </label>
-        <mat-slider thumbLabel type="range" min= "1" max= "30" [(ngModel)] = "lineThickness"  ></mat-slider> <br>
-        
-        <label> Type de tracé </label> <br>
-        <mat-radio-group> <br>
-            <mat-radio-button [value]="2" [checked]="true" (click) = "plotType =2"> Plein avec contour</mat-radio-button> <br><br>
-            <mat-radio-button [value]="0" (click) = "plotType = 0"> Contour</mat-radio-button> <br><br>
-            <mat-radio-button [value]="1" (click) = "plotType= 1"> Plein </mat-radio-button> <br>
+    <div
+        *ngSwitchCase="selectedTool === 'Rectangle' || selectedTool === 'Ellipse' || selectedTool === 'Polygone' ? selectedTool : ''"
+        (mouseleave)="updateForms()"
+    >
+        <label> Épaisseur du contour: {{ lineThickness }} px </label>
+        <mat-slider thumbLabel type="range" min="1" max="30" [(ngModel)]="lineThickness"></mat-slider> <br />
+
+        <label> Type de tracé </label> <br />
+        <mat-radio-group>
+            <br />
+            <mat-radio-button [value]="2" [checked]="true" (click)="plotType = 2"> Plein avec contour</mat-radio-button> <br /><br />
+            <mat-radio-button [value]="0" (click)="plotType = 0"> Contour</mat-radio-button> <br /><br />
+            <mat-radio-button [value]="1" (click)="plotType = 1"> Plein </mat-radio-button> <br />
         </mat-radio-group>
-        <br>
+        <br />
         <!-- sides for the polygon-->
-        <div *ngSwitchCase = " 'Polygone' " (mouseleave) ="updateForms()">
+        <div *ngSwitchCase="'Polygone'" (mouseleave)="updateForms()">
             <label> Nombre de côtés</label>
-            <mat-slider thumbLabel tickInterval="1" type="range" min= "3" max = "12" [(ngModel)] = "numberCorners"> </mat-slider><br>
+            <mat-slider thumbLabel tickInterval="1" type="range" min="3" max="12" [(ngModel)]="numberCorners"> </mat-slider><br />
         </div>
     </div>
-    
+
+    <div *ngSwitchCase="'Pipette'">
+        <label>Pipette de couleur</label>
+        <br />
+        <br />
+        <svg id="pipette-prev" width="100%">
+            <rect
+                x="25%"
+                width="100px"
+                height="100px"
+                [style.fill]="pipettePreviewFill"
+                stroke-width="3"
+                style="stroke-opacity: .5;"
+                stroke="white"
+            />
+        </svg>
+    </div>
 
     <!-- for the prencil-->
-    <div *ngSwitchCase = " 'Crayon' "(mouseleave) ="updateTools()">
-        <label> Épaisseur du trait: {{lineThickness}} px </label>
-        <mat-slider thumbLabel type="range" min= "1" max= "50" [(ngModel)] ="lineThickness" ></mat-slider> <br>
+    <div *ngSwitchCase="'Crayon'" (mouseleave)="updateTools()">
+        <label> Épaisseur du trait: {{ lineThickness }} px </label>
+        <mat-slider thumbLabel type="range" min="1" max="50" [(ngModel)]="lineThickness"></mat-slider> <br />
     </div>
     <!-- for the brush -->
-    <div *ngSwitchCase = " 'Pinceau' " (mouseleave) ="updateTools()">
-        <label> Épaisseur du trait: {{lineThickness}} px </label>
-        <mat-slider thumbLabel type="range" min= "1" max= "50" [(ngModel)] ="lineThickness" ></mat-slider> <br>
-        <label> Texture </label> <br><br>
+    <div *ngSwitchCase="'Pinceau'" (mouseleave)="updateTools()">
+        <label> Épaisseur du trait: {{ lineThickness }} px </label>
+        <mat-slider thumbLabel type="range" min="1" max="50" [(ngModel)]="lineThickness"></mat-slider> <br />
+        <label> Texture </label> <br /><br />
         <mat-radio-group>
-            <mat-radio-button [value]="0" [checked]="true" (click) = "texture = 0">Flou
-                <img src="../../../../../assets/images/flou.png">
+            <mat-radio-button [value]="0" [checked]="true" (click)="texture = 0"
+                >Flou
+                <img src="../../../../../assets/images/flou.png" />
             </mat-radio-button>
-            <br><br>
-            <mat-radio-button [value]="1" (click) ="texture = 1"> Bruit 1
-            <img src="../../../../../assets/images/bruit1.png">
-            </mat-radio-button> 
-            <br><br>
-            <mat-radio-button [value]="2" (click) = "texture = 2"> Bruit 2 
-                <img src="../../../../../assets/images/bruit2.png"> 
-            </mat-radio-button> <br><br>
-            <mat-radio-button [value]="3" (click) = "texture =3"> Bruit 3 
-                <img src="../../../../../assets/images/bruit3.png"> 
-            </mat-radio-button> <br><br>
-            <mat-radio-button [value]="4" (click) = "texture =4"> Bruit 4 
-                <img src="../../../../../assets/images/bruit4.png">
-            </mat-radio-button> <br><br>
+            <br /><br />
+            <mat-radio-button [value]="1" (click)="texture = 1">
+                Bruit 1
+                <img src="../../../../../assets/images/bruit1.png" />
+            </mat-radio-button>
+            <br /><br />
+            <mat-radio-button [value]="2" (click)="texture = 2">
+                Bruit 2
+                <img src="../../../../../assets/images/bruit2.png" />
+            </mat-radio-button>
+            <br /><br />
+            <mat-radio-button [value]="3" (click)="texture = 3">
+                Bruit 3
+                <img src="../../../../../assets/images/bruit3.png" />
+            </mat-radio-button>
+            <br /><br />
+            <mat-radio-button [value]="4" (click)="texture = 4">
+                Bruit 4
+                <img src="../../../../../assets/images/bruit4.png" />
+            </mat-radio-button>
+            <br /><br />
         </mat-radio-group>
-        
     </div>
     <!-- for the calligraphy-->
-    <div *ngSwitchCase = " 'Plume' ">
+    <div *ngSwitchCase="'Plume'">
         <label> Longueur de la ligne</label>
-        <mat-slider thumbLabel type="range" min= "1" max= "30" value= "1.5" ></mat-slider> <br>
+        <mat-slider thumbLabel type="range" min="1" max="30" value="1.5"></mat-slider> <br />
         <label> Angle d'orientation </label>
-        <mat-slider thumbLabel type="range" min= "0" max = "180" value ="3"> </mat-slider><br>
+        <mat-slider thumbLabel type="range" min="0" max="180" value="3"> </mat-slider><br />
     </div>
 
     <!-- for the aerosol-->
-    <div *ngSwitchCase = " 'Aérosol' ">
-        <label> Nombre d'émissions/sec </label>
-        <input type="text" value= "1.5"> <br><br>
-        <label> Diamètre du jet </label>
-        <input type= "text" value = "1"> <br>
+    <div *ngSwitchCase="'Aérosol'" (mouseleave)="updateAerosol()">
+        <label> Nombre d'émissions/sec: {{ emissionPerSecond }} </label>
+        <mat-slider thumbLabel type="range" min="1" max="50" value="50" [(ngModel)]="emissionPerSecond"></mat-slider> <br />
+        <label> Diamètre du jet: {{ diameter }} px </label>
+        <mat-slider thumbLabel type="range" min="10" max="200" value="50" [(ngModel)]="diameter"></mat-slider> <br />
     </div>
     <!-- for the line -->
-    <div *ngSwitchCase = " 'Ligne' " (mouseleave)="updateLine()">
-        <label> Type de jonction </label> <br><br>
+    <div *ngSwitchCase="'Ligne'" (mouseleave)="updateLine()">
+        <label> Type de jonction </label> <br /><br />
         <mat-radio-group>
-            <mat-radio-button [value]="true" [checked]="junction"  (click)= "junction = true"> Point</mat-radio-button>
-            <br><br>
-            <mat-radio-button  [checked]="!junction" (click) = "junction = false"> Normal</mat-radio-button>
-            <br><br>
+            <mat-radio-button [value]="true" [checked]="junction" (click)="junction = true"> Point</mat-radio-button>
+            <br /><br />
+            <mat-radio-button [checked]="!junction" (click)="junction = false"> Normal</mat-radio-button>
+            <br /><br />
         </mat-radio-group>
-        
-        <label> Épaisseur du trait: {{lineThickness}} px </label>
-        <mat-slider thumbLabel type="range" min= "1" max= "50" [(ngModel)] ="lineThickness" ></mat-slider> <br>
-        <label> Points de jonction: {{junctionRadius}} px</label>
-        <mat-slider thumbLabel type="range" min= "5" max= "50" [(ngModel)] ="junctionRadius" ></mat-slider> <br>
+
+        <label> Épaisseur du trait: {{ lineThickness }} px </label>
+        <mat-slider thumbLabel type="range" min="1" max="50" [(ngModel)]="lineThickness"></mat-slider> <br />
+        <label> Points de jonction: {{ junctionRadius }} px</label>
+        <mat-slider thumbLabel type="range" min="5" max="50" [(ngModel)]="junctionRadius"></mat-slider> <br />
     </div>
     <!-- for the eraser -->
-    <div *ngSwitchCase = " 'Efface' ">
+    <div *ngSwitchCase="'Efface'">
         <label> Taille (px) </label>
-        <input type="text" value="2"> px <br>
+        <input type="text" value="2" /> px <br />
     </div>
     <!-- for the text -->
-    <div *ngSwitchCase = " 'Texte' ">
+    <div *ngSwitchCase="'Texte'">
         <label> Police de texte </label>
         <select>
             <option>arial</option>
             <option> times new Roman</option>
-        </select> <br>
+        </select>
+        <br />
         <label> taille de la police</label>
-        <input type="text" valeur="10">
-        <br>
-        <label> Mutateur</label> <br>
+        <input type="text" valeur="10" />
+        <br />
+        <label> Mutateur</label> <br />
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/google"
              title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button> 
-            <img src ="../../../assets/images/bold.png">
+        <button>
+            <img src="../../../assets/images/bold.png" />
         </button>
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" 
             title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button> 
-            <img src="../../../assets/images/italics.png">
+        <button>
+            <img src="../../../assets/images/italics.png" />
         </button>
-        <br>
-        <label> Alignement</label> <br>
+        <br />
+        <label> Alignement</label> <br />
         <!-- Replace the text with the images-->
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" 
             title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
         <button>
-            <img src="../../../assets/images/left-align.png">    
+            <img src="../../../assets/images/left-align.png" />
         </button>
         <!--source: Icons made by <a href="https://www.flaticon.com/authors/bqlqn"
              title="bqlqn">bqlqn</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button> 
-            <img src="../../../assets/images/align-center.png">    
+        <button>
+            <img src="../../../assets/images/align-center.png" />
         </button>
         <!--source: Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" 
             title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button> 
-            <img src="../../../assets/images/right-align.png">  
+        <button>
+            <img src="../../../assets/images/right-align.png" />
         </button>
     </div>
-    
+
     <!-- for the color-picker-->
-    <div *ngSwitchCase = " 'Sélection de couleur' "(mouseout)="resize()">
+    <div *ngSwitchCase="'Sélection de couleur'" (mouseout)="resize()">
         <app-color-picker></app-color-picker>
     </div>
-   
-    <div *ngSwitchCase = "'Étampe'">
+
+    <div *ngSwitchCase="'Étampe'">
         <label> facteur de mise à l'échelle de l'étampe </label>
-        <mat-slider min= "0" max = "100" value ="50"> %</mat-slider><br>
+        <mat-slider min="0" max="100" value="50"> %</mat-slider><br />
         <label> Angle d'orientation de l'étampe</label>
-        <input type = "text" value= "90"> degré <br>
+        <input type="text" value="90" /> degré <br />
         <label> type d'étampe</label>
         <!-- here goes a list of stamps -->
-
     </div>
 </div>

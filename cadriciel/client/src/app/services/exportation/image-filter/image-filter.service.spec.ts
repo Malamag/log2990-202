@@ -4,9 +4,13 @@ import { ImageFilterService } from './image-filter.service';
 
 describe('ImageFilterService', () => {
     let service: ImageFilterService;
+
+    // tslint:disable-next-line: no-any
     let doodle: any;
+    // tslint:disable-next-line: no-any
     let filterStub: any;
     beforeEach(() => {
+        doodle = {};
         filterStub = {
             id: 0,
         };
@@ -83,7 +87,8 @@ describe('ImageFilterService', () => {
     });
     it('should push all six filters in an array filter', () => {
         const filtersArray = service.createAllFilters();
-        expect(filtersArray.length).toEqual(5);
+        const EXP_LEN = 5;
+        expect(filtersArray.length).toEqual(EXP_LEN);
     });
     it('should remove all the filters', () => {
         const num = -1;

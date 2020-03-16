@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { InteractionService } from '../service-interaction/interaction.service';
-import { DrawingTool } from './drawingTool';
+import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
 describe('drawingTools', () => {
@@ -14,7 +13,6 @@ describe('drawingTools', () => {
                 { provide: Boolean, useValue: false },
                 { provide: Number, useValue: 0 },
                 { provide: String, useValue: '' },
-                { provide: InteractionService, useValue: {} },
             ],
         });
 
@@ -22,8 +20,8 @@ describe('drawingTools', () => {
     });
 
     it('should be created', () => {
-        const service: DrawingTool = TestBed.get(DrawingTool);
-        expect(service).toBeTruthy();
+        const testService: DrawingTool = TestBed.get(DrawingTool);
+        expect(testService).toBeTruthy();
     });
 
     it('should call a subscription to the choosen colors and emit it', () => {
@@ -76,13 +74,12 @@ describe('drawingTools', () => {
     it('should add the progress to the main drawing and refresh the current progress', () => {
         service.currentPath = [new Point(0, 0), new Point(1, 1)]; // adding points to avoid having an empty array of progress
         service.createPath = () => 'test'; // stub function
-        service.interaction.emitDrawingDone = jasmine.createSpy().and.returnValue(true);
         service.updateDrawing();
 
         const EMPTY = '';
 
         expect(service.drawing).toBeDefined(); // we dont want to have an empty innerhtml
-        expect(service.interaction.emitDrawingDone).toHaveBeenCalled();
+
         expect(service.inProgress.innerHTML).toEqual(EMPTY);
         expect(service.currentPath.length).toEqual(0); // progress refresh check
     });

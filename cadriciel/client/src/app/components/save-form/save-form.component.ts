@@ -1,10 +1,10 @@
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { IndexService } from 'src/app/services/index/index.service';
+import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ImageData } from '../../imageData';
 
 @Component({
@@ -15,7 +15,11 @@ import { ImageData } from '../../imageData';
 
 export class SaveFormComponent implements OnInit {
   saveForm: FormGroup;
-  constructor(private winService: ModalWindowService, private formBuilder: FormBuilder, public doodleFetch: DoodleFetchService, private index: IndexService) { }
+  constructor(
+    private winService: ModalWindowService,
+    private formBuilder: FormBuilder,
+    public doodleFetch: DoodleFetchService,
+    private index: IndexService) { }
   readonly LabelsNumberCap: number = 20;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   labels: string[];
@@ -27,6 +31,7 @@ export class SaveFormComponent implements OnInit {
   cWidth: number; // attributes to get the correct export size
   cHeigth: number;
   doodle: Node;
+
   ngOnInit() {
     this.initForm();
     this.labels = [];
@@ -44,7 +49,9 @@ export class SaveFormComponent implements OnInit {
     this.doodle = this.doodleFetch.getDrawingWithoutGrid();
   }
 
-
+  blockEvent(ev: KeyboardEvent): void {
+    ev.stopPropagation();
+  }
   initForm() {
     this.saveForm = this.formBuilder.group({
       doodleName: ['Dessin sans titre', Validators.required],
@@ -80,8 +87,11 @@ export class SaveFormComponent implements OnInit {
     let imageData: ImageData = { id: id, name: this.saveForm.value.doodleName, tags: this.labels, svgElement: doodleString };
     this.index.saveImage(imageData);
     this.winService.closeWindow();
+
   }
   closeForm() {
     this.winService.closeWindow();
   }
+
+
 }

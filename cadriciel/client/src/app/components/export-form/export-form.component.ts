@@ -3,8 +3,8 @@ import { AfterContentInit, Component, ElementRef, OnInit, ViewChild } from '@ang
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { ExportService } from 'src/app/services/exportation/export.service';
-import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ImageFilterService } from 'src/app/services/exportation/image-filter/image-filter.service';
+import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 
 @Component({
     selector: 'app-export-form',
@@ -62,6 +62,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
 
     ngAfterContentInit() {
         this.doodle = this.doodleFetch.getDrawingWithoutGrid();
+        console.log(this.doodle);
     }
 
     onSubmit() {
@@ -79,7 +80,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     }
 
     exportation(name: string, type: string) {
-        this.expService.exportInCanvas(this.doodle, this.exportFromCanvas, name, type);
+        this.expService.exportInCanvas(this.doodle, this.exportFromCanvas.nativeElement, name, type);
     }
 
     applyFilter(event: number) {

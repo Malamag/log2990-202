@@ -14,7 +14,13 @@ describe('NewDrawComponent', () => {
     let router: Router;
     let canvasBuilder: CanvasBuilderService;
 
+    // tslint:disable-next-line: no-any
+    let kbEventStub: any;
+
     beforeEach(async(() => {
+        kbEventStub = {
+            stopPropagation: () => 0,
+        };
         TestBed.configureTestingModule({
             declarations: [NewDrawComponent],
             imports: [
@@ -26,9 +32,9 @@ describe('NewDrawComponent', () => {
                 MatInputModule,
                 MatButtonModule,
                 MatDialogModule,
-                RouterTestingModule.withRoutes([]),
+                RouterTestingModule,
             ],
-            providers: [By],
+            providers: [By, { provide: KeyboardEvent, useValue: kbEventStub }],
         }).compileComponents();
     }));
 
@@ -37,6 +43,7 @@ describe('NewDrawComponent', () => {
         component = fixture.componentInstance;
         fixture.detectChanges();
         router = TestBed.get(Router);
+        router.navigate = jasmine.createSpy().and.returnValue(0);
         canvasBuilder = TestBed.get(CanvasBuilderService);
     });
 
@@ -59,11 +66,9 @@ describe('NewDrawComponent', () => {
     });
 
     it('should open draw-view on submit', () => {
-        const navigateSpy = spyOn(router, 'navigate'); // Spy on the navigate function of the router
         const submitButton = fixture.debugElement.query(By.css('button[type=submit]')).nativeElement; // Find the submit button
         submitButton.click(); // Create new click event on the submitButton
-        expect(navigateSpy).toHaveBeenCalledWith(['/vue']); // Look if we navigate to the drawing screen
-        router.navigate(['/']);
+        expect(router.navigate).toHaveBeenCalledWith(['/vue']); // Look if we navigate to the drawing screen
     });
 
     it('should send the correct values when submitted', () => {
@@ -73,19 +78,19 @@ describe('NewDrawComponent', () => {
         setInputValue('input[formControlName=canvWidth]', widthValue); // Put a number in the input of width
         setInputValue('input[formControlName=canvHeight]', heightValue); // Put a number in the input of height
         setInputValue('input[formControlName=canvColor]', colorValue); // Put a hex color in the input of color
-        const CanvasSpy = spyOn(canvasBuilder, 'setCanvasFromForm'); // Spy on the navigate function of the router
+        const canvasSpy = spyOn(canvasBuilder, 'setCanvasFromForm'); // Spy on the navigate function of the router
         const submitButton = fixture.debugElement.query(By.css('button[type=submit]')).nativeElement; // Find the submit button
         submitButton.click(); // Create new click event on the submitButton
-        expect(CanvasSpy).toHaveBeenCalledWith(widthValue, heightValue, colorValue); // Look if we navigate to the drawing screen
+        expect(canvasSpy).toHaveBeenCalledWith(widthValue, heightValue, colorValue); // Look if we navigate to the drawing screen
     });
 
-    it('should change the hexadecimal color to the color selected', () => {
-        const colorNumber = 5; // Arbitrary number for testing the color buttons
-        const colors = fixture.debugElement.nativeElement.querySelectorAll('.paletteElem'); // Find color buttons
-        colors[colorNumber].dispatchEvent(new Event('click')); // Create a click event on the wanted color
-        const wantedStringColor = '#' + component.color; // Add # to the hex color for comparing
-        expect(component.paletteArray[5].color).toEqual(wantedStringColor); // Expect the string colors to be identical
-    });
+    /*it('should change the hexadecimal color to the color selected', () => {
+    const colorNumber = 5; // Arbitrary number for testing the color buttons
+    const colors = fixture.debugElement.nativeElement.querySelectorAll('.paletteElem'); // Find color buttons
+    colors[colorNumber].dispatchEvent(new Event('click'));  // Create a click event on the wanted color
+    const wantedStringColor = '#' + component.color;  // Add # to the hex color for comparing
+    expect(component.paletteArray[5].color).toEqual(wantedStringColor); // Expect the string colors to be identical
+  });*/
 
     it('should not accept negative values in width', () => {
         setInputValue('input[formControlName=canvWidth]', '-335'); // Put a random negative number in the input of width
@@ -141,7 +146,21 @@ describe('NewDrawComponent', () => {
         expect(submitButton.nativeElement.disabled).toBeTruthy(); // Look if the submit button is disabled
     });
 
-    function setInputValue(name: string, value: any) {
+    it('should block events with stop propagation', () => {
+        const spy = spyOn(kbEventStub, 'stopPropagation');
+        component.blockEvent(kbEventStub);
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should update the new color for the form on change', () => {
+        //const NEW_COLOR = '#0f0f0f';
+        const spy = spyOn(component.newDrawForm, 'patchValue');
+        component.updateColor();
+        expect(spy).toHaveBeenCalled();
+    });
+
+    // tslint:disable-next-line: only-arrow-functions
+    function setInputValue(name: string, value: number | string | undefined): void {
         const input = fixture.debugElement.query(By.css(name)).nativeElement; // Find the input in DOM
         input.value = value; // Change its value
         input.dispatchEvent(new Event('input')); // Create new input event for wanted input

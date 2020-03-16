@@ -78,7 +78,7 @@ describe('ColorPickingService', () => {
     });
 
     it('setColor should not call functions', () => {
-        let color: number[] = [];
+        const color: number[] = [];
         const spyRgb = spyOn(service.colorConvert, 'rgbToHex');
         const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex');
         service.setColor(color);
@@ -87,7 +87,7 @@ describe('ColorPickingService', () => {
     });
 
     it('set color should set the primary color to the string returned by the converter', () => {
-        let color: number[] = [1, 2, 3];
+        const color: number[] = [1, 2, 3];
         const spyRgb = spyOn(service.colorConvert, 'rgbToHex');
         const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex');
 
@@ -98,7 +98,7 @@ describe('ColorPickingService', () => {
     });
 
     it('set color should set the secondary color to the string returned by the converter', () => {
-        let color: number[] = [1, 2, 3];
+        const color: number[] = [1, 2, 3];
         const spyRgb = spyOn(service.colorConvert, 'rgbToHex');
         const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex');
 
@@ -110,7 +110,7 @@ describe('ColorPickingService', () => {
     });
 
     it('set color should set the background color to the string returned by the converter', () => {
-        let color: number[] = [1, 2, 3];
+        const color: number[] = [1, 2, 3];
 
         const spyRgb = spyOn(service.colorConvert, 'rgbToHex');
         const spyAlphaRGB = spyOn(service.colorConvert, 'alphaRGBToHex');
@@ -142,8 +142,8 @@ describe('ColorPickingService', () => {
     });
 
     it('should set the SLCursor to the parameters values', () => {
-        const x: number = 1;
-        const y: number = 2;
+        const x = 1;
+        const y = 2;
         service.setSLCursor(x, y);
         expect(service.cData.slCursorX).toEqual(x);
         expect(service.cData.slCursorY).toEqual(y);
@@ -364,19 +364,19 @@ describe('ColorPickingService', () => {
 
     it('should return the primary color saturation', () => {
         service.cData.colorMode = service.cData.PRIMARY_COLOR_MODE;
-        let sat = service.getSaturation();
+        const sat = service.getSaturation();
         expect(sat).toBe(service.cData.primarySaturation);
     });
 
     it('should return the secondary color saturation', () => {
         service.cData.colorMode = service.cData.SECONDARY_COLOR_MODE;
-        let sat = service.getSaturation();
+        const sat = service.getSaturation();
         expect(sat).toBe(service.cData.secondarySaturation);
     });
 
     it('should return the background color saturation', () => {
         service.cData.colorMode = service.cData.BACKGROUND_COLOR_MODE;
-        let sat = service.getSaturation();
+        const sat = service.getSaturation();
         expect(sat).toBe(service.cData.backgroundColorSaturation);
     });
 

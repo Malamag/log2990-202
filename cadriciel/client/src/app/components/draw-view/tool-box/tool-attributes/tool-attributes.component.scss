@@ -1,13 +1,19 @@
-label, p, mat-radio-button {
+label,
+p,
+mat-radio-button {
     color: lightgray;
 }
 
-p{
+p {
     font-size: 24px;
     font-weight: bold;
 }
 
-img{
+img {
     float: right;
     padding-left: 5px;
+}
+
+#pipette-prev {
+    position: relative;
 }

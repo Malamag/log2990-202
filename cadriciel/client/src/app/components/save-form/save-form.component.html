@@ -1,4 +1,4 @@
-<div class="form-container">
+<div class="form-container" (keydown)="blockEvent($event)">
 
     <h1>Sauvegarder un dessin</h1>
     <form [formGroup]="saveForm" >

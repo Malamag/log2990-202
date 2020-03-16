@@ -5,15 +5,15 @@ import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { Canvas } from 'src/app/models/Canvas.model';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
+import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
+import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ShownData } from 'src/app/shownData';
 import { SVGData } from 'src/svgData';
 import { ImageData } from '../../imageData';
 import { IndexService } from './../../services/index/index.service';
-import { GridRenderService } from 'src/app/services/grid/grid-render.service';
-import { Canvas } from 'src/app/models/Canvas.model';
-import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 
 @Component({
     selector: 'app-gallery',
@@ -84,6 +84,7 @@ export class GalleryComponent implements AfterViewInit {
     }
     showMessage(): void {
         this.text = this.render.createText('en cours de chargement');
+
         this.render.appendChild(this.cardsContainer.nativeElement, this.text);
     }
     delete(id: string): void {
@@ -106,11 +107,11 @@ export class GalleryComponent implements AfterViewInit {
     }
 
     getAllImages(): void {
-        this.shownDrawings = [];
         this.showMessage();
         this.drawings = this.index.getAllImages();
         this.render.removeChild(this.cardsContainer, this.text);
         this.drawings.subscribe((data: ImageData[]) => {
+            this.shownDrawings = [];
             if (data.length === 0) {
                 this.render.removeChild(this.cardsContainer.nativeElement, this.text);
                 this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
@@ -133,6 +134,7 @@ export class GalleryComponent implements AfterViewInit {
         });
     }
     getImagesByTags(): void {
+        this.render.removeChild(this.cardsContainer, this.text);
         if (!this.tags.length) {
             this.getAllImages();
         }
@@ -140,8 +142,8 @@ export class GalleryComponent implements AfterViewInit {
         this.drawings = this.index.getImagesByTags(this.tags);
         this.render.removeChild(this.cardsContainer, this.text);
         this.drawings.subscribe((data: ImageData[]) => {
+            this.shownDrawings = [];
             if (data.length === 0) {
-                this.render.removeChild(this.cardsContainer, this.text);
                 this.text = this.render.createText('Aucun dessin correspond a vos critères de recherche');
                 this.render.appendChild(this.cardsContainer.nativeElement, this.text);
             } else {
@@ -181,7 +183,7 @@ export class GalleryComponent implements AfterViewInit {
         this.tagInput.nativeElement.value = '';
         this.tagCtrl.setValue(null);
     }
-    private filter(value: string): string[] {
+    filter(value: string): string[] {
         const filterValue = value.toLowerCase();
         return this.possibleTags.filter((tag: string) => tag.toLowerCase().indexOf(filterValue) === 0);
     }
@@ -222,8 +224,10 @@ export class GalleryComponent implements AfterViewInit {
 
         for (let i = 0; i < data.innerHTML.length; ++i) {
             const tag = this.render.createElement('g', 'http://www.w3.org/2000/svg');
-            tag.innerHTML = data.innerHTML[i];
-            this.render.appendChild(svg, tag);
+            if (tag !== undefined) {
+                tag.innerHTML = data.innerHTML[i];
+                this.render.appendChild(svg, tag);
+            }
         }
 
         return svg;

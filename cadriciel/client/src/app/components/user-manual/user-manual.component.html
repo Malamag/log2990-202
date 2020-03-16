@@ -31,7 +31,7 @@
     <div *ngFor="let i of toolsItems;">
       <button mat-raised-button class="guide-selection-button"
         [ngClass]="(activeButton === i)? 'selected':'notSelected'" (click)="changeActivatedButton(i)">
-        <mat-icon svgIcon= {{i.icon}}> </mat-icon> {{i.shortcutName}}</button>
+        <mat-icon svgIcon={{i.icon}}></mat-icon> {{i.shortcutName}}</button>
     </div>
 
   </nav>

@@ -84,7 +84,7 @@ export class ImageFilterService {
         this.renderer.setAttribute(LIGHT_EFFECT, 'in', 'SourceGraphic');
         this.renderer.setAttribute(LIGHT_EFFECT, 'type', 'matrix');
         const VALUES: string =
-            '1.3 0 0 0 0 ' + //increases luminosity
+            '1.3 0 0 0 0 ' + // increases luminosity
             '0 1.3 0 0 0 ' +
             '0 0 1.3 0 0 ' +
             '0 0 0 1.3 0';
@@ -119,8 +119,8 @@ export class ImageFilterService {
         return FILTER_ARRAY;
     }
 
-    toggleFilter(doodle: Node, filterNum: number) {
-        const NO_FILTER_INDEX: number = -1;
+    toggleFilter(doodle: Node, filterNum: number): void {
+        const NO_FILTER_INDEX = -1;
 
         if (filterNum === NO_FILTER_INDEX) {
             if (this.currentFilter) {
