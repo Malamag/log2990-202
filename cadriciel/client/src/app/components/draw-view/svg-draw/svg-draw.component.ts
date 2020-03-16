@@ -221,6 +221,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.doodleFetch.currentDraw = this.svg;
             this.doodleFetch.widthAttr = this.width;
             this.doodleFetch.heightAttr = this.height;
+            this.doodleFetch.backColor = this.backColor;
         });
 
         this.bgroundChangeSubscription();

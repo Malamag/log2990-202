@@ -13,6 +13,7 @@ export class DoodleFetchService {
 
     widthAttr: number;
     heightAttr: number;
+    backColor: string;
 
     constructor(private gService: GridRenderService) {
         this.ask = new Subject<boolean>();
@@ -51,7 +52,8 @@ export class DoodleFetchService {
         const SVG_DATA: SVGData = {
             width: this.widthAttr + '',
             height: this.heightAttr + '',
-            bgColor: childs[0].getAttribute('style'), innerHTML
+            bgColor: this.backColor,
+            innerHTML
         };
         console.log(SVG_DATA);
         this.gService.renderBack();

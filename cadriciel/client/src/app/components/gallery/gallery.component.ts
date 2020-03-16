@@ -199,7 +199,7 @@ export class GalleryComponent implements AfterViewInit {
         const childs: HTMLCollection = el.children;
         for (let i = 0; i < childs.length; ++i) {
             if (i === 0 && data.bgColor !== null) {
-                childs[i].setAttribute('fill', data.bgColor.substring(6, 24));
+                childs[i].setAttribute('fill', data.bgColor);
             }
             if (data.innerHTML[i] === undefined) {
                 childs[i].innerHTML = '';
@@ -223,7 +223,7 @@ export class GalleryComponent implements AfterViewInit {
         this.render.setAttribute(svg, 'height', data.height);
         const rect = this.render.createElement('rect', 'svg');
         if (data.bgColor !== null) {
-            this.render.setAttribute(rect, 'fill', data.bgColor.substring(6, 24));
+            this.render.setAttribute(rect, 'fill', data.bgColor);
         }
         this.render.setAttribute(rect, 'height', '100%');
         this.render.setAttribute(rect, 'width', '100%');
