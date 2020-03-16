@@ -194,13 +194,9 @@ export class GalleryComponent implements AfterViewInit {
     continueDrawing(data: SVGData): void {
         this.doodle.askForDoodle();
         const el = this.doodle.currentDraw.nativeElement;
-        this.render.setAttribute(el, 'width', data.width);
-        this.render.setAttribute(el, 'height', data.height);
+
         const childs: HTMLCollection = el.children;
         for (let i = 0; i < childs.length; ++i) {
-            if (i === 0 && data.bgColor !== null) {
-                childs[i].setAttribute('fill', data.bgColor);
-            }
             if (data.innerHTML[i] === undefined) {
                 childs[i].innerHTML = '';
             } else {
@@ -208,7 +204,7 @@ export class GalleryComponent implements AfterViewInit {
             }
         }
 
-        const CANVAS_ATTRS: Canvas = { canvasWidth: +data.width, canvasHeight: +data.height, canvasColor: '#ffffffff' };
+        const CANVAS_ATTRS: Canvas = { canvasWidth: +data.width, canvasHeight: +data.height, canvasColor: data.bgColor };
         this.interact.emitGridAttributes(CANVAS_ATTRS);
         this.canvasBuilder.newCanvas = CANVAS_ATTRS;
         this.canvasBuilder.newCanvas.whipeAll = false;
@@ -217,6 +213,10 @@ export class GalleryComponent implements AfterViewInit {
         this.winService.closeWindow();
     }
 
+    /**
+     *
+     * The setAttributes below might be useless, as the subscription in SvgDrawComponent already set all the attributes 
+     */
     createSVG(data: SVGData) {
         const svg = this.render.createElement('svg', 'http://www.w3.org/2000/svg');
         this.render.setAttribute(svg, 'width', data.width);
