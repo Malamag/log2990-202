@@ -91,7 +91,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
                 }
             }
         });
-        this.canvBuilder.emitCanvas();
+        this.canvBuilder.emitCanvas(); // if a page reload is called, the canvas will not be undefined
     }
 
     initGridVisibility(): void {

@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { toolsItems } from '../../../functionality';
-import {IconsService} from '../../../services/icons.service';
+import { IconsService } from '../../../services/icons.service';
 @Component({
     selector: 'app-tool-box',
     templateUrl: './tool-box.component.html',
@@ -10,7 +10,7 @@ import {IconsService} from '../../../services/icons.service';
 export class ToolBoxComponent implements OnInit {
     funcTools = toolsItems;
 
-    activeButton: any;
+    activeButton: string;
 
     disableUndo: boolean;
     disableRedo: boolean;
@@ -36,7 +36,7 @@ export class ToolBoxComponent implements OnInit {
         this.disableRedo = true;
     }
     @HostListener('document: keydown', ['$event'])
-    updateBoard(event: KeyboardEvent) {
+    updateBoard(event: KeyboardEvent): void {
         // keyCode 90 for z
         if (event.ctrlKey && event.keyCode === 90) {
             if (event.shiftKey) {
@@ -49,14 +49,14 @@ export class ToolBoxComponent implements OnInit {
         }
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.interactionService.$enableDisableButtons.subscribe((disableContainer) => {
             this.disableUndo = disableContainer[0];
             this.disableRedo = disableContainer[1];
         });
     }
 
-    buttonAction(name: string) {
+    buttonAction(name: string): void {
         // on click, emit the selected tool name
         this.interactionService.emitSelectedTool(name);
         this.activeButton = name;
