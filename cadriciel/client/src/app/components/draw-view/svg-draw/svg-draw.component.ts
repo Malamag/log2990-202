@@ -48,7 +48,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     @ViewChild('drawingSpace', { static: false }) drawingSpace: ElementRef;
     @ViewChild('selectedItems', { static: false }) selectedItems: ElementRef;
     @ViewChild('grid', { static: false }) gridRef: ElementRef;
-
+    @ViewChild('container', { static: false }) cntRef: ElementRef;
     workingSpace: HTMLElement;
 
     ngOnInit(): void {
@@ -76,13 +76,16 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             if (canvas === undefined || canvas === null) {
                 canvas = this.canvBuilder.getDefCanvas();
             }
+
             this.width = canvas.canvasWidth;
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
             this.canvBuilder.whipeDraw(this.frameRef);
             if (this.gridService.grid) {
-                this.gridService.removeGrid();
-                this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+                if (this.gridRef) {
+                    this.gridService.removeGrid();
+                    this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+                }
             }
         });
         this.canvBuilder.emitCanvas();
@@ -92,6 +95,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.interaction.$showGrid.subscribe((show: boolean) => {
             this.showGrid = show;
         });
+        this.reinitGridFromSub();
     }
 
     ngAfterViewInit(): void {
@@ -221,6 +225,15 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.doodleFetch.widthAttr = this.width;
             this.doodleFetch.heightAttr = this.height;
         });
+
         this.bgroundChangeSubscription();
+    }
+
+    reinitGridFromSub() {
+        this.interaction.$canvasAttributes.subscribe((newDoodle: Canvas) => {
+            this.gridService.removeGrid();
+            this.gridService.initGrid(this.gridRef.nativeElement, newDoodle.canvasWidth, newDoodle.canvasHeight, newDoodle.canvasColor);
+            console.log(newDoodle);
+        });
     }
 }

@@ -9,6 +9,7 @@ import { menuItems } from '../../../functionality';
 import { ExportFormComponent } from '../../export-form/export-form.component';
 import { GalleryComponent } from '../../gallery/gallery.component';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
+import { SaveFormComponent } from '../../save-form/save-form.component';
 import { UserManualComponent } from '../../user-manual/user-manual.component';
 
 @Component({
@@ -48,10 +49,11 @@ export class OptionBarComponent {
         const O_KEY = 79; // keycode for letter o
         const E_KEY = 69;
         const G_KEY = 71;
-        const NUMPAD_PLUS = 107;
-        const NUMPAD_MINUS = 109;
-        const DASH = 189; // minus sign
-        const EQUAL = 187; // plus sign located on the equal key (shift-equal)
+        const S_KEY = 83;
+        const NUMPAD_PLUS: number = 107;
+        const NUMPAD_MINUS: number = 109;
+        const DASH: number = 189; // minus sign
+        const EQUAL: number = 187; // plus sign located on the equal key (shift-equal)
 
         const STEP = 5;
         this.kbHandler.logkey(e);
@@ -61,6 +63,13 @@ export class OptionBarComponent {
             this.openNewDrawForm();
             e.preventDefault(); // default behavior prevented
         }
+
+        if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === S_KEY) {
+            // ctrl+o opens the form!
+            this.openSaveForm();
+            e.preventDefault(); // default behavior prevented
+        }
+
 
         if (this.kbHandler.ctrlDown && this.kbHandler.keyCode === E_KEY) {
             this.openExportForm();
@@ -105,9 +114,14 @@ export class OptionBarComponent {
         this.winService.openWindow(ExportFormComponent);
     }
 
+    openSaveForm(): void {
+        this.winService.openWindow(SaveFormComponent);
+    }
+
     sendSigKill(): void {
         this.interaction.emitCancel(true);
     }
+
     openGallery(): void {
         if (confirm('Un dessin est déjà en cours. Voulez-vous continuer?')) {
             this.winService.openWindow(GalleryComponent);

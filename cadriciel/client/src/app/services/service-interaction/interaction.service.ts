@@ -1,5 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { Canvas } from 'src/app/models/Canvas.model';
 import { AerosolAttributes } from '../attributes/aerosol-attribute';
 import { FormsAttribute } from '../attributes/attribute-form';
 import { LineAttributes } from '../attributes/line-attributes';
@@ -41,6 +42,9 @@ export class InteractionService {
 
     showGrid = new Subject<boolean>();
     $showGrid = this.showGrid.asObservable();
+
+    canvasAttributes = new Subject<Canvas>();
+    $canvasAttributes = this.canvasAttributes.asObservable();
 
     convertSvg2Canvas = new Subject<boolean>();
     $convertSvg2Canvas = this.convertSvg2Canvas.asObservable();
@@ -98,6 +102,10 @@ export class InteractionService {
 
     emitGridVisibility(showGrid: boolean): void {
         this.showGrid.next(showGrid);
+    }
+
+    emitGridAttributes(attr: Canvas): void {
+        this.canvasAttributes.next(attr);
     }
 
     emitSvgCanvasConversion(toCanvas: boolean): void {

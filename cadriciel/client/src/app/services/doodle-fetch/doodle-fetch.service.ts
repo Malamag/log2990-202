@@ -1,5 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { SVGData } from '../../../svgData'
 import { GridRenderService } from '../grid/grid-render.service';
 
 @Injectable({
@@ -32,5 +33,28 @@ export class DoodleFetchService {
 
     getSVGElementFromRef(el: ElementRef): Node {
         return el.nativeElement;
+    }
+
+    getDrawingStringNoGrid(): SVGData {
+        this.gService.removeGrid();
+        const innerHTML: string[] = [];
+        const el: Element = this.currentDraw.nativeElement;
+        const childs: HTMLCollection = el.children;
+        for (let i = 0; i < childs.length; i++) {
+            try {
+                innerHTML.push(childs[i].innerHTML);
+            } catch {
+                innerHTML.push('');
+                console.log('Empty InnerHTML');
+            }
+        }
+        const SVG_DATA: SVGData = {
+            width: this.widthAttr + '',
+            height: this.heightAttr + '',
+            bgColor: childs[0].getAttribute('style'), innerHTML
+        };
+        console.log(SVG_DATA);
+        this.gService.renderBack();
+        return SVG_DATA;
     }
 }

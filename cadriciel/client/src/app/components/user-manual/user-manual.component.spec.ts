@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientModule } from '@angular/common/http';
 import { MatButtonModule, MatDialogModule, MatDialogRef, MatIconModule } from '@angular/material';
 import { toolsItems, welcomeItem } from 'src/app/functionality';
 import { UserManualContentComponent } from './user-manual-content/user-manual-content.component';
@@ -16,7 +16,7 @@ describe('UserManualComponent', () => {
         };
         TestBed.configureTestingModule({
             declarations: [UserManualComponent, UserManualContentComponent],
-            imports: [MatDialogModule, MatButtonModule, MatIconModule],
+            imports: [MatDialogModule, MatButtonModule, MatIconModule, HttpClientModule],
             providers: [{ provide: MatDialogRef, useValue: fakeDialog }],
         }).compileComponents();
     }));

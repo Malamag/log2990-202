@@ -1,24 +1,55 @@
-<div class ="gallery">
-  <div id ="header">
-    <div #filterContainer>
-      <input type = "text" [(ngModel)] = "filter">
+<div class="gallery" (keydown)="blockEvent($event)">
+    <h1>Galerie</h1>
+    <mat-form-field class="header">
+        <mat-chip-list #tagList>
+            <mat-chip *ngFor="let tag of tags" (removed)="removeTag(tag)" [selectable]="selectable">
+                {{ tag }}
+                <mat-icon matChipRemove>clear</mat-icon>
+            </mat-chip>
+
+            <input
+                matInput
+                #tagInput
+                [formControl]="tagCtrl"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="tagList"
+                [matChipInputSeparatorKeyCodes]="inputTagSeparators"
+                placeholder="Étiquette..."
+                (matChipInputTokenEnd)="addTag($event)"
+                (keydown)="blockEvent($event)"
+            />
+            <button id="filter-btn" mat-stroked-button color="primary" (click)="getImagesByTags()">Filtrer</button>
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSlected)="selected($event)">
+            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                {{ tag }}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <div id="cards-container" #cardsContainer>
+        <mat-card class="drawing" *ngFor="let drawing of shownDrawings">
+            <div *ngIf="shownDrawings.length === 0; else elseBlock">
+                <mat-progress-spinner></mat-progress-spinner>
+            </div>
+            <ng-template #elseBlock>
+                <mat-card-header>
+                    <mat-card-title> {{ drawing.name }} </mat-card-title>
+                    <mat-card-subtitle> {{ drawing.tags }} </mat-card-subtitle>
+                </mat-card-header>
+                <!---
+                <img mat-card-image src='https://cdn.instructables.com/F1F/IFEN/GW88TP3T/F1FIFENGW88TP3T.LARGE.jpg?auto=webp&fit=bounds' />
+                -->
+                <app-preview-box [draw]="drawing.svgElement" [svgW]="drawing.width" [svgH]="drawing.height"> </app-preview-box>
+                <mat-card-actions>
+                    <button mat-stroked-button color="warn" (click)="delete(drawing.id)">
+                        <mat-icon matTooltip="Supprimer"> delete </mat-icon>
+                    </button>
+                    <button mat-stroked-button color="basic">
+                        <mat-icon matTooltip="Continuer dessin" (click)="continueDrawing(drawing.data)"> arrow_right_alt</mat-icon>
+                    </button>
+                </mat-card-actions>
+            </ng-template>
+        </mat-card>
     </div>
-    <button (click)= "addFilter()"> Ajouter filtre </button>
-    <button> Appliquer Filtre </button>
-  </div>
-  <div id = "drawingContainer">
-    <div class = "drawings" *ngFor ="let im of fakeImage">
-      <div id ="drawing">
-        <header>
-          <title> {{im.title}}</title>
-          <sub> {{im.tag}}</sub>
-        </header>
-        <img src = {{im.image}}>
-        <footer>
-          <button> Supprimer </button>
-          <button>Continuer dessin </button>
-        </footer>
-      </div>
-    </div>
-  </div>  
 </div>

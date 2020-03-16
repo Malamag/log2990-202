@@ -5,6 +5,7 @@ import { ExportFormComponent } from 'src/app/components/export-form/export-form.
 import { GalleryComponent } from 'src/app/components/gallery/gallery.component';
 import { NewDrawComponent } from 'src/app/components/new-draw/new-draw.component';
 import { UserManualComponent } from 'src/app/components/user-manual/user-manual.component';
+import { SaveFormComponent } from '../../components/save-form/save-form.component';
 
 @Injectable({
     providedIn: 'root',
@@ -24,13 +25,18 @@ export class ModalWindowService {
         this.dialogConfig.restoreFocus = false;
     }
 
-    openWindow(component: ComponentType<GalleryComponent | NewDrawComponent | UserManualComponent | ExportFormComponent>) {
+    openWindow(component: ComponentType<
+        NewDrawComponent |
+        UserManualComponent |
+        GalleryComponent |
+        ExportFormComponent |
+        SaveFormComponent>): void {
         // Can open new draw form or user guide (for now)
         this.closeWindow();
         this.dialog.open(component, this.dialogConfig);
     }
 
-    closeWindow() {
+    closeWindow(): void {
         this.dialog.closeAll();
     }
 }
