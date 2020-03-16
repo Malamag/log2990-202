@@ -9,7 +9,7 @@ import { GalleryComponent } from './gallery.component';
 import { SVGData } from 'src/svgData';
 import { ImageData } from '../../imageData'
 
-fdescribe('GalleryComponent', () => {
+describe('GalleryComponent', () => {
     let component: GalleryComponent;
     let fixture: ComponentFixture<GalleryComponent>;
     let tagAdd: any;

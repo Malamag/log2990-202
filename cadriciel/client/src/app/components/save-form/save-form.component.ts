@@ -15,7 +15,7 @@ import { ImageData } from '../../imageData';
 
 export class SaveFormComponent implements OnInit {
   saveForm: FormGroup;
-  constructor(private winService: ModalWindowService, private formBuilder: FormBuilder, private doodleFetch: DoodleFetchService, private index: IndexService) { }
+  constructor(private winService: ModalWindowService, private formBuilder: FormBuilder, public doodleFetch: DoodleFetchService, private index: IndexService) { }
   readonly LabelsNumberCap: number = 20;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   labels: string[];

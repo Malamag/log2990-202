@@ -38,7 +38,7 @@
     <div id="prev">
         <app-preview-box [draw]="doodle" [svgW]="cWidth" [svgH]="cHeigth"></app-preview-box>
     </div>
-    <button mat-raised-button color="primary" (click)="saveImage()">Sauvegarder</button>
+    <button mat-raised-button color="primary" type ="save" (click)="saveImage()" [disabled]="saveForm.invalid">Sauvegarder</button>
         <button mat-button id="quitButton" (click)="closeForm()">Cancel</button>
         <span id="dimensions">{{ cWidth }}px X {{ cHeigth }}px</span>
     
