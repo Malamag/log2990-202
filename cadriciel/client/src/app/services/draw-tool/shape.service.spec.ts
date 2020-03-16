@@ -7,10 +7,11 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 import { ShapeService } from './shape.service';
 
-export class FakeInteractionService extends InteractionService {}
+export class FakeInteractionService extends InteractionService { }
 
 describe('ShapeService', () => {
     let service: ShapeService;
+    // tslint:disable-next-line: no-any
     let kbServiceStub: any;
     let ptA: Point;
     let ptB: Point;
@@ -40,7 +41,8 @@ describe('ShapeService', () => {
         service = TestBed.get(ShapeService);
         service.ignoreNextUp = false;
         service.isDown = false;
-        service.attr = { plotType: 0, lineThickness: 5, numberOfCorners: 3 };
+        // tslint:disable-next-line: no-string-literal
+        service['attr'] = { plotType: 0, lineThickness: 5, numberOfCorners: 3 };
     });
 
     it('should be created', () => {
@@ -52,7 +54,9 @@ describe('ShapeService', () => {
         const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
         service.updateAttributes();
         expect(spyInteraction).toHaveBeenCalled();
-        expect(service.attr).toBeDefined();
+
+        // tslint:disable-next-line: no-string-literal
+        expect(service['attr']).toBeDefined();
     });
     /*
     it('should update progress on move', () => {
@@ -95,25 +99,32 @@ describe('ShapeService', () => {
     });
     it('should set the width and the height', () => {
         service.setdimensions(ptArr);
-        expect(service.width).toEqual(ptB.x - ptA.x);
-        expect(service.height).toEqual(ptB.y - ptA.y);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['width']).toEqual(ptB.x - ptA.x);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['height']).toEqual(ptB.y - ptA.y);
     });
 
     it('should not fill the shape', () => {
         const NOFILL_MODE = 0;
-        service.attr.plotType = NOFILL_MODE;
+        // tslint:disable-next-line: no-string-literal
+        service['attr'].plotType = NOFILL_MODE;
         service.setAttributesToPath();
         const FILL = 'fill="none"';
 
-        expect(service.svgString).toContain(FILL);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['svgString']).toContain(FILL);
     });
     it('should not have a stroke and fill the shape', () => {
-        service.attr = { plotType: 1, lineThickness: 5, numberOfCorners: 3 };
+        // tslint:disable-next-line: no-string-literal
+        service['attr'] = { plotType: 1, lineThickness: 5, numberOfCorners: 3 };
         service.setAttributesToPath();
         const STROKE_FILL = 'stroke="none"';
         const FILL = 'fill="#000000ff"'; // base color
 
-        expect(service.svgString).toContain(STROKE_FILL);
-        expect(service.svgString).toContain(FILL);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['svgString']).toContain(STROKE_FILL);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['svgString']).toContain(FILL);
     });
 });
