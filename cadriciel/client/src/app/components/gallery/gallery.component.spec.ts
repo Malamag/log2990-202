@@ -1,7 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
 import {
     MatAutocompleteModule,
     MatCardModule,
@@ -11,7 +10,8 @@ import {
     MatIconModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule,
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Subject } from 'rxjs';
@@ -40,7 +40,7 @@ describe('GalleryComponent', () => {
         BrowserAnimationsModule,
         MatDialogModule,
         MatProgressSpinnerModule,
-        FormsModule // for the ngModel
+        MatSnackBarModule,
       ],
         }).compileComponents();
     }));

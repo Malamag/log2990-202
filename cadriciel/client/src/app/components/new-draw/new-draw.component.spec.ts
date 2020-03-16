@@ -153,9 +153,9 @@ describe('NewDrawComponent', () => {
     });
 
     it('should update the new color for the form on change', () => {
-        const NEW_COLOR = '#0f0f0f';
+        //const NEW_COLOR = '#0f0f0f';
         const spy = spyOn(component.newDrawForm, 'patchValue');
-        component.updateColor(NEW_COLOR);
+        component.updateColor();
         expect(spy).toHaveBeenCalled();
     });
 

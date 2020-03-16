@@ -7,7 +7,7 @@ import SpyObj = jasmine.SpyObj;
 import {MatSnackBarModule } from '@angular/material';
 import {SVGData} from '../../../svgData';
 import {ImageData} from '../../imageData'
-fdescribe('IndexService', () => {
+describe('IndexService', () => {
     let httpClientSpy: SpyObj<HttpClient>;
     beforeEach(() => {
         httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'delete', 'patch' , 'post']);
