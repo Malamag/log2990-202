@@ -55,7 +55,7 @@ export class DatabaseService {
                 const imageData: ImageData[] = [];
                 buffer.forEach((data: ImageData) => {
                     let asTag = false;
-                    tagsArray.forEach(tag => {
+                    tagsArray.forEach((tag) => {
                         if (this.searchTag(tag, data.tags)) {
                             asTag = true;
                         }
@@ -118,7 +118,7 @@ export class DatabaseService {
         return buffer;
     }
     async deleteImageById(imageId: string): Promise<void> {
-        fs.readFile('../data.json', function (err, data) {
+        fs.readFile('../data.json', function(err, data) {
             // Convert string (old data) to JSON
             const drawingsList = JSON.parse(data.toString());
 
@@ -128,7 +128,7 @@ export class DatabaseService {
             // Convert JSON to string
             const listToJson = JSON.stringify(drawingsList);
             // Replace all data in the data.json with new ones
-            fs.writeFile('../data.json', listToJson, function (err) {
+            fs.writeFile('../data.json', listToJson, function(err) {
                 if (err) {
                     throw err;
                 }
@@ -144,7 +144,7 @@ export class DatabaseService {
     }
 
     async modifyImage(imageData: ImageData): Promise<void> {
-        fs.readFile('../data.json', function (err, data) {
+        fs.readFile('../data.json', function(err, data) {
             // Convert string (old data) to JSON
             const drawingsList = JSON.parse(data.toString());
             const jsonObj = { id: imageData.id, svgElement: imageData.svgElement };
@@ -156,7 +156,7 @@ export class DatabaseService {
             // Convert JSON to string
             const listToJson = JSON.stringify(drawingsList);
             // Replace all data in the data.json with new ones
-            fs.writeFile('../data.json', listToJson, function (err) {
+            fs.writeFile('../data.json', listToJson, function(err) {
                 if (err) {
                     throw err;
                 }
@@ -191,14 +191,14 @@ export class DatabaseService {
     }
     async saveImage(imageData: ImageData) {
         this.validateImageData(imageData)
-            .then(data => {
+            .then((data) => {
                 let image: ImageData;
                 if (data !== null) {
                     image = data;
                 } else {
                     throw new Error('Invalide image data');
                 }
-                fs.readFile('../data.json', function (err, data) {
+                fs.readFile('../data.json', function(err, data) {
                     // Convert string (old data) to JSON
                     const drawingsList = JSON.parse(data.toString());
                     const jsonObj = { id: image.id, svgElement: image.svgElement };
@@ -207,7 +207,7 @@ export class DatabaseService {
                     // Convert JSON to string
                     const listToJson = JSON.stringify(drawingsList);
                     // Replace all data in the data.json with new ones
-                    fs.writeFile('../data.json', listToJson, function (err) {
+                    fs.writeFile('../data.json', listToJson, function(err) {
                         if (err) {
                             throw err;
                         }
@@ -225,7 +225,7 @@ export class DatabaseService {
     }
 
     validateImageData(imageData: ImageData): Promise<ImageData | null> {
-        return this.getAllImages().then(data => {
+        return this.getAllImages().then((data) => {
             console.log(data.length);
             if (data.length >= 1000) {
                 return null;
@@ -265,7 +265,7 @@ export class DatabaseService {
     validateTags(tags: string[]): boolean {
         let validTags = true;
         const format = new RegExp(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/);
-        tags.forEach(tag => {
+        tags.forEach((tag) => {
             if (format.test(tag)) {
                 validTags = false;
             }

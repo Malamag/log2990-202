@@ -3,8 +3,8 @@ import * as Httpstatus from 'http-status-codes';
 import { inject, injectable } from 'inversify';
 import { DatabaseService } from '../services/database.service';
 
-import Types from '../types';
 import { ImageData } from '../imageData';
+import Types from '../types';
 
 @injectable()
 export class DatabaseController {

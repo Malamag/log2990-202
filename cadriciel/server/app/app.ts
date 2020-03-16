@@ -4,9 +4,9 @@ import cors from 'cors';
 import express from 'express';
 import { inject, injectable } from 'inversify';
 import logger from 'morgan';
+import { DatabaseController } from './controllers/database.controller';
 import { DateController } from './controllers/date.controller';
 import { IndexController } from './controllers/index.controller';
-import { DatabaseController } from './controllers/database.controller';
 import Types from './types';
 
 @injectable()
