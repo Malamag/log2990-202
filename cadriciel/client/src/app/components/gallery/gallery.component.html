@@ -1,6 +1,6 @@
 <div class="gallery" (keydown)="blockEvent($event)">
     <h1>Galerie</h1>
-    <div *ngIf="allLoaded === false">
+    <div *ngIf="allLoaded === false || allLoaded === undefined || shownDrawings.length === 0">
         <mat-spinner [diameter]="32" id="progress-all"></mat-spinner>
     </div>
 

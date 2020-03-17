@@ -61,12 +61,14 @@ export class GalleryComponent implements AfterViewInit {
         );
         this.tags = [];
         this.hasLoaded = false;
-        this.allLoaded = false;
+        this.allLoaded = true;
 
     }
 
     ngAfterViewInit(): void {
+
         this.getAllImages();
+
     }
 
     blockEvent(ev: KeyboardEvent): void {
@@ -93,17 +95,19 @@ export class GalleryComponent implements AfterViewInit {
         }
         this.tagCtrl.setValue(null);
     }
+
     showMessage(): void {
         this.text = this.render.createText('en cours de chargement');
 
         this.render.appendChild(this.cardsContainer.nativeElement, this.text);
     }
+
     delete(id: string): void {
-        this.allLoaded = false;
+        // this.allLoaded = false;
         try {
             this.index.deleteImageById(id);
         } catch (error) {
-            this.text = this.render.createText("l'élément ne peut pas être effacé car il n'existe pas sur le serveur");
+            this.text = this.render.createText("L'élément ne peut pas être effacé car il n'existe pas sur le serveur");
         }
 
         // this.getAllImages();
@@ -116,14 +120,14 @@ export class GalleryComponent implements AfterViewInit {
             this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
             this.render.appendChild(this.cardsContainer.nativeElement, this.text);
         }
-        this.allLoaded = true;
+        // this.allLoaded = true;
     }
 
     getAllImages(): void {
         this.hasLoaded = false;
         this.allLoaded = false;
         this.showMessage();
-        this.render.removeChild(this.cardsContainer, this.text);
+
         this.index.getAllImages().subscribe((data: ImageData[]) => {
             this.shownDrawings = [];
             if (data.length === 0) {
@@ -146,11 +150,13 @@ export class GalleryComponent implements AfterViewInit {
                 this.getAllTags(data);
             }
         });
+        this.render.removeChild(this.cardsContainer, this.text);
         this.hasLoaded = true;
         this.allLoaded = true;
+
     }
     getImagesByTags(): void {
-        this.allLoaded = false;
+        // this.allLoaded = false;
         this.render.removeChild(this.cardsContainer, this.text);
         if (!this.tags.length) {
             this.getAllImages();
@@ -177,10 +183,10 @@ export class GalleryComponent implements AfterViewInit {
                 });
             }
         });
-        this.allLoaded = true;
+        // this.allLoaded = true;
     }
     getAllTags(imageContainer: ImageData[]): void {
-        this.allLoaded = false;
+        // this.allLoaded = false;
         imageContainer.forEach((image: ImageData) => {
             for (const tag of image.tags) {
                 let tagExist = false;
@@ -194,7 +200,7 @@ export class GalleryComponent implements AfterViewInit {
                 }
             }
         });
-        this.allLoaded = true;
+        // this.allLoaded = true;
     }
     // source: https://material.angular.io/components/chips/examples
     selected(event: MatAutocompleteSelectedEvent): void {
