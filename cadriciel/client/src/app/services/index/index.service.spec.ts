@@ -51,10 +51,16 @@ describe('IndexService', () => {
             expect(data).toEqual([expectedData]);
         });
     }));
-    it('should throw an error in the console', inject([IndexService], (service: IndexService) => {
-        httpClientSpy.delete.and.throwError('failed to delete');
+    it('should throw an error that the element can not be deleted', inject([IndexService], (service: IndexService) => {
+        const message = 'failed to delete';
+        httpClientSpy.delete.and.throwError(message);
+        const expectedError = new Error(message);
         const id = '570';
-        expect(service.deleteImageById(id)).toThrowError('failed to delete');
+        try {
+            expect(service.deleteImageById(id)).toThrowError('failed to delete');
+        } catch (error) {
+            expect(error).toEqual(expectedError);
+        }
     }));
     it('should display a feedback', inject([IndexService], (service: IndexService) => {
         const spy = spyOn(service, 'displayFeedback');
@@ -67,11 +73,10 @@ describe('IndexService', () => {
     }));
     it('should patch the information', inject([IndexService], (service: IndexService) => {
         httpClientSpy.patch.calls.reset();
-        const spy = spyOn(httpClientSpy, 'patch');
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
         service.modifyImage(expectedData);
-        expect(spy).toHaveBeenCalled();
+        expect(httpClientSpy.patch.calls.count).toBe(1);
     }));
     it('should display a positive feedback', inject([IndexService], (service: IndexService) => {
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
@@ -84,9 +89,14 @@ describe('IndexService', () => {
     it('should throw an error', inject([IndexService], (service: IndexService) => {
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
-        const error = 'error while saving';
-        httpClientSpy.post.and.throwError(error);
-        expect(service.saveImage(expectedData)).toThrow('Error : ' + error);
+        const message = 'error while saving';
+        const expectedError = new Error(message);
+        httpClientSpy.post.and.throwError(message);
+        try {
+            expect(service.saveImage(expectedData)).toThrowError();
+        } catch (error) {
+            expect(error).toEqual(expectedError);
+        }
     }));
     it('should open a snack bar', inject([IndexService], (service: IndexService) => {
         const openSpy = spyOn(service.snackBar, 'open');
