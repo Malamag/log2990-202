@@ -204,7 +204,7 @@ export class GalleryComponent implements AfterViewInit {
         const CANVAS_ATTRS: Canvas = { canvasWidth: +data.width, canvasHeight: +data.height, canvasColor: data.bgColor };
         this.interact.emitGridAttributes(CANVAS_ATTRS);
         this.canvasBuilder.newCanvas = CANVAS_ATTRS;
-        this.canvasBuilder.newCanvas.whipeAll = false;
+        this.canvasBuilder.newCanvas.wipeAll = false;
         this.canvasBuilder.emitCanvas();
 
         this.winService.closeWindow();
@@ -214,7 +214,7 @@ export class GalleryComponent implements AfterViewInit {
      *
      * The setAttributes below might be useless, as the subscription in SvgDrawComponent already set all the attributes 
      */
-    createSVG(data: SVGData) {
+    createSVG(data: SVGData): Element {
         const svg = this.render.createElement('svg', 'http://www.w3.org/2000/svg');
         this.render.setAttribute(svg, 'width', data.width);
         this.render.setAttribute(svg, 'height', data.height);

@@ -57,7 +57,7 @@ export class CanvasBuilderService {
         return colorCircles;
     }
 
-    whipeDraw(myDoodle: ElementRef | undefined): void {
+    wipeDraw(myDoodle: ElementRef | undefined): void {
         if (myDoodle) {
             // element is defined
             myDoodle.nativeElement.innerHTML = '';
