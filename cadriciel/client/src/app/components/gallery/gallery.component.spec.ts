@@ -7,7 +7,7 @@ import { MatAutocompleteModule, MatCardModule,
        MatInputModule, MatProgressSpinnerModule,
         MatSelectModule, MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Subject } from 'rxjs';
+import { of } from 'rxjs';
 import { SVGData } from 'src/svgData';
 import { ImageData } from '../../imageData';
 import { GalleryComponent } from './gallery.component';
@@ -101,26 +101,26 @@ describe('GalleryComponent', () => {
         expect(component.text).toEqual(text);
     });
     it('should show a message instead of images', () => {
-        const obs = new Subject<ImageData[]>();
-        const observable = obs.asObservable();
-        obs.next([]);
-        component.index.getAllImages = jasmine.createSpy().and.returnValue(observable);
+        component.index.getAllImages = jasmine.createSpy().and.returnValue(of([]));
         const appendSpy = spyOn(component.render, 'appendChild');
         component.getAllImages();
-        expect(appendSpy).toHaveBeenCalled();
+        of([]).subscribe(() => {
+            expect(appendSpy).toHaveBeenCalled();
+        })
     });
-    it('should create an svg and get tags', () => {
-        const obs = new Subject<ImageData[]>();
+    // tslint:disable-next-line: no-any
+    it('should create an svg and get tags', async(done: any) => {
         const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const data: ImageData = { id: '570', svgElement: svgData, name: 'welcome', tags: ['hello', 'new'] };
-        obs.next([data, data]);
-        const observable = obs.asObservable();
-        component.index.getAllImages = jasmine.createSpy().and.returnValues(observable);
+        component.index.getAllImages = jasmine.createSpy().and.returnValue(of([data, data]));
         const createSpy = spyOn(component, 'createSVG');
         const getSpy = spyOn(component, 'getAllTags');
         component.getAllImages();
-        expect(createSpy).toHaveBeenCalled();
-        expect(getSpy).toHaveBeenCalled();
+        of([data, data]).subscribe(() => {
+            expect(createSpy).toHaveBeenCalled();
+            expect(getSpy).toHaveBeenCalled();
+            done();
+        })
     });
     it('should get all images', () => {
         component.tags = [];
@@ -130,25 +130,23 @@ describe('GalleryComponent', () => {
     });
     it(' should show the message that there is no elements with corresponding tags', () => {
         component.tags = ['hello', 'hello'];
-        const obs = new Subject<ImageData[]>();
-        const observable = obs.asObservable();
-        obs.next([]);
         const text = component.render.createText('Aucun dessin correspond a vos critères de recherche');
-        component.index.getImagesByTags = jasmine.createSpy().and.returnValue(observable);
+        component.index.getImagesByTags = jasmine.createSpy().and.returnValue(of([]));
         component.getImagesByTags();
-        expect(component.text.textContent).toEqual(text.textContent);
+        of([]).subscribe(() => {
+            expect(component.text.textContent).toEqual(text.textContent);
+        })
     });
     it('should call create an svg', () => {
         component.tags = ['hello', 'hello'];
-        const obs = new Subject<ImageData[]>();
         const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const data: ImageData = { id: '570', svgElement: svgData, name: 'welcome', tags: ['hello', 'new'] };
-        obs.next([data, data]);
-        const observable = obs.asObservable();
         const spy = spyOn(component, 'createSVG');
-        component.index.getImagesByTags = jasmine.createSpy().and.returnValues(observable);
+        component.index.getImagesByTags = jasmine.createSpy().and.returnValues(of([data, data]));
         component.getImagesByTags();
-        expect(spy).toHaveBeenCalled();
+        of([data, data]).subscribe(() => {
+            expect(spy).toHaveBeenCalled();
+        })
     });
     it('possible tags length should be greater than zero', () => {
         component.possibleTags = [];

@@ -28,7 +28,6 @@ import { IndexService } from './../../services/index/index.service';
  * Angular Material (Google). "Chips" (01/03/2020). En ligne: https://material.angular.io/components/chips/examples
  */
 export class GalleryComponent implements AfterViewInit {
-    drawings: Observable<ImageData[]>;
     shownDrawings: ShownData[] = [];
     readonly inputTagSeparators: number[] = [ENTER, COMMA];
     tags: string[] = [];
@@ -110,9 +109,8 @@ export class GalleryComponent implements AfterViewInit {
 
     getAllImages(): void {
         this.showMessage();
-        this.drawings = this.index.getAllImages();
         this.render.removeChild(this.cardsContainer, this.text);
-        this.drawings.subscribe((data: ImageData[]) => {
+        this.index.getAllImages().subscribe((data: ImageData[]) => {
             this.shownDrawings = [];
             if (data.length === 0) {
                 this.render.removeChild(this.cardsContainer.nativeElement, this.text);
@@ -141,9 +139,8 @@ export class GalleryComponent implements AfterViewInit {
             this.getAllImages();
         }
         this.showMessage();
-        this.drawings = this.index.getImagesByTags(this.tags);
         this.render.removeChild(this.cardsContainer, this.text);
-        this.drawings.subscribe((data: ImageData[]) => {
+        this.index.getImagesByTags(this.tags).subscribe((data: ImageData[]) => {
             this.shownDrawings = [];
             if (data.length === 0) {
                 this.text = this.render.createText('Aucun dessin correspond a vos critères de recherche');
