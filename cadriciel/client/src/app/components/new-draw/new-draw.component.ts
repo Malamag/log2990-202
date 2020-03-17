@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ColorConvertingService } from 'src/app/services/colorPicker/color-converting.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
-import { CanvasBuilderService } from '../../services/drawing/canvas-builder.service';
+import { CanvasBuilderService } from '../../services/new-doodle/canvas-builder.service';
 import { colorData } from '../color-picker/color-data';
 
 @Component({

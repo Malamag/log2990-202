@@ -42,7 +42,7 @@ describe('CanvasBuilderService', () => {
         const draw = '<rect />';
         elem.nativeElement.innerHTML = draw;
 
-        service.whipeDraw(elem);
+        service.wipeDraw(elem);
         expect(elem.nativeElement.innerHTML).not.toContain(draw);
     });
 
@@ -54,11 +54,6 @@ describe('CanvasBuilderService', () => {
     it('should get a white default color', () => {
         const WHITE = 'ffffff';
         expect(service.getDefColor()).toEqual(WHITE);
-    });
-
-    it('should get a valid offset array for color palette in form', () => {
-        const arr = service.getPalleteAttributes();
-        expect(arr).toBeDefined();
     });
 
     it('should emit the new canvas', () => {

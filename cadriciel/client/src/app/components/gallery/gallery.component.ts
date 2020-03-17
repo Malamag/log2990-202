@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Canvas } from 'src/app/models/canvas.model';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
@@ -15,6 +15,8 @@ import { ShownData } from 'src/app/shownData';
 import { SVGData } from 'src/svgData';
 import { ImageData } from '../../imageData';
 import { IndexService } from './../../services/index/index.service';
+import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
+import { colorData } from '../../components/color-picker/color-data';
 
 @Component({
     selector: 'app-gallery',
@@ -46,7 +48,8 @@ export class GalleryComponent implements AfterViewInit {
         public interact: InteractionService,
         public gridService: GridRenderService,
         public winService: ModalWindowService,
-        public canvasBuilder: CanvasBuilderService
+        public canvasBuilder: CanvasBuilderService,
+        public colorService: ColorPickingService
     ) {
         this.render = render;
         this.possibleTags = [];
@@ -55,14 +58,17 @@ export class GalleryComponent implements AfterViewInit {
             map((tag: string | null) => (tag ? this.filter(tag) : this.possibleTags.slice())),
         );
         this.tags = [];
+
     }
 
     ngAfterViewInit(): void {
         this.getAllImages();
     }
+
     blockEvent(ev: KeyboardEvent): void {
         ev.stopPropagation();
     }
+
     removeTag(tag: string): void {
         const INDEX: number = this.tags.indexOf(tag);
         if (INDEX >= 0) {
@@ -206,7 +212,8 @@ export class GalleryComponent implements AfterViewInit {
         this.canvasBuilder.newCanvas = CANVAS_ATTRS;
         this.canvasBuilder.newCanvas.wipeAll = false;
         this.canvasBuilder.emitCanvas();
-
+        this.colorService.colors = { primColor: colorData.primaryColor, secColor: colorData.secondaryColor, backColor: data.bgColor };
+        this.colorService.emitColors();
         this.winService.closeWindow();
     }
 

@@ -6,7 +6,7 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
 import { InputObserver } from 'src/app/services/draw-tool/input-observer';
 import { ToolCreator } from 'src/app/services/draw-tool/tool-creator';
-import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';

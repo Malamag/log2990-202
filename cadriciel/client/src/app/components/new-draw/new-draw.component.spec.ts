@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { CanvasBuilderService } from '../../services/drawing/canvas-builder.service';
+import { CanvasBuilderService } from '../../services/new-doodle/canvas-builder.service';
 import { NewDrawComponent } from './new-draw.component';
 
 describe('NewDrawComponent', () => {

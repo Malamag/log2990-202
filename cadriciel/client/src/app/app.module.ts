@@ -25,7 +25,7 @@ import { UserManualComponent } from './components/user-manual/user-manual.compon
 import { CanvasSwitchDirective } from './directives/canvas-switch.directive';
 import { ColorConvertingService } from './services/colorPicker/color-converting.service';
 import { ColorPickingService } from './services/colorPicker/color-picking.service';
-import { CanvasBuilderService } from './services/drawing/canvas-builder.service';
+import { CanvasBuilderService } from './services/new-doodle/canvas-builder.service';
 import { ExportService } from './services/exportation/export.service';
 import { ModalWindowService } from './services/window-handler/modal-window.service';
 
