@@ -6,17 +6,17 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Canvas } from 'src/app/models/canvas.model';
+import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
+import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ShownData } from 'src/app/shownData';
 import { SVGData } from 'src/svgData';
+import { colorData } from '../../components/color-picker/color-data';
 import { ImageData } from '../../imageData';
 import { IndexService } from './../../services/index/index.service';
-import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
-import { colorData } from '../../components/color-picker/color-data';
 
 @Component({
     selector: 'app-gallery',
@@ -169,15 +169,15 @@ export class GalleryComponent implements AfterViewInit {
     }
     getAllTags(imageContainer: ImageData[]): void {
         imageContainer.forEach((image: ImageData) => {
-            for (let i = 0; i < image.tags.length; ++i) {
+            for (const tag of image.tags) {
                 let tagExist = false;
-                for (let j = 0; j < this.possibleTags.length; ++j) {
-                    if (image.tags[i] === this.possibleTags[j]) {
+                for (const possTag of this.possibleTags) {
+                    if (tag === possTag) {
                         tagExist = true;
                     }
                 }
                 if (!tagExist) {
-                    this.possibleTags.push(image.tags[i]);
+                    this.possibleTags.push(tag);
                 }
             }
         });
@@ -219,24 +219,25 @@ export class GalleryComponent implements AfterViewInit {
 
     /**
      *
-     * The setAttributes below might be useless, as the subscription in SvgDrawComponent already set all the attributes 
+     * The setAttributes below might be useless, as the subscription in SvgDrawComponent already set all the attributes
      */
     createSVG(data: SVGData): Element {
         const svg = this.render.createElement('svg', 'http://www.w3.org/2000/svg');
         this.render.setAttribute(svg, 'width', data.width);
         this.render.setAttribute(svg, 'height', data.height);
         const rect = this.render.createElement('rect', 'svg');
-        if (data.bgColor !== null) {
-            this.render.setAttribute(rect, 'fill', data.bgColor);
+        if (data.bgColor.charAt(0) !== '#') {
+            data.bgColor = '#' + data.bgColor;
         }
+        this.render.setAttribute(rect, 'fill', data.bgColor);
         this.render.setAttribute(rect, 'height', '100%');
         this.render.setAttribute(rect, 'width', '100%');
         this.render.appendChild(svg, rect);
 
-        for (let i = 0; i < data.innerHTML.length; ++i) {
+        for (const inHTML of data.innerHTML) {
             const tag = this.render.createElement('g', 'http://www.w3.org/2000/svg');
             if (tag !== undefined) {
-                tag.innerHTML = data.innerHTML[i];
+                tag.innerHTML = inHTML;
                 this.render.appendChild(svg, tag);
             }
         }
