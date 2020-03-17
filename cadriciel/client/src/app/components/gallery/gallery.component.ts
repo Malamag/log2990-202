@@ -163,17 +163,17 @@ export class GalleryComponent implements AfterViewInit {
     }
     getAllTags(imageContainer: ImageData[]): void {
         imageContainer.forEach((image: ImageData) => {
-            for (let i = 0; i < image.tags.length; ++i) {
+            image.tags.forEach((tag) => {
                 let tagExist = false;
-                for (let j = 0; j < this.possibleTags.length; ++j) {
-                    if (image.tags[i] === this.possibleTags[j]) {
+                this.possibleTags.forEach((exTag) => {
+                    if (tag === exTag) {
                         tagExist = true;
                     }
+                });
+                if(!tagExist) {
+                    this.possibleTags.push(tag);
                 }
-                if (!tagExist) {
-                    this.possibleTags.push(image.tags[i]);
-                }
-            }
+            });
         });
     }
     // source: https://material.angular.io/components/chips/examples
@@ -214,7 +214,7 @@ export class GalleryComponent implements AfterViewInit {
      *
      * The setAttributes below might be useless, as the subscription in SvgDrawComponent already set all the attributes 
      */
-    createSVG(data: SVGData) {
+    createSVG(data: SVGData): Element {
         const svg = this.render.createElement('svg', 'http://www.w3.org/2000/svg');
         this.render.setAttribute(svg, 'width', data.width);
         this.render.setAttribute(svg, 'height', data.height);
@@ -225,15 +225,13 @@ export class GalleryComponent implements AfterViewInit {
         this.render.setAttribute(rect, 'height', '100%');
         this.render.setAttribute(rect, 'width', '100%');
         this.render.appendChild(svg, rect);
-
-        for (let i = 0; i < data.innerHTML.length; ++i) {
+        data.innerHTML.forEach((str) => {
             const tag = this.render.createElement('g', 'http://www.w3.org/2000/svg');
             if (tag !== undefined) {
-                tag.innerHTML = data.innerHTML[i];
+                tag.innerHTML = str;
                 this.render.appendChild(svg, tag);
             }
-        }
-
+        });
         return svg;
     }
 }

@@ -5,13 +5,18 @@ import { ColorConvertingService } from 'src/app/services/colorPicker/color-conve
 // import { Subscription } from 'rxjs';
 // import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { colorData } from '../color-data';
-
+const offstY = 10;
+const offsetX = 25;
+const svMaxValue = 100;
+const hueCursorWidth = 6;
+const value = 100;
 @Component({
     selector: 'app-mini-color-picker',
     templateUrl: './mini-color-picker.component.html',
     styleUrls: ['./mini-color-picker.component.scss'],
 })
 export class MiniColorPickerComponent implements OnInit {
+    // tslint:disable-next-line: typedef
     cData = colorData;
     offsetY: number;
     offsetX: number;
@@ -26,14 +31,14 @@ export class MiniColorPickerComponent implements OnInit {
     isSVSelecting: boolean;
     colorSubject: Subject<string>;
     constructor(private colorconvert: ColorConvertingService) {
-        this.offsetY = 10;
-        this.offsetX = 25;
-        this.svMaxValue = 100;
-        this.hueCursorWidth = 6;
+        this.offsetY = offstY;
+        this.offsetX = offsetX;
+        this.svMaxValue = svMaxValue;
+        this.hueCursorWidth = hueCursorWidth;
         this.color = '#ffffff';
         this.hue = 0;
         this.saturation = 0;
-        this.value = 100;
+        this.value = value;
         this.svCursorPos = { x: this.saturation, y: this.svMaxValue - this.value };
         this.isHueSelecting = false;
         this.isSVSelecting = false;
@@ -95,29 +100,30 @@ export class MiniColorPickerComponent implements OnInit {
         let R: number = this.cData.MIN_RGB_VALUE;
         let G: number = this.cData.MIN_RGB_VALUE;
         let B: number = this.cData.MIN_RGB_VALUE;
-
+        const smallDiv = 3;
+        const mult = 5;
         // Math formula for conversion
         if (this.cData.MIN_HUE_VALUE <= H && H < this.cData.MAX_HUE_VALUE / DIV) {
             R = C;
             G = X;
             B = this.cData.MIN_RGB_VALUE;
-        } else if (this.cData.MAX_HUE_VALUE / 6 <= H && H < this.cData.MAX_HUE_VALUE / 3) {
+        } else if (this.cData.MAX_HUE_VALUE / DIV <= H && H < this.cData.MAX_HUE_VALUE / smallDiv) {
             R = X;
             G = C;
             B = this.cData.MIN_RGB_VALUE;
-        } else if (this.cData.MAX_HUE_VALUE / 3 <= H && H < this.cData.MAX_HUE_VALUE / 2) {
+        } else if (this.cData.MAX_HUE_VALUE / smallDiv <= H && H < this.cData.MAX_HUE_VALUE / 2) {
             R = this.cData.MIN_RGB_VALUE;
             G = C;
             B = X;
-        } else if (this.cData.MAX_HUE_VALUE / 2 <= H && H < (2 * this.cData.MAX_HUE_VALUE) / 3) {
+        } else if (this.cData.MAX_HUE_VALUE / 2 <= H && H < (2 * this.cData.MAX_HUE_VALUE) / smallDiv) {
             R = this.cData.MIN_RGB_VALUE;
             G = X;
             B = C;
-        } else if ((2 * this.cData.MAX_HUE_VALUE) / 3 <= H && H < (5 * this.cData.MAX_HUE_VALUE) / 6) {
+        } else if ((2 * this.cData.MAX_HUE_VALUE) / smallDiv <= H && H < (mult * this.cData.MAX_HUE_VALUE) / DIV) {
             R = X;
             G = this.cData.MIN_RGB_VALUE;
             B = C;
-        } else if ((5 * this.cData.MAX_HUE_VALUE) / 6 <= H && H < this.cData.MAX_HUE_VALUE) {
+        } else if ((mult * this.cData.MAX_HUE_VALUE) / DIV <= H && H < this.cData.MAX_HUE_VALUE) {
             R = C;
             G = this.cData.MIN_RGB_VALUE;
             B = X;

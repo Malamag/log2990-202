@@ -103,5 +103,5 @@ describe('IndexService', () => {
         const feedback = 'hello';
         service.displayFeedback(feedback);
         expect(openSpy).toHaveBeenCalled();
-    }))
+    }));
 });

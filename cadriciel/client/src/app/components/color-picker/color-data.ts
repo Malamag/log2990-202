@@ -1,3 +1,20 @@
+const hexZero = 48; // 0
+const hexOne = 49; // 1
+const hexTwo = 50; // 2
+const hexThree = 51; // 3
+const hexFour = 52; // 4
+const hexFive = 53; // 5
+const hexSix = 54; // 6
+const hexSeven = 55; // 7
+const hexEight = 56; // 8
+const hexNine = 57; // 9
+const hexA = 65; // a
+const hexB = 66; // b
+const hexC = 67; // c
+const hexD = 68; // d
+const hexE = 69; // e
+const hexF = 70; // f
+const hexBackspace = 8;
 export const colorData = {
     currentHue: 0,
     primaryColor: '#ff0000ff',
@@ -36,23 +53,23 @@ export const colorData = {
     swapStrokeStyle: 'white',
     // Ascii table number of hex
     hexNumber: [
-        48, // 0
-        49, // 1
-        50, // 2
-        51, // 3
-        52, // 4
-        53, // 5
-        54, // 6
-        55, // 7
-        56, // 8
-        57, // 9
-        65, // a
-        66, // b
-        67, // c
-        68, // d
-        69, // e
-        70, // f
-        8,
+        hexZero,
+        hexOne,
+        hexTwo,
+        hexThree,
+        hexFour,
+        hexFive,
+        hexSix,
+        hexSeven,
+        hexEight,
+        hexNine,
+        hexA,
+        hexB,
+        hexC,
+        hexD,
+        hexE,
+        hexF,
+        hexBackspace,
     ], // backspace
     lastColorRects: [
         { x: 110, y: 25, fill: 'none', stroke: 'none' },

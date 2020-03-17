@@ -38,7 +38,9 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     height: number;
     backColor: string;
 
+    // tslint:disable-next-line: typedef
     toolsContainer = new Map();
+    // tslint:disable-next-line: typedef
     interactionToolsContainer = new Map();
 
     @ViewChild('inPrgress', { static: false }) inProgress: ElementRef;

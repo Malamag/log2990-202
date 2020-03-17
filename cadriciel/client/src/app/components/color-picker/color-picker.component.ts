@@ -10,6 +10,8 @@ import { colorData } from './color-data';
     styleUrls: ['./color-picker.component.scss'],
 })
 export class ColorPickerComponent implements OnInit {
+    // because it is an interface
+    // tslint:disable-next-line: typedef
     cData = colorData;
     colorSubsc: Subscription;
 

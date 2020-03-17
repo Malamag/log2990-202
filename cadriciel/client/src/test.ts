@@ -11,6 +11,6 @@ declare const require: any;
 getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
 // Then we find all the tests.
 // const myContext = require.context('./', true, /\.spec\.ts$/);
-const myContext = require.context('./', true, /polygon.service\.spec\.ts$/);
+const myContext = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 myContext.keys().map(myContext);

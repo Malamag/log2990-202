@@ -106,10 +106,9 @@ describe('GalleryComponent', () => {
         component.getAllImages();
         of([]).subscribe(() => {
             expect(appendSpy).toHaveBeenCalled();
-        })
+        });
     });
-    // tslint:disable-next-line: no-any
-    it('should create an svg and get tags', async(done: any) => {
+    it('should create an svg and get tags', () => {
         const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const data: ImageData = { id: '570', svgElement: svgData, name: 'welcome', tags: ['hello', 'new'] };
         component.index.getAllImages = jasmine.createSpy().and.returnValue(of([data, data]));
@@ -119,8 +118,7 @@ describe('GalleryComponent', () => {
         of([data, data]).subscribe(() => {
             expect(createSpy).toHaveBeenCalled();
             expect(getSpy).toHaveBeenCalled();
-            done();
-        })
+        });
     });
     it('should get all images', () => {
         component.tags = [];
@@ -135,7 +133,7 @@ describe('GalleryComponent', () => {
         component.getImagesByTags();
         of([]).subscribe(() => {
             expect(component.text.textContent).toEqual(text.textContent);
-        })
+        });
     });
     it('should call create an svg', () => {
         component.tags = ['hello', 'hello'];
@@ -146,7 +144,7 @@ describe('GalleryComponent', () => {
         component.getImagesByTags();
         of([data, data]).subscribe(() => {
             expect(spy).toHaveBeenCalled();
-        })
+        });
     });
     it('possible tags length should be greater than zero', () => {
         component.possibleTags = [];
@@ -189,8 +187,10 @@ describe('GalleryComponent', () => {
         const attributeSpy = spyOn(component.render, 'setAttribute');
         const appendSpy = spyOn(component.render, 'appendChild');
         component.createSVG(svgData);
-        expect(createSpy).toHaveBeenCalledTimes(4);
-        expect(attributeSpy).toHaveBeenCalledTimes(5);
+        const nbCallsCreate = 4;
+        const nbCallsAttr = 5;
+        expect(createSpy).toHaveBeenCalledTimes(nbCallsCreate);
+        expect(attributeSpy).toHaveBeenCalledTimes(nbCallsAttr);
         expect(appendSpy).toHaveBeenCalled();
     });
     it('should lower case the value and filter the value from possible tags container', () => {
