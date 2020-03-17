@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ColorConvertingService } from 'src/app/services/colorPicker/color-converting.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
-import { CanvasBuilderService } from '../../services/drawing/canvas-builder.service';
+import { CanvasBuilderService } from '../../services/new-doodle/canvas-builder.service';
 import { colorData } from '../color-picker/color-data';
 
 @Component({
@@ -12,23 +12,22 @@ import { colorData } from '../color-picker/color-data';
   styleUrls: ['./new-draw.component.scss'],
 })
 export class NewDrawComponent implements OnInit {
-  paletteArray = this.canvasBuilder.getPalleteAttributes();
 
   newDrawForm: FormGroup;
   width: number;
   height: number;
   color: string;
   cData = colorData;
-  offsetY = 10;
-  offsetX = 25;
-  svMaxValue = 100;
-  hueCursorWidth = 6;
-  hue = 0;
-  saturation = 0;
-  value = 100;
-  svCursorPos = { x: this.saturation, y: this.svMaxValue - this.value };
-  isHueSelecting = false;
-  isSVSelecting = false;
+  offsetY: number;
+  offsetX: number;
+  svMaxValue: number;
+  hueCursorWidth: number;
+  hue: number;
+  saturation: number;
+  value: number;
+  svCursorPos: {};
+  isHueSelecting: boolean;
+  isSVSelecting: boolean;
   inputEntered: boolean;
 
   constructor(private formBuilder: FormBuilder,
@@ -36,10 +35,20 @@ export class NewDrawComponent implements OnInit {
     private winService: ModalWindowService,
     private router: Router,
     private colorConvert: ColorConvertingService) {
+    this.offsetY = 10;
+    this.offsetX = 25;
+    this.svMaxValue = 100;
+    this.hueCursorWidth = 6;
+    this.hue = 0;
+    this.saturation = 0;
+    this.value = 100;
+    this.svCursorPos = { x: this.saturation, y: this.svMaxValue - this.value };
+    this.isHueSelecting = false;
+    this.isSVSelecting = false;
 
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.initForm();
     this.resizeCanvas();
     this.color = this.canvasBuilder.getDefColor();
@@ -51,18 +60,18 @@ export class NewDrawComponent implements OnInit {
     });
   }
 
-  blockEvent(ev: KeyboardEvent) {
+  blockEvent(ev: KeyboardEvent): void {
     ev.stopPropagation();
 
     this.inputEntered = false;
   }
 
-  resizeCanvas() {
+  resizeCanvas(): void {
     this.width = this.canvasBuilder.getDefWidth();
     this.height = this.canvasBuilder.getDefHeight();
   }
 
-  initForm() {
+  initForm(): void {
     this.newDrawForm = this.formBuilder.group({
       canvWidth: ['', [Validators.pattern(/^\d+$/), Validators.min(1)]], // accepts only positive integers
       canvHeight: ['', [Validators.pattern(/^\d+$/), Validators.min(1)]],
@@ -76,114 +85,79 @@ export class NewDrawComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     const values = this.newDrawForm.value;
     this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight, values.canvColor);
     this.canvasBuilder.emitCanvas();
     this.closeModalForm();
     this.router.navigate(['/vue']);
-
+    const LOAD_TIME = 15;
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
-    }, 15); // waits for the canvas to be created
+    }, LOAD_TIME); // waits for the canvas to be created
   }
 
-  closeModalForm() {
+  closeModalForm(): void {
     this.winService.closeWindow();
   }
 
-  get canvHeight() { // basic accessors to get individual input validity in html
+  get canvHeight(): AbstractControl | null { // basic accessors to get individual input validity in html
     return this.newDrawForm.get('canvHeight');
   }
 
-  get canvWidth() {
+  get canvWidth(): AbstractControl | null {
     return this.newDrawForm.get('canvWidth');
   }
 
-  get canvColor() {
+  get canvColor(): AbstractControl | null {
     return this.newDrawForm.get('canvColor');
   }
 
-  updateColor() {
-    this.color = this.hsvToHex(this.hue, this.saturation / this.svMaxValue, this.value / this.svMaxValue).slice(1); // removes the '#'
+  updateColor(): void {
+    // slice (1) removes the '#'
+    this.color = this.colorConvert.hsvToHex(this.hue, this.saturation / this.svMaxValue, this.value / this.svMaxValue).slice(1);
     this.newDrawForm.patchValue({ canvColor: this.color }); // updates value for form
   }
 
-  onMouseDownHue(event: MouseEvent) {
+  onMouseDownHue(event: MouseEvent): void {
     this.isHueSelecting = true;
     this.hueSelect(event);
   }
-  onMouseDownSV(event: MouseEvent) {
+
+  onMouseDownSV(event: MouseEvent): void {
     this.isSVSelecting = true;
     this.svSelect(event);
   }
-  onMouseUp() {
+
+  onMouseUp(): void {
     this.isHueSelecting = false;
     this.isSVSelecting = false;
   }
-  hueSelect(event: MouseEvent) {
+
+  hueSelect(event: MouseEvent): void {
     if (this.isHueSelecting) {
       this.hue = Math.round((event.offsetY - this.offsetY) * (this.cData.MAX_HUE_VALUE / this.svMaxValue));
       this.updateColor();
     }
   }
-  svSelect(event: MouseEvent) {
+
+  svSelect(event: MouseEvent): void {
     if (this.isSVSelecting) {
       this.saturation = event.offsetX - this.offsetX;
       this.value = this.svMaxValue - (event.offsetY - this.offsetY);
       this.updateColor();
     }
   }
-  hsvToHex(H: number, S: number, V: number): string {
-    let hex = '';
-    const rgb: number[] = [-1, -1, -1];
 
-    const C: number = S * V;
-    const X: number = C * (1 - Math.abs(((H / (this.cData.MAX_HUE_VALUE / 6)) % 2) - 1));
-    const m: number = V - C;
-
-    let R: number = this.cData.MIN_RGB_VALUE;
-    let G: number = this.cData.MIN_RGB_VALUE;
-    let B: number = this.cData.MIN_RGB_VALUE;
-
-    // Math formula for conversion
-    if (this.cData.MIN_HUE_VALUE <= H && H < this.cData.MAX_HUE_VALUE / 6) {
-      R = C;
-      G = X;
-      B = this.cData.MIN_RGB_VALUE;
-    } else if (this.cData.MAX_HUE_VALUE / 6 <= H && H < this.cData.MAX_HUE_VALUE / 3) {
-      R = X;
-      G = C;
-      B = this.cData.MIN_RGB_VALUE;
-    } else if (this.cData.MAX_HUE_VALUE / 3 <= H && H < this.cData.MAX_HUE_VALUE / 2) {
-      R = this.cData.MIN_RGB_VALUE;
-      G = C;
-      B = X;
-    } else if (this.cData.MAX_HUE_VALUE / 2 <= H && H < (2 * this.cData.MAX_HUE_VALUE) / 3) {
-      R = this.cData.MIN_RGB_VALUE;
-      G = X;
-      B = C;
-    } else if ((2 * this.cData.MAX_HUE_VALUE) / 3 <= H && H < (5 * this.cData.MAX_HUE_VALUE) / 6) {
-      R = X;
-      G = this.cData.MIN_RGB_VALUE;
-      B = C;
-    } else if ((5 * this.cData.MAX_HUE_VALUE) / 6 <= H && H < this.cData.MAX_HUE_VALUE) {
-      R = C;
-      G = this.cData.MIN_RGB_VALUE;
-      B = X;
-    }
-    rgb[0] = Math.round((R + m) * this.cData.MAX_RGB_VALUE);
-    rgb[1] = Math.round((G + m) * this.cData.MAX_RGB_VALUE);
-    rgb[2] = Math.round((B + m) * this.cData.MAX_RGB_VALUE);
-
-    hex = '#' + this.colorConvert.rgbToHex(rgb[0]) + this.colorConvert.rgbToHex(rgb[1]) + this.colorConvert.rgbToHex(rgb[2]);
-    return hex;
-  }
-  get hueCursorStyles(): any {
-    return { transform: 'translateY(' + ((Math.round(this.hue * (this.svMaxValue / this.cData.MAX_HUE_VALUE))) + (this.offsetY - this.hueCursorWidth / 2)) + 'px)' };
+  get hueCursorStyles(): {} {
+    return {
+      transform: 'translateY(' +
+        ((Math.round(this.hue * (this.svMaxValue / this.cData.MAX_HUE_VALUE))) +
+          (this.offsetY - this.hueCursorWidth / 2)) + 'px)'
+    };
   }
 
-  get svCursorStyles(): any {
+  get svCursorStyles(): {} {
     return { transform: 'translate(' + this.saturation + 'px,' + (this.svMaxValue - this.value) + 'px)' };
   }
 }

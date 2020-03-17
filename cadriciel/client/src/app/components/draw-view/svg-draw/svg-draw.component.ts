@@ -5,12 +5,11 @@ import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
 import { InputObserver } from 'src/app/services/draw-tool/input-observer';
-import { PipetteService } from 'src/app/services/draw-tool/pipette.service';
 import { ToolCreator } from 'src/app/services/draw-tool/tool-creator';
-import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
+import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
 
@@ -21,7 +20,7 @@ import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handl
 })
 export class SvgDrawComponent implements OnInit, AfterViewInit {
     showGrid: boolean;
-    pipette: PipetteService; // needed in the canvas switch directive as an Input element
+
     constructor(
         private canvBuilder: CanvasBuilderService,
         public interaction: InteractionService,
@@ -66,6 +65,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     bgroundChangeSubscription(): void {
         this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
+
             if (choosenColors) {
                 this.backColor = choosenColors.backColor;
                 this.gridService.updateColor(this.backColor);
@@ -75,6 +75,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     initCanvas(): void {
         this.canvBuilder.canvSubject.subscribe((canvas: Canvas) => {
+
             if (canvas === undefined || canvas === null) {
                 canvas = this.canvBuilder.getDefCanvas();
             }
@@ -82,8 +83,8 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.width = canvas.canvasWidth;
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
-            if (canvas.whipeAll === true || canvas.whipeAll === undefined) {
-                this.canvBuilder.whipeDraw(this.frameRef);
+            if (canvas.wipeAll === true || canvas.wipeAll === undefined) { // if no attribute is specified, the doodle will be w
+                this.canvBuilder.wipeDraw(this.frameRef);
             }
 
             if (this.gridService.grid) {
@@ -147,7 +148,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.svg.nativeElement,
         );
 
-        this.pipette = tc.CreatePipette(false, this.interaction, this.colorPick);
+        const pipette = tc.CreatePipette(false, this.interaction, this.colorPick);
 
         this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
         this.toolsContainer.set('Rectangle', rect);
@@ -160,7 +161,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Sélectionner', selection);
         this.toolsContainer.set('Efface', eraser);
         this.toolsContainer.set('ApplicateurCouleur', colorEditor);
-        this.toolsContainer.set('Pipette', this.pipette);
+        this.toolsContainer.set('Pipette', pipette);
 
         this.interaction.$cancelToolsObs.subscribe((sig: boolean) => {
             if (sig) {

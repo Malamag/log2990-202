@@ -18,7 +18,7 @@ export class CanvasSwitchDirective implements AfterViewInit {
         private exService: ExportService,
         private itService: InteractionService,
         private renderer: Renderer2,
-    ) {}
+    ) { }
 
     ngAfterViewInit(): void {
         /**

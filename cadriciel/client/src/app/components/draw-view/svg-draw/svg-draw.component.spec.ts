@@ -7,7 +7,7 @@ import { SvgDrawComponent } from './svg-draw.component';
 import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
 import { CanvasSwitchDirective } from 'src/app/directives/canvas-switch.directive';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';

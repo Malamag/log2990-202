@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Canvas } from 'src/app/models/canvas.model';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
+import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ShownData } from 'src/app/shownData';
@@ -170,7 +170,7 @@ export class GalleryComponent implements AfterViewInit {
                         tagExist = true;
                     }
                 });
-                if(!tagExist) {
+                if (!tagExist) {
                     this.possibleTags.push(tag);
                 }
             });
@@ -204,7 +204,7 @@ export class GalleryComponent implements AfterViewInit {
         const CANVAS_ATTRS: Canvas = { canvasWidth: +data.width, canvasHeight: +data.height, canvasColor: data.bgColor };
         this.interact.emitGridAttributes(CANVAS_ATTRS);
         this.canvasBuilder.newCanvas = CANVAS_ATTRS;
-        this.canvasBuilder.newCanvas.whipeAll = false;
+        this.canvasBuilder.newCanvas.wipeAll = false;
         this.canvasBuilder.emitCanvas();
 
         this.winService.closeWindow();
