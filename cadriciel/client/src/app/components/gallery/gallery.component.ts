@@ -63,13 +63,13 @@ export class GalleryComponent implements AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-
         this.getAllImages();
-
     }
+
     blockEvent(ev: KeyboardEvent): void {
         ev.stopPropagation();
     }
+
     removeTag(tag: string): void {
         const INDEX: number = this.tags.indexOf(tag);
         if (INDEX >= 0) {
@@ -98,7 +98,7 @@ export class GalleryComponent implements AfterViewInit {
     }
 
     delete(id: string): void {
-        // this.allLoaded = false;
+        this.allLoaded = false;
         try {
             this.index.deleteImageById(id);
         } catch (error) {
@@ -115,7 +115,7 @@ export class GalleryComponent implements AfterViewInit {
             this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
             this.render.appendChild(this.cardsContainer.nativeElement, this.text);
         }
-        // this.allLoaded = true;
+        this.allLoaded = true;
     }
 
     getAllImages(): void {
@@ -149,7 +149,7 @@ export class GalleryComponent implements AfterViewInit {
 
     }
     getImagesByTags(): void {
-        // this.allLoaded = false;
+        this.allLoaded = false;
         this.render.removeChild(this.cardsContainer, this.text);
         if (!this.tags.length) {
             this.getAllImages();
@@ -176,10 +176,10 @@ export class GalleryComponent implements AfterViewInit {
                 });
             }
         });
-        // this.allLoaded = true;
+        this.allLoaded = true;
     }
     getAllTags(imageContainer: ImageData[]): void {
-        // this.allLoaded = false;
+        this.allLoaded = false;
         imageContainer.forEach((image: ImageData) => {
             image.tags.forEach((tag) => {
                 let tagExist = false;
@@ -193,7 +193,7 @@ export class GalleryComponent implements AfterViewInit {
                 }
             });
         });
-        // this.allLoaded = true;
+        this.allLoaded = true;
     }
     // source: https://material.angular.io/components/chips/examples
     selected(event: MatAutocompleteSelectedEvent): void {
@@ -238,9 +238,10 @@ export class GalleryComponent implements AfterViewInit {
         this.render.setAttribute(svg, 'width', data.width);
         this.render.setAttribute(svg, 'height', data.height);
         const rect = this.render.createElement('rect', 'svg');
-        if (data.bgColor !== null) {
-            this.render.setAttribute(rect, 'fill', data.bgColor);
+        if (data.bgColor.charAt(0) !== '#') {
+            data.bgColor = '#' + data.bgColor;
         }
+        this.render.setAttribute(rect, 'fill', data.bgColor);
         this.render.setAttribute(rect, 'height', '100%');
         this.render.setAttribute(rect, 'width', '100%');
         this.render.appendChild(svg, rect);
