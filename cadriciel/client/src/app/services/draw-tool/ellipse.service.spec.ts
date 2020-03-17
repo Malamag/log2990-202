@@ -108,8 +108,8 @@ describe('EllipseService', () => {
         const first = new Point(0, 0);
         const num = 10;
         const second = new Point(num, num);
-        const rect = service.createPath([first, second], false);
-        expect(rect).toContain('<ellipse');
+        const ellipse = service.createPath([first, second], false);
+        expect(ellipse).toContain('<ellipse');
     });
 
     it('should create a rectangle of the correct dimensions from mouse move', () => {
@@ -125,22 +125,22 @@ describe('EllipseService', () => {
         expect(rect).toContain(expHeigth);
     });
 
-    it('should create a rectangle with the selected border thickness', () => {
+    it('should create an ellipse with the selected border thickness', () => {
         const thick = 1;
         service.attr.lineThickness = thick; // simulated border thickness
-        const rect = service.createPath(ptArr, false);
+        const ellipse = service.createPath(ptArr, false);
         const expTick = `stroke-width="${thick}"`;
-        expect(rect).toContain(expTick);
+        expect(ellipse).toContain(expTick);
     });
 
-    it('should render a square on pressed shift key', () => {
-        const newArr = [new Point(0, 0), new Point(1, 1)]; // forcing a square
-        const fakeSquare = service.createPath(newArr, false);
+    it('should render a circle on pressed shift key', () => {
+        const newArr = [new Point(0, 0), new Point(1, 1)]; // forcing a circle
+        const fakeCircle = service.createPath(newArr, false);
 
         service.isSquare = true;
-        const square = service.createPath(ptArr, false);
+        const circle = service.createPath(ptArr, false);
 
-        expect(square).toEqual(fakeSquare);
+        expect(circle).toEqual(fakeCircle);
     });
 
     it('should create a rectangle with corner at mouse start', () => {
@@ -149,14 +149,14 @@ describe('EllipseService', () => {
         expect(rect).toEqual('');
     });
 
-    it('should create a rectangle filled with the selected color', () => {
+    it('should create an ellipse filled with the selected color', () => {
         const color = '#ffffff';
         service.chosenColor = { primColor: color, secColor: color, backColor: color }; // both prim. and sec.
         const first = new Point(0 , 0);
         const num = 10;
         const second = new Point(num, num);
-        const rect = service.createPath([first, second], false);
-        expect(rect).toContain(`fill="${color}"`);
+        const ellipse = service.createPath([first, second], false);
+        expect(ellipse).toContain(`fill="${color}"`);
     });
 
     it('should create a border of the selected secondary color', () => {
@@ -168,12 +168,12 @@ describe('EllipseService', () => {
         const secondPoint = new Point(num, num);
         const pointsContainer = [firstPoint, secondPoint];
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-        const rect = service.createPath(pointsContainer, false);
+        const ellipse = service.createPath(pointsContainer, false);
 
-        expect(rect).toContain(`stroke="${sec}"`);
+        expect(ellipse).toContain(`stroke="${sec}"`);
     });
 
-    it('should create only an outlined rectangle on plottype = 0', () => {
+    it('should create only an outlined ellipse on plottype = 0', () => {
         service.attr.plotType = 0; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
@@ -182,28 +182,28 @@ describe('EllipseService', () => {
         const first = new Point(0, 0);
         const num = 10;
         const second = new Point(num , num);
-        const rect = service.createPath([first, second], false);
+        const ellipse = service.createPath([first, second], false);
 
-        expect(rect).toContain(`fill="${'none'}"`); // no color for fill
+        expect(ellipse).toContain(`fill="${'none'}"`); // no color for fill
 
-        expect(rect).toContain(`stroke="${sec}"`); // secondary color for border fill
+        expect(ellipse).toContain(`stroke="${sec}"`); // secondary color for border fill
     });
 
-    it('should create only a filled rectangle on plottype = 1', () => {
+    it('should create only a filled ellipse on plottype = 1', () => {
         service.attr.plotType = 1; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
 
-        const rect = service.createPath(ptArr, false);
+        const ellipse = service.createPath(ptArr, false);
 
-        expect(rect).toContain(`fill="${prim}"`); // primary color fill
+        expect(ellipse).toContain(`fill="${prim}"`); // primary color fill
 
-        expect(rect).toContain(`stroke="${'none'}"`);
+        expect(ellipse).toContain(`stroke="${'none'}"`);
     });
 
-    it('should create a filled and outlined rectangle on plottype = 2', () => {
+    it('should create a filled and outlined ellipse on plottype = 2', () => {
         service.attr.plotType = 2; // init the plot type
         const prim = '#000000';
         const sec = '#ffffff';
@@ -212,19 +212,19 @@ describe('EllipseService', () => {
         const first = new Point(0 , 0);
         const num = 10;
         const second = new Point(num, num)
-        const rect = service.createPath([first, second], false);
+        const ellipse = service.createPath([first, second], false);
 
-        expect(rect).toContain(`fill="${prim}"`); // no color for fill
+        expect(ellipse).toContain(`fill="${prim}"`); // no color for fill
 
-        expect(rect).toContain(`stroke="${sec}"`); // secondary color for border fill
+        expect(ellipse).toContain(`stroke="${sec}"`); // secondary color for border fill
     });
 
     it('should not create an ellipse if the mouse didnt move', () => {
         const newArr = [new Point(0, 0), new Point(0, 0)]; // no move
 
-        const rect = service.createPath(newArr, false);
+        const ellipse = service.createPath(newArr, false);
 
-        expect(rect).toBe('');
+        expect(ellipse).toBe('');
     });
 
     it('should be named ellipse', () => {
