@@ -38,6 +38,8 @@ export class GalleryComponent implements AfterViewInit {
     tagCtrl: FormControl = new FormControl();
     render: Renderer2;
     text: Element;
+    hasLoaded: boolean;
+    allLoaded: boolean;
     @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef;
     @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
@@ -58,6 +60,8 @@ export class GalleryComponent implements AfterViewInit {
             map((tag: string | null) => (tag ? this.filter(tag) : this.possibleTags.slice())),
         );
         this.tags = [];
+        this.hasLoaded = false;
+        this.allLoaded = false;
 
     }
 
@@ -95,6 +99,7 @@ export class GalleryComponent implements AfterViewInit {
         this.render.appendChild(this.cardsContainer.nativeElement, this.text);
     }
     delete(id: string): void {
+        this.allLoaded = false;
         try {
             this.index.deleteImageById(id);
         } catch (error) {
@@ -111,9 +116,12 @@ export class GalleryComponent implements AfterViewInit {
             this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
             this.render.appendChild(this.cardsContainer.nativeElement, this.text);
         }
+        this.allLoaded = true;
     }
 
     getAllImages(): void {
+        this.hasLoaded = false;
+        this.allLoaded = false;
         this.showMessage();
         this.render.removeChild(this.cardsContainer, this.text);
         this.index.getAllImages().subscribe((data: ImageData[]) => {
@@ -138,8 +146,11 @@ export class GalleryComponent implements AfterViewInit {
                 this.getAllTags(data);
             }
         });
+        this.hasLoaded = true;
+        this.allLoaded = true;
     }
     getImagesByTags(): void {
+        this.allLoaded = false;
         this.render.removeChild(this.cardsContainer, this.text);
         if (!this.tags.length) {
             this.getAllImages();
@@ -166,8 +177,10 @@ export class GalleryComponent implements AfterViewInit {
                 });
             }
         });
+        this.allLoaded = true;
     }
     getAllTags(imageContainer: ImageData[]): void {
+        this.allLoaded = false;
         imageContainer.forEach((image: ImageData) => {
             for (const tag of image.tags) {
                 let tagExist = false;
@@ -181,6 +194,7 @@ export class GalleryComponent implements AfterViewInit {
                 }
             }
         });
+        this.allLoaded = true;
     }
     // source: https://material.angular.io/components/chips/examples
     selected(event: MatAutocompleteSelectedEvent): void {
@@ -217,10 +231,6 @@ export class GalleryComponent implements AfterViewInit {
         this.winService.closeWindow();
     }
 
-    /**
-     *
-     * The setAttributes below might be useless, as the subscription in SvgDrawComponent already set all the attributes
-     */
     createSVG(data: SVGData): Element {
         const svg = this.render.createElement('svg', 'http://www.w3.org/2000/svg');
         this.render.setAttribute(svg, 'width', data.width);
