@@ -36,6 +36,8 @@ export class GalleryComponent implements AfterViewInit {
     tagCtrl: FormControl = new FormControl();
     render: Renderer2;
     text: Element;
+    hasLoaded: boolean;
+    allLoaded: boolean;
     @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef;
     @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
@@ -55,12 +57,9 @@ export class GalleryComponent implements AfterViewInit {
             map((tag: string | null) => (tag ? this.filter(tag) : this.possibleTags.slice())),
         );
         this.tags = [];
-<<<<<<< HEAD
         this.hasLoaded = false;
         this.allLoaded = true;
 
-=======
->>>>>>> 7c97b6bdf055aeee93e9a9a18a19b82a60711253
     }
 
     ngAfterViewInit(): void {
@@ -99,10 +98,7 @@ export class GalleryComponent implements AfterViewInit {
     }
 
     delete(id: string): void {
-<<<<<<< HEAD
         // this.allLoaded = false;
-=======
->>>>>>> 7c97b6bdf055aeee93e9a9a18a19b82a60711253
         try {
             this.index.deleteImageById(id);
         } catch (error) {
@@ -119,10 +115,7 @@ export class GalleryComponent implements AfterViewInit {
             this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
             this.render.appendChild(this.cardsContainer.nativeElement, this.text);
         }
-<<<<<<< HEAD
         // this.allLoaded = true;
-=======
->>>>>>> 7c97b6bdf055aeee93e9a9a18a19b82a60711253
     }
 
     getAllImages(): void {
@@ -150,7 +143,6 @@ export class GalleryComponent implements AfterViewInit {
                 this.getAllTags(data);
             }
         });
-<<<<<<< HEAD
         this.render.removeChild(this.cardsContainer, this.text);
         this.hasLoaded = true;
         this.allLoaded = true;
@@ -158,10 +150,6 @@ export class GalleryComponent implements AfterViewInit {
     }
     getImagesByTags(): void {
         // this.allLoaded = false;
-=======
-    }
-    getImagesByTags(): void {
->>>>>>> 7c97b6bdf055aeee93e9a9a18a19b82a60711253
         this.render.removeChild(this.cardsContainer, this.text);
         if (!this.tags.length) {
             this.getAllImages();
@@ -188,15 +176,10 @@ export class GalleryComponent implements AfterViewInit {
                 });
             }
         });
-<<<<<<< HEAD
         // this.allLoaded = true;
     }
     getAllTags(imageContainer: ImageData[]): void {
         // this.allLoaded = false;
-=======
-    }
-    getAllTags(imageContainer: ImageData[]): void {
->>>>>>> 7c97b6bdf055aeee93e9a9a18a19b82a60711253
         imageContainer.forEach((image: ImageData) => {
             image.tags.forEach((tag) => {
                 let tagExist = false;
@@ -210,10 +193,7 @@ export class GalleryComponent implements AfterViewInit {
                 }
             });
         });
-<<<<<<< HEAD
         // this.allLoaded = true;
-=======
->>>>>>> 7c97b6bdf055aeee93e9a9a18a19b82a60711253
     }
     // source: https://material.angular.io/components/chips/examples
     selected(event: MatAutocompleteSelectedEvent): void {
