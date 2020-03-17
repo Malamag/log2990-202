@@ -6,7 +6,7 @@ import { colorData } from '../../components/color-picker/color-data';
 })
 export class ColorConvertingService {
     cData = colorData; // Interface for Color data
-    constructor() {}
+    constructor() { }
 
     // RGB [0,255]
     validateRGB(r: number): Boolean {
@@ -202,5 +202,52 @@ export class ColorConvertingService {
             rgba[1] = -1;
         }
         return rgba;
+    }
+
+    hsvToHex(H: number, S: number, V: number): string {
+        let hex = '';
+        // tslint:disable-next-line: no-magic-numbers
+        const rgb: number[] = [-1, -1, -1]; // array of bad index
+
+        const C: number = S * V;
+        const X: number = C * (1 - Math.abs(((H / (this.cData.MAX_HUE_VALUE / 6)) % 2) - 1));
+        const m: number = V - C;
+
+        let R: number = this.cData.MIN_RGB_VALUE;
+        let G: number = this.cData.MIN_RGB_VALUE;
+        let B: number = this.cData.MIN_RGB_VALUE;
+
+        // Math formula for conversion
+        if (this.cData.MIN_HUE_VALUE <= H && H < this.cData.MAX_HUE_VALUE / 6) {
+            R = C;
+            G = X;
+            B = this.cData.MIN_RGB_VALUE;
+        } else if (this.cData.MAX_HUE_VALUE / 6 <= H && H < this.cData.MAX_HUE_VALUE / 3) {
+            R = X;
+            G = C;
+            B = this.cData.MIN_RGB_VALUE;
+        } else if (this.cData.MAX_HUE_VALUE / 3 <= H && H < this.cData.MAX_HUE_VALUE / 2) {
+            R = this.cData.MIN_RGB_VALUE;
+            G = C;
+            B = X;
+        } else if (this.cData.MAX_HUE_VALUE / 2 <= H && H < (2 * this.cData.MAX_HUE_VALUE) / 3) {
+            R = this.cData.MIN_RGB_VALUE;
+            G = X;
+            B = C;
+        } else if ((2 * this.cData.MAX_HUE_VALUE) / 3 <= H && H < (5 * this.cData.MAX_HUE_VALUE) / 6) {
+            R = X;
+            G = this.cData.MIN_RGB_VALUE;
+            B = C;
+        } else if ((5 * this.cData.MAX_HUE_VALUE) / 6 <= H && H < this.cData.MAX_HUE_VALUE) {
+            R = C;
+            G = this.cData.MIN_RGB_VALUE;
+            B = X;
+        }
+        rgb[0] = Math.round((R + m) * this.cData.MAX_RGB_VALUE);
+        rgb[1] = Math.round((G + m) * this.cData.MAX_RGB_VALUE);
+        rgb[2] = Math.round((B + m) * this.cData.MAX_RGB_VALUE);
+
+        hex = '#' + this.rgbToHex(rgb[0]) + this.rgbToHex(rgb[1]) + this.rgbToHex(rgb[2]);
+        return hex;
     }
 }
