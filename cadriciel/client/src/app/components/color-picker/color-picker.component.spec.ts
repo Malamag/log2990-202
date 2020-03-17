@@ -48,8 +48,11 @@ describe('ColorPickerComponent', () => {
         expect(component.cData.backgroundColor).toBe(BG_COLOR);
     });
     it('should call set color', () => {
+        const first = 1;
+        const second = 2;
+        const third = 3;
         const setSpy = spyOn(component.colorPicking, 'setColor');
-        component.setColor([1, 2, 3]);
+        component.setColor([first, second, third]);
         expect(setSpy).toHaveBeenCalled();
     });
     it('should call hue selector', () => {
@@ -141,7 +144,8 @@ describe('ColorPickerComponent', () => {
     });
     it('should call onHexInput', () => {
         const inputSpy = spyOn(component.colorPicking, 'onHexInput');
-        component.onHexInput(10, '00000000', 'background');
+        const num = 10;
+        component.onHexInput(num, '00000000', 'background');
         expect(inputSpy).toHaveBeenCalled();
     });
     it('should call on sl slider input', () => {

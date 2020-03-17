@@ -13,6 +13,7 @@ import { UserManualComponent } from '../user-manual/user-manual.component';
 
 })
 export class EntryPointComponent implements OnInit {
+  // tslint:disable-next-line: typedef
   menuItems = menuItems;
   winService: ModalWindowService;
 
@@ -20,30 +21,31 @@ export class EntryPointComponent implements OnInit {
     this.winService = new ModalWindowService(this.dialog);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.onOpen(); // opens snackbar at the bottom of the page
   }
 
-  onOpen() {
+  onOpen(): void {
     const config = new MatSnackBarConfig();
-    config.duration = 2500; // temps de visibilité de la barre de bienvenue (ms)
+    const duration = 2500;
+    config.duration = duration; // temps de visibilité de la barre de bienvenue (ms)
     this.snackBar.open('Bienvenue !', undefined, config);
   }
 
-  openUserManual() {
+  openUserManual(): void {
 
     this.winService.openWindow(UserManualComponent);
   }
 
-  openCreateNew() {
+  openCreateNew(): void {
     this.winService.openWindow(NewDrawComponent);
   }
 
-  openGallery() {
+  openGallery(): void {
     this.winService.openWindow(GalleryComponent);
   }
 
-  execute(shortcutName: string) {
+  execute(shortcutName: string): void {
     switch (shortcutName) {
       case 'Créer': {
         this.openCreateNew();

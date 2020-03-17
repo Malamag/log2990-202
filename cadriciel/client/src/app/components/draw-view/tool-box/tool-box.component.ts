@@ -2,12 +2,15 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { toolsItems } from '../../../functionality';
 import { IconsService } from '../../../services/icons.service';
+const zKeyCode = 90;
 @Component({
     selector: 'app-tool-box',
     templateUrl: './tool-box.component.html',
     styleUrls: ['./tool-box.component.scss'],
 })
 export class ToolBoxComponent implements OnInit {
+    // an interface
+    // tslint:disable-next-line: typedef
     funcTools = toolsItems;
 
     activeButton: string;
@@ -16,6 +19,7 @@ export class ToolBoxComponent implements OnInit {
     disableRedo: boolean;
     // I doubt if we can delete these two
     @ViewChild('toolsOptionsRef', { static: false }) navBarRef: ElementRef;
+    // tslint:disable-next-line: typedef
     selectingToolsMap = new Map();
 
     constructor(public interactionService: InteractionService, public icons: IconsService) {
@@ -38,7 +42,8 @@ export class ToolBoxComponent implements OnInit {
     @HostListener('document: keydown', ['$event'])
     updateBoard(event: KeyboardEvent): void {
         // keyCode 90 for z
-        if (event.ctrlKey && event.keyCode === 90) {
+        // tslint:disable-next-line: deprecation
+        if (event.ctrlKey && event.keyCode === zKeyCode) {
             if (event.shiftKey) {
                 this.buttonAction(this.selectingToolsMap.get('ctrl+shift+z'));
             } else {

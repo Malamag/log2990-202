@@ -6,7 +6,6 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Canvas } from 'src/app/models/canvas.model';
-import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
@@ -14,7 +13,6 @@ import { InteractionService } from 'src/app/services/service-interaction/interac
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ShownData } from 'src/app/shownData';
 import { SVGData } from 'src/svgData';
-import { colorData } from '../../components/color-picker/color-data';
 import { ImageData } from '../../imageData';
 import { IndexService } from './../../services/index/index.service';
 
@@ -38,8 +36,6 @@ export class GalleryComponent implements AfterViewInit {
     tagCtrl: FormControl = new FormControl();
     render: Renderer2;
     text: Element;
-    hasLoaded: boolean;
-    allLoaded: boolean;
     @ViewChild('cardsContainer', { static: false }) cardsContainer: ElementRef;
     @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
@@ -50,8 +46,7 @@ export class GalleryComponent implements AfterViewInit {
         public interact: InteractionService,
         public gridService: GridRenderService,
         public winService: ModalWindowService,
-        public canvasBuilder: CanvasBuilderService,
-        public colorService: ColorPickingService
+        public canvasBuilder: CanvasBuilderService
     ) {
         this.render = render;
         this.possibleTags = [];
@@ -60,9 +55,12 @@ export class GalleryComponent implements AfterViewInit {
             map((tag: string | null) => (tag ? this.filter(tag) : this.possibleTags.slice())),
         );
         this.tags = [];
+<<<<<<< HEAD
         this.hasLoaded = false;
         this.allLoaded = true;
 
+=======
+>>>>>>> 7c97b6bdf055aeee93e9a9a18a19b82a60711253
     }
 
     ngAfterViewInit(): void {
@@ -70,11 +68,9 @@ export class GalleryComponent implements AfterViewInit {
         this.getAllImages();
 
     }
-
     blockEvent(ev: KeyboardEvent): void {
         ev.stopPropagation();
     }
-
     removeTag(tag: string): void {
         const INDEX: number = this.tags.indexOf(tag);
         if (INDEX >= 0) {
@@ -103,7 +99,10 @@ export class GalleryComponent implements AfterViewInit {
     }
 
     delete(id: string): void {
+<<<<<<< HEAD
         // this.allLoaded = false;
+=======
+>>>>>>> 7c97b6bdf055aeee93e9a9a18a19b82a60711253
         try {
             this.index.deleteImageById(id);
         } catch (error) {
@@ -120,12 +119,13 @@ export class GalleryComponent implements AfterViewInit {
             this.text = this.render.createText('Aucun dessin ne se trouve sur le serveur');
             this.render.appendChild(this.cardsContainer.nativeElement, this.text);
         }
+<<<<<<< HEAD
         // this.allLoaded = true;
+=======
+>>>>>>> 7c97b6bdf055aeee93e9a9a18a19b82a60711253
     }
 
     getAllImages(): void {
-        this.hasLoaded = false;
-        this.allLoaded = false;
         this.showMessage();
 
         this.index.getAllImages().subscribe((data: ImageData[]) => {
@@ -150,6 +150,7 @@ export class GalleryComponent implements AfterViewInit {
                 this.getAllTags(data);
             }
         });
+<<<<<<< HEAD
         this.render.removeChild(this.cardsContainer, this.text);
         this.hasLoaded = true;
         this.allLoaded = true;
@@ -157,6 +158,10 @@ export class GalleryComponent implements AfterViewInit {
     }
     getImagesByTags(): void {
         // this.allLoaded = false;
+=======
+    }
+    getImagesByTags(): void {
+>>>>>>> 7c97b6bdf055aeee93e9a9a18a19b82a60711253
         this.render.removeChild(this.cardsContainer, this.text);
         if (!this.tags.length) {
             this.getAllImages();
@@ -183,24 +188,32 @@ export class GalleryComponent implements AfterViewInit {
                 });
             }
         });
+<<<<<<< HEAD
         // this.allLoaded = true;
     }
     getAllTags(imageContainer: ImageData[]): void {
         // this.allLoaded = false;
+=======
+    }
+    getAllTags(imageContainer: ImageData[]): void {
+>>>>>>> 7c97b6bdf055aeee93e9a9a18a19b82a60711253
         imageContainer.forEach((image: ImageData) => {
-            for (const tag of image.tags) {
+            image.tags.forEach((tag) => {
                 let tagExist = false;
-                for (const possTag of this.possibleTags) {
-                    if (tag === possTag) {
+                this.possibleTags.forEach((exTag) => {
+                    if (tag === exTag) {
                         tagExist = true;
                     }
-                }
+                });
                 if (!tagExist) {
                     this.possibleTags.push(tag);
                 }
-            }
+            });
         });
+<<<<<<< HEAD
         // this.allLoaded = true;
+=======
+>>>>>>> 7c97b6bdf055aeee93e9a9a18a19b82a60711253
     }
     // source: https://material.angular.io/components/chips/examples
     selected(event: MatAutocompleteSelectedEvent): void {
@@ -232,32 +245,32 @@ export class GalleryComponent implements AfterViewInit {
         this.canvasBuilder.newCanvas = CANVAS_ATTRS;
         this.canvasBuilder.newCanvas.wipeAll = false;
         this.canvasBuilder.emitCanvas();
-        this.colorService.colors = { primColor: colorData.primaryColor, secColor: colorData.secondaryColor, backColor: data.bgColor };
-        this.colorService.emitColors();
+
         this.winService.closeWindow();
     }
 
+    /**
+     *
+     * The setAttributes below might be useless, as the subscription in SvgDrawComponent already set all the attributes 
+     */
     createSVG(data: SVGData): Element {
         const svg = this.render.createElement('svg', 'http://www.w3.org/2000/svg');
         this.render.setAttribute(svg, 'width', data.width);
         this.render.setAttribute(svg, 'height', data.height);
         const rect = this.render.createElement('rect', 'svg');
-        if (data.bgColor.charAt(0) !== '#') {
-            data.bgColor = '#' + data.bgColor;
+        if (data.bgColor !== null) {
+            this.render.setAttribute(rect, 'fill', data.bgColor);
         }
-        this.render.setAttribute(rect, 'fill', data.bgColor);
         this.render.setAttribute(rect, 'height', '100%');
         this.render.setAttribute(rect, 'width', '100%');
         this.render.appendChild(svg, rect);
-
-        for (const inHTML of data.innerHTML) {
+        data.innerHTML.forEach((str) => {
             const tag = this.render.createElement('g', 'http://www.w3.org/2000/svg');
             if (tag !== undefined) {
-                tag.innerHTML = inHTML;
+                tag.innerHTML = str;
                 this.render.appendChild(svg, tag);
             }
-        }
-
+        });
         return svg;
     }
 }
