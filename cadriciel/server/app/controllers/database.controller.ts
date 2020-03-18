@@ -60,10 +60,10 @@ export class DatabaseController {
                 });
         });
 
-        this.router.get('/populateDB', (req: Request, res: Response, next: NextFunction) => {
-            this.databaseService.populateDB();
-            res.sendStatus(Httpstatus.OK);
-        });
+        /* this.router.get('/populateDB', (req: Request, res: Response, next: NextFunction) => {
+             this.databaseService.populateDB();
+             res.sendStatus(Httpstatus.OK);
+         });*/
 
         this.router.post('/saveImage', (req: Request, res: Response, next: NextFunction) => {
             this.databaseService.saveImage(req.body)

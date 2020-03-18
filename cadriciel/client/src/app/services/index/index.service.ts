@@ -26,6 +26,7 @@ export class IndexService {
     }
 
     private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
+
         return (error: Error): Observable<T> => {
             return of(result as T);
         };
@@ -34,11 +35,12 @@ export class IndexService {
     getAllImages(): Observable<ImageData[]> {
         return this.http.get<ImageData[]>(this.DATABASE_URL);
     }
+
     getImagesByTags(tags: string[]): Observable<ImageData[]> {
         return this.http.get<ImageData[]>(this.DATABASE_URL + tags);
     }
 
-    deleteImageById(imageId: string) {
+    deleteImageById(imageId: string): void {
         this.http.delete<ImageData>(this.DATABASE_URL + imageId, httpOptions).subscribe(
             (data) => this.displayFeedback('Image supprimée avec succès!'),
             (error) => {
@@ -48,16 +50,16 @@ export class IndexService {
         );
     }
 
-    modifyImage(imageData: ImageData) {
+    modifyImage(imageData: ImageData): void {
         httpOptions.headers = httpOptions.headers.set('Authorization', 'my-new-auth-token');
         this.http.patch<ImageData>(this.DATABASE_URL, imageData, httpOptions).subscribe((data) => { });
     }
 
-    populatedBd() {
-        this.http.get<any>('http://localhost:3000/database/populateDB').subscribe((data) => { });
+    populatedBd(): void {
+        this.http.get<ImageData[]>('http://localhost:3000/database/populateDB').subscribe((data) => { });
     }
 
-    saveImage(imageData: ImageData) {
+    saveImage(imageData: ImageData): void {
         this.http.post('http://localhost:3000/database/saveImage', imageData, httpOptions).subscribe(
             (data) => {
                 this.displayFeedback('Image sauvegardée avec succès');
@@ -70,7 +72,7 @@ export class IndexService {
         );
     }
 
-    displayFeedback(message: string) {
+    private displayFeedback(message: string): void {
         const DURATION = 2500;
         const config = new MatSnackBarConfig();
         config.duration = DURATION;

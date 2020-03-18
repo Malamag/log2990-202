@@ -12,7 +12,7 @@ export class DateController {
         this.configureRouter();
     }
 
-    private configureRouter() {
+    private configureRouter(): void {
         this.router = Router();
         this.router.get('/', (req: Request, res: Response, next: NextFunction) => {
             // Send the request to the service and send the response
