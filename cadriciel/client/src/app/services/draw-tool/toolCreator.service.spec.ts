@@ -26,6 +26,7 @@ describe('ToolCreator', () => {
     const brushSpy = jasmine.createSpy('BrushService');
 
     colorConvertingStub = {
+      hsvToHex : () => '',
       validateHSL: () => true,
       validateHex: () => true,
       rgbToHex: () => '',
