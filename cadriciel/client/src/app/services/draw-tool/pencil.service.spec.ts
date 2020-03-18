@@ -1,11 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-
-import { InteractionService } from '../service-interaction/interaction.service';
-import { PencilService } from './pencil.service';
-
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
+import { InteractionService } from '../service-interaction/interaction.service';
+import { PencilService } from './pencil.service';
 import { Point } from './point';
 // tslint:disable: max-classes-per-file
 export class FakeInteractionService extends InteractionService {}

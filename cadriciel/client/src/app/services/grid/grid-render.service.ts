@@ -7,13 +7,13 @@ import { InteractionService } from '../service-interaction/interaction.service';
 })
 export class GridRenderService {
     render: Renderer2;
-    readonly defSteps = 10;
+    readonly defSteps: number = 10;
     private readonly ns: string = 'http://www.w3.org/2000/svg';
     private vGridLines: SVGLineElement[] = [];
     private hGridLines: SVGLineElement[] = [];
 
-    gridAlpha = 'ff';
-    gridColor = '#000000';
+    gridAlpha: string;
+    gridColor: string;
 
     drawHeight: number;
     drawWidth: number;
@@ -22,6 +22,8 @@ export class GridRenderService {
 
     constructor(private rdFact: RendererFactory2, private colConv: ColorConvertingService, private itService: InteractionService) {
         this.render = this.rdFact.createRenderer(null, null);
+        this.gridAlpha = 'ff';
+        this.gridColor = '#000000';
     }
 
     renderVerticalLine(): SVGLineElement {
@@ -34,7 +36,7 @@ export class GridRenderService {
         return V_LINE;
     }
 
-    renderHorizontalLine() {
+    renderHorizontalLine(): SVGLineElement {
         const H_LINE = this.render.createElement('line', this.ns);
 
         this.render.setAttribute(H_LINE, 'x1', '0');
@@ -44,7 +46,7 @@ export class GridRenderService {
         return H_LINE;
     }
 
-    renderVerticalLines(step: number) {
+    renderVerticalLines(step: number): void {
         let vLineElement: SVGLineElement;
         let position: string;
 
@@ -57,7 +59,7 @@ export class GridRenderService {
         }
     }
 
-    renderHorizontalLines(step: number) {
+    renderHorizontalLines(step: number): void {
         let hLineElement: SVGLineElement;
         let position: string;
         for (let j = 0; j < this.drawHeight; j += step) {
@@ -69,7 +71,7 @@ export class GridRenderService {
         }
     }
 
-    initGrid(gridElement: SVGElement, width: number, height: number, color: string) {
+    initGrid(gridElement: SVGElement, width: number, height: number, color: string): void {
         this.hGridLines = [];
         this.vGridLines = [];
         this.grid = gridElement;
@@ -91,7 +93,7 @@ export class GridRenderService {
         this.updateColor(color);
     }
 
-    updateSpacing(spacing: number) {
+    updateSpacing(spacing: number): void {
         let hSpacing: number = spacing;
         let wSpacing: number = spacing;
 
@@ -108,7 +110,7 @@ export class GridRenderService {
         });
     }
 
-    updateTransparency(alphaPercent: number) {
+    updateTransparency(alphaPercent: number): void {
         const PERCENT = 100;
         const ALPHA_VAL: number = alphaPercent / PERCENT;
 
@@ -116,7 +118,7 @@ export class GridRenderService {
         this.updateAttributes('style', `stroke:${this.gridColor + this.gridAlpha}`);
     }
 
-    updateColor(bgColor: string) {
+    updateColor(bgColor: string): void {
         const RGBA: number[] = this.colConv.hexToRgba(bgColor);
         const LIMIT = 128;
 
@@ -135,11 +137,11 @@ export class GridRenderService {
         }
     }
 
-    toggleGridVisibility(show: boolean) {
+    toggleGridVisibility(show: boolean): void {
         this.itService.emitGridVisibility(show);
     }
 
-    updateAttributes(attrName: string, value: string) {
+    updateAttributes(attrName: string, value: string): void {
         this.hGridLines.forEach((hLine: SVGLineElement) => {
             this.render.setAttribute(hLine, attrName, value);
         });
@@ -149,11 +151,11 @@ export class GridRenderService {
         });
     }
 
-    removeGrid() {
+    removeGrid(): void {
         this.grid.innerHTML = ''; // removes the line elements
     }
 
-    renderBack() {
+    renderBack(): void {
         this.hGridLines.forEach((hLine: SVGLineElement) => {
             this.render.appendChild(this.grid, hLine);
         });
