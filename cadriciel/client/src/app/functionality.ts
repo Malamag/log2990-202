@@ -1,3 +1,8 @@
+// tslint:disable:max-lines max-line-length
+/*
+We disabled these rules because functionality.ts contains multiple arrays with our functionalities. Each object contains a
+description (which can be long) displayed in the user manual.
+*/
 export const welcomeItem = [
     {
         name: 'Bienvenue',

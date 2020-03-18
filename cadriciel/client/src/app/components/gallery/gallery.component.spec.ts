@@ -9,7 +9,7 @@ import { MatAutocompleteModule, MatCardModule,
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { SVGData } from 'src/svgData';
-import { ImageData } from '../../imageData';
+import { ImageData } from '../../image-data';
 import { GalleryComponent } from './gallery.component';
 
 describe('GalleryComponent', () => {

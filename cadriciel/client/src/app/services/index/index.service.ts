@@ -5,7 +5,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Message } from '../../../../../common/communication/message';
-import { ImageData } from '../../imageData';
+import { ImageData } from '../../image-data';
 
 const httpOptions = {
     headers: new HttpHeaders({

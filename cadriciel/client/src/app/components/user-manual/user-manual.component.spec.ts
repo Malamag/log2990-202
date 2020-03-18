@@ -8,6 +8,7 @@ import { UserManualComponent } from './user-manual.component';
 describe('UserManualComponent', () => {
     let component: UserManualComponent;
     let fixture: ComponentFixture<UserManualComponent>;
+    // tslint:disable-next-line: no-any
     let fakeDialog: any;
 
     beforeEach(async(() => {
@@ -36,7 +37,7 @@ describe('UserManualComponent', () => {
         const buttons = fixture.debugElement.nativeElement.querySelectorAll('.guide-selection-button'); // Find all guide selection buttons
         component.changeActivatedButton(component.func[funcNumber - 2]); // Change active button for another arbitrary button
         buttons[funcNumber].click(); // Simulate a click on the first arbitrary button
-        expect(component.activeButton).toEqual(component.func[funcNumber]); // Expect the active button to have changed to the button clicked
+        expect(component.activeButton).toEqual(component.func[funcNumber]);
     });
 
     it('should change to the next page', () => {

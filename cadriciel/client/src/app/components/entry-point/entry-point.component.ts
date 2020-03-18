@@ -13,12 +13,13 @@ import { UserManualComponent } from '../user-manual/user-manual.component';
 
 })
 export class EntryPointComponent implements OnInit {
-  // tslint:disable-next-line: typedef
-  menuItems = menuItems;
+
+  menuItems: object = {};
   winService: ModalWindowService;
 
   constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {
     this.winService = new ModalWindowService(this.dialog);
+    this.menuItems = menuItems;
   }
 
   ngOnInit(): void {

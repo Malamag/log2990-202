@@ -7,6 +7,7 @@ import { PreviewBoxComponent } from './preview-box.component';
 describe('PreviewBoxComponent', () => {
     let component: PreviewBoxComponent;
     let fixture: ComponentFixture<PreviewBoxComponent>;
+    // tslint:disable-next-line: no-any
     let rdStub: any;
     beforeEach(async(() => {
         rdStub = {
