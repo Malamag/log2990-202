@@ -13,7 +13,7 @@ import { InteractionService } from 'src/app/services/service-interaction/interac
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ShownData } from 'src/app/shownData';
 import { SVGData } from 'src/svgData';
-import { ImageData } from '../../imageData';
+import { ImageData } from '../../image-data';
 import { IndexService } from './../../services/index/index.service';
 
 @Component({
@@ -228,11 +228,7 @@ export class GalleryComponent implements AfterViewInit {
 
         this.winService.closeWindow();
     }
-
-    /**
-     *
-     * The setAttributes below might be useless, as the subscription in SvgDrawComponent already set all the attributes 
-     */
+    // The setAttributes below might be useless, as the subscription in SvgDrawComponent already set all the attributes
     createSVG(data: SVGData): Element {
         const svg = this.render.createElement('svg', 'http://www.w3.org/2000/svg');
         this.render.setAttribute(svg, 'width', data.width);

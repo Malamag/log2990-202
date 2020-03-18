@@ -211,7 +211,7 @@ describe('EllipseService', () => {
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
         const first = new Point(0 , 0);
         const num = 10;
-        const second = new Point(num, num)
+        const second = new Point(num, num);
         const ellipse = service.createPath([first, second], false);
 
         expect(ellipse).toContain(`fill="${prim}"`); // no color for fill
@@ -228,7 +228,7 @@ describe('EllipseService', () => {
     });
 
     it('should be named ellipse', () => {
-        const firstP = new Point (0, 0)
+        const firstP = new Point (0, 0);
         const num = 10;
         const secondP = new Point(num, num);
         const path = service.createPath([firstP, secondP], false);

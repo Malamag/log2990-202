@@ -1,11 +1,13 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { IndexService } from 'src/app/services/index/index.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
-import { ImageData } from '../../imageData';
+import { ImageData } from '../../image-data';
+
+const LABELS_NUMBER_CAP = 20;
 
 @Component({
   selector: 'app-save-form',
@@ -13,14 +15,13 @@ import { ImageData } from '../../imageData';
   styleUrls: ['./save-form.component.scss']
 })
 
-export class SaveFormComponent implements OnInit {
+export class SaveFormComponent implements OnInit, AfterContentInit {
   saveForm: FormGroup;
   constructor(
     private winService: ModalWindowService,
     private formBuilder: FormBuilder,
     public doodleFetch: DoodleFetchService,
     private index: IndexService) { }
-  readonly LabelsNumberCap: number = 20;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   labels: string[];
   selectable: boolean;
@@ -32,7 +33,7 @@ export class SaveFormComponent implements OnInit {
   cHeigth: number;
   doodle: Node;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.initForm();
     this.labels = [];
     this.format = new RegExp(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/);
@@ -45,14 +46,14 @@ export class SaveFormComponent implements OnInit {
     this.cHeigth = this.doodleFetch.heightAttr;
   }
 
-  ngAfterContentInit() {
+  ngAfterContentInit(): void {
     this.doodle = this.doodleFetch.getDrawingWithoutGrid();
   }
 
   blockEvent(ev: KeyboardEvent): void {
     ev.stopPropagation();
   }
-  initForm() {
+  initForm(): void {
     this.saveForm = this.formBuilder.group({
       doodleName: ['Dessin sans titre', Validators.required],
     });
@@ -62,7 +63,7 @@ export class SaveFormComponent implements OnInit {
     const input = event.input;
     const value = event.value;
     this.containsSymbols = this.format.test(event.value);
-    this.labelsIsFull = this.labels.length >= this.LabelsNumberCap;
+    this.labelsIsFull = this.labels.length >= LABELS_NUMBER_CAP;
 
     if ((value || '').trim() && !this.containsSymbols && !this.labelsIsFull) {
       this.labels.push(value.trim());
@@ -79,9 +80,9 @@ export class SaveFormComponent implements OnInit {
     if (index >= 0) {
       this.labels.splice(index, 1);
     }
-    this.labelsIsFull = this.labels.length >= this.LabelsNumberCap;
+    this.labelsIsFull = this.labels.length >= LABELS_NUMBER_CAP;
   }
-  saveImage() {
+  saveImage(): void {
     const id: string = new Date().getUTCMilliseconds() + '';
     const doodleString = this.doodleFetch.getDrawingStringNoGrid();
     const imageData: ImageData = { id, name: this.saveForm.value.doodleName, tags: this.labels, svgElement: doodleString };
@@ -89,7 +90,7 @@ export class SaveFormComponent implements OnInit {
     this.winService.closeWindow();
 
   }
-  closeForm() {
+  closeForm(): void {
     this.winService.closeWindow();
   }
 

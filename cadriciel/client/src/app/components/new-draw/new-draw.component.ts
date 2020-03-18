@@ -6,18 +6,24 @@ import { ModalWindowService } from 'src/app/services/window-handler/modal-window
 import { CanvasBuilderService } from '../../services/new-doodle/canvas-builder.service';
 import { colorData } from '../color-picker/color-data';
 
+const OFFSETY = 10;
+const OFFSETX = 25;
+const SVMAXVALUE = 100;
+const CURSORWIDTH = 6;
+const DEFAULT_VALUE = 100;
 @Component({
   selector: 'app-new-draw',
   templateUrl: './new-draw.component.html',
   styleUrls: ['./new-draw.component.scss'],
 })
-export class NewDrawComponent implements OnInit {
 
+export class NewDrawComponent implements OnInit {
+  // tslint:disable-next-line: typedef
+  cData = colorData;
   newDrawForm: FormGroup;
   width: number;
   height: number;
   color: string;
-  cData = colorData;
   offsetY: number;
   offsetX: number;
   svMaxValue: number;
@@ -30,22 +36,22 @@ export class NewDrawComponent implements OnInit {
   isSVSelecting: boolean;
   inputEntered: boolean;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
+    private formBuilder: FormBuilder,
     private canvasBuilder: CanvasBuilderService,
     private winService: ModalWindowService,
     private router: Router,
     private colorConvert: ColorConvertingService) {
-    this.offsetY = 10;
-    this.offsetX = 25;
-    this.svMaxValue = 100;
-    this.hueCursorWidth = 6;
+    this.offsetY = OFFSETY;
+    this.offsetX = OFFSETX;
+    this.svMaxValue = SVMAXVALUE;
+    this.hueCursorWidth = CURSORWIDTH;
     this.hue = 0;
     this.saturation = 0;
-    this.value = 100;
+    this.value = DEFAULT_VALUE;
     this.svCursorPos = { x: this.saturation, y: this.svMaxValue - this.value };
     this.isHueSelecting = false;
     this.isSVSelecting = false;
-
   }
 
   ngOnInit(): void {

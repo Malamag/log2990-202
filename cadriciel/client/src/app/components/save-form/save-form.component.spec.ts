@@ -12,16 +12,17 @@ import { SaveFormComponent } from './save-form.component';
 fdescribe('SaveFormComponent', () => {
   let component: SaveFormComponent;
   let fixture: ComponentFixture<SaveFormComponent>;
+  // tslint:disable-next-line: no-any
   let dFetchStub: any;
   let winService: ModalWindowService;
-  let index : IndexService;
+  let index: IndexService;
   beforeEach(async(() => {
 
     dFetchStub = {
       askForDoodle: () => 0,
       getDrawingWithoutGrid: () => 0,
       getDrawingWithoutNoGrid: () => 0,
-      getDrawingStringNoGrid:() => 0,
+      getDrawingStringNoGrid: () => 0,
     };
     TestBed.configureTestingModule({
       declarations: [SaveFormComponent],
@@ -39,9 +40,6 @@ fdescribe('SaveFormComponent', () => {
     fixture = TestBed.createComponent(SaveFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
-
-    //winService = TestBed.get(ModalWindowService);
   });
 
   it('should create', () => {
@@ -77,7 +75,7 @@ fdescribe('SaveFormComponent', () => {
     const mockUpEvent: MatChipInputEvent = {
       input: dummyElement,
       value: 'hello',
-    }
+    };
     const spy = spyOn(component.labels, 'push');
     component.add(mockUpEvent);
     expect(spy).toHaveBeenCalled();
@@ -88,7 +86,7 @@ fdescribe('SaveFormComponent', () => {
     const mockUpEvent: MatChipInputEvent = {
       input: dummyElement,
       value: '!%!@!#!@#!',
-    }
+    };
     const spy = spyOn(component.labels, 'push');
     component.add(mockUpEvent);
     expect(spy).not.toHaveBeenCalled();
@@ -126,6 +124,4 @@ fdescribe('SaveFormComponent', () => {
     component.blockEvent(keyEvent);
     expect(spy).toHaveBeenCalled();
   });
-
 });
-

@@ -4,7 +4,7 @@ import { MatSnackBarModule } from '@angular/material';
 import { of } from 'rxjs';
 import { Message } from '../../../../../common/communication/message';
 import { SVGData } from '../../../svgData';
-import { ImageData } from '../../imageData';
+import { ImageData } from '../../image-data';
 import { IndexService } from './index.service';
 import SpyObj = jasmine.SpyObj;
 describe('IndexService', () => {
