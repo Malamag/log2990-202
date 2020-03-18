@@ -8,7 +8,7 @@ import { MatAutocompleteModule, MatCardModule,
         MatSelectModule, MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
-import { SVGData } from 'src/svgData';
+import { SVGData } from 'src/svg-data';
 import { ImageData } from '../../image-data';
 import { GalleryComponent } from './gallery.component';
 
@@ -169,7 +169,6 @@ describe('GalleryComponent', () => {
     });
     it('should set attributes and emit the redone for the canvas', () => {
         const askSpy = spyOn(component.doodle, 'askForDoodle');
-        const emitSpy = spyOn(component.interact, 'emitCanvasRedone');
         const parent = component.render.createElement('div');
         const ref = new ElementRef(parent);
         component.doodle.currentDraw = ref;
@@ -179,7 +178,6 @@ describe('GalleryComponent', () => {
         component.continueDrawing(svgData);
         expect(firstChild.innerHTML).toEqual('hello');
         expect(askSpy).toHaveBeenCalled();
-        expect(emitSpy).toHaveBeenCalled();
     });
     it('should create an svg with renderer', () => {
         const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
