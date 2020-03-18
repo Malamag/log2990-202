@@ -25,12 +25,14 @@ mat-card {
 #chip-container {
     width: 100%;
 }
+
 h1 {
     text-align: center;
     margin: 0;
 }
 
 #progress-all {
+    // for the top-left mat-spinner
     float: right;
     margin-right: 2%;
 }

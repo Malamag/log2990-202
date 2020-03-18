@@ -208,6 +208,7 @@ export class GalleryComponent implements AfterViewInit {
     }
 
     continueDrawing(data: SVGData): void {
+        this.allLoaded = false;
         this.doodle.askForDoodle();
         const el = this.doodle.currentDraw.nativeElement;
 
@@ -225,7 +226,7 @@ export class GalleryComponent implements AfterViewInit {
         this.canvasBuilder.newCanvas = CANVAS_ATTRS;
         this.canvasBuilder.newCanvas.wipeAll = false;
         this.canvasBuilder.emitCanvas();
-
+        this.allLoaded = true;
         this.winService.closeWindow();
     }
     // The setAttributes below might be useless, as the subscription in SvgDrawComponent already set all the attributes

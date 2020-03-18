@@ -30,7 +30,7 @@ export class MiniColorPickerComponent implements OnInit {
     isHueSelecting: boolean;
     isSVSelecting: boolean;
     colorSubject: Subject<string>;
-    constructor(private colorconvert: ColorConvertingService) {
+    constructor(public colorconvert: ColorConvertingService) {
         this.offsetY = offstY;
         this.offsetX = offsetX;
         this.svMaxValue = svMaxValue;
@@ -74,17 +74,19 @@ export class MiniColorPickerComponent implements OnInit {
     }
 
     hueSelect(event: MouseEvent): void {
-        if (this.isHueSelecting) {
-            this.hue = Math.round((event.offsetY - this.offsetY) * (this.cData.MAX_HUE_VALUE / this.svMaxValue));
-            this.setColor();
+        if (!this.isHueSelecting) {
+            return;
         }
+        this.hue = Math.round((event.offsetY - this.offsetY) * (this.cData.MAX_HUE_VALUE / this.svMaxValue));
+        this.setColor();
     }
     svSelect(event: MouseEvent): void {
-        if (this.isSVSelecting) {
-            this.saturation = event.offsetX - this.offsetX;
-            this.value = this.svMaxValue - (event.offsetY - this.offsetY);
-            this.setColor();
+        if (!this.isSVSelecting) {
+            return;
         }
+        this.saturation = event.offsetX - this.offsetX;
+        this.value = this.svMaxValue - (event.offsetY - this.offsetY);
+        this.setColor();
     }
 
     hsvToHex(H: number, S: number, V: number): string {

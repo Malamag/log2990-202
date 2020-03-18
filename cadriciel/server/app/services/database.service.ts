@@ -87,12 +87,14 @@ export class DatabaseService {
         });
         return imageData;
     }
+
     searchTag(tag: string, tags: string[]): boolean {
         let isFound = false;
-        for (let i = 0; i < tags.length; i++) {
+
+        for (const myTag of tags) {
             let startPos = 0;
-            for (let j: number = tag.length; j <= tags[i].length; j++) {
-                isFound = tag === tags[i].substring(startPos, j);
+            for (let j: number = tag.length; j <= myTag.length; j++) {
+                isFound = tag === myTag.substring(startPos, j);
                 startPos++;
                 if (isFound) {
                     break;
@@ -118,47 +120,49 @@ export class DatabaseService {
         return buffer;
     }
     async deleteImageById(imageId: string): Promise<void> {
-        fs.readFile('../data.json', function(err, data) {
+        fs.readFile('../data.json', (err, data) => {
             // Convert string (old data) to JSON
             const drawingsList = JSON.parse(data.toString());
 
-            drawingsList.drawings = drawingsList.drawings.filter((data: Image) => {
-                return data.id !== imageId;
+            drawingsList.drawings = drawingsList.drawings.filter((imgData: Image) => {
+                return imgData.id !== imageId;
             });
             // Convert JSON to string
             const listToJson = JSON.stringify(drawingsList);
             // Replace all data in the data.json with new ones
-            fs.writeFile('../data.json', listToJson, function(err) {
-                if (err) {
-                    throw err;
+            fs.writeFile('../data.json', listToJson, (error) => {
+                if (error) {
+                    throw error;
                 }
                 console.log('The "data to append" was appended to file!');
             });
         });
         return this.collection
             .findOneAndDelete({ id: imageId })
-            .then(() => { })
+            .then(() => {
+                /* nothing to do after findOneAndDelete, .then necessary (empty block) */
+            })
             .catch((error: Error) => {
                 throw new Error("Impposible de supprimer l'image");
             });
     }
 
     async modifyImage(imageData: ImageData): Promise<void> {
-        fs.readFile('../data.json', function(err, data) {
+        fs.readFile('../data.json', (err, data) => {
             // Convert string (old data) to JSON
             const drawingsList = JSON.parse(data.toString());
             const jsonObj = { id: imageData.id, svgElement: imageData.svgElement };
-            drawingsList.drawings = drawingsList.drawings.filter((data: Image) => {
-                return data.id !== imageData.id;
+            drawingsList.drawings = drawingsList.drawings.filter((imgData: Image) => {
+                return imgData.id !== imageData.id;
             });
             // Add new data to my drawings list
             drawingsList.drawings.push(jsonObj);
             // Convert JSON to string
             const listToJson = JSON.stringify(drawingsList);
             // Replace all data in the data.json with new ones
-            fs.writeFile('../data.json', listToJson, function(err) {
-                if (err) {
-                    throw err;
+            fs.writeFile('../data.json', listToJson, (error) => {
+                if (error) {
+                    throw error;
                 }
                 console.log('The "data to append" was appended to file!');
             });
@@ -173,23 +177,25 @@ export class DatabaseService {
         };
         this.collection
             .updateOne(filterQuery, udateQuery)
-            .then(() => { })
+            .then(() => {
+                /* nothing to do after updating image, .then necessary (empty block) */
+            })
             .catch(() => {
                 throw new Error("Impossible de mette à jour l'image");
             });
     }
 
-    async populateDB() {
-        /*let images: ImageData[] = [
+    /*async populateDB() {
+        let images: ImageData[] = [
             { id: '1', name: 'one', tags: ["string"], svgElement: "" },
             { id: '2', name: 'two', tags: ["string"], svgElement: '' },
             { id: '3', name: 'three', tags: ["string"], svgElement: '' },
             { id: '4', name: 'four', tags: ["string"], svgElement: '' }]
         images.forEach((image) => {
             //this.saveImage(image);
-        })*/
-    }
-    async saveImage(imageData: ImageData) {
+        })
+    }*/
+    async saveImage(imageData: ImageData): Promise<void> {
         this.validateImageData(imageData)
             .then((data) => {
                 let image: ImageData;
@@ -198,18 +204,18 @@ export class DatabaseService {
                 } else {
                     throw new Error('Invalide image data');
                 }
-                fs.readFile('../data.json', function(err, data) {
+                fs.readFile('../data.json', (err, readData) => {
                     // Convert string (old data) to JSON
-                    const drawingsList = JSON.parse(data.toString());
+                    const drawingsList = JSON.parse(readData.toString());
                     const jsonObj = { id: image.id, svgElement: image.svgElement };
                     // Add new data to my drawings list
                     drawingsList.drawings.push(jsonObj);
                     // Convert JSON to string
                     const listToJson = JSON.stringify(drawingsList);
                     // Replace all data in the data.json with new ones
-                    fs.writeFile('../data.json', listToJson, function(err) {
-                        if (err) {
-                            throw err;
+                    fs.writeFile('../data.json', listToJson, (error) => {
+                        if (error) {
+                            throw error;
                         }
                         console.log('The "data to append" was appended to file!');
                     });
@@ -224,10 +230,11 @@ export class DatabaseService {
             });
     }
 
-    validateImageData(imageData: ImageData): Promise<ImageData | null> {
+    async validateImageData(imageData: ImageData): Promise<ImageData | null> {
+        const MAX_DATA_AMOUNT = 1000;
         return this.getAllImages().then((data) => {
             console.log(data.length);
-            if (data.length >= 1000) {
+            if (data.length >= MAX_DATA_AMOUNT) {
                 return null;
             }
             while (!this.validateId(imageData.id, data)) {
@@ -246,6 +253,7 @@ export class DatabaseService {
             return imageData;
         });
     }
+
     validateId(id: string, data: ImageData[]): boolean {
         if (
             data.filter((image: ImageData) => {
@@ -259,9 +267,11 @@ export class DatabaseService {
             return true;
         }
     }
+
     validateName(name: string): boolean {
         return name.length > 0 && name !== null;
     }
+
     validateTags(tags: string[]): boolean {
         let validTags = true;
         const format = new RegExp(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/);

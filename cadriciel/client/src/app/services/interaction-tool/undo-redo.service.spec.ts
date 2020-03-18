@@ -4,7 +4,9 @@ import { UndoRedoService } from './undo-redo.service';
 
 describe('UndoRedoService', () => {
     let service: UndoRedoService;
+    // tslint:disable-next-line: no-any
     let drawingStub: any;
+    // tslint:disable-next-line: prefer-const
     let renderStub: Renderer2;
     beforeEach(() =>
         TestBed.configureTestingModule({
@@ -34,15 +36,36 @@ describe('UndoRedoService', () => {
         expect(service.undone.length).toEqual(0);
         expect(spyUpdate).toHaveBeenCalled();
     });
-    it('should empty the two lists', () => {
-        service.done.push('hello');
-        service.undone.push('world');
-        service.interact.emitCanvasRedone();
-        service.updateDoneContainer();
-        expect(service.done.length).toEqual(0);
+    it('should not updateButtons and not empty the undone container', () => {
+        service.undone = ['hello'];
+        service.interact.drawingDone.next(false);
+        const spy = spyOn(service, 'updateButtons');
+        service.updateContainer();
+        expect(service.undone.length).toEqual(1);
+        expect(spy).toHaveBeenCalledTimes(0);
+    });
+    it('should empty the undone list', () => {
+        service.undone = ['hello'];
+        service.interact.emitDrawingDone();
+        service.updateContainer();
         expect(service.undone.length).toEqual(0);
     });
+
+    it('should empty the undone list', () => {
+        service.done.push('hello');
+        service.undone.push('world');
+        service.interact.emitContinueDrawing();
+        service.updateDoneContainer();
+        expect(service.undone.length).toEqual(0);
+    });
+    it('should not push anything in done container', () => {
+        const spy = spyOn(service.done, 'push');
+        service.interact.drawingContinued.next(false);
+        service.updateDoneContainer();
+        expect(spy).toHaveBeenCalledTimes(0);
+    });
     it('should empty the done list and fill the undone list', () => {
+        service.done = [];
         service.done.push('hello');
         const dispatchSpy = spyOn(window, 'dispatchEvent');
         service.undo();

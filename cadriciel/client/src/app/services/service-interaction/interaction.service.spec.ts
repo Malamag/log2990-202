@@ -81,8 +81,8 @@ describe('InteractionService', () => {
     });
 
     it('should emit when the canvas has been restarted', () => {
-        const spy = spyOn(service.canvasRedone, 'next');
-        service.emitCanvasRedone();
+        const spy = spyOn(service.drawingContinued, 'next');
+        service.emitContinueDrawing();
         expect(spy).toHaveBeenCalled();
     });
 
