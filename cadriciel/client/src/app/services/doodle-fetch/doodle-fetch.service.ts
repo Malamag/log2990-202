@@ -41,7 +41,9 @@ export class DoodleFetchService {
         const innerHTML: string[] = [];
         const el: Element = this.currentDraw.nativeElement;
         const childs: HTMLCollection = el.children;
-        for (let i = 0; i < childs.length; i++) {
+
+        // tslint:disable-next-line: prefer-for-of
+        for (let i = 0; i < childs.length; i++) {  // HTMLCollection doesnt have an iterator...
             try {
                 innerHTML.push(childs[i].innerHTML);
             } catch {
