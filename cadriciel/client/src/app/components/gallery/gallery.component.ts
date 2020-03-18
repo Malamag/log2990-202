@@ -11,9 +11,9 @@ import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
-import { ShownData } from 'src/app/shownData';
-import { SVGData } from 'src/svgData';
-import { ImageData } from '../../';
+import { ShownData } from 'src/app/shown-data';
+import { SVGData } from 'src/svg-data';
+import { ImageData } from '../../image-data';
 import { IndexService } from './../../services/index/index.service';
 
 @Component({
