@@ -11,27 +11,29 @@ export class UndoRedoService extends InteractionTool {
         this.updateDoneContainer();
         this.updateContainer();
     }
-    updateContainer() {
+    updateContainer(): void {
         this.interact.$drawingDone.subscribe((sig) => {
-            if (sig) {
-                if (this.undone.length > 0) {
-                    this.undone = [];
-                }
-                this.done.push(this.drawing.innerHTML);
-                this.updateButtons();
+            if (!sig) {
+                return;
             }
-        });
-    }
-    updateDoneContainer() {
-        this.interact.$canvasRedone.subscribe((sig) => {
-            if (sig) {
-                this.done = [];
+            if (this.undone.length > 0) {
                 this.undone = [];
             }
-
+            this.done.push(this.drawing.innerHTML);
+            this.updateButtons();
         });
     }
-    undo() {
+    updateDoneContainer(): void {
+        this.interact.$drawingContinued.subscribe((sig) => {
+            if (!sig) {
+                return;
+            }
+            this.done = [];
+            this.done.push(this.drawing.innerHTML);
+            this.undone = [];
+        });
+    }
+    undo(): void {
         if (!this.done.length) {
             return;
         }
@@ -46,7 +48,7 @@ export class UndoRedoService extends InteractionTool {
             window.dispatchEvent(event);
         }
     }
-    redo() {
+    redo(): void {
 
         if (!this.undone.length) {
             return;
@@ -62,7 +64,7 @@ export class UndoRedoService extends InteractionTool {
 
     }
 
-    apply(name: string) {
+    apply(name: string): void {
         if (name === 'Annuler') {
             this.undo();
         } else if (name === 'Refaire') {
@@ -70,7 +72,7 @@ export class UndoRedoService extends InteractionTool {
         }
         this.updateButtons();
     }
-    updateButtons() {
+    updateButtons(): void {
         let disableUndo = true;
         let disableRedo = true;
         this.done.length ? (disableUndo = false) : (disableUndo = true);
