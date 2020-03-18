@@ -1,6 +1,6 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { InteractionService } from '../service-interaction/interaction.service';
-import { InteractionTool } from './interactionTool';
+import { InteractionTool } from './interaction-tool';
 
 @Injectable({
     providedIn: 'root',

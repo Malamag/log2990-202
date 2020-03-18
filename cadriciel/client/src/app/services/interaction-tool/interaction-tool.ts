@@ -1,5 +1,5 @@
 import { Renderer2 } from '@angular/core';
-import { InteractionService } from './../service-interaction/interaction.service';
+import { InteractionService } from '../service-interaction/interaction.service';
 
 export abstract class InteractionTool {
     // Parameters I need is: interactionService??, HTMLELement, Rendrer2: maybe for undo redo only?, colorPickingService?

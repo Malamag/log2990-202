@@ -4,7 +4,9 @@ import { UndoRedoService } from './undo-redo.service';
 
 describe('UndoRedoService', () => {
     let service: UndoRedoService;
+    // tslint:disable-next-line: no-any
     let drawingStub: any;
+    // tslint:disable-next-line: prefer-const
     let renderStub: Renderer2;
     beforeEach(() =>
         TestBed.configureTestingModule({
@@ -34,15 +36,15 @@ describe('UndoRedoService', () => {
         expect(service.undone.length).toEqual(0);
         expect(spyUpdate).toHaveBeenCalled();
     });
-    it('should empty the two lists', () => {
+    it('should empty the undone list', () => {
         service.done.push('hello');
         service.undone.push('world');
-        service.interact.emitCanvasRedone();
+        service.interact.emitContinueDrawing();
         service.updateDoneContainer();
-        expect(service.done.length).toEqual(0);
         expect(service.undone.length).toEqual(0);
     });
     it('should empty the done list and fill the undone list', () => {
+        service.done = [];
         service.done.push('hello');
         const dispatchSpy = spyOn(window, 'dispatchEvent');
         service.undo();

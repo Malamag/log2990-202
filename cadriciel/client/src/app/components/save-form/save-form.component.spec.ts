@@ -9,7 +9,7 @@ import { IndexService } from 'src/app/services/index/index.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { SaveFormComponent } from './save-form.component';
 
-fdescribe('SaveFormComponent', () => {
+describe('SaveFormComponent', () => {
   let component: SaveFormComponent;
   let fixture: ComponentFixture<SaveFormComponent>;
   // tslint:disable-next-line: no-any
