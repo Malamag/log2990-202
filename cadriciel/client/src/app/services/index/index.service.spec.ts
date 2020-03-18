@@ -84,7 +84,7 @@ describe('IndexService', () => {
         httpClientSpy.post.and.returnValue(of(expectedData));
         const spy = spyOn(service, 'displayFeedback');
         service.saveImage(expectedData);
-        expect(spy).toHaveBeenCalled()
+        expect(spy).toHaveBeenCalled();
     }));
     it('should throw an error', inject([IndexService], (service: IndexService) => {
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };

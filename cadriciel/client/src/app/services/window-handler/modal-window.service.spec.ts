@@ -31,8 +31,8 @@ describe('ModalWindowService', () => {
   });
 
   it('should be created', () => {
-    const service: ModalWindowService = TestBed.get(ModalWindowService);
-    expect(service).toBeTruthy();
+    const testService: ModalWindowService = TestBed.get(ModalWindowService);
+    expect(testService).toBeTruthy();
   });
 
   it('should be able to open a new draw form modal window', () => {

@@ -52,11 +52,11 @@ export class IndexService {
 
     modifyImage(imageData: ImageData): void {
         httpOptions.headers = httpOptions.headers.set('Authorization', 'my-new-auth-token');
-        this.http.patch<ImageData>(this.DATABASE_URL, imageData, httpOptions).subscribe((data) => { });
+        // this.http.patch<ImageData>(this.DATABASE_URL, imageData, httpOptions).subscribe((data) => { });
     }
 
     populatedBd(): void {
-        this.http.get<ImageData[]>('http://localhost:3000/database/populateDB').subscribe((data) => { });
+        // this.http.get<ImageData[]>('http://localhost:3000/database/populateDB').subscribe((data) => { });
     }
 
     saveImage(imageData: ImageData): void {
