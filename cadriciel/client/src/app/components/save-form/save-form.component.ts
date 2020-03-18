@@ -18,7 +18,7 @@ export class SaveFormComponent implements OnInit {
   constructor(
     private winService: ModalWindowService,
     private formBuilder: FormBuilder,
-    private doodleFetch: DoodleFetchService,
+    public doodleFetch: DoodleFetchService,
     private index: IndexService) { }
   readonly LabelsNumberCap: number = 20;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
