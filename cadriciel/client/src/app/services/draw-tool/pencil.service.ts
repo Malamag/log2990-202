@@ -6,8 +6,8 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
-const DEFAULTLINETHICKNESS = 5;
-const DEFAULTTEXTURE = 0;
+const DEFAULT_LINE_THICKNESS = 5;
+const DEFAULT_TEXTURE = 0;
 @Injectable({
     providedIn: 'root',
 })
@@ -22,7 +22,7 @@ export class PencilService extends DrawingTool {
         colorPick: ColorPickingService,
     ) {
         super(inProgess, drawing, selected, interaction, colorPick);
-        this.attr = { lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE };
+        this.attr = { lineThickness: DEFAULT_LINE_THICKNESS, texture: DEFAULT_TEXTURE };
         this.updateColors();
         this.updateAttributes();
     }
