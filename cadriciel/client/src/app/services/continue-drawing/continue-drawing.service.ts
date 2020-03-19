@@ -16,23 +16,24 @@ export class ContinueDrawingService {
     public gridService: GridRenderService,
     public canvasBuilder: CanvasBuilderService,
   ) { }
+
   continueDrawing(data: SVGData): void {
     this.doodle.askForDoodle();
     const el = this.doodle.currentDraw.nativeElement;
 
     const childs: HTMLCollection = el.children;
     for (let i = 0; i < childs.length; ++i) {
-            if (data.innerHTML[i] === undefined) {
-                childs[i].innerHTML = '';
-            } else {
-                childs[i].innerHTML = data.innerHTML[i];
-            }
-        }
+      if (data.innerHTML[i] === undefined) {
+        childs[i].innerHTML = '';
+      } else {
+        childs[i].innerHTML = data.innerHTML[i];
+      }
+    }
 
     const CANVAS_ATTRS: Canvas = { canvasWidth: +data.width, canvasHeight: +data.height, canvasColor: data.bgColor };
     this.interact.emitGridAttributes(CANVAS_ATTRS);
     this.canvasBuilder.newCanvas = CANVAS_ATTRS;
-    this.canvasBuilder.newCanvas.wipeAll = false;
+    this.canvasBuilder.newCanvas.wipeAll = false; // we are replacing the innerHTML, an afterward deletion is unnecessary
     this.canvasBuilder.emitCanvas();
   }
 }
