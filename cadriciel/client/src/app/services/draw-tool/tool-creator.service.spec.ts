@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
-import { colorData } from 'src/app/components/color-picker/color-data';
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
@@ -16,7 +14,8 @@ export class FakeItService extends InteractionService { }
 describe('ToolCreator', () => {
   // let elem: HTMLElement;
 
-  let colorConvertingStub: ColorConvertingService;
+  // tslint:disable-next-line: no-any
+  let colorConvertingStub: any;
   let service: ToolCreator;
 
   beforeEach(() => {
@@ -26,7 +25,7 @@ describe('ToolCreator', () => {
     const brushSpy = jasmine.createSpy('BrushService');
 
     colorConvertingStub = {
-      hsvToHex : () => '',
+      hsvToHex: () => '',
       validateHSL: () => true,
       validateHex: () => true,
       rgbToHex: () => '',
@@ -34,7 +33,6 @@ describe('ToolCreator', () => {
       hexToRgba: () => [],
       validateRGB: () => true,
       rgbToHsl: () => [],
-      cData: colorData,
       alphaRGBToHex: () => ''
     };
 

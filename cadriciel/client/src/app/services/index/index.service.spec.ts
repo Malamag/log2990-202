@@ -63,7 +63,8 @@ describe('IndexService', () => {
         }
     }));
     it('should display a feedback', inject([IndexService], (service: IndexService) => {
-        const spy = spyOn(service, 'displayFeedback');
+        // tslint:disable-next-line: no-any - allows access to a private method
+        const spy = spyOn<any>(service, 'displayFeedback');
         const id = '570';
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
@@ -82,7 +83,8 @@ describe('IndexService', () => {
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
         httpClientSpy.post.and.returnValue(of(expectedData));
-        const spy = spyOn(service, 'displayFeedback');
+        // tslint:disable-next-line: no-any - allows access to a private method
+        const spy = spyOn<any>(service, 'displayFeedback');
         service.saveImage(expectedData);
         expect(spy).toHaveBeenCalled();
     }));
@@ -101,7 +103,8 @@ describe('IndexService', () => {
     it('should open a snack bar', inject([IndexService], (service: IndexService) => {
         const openSpy = spyOn(service.snackBar, 'open');
         const feedback = 'hello';
-        service.displayFeedback(feedback);
+        // tslint:disable-next-line: no-string-literal
+        service['displayFeedback'](feedback);
         expect(openSpy).toHaveBeenCalled();
     }));
 });
