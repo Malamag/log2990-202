@@ -5,16 +5,12 @@ import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { Canvas } from 'src/app/models/canvas.model';
-import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { GridRenderService } from 'src/app/services/grid/grid-render.service';
-import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
-import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ShownData } from 'src/app/shown-data';
 import { SVGData } from 'src/svg-data';
 import { ImageData } from '../../image-data';
 import { IndexService } from './../../services/index/index.service';
+import { ContinueDrawingService } from 'src/app/services/continue-drawing/continue-drawing.service';
 
 @Component({
     selector: 'app-gallery',
@@ -44,11 +40,8 @@ export class GalleryComponent implements AfterViewInit {
     constructor(
         public index: IndexService,
         render: Renderer2,
-        public doodle: DoodleFetchService,
-        public interact: InteractionService,
-        public gridService: GridRenderService,
         public winService: ModalWindowService,
-        public canvasBuilder: CanvasBuilderService
+        public continueDraw: ContinueDrawingService,
     ) {
         this.render = render;
         this.possibleTags = [];
@@ -209,23 +202,7 @@ export class GalleryComponent implements AfterViewInit {
 
     continueDrawing(data: SVGData): void {
         this.allLoaded = false;
-        this.doodle.askForDoodle();
-        const el = this.doodle.currentDraw.nativeElement;
-
-        const childs: HTMLCollection = el.children;
-        for (let i = 0; i < childs.length; ++i) {
-            if (data.innerHTML[i] === undefined) {
-                childs[i].innerHTML = '';
-            } else {
-                childs[i].innerHTML = data.innerHTML[i];
-            }
-        }
-
-        const CANVAS_ATTRS: Canvas = { canvasWidth: +data.width, canvasHeight: +data.height, canvasColor: data.bgColor };
-        this.interact.emitGridAttributes(CANVAS_ATTRS);
-        this.canvasBuilder.newCanvas = CANVAS_ATTRS;
-        this.canvasBuilder.newCanvas.wipeAll = false;
-        this.canvasBuilder.emitCanvas();
+        this.continueDraw.continueDrawing(data);
         this.allLoaded = true;
         this.winService.closeWindow();
     }
