@@ -63,13 +63,14 @@ describe('IndexService', () => {
         }
     }));
     it('should display a feedback', inject([IndexService], (service: IndexService) => {
-        const spy = spyOn(service, 'displayFeedback');
+        //const spy = spyOn(service, 'displayFeedback');
+        service['displayFeedback'] = jasmine.createSpy();
         const id = '570';
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
         httpClientSpy.delete.and.returnValue(of([expectedData]));
         service.deleteImageById(id);
-        expect(spy).toHaveBeenCalled();
+        expect(service['displayFeedback']).toHaveBeenCalled();
     }));
     it('should patch the information', inject([IndexService], (service: IndexService) => {
         httpClientSpy.patch.calls.reset();
@@ -82,9 +83,9 @@ describe('IndexService', () => {
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
         httpClientSpy.post.and.returnValue(of(expectedData));
-        const spy = spyOn(service, 'displayFeedback');
+        service['displayFeedback'] = jasmine.createSpy();
         service.saveImage(expectedData);
-        expect(spy).toHaveBeenCalled()
+        expect(service['displayFeedback']).toHaveBeenCalled();
     }));
     it('should throw an error', inject([IndexService], (service: IndexService) => {
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
@@ -98,10 +99,11 @@ describe('IndexService', () => {
             expect(error).toEqual(expectedError);
         }
     }));
+    /*
     it('should open a snack bar', inject([IndexService], (service: IndexService) => {
         const openSpy = spyOn(service.snackBar, 'open');
         const feedback = 'hello';
-        service.displayFeedback(feedback);
+        service.['displayFeedback'](feedback);
         expect(openSpy).toHaveBeenCalled();
-    }));
+    }));*/
 });
