@@ -2,16 +2,23 @@ import {  ElementRef, Renderer2} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { SVGData } from 'src/svg-data';
 import { ContinueDrawingService } from './continue-drawing.service';
-
+import SpyObj = jasmine.SpyObj;
 describe('ContinueDrawingService', () => {
-  // tslint:disable-next-line: prefer-const
-  let render: Renderer2;
+  let render: SpyObj<Renderer2>;
   let service: ContinueDrawingService;
-  beforeEach(() => TestBed.configureTestingModule({})
+  let html: any;
+  beforeEach(() => TestBed.configureTestingModule({
+      providers: [{provide: Renderer2, useValue: {render}}]
+    })
   );
   beforeEach(() => {
     service = TestBed.get(ContinueDrawingService);
-  })
+    render = jasmine.createSpyObj('Renderer2', ['createElement', 'appendChild']);
+    //render = TestBed.get(Renderer2);
+    html = {
+      children: {},
+    };
+  });
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
