@@ -6,8 +6,6 @@ import { colorData } from '../../components/color-picker/color-data';
 })
 export class ColorConvertingService {
     // cData = colorData; // Interface for Color data
-
-
     // RGB [0,255]
     validateRGB(r: number): boolean {
         return r >= colorData.MIN_RGB_VALUE && r <= colorData.MAX_RGB_VALUE;
@@ -18,9 +16,13 @@ export class ColorConvertingService {
         if (!this.validateRGB(r)) {
             return '';
         }
+        const shifter = 4;
+        const hexN = 0xf;
         // Split 1 8 bits int into 2 4 bits int
-        bits[0] = r >> 4;
-        bits[1] = r & 0xf;
+        // tslint:disable-next-line: no-bitwise
+        bits[0] = r >> shifter;
+        // tslint:disable-next-line: no-bitwise
+        bits[1] = r & hexN;
 
         for (let i = 0; i < 2; i++) {
             if (bits[i] >= colorData.HEX_NUMBER_LETTER_MIN_VALUE) {
@@ -49,40 +51,44 @@ export class ColorConvertingService {
         S: number = colorData.MAX_SATURATION_VALUE,
         L: number = colorData.MAX_LIGHTNESS_VALUE / 2,
     ): number[] {
-        const rgb: number[] = [-1, -1, -1];
+        const initNum = -1;
+        const rgb: number[] = [initNum, initNum, initNum];
         if (!this.validateHSL(H, S, L)) {
             return rgb;
         }
         const C: number = (1 - Math.abs(2 * L - 1)) * S;
-        const X: number = C * (1 - Math.abs(((H / 60) % 2) - 1));
+        const div = 60;
+        const X: number = C * (1 - Math.abs(((H / div) % 2) - 1));
         const m: number = L - C / 2;
 
         let R: number = colorData.MIN_RGB_VALUE;
         let G: number = colorData.MIN_RGB_VALUE;
         let B: number = colorData.MIN_RGB_VALUE;
-
+        const bigDiv = 6;
+        const smallDiv = 3;
+        const mult = 5;
         // Math formula for conversion
-        if (colorData.MIN_HUE_VALUE <= H && H < colorData.MAX_HUE_VALUE / 6) {
+        if (colorData.MIN_HUE_VALUE <= H && H < colorData.MAX_HUE_VALUE / bigDiv) {
             R = C;
             G = X;
             B = colorData.MIN_RGB_VALUE;
-        } else if (colorData.MAX_HUE_VALUE / 6 <= H && H < colorData.MAX_HUE_VALUE / 3) {
+        } else if (colorData.MAX_HUE_VALUE / bigDiv <= H && H < colorData.MAX_HUE_VALUE / smallDiv) {
             R = X;
             G = C;
             B = colorData.MIN_RGB_VALUE;
-        } else if (colorData.MAX_HUE_VALUE / 3 <= H && H < colorData.MAX_HUE_VALUE / 2) {
+        } else if (colorData.MAX_HUE_VALUE / smallDiv <= H && H < colorData.MAX_HUE_VALUE / 2) {
             R = colorData.MIN_RGB_VALUE;
             G = C;
             B = X;
-        } else if (colorData.MAX_HUE_VALUE / 2 <= H && H < (2 * colorData.MAX_HUE_VALUE) / 3) {
+        } else if (colorData.MAX_HUE_VALUE / 2 <= H && H < (2 * colorData.MAX_HUE_VALUE) / smallDiv) {
             R = colorData.MIN_RGB_VALUE;
             G = X;
             B = C;
-        } else if ((2 * colorData.MAX_HUE_VALUE) / 3 <= H && H < (5 * colorData.MAX_HUE_VALUE) / 6) {
+        } else if ((2 * colorData.MAX_HUE_VALUE) / smallDiv <= H && H < (mult * colorData.MAX_HUE_VALUE) / bigDiv) {
             R = X;
             G = colorData.MIN_RGB_VALUE;
             B = C;
-        } else if ((5 * colorData.MAX_HUE_VALUE) / 6 <= H && H < colorData.MAX_HUE_VALUE) {
+        } else if ((mult * colorData.MAX_HUE_VALUE) / bigDiv <= H && H < colorData.MAX_HUE_VALUE) {
             R = C;
             G = colorData.MIN_RGB_VALUE;
             B = X;
@@ -110,13 +116,15 @@ export class ColorConvertingService {
         let saturation: number = colorData.MIN_SATURATION_VALUE;
         let lightness: number = colorData.MIN_LIGHTNESS_VALUE;
         // math conversion formula base on max prime
+        const num = 6;
+        const add = 4;
         if (delta) {
             if (max === primeR) {
-                hue = (colorData.MAX_HUE_VALUE / 6) * (((primeG - primeB) / delta) % 6);
+                hue = (colorData.MAX_HUE_VALUE / num) * (((primeG - primeB) / delta) % num);
             } else if (max === primeG) {
-                hue = (colorData.MAX_HUE_VALUE / 6) * ((primeB - primeR) / delta + 2);
+                hue = (colorData.MAX_HUE_VALUE / num) * ((primeB - primeR) / delta + 2);
             } else if (max === primeB) {
-                hue = (colorData.MAX_HUE_VALUE / 6) * ((primeR - primeG) / delta + 4);
+                hue = (colorData.MAX_HUE_VALUE / num) * ((primeR - primeG) / delta + add);
             }
         }
 
@@ -138,21 +146,21 @@ export class ColorConvertingService {
 
         return hsl;
     }
-    validateHex(hex: number): Boolean {
-        let hexOk: Boolean = false;
-        for (let i = 0; i < colorData.hexNumber.length; i++) {
-            if (hex === colorData.hexNumber[i]) {
+    validateHex(hex: number): boolean {
+        let hexOk = false;
+        colorData.hexNumber.forEach((hexNumber) => {
+            if (hex === hexNumber) {
                 hexOk = true;
-                break;
             }
-        }
+        });
         return hexOk;
     }
     hexToRgba(hex: string): number[] {
         let colorBits: string = hex;
         // check if first char is a # (ascii code number is 35) and remove it
         const asciiHashTag = 35;
-        const rgba: number[] = [-1, -1, -1, -1];
+        const initValue = -1;
+        const rgba: number[] = [initValue, initValue, initValue, initValue];
         if (hex.charCodeAt(0) === asciiHashTag) {
             colorBits = hex.substring(1, hex.length);
         }
@@ -183,23 +191,28 @@ export class ColorConvertingService {
                 buffer[i] -= colorData.ASCII_0;
             }
         }
+        const shifter = 4;
         for (let j = 0; j < buffer.length / 2; j++) {
-            rgba[j] = (buffer[j * 2] << 4) | buffer[j * 2 + 1];
+            // tslint:disable-next-line: no-bitwise
+            rgba[j] = (buffer[j * 2] << shifter) | buffer[j * 2 + 1];
         }
         // lenght without # and alpha
-        if (colorBits.length <= colorData.HEX_NUMBER_MAX_LENGTH - 3) {
-            rgba[3] = -1;
+        const num = 3;
+        const reduceHigh = 7;
+        const reduceLow = 5;
+        if (colorBits.length <= colorData.HEX_NUMBER_MAX_LENGTH - num) {
+            rgba[num] = initValue;
         } else {
             // opacity for rgba is between [0,1] while for hex it's [0,255]
-            rgba[3] = rgba[3] / colorData.RGBA_TO_HEX_ALPHA_MODIFIER;
+            rgba[num] = rgba[num] / colorData.RGBA_TO_HEX_ALPHA_MODIFIER;
         }
         // length with only 2 colors
-        if (colorBits.length <= colorData.HEX_NUMBER_MAX_LENGTH - 5) {
-            rgba[2] = -1;
+        if (colorBits.length <= colorData.HEX_NUMBER_MAX_LENGTH - reduceLow) {
+            rgba[2] = initValue;
         }
         // lenght with only 1 color
-        if (colorBits.length <= colorData.HEX_NUMBER_MAX_LENGTH - 7) {
-            rgba[1] = -1;
+        if (colorBits.length <= colorData.HEX_NUMBER_MAX_LENGTH - reduceHigh) {
+            rgba[1] = initValue;
         }
         return rgba;
     }
@@ -209,8 +222,9 @@ export class ColorConvertingService {
         // tslint:disable-next-line: no-magic-numbers
         const rgb: number[] = [-1, -1, -1]; // array of bad index
 
+        const bigDiv = 6;
         const C: number = S * V;
-        const X: number = C * (1 - Math.abs(((H / (colorData.MAX_HUE_VALUE / 6)) % 2) - 1));
+        const X: number = C * (1 - Math.abs(((H / (colorData.MAX_HUE_VALUE / bigDiv)) % 2) - 1));
         const m: number = V - C;
 
         let R: number = colorData.MIN_RGB_VALUE;
@@ -218,27 +232,29 @@ export class ColorConvertingService {
         let B: number = colorData.MIN_RGB_VALUE;
 
         // Math formula for conversion
-        if (colorData.MIN_HUE_VALUE <= H && H < colorData.MAX_HUE_VALUE / 6) {
+        const smallDiv = 3;
+        const mult = 5;
+        if (colorData.MIN_HUE_VALUE <= H && H < colorData.MAX_HUE_VALUE / bigDiv) {
             R = C;
             G = X;
             B = colorData.MIN_RGB_VALUE;
-        } else if (colorData.MAX_HUE_VALUE / 6 <= H && H < colorData.MAX_HUE_VALUE / 3) {
+        } else if (colorData.MAX_HUE_VALUE / bigDiv <= H && H < colorData.MAX_HUE_VALUE / smallDiv) {
             R = X;
             G = C;
             B = colorData.MIN_RGB_VALUE;
-        } else if (colorData.MAX_HUE_VALUE / 3 <= H && H < colorData.MAX_HUE_VALUE / 2) {
+        } else if (colorData.MAX_HUE_VALUE / smallDiv <= H && H < colorData.MAX_HUE_VALUE / 2) {
             R = colorData.MIN_RGB_VALUE;
             G = C;
             B = X;
-        } else if (colorData.MAX_HUE_VALUE / 2 <= H && H < (2 * colorData.MAX_HUE_VALUE) / 3) {
+        } else if (colorData.MAX_HUE_VALUE / 2 <= H && H < (2 * colorData.MAX_HUE_VALUE) / smallDiv) {
             R = colorData.MIN_RGB_VALUE;
             G = X;
             B = C;
-        } else if ((2 * colorData.MAX_HUE_VALUE) / 3 <= H && H < (5 * colorData.MAX_HUE_VALUE) / 6) {
+        } else if ((2 * colorData.MAX_HUE_VALUE) / smallDiv <= H && H < (mult * colorData.MAX_HUE_VALUE) / bigDiv) {
             R = X;
             G = colorData.MIN_RGB_VALUE;
             B = C;
-        } else if ((5 * colorData.MAX_HUE_VALUE) / 6 <= H && H < colorData.MAX_HUE_VALUE) {
+        } else if ((mult * colorData.MAX_HUE_VALUE) / bigDiv <= H && H < colorData.MAX_HUE_VALUE) {
             R = C;
             G = colorData.MIN_RGB_VALUE;
             B = X;

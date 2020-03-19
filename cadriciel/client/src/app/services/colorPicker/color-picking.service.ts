@@ -22,10 +22,11 @@ import { ColorConvertingService } from './color-converting.service';
     providedIn: 'root',
 })
 export class ColorPickingService {
+    // tslint:disable-next-line: typedef
     cData = colorData; // Interface for Color data
 
     colors: ChoosenColors;
-    colorSubject = new Subject<ChoosenColors>(); // le constuire à qqpart
+    colorSubject: Subject<ChoosenColors> = new Subject<ChoosenColors>(); // le constuire à qqpart
     constructor(public colorConvert: ColorConvertingService) { }
 
     emitColors(): void {
@@ -37,7 +38,8 @@ export class ColorPickingService {
         this.colors = { primColor: primary, secColor: secondary, backColor: background };
     }
     setColor(color: number[]): string {
-        if (color.length < 3) {
+        const limit = 3;
+        if (color.length < limit) {
             return '';
         } else {
             let newColor: string =
@@ -90,6 +92,7 @@ export class ColorPickingService {
         }
     }
     getSaturation(): number {
+        const ret = -1;
         switch (this.cData.colorMode) {
             case this.cData.PRIMARY_COLOR_MODE:
                 return this.cData.primarySaturation;
@@ -98,7 +101,7 @@ export class ColorPickingService {
             case this.cData.BACKGROUND_COLOR_MODE:
                 return this.cData.backgroundColorSaturation;
         }
-        return -1;
+        return ret;
     }
     /************************ SELECTORS SECTION ***************************/
     hueSelector(event: MouseEvent): void {
@@ -223,22 +226,23 @@ export class ColorPickingService {
     // DISPLAY/UPDATE
     // Update last color table with a new color
     updateLastColor(newColor: string): void {
-        for (let i = 0; i < this.cData.lastColorRects.length; i++) {
-            if (this.cData.lastColorRects[i].fill === newColor.substring(0, 7)) {
+        const sub = 7;
+        this.cData.lastColorRects.forEach((color) => {
+            if (color.fill === newColor.substring(0, sub)) {
                 return;
             }
-        }
-        for (let i = 0; i < this.cData.lastColorRects.length; i++) {
-            if (this.cData.lastColorRects[i].fill === 'none') {
-                this.cData.lastColorRects[i].fill = newColor.substring(0, 7);
-                this.cData.lastColorRects[i].stroke = 'white';
+        });
+        this.cData.lastColorRects.forEach((color) => {
+            if (color.fill === 'none') {
+                color.fill = newColor.substring(0, sub);
+                color.stroke = 'white';
                 return;
             }
-        }
+        });
         for (let i = 0; i < this.cData.lastColorRects.length - 1; i++) {
             this.cData.lastColorRects[i].fill = this.cData.lastColorRects[i + 1].fill;
         }
-        this.cData.lastColorRects[this.cData.lastColorRects.length - 1].fill = newColor.substring(0, 7);
+        this.cData.lastColorRects[this.cData.lastColorRects.length - 1].fill = newColor.substring(0, sub);
     }
     updateDisplay(
         hex: string,
@@ -254,7 +258,8 @@ export class ColorPickingService {
         this.emitColors();
     }
     updateDisplayRGB(rgb: number[]): void {
-        this.cData.opacitySliderInput = Math.round(rgb[3] * this.cData.POURCENT_MODIFIER);
+        const pos = 3;
+        this.cData.opacitySliderInput = Math.round(rgb[pos] * this.cData.POURCENT_MODIFIER);
     }
     updateDisplayHSL(hsl: number[]): void {
         const newSaturation: number = Math.round(hsl[1] * this.cData.POURCENT_MODIFIER);
@@ -270,10 +275,13 @@ export class ColorPickingService {
         this.setSLCursor(this.cData.saturationSliderInput / 2, this.cData.lightnessSliderInput / 2);
     }
     upadateDisplayHex(hex: string): void {
-        this.cData.hexColorInput = hex.substring(1, 7); // only 1 to 7 char are needed for view
-        this.cData.redHexInput = hex.substring(1, 3);
-        this.cData.greenHexInput = hex.substring(3, 5);
-        this.cData.blueHexInput = hex.substring(5, 7);
+        const bigSub = 7;
+        const averageSub = 5;
+        const smallSub = 3;
+        this.cData.hexColorInput = hex.substring(1, bigSub); // only 1 to 7 char are needed for view
+        this.cData.redHexInput = hex.substring(1, smallSub);
+        this.cData.greenHexInput = hex.substring(smallSub, averageSub);
+        this.cData.blueHexInput = hex.substring(averageSub, bigSub);
     }
     // Change color display between primary , secondary and background
     swapInputDisplay(): void {
@@ -318,11 +326,15 @@ export class ColorPickingService {
         event.stopPropagation();
         this.cData.isValideInput = false;
         // left/right arrow/delete
-        if (event.which === 37 || event.which === 39 || event.which === 46) {
+        const leftArrow = 37;
+        const rightArrow = 39;
+        const del = 46;
+        if (event.which === leftArrow || event.which === rightArrow || event.which === del) {
             return;
         }
         // if not backspace
-        if (event.which !== 8) {
+        const backspace = 8;
+        if (event.which !== backspace) {
             if (hex.length === hexLength) {
                 event.preventDefault();
                 return;
@@ -349,15 +361,18 @@ export class ColorPickingService {
     }
     writeHexColor(color: string): string {
         let ret = '';
+        const bigSub = 6;
+        const smallSub = 4;
         switch (color) {
             case this.cData.RED_INPUT_FIELD:
-                ret += '#' + this.cData.redHexInput + this.cData.hexColorInput.substring(2, 6);
+                ret += '#' + this.cData.redHexInput + this.cData.hexColorInput.substring(2, bigSub);
                 break;
             case this.cData.GREEN_INPUT_FIELD:
-                ret += '#' + this.cData.hexColorInput.substring(0, 2) + this.cData.greenHexInput + this.cData.hexColorInput.substring(4, 6);
+                ret += '#' + this.cData.hexColorInput.substring(0, 2) + this.cData.greenHexInput +
+                 this.cData.hexColorInput.substring(smallSub, bigSub);
                 break;
             case this.cData.BLUE_INPUT_FIELD:
-                ret += '#' + this.cData.hexColorInput.substring(0, 4) + this.cData.blueHexInput;
+                ret += '#' + this.cData.hexColorInput.substring(0, smallSub) + this.cData.blueHexInput;
                 break;
             case this.cData.COLOR_HEX_INPUT_FIELD:
                 ret += '#' + this.cData.hexColorInput;
@@ -393,16 +408,17 @@ export class ColorPickingService {
         this.updateLastColor(newColor);
     }
     sliderAlphaChange(): void {
+        const sub = 7;
         switch (this.cData.colorMode) {
             case this.cData.PRIMARY_COLOR_MODE:
                 this.cData.primaryAlpha = this.cData.opacitySliderInput / this.cData.POURCENT_MODIFIER;
                 this.cData.primaryColor =
-                    this.cData.primaryColor.substring(0, 7) + this.colorConvert.alphaRGBToHex(this.cData.primaryAlpha);
+                    this.cData.primaryColor.substring(0, sub) + this.colorConvert.alphaRGBToHex(this.cData.primaryAlpha);
                 break;
             case this.cData.SECONDARY_COLOR_MODE:
                 this.cData.secondaryAlpha = this.cData.opacitySliderInput / this.cData.POURCENT_MODIFIER;
                 this.cData.secondaryColor =
-                    this.cData.secondaryColor.substring(0, 7) + this.colorConvert.alphaRGBToHex(this.cData.secondaryAlpha);
+                    this.cData.secondaryColor.substring(0, sub) + this.colorConvert.alphaRGBToHex(this.cData.secondaryAlpha);
                 break;
             case this.cData.BACKGROUND_COLOR_MODE:
                 this.cData.backgroundColorAlpha = this.cData.opacitySliderInput / this.cData.POURCENT_MODIFIER;
@@ -417,16 +433,19 @@ export class ColorPickingService {
     computeHue(event: MouseEvent): number {
         // Hue circle radius is 45px and stroke widht 10px which mean average radius is ( 55 - 45 ) / 2 = 50
         // Which is subtract from offset to center circle for math formula
-        const radiusX: number = event.offsetX - 50;
-        const radiusY: number = event.offsetY - 50;
+        const raduis = 360;
+        const div = 180;
+        const reduce = 50;
+        const radiusX: number = event.offsetX - reduce;
+        const radiusY: number = event.offsetY - reduce;
         const radius: number = Math.sqrt(Math.pow(radiusX, 2) + Math.pow(radiusY, 2));
         const theta: number = Math.acos(radiusX / radius);
         let hue = 0;
         // hue is a value of 0 to 360 degree but theta is in radiant so conversion are needed depending on raduisY signe
         if (radiusY >= 0) {
-            hue = (180 / Math.PI) * theta;
+            hue = (div / Math.PI) * theta;
         } else {
-            hue = 360 - (180 / Math.PI) * theta;
+            hue = raduis - (div / Math.PI) * theta;
         }
         return hue;
     }
