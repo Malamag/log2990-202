@@ -36,7 +36,7 @@ export class DoodleFetchService {
         return el.nativeElement;
     }
 
-    getDrawingStringNoGrid(): SVGData {
+    getDrawingDataNoGrid(): SVGData {
         this.gService.removeGrid();
         const innerHTML: string[] = [];
         const el: Element = this.currentDraw.nativeElement;
@@ -57,7 +57,7 @@ export class DoodleFetchService {
             bgColor: this.backColor,
             innerHTML
         };
-        console.log(SVG_DATA);
+
         this.gService.renderBack();
         return SVG_DATA;
     }

@@ -84,7 +84,7 @@ export class SaveFormComponent implements OnInit, AfterContentInit {
   }
   saveImage(): void {
     const id: string = new Date().getUTCMilliseconds() + '';
-    const doodleString = this.doodleFetch.getDrawingStringNoGrid();
+    const doodleString = this.doodleFetch.getDrawingDataNoGrid();
     const imageData: ImageData = { id, name: this.saveForm.value.doodleName, tags: this.labels, svgElement: doodleString };
     this.index.saveImage(imageData);
     this.winService.closeWindow();

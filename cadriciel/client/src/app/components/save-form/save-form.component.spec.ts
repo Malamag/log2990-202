@@ -101,7 +101,7 @@ describe('SaveFormComponent', () => {
   it('should get the drawing in string format without the grid', () => {
     component.ngOnInit();
     // tslint:disable-next-line: no-string-literal
-    const spy = spyOn(component['doodleFetch'], 'getDrawingStringNoGrid');
+    const spy = spyOn(component['doodleFetch'], 'getDrawingDataNoGrid');
     component.saveImage();
     expect(spy).toHaveBeenCalled();
   });
@@ -109,13 +109,13 @@ describe('SaveFormComponent', () => {
   it('should disable the save button if draw name is invalid', () => {
     const input: HTMLInputElement = fixture.debugElement.query(By.css('input[type=text]')).nativeElement;
     input.value = '';
-    component.saveForm.setValue({doodleName : input.value});
+    component.saveForm.setValue({ doodleName: input.value });
     expect(component.saveForm.valid).toBe(false);
   });
 
   it('should get the drawing in string format without the grid', () => {
     // tslint:disable-next-line: no-string-literal
-    const spy = spyOn(component['doodleFetch'], 'getDrawingStringNoGrid');
+    const spy = spyOn(component['doodleFetch'], 'getDrawingDataNoGrid');
     component.saveImage();
     expect(spy).toHaveBeenCalled();
   });
