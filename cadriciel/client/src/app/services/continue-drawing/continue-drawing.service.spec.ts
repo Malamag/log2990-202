@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { SVGData } from 'src/svg-data';
 import { ContinueDrawingService } from './continue-drawing.service';
 import SpyObj = jasmine.SpyObj;
-fdescribe('ContinueDrawingService', () => {
+describe('ContinueDrawingService', () => {
   let render: SpyObj<Renderer2>;
   let service: ContinueDrawingService;
   // tslint:disable-next-line: no-any

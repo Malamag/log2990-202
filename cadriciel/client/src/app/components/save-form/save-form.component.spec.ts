@@ -22,7 +22,7 @@ describe('SaveFormComponent', () => {
       askForDoodle: () => 0,
       getDrawingWithoutGrid: () => 0,
       getDrawingWithoutNoGrid: () => 0,
-      getDrawingStringNoGrid: () => 0,
+      getDrawingDataNoGrid: () => 0,
     };
     TestBed.configureTestingModule({
       declarations: [SaveFormComponent],
