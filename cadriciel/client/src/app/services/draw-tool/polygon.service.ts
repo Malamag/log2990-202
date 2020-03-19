@@ -5,12 +5,11 @@ import { Point } from './point';
 import { ShapeService } from './shape.service';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
-
 export class PolygonService extends ShapeService {
-
-    private displayPolygon: boolean;  // False if polygon is too small
+    // All corners of the polygon
+    corners: Point[];
 
     // Point for the middle of the perimeter
     private middleX: number;
@@ -18,13 +17,15 @@ export class PolygonService extends ShapeService {
     // min and max values for x
     private leftPoint: number;
     private rightPoint: number;
-    // All corners of the polygon
-    private corners: Point[];
 
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
-                interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(
+        inProgess: HTMLElement,
+        drawing: HTMLElement,
+        selected: boolean,
+        interaction: InteractionService,
+        colorPick: ColorPickingService,
+    ) {
         super(inProgess, drawing, selected, interaction, colorPick);
-        this.displayPolygon = false;
         this.leftPoint = 0;
         this.rightPoint = 0;
         this.corners = [];
@@ -32,7 +33,6 @@ export class PolygonService extends ShapeService {
 
     // Creates an svg polygon that connects the first and last points of currentPath with the rectangle attributes
     createPath(p: Point[], removePerimeter: boolean): string {
-
         // We need at least 2 points
         if (p.length < 2) {
             return '';
@@ -61,16 +61,14 @@ export class PolygonService extends ShapeService {
         // end the divider
         this.svgString += '</g>';
 
-        // need to display?
-        if (!this.displayPolygon) {
-            this.svgString = '';
+        if (this.width === 0 || this.height === 0) {
+            return '';
         }
 
         return this.svgString;
     }
 
     setdimensions(p: Point[]): void {
-
         super.setdimensions(p);
 
         // Assign values of the first mouse down
@@ -97,24 +95,23 @@ export class PolygonService extends ShapeService {
     setCorners(p: Point[]): void {
         // Initilize values used for determining the other polygon's corners
         // tslint:disable-next-line: no-magic-numbers
-        let rotateAngle = 3 * Math.PI / 2; // 3PI/2
+        let rotateAngle = (3 * Math.PI) / 2; // 3PI/2
         let x;
         let y;
         this.leftPoint = this.middleX;
         this.rightPoint = this.middleX;
 
         for (let i = 0; i < this.attr.numberOfCorners; i++) {
-
             // Assigning all points of the polygon depending on the axis (where the mouse is dragged)
             if (this.width > 0) {
-                x = this.middleX - this.smallest * Math.cos(rotateAngle) / 2;
+                x = this.middleX - (this.smallest * Math.cos(rotateAngle)) / 2;
             } else {
-                x = this.middleX + this.smallest * Math.cos(rotateAngle) / 2;
+                x = this.middleX + (this.smallest * Math.cos(rotateAngle)) / 2;
             }
             if (this.height > 0) {
-                y = this.middleY + this.smallest * Math.sin(rotateAngle) / 2;
+                y = this.middleY + (this.smallest * Math.sin(rotateAngle)) / 2;
             } else {
-                y = this.middleY - this.smallest * Math.sin(rotateAngle) / 2;
+                y = this.middleY - (this.smallest * Math.sin(rotateAngle)) / 2;
             }
 
             // Assigning max and min for x
@@ -126,14 +123,7 @@ export class PolygonService extends ShapeService {
 
             // Put new point in the array of corners
             this.corners[i] = new Point(x, y);
-            rotateAngle += (2 * Math.PI / this.attr.numberOfCorners);
-        }
-
-        // can't have rectangle with 0 width or height
-        if (this.width === 0 || this.height === 0) {
-            this.displayPolygon = false;
-        } else {
-            this.displayPolygon = true;
+            rotateAngle += (2 * Math.PI) / this.attr.numberOfCorners;
         }
 
         this.alignCorners();
@@ -151,7 +141,8 @@ export class PolygonService extends ShapeService {
         // Assign start values of the rectangle depending on where we drag the mouse
         const PER_START_X = this.width > 0 ? this.startX : this.startX - WIDTH_PERIMETER;
         const PER_START_Y = this.height > 0 ? this.startY : this.startY - HEIGHT_PERIMETER;
-        if (!removePerimeter) { // Create perimeter if mouse is still down
+        if (!removePerimeter) {
+            // Create perimeter if mouse is still down
             this.svgString += `<rect x="${PER_START_X}" y="${PER_START_Y}"`;
             this.svgString += `width="${Math.abs(WIDTH_PERIMETER)}" height="${Math.abs(HEIGHT_PERIMETER)}"`;
             this.svgString += 'style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"';
@@ -168,6 +159,7 @@ export class PolygonService extends ShapeService {
             for (const corner of this.corners) {
                 corner.x -= SUBSTACTION_X;
             }
+            this.leftPoint -= SUBSTACTION_X;
         }
         // If the the right point value is greater than the initial point where the mouse was down,
         // Adjust the position of all the polygon's points
@@ -176,7 +168,7 @@ export class PolygonService extends ShapeService {
             for (const corner of this.corners) {
                 corner.x += ADDITION_X;
             }
+            this.rightPoint += ADDITION_X;
         }
     }
-
 }

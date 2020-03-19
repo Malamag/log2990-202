@@ -14,18 +14,16 @@ const DEFAULTDIAMETER = 50;
 @Injectable({
     providedIn: 'root',
 })
-
 export class AerosolService extends DrawingTool {
+    attr: AerosolAttributes;
 
-    private attr: AerosolAttributes;
+    points: Point[]; // All points of the aerosol for this path
 
-    private lastPoint: Point;   // Last point when registering
+    private lastPoint: Point; // Last point when registering
 
-    private points: Point[];    // All points of the aerosol for this path
+    private path: string; // Current svg path
 
-    private path: string;       // Current svg path
-
-    private sub: Subscription;  // Subscription for updating through an interval
+    private sub: Subscription; // Subscription for updating through an interval
 
     constructor(
         inProgess: HTMLElement,
@@ -58,7 +56,7 @@ export class AerosolService extends DrawingTool {
     }
 
     subscribe(): void {
-        const INTERVAL_DIV = 1000;  // interval in milliseconds
+        const INTERVAL_DIV = 1000; // interval in milliseconds
         const srcInterval = interval(INTERVAL_DIV / this.attr.emissionPerSecond);
         // subscribe for updating with the desired interval
         this.sub = srcInterval.subscribe(() => {
@@ -174,9 +172,8 @@ export class AerosolService extends DrawingTool {
     // Create an invisible path for the selection of the eraser
     // for it not having to highlight every lines of the aerosol path
     createInvisiblePath(p: Point[]): void {
-
         // start the path
-        this.path += ' <path d="';
+        this.path += ' <path name="invisiblePath" d="';
         // move to the first point
         this.path += `M ${p[0].x} ${p[0].y} `;
         // for each succeding point, connect it with a line
@@ -189,7 +186,6 @@ export class AerosolService extends DrawingTool {
         // set render attributes
         this.path += ` stroke="none" stroke-width="${this.attr.diameter}"`;
         this.path += ' fill="none" stroke-linecap="round" stroke-linejoin="round" />';
-
     }
 
     generatePoint(): void {
@@ -198,7 +194,6 @@ export class AerosolService extends DrawingTool {
 
         // Generate a number of points depending on the diameter of the circle
         for (let j = 1; j < DEPENDENT_PT_NUM && this.isDown; j++) {
-
             // Find a randomized radius. sqrt(random) is for not having more points in the middle of the circle
             const radius = (this.attr.diameter / 2) * Math.sqrt(Math.random());
             // Find a randomized angle in radians
@@ -213,5 +208,4 @@ export class AerosolService extends DrawingTool {
             }
         }
     }
-
 }
