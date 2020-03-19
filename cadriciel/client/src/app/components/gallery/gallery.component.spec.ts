@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { CUSTOM_ELEMENTS_SCHEMA, ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatAutocompleteModule, MatCardModule,
      MatChipsModule, MatDialogModule,
@@ -167,17 +167,11 @@ describe('GalleryComponent', () => {
         component.selected(fakeEvent);
         expect(spy).toHaveBeenCalled();
     });
-    it('should set attributes and emit the redone for the canvas', () => {
-        const askSpy = spyOn(component.doodle, 'askForDoodle');
-        const parent = component.render.createElement('div');
-        const ref = new ElementRef(parent);
-        component.doodle.currentDraw = ref;
-        const firstChild = component.render.createElement('div');
-        component.render.appendChild(component.doodle.currentDraw.nativeElement, firstChild);
+    it('should call continue drawing', () => {
+        const spy = spyOn(component.continueDraw, 'continueDrawing');
         const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         component.continueDrawing(svgData);
-        expect(firstChild.innerHTML).toEqual('hello');
-        expect(askSpy).toHaveBeenCalled();
+        expect(spy).toHaveBeenCalled();
     });
     it('should create an svg with renderer', () => {
         const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };

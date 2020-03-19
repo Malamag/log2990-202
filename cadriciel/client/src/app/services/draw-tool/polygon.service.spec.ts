@@ -3,7 +3,6 @@ import { Point } from './point';
 import { PolygonService } from './polygon.service';
 
 describe('PolygonService', () => {
-
     // let kbServiceStub: any;
     let service: PolygonService;
     let ptA: Point;
@@ -12,7 +11,6 @@ describe('PolygonService', () => {
     let ptArr: Point[];
 
     beforeEach(() => {
-
         ptA = new Point(0, 0); // using a point to test position functions
         ptB = new Point(1, 2);
         ptC = new Point(1, 2);
@@ -45,14 +43,6 @@ describe('PolygonService', () => {
         expect(spyInteraction).toHaveBeenCalled();
         expect(service.attr).toBeDefined();
     });
-
-    // it('should update progress on move', () => {
-    // const spy = spyOn(service, 'updateProgress');
-    // service.down(ptA); // simulating a mouse down at given point
-    // service.update(kbServiceStub);
-    // expect(service.isSquare).toBeTruthy();
-    // expect(spy).toHaveBeenCalled();
-    // });
 
     it('should update the current path on mouse down', () => {
         const spy = spyOn(service, 'updateProgress');
@@ -105,6 +95,13 @@ describe('PolygonService', () => {
         const polygon = service.createPath([first, second], false);
         expect(polygon).toContain('<polygon');
     });
+
+    it('should change the number of corners of the polygon', () => {
+        const corners = 7;
+        service.attr.numberOfCorners = corners; // simulated border thickness
+        service.createPath(ptArr, false);
+        expect(service.corners.length).toEqual(corners);
+    });
     /*
         it('should create a rectangle of the correct dimensions from mouse move', () => {
             const first = new Point(0, 0);
@@ -125,19 +122,7 @@ describe('PolygonService', () => {
         const expTick = `stroke-width="${thick}"`;
         expect(polygon).toContain(expTick);
     });
-    /*
-        it('should render a square on pressed shift key', () => {
-            const newArr = [new Point(0, 0), new Point(1, 1)]; // forcing a square
-            const fakeSquare = service.createPath(newArr, false);
-            service.isSquare = true;
-            const square = service.createPath(ptArr, false);
-            expect(square).toEqual(fakeSquare);
-        });
-        it('should create a square with corner at mouse start', () => {
-            const rect = service.createPath(ptArr, false);
-            expect(rect).toEqual('');
-        });
-    */
+
     it('should create a polygon filled with the selected color', () => {
         const color = '#ffffff';
         service.chosenColor = { primColor: color, secColor: color, backColor: color }; // both prim. and sec.
@@ -224,5 +209,4 @@ describe('PolygonService', () => {
         const name = 'polygon';
         expect(path).toContain(name);
     });
-
 });
