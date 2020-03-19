@@ -20,7 +20,7 @@ export class SaveFormComponent implements OnInit, AfterContentInit {
   constructor(
     private winService: ModalWindowService,
     private formBuilder: FormBuilder,
-    public doodleFetch: DoodleFetchService,
+    private doodleFetch: DoodleFetchService,
     private index: IndexService) { }
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   labels: string[];

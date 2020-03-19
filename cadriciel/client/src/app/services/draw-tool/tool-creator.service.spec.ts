@@ -7,10 +7,10 @@ import { LineService } from './line.service';
 import { PencilService } from './pencil.service';
 import { RectangleService } from './rectangle.service';
 import { ToolCreator } from './tool-creator';
-
+// tslint:disable: max-classes-per-file
 export class FakeCpService extends ColorPickingService { }
 export class FakeItService extends InteractionService { }
-
+// tslint:enable: max-classes-per-file
 describe('ToolCreator', () => {
   // let elem: HTMLElement;
 
@@ -32,7 +32,6 @@ describe('ToolCreator', () => {
       hexToRgba: () => [],
       validateRGB: () => true,
       rgbToHsl: () => [],
-      //cData: colorData,
       alphaRGBToHex: () => ''
     };
 
@@ -53,8 +52,8 @@ describe('ToolCreator', () => {
   });
 
   it('should be created', () => {
-    const service: ToolCreator = TestBed.get(ToolCreator);
-    expect(service).toBeTruthy();
+    const testService: ToolCreator = TestBed.get(ToolCreator);
+    expect(testService).toBeTruthy();
   });
 
   it('should create a new pencil service', () => {

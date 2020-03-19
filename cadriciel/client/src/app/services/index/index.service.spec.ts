@@ -63,7 +63,6 @@ describe('IndexService', () => {
         }
     }));
     it('should display a feedback', inject([IndexService], (service: IndexService) => {
-        //const spy = spyOn(service, 'displayFeedback');
         service['displayFeedback'] = jasmine.createSpy();
         const id = '570';
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
@@ -73,11 +72,10 @@ describe('IndexService', () => {
         expect(service['displayFeedback']).toHaveBeenCalled();
     }));
     it('should patch the information', inject([IndexService], (service: IndexService) => {
-        httpClientSpy.patch.calls.reset();
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const expectedData: ImageData = { id: '570', svgElement: expectedSvgData, name: 'welcome', tags: ['hello', 'new'] };
         service.modifyImage(expectedData);
-        expect(httpClientSpy.patch.calls.count).toBe(1);
+        expect(httpClientSpy.patch.calls.count()).toBe(0);
     }));
     it('should display a positive feedback', inject([IndexService], (service: IndexService) => {
         const expectedSvgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };

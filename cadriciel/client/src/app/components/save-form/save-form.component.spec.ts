@@ -100,7 +100,8 @@ describe('SaveFormComponent', () => {
 
   it('should get the drawing in string format without the grid', () => {
     component.ngOnInit();
-    const spy = spyOn(component.doodleFetch, 'getDrawingStringNoGrid');
+    // tslint:disable-next-line: no-string-literal
+    const spy = spyOn(component['doodleFetch'], 'getDrawingStringNoGrid');
     component.saveImage();
     expect(spy).toHaveBeenCalled();
   });
@@ -113,7 +114,8 @@ describe('SaveFormComponent', () => {
   });
 
   it('should get the drawing in string format without the grid', () => {
-    const spy = spyOn(component.doodleFetch, 'getDrawingStringNoGrid');
+    // tslint:disable-next-line: no-string-literal
+    const spy = spyOn(component['doodleFetch'], 'getDrawingStringNoGrid');
     component.saveImage();
     expect(spy).toHaveBeenCalled();
   });
