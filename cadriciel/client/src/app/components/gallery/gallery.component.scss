@@ -5,9 +5,11 @@
     width: 90vw;
     background-color: #313131;
 }
+
 .header {
     width: 99%;
 }
+
 mat-card {
     position: relative;
     align-items: baseline;
@@ -17,11 +19,16 @@ mat-card {
     margin-right: 5px;
     float: left;
     margin-bottom: 5px;
+
+    width: auto;
+    height: auto;
 }
+
 #cards-container {
     display: grid;
     grid-template-columns: auto auto auto;
 }
+
 #chip-container {
     width: 100%;
 }

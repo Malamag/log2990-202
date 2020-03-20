@@ -6,7 +6,7 @@
 
     <mat-form-field class="header">
         <mat-chip-list #tagList>
-            <mat-chip *ngFor="let tag of tags" (removed)="removeTag(tag)" [selectable]="selectable">
+            <mat-chip *ngFor="let tag of tags" (removed)="removeTag(tag)">
                 {{ tag }}
                 <mat-icon matChipRemove>clear</mat-icon>
             </mat-chip>
@@ -44,7 +44,8 @@
                 <!---
                 <img mat-card-image src='https://cdn.instructables.com/F1F/IFEN/GW88TP3T/F1FIFENGW88TP3T.LARGE.jpg?auto=webp&fit=bounds' />
                 -->
-                <app-preview-box [draw]="drawing.svgElement" [svgW]="drawing.width" [svgH]="drawing.height"> </app-preview-box>
+                <app-preview-box class="preview-box" [draw]="drawing.svgElement" [svgW]="drawing.width" [svgH]="drawing.height">
+                </app-preview-box>
                 <mat-card-actions>
                     <button mat-stroked-button color="warn" (click)="delete(drawing.id)">
                         <mat-icon matTooltip="Supprimer"> delete </mat-icon>
