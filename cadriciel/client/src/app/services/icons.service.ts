@@ -10,7 +10,6 @@ export class IconsService {
   constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('brush', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/brush.svg'));
     iconRegistry.addSvgIcon('calligraphie', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/calligraphie.svg'));
-    iconRegistry.addSvgIcon('color', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/color.svg'));
     iconRegistry.addSvgIcon('cursor', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/cursor.svg'));
     iconRegistry.addSvgIcon('ellipse', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/ellipse.svg'));
     iconRegistry.addSvgIcon('eraser', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/eraser.svg'));

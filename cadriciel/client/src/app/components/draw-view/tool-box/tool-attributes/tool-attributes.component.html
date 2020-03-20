@@ -155,11 +155,6 @@
         </button>
     </div>
 
-    <!-- for the color-picker-->
-    <div *ngSwitchCase="'Sélection de couleur'" (mouseout)="resize()">
-        <app-color-picker></app-color-picker>
-    </div>
-
     <div *ngSwitchCase="'Étampe'">
         <label> facteur de mise à l'échelle de l'étampe </label>
         <mat-slider min="0" max="100" value="50"> %</mat-slider><br />

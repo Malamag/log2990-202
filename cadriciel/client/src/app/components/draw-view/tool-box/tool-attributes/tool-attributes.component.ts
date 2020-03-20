@@ -26,7 +26,6 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
             'Ligne',
             'Pinceau',
             'Crayon',
-            'Sélection de couleur',
             'Ellipse',
             'Polygone',
             'Pipette',

@@ -246,6 +246,7 @@ export class ColorPickingService {
     }
     updateDisplay(
         hex: string,
+        // tslint:disable-next-line: no-magic-numbers
         rgb: number[] = this.colorConvert.hexToRgba(hex.substring(1, 9)),
         hsl: number[] = this.colorConvert.rgbToHsl(rgb[0], rgb[1], rgb[2]),
     ): void {
@@ -329,17 +330,20 @@ export class ColorPickingService {
         const leftArrow = 37;
         const rightArrow = 39;
         const del = 46;
+        // tslint:disable-next-line: deprecation // tslint:disable-next-line: prefer-switch
         if (event.which === leftArrow || event.which === rightArrow || event.which === del) {
             return;
         }
         // if not backspace
         const backspace = 8;
+        // tslint:disable-next-line: deprecation
         if (event.which !== backspace) {
             if (hex.length === hexLength) {
                 event.preventDefault();
                 return;
             }
         }
+        // tslint:disable-next-line: deprecation
         const validator = this.colorConvert.validateHex(event.which);
         if (!validator) {
             event.preventDefault();
@@ -433,7 +437,7 @@ export class ColorPickingService {
     computeHue(event: MouseEvent): number {
         // Hue circle radius is 45px and stroke widht 10px which mean average radius is ( 55 - 45 ) / 2 = 50
         // Which is subtract from offset to center circle for math formula
-        const raduis = 360;
+        const maxRadius = 360;
         const div = 180;
         const reduce = 50;
         const radiusX: number = event.offsetX - reduce;
@@ -445,7 +449,7 @@ export class ColorPickingService {
         if (radiusY >= 0) {
             hue = (div / Math.PI) * theta;
         } else {
-            hue = raduis - (div / Math.PI) * theta;
+            hue = maxRadius - (div / Math.PI) * theta;
         }
         return hue;
     }
