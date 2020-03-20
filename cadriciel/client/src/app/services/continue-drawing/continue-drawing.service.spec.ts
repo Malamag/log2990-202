@@ -1,5 +1,6 @@
 import { ElementRef, Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { SVGData } from 'src/svg-data';
 import { ContinueDrawingService } from './continue-drawing.service';
 import SpyObj = jasmine.SpyObj;
@@ -27,6 +28,9 @@ describe('ContinueDrawingService', () => {
     };
 
     TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule,
+      ],
       providers: [
         { provide: Renderer2, useValue: render },
         { provide: ElementRef, useValue: elementStub }]
@@ -42,7 +46,8 @@ describe('ContinueDrawingService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should set attributes and emit the redone for the canvas', () => {
+  it('ask for doodle and affect the children', async (done: any) => {
+    const LOAD_TIME = 15;
     const askSpy = spyOn(service.doodle, 'askForDoodle');
 
     service.doodle.currentDraw = elementStub;
@@ -50,8 +55,10 @@ describe('ContinueDrawingService', () => {
     render.appendChild(service.doodle.currentDraw.nativeElement, childElemStub);
     const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello', 'hello'] };
     service.continueDrawing(svgData);
-
-    expect(childElemStub.innerHTML).toEqual('hello');
-    expect(askSpy).toHaveBeenCalled();
+    setTimeout(() => {
+      expect(childElemStub.innerHTML).toEqual('hello');
+      expect(askSpy).toHaveBeenCalled();
+      done();
+    }, LOAD_TIME);
   });
 });
