@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Canvas } from 'src/app/models/canvas.model';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { SVGData } from 'src/svg-data';
@@ -13,7 +12,6 @@ export class ContinueDrawingService {
   constructor(
     public doodle: DoodleFetchService,
     public interact: InteractionService,
-    public gridService: GridRenderService,
     public canvasBuilder: CanvasBuilderService,
   ) { }
 
