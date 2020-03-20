@@ -119,12 +119,13 @@ export class ColorConvertingService {
         const num = 6;
         const add = 4;
         if (delta) {
-            if (max === primeR) {
-                hue = (colorData.MAX_HUE_VALUE / num) * (((primeG - primeB) / delta) % num);
-            } else if (max === primeG) {
-                hue = (colorData.MAX_HUE_VALUE / num) * ((primeB - primeR) / delta + 2);
-            } else if (max === primeB) {
-                hue = (colorData.MAX_HUE_VALUE / num) * ((primeR - primeG) / delta + add);
+            switch (max) {
+                case primeR: hue = (colorData.MAX_HUE_VALUE / num) * (((primeG - primeB) / delta) % num);
+                             break;
+                case primeG: hue = (colorData.MAX_HUE_VALUE / num) * ((primeB - primeR) / delta + 2);
+                             break;
+                case primeB: hue = (colorData.MAX_HUE_VALUE / num) * ((primeR - primeG) / delta + add);
+                             break;
             }
         }
 
