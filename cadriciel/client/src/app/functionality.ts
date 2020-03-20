@@ -143,7 +143,7 @@ export const toolsItems = [
         shortDescription:
             'En faisant un clic gauche, vous définissez un premier coin du polygone. En vous déplaçant, un aperçu de sa taille est disponible et vous pouvez confirmer la création de l’objet en relâchant le clic de souris. Les polygones créés sont toujours réguliers et convexe.',
         description: `Vous pouvez configurer les attributs de polygone, comme le nombre de côté et l'épaisseur du contour, via le panneau des attributs.
-        Pour utiliser le polygone vous pouvovez le sélctionner en appuyant sur l'icône appropriée de la barre des outils 
+        Pour utiliser le polygone vous pouvovez le sélctionner en appuyant sur l'icône appropriée de la barre des outils
         comme vous pouvez l'utiliser en appuyant sur la touche 3 de votre clavier.`,
         icon: 'hexagon',
     },
