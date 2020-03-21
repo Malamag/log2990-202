@@ -5,6 +5,7 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawingTool';
 import { Point } from './point';
+import { CanvasInteraction } from './canvas-interaction.service';
 
 const DEFAULTLINETHICKNESS = 5;
 const DEFAULTTEXTURE = 0;
@@ -208,9 +209,10 @@ export class EraserService extends DrawingTool {
       let firstChild = this.drawing.children[i];
 
       // item bounding box
-      let itemBox = firstChild.getBoundingClientRect();
-      let itemTopLeft: Point = new Point(itemBox.left - canvOffsetX, itemBox.top - canvOffsetY);
-      let itemBottomRight: Point = new Point(itemBox.right - canvOffsetX, itemBox.bottom - canvOffsetY);
+      let itemBox = CanvasInteraction.getPreciseBorder(firstChild);
+      let itemTopLeft: Point = new Point(itemBox[0][0] - canvOffsetX, itemBox[2][0] - canvOffsetY);
+      let itemBottomRight: Point = new Point(itemBox[1][0] - canvOffsetX, itemBox[3][0] - canvOffsetY);
+
 
       if (!Point.rectOverlap(tl, br, itemTopLeft, itemBottomRight)) {
         this.unhighlight(firstChild);

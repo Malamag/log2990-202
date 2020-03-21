@@ -44,29 +44,12 @@ export class CanvasInteraction {
       // ignore those who aren't selected
       if (!selectionTool.selectedItems[j]) { continue; }
 
-      // iterate through every svg element
-      for (let i = 0; i < selectionTool.drawing.children[j].childElementCount; i++) {
+      let currentBorder = this.getPreciseBorder(selectionTool.drawing.children[j], [minX, maxX, minY, maxY]);
 
-        let current = selectionTool.drawing.children[j].children[i] as HTMLElement;
-
-        // ignore the brush filters
-        if (current.tagName.toString() == "filter") { continue; }
-
-        // offset due to the stroke width
-        let childStrokeWidth = current.getAttribute("stroke-width");
-        let currentOffset = childStrokeWidth ? +childStrokeWidth / 2 : 0;
-
-        // item bounding box
-        let box = current.getBoundingClientRect();
-        let topLeft: Point = new Point(box.left - currentOffset, box.top - currentOffset);
-        let bottomRight: Point = new Point(box.right + currentOffset, box.bottom + currentOffset);
-
-        // get smallest rectangle that includes every item
-        minX = topLeft.x < minX[0] ? [topLeft.x, true] : [minX[0], minX[1]];
-        maxX = bottomRight.x > maxX[0] ? [bottomRight.x, true] : [maxX[0], maxX[1]];
-        minY = topLeft.y < minY[0] ? [topLeft.y, true] : [minY[0], minY[1]];
-        maxY = bottomRight.y > maxY[0] ? [bottomRight.y, true] : [maxY[0], maxY[1]];
-      }
+      minX = currentBorder[0];
+      maxX = currentBorder[1];
+      minY = currentBorder[2];
+      maxY = currentBorder[3];
     };
 
     // convert
@@ -97,6 +80,40 @@ export class CanvasInteraction {
     return wrapper;
   }
 
+  static getPreciseBorder(item: Element, record?: [number, boolean][]) {
+
+    let minX: [number, boolean] = record ? record[0] : [Infinity, false];
+    let maxX: [number, boolean] = record ? record[1] : [-1, false];
+    let minY: [number, boolean] = record ? record[2] : [Infinity, false];
+    let maxY: [number, boolean] = record ? record[3] : [-1, false];
+
+    // iterate through every svg element
+    for (let i = 0; i < item.childElementCount; i++) {
+
+      let current = item.children[i] as HTMLElement;
+
+      // ignore the brush filters
+      if (current.tagName.toString() == "filter") { continue; }
+
+      // offset due to the stroke width
+      let childStrokeWidth = current.getAttribute("stroke-width");
+      let currentOffset = childStrokeWidth ? +childStrokeWidth / 2 : 0;
+
+      // item bounding box
+      let box = current.getBoundingClientRect();
+      let topLeft: Point = new Point(box.left - currentOffset, box.top - currentOffset);
+      let bottomRight: Point = new Point(box.right + currentOffset, box.bottom + currentOffset);
+
+      // get smallest rectangle that includes every item
+      minX = topLeft.x < minX[0] ? [topLeft.x, true] : [minX[0], minX[1]];
+      maxX = bottomRight.x > maxX[0] ? [bottomRight.x, true] : [maxX[0], maxX[1]];
+      minY = topLeft.y < minY[0] ? [topLeft.y, true] : [minY[0], minY[1]];
+      maxY = bottomRight.y > maxY[0] ? [bottomRight.y, true] : [maxY[0], maxY[1]];
+    }
+
+    return [minX, maxX, minY, maxY];
+  }
+
   static retrieveItemsInRect(inProgress: HTMLElement, drawing: HTMLElement, selectedItems: boolean[], invertedItems: boolean[], inverted: boolean) {
 
     let selectionRectangle = inProgress.lastElementChild;
@@ -110,9 +127,9 @@ export class CanvasInteraction {
     for (let i = 0; i < items.length; i++) {
 
       // item bounding box
-      let itemBox = items[i].getBoundingClientRect();
-      let itemTopLeft: Point = new Point(itemBox.left, itemBox.top);
-      let itemBottomRight: Point = new Point(itemBox.right, itemBox.bottom);
+      let itemBox = this.getPreciseBorder(items[i]);
+      let itemTopLeft: Point = new Point(itemBox[0][0], itemBox[2][0]);
+      let itemBottomRight: Point = new Point(itemBox[1][0], itemBox[3][0]);
 
       // check if the two bounding box are overlapping
       let inside: boolean = Point.rectOverlap(boxTopLeft, boxBottomRight, itemTopLeft, itemBottomRight);
