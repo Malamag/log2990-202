@@ -53,9 +53,7 @@ export class AerosolService extends DrawingTool {
 
     updateAttributes(): void {
         this.interaction.$aerosolAttributes.subscribe((obj: AerosolAttributes) => {
-            if (obj) {
                 this.attr = { emissionPerSecond: obj.emissionPerSecond, diameter: obj.diameter };
-            }
         });
     }
 
@@ -102,6 +100,8 @@ export class AerosolService extends DrawingTool {
                 this.updateDrawing();
                 this.sub.unsubscribe();
             }
+        } else {
+            this.ignoreNextUp = false;
         }
     }
 

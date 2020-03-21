@@ -96,11 +96,15 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
     }
 
     updateTools(): void {
-        this.interaction.emitToolsAttributes({ lineThickness: this.lineThickness, texture: this.texture });
+        this.interaction.emitToolsAttributes({
+            lineThickness: this.lineThickness,
+            texture: this.texture });
     }
 
     updateAerosol(): void {
-        this.interaction.emitAerosolAttributes({ emissionPerSecond: this.emissionPerSecond, diameter: this.diameter });
+        this.interaction.emitAerosolAttributes({
+            emissionPerSecond: this.emissionPerSecond,
+            diameter: this.diameter });
     }
 
     resize(): void {

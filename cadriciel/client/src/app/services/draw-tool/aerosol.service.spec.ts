@@ -23,7 +23,7 @@ describe('AerosolService', () => {
                 { provide: KeyboardHandlerService, kbServiceStub },
             ],
         }),
-            (ptA = new Point(0, 0));
+        ptA = new Point(0, 0);
         ptB = new Point(1, 2);
         ptArr = [ptA, ptB];
         service = TestBed.get(AerosolService);
@@ -242,7 +242,7 @@ describe('AerosolService', () => {
         expect(service.isDown).toBeFalsy();
     });
 
-    it('should fff', () => {
+    it('should not start an aerosol path when the tool is changed while the mouse is clicked', () => {
         //
     });
 
