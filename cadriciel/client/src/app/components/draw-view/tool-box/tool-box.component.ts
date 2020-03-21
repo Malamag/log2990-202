@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { toolsItems } from '../../../functionality';
 import { IconsService } from '../../../services/icons.service';
-const zKeyCode = 90;
+const Z_KEY_CODE = 90;
 @Component({
     selector: 'app-tool-box',
     templateUrl: './tool-box.component.html',
@@ -43,7 +43,7 @@ export class ToolBoxComponent implements OnInit {
     updateBoard(event: KeyboardEvent): void {
         // keyCode 90 for z
         // tslint:disable-next-line: deprecation
-        if (event.ctrlKey && event.keyCode === zKeyCode) {
+        if (event.ctrlKey && event.keyCode === Z_KEY_CODE) {
             if (event.shiftKey) {
                 this.buttonAction(this.selectingToolsMap.get('ctrl+shift+z'));
             } else {

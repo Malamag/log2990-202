@@ -27,10 +27,10 @@ export class EntryPointComponent implements OnInit {
   }
 
   onOpen(): void {
-    const config = new MatSnackBarConfig();
-    const duration = 2500;
-    config.duration = duration; // temps de visibilité de la barre de bienvenue (ms)
-    this.snackBar.open('Bienvenue !', undefined, config);
+    const CONFIG = new MatSnackBarConfig();
+    const DURATION = 2500;
+    CONFIG.duration = DURATION; // temps de visibilité de la barre de bienvenue (ms)
+    this.snackBar.open('Bienvenue !', undefined, CONFIG);
   }
 
   openUserManual(): void {

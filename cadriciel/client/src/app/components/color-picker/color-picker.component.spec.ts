@@ -20,11 +20,11 @@ describe('ColorPickerComponent', () => {
         expect(component).toBeTruthy();
     });
     it('should init colors and emit them', () => {
-        const initSpy = spyOn(component, 'initColors');
-        const emitSpy = spyOn(component.colorPicking, 'emitColors');
+        const INIT_SPY = spyOn(component, 'initColors');
+        const EMIT_SPY = spyOn(component.colorPicking, 'emitColors');
         component.ngOnInit();
-        expect(initSpy).toHaveBeenCalled();
-        expect(emitSpy).toHaveBeenCalled();
+        expect(INIT_SPY).toHaveBeenCalled();
+        expect(EMIT_SPY).toHaveBeenCalled();
     });
     it('should init colors with the default values', () => {
         const DEF_PRIM = '#000000ff';
@@ -48,119 +48,119 @@ describe('ColorPickerComponent', () => {
         expect(component.cData.backgroundColor).toBe(BG_COLOR);
     });
     it('should call set color', () => {
-        const first = 1;
-        const second = 2;
-        const third = 3;
-        const setSpy = spyOn(component.colorPicking, 'setColor');
-        component.setColor([first, second, third]);
-        expect(setSpy).toHaveBeenCalled();
+        const FIRST = 1;
+        const SECOND = 2;
+        const THIRD = 3;
+        const SET_SPY = spyOn(component.colorPicking, 'setColor');
+        component.setColor([FIRST, SECOND, THIRD]);
+        expect(SET_SPY).toHaveBeenCalled();
     });
     it('should call hue selector', () => {
-        const mouseStub = new MouseEvent('mousedown');
-        const hueSpy = spyOn(component.colorPicking, 'hueSelector');
-        component.hueSelector(mouseStub);
-        expect(hueSpy).toHaveBeenCalled();
+        const MOUSE_STUB = new MouseEvent('mousedown');
+        const HUE_SPY = spyOn(component.colorPicking, 'hueSelector');
+        component.hueSelector(MOUSE_STUB);
+        expect(HUE_SPY).toHaveBeenCalled();
     });
     it('should call sl selector', () => {
-        const mouseStub = new MouseEvent('mousedown');
-        const slSpy = spyOn(component.colorPicking, 'slSelector');
-        component.slSelector(mouseStub);
-        expect(slSpy).toHaveBeenCalled();
+        const MOUSE_STUB = new MouseEvent('mousedown');
+        const SL_SPY = spyOn(component.colorPicking, 'slSelector');
+        component.slSelector(MOUSE_STUB);
+        expect(SL_SPY).toHaveBeenCalled();
     });
     it('should call on context menu', () => {
-        const mouseStub = new MouseEvent('mousedown');
-        const contextSpy = spyOn(component.colorPicking, 'onContextMenu');
-        component.onContextMenu(mouseStub);
-        expect(contextSpy).toHaveBeenCalled();
+        const MOUSE_STUB = new MouseEvent('mousedown');
+        const CONTEXT_SPY = spyOn(component.colorPicking, 'onContextMenu');
+        component.onContextMenu(MOUSE_STUB);
+        expect(CONTEXT_SPY).toHaveBeenCalled();
     });
     it('should call color select on mouse up', () => {
-        const selectorSpy = spyOn(component.colorPicking, 'colorSelectOnMouseUp');
+        const SELECTOR_SPY = spyOn(component.colorPicking, 'colorSelectOnMouseUp');
         component.colorSelectOnMouseUp();
-        expect(selectorSpy).toHaveBeenCalled();
+        expect(SELECTOR_SPY).toHaveBeenCalled();
     });
     it('should call the hue selector on mouse down', () => {
-        const mouseStub = new MouseEvent('mousedown');
-        const hueSpy = spyOn(component.colorPicking, 'hueSelectorOnMouseDown');
-        component.hueSelectorOnMouseDown(mouseStub);
-        expect(hueSpy).toHaveBeenCalled();
+        const MOUSE_STUB = new MouseEvent('mousedown');
+        const HUE_SPY = spyOn(component.colorPicking, 'hueSelectorOnMouseDown');
+        component.hueSelectorOnMouseDown(MOUSE_STUB);
+        expect(HUE_SPY).toHaveBeenCalled();
     });
     it('should call the selector on mouse leave', () => {
-        const mouseStub = new MouseEvent('mousedown');
-        const selectorSpy = spyOn(component.colorPicking, 'selectorOnMouseLeave');
-        component.selectorOnMouseLeave(mouseStub);
-        expect(selectorSpy).toHaveBeenCalled();
+        const MOUSE_STUB = new MouseEvent('mousedown');
+        const SELECTOR_SPY = spyOn(component.colorPicking, 'selectorOnMouseLeave');
+        component.selectorOnMouseLeave(MOUSE_STUB);
+        expect(SELECTOR_SPY).toHaveBeenCalled();
     });
     it('should call the slSelector', () => {
-        const mouseStub = new MouseEvent('mousedown');
-        const selectorSpy = spyOn(component.colorPicking, 'slSelectorOnMouseDown');
-        component.slSelectorOnMouseDown(mouseStub);
-        expect(selectorSpy).toHaveBeenCalled();
+        const MOUSE_STUB = new MouseEvent('mousedown');
+        const SELECTOR_SPY = spyOn(component.colorPicking, 'slSelectorOnMouseDown');
+        component.slSelectorOnMouseDown(MOUSE_STUB);
+        expect(SELECTOR_SPY).toHaveBeenCalled();
     });
     it('should call the last color selector', () => {
-        const mouseStub = new MouseEvent('mousedown');
-        const lastColor = 'ffffffff';
-        const lastColorSpy = spyOn(component.colorPicking, 'lastColorSelector');
-        component.lastColorSelector(mouseStub, lastColor);
-        expect(lastColorSpy).toHaveBeenCalled();
+        const MOUSE_STUB = new MouseEvent('mousedown');
+        const LAST_COLOR = 'ffffffff';
+        const LAST_COLOR_SPY = spyOn(component.colorPicking, 'lastColorSelector');
+        component.lastColorSelector(MOUSE_STUB, LAST_COLOR);
+        expect(LAST_COLOR_SPY).toHaveBeenCalled();
     });
     it('should call swap on mouse over', () => {
-        const swapSpy = spyOn(component.colorPicking, 'onSwapSVGMouseOver');
+        const SWAP_SPY = spyOn(component.colorPicking, 'onSwapSVGMouseOver');
         component.onSwapSVGMouseOver();
-        expect(swapSpy).toHaveBeenCalled();
+        expect(SWAP_SPY).toHaveBeenCalled();
     });
     it('should call swap on mouse leave', () => {
-        const swapSpy = spyOn(component.colorPicking, 'onSwapSVGMouseLeave');
+        const SWAP_SPY = spyOn(component.colorPicking, 'onSwapSVGMouseLeave');
         component.onSwapSVGMouseLeave();
-        expect(swapSpy).toHaveBeenCalled();
+        expect(SWAP_SPY).toHaveBeenCalled();
     });
     it('should call swap on mouse down', () => {
-        const swapSpy = spyOn(component.colorPicking, 'onSwapSVGMouseDown');
+        const SWAP_SPY = spyOn(component.colorPicking, 'onSwapSVGMouseDown');
         component.onSwapSVGMouseDown();
-        expect(swapSpy).toHaveBeenCalled();
+        expect(SWAP_SPY).toHaveBeenCalled();
     });
     it('should call swap on mouse up', () => {
-        const swapSpy = spyOn(component.colorPicking, 'onSwapSVGMouseUp');
+        const SWAP_SPY = spyOn(component.colorPicking, 'onSwapSVGMouseUp');
         component.onSwapSVGMouseUp();
-        expect(swapSpy).toHaveBeenCalled();
+        expect(SWAP_SPY).toHaveBeenCalled();
     });
     it('should call on radio button change', () => {
-        const radioSpy = spyOn(component.colorPicking, 'onRadioButtonChange');
-        const colorMode = 'Primary';
-        component.onRadioButtonChange(colorMode);
-        expect(radioSpy).toHaveBeenCalled();
+        const RADIO_SPY = spyOn(component.colorPicking, 'onRadioButtonChange');
+        const COLOR_MODE = 'Primary';
+        component.onRadioButtonChange(COLOR_MODE);
+        expect(RADIO_SPY).toHaveBeenCalled();
     });
     it('should swap input display', () => {
-        const swapSpy = spyOn(component.colorPicking, 'swapInputDisplay');
+        const SWAP_SPY = spyOn(component.colorPicking, 'swapInputDisplay');
         component.swapInputDisplay();
-        expect(swapSpy).toHaveBeenCalled();
+        expect(SWAP_SPY).toHaveBeenCalled();
     });
     it('should call validate hex input', () => {
-        const validatorSpy = spyOn(component.colorPicking, 'validateHexInput');
-        const keyboardEventStub = new KeyboardEvent('keyUp');
-        const hexLength = 10;
-        const hex = '0000';
-        component.validateHexInput(keyboardEventStub, hexLength, hex);
-        expect(validatorSpy).toHaveBeenCalled();
+        const VALIDATOR_SPY = spyOn(component.colorPicking, 'validateHexInput');
+        const KEYBOARD_STUB = new KeyboardEvent('keyUp');
+        const HEX_LENGTH = 10;
+        const HEX = '0000';
+        component.validateHexInput(KEYBOARD_STUB, HEX_LENGTH, HEX);
+        expect(VALIDATOR_SPY).toHaveBeenCalled();
     });
     it('should call onHexInput', () => {
-        const inputSpy = spyOn(component.colorPicking, 'onHexInput');
-        const num = 10;
-        component.onHexInput(num, '00000000', 'background');
-        expect(inputSpy).toHaveBeenCalled();
+        const INIT_SPY = spyOn(component.colorPicking, 'onHexInput');
+        const NUM = 10;
+        component.onHexInput(NUM, '00000000', 'background');
+        expect(INIT_SPY).toHaveBeenCalled();
     });
     it('should call on sl slider input', () => {
-        const sliderSpy = spyOn(component.colorPicking, 'onSLSliderInput');
+        const SLIDER_SPY = spyOn(component.colorPicking, 'onSLSliderInput');
         component.onSLSliderInput();
-        expect(sliderSpy).toHaveBeenCalled();
+        expect(SLIDER_SPY).toHaveBeenCalled();
     });
     it('should call slider alpha change', () => {
-        const sliderSpy = spyOn(component.colorPicking, 'sliderAlphaChange');
+        const SLIDER_SPY = spyOn(component.colorPicking, 'sliderAlphaChange');
         component.sliderAlphaChange();
-        expect(sliderSpy).toHaveBeenCalled();
+        expect(SLIDER_SPY).toHaveBeenCalled();
     });
     it('should swap primary secondary', () => {
-        const swapSpy = spyOn(component.colorPicking, 'swapPrimarySecondary');
+        const SWAP_SPY = spyOn(component.colorPicking, 'swapPrimarySecondary');
         component.swapPrimarySecondary();
-        expect(swapSpy).toHaveBeenCalled();
+        expect(SWAP_SPY).toHaveBeenCalled();
     });
 });

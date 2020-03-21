@@ -80,115 +80,115 @@ describe('GalleryComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
     it('should add the value and should empty the input value', () => {
-        const spy = spyOn(component.tagCtrl, 'setValue');
+        const SPY = spyOn(component.tagCtrl, 'setValue');
         component.addTag(tagAdd);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
         expect(tagAdd.input.value).toEqual(' ');
         expect(component.tags.length).toBeGreaterThan(0);
     });
     it('should call renderer functions', () => {
-        const createSpy = spyOn(component.render, 'createText');
-        const appendSpy = spyOn(component.render, 'appendChild');
+        const CREATE_SPY = spyOn(component.render, 'createText');
+        const APPEND_SPY = spyOn(component.render, 'appendChild');
         component.showMessage();
-        expect(createSpy).toHaveBeenCalled();
-        expect(appendSpy).toHaveBeenCalled();
+        expect(CREATE_SPY).toHaveBeenCalled();
+        expect(APPEND_SPY).toHaveBeenCalled();
     });
     it('should throw the error and get all the images', () => {
-        const id = 'hello';
+        const ID = 'hello';
         component.index.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
-        const text = component.render.createText('Aucun dessin ne se trouve sur le serveur');
-        component.delete(id);
-        expect(component.text).toEqual(text);
+        const TEXT = component.render.createText('Aucun dessin ne se trouve sur le serveur');
+        component.delete(ID);
+        expect(component.text).toEqual(TEXT);
     });
     it('should show a message instead of images', () => {
         component.index.getAllImages = jasmine.createSpy().and.returnValue(of([]));
-        const appendSpy = spyOn(component.render, 'appendChild');
+        const APPEND_SPY = spyOn(component.render, 'appendChild');
         component.getAllImages();
         of([]).subscribe(() => {
-            expect(appendSpy).toHaveBeenCalled();
+            expect(APPEND_SPY).toHaveBeenCalled();
         });
     });
     it('should create an svg and get tags', () => {
-        const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
-        const data: ImageData = { id: '570', svgElement: svgData, name: 'welcome', tags: ['hello', 'new'] };
-        component.index.getAllImages = jasmine.createSpy().and.returnValue(of([data, data]));
-        const createSpy = spyOn(component, 'createSVG');
-        const getSpy = spyOn(component, 'getAllTags');
+        const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const DATA: ImageData = { id: '570', svgElement: SVG_DATA, name: 'welcome', tags: ['hello', 'new'] };
+        component.index.getAllImages = jasmine.createSpy().and.returnValue(of([DATA, DATA]));
+        const CREATE_SPY = spyOn(component, 'createSVG');
+        const GET_SPY = spyOn(component, 'getAllTags');
         component.getAllImages();
-        of([data, data]).subscribe(() => {
-            expect(createSpy).toHaveBeenCalled();
-            expect(getSpy).toHaveBeenCalled();
+        of([DATA, DATA]).subscribe(() => {
+            expect(CREATE_SPY).toHaveBeenCalled();
+            expect(GET_SPY).toHaveBeenCalled();
         });
     });
     it('should get all images', () => {
         component.tags = [];
-        const getSpy = spyOn(component, 'getAllImages');
+        const GET_SPY = spyOn(component, 'getAllImages');
         component.getImagesByTags();
-        expect(getSpy).toHaveBeenCalled();
+        expect(GET_SPY).toHaveBeenCalled();
     });
     it(' should show the message that there is no elements with corresponding tags', () => {
         component.tags = ['hello', 'hello'];
-        const text = component.render.createText('Aucun dessin correspond a vos critères de recherche');
+        const TEXT = component.render.createText('Aucun dessin correspond a vos critères de recherche');
         component.index.getImagesByTags = jasmine.createSpy().and.returnValue(of([]));
         component.getImagesByTags();
         of([]).subscribe(() => {
-            expect(component.text.textContent).toEqual(text.textContent);
+            expect(component.text.textContent).toEqual(TEXT.textContent);
         });
     });
     it('should call create an svg', () => {
         component.tags = ['hello', 'hello'];
-        const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
-        const data: ImageData = { id: '570', svgElement: svgData, name: 'welcome', tags: ['hello', 'new'] };
-        const spy = spyOn(component, 'createSVG');
-        component.index.getImagesByTags = jasmine.createSpy().and.returnValues(of([data, data]));
+        const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const DATA: ImageData = { id: '570', svgElement: SVG_DATA, name: 'welcome', tags: ['hello', 'new'] };
+        const SPY = spyOn(component, 'createSVG');
+        component.index.getImagesByTags = jasmine.createSpy().and.returnValues(of([DATA, DATA]));
         component.getImagesByTags();
-        of([data, data]).subscribe(() => {
-            expect(spy).toHaveBeenCalled();
+        of([DATA, DATA]).subscribe(() => {
+            expect(SPY).toHaveBeenCalled();
         });
     });
     it('possible tags length should be greater than zero', () => {
         component.possibleTags = [];
-        const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
-        const data: ImageData = { id: '570', svgElement: svgData, name: 'welcome', tags: ['hello', 'new'] };
-        const dataContainer = [data];
-        component.getAllTags(dataContainer);
+        const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const DATA: ImageData = { id: '570', svgElement: SVG_DATA, name: 'welcome', tags: ['hello', 'new'] };
+        const DATA_CONTAINER = [DATA];
+        component.getAllTags(DATA_CONTAINER);
         expect(component.possibleTags.length).toBeGreaterThan(0);
     });
     it('possible tag length should remain the same', () => {
         component.possibleTags = ['hello'];
-        const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
-        const data: ImageData = { id: '570', svgElement: svgData, name: 'welcome', tags: ['hello'] };
-        const dataContainer = [data];
+        const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const DATA: ImageData = { id: '570', svgElement: SVG_DATA, name: 'welcome', tags: ['hello'] };
+        const dataContainer = [DATA];
         component.getAllTags(dataContainer);
         expect(component.possibleTags.length).toEqual(1);
     });
     it('should push the the value in tags container', () => {
-        const spy = spyOn(component.tags, 'push');
+        const SPY = spyOn(component.tags, 'push');
         component.selected(fakeEvent);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
     it('should call continue drawing', () => {
-        const spy = spyOn(component.continueDraw, 'continueDrawing');
-        const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
-        component.continueDrawing(svgData);
-        expect(spy).toHaveBeenCalled();
+        const SPY = spyOn(component.continueDraw, 'continueDrawing');
+        const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        component.continueDrawing(SVG_DATA);
+        expect(SPY).toHaveBeenCalled();
     });
     it('should create an svg with renderer', () => {
-        const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
-        const createSpy = spyOn(component.render, 'createElement');
-        const attributeSpy = spyOn(component.render, 'setAttribute');
-        const appendSpy = spyOn(component.render, 'appendChild');
-        component.createSVG(svgData);
-        const nbCallsCreate = 4;
-        const nbCallsAttr = 5;
-        expect(createSpy).toHaveBeenCalledTimes(nbCallsCreate);
-        expect(attributeSpy).toHaveBeenCalledTimes(nbCallsAttr);
-        expect(appendSpy).toHaveBeenCalled();
+        const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const CREATE_SPY = spyOn(component.render, 'createElement');
+        const ATTRIBUTE_SPY = spyOn(component.render, 'setAttribute');
+        const APPEND_SPY = spyOn(component.render, 'appendChild');
+        component.createSVG(SVG_DATA);
+        const NB_CALLS_CREATE = 4;
+        const NB_CALLS_ATTR = 5;
+        expect(CREATE_SPY).toHaveBeenCalledTimes(NB_CALLS_CREATE);
+        expect(ATTRIBUTE_SPY).toHaveBeenCalledTimes(NB_CALLS_ATTR);
+        expect(APPEND_SPY).toHaveBeenCalled();
     });
     it('should lower case the value and filter the value from possible tags container', () => {
-        const value = 'black';
-        const filterSpy = spyOn(component.possibleTags, 'filter');
-        component.filter(value);
-        expect(filterSpy).toHaveBeenCalled();
+        const VALUE = 'black';
+        const FILTER_SPY = spyOn(component.possibleTags, 'filter');
+        component.filter(VALUE);
+        expect(FILTER_SPY).toHaveBeenCalled();
     });
 });

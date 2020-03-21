@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExportFormComponent } from '../export-form/export-form.component';
 import { PreviewBoxComponent } from './preview-box.component';
 
-fdescribe('PreviewBoxComponent', () => {
+describe('PreviewBoxComponent', () => {
     let component: PreviewBoxComponent;
     let fixture: ComponentFixture<PreviewBoxComponent>;
     // tslint:disable-next-line: no-any
