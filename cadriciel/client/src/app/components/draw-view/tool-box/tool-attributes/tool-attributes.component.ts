@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { AerosolAttributes } from 'src/app/services/attributes/aerosol-attribute';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 
 @Component({
@@ -97,11 +96,15 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
     }
 
     updateTools(): void {
-        this.interaction.emitToolsAttributes({ lineThickness: this.lineThickness, texture: this.texture });
+        this.interaction.emitToolsAttributes({
+            lineThickness: this.lineThickness,
+            texture: this.texture });
     }
 
     updateAerosol(): void {
-        this.interaction.emitAerosolAttributes(new AerosolAttributes(this.emissionPerSecond, this.diameter));
+        this.interaction.emitAerosolAttributes({
+            emissionPerSecond: this.emissionPerSecond,
+            diameter: this.diameter });
     }
 
     resize(): void {

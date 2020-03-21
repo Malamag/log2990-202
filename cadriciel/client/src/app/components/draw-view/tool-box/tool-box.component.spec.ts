@@ -45,27 +45,27 @@ describe('ToolBoxComponent', () => {
     });
 
     it('should emit a name with the interaction service', () => {
-        const spyObj = spyOn(component.interactionService, 'emitSelectedTool');
-        const name = 'Rectangle';
-        component.buttonAction(name);
-        expect(spyObj).toHaveBeenCalled();
+        const SPY_OBJ = spyOn(component.interactionService, 'emitSelectedTool');
+        const NAME = 'Rectangle';
+        component.buttonAction(NAME);
+        expect(SPY_OBJ).toHaveBeenCalled();
     });
 
     // this test fail I dont know why
     it('should call buttonAction following a good key from the keyboardEvent', () => {
-        const spy = spyOn(component, 'buttonAction');
-        const mockKey = new KeyboardEvent('keyup', {
+        const SPY = spyOn(component, 'buttonAction');
+        const MOCK_KEY = new KeyboardEvent('keyup', {
             key: '1',
         });
-        component.updateBoard(mockKey);
-        expect(spy).toHaveBeenCalled();
+        component.updateBoard(MOCK_KEY);
+        expect(SPY).toHaveBeenCalled();
     });
     it('should not call buttonAction', () => {
-        const mockKey = new KeyboardEvent('keyup', {
+        const MOCK_KEY = new KeyboardEvent('keyup', {
             key: 'r',
         });
-        component.updateBoard(mockKey);
-        const spyObj = spyOn(component, 'buttonAction');
-        expect(spyObj).toHaveBeenCalledTimes(0);
+        component.updateBoard(MOCK_KEY);
+        const SPY_OBJ = spyOn(component, 'buttonAction');
+        expect(SPY_OBJ).toHaveBeenCalledTimes(0);
     });
 });

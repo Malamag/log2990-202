@@ -5,11 +5,11 @@ import { ColorConvertingService } from 'src/app/services/colorPicker/color-conve
 // import { Subscription } from 'rxjs';
 // import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 import { colorData } from '../color-data';
-const offstY = 10;
-const offsetX = 25;
-const svMaxValue = 100;
-const hueCursorWidth = 6;
-const value = 100;
+const OFFSET_Y = 10;
+const OFFSET_X = 25;
+const SV_MAX_VALUE = 100;
+const HUE_CURSOR_WIDTH = 6;
+const VALUE = 100;
 @Component({
     selector: 'app-mini-color-picker',
     templateUrl: './mini-color-picker.component.html',
@@ -31,14 +31,14 @@ export class MiniColorPickerComponent implements OnInit {
     isSVSelecting: boolean;
     colorSubject: Subject<string>;
     constructor(public colorconvert: ColorConvertingService) {
-        this.offsetY = offstY;
-        this.offsetX = offsetX;
-        this.svMaxValue = svMaxValue;
-        this.hueCursorWidth = hueCursorWidth;
+        this.offsetY = OFFSET_Y;
+        this.offsetX = OFFSET_X;
+        this.svMaxValue = SV_MAX_VALUE;
+        this.hueCursorWidth = HUE_CURSOR_WIDTH;
         this.color = '#ffffff';
         this.hue = 0;
         this.saturation = 0;
-        this.value = value;
+        this.value = VALUE;
         this.svCursorPos = { x: this.saturation, y: this.svMaxValue - this.value };
         this.isHueSelecting = false;
         this.isSVSelecting = false;
@@ -92,49 +92,49 @@ export class MiniColorPickerComponent implements OnInit {
     hsvToHex(H: number, S: number, V: number): string {
         let hex = '';
         // tslint:disable-next-line: no-magic-numbers
-        const rgb: number[] = [-1, -1, -1]; // invalid index
+        const RGB: number[] = [-1, -1, -1]; // invalid index
 
         const DIV = 6; // Value used in the formula
         const C: number = S * V;
         const X: number = C * (1 - Math.abs(((H / (this.cData.MAX_HUE_VALUE / DIV)) % 2) - 1));
-        const m: number = V - C;
+        const M: number = V - C;
 
         let R: number = this.cData.MIN_RGB_VALUE;
         let G: number = this.cData.MIN_RGB_VALUE;
         let B: number = this.cData.MIN_RGB_VALUE;
-        const smallDiv = 3;
-        const mult = 5;
+        const SMALL_DIV = 3;
+        const MULT = 5;
         // Math formula for conversion
         if (this.cData.MIN_HUE_VALUE <= H && H < this.cData.MAX_HUE_VALUE / DIV) {
             R = C;
             G = X;
             B = this.cData.MIN_RGB_VALUE;
-        } else if (this.cData.MAX_HUE_VALUE / DIV <= H && H < this.cData.MAX_HUE_VALUE / smallDiv) {
+        } else if (this.cData.MAX_HUE_VALUE / DIV <= H && H < this.cData.MAX_HUE_VALUE / SMALL_DIV) {
             R = X;
             G = C;
             B = this.cData.MIN_RGB_VALUE;
-        } else if (this.cData.MAX_HUE_VALUE / smallDiv <= H && H < this.cData.MAX_HUE_VALUE / 2) {
+        } else if (this.cData.MAX_HUE_VALUE / SMALL_DIV <= H && H < this.cData.MAX_HUE_VALUE / 2) {
             R = this.cData.MIN_RGB_VALUE;
             G = C;
             B = X;
-        } else if (this.cData.MAX_HUE_VALUE / 2 <= H && H < (2 * this.cData.MAX_HUE_VALUE) / smallDiv) {
+        } else if (this.cData.MAX_HUE_VALUE / 2 <= H && H < (2 * this.cData.MAX_HUE_VALUE) / SMALL_DIV) {
             R = this.cData.MIN_RGB_VALUE;
             G = X;
             B = C;
-        } else if ((2 * this.cData.MAX_HUE_VALUE) / smallDiv <= H && H < (mult * this.cData.MAX_HUE_VALUE) / DIV) {
+        } else if ((2 * this.cData.MAX_HUE_VALUE) / SMALL_DIV <= H && H < (MULT * this.cData.MAX_HUE_VALUE) / DIV) {
             R = X;
             G = this.cData.MIN_RGB_VALUE;
             B = C;
-        } else if ((mult * this.cData.MAX_HUE_VALUE) / DIV <= H && H < this.cData.MAX_HUE_VALUE) {
+        } else if ((MULT * this.cData.MAX_HUE_VALUE) / DIV <= H && H < this.cData.MAX_HUE_VALUE) {
             R = C;
             G = this.cData.MIN_RGB_VALUE;
             B = X;
         }
-        rgb[0] = Math.round((R + m) * this.cData.MAX_RGB_VALUE);
-        rgb[1] = Math.round((G + m) * this.cData.MAX_RGB_VALUE);
-        rgb[2] = Math.round((B + m) * this.cData.MAX_RGB_VALUE);
+        RGB[0] = Math.round((R + M) * this.cData.MAX_RGB_VALUE);
+        RGB[1] = Math.round((G + M) * this.cData.MAX_RGB_VALUE);
+        RGB[2] = Math.round((B + M) * this.cData.MAX_RGB_VALUE);
 
-        hex = '#' + this.colorconvert.rgbToHex(rgb[0]) + this.colorconvert.rgbToHex(rgb[1]) + this.colorconvert.rgbToHex(rgb[2]);
+        hex = '#' + this.colorconvert.rgbToHex(RGB[0]) + this.colorconvert.rgbToHex(RGB[1]) + this.colorconvert.rgbToHex(RGB[2]);
         return hex;
     }
     get hueCursorStyles(): {} {

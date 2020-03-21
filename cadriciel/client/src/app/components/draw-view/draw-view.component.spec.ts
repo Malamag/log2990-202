@@ -61,14 +61,14 @@ describe('DrawViewComponent', () => {
     });
 
     it('should call dispatch the window', () => {
-        const spyObj = spyOn(window, 'dispatchEvent');
+        const SPY_OBJ = spyOn(window, 'dispatchEvent');
         component.adaptWindowSize();
-        expect(spyObj).toHaveBeenCalled();
+        expect(SPY_OBJ).toHaveBeenCalled();
     });
     it('After building the template the reference should be emiited by the observer', () => {
-        const objSpy = spyOn(component.interaction, 'emitRef');
+        const OBJ_SPY = spyOn(component.interaction, 'emitRef');
         component.ngAfterViewInit();
         expect(component.workingSpaceRef).toBeUndefined();
-        expect(objSpy).toHaveBeenCalled();
+        expect(OBJ_SPY).toHaveBeenCalled();
     });
 });

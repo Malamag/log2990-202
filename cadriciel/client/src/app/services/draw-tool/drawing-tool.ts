@@ -9,9 +9,11 @@ import { Point } from './point';
 const DEFAULTPRIMARYCOLOR = 'ff0000ff';
 const DEFAULTSECONDARYCOLOR = '000000';
 const DEFAULTBACKCOLOR = 'ffffffff';
+
 @Injectable({
   providedIn: 'root'
 })
+
 export abstract class DrawingTool extends InputObserver {
   isDown: boolean;
   currentPath: Point[];

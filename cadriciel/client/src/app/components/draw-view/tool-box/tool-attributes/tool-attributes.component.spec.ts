@@ -46,37 +46,37 @@ describe('ToolAttributesComponent', () => {
     });
 
     it('should emit forms attributes', () => {
-        const spyObj = spyOn(component.interaction, 'emitFormsAttributes');
+        const SPY_OBJ = spyOn(component.interaction, 'emitFormsAttributes');
         component.updateForms();
-        expect(spyObj).toHaveBeenCalled();
+        expect(SPY_OBJ).toHaveBeenCalled();
     });
 
     it('should emit line attributes', () => {
-        const spyObj = spyOn(component.interaction, 'emitLineAttributes');
+        const SPY_OBJ = spyOn(component.interaction, 'emitLineAttributes');
         component.updateLine();
-        expect(spyObj).toHaveBeenCalled();
+        expect(SPY_OBJ).toHaveBeenCalled();
     });
 
     it('should emit tools attributes', () => {
-        const spyObj = spyOn(component.interaction, 'emitToolsAttributes');
+        const SPY_OBJ = spyOn(component.interaction, 'emitToolsAttributes');
         component.updateTools();
-        expect(spyObj).toHaveBeenCalled();
+        expect(SPY_OBJ).toHaveBeenCalled();
     });
 
     it('should dispatch the window', () => {
-        const spyObj = spyOn(window, 'dispatchEvent');
+        const SPY_OBJ = spyOn(window, 'dispatchEvent');
         component.resize();
-        expect(spyObj).toHaveBeenCalled();
+        expect(SPY_OBJ).toHaveBeenCalled();
     });
 
     it('should call update functions', () => {
-        const formsSpy = spyOn(component, 'updateForms');
-        const toolsSpy = spyOn(component, 'updateTools');
-        const lineSpy = spyOn(component, 'updateLine');
+        const FORM_SPY = spyOn(component, 'updateForms');
+        const TOOL_SPY = spyOn(component, 'updateTools');
+        const LINE_SPY = spyOn(component, 'updateLine');
         component.ngAfterViewInit();
-        expect(formsSpy).toHaveBeenCalled();
-        expect(toolsSpy).toHaveBeenCalled();
-        expect(lineSpy).toHaveBeenCalled();
+        expect(FORM_SPY).toHaveBeenCalled();
+        expect(TOOL_SPY).toHaveBeenCalled();
+        expect(LINE_SPY).toHaveBeenCalled();
     });
 
     it('should select tool', () => {
@@ -86,12 +86,12 @@ describe('ToolAttributesComponent', () => {
     });
 
     it('should not select tool', () => {
-        const interactionStub = new InteractionService();
-        interactionStub.emitSelectedTool('Ellipse');
-        const componentStub = new ToolAttributesComponent(interactionStub);
-        componentStub.ngOnInit();
+        const INTERACTION_STUB = new InteractionService();
+        INTERACTION_STUB.emitSelectedTool('Ellipse');
+        const COMPONENT_STUB = new ToolAttributesComponent(INTERACTION_STUB);
+        COMPONENT_STUB.ngOnInit();
 
-        expect(componentStub.selectedTool).toBe('Crayon');
+        expect(COMPONENT_STUB.selectedTool).toBe('Crayon');
     });
 
     it('selectedTool should be rectangle', () => {
@@ -109,9 +109,9 @@ describe('ToolAttributesComponent', () => {
     });
 
     it('should emit the aerosol attributes on update', () => {
-        const spy = spyOn(component.interaction, 'emitAerosolAttributes');
+        const SPY = spyOn(component.interaction, 'emitAerosolAttributes');
         component.updateAerosol();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should not set the selected tool if it doesnt exist', () => {
