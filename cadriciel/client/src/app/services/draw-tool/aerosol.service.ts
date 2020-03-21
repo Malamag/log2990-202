@@ -8,22 +8,25 @@ import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
 // Default attirbutes for the aerosol
-const DEFAULTEMISSIONPERSECOND = 50;
-const DEFAULTDIAMETER = 50;
+const DEFAULT_EMISSION_PER_SECOND = 50;
+const DEFAULT_DIAMETER = 50;
 
 @Injectable({
     providedIn: 'root',
 })
 export class AerosolService extends DrawingTool {
-    attr: AerosolAttributes;
 
-    points: Point[]; // All points of the aerosol for this path
+    private attr: AerosolAttributes;
+
+    private points: Point[]; // All points of the aerosol for this path
 
     private lastPoint: Point; // Last point when registering
 
     private path: string; // Current svg path
 
     private sub: Subscription; // Subscription for updating through an interval
+
+    private insideCanvas: boolean; // True if the mouse is inside the canvas
 
     constructor(
         inProgess: HTMLElement,
@@ -33,18 +36,19 @@ export class AerosolService extends DrawingTool {
         colorPick: ColorPickingService,
     ) {
         super(inProgess, drawing, selected, interaction, colorPick);
-        this.attr = { emissionPerSecond: DEFAULTEMISSIONPERSECOND, diameter: DEFAULTDIAMETER };
+        this.attr = { emissionPerSecond: DEFAULT_EMISSION_PER_SECOND, diameter: DEFAULT_DIAMETER };
         this.updateColors();
         this.updateAttributes();
         this.points = new Array();
+        this.insideCanvas = true;
     }
 
     updateDown(keyboard: KeyboardHandlerService): void {
-        /*No defined behavior  */
+        /* No defined behavior */
     }
 
     updateUp(keyCode: number): void {
-        /*No defined behavior  */
+        /* No defined behavior */
     }
 
     updateAttributes(): void {
@@ -55,11 +59,12 @@ export class AerosolService extends DrawingTool {
         });
     }
 
+    // Subscribe to the updateProgress for a constant intervaled spray
     subscribe(): void {
         const INTERVAL_DIV = 1000; // interval in milliseconds
-        const srcInterval = interval(INTERVAL_DIV / this.attr.emissionPerSecond);
+        const SRC_INTERVAL = interval(INTERVAL_DIV / this.attr.emissionPerSecond);
         // subscribe for updating with the desired interval
-        this.sub = srcInterval.subscribe(() => {
+        this.sub = SRC_INTERVAL.subscribe(() => {
             this.updateProgress();
         });
     }
@@ -72,8 +77,6 @@ export class AerosolService extends DrawingTool {
         // the aerosol should affect the canvas
         this.isDown = true;
 
-        // add the same point twice in case the mouse doesn't move
-        this.currentPath.push(position);
         this.currentPath.push(position);
 
         // Subscribe to an interval of updates
@@ -87,14 +90,14 @@ export class AerosolService extends DrawingTool {
     }
 
     // unclick with aerosol in hand
-    up(position: Point, insideWorkspace: boolean): void {
+    up(position: Point): void {
         // in case we changed tool while the mouse was down
         if (!this.ignoreNextUp) {
             // the pencil should not affect the canvas
             this.isDown = false;
 
             // no path is created while outside the canvas
-            if (insideWorkspace) {
+            if (this.insideCanvas) {
                 // add everything to the canvas
                 this.updateDrawing();
                 this.sub.unsubscribe();
@@ -105,7 +108,7 @@ export class AerosolService extends DrawingTool {
     // mouse move with aerosol in hand
     move(position: Point): void {
         // only if the aerosol is currently affecting the canvas
-        if (this.isDown) {
+        if (this.isDown && this.insideCanvas) {
             // save mouse position
             this.currentPath.push(position);
         }
@@ -121,9 +124,10 @@ export class AerosolService extends DrawingTool {
         if (this.isDown) {
             // Do the same as when the mouse unclick,
             // but reassign isDown to true for goingInsideCanvas function
-            this.up(position, true);
+            this.up(position);
             this.isDown = true;
         }
+        this.insideCanvas = false;
     }
 
     // when we go from outside to inside the canvas
@@ -133,6 +137,7 @@ export class AerosolService extends DrawingTool {
             // start new drawing
             this.down(position);
         }
+        this.insideCanvas = true;
     }
 
     // Creates an svg path of multiple tiny lines with the aerosol attributes
@@ -150,9 +155,9 @@ export class AerosolService extends DrawingTool {
         let dString = '';
         const LINE_LENGTH = 1;
         // For each generated point, move to the point and put a tiny line that looks like a point
-        for (const point of this.points) {
-            dString += ` M ${point.x} ${point.y}`;
-            dString += ` L ${point.x + LINE_LENGTH} ${point.y + LINE_LENGTH}`;
+        for (const POINT of this.points) {
+            dString += ` M ${POINT.x} ${POINT.y}`;
+            dString += ` L ${POINT.x + LINE_LENGTH} ${POINT.y + LINE_LENGTH}`;
         }
 
         // Create a radius dependent of the diameter -> 1/100 of the diameter
@@ -195,15 +200,15 @@ export class AerosolService extends DrawingTool {
         // Generate a number of points depending on the diameter of the circle
         for (let j = 1; j < DEPENDENT_PT_NUM && this.isDown; j++) {
             // Find a randomized radius. sqrt(random) is for not having more points in the middle of the circle
-            const radius = (this.attr.diameter / 2) * Math.sqrt(Math.random());
+            const RADIUS = (this.attr.diameter / 2) * Math.sqrt(Math.random());
             // Find a randomized angle in radians
-            const angle = Math.random() * 2 * Math.PI;
+            const ANGLE = Math.random() * 2 * Math.PI;
 
             // Push four points with same radius and changing the angle a little.
             // Seems almost as random, but has less operations to do
             for (let i = 1; i < PT_NUM && this.isDown; i++) {
-                const x = this.lastPoint.x + radius * Math.cos(angle * i);
-                const y = this.lastPoint.y + radius * Math.sin(angle * i);
+                const x = this.lastPoint.x + RADIUS * Math.cos(ANGLE * i);
+                const y = this.lastPoint.y + RADIUS * Math.sin(ANGLE * i);
                 this.points.push(new Point(x, y));
             }
         }

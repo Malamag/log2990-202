@@ -15,6 +15,13 @@
     background-color: #f1f1f1;
 }
 
+// For correcting white screen bug when screen width is too small
+@media (max-width: 550px) {
+  #guideContent {
+    width: calc(100% - 140px);
+  }
+}
+
 #guideLinkBar {
     width: 20vw;
     max-width: 200px;
