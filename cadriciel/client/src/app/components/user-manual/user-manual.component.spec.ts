@@ -111,4 +111,14 @@ describe('UserManualComponent', () => {
         component.previousPage();
         expect(component.activePreviousButton).toBeFalsy();
     });
+    it('the previous button should be false', () => {
+        component.activeButton = component.func[1];
+        component.previousPage();
+        expect(component.activePreviousButton).toBeFalsy();
+    });
+    it(' the next button should be hidden', () => {
+        component.activeButton = component.func[component.func.length - 2];
+        component.nextPage();
+        expect(component.activeNextButton).toBeFalsy();
+    });
 });
