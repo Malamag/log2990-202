@@ -43,6 +43,8 @@ describe('GalleryComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(GalleryComponent);
         component = fixture.componentInstance;
+        spyOn(component.index, 'getImagesByTags').and.returnValue(of([]));
+        spyOn(component.index, 'getAllImages').and.returnValue(of([]));
         fixture.detectChanges();
         tagAdd = {
             input: {
