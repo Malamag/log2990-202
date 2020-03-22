@@ -1,24 +1,22 @@
 import { TestBed } from '@angular/core/testing';
-
-import { InteractionService } from '../service-interaction/interaction.service';
-import { PencilService } from './pencil.service';
-
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
+import { InteractionService } from '../service-interaction/interaction.service';
+import { PencilService } from './pencil.service';
 import { Point } from './point';
-
-export class fakeInteractionService extends InteractionService {}
-export class fakeColorPickingService extends ColorPickingService {}
-export class fakeColorConvertingService extends ColorConvertingService {}
-export class MouseHandlerMock {
-
-}
+// tslint:disable: max-classes-per-file
+export class FakeInteractionService extends InteractionService {}
+export class FakeColorPickingService extends ColorPickingService {}
+export class FakeColorConvertingService extends ColorConvertingService {}
+export class MouseHandlerMock {}
+// tslint:enable: max-classes-per-file
 describe('PencilService', () => {
   let service: PencilService;
   let ptA: Point;
   let ptB: Point;
   let ptArr: Point[];
+  // tslint:disable-next-line: no-any
   let kbServiceStub: any;
   beforeEach(() => {
     kbServiceStub = {};
@@ -39,8 +37,8 @@ describe('PencilService', () => {
 });
 
   it('should be created', () => {
-    const service: PencilService = TestBed.get(PencilService);
-    expect(service).toBeTruthy();
+    const testService: PencilService = TestBed.get(PencilService);
+    expect(testService).toBeTruthy();
   });
 
   it('should set the attributes in the subscription', () => {

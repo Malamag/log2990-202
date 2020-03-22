@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { ChoosenColors } from 'src/app/models/choosen-colors.model';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { InputObserver } from './input-observer';
@@ -9,9 +9,11 @@ import { Point } from './point';
 const DEFAULTPRIMARYCOLOR = 'ff0000ff';
 const DEFAULTSECONDARYCOLOR = '000000';
 const DEFAULTBACKCOLOR = 'ffffffff';
+
 @Injectable({
   providedIn: 'root'
 })
+
 export abstract class DrawingTool extends InputObserver {
   isDown: boolean;
   currentPath: Point[];

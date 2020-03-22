@@ -1,5 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { SVGData } from '../../../svg-data';
 import { GridRenderService } from '../grid/grid-render.service';
 
 @Injectable({
@@ -12,6 +13,7 @@ export class DoodleFetchService {
 
     widthAttr: number;
     heightAttr: number;
+    backColor: string;
 
     constructor(private gService: GridRenderService) {
         this.ask = new Subject<boolean>();
@@ -32,5 +34,31 @@ export class DoodleFetchService {
 
     getSVGElementFromRef(el: ElementRef): Node {
         return el.nativeElement;
+    }
+
+    getDrawingDataNoGrid(): SVGData {
+        this.gService.removeGrid();
+        const innerHTML: string[] = [];
+        const el: Element = this.currentDraw.nativeElement;
+        const childs: HTMLCollection = el.children;
+
+        // tslint:disable-next-line: prefer-for-of
+        for (let i = 0; i < childs.length; i++) {  // HTMLCollection doesnt have an iterator...
+            try {
+                innerHTML.push(childs[i].innerHTML);
+            } catch {
+                innerHTML.push('');
+                console.log('Empty InnerHTML');
+            }
+        }
+        const SVG_DATA: SVGData = {
+            width: this.widthAttr + '',
+            height: this.heightAttr + '',
+            bgColor: this.backColor,
+            innerHTML
+        };
+
+        this.gService.renderBack();
+        return SVG_DATA;
     }
 }

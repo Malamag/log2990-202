@@ -64,6 +64,7 @@ describe('ColorConvertingService', () => {
         expect(service.validateHSL(h, s, l)).toBeTruthy();
     });
     it('should return an invalid rgb array', () => {
+        const ret = -1;
         const h = 230;
         const s = 1;
         const l = 1.5;
@@ -73,85 +74,99 @@ describe('ColorConvertingService', () => {
         const spy = spyOn(service, 'validateHSL');
         const rgbContainer = service.hslToRgb(h, s, l);
         expect(spy).toHaveBeenCalled();
-        expect(rgbContainer).toEqual([-1, -1, -1]);
+        expect(rgbContainer).toEqual([ret, ret, ret]);
     });
     it('should return a valid RGB array', () => {
+        const rgb = 255;
         const h = 230;
         const s = 1;
         const l = 1;
         const rgbContainer = service.hslToRgb(h, s, l);
-        expect(rgbContainer).toEqual([255, 255, 255]); // 8-bits
+        expect(rgbContainer).toEqual([rgb, rgb, rgb]); // 8-bits
     });
     it('should return a valid RGB array', () => {
+        const rgb = 255;
         const h = 50;
         const s = 1;
         const l = 1;
         const rgbContainer = service.hslToRgb(h, s, l);
-        expect(rgbContainer).toEqual([255, 255, 255]);
+        expect(rgbContainer).toEqual([rgb, rgb, rgb]);
     });
     it('should return a valid RGB array', () => {
+        const rgb = 255;
         const h = 70;
         const s = 1;
         const l = 1;
         const rgbContainer = service.hslToRgb(h, s, l);
-        expect(rgbContainer).toEqual([255, 255, 255]);
+        expect(rgbContainer).toEqual([rgb, rgb, rgb]);
     });
     it('should return a valid RGB array', () => {
+        const rgb = 255;
         const h = 150;
         const s = 1;
         const l = 1;
         const rgbContainer = service.hslToRgb(h, s, l);
-        expect(rgbContainer).toEqual([255, 255, 255]);
+        expect(rgbContainer).toEqual([rgb, rgb, rgb]);
     });
     it('should return a valid RGB array', () => {
+        const rgb = 255;
         const h = 270;
         const s = 1;
         const l = 1;
         const rgbContainer = service.hslToRgb(h, s, l);
-        expect(rgbContainer).toEqual([255, 255, 255]);
+        expect(rgbContainer).toEqual([rgb, rgb, rgb]);
     });
     it('should return a valid RGB array', () => {
+        const rgb = 255;
         const h = 310;
         const s = 1;
         const l = 1;
         const rgbContainer = service.hslToRgb(h, s, l);
-        expect(rgbContainer).toEqual([255, 255, 255]);
+        expect(rgbContainer).toEqual([rgb, rgb, rgb]);
     });
     it('should return a HSL calculated from a RGB input', () => {
+        const mod = 6;
+        const div = 255;
+        const mult = 60;
         const r = 250;
         const g = 200;
         const b = 150;
-        const primR = r / 255; // 8-bits, 255
-        const primG = g / 255;
-        const primB = b / 255;
+        const primR = r / div; // 8-bits, 255
+        const primG = g / div;
+        const primB = b / div;
         const delta = primR - primB;
-        const hue = 60 * (((primG - primB) / delta) % 6);
+        const hue = mult * (((primG - primB) / delta) % mod);
         const lightness = (primR + primB) / 2;
         const saturation = delta / (1 - Math.abs(2 * lightness - 1));
         expect(service.rgbToHsl(r, g, b)).toEqual([hue, saturation, lightness]);
     });
     it('should return a hue calculated with green value', () => {
+        const div = 255;
+        const mult = 60;
         const r = 200;
         const g = 250;
         const b = 150;
-        const primR = r / 255;
-        const primG = g / 255;
-        const primB = b / 255;
+        const primR = r / div;
+        const primG = g / div;
+        const primB = b / div;
         const delta = primG - primB;
-        const hue = 60 * ((primB - primR) / delta + 2);
+        const hue = mult * ((primB - primR) / delta + 2);
         const lightness = (primG + primB) / 2;
         const saturation = delta / (1 - Math.abs(2 * lightness - 1));
         expect(service.rgbToHsl(r, g, b)).toEqual([hue, saturation, lightness]);
     });
     it('should return a hue calculated with blue value', () => {
+        const add = 4;
+        const div = 255;
+        const mult = 60;
         const r = 200; // arbitrary inputs
         const g = 150;
         const b = 250;
-        const primR = r / 255;
-        const primG = g / 255;
-        const primB = b / 255;
+        const primR = r / div;
+        const primG = g / div;
+        const primB = b / div;
         const delta = primB - primG;
-        const hue = 60 * ((primR - primG) / delta + 4); // taking the formula
+        const hue = mult * ((primR - primG) / delta + add); // taking the formula
         const lightness = (primG + primB) / 2;
         const saturation = delta / (1 - Math.abs(2 * lightness - 1));
         expect(service.rgbToHsl(r, g, b)).toEqual([hue, saturation, lightness]);

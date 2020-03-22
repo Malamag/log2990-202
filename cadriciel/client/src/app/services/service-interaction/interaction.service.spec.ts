@@ -81,8 +81,8 @@ describe('InteractionService', () => {
     });
 
     it('should emit when the canvas has been restarted', () => {
-        const spy = spyOn(service.canvasRedone, 'next');
-        service.emitCanvasRedone();
+        const spy = spyOn(service.drawingContinued, 'next');
+        service.emitContinueDrawing();
         expect(spy).toHaveBeenCalled();
     });
 
@@ -109,7 +109,7 @@ describe('InteractionService', () => {
         const spy = spyOn(service.aerosolAttributes, 'next');
         const DIAM = 50;
         const EM_PER_SEC = 25;
-        const ATTR = new AerosolAttributes(EM_PER_SEC, DIAM);
+        const ATTR: AerosolAttributes = { emissionPerSecond: EM_PER_SEC, diameter: DIAM };
         service.emitAerosolAttributes(ATTR);
         expect(spy).toHaveBeenCalled();
     });
