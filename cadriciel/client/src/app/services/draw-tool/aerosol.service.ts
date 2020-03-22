@@ -53,7 +53,7 @@ export class AerosolService extends DrawingTool {
 
     updateAttributes(): void {
         this.interaction.$aerosolAttributes.subscribe((obj: AerosolAttributes) => {
-                this.attr = { emissionPerSecond: obj.emissionPerSecond, diameter: obj.diameter };
+            this.attr = { emissionPerSecond: obj.emissionPerSecond, diameter: obj.diameter };
         });
     }
 
@@ -67,6 +67,15 @@ export class AerosolService extends DrawingTool {
         });
     }
 
+    // cancel the current progress
+    cancel(): void {
+
+        super.cancel();
+
+        // Reinitialize insideCanvas
+        this.insideCanvas = true;
+    }
+
     // click with aerosol in hand
     down(position: Point): void {
         // in case we changed tool while the mouse was down
@@ -75,6 +84,8 @@ export class AerosolService extends DrawingTool {
         // the aerosol should affect the canvas
         this.isDown = true;
 
+        // We need to positions for making a line with the invisible path
+        this.currentPath.push(position);
         this.currentPath.push(position);
 
         // Subscribe to an interval of updates
@@ -90,19 +101,19 @@ export class AerosolService extends DrawingTool {
     // unclick with aerosol in hand
     up(position: Point): void {
         // in case we changed tool while the mouse was down
-        if (!this.ignoreNextUp) {
-            // the pencil should not affect the canvas
-            this.isDown = false;
-
-            // no path is created while outside the canvas
-            if (this.insideCanvas) {
-                // add everything to the canvas
-                this.updateDrawing();
-                this.sub.unsubscribe();
-            }
-        } else {
-            this.ignoreNextUp = false;
+        if (this.ignoreNextUp) {
+            return;
         }
+        // the pencil should not affect the canvas
+        this.isDown = false;
+
+        // no path is created while outside the canvas
+        if (this.insideCanvas) {
+            // add everything to the canvas
+            this.updateDrawing();
+            this.sub.unsubscribe();
+        }
+
     }
 
     // mouse move with aerosol in hand
@@ -153,11 +164,10 @@ export class AerosolService extends DrawingTool {
 
         // Initialize the d string attribute of the path
         let dString = '';
-        const LINE_LENGTH = 1;
         // For each generated point, move to the point and put a tiny line that looks like a point
         for (const POINT of this.points) {
             dString += ` M ${POINT.x} ${POINT.y}`;
-            dString += ` L ${POINT.x + LINE_LENGTH} ${POINT.y + LINE_LENGTH}`;
+            dString += ` L ${POINT.x} ${POINT.y}`;
         }
 
         // Create a radius dependent of the diameter -> 1/100 of the diameter
@@ -167,6 +177,7 @@ export class AerosolService extends DrawingTool {
         this.path += ' <path';
         this.path += ` d="${dString}"`;
         this.path += ` stroke="${this.chosenColor.primColor}"`;
+        this.path += ' stroke-linecap="round"';
         this.path += ' stroke-linejoin="round"';
         this.path += ` stroke-width="${POINT_RADIUS}"`;
         this.path += ' fill="none" /> </g>';

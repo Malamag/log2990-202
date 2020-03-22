@@ -48,7 +48,7 @@ describe('AerosolService', () => {
         expect(PATH).toContain('<path');
     });
 
-    it('the path must have the same starting point has the mouse', () => {
+    it('the path must have the same starting point as the mouse', () => {
         const PATH = service.createPath(ptArr);
         expect(PATH).toContain(`M ${ptArr[0].x} ${ptArr[0].y} `);
     });
@@ -242,8 +242,16 @@ describe('AerosolService', () => {
         expect(service.isDown).toBeFalsy();
     });
 
-    it('should not start an aerosol path when the tool is changed while the mouse is clicked', () => {
-        //
+    it('should clear the svg path when cancelled', () => {
+        const SPY = spyOn(service, 'updateDrawing');
+        service.down(ptA);
+        service.createPath(ptArr);
+        service.cancel();
+        service.up(ptA);
+        // the mouse should be still up at this point
+        expect(service.currentPath).toEqual([]);
+        expect(SPY).not.toHaveBeenCalled();
+
     });
 
 });

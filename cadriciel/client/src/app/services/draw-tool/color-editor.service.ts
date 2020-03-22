@@ -9,11 +9,12 @@ import { Point } from './point';
 const DEFAULTLINETHICKNESS = 5;
 const DEFAULTTEXTURE = 0;
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class ColorEditorService extends DrawingTool {
+
     render: Renderer2;
-    attr: ToolsAttributes;
+    attr: ToolsAttributes
 
     foundAnItem: boolean;
 
@@ -23,20 +24,17 @@ export class ColorEditorService extends DrawingTool {
 
     isRightClick: boolean;
 
-    constructor(
-        inProgess: HTMLElement,
-        drawing: HTMLElement,
-        selected: boolean,
-        interaction: InteractionService,
-        colorPick: ColorPickingService,
-        render: Renderer2,
-        selectedRef: HTMLElement,
-        canvas: HTMLElement,
-    ) {
+    changedColorOnce: boolean;
+
+    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean, interaction: InteractionService, colorPick: ColorPickingService,
+        render: Renderer2, selectedRef: HTMLElement, canvas: HTMLElement) {
+
         super(inProgess, drawing, selected, interaction, colorPick);
-        this.attr = { lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE };
-        this.updateColors();
-        this.updateAttributes();
+        this.attr = { lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE }
+        this.updateColors()
+        this.updateAttributes()
+
+        this.changedColorOnce = false;
 
         this.canvas = canvas;
 
@@ -46,80 +44,39 @@ export class ColorEditorService extends DrawingTool {
 
         this.erasedSomething = false;
 
-        this.inProgress.style.pointerEvents = 'none';
+        this.inProgress.style.pointerEvents = "none";
 
         this.isRightClick = false;
 
-        window.addEventListener('newDrawing', (e: Event) => {
+        window.addEventListener("toolChange", (e: Event) => {
+            this.foundAnItem = false;
             for (let i = 0; i < this.drawing.childElementCount; i++) {
-                const el = this.drawing.children[i];
-                const status = el.getAttribute('isListening3');
-                this.render.setAttribute(el, 'checkPreciseEdge2', 'true');
-                if (status !== 'true') {
-                    this.render.setAttribute(el, 'isListening3', 'true');
-                    this.render.listen(el, 'mousemove', () => {
-                        // console.log("enter");
-                        if (!this.foundAnItem) {
-                            // this.highlight(el);
-                            this.render.setAttribute(el, 'checkPreciseEdge2', 'false');
-                            this.foundAnItem = true;
-                            if (this.isDown) {
-                                this.changeColor(el);
-                                this.foundAnItem = false;
-                            }
-                        }
-                    });
-                    this.render.listen(el, 'mouseleave', () => {
-                        // console.log("leaving");
-                        if (this.foundAnItem) {
-                            // this.unhighlight(el);
-                            this.foundAnItem = false;
-                            this.render.setAttribute(el, 'checkPreciseEdge2', 'true');
-                        }
-                    });
-                    this.render.listen(el, 'mousedown', () => {
-                        this.changeColor(el);
-                        this.foundAnItem = false;
-                        this.render.setAttribute(el, 'checkPreciseEdge2', 'true');
-                    });
-                    this.render.listen(el, 'mouseup', () => {
-                        if (!this.foundAnItem) {
-                            // this.highlight(el);
-                            this.render.setAttribute(el, 'checkPreciseEdge2', 'false');
-                            this.foundAnItem = false;
-                        }
-                    });
-                }
+                //this.unhighlight(this.drawing.children[i]);
             }
         });
 
-        window.addEventListener('toolChange', (e: Event) => {
-            this.foundAnItem = false;
-            for (let i = 0; i < this.drawing.childElementCount; i++) {
-                // this.unhighlight(this.drawing.children[i]);
-            }
-        });
     }
-    updateAttributes(): void {
+    updateAttributes() {
         this.interaction.$toolsAttributes.subscribe((obj) => {
             if (obj) {
-                this.attr = { lineThickness: obj.lineThickness, texture: obj.texture };
+                this.attr = { lineThickness: obj.lineThickness, texture: obj.texture }
             }
-        });
-        this.colorPick.emitColors();
+        })
+        this.colorPick.emitColors()
     }
     // updating on key change
-    updateDown(keyboard: KeyboardHandlerService): void {
+    updateDown(keyboard: KeyboardHandlerService) {
         // keyboard has no effect on pencil
     }
 
     // updating on key up
-    updateUp(keyCode: number): void {
+    updateUp(keyCode: number) {
         // nothing happens for eraser tool
     }
 
     // mouse down with pencil in hand
-    down(position: Point, insideWorkspace: boolean, isRightClick: boolean): void {
+    down(position: Point, insideWorkspace: boolean, isRightClick: boolean) {
+
         this.isRightClick = isRightClick;
 
         // in case we changed tool while the mouse was down
@@ -138,27 +95,27 @@ export class ColorEditorService extends DrawingTool {
     }
 
     // mouse up with pencil in hand
-    up(position: Point, insideWorkspace: boolean): void {
+    up(position: Point, insideWorkspace: boolean) {
+
         // in case we changed tool while the mouse was down
         if (!this.ignoreNextUp) {
+
             // the pencil should not affect the canvas
             this.isDown = false;
 
-            if (this.erasedSomething) {
+            if (this.changedColorOnce) {
                 this.interaction.emitDrawingDone();
-                // console.log("now");
             }
-            this.erasedSomething = false;
+            this.changedColorOnce = false;
         }
     }
 
-    changeColor(el: Element): void {
+    changeColor(el: Element) {
         if (this.selected) {
+            console.log(this.isRightClick);
             for (let i = 0; i < el.childElementCount; i++) {
-                const current = el.children[i];
-                if (current.tagName === 'filter') {
-                    continue;
-                }
+                let current = el.children[i];
+                if (current.tagName == "filter") { continue; }
                 if (this.isRightClick) {
                     this.changeBorder(current as HTMLElement);
                 } else {
@@ -168,27 +125,30 @@ export class ColorEditorService extends DrawingTool {
         }
     }
 
-    changeBorder(el: HTMLElement): void {
-        const newColor = el.getAttribute('stroke') !== 'none' ? this.chosenColor.secColor : '';
-        this.render.setAttribute(el, 'stroke', newColor);
+    changeBorder(el: HTMLElement) {
+        if (el.getAttribute("stroke") != this.chosenColor.secColor && el.getAttribute("stroke") != "none") {
+            this.render.setAttribute(el, "stroke", this.chosenColor.secColor);
+            this.changedColorOnce = true;
+        }
     }
 
-    changeFill(el: HTMLElement): void {
-        const newColor = el.getAttribute('fill') !== 'none' ? this.chosenColor.primColor : '';
-        this.render.setAttribute(el, 'fill', newColor);
+    changeFill(el: HTMLElement) {
+        if (el.getAttribute("fill") != this.chosenColor.primColor && el.getAttribute("fill") != "none") {
+            this.render.setAttribute(el, "fill", this.chosenColor.primColor);
+            this.changedColorOnce = true;
+        }
     }
 
     // mouse move with pencil in hand
-    move(position: Point): void {
-        // console.log(this.erasedSomething);
+    move(position: Point) {
 
         // only if the pencil is currently affecting the canvas
-        const MAX_LEN = 3;
         if (true) {
+
             // save mouse position
             this.currentPath.push(position);
 
-            while (this.currentPath.length > MAX_LEN) {
+            while (this.currentPath.length > 3) {
                 this.currentPath.shift();
             }
 
@@ -199,126 +159,81 @@ export class ColorEditorService extends DrawingTool {
     }
 
     // when we go from inside to outside the canvas
-    goingOutsideCanvas(): void {
+    goingOutsideCanvas() {
         // nothing happens since we might want to readjust the shape once back in
     }
 
     // when we go from outside to inside the canvas
-    goingInsideCanvas(): void {
+    goingInsideCanvas() {
         // nothing happens since we just update the preview
     }
 
-    checkIfTouching(): void {
-        const canv = this.canvas;
-        const canvasBox = canv ? canv.getBoundingClientRect() : null;
-        const canvOffsetX = canvasBox ? canvasBox.left : 0;
-        const canvOffsetY = canvasBox ? canvasBox.top : 0;
+    checkIfTouching() {
 
-        // console.log(`${canvOffsetX}, ${canvOffsetY}`);
-        const OFFSET = 10;
+        let w = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
+        let h = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
 
-        const w = Math.max(OFFSET, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
-        const h = Math.max(OFFSET, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
+        let dim = Math.max(w, h);
 
-        const dim = Math.max(w, h);
+        for (let i = this.drawing.childElementCount - 1; i >= 0; i--) {
 
-        const tl = new Point(this.currentPath[this.currentPath.length - 1].x - dim / 2, this.currentPath[this.currentPath.length - 1].y - dim / 2);
-        const br = new Point(tl.x + dim, tl.y + dim);
-
-        for (let i = 0; i < this.drawing.childElementCount; i++) {
             let touching = false;
-            const firstChild = this.drawing.children[i];
+            let firstChild = this.drawing.children[i];
 
-            // item bounding box
-            const itemBox = firstChild.getBoundingClientRect();
-            const itemTopLeft: Point = new Point(itemBox.left - canvOffsetX, itemBox.top - canvOffsetY);
-            const itemBottomRight: Point = new Point(itemBox.right - canvOffsetX, itemBox.bottom - canvOffsetY);
-
-            if (!Point.rectOverlap(tl, br, itemTopLeft, itemBottomRight)) {
-                // this.unhighlight(firstChild);
-                continue;
-            }
-
-            if (firstChild.getAttribute('checkPreciseEdge') !== 'true') {
-                continue;
-            }
-
-            const objOffset = (this.drawing.children[i] as HTMLElement).style.transform;
-            const s = objOffset ? objOffset.split(',') : '';
-            const objOffsetX = +s[0].replace(/[^\d.-]/g, '');
-            const objOffsetY = +s[1].replace(/[^\d.-]/g, '');
+            let objOffset = (this.drawing.children[i] as HTMLElement).style.transform;
+            let s = objOffset ? objOffset.split(",") : "";
+            let objOffsetX = +(s[0].replace(/[^\d.-]/g, ''));
+            let objOffsetY = +(s[1].replace(/[^\d.-]/g, ''));
 
             for (let j = 0; j < firstChild.childElementCount; j++) {
-                const secondChild = firstChild.children[j];
+                let secondChild = firstChild.children[j];
 
-                const width = (secondChild as HTMLElement).getAttribute('stroke-width');
+                let width = (secondChild as HTMLElement).getAttribute("stroke-width");
                 let offset = 0;
                 if (width) {
                     offset = +width;
-                }
+                } // only to be able to run the tests 
+                else { offset = offset }
+                //let dim2 = 3 + offset;
 
-                const dim2 = 3 + offset;
+                if (secondChild.classList.contains("clone") || secondChild.classList.contains("noHighlights") || secondChild.tagName == "filter") { continue; }
 
-                if (secondChild.classList.contains('clone') || secondChild.tagName === 'filter') {
-                    continue;
-                }
+                if (this.inProgress.firstElementChild) {
+                    let test = this.inProgress.firstElementChild.firstElementChild as SVGGeometryElement;
+                    let l = test.getTotalLength();
 
-                const path = secondChild as SVGPathElement;
-                const lenght = path.getTotalLength();
-                const inc = lenght / 300;
+                    let path = secondChild as SVGGeometryElement;
 
-                const BAD_COORD = -1;
-                const MAX = 10000;
-                const closest: [Point, number] = [new Point(BAD_COORD, BAD_COORD), MAX];
-                for (let a = 0; a < lenght; a += inc) {
-                    const candidate = new Point(path.getPointAtLength(a).x + objOffsetX, path.getPointAtLength(a).y + objOffsetY);
-                    const dist = Point.distance(this.currentPath[this.currentPath.length - 1], candidate);
-                    if (dist < closest[1]) {
-                        closest[0] = candidate;
-                        closest[1] = dist;
+                    for (let v = 0; v < l; v += dim / 10) {
+
+                        let testPoint = test.getPointAtLength(v);
+                        testPoint.x -= objOffsetX;
+                        testPoint.y -= objOffsetY;
+                        if (path.isPointInStroke(testPoint) || (path.isPointInFill(testPoint) && secondChild.getAttribute("fill") != "none")) {
+                            touching = true;
+                            break;
+                        }
                     }
-                }
-
-                if (true) {
-                    const good = closest[0];
-                    // console.log(good);
-                    const tlp = new Point(good.x - dim2 / 2, good.y - dim2 / 2);
-                    const brp = new Point(good.x + dim2 / 2, good.y + dim2 / 2);
-                    if (Point.rectOverlap(tlp, brp, tl, br)) {
-                        touching = true;
-                        break;
-                    }
-                }
-
-                // for(let a = 0; a < points.length; a++){
-
-                // }
-
-                if (touching) {
-                    break;
                 }
             }
 
-            // console.log(touching);
             if (touching) {
                 if (this.isDown) {
                     this.changeColor(firstChild);
-                } else {
-                    // this.highlight(firstChild);
                 }
-            } else {
-                // this.unhighlight(firstChild);
+                break;
             }
         }
     }
 
     // mouse doubleClick with pencil in hand
-    doubleClick(position: Point): void {
+    doubleClick(position: Point) {
         // since its down -> up -> down -> up -> doubleClick, nothing more happens for the pencil
     }
 
     // Creates an svg path that connects every points of currentPath with the pencil attributes
-    createPath(p: Point[]): string {
+    createPath(p: Point[]) {
+
         let s = '';
 
         // We need at least 2 points
@@ -326,20 +241,20 @@ export class ColorEditorService extends DrawingTool {
             return s;
         }
 
-        const OFFSET = 10;
         // create a divider
         s = '<g style="transform: translate(0px, 0px);" name = "eraser-brush">';
 
-        const w = Math.max(OFFSET, Math.abs(p[p.length - 1].x - p[0].x));
-        const h = Math.max(OFFSET, Math.abs(p[p.length - 1].y - p[0].y));
 
-        const dim = Math.max(w, h);
+        let w = Math.max(10, Math.abs(p[p.length - 1].x - p[0].x));
+        let h = Math.max(10, Math.abs(p[p.length - 1].y - p[0].y));
+
+        let dim = Math.max(w, h);
 
         s += `<rect x="${p[p.length - 1].x - dim / 2}" y="${p[p.length - 1].y - dim / 2}"`;
         s += `width="${dim}" height="${dim}"`;
 
-        s += 'fill="white"';
-        s += 'stroke-width="1" stroke="black"';
+        s += `fill="${this.chosenColor.primColor}"`;
+        s += `stroke-width="3" stroke="${this.chosenColor.secColor}"`;
 
         // end the divider
         s += '</g>';

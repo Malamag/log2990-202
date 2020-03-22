@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { Collection, FilterQuery, MongoClient, MongoClientOptions, UpdateQuery } from 'mongodb';
 import 'reflect-metadata';
 import { Image } from '../Image';
-import { ImageData } from '../imageData';
+import { ImageData } from '../../../image-data';
 import { MetaData } from '../metadata';
 
 const DATABASE_URL = 'mongodb+srv://Equipe202:Equipe202@cluster0-kusq4.mongodb.net/test?retryWrites=true&w=majority';
@@ -97,7 +97,7 @@ export class DatabaseService {
                 isFound = tag === myTag.substring(startPos, j);
                 startPos++;
                 if (isFound) {
-                    break;
+                    return isFound;
                 }
             }
         }

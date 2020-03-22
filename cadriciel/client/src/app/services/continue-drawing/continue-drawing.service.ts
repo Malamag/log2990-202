@@ -4,7 +4,7 @@ import { Canvas } from 'src/app/models/canvas.model';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
-import { SVGData } from 'src/svg-data';
+import { SVGData } from '../../../../../svg-data';
 @Injectable({
   providedIn: 'root'
 })
@@ -26,12 +26,12 @@ export class ContinueDrawingService {
 
       const childs: HTMLCollection = el.children;
       for (let i = 0; i < childs.length; ++i) {
-      if (data.innerHTML[i] === undefined) {
-        childs[i].innerHTML = '';
-      } else {
-        childs[i].innerHTML = data.innerHTML[i];
+        if (data.innerHTML[i] === undefined) {
+          childs[i].innerHTML = '';
+        } else {
+          childs[i].innerHTML = data.innerHTML[i];
+        }
       }
-    }
 
       const CANVAS_ATTRS: Canvas = { canvasWidth: +data.width, canvasHeight: +data.height, canvasColor: data.bgColor };
       this.interact.emitGridAttributes(CANVAS_ATTRS);

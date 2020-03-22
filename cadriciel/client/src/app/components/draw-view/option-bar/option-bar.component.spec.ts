@@ -2,14 +2,12 @@ import { E, G, O, S } from '@angular/cdk/keycodes';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-    MatButtonModule,
-    MatDialog,
-    MatIconModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatToolbarModule,
-    MatTooltipModule
+    MatButtonModule, MatDialog,
+    MatIconModule, MatSliderModule,
+    MatSlideToggleModule, MatToolbarModule, MatTooltipModule
 } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
@@ -49,7 +47,8 @@ describe('OptionBarComponent', () => {
 
         TestBed.configureTestingModule({
             declarations: [OptionBarComponent],
-            imports: [MatButtonModule, MatToolbarModule, MatIconModule, MatTooltipModule, MatSlideToggleModule, MatSliderModule],
+            imports: [MatButtonModule, MatToolbarModule, MatIconModule, MatTooltipModule, MatSlideToggleModule,
+                MatSliderModule, RouterTestingModule, BrowserAnimationsModule],
             providers: [
                 { provide: MatDialog },
                 { provide: ModalWindowService, useValue: winServiceStub },

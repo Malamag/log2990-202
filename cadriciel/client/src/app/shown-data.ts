@@ -1,4 +1,4 @@
-import { SVGData } from '../svg-data';
+import { SVGData } from '../../../svg-data';
 export interface ShownData {
     id: string;
     svgElement: Element;

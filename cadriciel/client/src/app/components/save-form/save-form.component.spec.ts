@@ -47,9 +47,9 @@ describe('SaveFormComponent', () => {
   });
 
   it('should build the form on initialisation', () => {
-    const spy = spyOn(component, 'initForm');
+    const SPY = spyOn(component, 'initForm');
     component.ngOnInit();
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
   });
 
   it('should initialize the doodle after content init', () => {
@@ -58,72 +58,72 @@ describe('SaveFormComponent', () => {
   });
 
   it('should close the form on cancel using the window service', () => {
-    const spy = spyOn(winService, 'closeWindow');
+    const SPY = spyOn(winService, 'closeWindow');
     component.closeForm();
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
   });
 
   it('should remove a label', () => {
     component.labels = ['test'];
-    const spy = spyOn(component.labels, 'splice');
+    const SPY = spyOn(component.labels, 'splice');
     component.remove('test');
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
   });
 
   it('should add a label', () => {
-    const dummyElement = document.createElement('input');
+    const DUMMY_ELEMENT = document.createElement('input');
     const mockUpEvent: MatChipInputEvent = {
-      input: dummyElement,
+      input: DUMMY_ELEMENT,
       value: 'hello',
     };
-    const spy = spyOn(component.labels, 'push');
+    const SPY = spyOn(component.labels, 'push');
     component.add(mockUpEvent);
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
   });
 
   it('should not add the label if it contains symbols', () => {
-    const dummyElement = document.createElement('input');
+    const DUMMY_ELEMENT = document.createElement('input');
     const mockUpEvent: MatChipInputEvent = {
-      input: dummyElement,
+      input: DUMMY_ELEMENT,
       value: '!%!@!#!@#!',
     };
-    const spy = spyOn(component.labels, 'push');
+    const SPY = spyOn(component.labels, 'push');
     component.add(mockUpEvent);
-    expect(spy).not.toHaveBeenCalled();
+    expect(SPY).not.toHaveBeenCalled();
   });
 
   it('should complete http request to save the image', () => {
-    const spy = spyOn(index, 'saveImage');
+    const SPY = spyOn(index, 'saveImage');
     component.saveImage();
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
   });
 
   it('should get the drawing in string format without the grid', () => {
     component.ngOnInit();
     // tslint:disable-next-line: no-string-literal
-    const spy = spyOn(component['doodleFetch'], 'getDrawingDataNoGrid');
+    const SPY = spyOn(component['doodleFetch'], 'getDrawingDataNoGrid');
     component.saveImage();
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
   });
 
   it('should disable the save button if draw name is invalid', () => {
-    const input: HTMLInputElement = fixture.debugElement.query(By.css('input[type=text]')).nativeElement;
-    input.value = '';
-    component.saveForm.setValue({ doodleName: input.value });
+    const INPUT: HTMLInputElement = fixture.debugElement.query(By.css('input[type=text]')).nativeElement;
+    INPUT.value = '';
+    component.saveForm.setValue({ doodleName: INPUT.value });
     expect(component.saveForm.valid).toBe(false);
   });
 
   it('should get the drawing in string format without the grid', () => {
     // tslint:disable-next-line: no-string-literal
-    const spy = spyOn(component['doodleFetch'], 'getDrawingDataNoGrid');
+    const SPY = spyOn(component['doodleFetch'], 'getDrawingDataNoGrid');
     component.saveImage();
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
   });
 
   it('should stop event propagation when save form is open', () => {
-    const keyEvent = new KeyboardEvent('keydown', { code: 'Key1' });
-    const spy = spyOn(keyEvent, 'stopPropagation');
-    component.blockEvent(keyEvent);
-    expect(spy).toHaveBeenCalled();
+    const KEY_EVENT = new KeyboardEvent('keydown', { code: 'Key1' });
+    const SPY = spyOn(KEY_EVENT, 'stopPropagation');
+    component.blockEvent(KEY_EVENT);
+    expect(SPY).toHaveBeenCalled();
   });
 });

@@ -3,7 +3,7 @@ import * as Httpstatus from 'http-status-codes';
 import { inject, injectable } from 'inversify';
 import { DatabaseService } from '../services/database.service';
 
-import { ImageData } from '../imageData';
+import { ImageData } from '../../../image-data';
 import Types from '../types';
 
 @injectable()

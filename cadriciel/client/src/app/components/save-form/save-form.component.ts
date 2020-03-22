@@ -5,7 +5,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { IndexService } from 'src/app/services/index/index.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
-import { ImageData } from '../../image-data';
+import { ImageData } from '../../../../../image-data';
 
 const LABELS_NUMBER_CAP = 20;
 
@@ -60,33 +60,33 @@ export class SaveFormComponent implements OnInit, AfterContentInit {
   }
 
   add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
+    const INPUT = event.input;
+    const VALUE = event.value;
     this.containsSymbols = this.format.test(event.value);
     this.labelsIsFull = this.labels.length >= LABELS_NUMBER_CAP;
 
-    if ((value || '').trim() && !this.containsSymbols && !this.labelsIsFull) {
-      this.labels.push(value.trim());
+    if ((VALUE || '').trim() && !this.containsSymbols && !this.labelsIsFull) {
+      this.labels.push(VALUE.trim());
     }
 
-    if (input) {
-      input.value = '';
+    if (INPUT) {
+      INPUT.value = '';
     }
   }
 
   remove(label: string): void {
-    const index = this.labels.indexOf(label);
+    const INDEX = this.labels.indexOf(label);
 
-    if (index >= 0) {
-      this.labels.splice(index, 1);
+    if (INDEX >= 0) {
+      this.labels.splice(INDEX, 1);
     }
     this.labelsIsFull = this.labels.length >= LABELS_NUMBER_CAP;
   }
   saveImage(): void {
-    const id: string = new Date().getUTCMilliseconds() + '';
-    const doodleString = this.doodleFetch.getDrawingDataNoGrid();
-    const imageData: ImageData = { id, name: this.saveForm.value.doodleName, tags: this.labels, svgElement: doodleString };
-    this.index.saveImage(imageData);
+    const ID: string = new Date().getUTCMilliseconds() + '';
+    const DOODLE_STRING = this.doodleFetch.getDrawingDataNoGrid();
+    const IMAGE_DATA: ImageData = { id: ID, name: this.saveForm.value.doodleName, tags: this.labels, svgElement: DOODLE_STRING };
+    this.index.saveImage(IMAGE_DATA);
     this.winService.closeWindow();
 
   }
