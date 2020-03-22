@@ -12,7 +12,6 @@ import {
 } from '@angular/material';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
-import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ExportFormComponent } from '../../export-form/export-form.component';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
@@ -73,13 +72,6 @@ describe('OptionBarComponent', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
-    });
-
-    it('should add observers on construction', () => {
-        window.addEventListener = jasmine.createSpy().and.callThrough();
-        const TEST_SERVICE = new OptionBarComponent(winServiceStub, new InteractionService(), new KeyboardHandlerService(), gridRenderStub);
-        expect(TEST_SERVICE).toBeTruthy();
-        expect(window.addEventListener).toHaveBeenCalled();
     });
 
     it('should open the new form modal window on ctrl+o', () => {
