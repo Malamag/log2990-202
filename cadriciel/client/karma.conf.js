@@ -28,16 +28,16 @@ module.exports = function(config) {
         logLevel: config.LOG_INFO,
         autoWatch: true,
         singleRun: false,
-        browsers: ['Chrome', 'ChromeHeadlessNoSandbox'],
+        browsers: ['Chrome', /*'ChromeHeadlessNoSandbox'*/],
         customLaunchers: {
             /*FirefoxHeadless: {
                 base: 'Firefox',
                 flags: ['-headless'],
             },*/
-            ChromeHeadlessNoSandbox: {
+            /*ChromeHeadlessNoSandbox: {
                 base: 'ChromeHeadless',
                 flags: ['--no-sandbox'],
-            },
+            },*/
         },
     });
 };

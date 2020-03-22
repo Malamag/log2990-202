@@ -46,26 +46,26 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
 
     selectedFilter: number;
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.initForm();
         this.doodleFetch.askForDoodle();
         this.cWidth = this.doodleFetch.widthAttr;
         this.cHeigth = this.doodleFetch.heightAttr;
     }
 
-    initForm() {
+    initForm(): void {
         this.exportForm = this.formBuilder.group({
             doodleName: ['Dessin sans titre', Validators.required],
             formatSel: [null, Validators.required],
         });
     }
 
-    ngAfterContentInit() {
+    ngAfterContentInit(): void {
         this.doodle = this.doodleFetch.getDrawingWithoutGrid();
         console.log(this.doodle);
     }
 
-    onSubmit() {
+    onSubmit(): void {
         const FORMVAL = this.exportForm.value;
         const TYPE = FORMVAL.formatSel;
         const NAME = FORMVAL.doodleName;
@@ -75,15 +75,15 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         this.closeForm();
     }
 
-    closeForm() {
+    closeForm(): void {
         this.winService.closeWindow();
     }
 
-    exportation(name: string, type: string) {
+    exportation(name: string, type: string): void {
         this.expService.exportInCanvas(this.doodle, this.exportFromCanvas.nativeElement, name, type);
     }
 
-    applyFilter(event: number) {
+    applyFilter(event: number): void {
         this.selectedFilter = event;
         this.imgFilter.toggleFilter(this.doodle, this.selectedFilter);
     }

@@ -1,16 +1,15 @@
 import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { Canvas } from 'src/app/models/Canvas.model';
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { Canvas } from 'src/app/models/canvas.model';
+import { ChoosenColors } from 'src/app/models/choosen-colors.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
 import { InputObserver } from 'src/app/services/draw-tool/input-observer';
-import { PipetteService } from 'src/app/services/draw-tool/pipette.service';
 import { ToolCreator } from 'src/app/services/draw-tool/tool-creator';
-import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
+import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
 
@@ -21,7 +20,7 @@ import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handl
 })
 export class SvgDrawComponent implements OnInit, AfterViewInit {
     showGrid: boolean;
-    pipette: PipetteService; // needed in the canvas switch directive as an Input element
+
     constructor(
         private canvBuilder: CanvasBuilderService,
         public interaction: InteractionService,
@@ -38,7 +37,9 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     height: number;
     backColor: string;
 
+    // tslint:disable-next-line: typedef
     toolsContainer = new Map();
+    // tslint:disable-next-line: typedef
     interactionToolsContainer = new Map();
 
     @ViewChild('inPrgress', { static: false }) inProgress: ElementRef;
@@ -48,7 +49,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     @ViewChild('drawingSpace', { static: false }) drawingSpace: ElementRef;
     @ViewChild('selectedItems', { static: false }) selectedItems: ElementRef;
     @ViewChild('grid', { static: false }) gridRef: ElementRef;
-
+    @ViewChild('container', { static: false }) cntRef: ElementRef;
     workingSpace: HTMLElement;
 
     ngOnInit(): void {
@@ -64,6 +65,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     bgroundChangeSubscription(): void {
         this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
+
             if (choosenColors) {
                 this.backColor = choosenColors.backColor;
                 this.gridService.updateColor(this.backColor);
@@ -73,25 +75,33 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     initCanvas(): void {
         this.canvBuilder.canvSubject.subscribe((canvas: Canvas) => {
+
             if (canvas === undefined || canvas === null) {
                 canvas = this.canvBuilder.getDefCanvas();
             }
+
             this.width = canvas.canvasWidth;
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
-            this.canvBuilder.whipeDraw(this.frameRef);
+            if (canvas.wipeAll === true || canvas.wipeAll === undefined) { // if no attribute is specified, the doodle will be w
+                this.canvBuilder.wipeDraw(this.frameRef);
+            }
+
             if (this.gridService.grid) {
-                this.gridService.removeGrid();
-                this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+                if (this.gridRef) {
+                    this.gridService.removeGrid();
+                    this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+                }
             }
         });
-        this.canvBuilder.emitCanvas();
+        this.canvBuilder.emitCanvas(); // if a page reload is called, the canvas will not be undefined
     }
 
     initGridVisibility(): void {
         this.interaction.$showGrid.subscribe((show: boolean) => {
             this.showGrid = show;
         });
+        this.reinitGridFromSub();
     }
 
     ngAfterViewInit(): void {
@@ -138,7 +148,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.svg.nativeElement,
         );
 
-        this.pipette = tc.CreatePipette(false, this.interaction, this.colorPick);
+        const pipette = tc.CreatePipette(false, this.interaction, this.colorPick);
 
         this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
         this.toolsContainer.set('Rectangle', rect);
@@ -151,7 +161,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Sélectionner', selection);
         this.toolsContainer.set('Efface', eraser);
         this.toolsContainer.set('ApplicateurCouleur', colorEditor);
-        this.toolsContainer.set('Pipette', this.pipette);
+        this.toolsContainer.set('Pipette', pipette);
 
         this.interaction.$cancelToolsObs.subscribe((sig: boolean) => {
             if (sig) {
@@ -168,13 +178,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
                 this.closeTools(this.toolsContainer);
                 this.toolsContainer.get(toolName).selected = true;
             }
-            /* if (toolName === 'Pipette') {
-                // ... or, eventually, bucket tool
-                mouseHandler.svgCanvas = this.pixelMatrixRef.nativeElement;
-                //
-            } else {
-                mouseHandler.svgCanvas = this.svg.nativeElement;
-            }*/
+
             mouseHandler.updateWindowSize();
         });
 
@@ -220,7 +224,17 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.doodleFetch.currentDraw = this.svg;
             this.doodleFetch.widthAttr = this.width;
             this.doodleFetch.heightAttr = this.height;
+            this.doodleFetch.backColor = this.backColor;
         });
+
         this.bgroundChangeSubscription();
+    }
+
+    reinitGridFromSub(): void {
+        this.interaction.$canvasAttributes.subscribe((newDoodle: Canvas) => {
+            this.gridService.removeGrid();
+            this.gridService.initGrid(this.gridRef.nativeElement, newDoodle.canvasWidth, newDoodle.canvasHeight, newDoodle.canvasColor);
+            console.log(newDoodle);
+        });
     }
 }

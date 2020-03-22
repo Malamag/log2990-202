@@ -45,38 +45,38 @@ describe('EntryPointComponent', () => {
 
   it('should open the user guide on click', () => {
     const NAME = 'Guide';
-    const openGuide = spyOn(component, 'openUserManual');
+    const OPEN_GUIDE = spyOn(component, 'openUserManual');
     component.execute(NAME);
-    expect(openGuide).toHaveBeenCalled();
+    expect(OPEN_GUIDE).toHaveBeenCalled();
   });
 
   it('should open a snack bar on initialisation', () => {
-    const open = spyOn(component, 'onOpen');
+    const OPEN = spyOn(component, 'onOpen');
     component.ngOnInit(); // initialisation of entry point
-    expect(open).toHaveBeenCalled();
+    expect(OPEN).toHaveBeenCalled();
   });
 
   it('should use the window handler service to open the new draw form', () => {
-    const winService = component.winService;
-    const spy = spyOn(winService, 'openWindow');
+    const WIN_SERVICE = component.winService;
+    const SPY = spyOn(WIN_SERVICE, 'openWindow');
     component.openCreateNew();
-    expect(spy).toHaveBeenCalledWith(NewDrawComponent);
+    expect(SPY).toHaveBeenCalledWith(NewDrawComponent);
   });
 
   it('should use the window handler service to open the new draw form', () => {
-    const winService = component.winService;
-    const spy = spyOn(winService, 'openWindow');
+    const WIN_SERVICE = component.winService;
+    const SPY = spyOn(WIN_SERVICE, 'openWindow');
     component.openUserManual();
-    expect(spy).toHaveBeenCalledWith(UserManualComponent);
+    expect(SPY).toHaveBeenCalledWith(UserManualComponent);
   });
 
   it('should not open any window on invalid input', () => {
     const INVALID = '';
     component.execute(INVALID);
-    const formSpy = spyOn(component, 'openCreateNew');
-    const guideSpy = spyOn(component, 'openUserManual');
-    expect(formSpy).not.toHaveBeenCalled();
-    expect(guideSpy).not.toHaveBeenCalled();
+    const FORM_SPY = spyOn(component, 'openCreateNew');
+    const GUIDE_SPY = spyOn(component, 'openUserManual');
+    expect(FORM_SPY).not.toHaveBeenCalled();
+    expect(GUIDE_SPY).not.toHaveBeenCalled();
   });
 
 });

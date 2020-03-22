@@ -1,16 +1,14 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { PencilService } from 'src/app/services/draw-tool/pencil.service';
-import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
-import { SvgDrawComponent } from './svg-draw.component';
-
 import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CanvasSwitchDirective } from 'src/app/directives/canvas-switch.directive';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+import { PencilService } from 'src/app/services/draw-tool/pencil.service';
+import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
+import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
+import { SvgDrawComponent } from './svg-draw.component';
 
 const width = 67;
 const height = 10;
@@ -74,17 +72,17 @@ describe('SvgDrawComponent', () => {
     });
 
     it('should deselect all tools', () => {
-        const name1 = 'Pencil';
-        const name2 = 'rect';
-        const htmlElement = fixture.debugElement.nativeElement;
-        const pencil = new PencilService(htmlElement, htmlElement, true, component.interaction, component.colorPick);
-        const rect = new RectangleService(htmlElement, htmlElement, true, component.interaction, component.colorPick);
+        const NAME1 = 'Pencil';
+        const NAME2 = 'rect';
+        const HTML_ELEMENT = fixture.debugElement.nativeElement;
+        const pencil = new PencilService(HTML_ELEMENT, HTML_ELEMENT, true, component.interaction, component.colorPick);
+        const rect = new RectangleService(HTML_ELEMENT, HTML_ELEMENT, true, component.interaction, component.colorPick);
         const mapTest = new Map();
-        mapTest.set(name1, pencil);
-        mapTest.set(name2, rect);
+        mapTest.set(NAME1, pencil);
+        mapTest.set(NAME2, rect);
         component.closeTools(mapTest);
-        expect(mapTest.get(name1).selected).toBeFalsy();
-        expect(mapTest.get(name2).selected).toBeFalsy();
+        expect(mapTest.get(NAME1).selected).toBeFalsy();
+        expect(mapTest.get(NAME2).selected).toBeFalsy();
     });
 
     it('the containers length should be greater than zero', () => {
@@ -93,18 +91,18 @@ describe('SvgDrawComponent', () => {
     });
 
     it('a dispatch should be sent', () => {
-        const spyObj = spyOn(window, 'dispatchEvent');
+        const SPY_OBJ = spyOn(window, 'dispatchEvent');
         component.ngAfterViewInit();
-        expect(spyObj).toHaveBeenCalled();
+        expect(SPY_OBJ).toHaveBeenCalled();
     });
 
     it('should have the same parameters as the observer', () => {
-        const canvasBuilderStub = new CanvasBuilderService(component.interaction);
-        const canvas = { canvasWidth: width, canvasHeight: height, canvasColor: color };
-        canvasBuilderStub.newCanvas = canvas;
+        const CANVAS_BUILDER_STUB = new CanvasBuilderService(component.interaction);
+        const CANVAS = { canvasWidth: width, canvasHeight: height, canvasColor: color };
+        CANVAS_BUILDER_STUB.newCanvas = CANVAS;
 
         const componentStub = new SvgDrawComponent(
-            canvasBuilderStub,
+            CANVAS_BUILDER_STUB,
             component.interaction,
             component.colorPick,
             dFetch,
@@ -112,16 +110,16 @@ describe('SvgDrawComponent', () => {
             gridServiceStub,
         );
         componentStub.initCanvas();
-        expect(componentStub.width).toBe(canvas.canvasWidth);
-        expect(componentStub.height).toBe(canvas.canvasHeight);
-        expect(componentStub.backColor).toBe(canvas.canvasColor);
+        expect(componentStub.width).toBe(CANVAS.canvasWidth);
+        expect(componentStub.height).toBe(CANVAS.canvasHeight);
+        expect(componentStub.backColor).toBe(CANVAS.canvasColor);
     });
 
     it('should call initCanvas and the observable', () => {
-        const spyObj = spyOn(component, 'initCanvas');
+        const SPY_OBJ = spyOn(component, 'initCanvas');
 
         component.ngOnInit();
-        expect(spyObj).toHaveBeenCalled();
+        expect(SPY_OBJ).toHaveBeenCalled();
     });
 
     it('should call window addEventListener', () => {
@@ -132,56 +130,56 @@ describe('SvgDrawComponent', () => {
     });
 
     it('should call the mouse down listener on mouse down', () => {
-        const spyDown = spyOn(mouseHandlerStub, 'down');
+        const SPY_DOWN = spyOn(mouseHandlerStub, 'down');
         window.addEventListener = jasmine.createSpy().and.callFake(() => {
             mouseHandlerStub.down();
         });
         component.ngAfterViewInit(); // prepares the event listeners
-        expect(spyDown).toHaveBeenCalled();
+        expect(SPY_DOWN).toHaveBeenCalled();
     });
 
     it('should call the mouse move listener on mouse move', () => {
-        const spyDown = spyOn(mouseHandlerStub, 'move');
+        const SPY_DOWN = spyOn(mouseHandlerStub, 'move');
         window.addEventListener = jasmine.createSpy().and.callFake(() => {
             mouseHandlerStub.move();
         });
         component.ngAfterViewInit(); // prepares the event listeners
-        expect(spyDown).toHaveBeenCalled();
+        expect(SPY_DOWN).toHaveBeenCalled();
     });
 
     it('should call the mouse up listener on mouse up', () => {
-        const spyDown = spyOn(mouseHandlerStub, 'up');
+        const SPY_DOWN = spyOn(mouseHandlerStub, 'up');
         window.addEventListener = jasmine.createSpy().and.callFake(() => {
             mouseHandlerStub.up();
         });
         component.ngAfterViewInit(); // prepares the event listeners
-        expect(spyDown).toHaveBeenCalled();
+        expect(SPY_DOWN).toHaveBeenCalled();
     });
 
     it('should call the kb handler logkey listener', () => {
-        const spyKey = spyOn(kbHandlerStub, 'logkey');
+        const SPY_KEY = spyOn(kbHandlerStub, 'logkey');
         window.addEventListener = jasmine.createSpy().and.callFake(() => {
             kbHandlerStub.logkey();
         });
         component.ngAfterViewInit(); // same principle goes for the keyboard events
 
-        expect(spyKey).toHaveBeenCalled();
+        expect(SPY_KEY).toHaveBeenCalled();
     });
     it('should call the kb handler logkey listener', () => {
-        const spyKey = spyOn(kbHandlerStub, 'reset');
+        const SPY_KEY = spyOn(kbHandlerStub, 'reset');
         window.addEventListener = jasmine.createSpy().and.callFake(() => {
             kbHandlerStub.reset();
         });
         component.ngAfterViewInit(); // same principle goes for the keyboard events
 
-        expect(spyKey).toHaveBeenCalled();
+        expect(SPY_KEY).toHaveBeenCalled();
     });
 
     it('should affect the variables on subscription', () => {
-        const spy = spyOn(component, 'closeTools');
+        const SPY = spyOn(component, 'closeTools');
         component.ngAfterViewInit(); // init all
         component.interaction.emitCancel(true); // we want to cancel the tool selection
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
 
         const TOOL = 'Rectangle'; // arbitrary tool selection
         component.interaction.emitSelectedTool(TOOL);

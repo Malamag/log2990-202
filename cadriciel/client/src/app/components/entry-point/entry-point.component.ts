@@ -13,37 +13,40 @@ import { UserManualComponent } from '../user-manual/user-manual.component';
 
 })
 export class EntryPointComponent implements OnInit {
-  menuItems = menuItems;
+
+  menuItems: object = {};
   winService: ModalWindowService;
 
   constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {
     this.winService = new ModalWindowService(this.dialog);
+    this.menuItems = menuItems;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.onOpen(); // opens snackbar at the bottom of the page
   }
 
-  onOpen() {
-    const config = new MatSnackBarConfig();
-    config.duration = 2500; // temps de visibilité de la barre de bienvenue (ms)
-    this.snackBar.open('Bienvenue !', undefined, config);
+  onOpen(): void {
+    const CONFIG = new MatSnackBarConfig();
+    const DURATION = 2500;
+    CONFIG.duration = DURATION; // temps de visibilité de la barre de bienvenue (ms)
+    this.snackBar.open('Bienvenue !', undefined, CONFIG);
   }
 
-  openUserManual() {
+  openUserManual(): void {
 
     this.winService.openWindow(UserManualComponent);
   }
 
-  openCreateNew() {
+  openCreateNew(): void {
     this.winService.openWindow(NewDrawComponent);
   }
 
-  openGallery() {
+  openGallery(): void {
     this.winService.openWindow(GalleryComponent);
   }
 
-  execute(shortcutName: string) {
+  execute(shortcutName: string): void {
     switch (shortcutName) {
       case 'Créer': {
         this.openCreateNew();

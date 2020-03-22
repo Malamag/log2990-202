@@ -89,7 +89,7 @@
     <!-- for the aerosol-->
     <div *ngSwitchCase="'Aérosol'" (mouseleave)="updateAerosol()">
         <label> Nombre d'émissions/sec: {{ emissionPerSecond }} </label>
-        <mat-slider thumbLabel type="range" min="1" max="50" value="50" [(ngModel)]="emissionPerSecond"></mat-slider> <br />
+        <mat-slider thumbLabel type="range" min="1" max="100" value="50" [(ngModel)]="emissionPerSecond"></mat-slider> <br />
         <label> Diamètre du jet: {{ diameter }} px </label>
         <mat-slider thumbLabel type="range" min="10" max="200" value="50" [(ngModel)]="diameter"></mat-slider> <br />
     </div>
@@ -153,11 +153,6 @@
         <button>
             <img src="../../../assets/images/right-align.png" />
         </button>
-    </div>
-
-    <!-- for the color-picker-->
-    <div *ngSwitchCase="'Sélection de couleur'" (mouseout)="resize()">
-        <app-color-picker></app-color-picker>
     </div>
 
     <div *ngSwitchCase="'Étampe'">
