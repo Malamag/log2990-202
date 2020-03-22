@@ -1,14 +1,14 @@
-import { Renderer2 } from '@angular/core';
+simport { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 import { SelectionService } from './selection.service';
 
-export class FakeInteractionService extends InteractionService {}
+export class FakeInteractionService extends InteractionService { }
 
 describe('SelectionService', () => {
-    let service: SelectionService;
+    let service: SelectionService
     let render: Renderer2;
     let select: any;
     let firstChild: any;
@@ -233,5 +233,82 @@ describe('SelectionService', () => {
         service.itemUnderMouse = 3;
         service.up(new Point(0, 0));
         expect(service.invertedItems).toEqual([]);
-    });
+    })
+    it('move should not update the bounding box', () => {
+        service.isDown = false;
+        const spy = spyOn(service, 'updateBoundingBox')
+        service.move(new Point(0, 0));
+        expect(spy).toHaveBeenCalledTimes(0);
+    })
+    it('should update the progress and retreive ithe items in the rectangle', () => {
+        service.currentPath = []
+        service.isDown = true;
+        service.movingSelection = false;
+        service.inverted = false;
+        service.currentPath.push(new Point(0, 0))
+        const retreiveSpy = spyOn(service, 'retrieveItemsInRect')
+        const progressSpy = spyOn(service, 'updateProgress')
+        const boxSpy = spyOn(service, 'updateBoundingBox')
+        service.move(new Point(10, 10));
+        expect(service.selectedItems).toEqual([])
+        expect(retreiveSpy).toHaveBeenCalled()
+        expect(progressSpy).toHaveBeenCalled()
+        expect(boxSpy).toHaveBeenCalled()
+    })
+    it('should move the selection', () => {
+        const moveSpy = spyOn(service, 'moveSelection');
+        service.currentPath.push(new Point(0, 0))
+        service.isDown = true;
+        service.movingSelection = true;
+        service.move(new Point(0, 0))
+        expect(moveSpy).toHaveBeenCalled()
+    })
+    it('should empty the selected items array', () => {
+        service.selectedItems = [true, true, true]
+        service.selected = false;
+        service.updateBoundingBox()
+        expect(service.selectedItems).toEqual([]);
+    })
+    it('the result should contain a rectangle', () => {
+        service.selected = true;
+        let ret = service.updateBoundingBox()
+        expect(ret).toBe('')
+    })
+
+
+    it('should call set style of renderer', () => {
+        service.selectedItems = [true, true, false, true]
+        const styleSpy = jasmine.createSpy('setStyle')
+        service.drawing.innerHTML = '<div> hello world </div>';
+        service.moveSelection(10, 10);
+        expect(styleSpy).toHaveBeenCalled()
+    })
+
+    it('should select items', () => {
+        service.drawing.innerHTML = '<div> hello world </div>';
+        service.inverted = true;
+        Point.rectOverlap = jasmine.createSpy().and.returnValue(true);
+        service.retrieveItemsInRect();
+        expect(service.selectedItems[0]).toBeTruthy()
+        expect(service.invertedItems[0]).toBeTruthy()
+    })
+    it('should return an empty string', () => {
+        const point = new Point(0, 0);
+        const pointContainer = [point];
+        const ret = service.createPath(pointContainer)
+        expect(ret).toEqual('');
+    })
+    it('should return an empty string because the width and height equal zero', () => {
+        const point = new Point(0, 0);
+        const pointConatiner = [point, point, point];
+        const ret = service.createPath(pointConatiner)
+        expect(ret).toEqual('')
+    })
+    it('should return a valid string', () => {
+        const firstPoint = new Point(0, 0)
+        const secondPoint = new Point(5, 5)
+        const pointConatiner = [firstPoint, secondPoint]
+        const ret = service.createPath(pointConatiner)
+        expect(ret).toContain('<g name = "selection-perimeter">')
+    })
 });

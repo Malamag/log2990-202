@@ -46,6 +46,12 @@ describe('RectangleService', () => {
         expect(testService).toBeTruthy();
     });
 
+    it('should affect is square attribute to true', ()=>{
+        const keyboard = new KeyboardHandlerService()
+        keyboard.shiftDown = true
+        service.updateDown(keyboard)
+        expect(service.isSquare).toBeTruthy()
+    })
     it('should set the attributes in the subscription', () => {
         service.interaction.emitFormsAttributes({ plotType: 0, lineThickness: 0, numberOfCorners: 0 });
         const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
@@ -54,14 +60,6 @@ describe('RectangleService', () => {
         // tslint:disable-next-line: no-string-literal
         expect(service['attr']).toBeDefined();
     });
-
-    /*it('should update progress on move', () => {
-        const spy = spyOn(service, 'updateProgress');
-        service.down(ptA); // simulating a mouse down at given point
-        service.update(kbServiceStub);
-        expect(service.isSquare).toBeTruthy();
-        expect(spy).toHaveBeenCalled();
-    });*/
 
     it('should update the current path on mouse down', () => {
         const spy = spyOn(service, 'updateProgress');
