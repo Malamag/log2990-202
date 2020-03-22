@@ -21,16 +21,16 @@ describe('GridRenderService', () => {
     });
 
     it('should be created', () => {
-        const testService: GridRenderService = TestBed.get(GridRenderService);
-        expect(testService).toBeTruthy();
+        const TEST_SERVICE: GridRenderService = TestBed.get(GridRenderService);
+        expect(TEST_SERVICE).toBeTruthy();
     });
 
     it('should render a verical line with its attributes', () => {
         const ATTR_NUM = 3;
         service.render.createElement = jasmine.createSpy().and.returnValue(svgElemStub);
-        const setAttrSpy = spyOn(service.render, 'setAttribute');
+        const SET_ATTR_SPY = spyOn(service.render, 'setAttribute');
         const LINE = service.renderVerticalLine();
-        expect(setAttrSpy).toHaveBeenCalledTimes(ATTR_NUM);
+        expect(SET_ATTR_SPY).toHaveBeenCalledTimes(ATTR_NUM);
         expect(service.render.createElement).toHaveBeenCalled();
         expect(LINE).toBeDefined();
     });
@@ -38,9 +38,9 @@ describe('GridRenderService', () => {
     it('should render a horizontal line with its attributes', () => {
         const ATTR_NUM = 3;
         service.render.createElement = jasmine.createSpy().and.returnValue(svgElemStub);
-        const setAttrSpy = spyOn(service.render, 'setAttribute');
+        const SET_ATTR_SPY = spyOn(service.render, 'setAttribute');
         const LINE = service.renderHorizontalLine();
-        expect(setAttrSpy).toHaveBeenCalledTimes(ATTR_NUM);
+        expect(SET_ATTR_SPY).toHaveBeenCalledTimes(ATTR_NUM);
         expect(service.render.createElement).toHaveBeenCalled();
         expect(LINE).toBeDefined();
     });
@@ -49,13 +49,13 @@ describe('GridRenderService', () => {
         const STEP = 5;
         const HEIGHT = 200; // 1 line every 5px for 200px
         service.drawHeight = HEIGHT;
-        const renderSpy = spyOn(service, 'renderHorizontalLine');
-        const setAttrSpy = spyOn(service.render, 'setAttribute');
+        const RENDER_SPY = spyOn(service, 'renderHorizontalLine');
+        const SET_ATTR_SPY = spyOn(service.render, 'setAttribute');
         service.renderHorizontalLines(STEP);
-        expect(renderSpy).toHaveBeenCalledTimes(HEIGHT / STEP);
+        expect(RENDER_SPY).toHaveBeenCalledTimes(HEIGHT / STEP);
 
         const ATTR_NUM = 2; // setting y1 and y2
-        expect(setAttrSpy).toHaveBeenCalledTimes(ATTR_NUM * (HEIGHT / STEP));
+        expect(SET_ATTR_SPY).toHaveBeenCalledTimes(ATTR_NUM * (HEIGHT / STEP));
     });
 
     it('should populate the horizontal grid lines array', () => {
@@ -64,23 +64,23 @@ describe('GridRenderService', () => {
         service.drawHeight = HEIGHT;
 
         // tslint:disable-next-line: no-string-literal
-        const spy = spyOn(service['hGridLines'], 'push');
+        const SPY = spyOn(service['hGridLines'], 'push');
         service.renderHorizontalLines(STEP);
 
-        expect(spy).toHaveBeenCalledTimes(HEIGHT / STEP);
+        expect(SPY).toHaveBeenCalledTimes(HEIGHT / STEP);
     });
 
     it('should render the proper number of vertical lines from draw width and step', () => {
         const STEP = 10;
         const WIDTH = 400; // 1 line every 5px for 200px
         service.drawWidth = WIDTH;
-        const renderSpy = spyOn(service, 'renderVerticalLine');
-        const setAttrSpy = spyOn(service.render, 'setAttribute');
+        const RENDER_SPY = spyOn(service, 'renderVerticalLine');
+        const SET_ATTR_SPY = spyOn(service.render, 'setAttribute');
         service.renderVerticalLines(STEP);
-        expect(renderSpy).toHaveBeenCalledTimes(WIDTH / STEP);
+        expect(RENDER_SPY).toHaveBeenCalledTimes(WIDTH / STEP);
 
         const ATTR_NUM = 2; // setting x1 and yx
-        expect(setAttrSpy).toHaveBeenCalledTimes(ATTR_NUM * (WIDTH / STEP));
+        expect(SET_ATTR_SPY).toHaveBeenCalledTimes(ATTR_NUM * (WIDTH / STEP));
     });
 
     it('should populate the vertical grid lines array', () => {
@@ -88,10 +88,10 @@ describe('GridRenderService', () => {
         const WIDTH = 400;
         service.drawWidth = WIDTH;
         // tslint:disable-next-line: no-string-literal
-        const spy = spyOn(service['vGridLines'], 'push');
+        const SPY = spyOn(service['vGridLines'], 'push');
         service.renderVerticalLines(STEP);
 
-        expect(spy).toHaveBeenCalledTimes(WIDTH / STEP);
+        expect(SPY).toHaveBeenCalledTimes(WIDTH / STEP);
     });
 
     it('should render horizontal lines on init with default steps', () => {
@@ -99,9 +99,9 @@ describe('GridRenderService', () => {
         const HEIGHT = 200;
         const WIDTH = 400;
         const COLOR = '#ffffff';
-        const spy = spyOn(service, 'renderHorizontalLines');
+        const SPY = spyOn(service, 'renderHorizontalLines');
         service.initGrid(svgElemStub, WIDTH, HEIGHT, COLOR);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should render vertical lines on init with default steps', () => {
@@ -109,21 +109,21 @@ describe('GridRenderService', () => {
         const HEIGHT = 200;
         const WIDTH = 400;
         const COLOR = '#ffffff';
-        const spy = spyOn(service, 'renderVerticalLines');
+        const SPY = spyOn(service, 'renderVerticalLines');
         service.initGrid(svgElemStub, WIDTH, HEIGHT, COLOR);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should append all the lines to the grid svg element', () => {
         const HEIGHT = 200;
         const WIDTH = 400;
         const COLOR = '#ffffff';
-        const spy = spyOn(service.render, 'appendChild');
+        const SPY = spyOn(service.render, 'appendChild');
         service.initGrid(svgElemStub, WIDTH, HEIGHT, COLOR);
 
         const H_LINE_CALLS: number = HEIGHT / service.defSteps;
         const V_LINE_CALLS: number = WIDTH / service.defSteps;
-        expect(spy).toHaveBeenCalledTimes(H_LINE_CALLS + V_LINE_CALLS);
+        expect(SPY).toHaveBeenCalledTimes(H_LINE_CALLS + V_LINE_CALLS);
     });
 
     it('should call color update function on grid init', () => {
@@ -131,9 +131,9 @@ describe('GridRenderService', () => {
         const HEIGHT = 200;
         const WIDTH = 400;
         const COLOR = '#ffffff';
-        const spy = spyOn(service, 'updateColor');
+        const SPY = spyOn(service, 'updateColor');
         service.initGrid(svgElemStub, WIDTH, HEIGHT, COLOR);
-        expect(spy).toHaveBeenCalledWith(COLOR);
+        expect(SPY).toHaveBeenCalledWith(COLOR);
     });
 
     it('should set the new position attibutes on spacing update and update innerHTML', () => {
@@ -148,26 +148,26 @@ describe('GridRenderService', () => {
             // tslint:disable-next-line: no-string-literal
             service['vGridLines'].push(svgElemStub);
         }
-        const spy = spyOn(service.render, 'setAttribute');
+        const SPY = spyOn(service.render, 'setAttribute');
         service.updateSpacing(SPACE);
-        expect(spy).toHaveBeenCalledTimes(ELEM_NUM * ATTR_SET_CALLS);
+        expect(SPY).toHaveBeenCalledTimes(ELEM_NUM * ATTR_SET_CALLS);
     });
 
     it('should update line transparency with alpha hex input', () => {
         const ALPHA_PERCENT = 70;
 
         // tslint:disable-next-line: no-string-literal
-        const colorSpy = spyOn(service['colConv'], 'alphaRGBToHex');
+        const COLOR_SPY = spyOn(service['colConv'], 'alphaRGBToHex');
         service.updateTransparency(ALPHA_PERCENT);
-        expect(colorSpy).toHaveBeenCalled();
+        expect(COLOR_SPY).toHaveBeenCalled();
     });
 
     it('should update the attributes after transparency change', () => {
         const ALPHA_PERCENT = 70;
 
-        const spy = spyOn(service, 'updateAttributes');
+        const SPY = spyOn(service, 'updateAttributes');
         service.updateTransparency(ALPHA_PERCENT);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should convert hex bg color to rgba on color update', () => {
@@ -188,10 +188,10 @@ describe('GridRenderService', () => {
         const GRID_ALPHA = 'ff';
         service.gridAlpha = GRID_ALPHA;
         const WHITE = '#ffffff';
-        const spy = spyOn(service, 'updateAttributes');
+        const SPY = spyOn(service, 'updateAttributes');
         service.updateColor(FAKE_BG_COLOR);
         expect(service.gridColor).toEqual(WHITE);
-        expect(spy).toHaveBeenCalledWith('style', `stroke:${WHITE + service.gridAlpha}`);
+        expect(SPY).toHaveBeenCalledWith('style', `stroke:${WHITE + service.gridAlpha}`);
     });
 
     it('should turn change the grid color to black if the background is too pale', () => {
@@ -209,20 +209,20 @@ describe('GridRenderService', () => {
 
         const BLACK = '#000000';
 
-        const spy = spyOn(service, 'updateAttributes');
+        const SPY = spyOn(service, 'updateAttributes');
 
         service.updateColor(FAKE_BG_COLOR);
 
         expect(service.gridColor).toEqual(BLACK);
-        expect(spy).toHaveBeenCalledWith('style', `stroke:${BLACK + service.gridAlpha}`);
+        expect(SPY).toHaveBeenCalledWith('style', `stroke:${BLACK + service.gridAlpha}`);
     });
 
     it('should emit a signal with grid visibility boolean on toggle', () => {
         // tslint:disable-next-line: no-string-literal
-        const spy = spyOn(service['itService'], 'emitGridVisibility');
+        const SPY = spyOn(service['itService'], 'emitGridVisibility');
         const SHOW = true;
         service.toggleGridVisibility(SHOW);
-        expect(spy).toHaveBeenCalledWith(SHOW);
+        expect(SPY).toHaveBeenCalledWith(SHOW);
     });
 
     it('should be able to update the attributes on the line arrays', () => {
@@ -237,13 +237,13 @@ describe('GridRenderService', () => {
             service['vGridLines'].push(svgElemStub);
         }
 
-        const spy = spyOn(service.render, 'setAttribute');
+        const SPY = spyOn(service.render, 'setAttribute');
         const ATTR_NAME = 'style';
         const ATTR_VALUE = 'stroke:#ffffffff';
 
         service.updateAttributes(ATTR_NAME, ATTR_VALUE);
-        expect(spy).toHaveBeenCalledTimes(ELEM_NUM * 2); // 2 arrays
-        expect(spy).toHaveBeenCalledWith(svgElemStub, ATTR_NAME, ATTR_VALUE);
+        expect(SPY).toHaveBeenCalledTimes(ELEM_NUM * 2); // 2 arrays
+        expect(SPY).toHaveBeenCalledWith(svgElemStub, ATTR_NAME, ATTR_VALUE);
     });
 
     it('should be able to remove the grid', () => {
@@ -264,9 +264,9 @@ describe('GridRenderService', () => {
             service['vGridLines'].push(svgElemStub);
         }
 
-        const spy = spyOn(service.render, 'appendChild');
+        const SPY = spyOn(service.render, 'appendChild');
         service.renderBack();
-        expect(spy).toHaveBeenCalledTimes(2 * ELEM_NUM);
-        expect(spy).toHaveBeenCalledWith(service.grid, svgElemStub);
+        expect(SPY).toHaveBeenCalledTimes(2 * ELEM_NUM);
+        expect(SPY).toHaveBeenCalledWith(service.grid, svgElemStub);
     });
 });

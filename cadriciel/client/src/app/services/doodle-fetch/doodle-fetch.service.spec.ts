@@ -41,14 +41,14 @@ describe('DoodleFetchService', () => {
     });
 
     it('should be created', () => {
-        const testService: DoodleFetchService = TestBed.get(DoodleFetchService);
-        expect(testService).toBeTruthy();
+        const TEST_SERVICE: DoodleFetchService = TestBed.get(DoodleFetchService);
+        expect(TEST_SERVICE).toBeTruthy();
     });
 
     it('should emit a signal when asking for the doodle', () => {
-        const spy = spyOn(service.ask, 'next');
+        const SPY = spyOn(service.ask, 'next');
         service.askForDoodle();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should return a native element from a reference', () => {
