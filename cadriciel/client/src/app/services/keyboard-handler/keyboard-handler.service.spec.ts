@@ -15,8 +15,9 @@ describe('KeyboardHandlerService', () => {
         observerStub = {
             selected: true,
 
-            update: () => 0,
+            updateDown: () => 0,
             cancel: () => 0,
+            updateUp: () => 0,
         };
 
         TestBed.configureTestingModule({
@@ -30,7 +31,19 @@ describe('KeyboardHandlerService', () => {
         const testService: KeyboardHandlerService = TestBed.get(KeyboardHandlerService);
         expect(testService).toBeTruthy();
     });
-
+    it('should update up all the observers', () => {
+        const NUM = 10;
+        service.toolObservers = [observerStub, observerStub];
+        const SPY = spyOn(observerStub, 'updateUp');
+        service.updateUpToolObservers(NUM);
+        expect(SPY).toHaveBeenCalled();
+    });
+    it('should update down all the observers', () => {
+        service.toolObservers = [observerStub, observerStub];
+        const SPY = spyOn(observerStub, 'updateDown');
+        service.updateDownToolObservers();
+        expect(SPY).toHaveBeenCalled();
+    });
     it('should properly add tool observers', () => {
         service.toolObservers = [];
 
