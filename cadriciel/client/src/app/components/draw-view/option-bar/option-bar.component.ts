@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Canvas } from 'src/app/models/canvas.model';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
@@ -39,12 +39,10 @@ export class OptionBarComponent {
         const DEF_GRID_ALPHA = 100;
         this.alphaVal = DEF_GRID_ALPHA;
 
-        window.addEventListener('keydown', (e: KeyboardEvent) => {
-            this.setShortcutEvent(e);
-        });
         this.stepVal = this.gridService.defSteps;
     }
 
+    @HostListener('document: keydown', ['$event'])
     setShortcutEvent(e: KeyboardEvent): void {
         const STEP = 5;
         this.kbHandler.logkey(e);

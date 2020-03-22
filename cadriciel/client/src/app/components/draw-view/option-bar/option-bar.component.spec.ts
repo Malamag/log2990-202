@@ -258,15 +258,6 @@ describe('OptionBarComponent', () => {
         expect(SPY).toHaveBeenCalledWith(ALPHA_VAL);
     });
 
-    it('should set the shortcut on keyboard event', () => {
-        const SPY = spyOn(component, 'setShortcutEvent');
-        window.dispatchEvent(new KeyboardEvent('keydown'));
-        const TEST_COMPONENT = new OptionBarComponent(winServiceStub, new InteractionService(), kbService, gridRenderStub);
-
-        expect(TEST_COMPONENT).toBeTruthy();
-        expect(SPY).toHaveBeenCalled();
-    });
-
     it('should not open the gallery when user chooses to cancel action', () => {
         window.confirm = jasmine.createSpy().and.returnValue(false); // cancel action
         const SPY = spyOn(component.winService, 'openWindow');
