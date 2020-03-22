@@ -16,13 +16,13 @@ export class ColorConvertingService {
         if (!this.validateRGB(r)) {
             return '';
         }
-        const shifter = 4;
-        const hexN = 0xf;
+        const SHIFTER = 4;
+        const HEX_N = 0xf;
         // Split 1 8 bits int into 2 4 bits int
         // tslint:disable-next-line: no-bitwise
-        bits[0] = r >> shifter;
+        bits[0] = r >> SHIFTER;
         // tslint:disable-next-line: no-bitwise
-        bits[1] = r & hexN;
+        bits[1] = r & HEX_N;
 
         for (let i = 0; i < 2; i++) {
             if (bits[i] >= colorData.HEX_NUMBER_LETTER_MIN_VALUE) {
@@ -34,98 +34,98 @@ export class ColorConvertingService {
         return hex;
     }
     alphaRGBToHex(a: number): string {
-        const alpha: number = a * colorData.RGBA_TO_HEX_ALPHA_MODIFIER;
-        if (!this.validateRGB(alpha)) {
+        const ALPHA: number = a * colorData.RGBA_TO_HEX_ALPHA_MODIFIER;
+        if (!this.validateRGB(ALPHA)) {
             return '';
         }
-        return this.rgbToHex(alpha);
+        return this.rgbToHex(ALPHA);
     }
     validateHSL(h: number, s: number, l: number): boolean {
-        const hOk = h >= colorData.MIN_HUE_VALUE && h <= colorData.MAX_HUE_VALUE;
-        const sOk = s >= colorData.MIN_SATURATION_VALUE && s <= colorData.MAX_SATURATION_VALUE;
-        const lOk = l >= colorData.MIN_LIGHTNESS_VALUE && l <= colorData.MAX_LIGHTNESS_VALUE;
-        return hOk && sOk && lOk;
+        const H_OK = h >= colorData.MIN_HUE_VALUE && h <= colorData.MAX_HUE_VALUE;
+        const S_OK = s >= colorData.MIN_SATURATION_VALUE && s <= colorData.MAX_SATURATION_VALUE;
+        const L_OK = l >= colorData.MIN_LIGHTNESS_VALUE && l <= colorData.MAX_LIGHTNESS_VALUE;
+        return H_OK && S_OK && L_OK;
     }
     hslToRgb(
         H: number = colorData.MIN_HUE_VALUE,
         S: number = colorData.MAX_SATURATION_VALUE,
         L: number = colorData.MAX_LIGHTNESS_VALUE / 2,
     ): number[] {
-        const initNum = -1;
-        const rgb: number[] = [initNum, initNum, initNum];
+        const INIT_NUM = -1;
+        const RGB: number[] = [INIT_NUM, INIT_NUM, INIT_NUM];
         if (!this.validateHSL(H, S, L)) {
-            return rgb;
+            return RGB;
         }
         const C: number = (1 - Math.abs(2 * L - 1)) * S;
         const div = 60;
         const X: number = C * (1 - Math.abs(((H / div) % 2) - 1));
-        const m: number = L - C / 2;
+        const M: number = L - C / 2;
 
         let R: number = colorData.MIN_RGB_VALUE;
         let G: number = colorData.MIN_RGB_VALUE;
         let B: number = colorData.MIN_RGB_VALUE;
-        const bigDiv = 6;
-        const smallDiv = 3;
-        const mult = 5;
+        const BIG_DIV = 6;
+        const SMALL_DIV = 3;
+        const MULT = 5;
         // Math formula for conversion
-        if (colorData.MIN_HUE_VALUE <= H && H < colorData.MAX_HUE_VALUE / bigDiv) {
+        if (colorData.MIN_HUE_VALUE <= H && H < colorData.MAX_HUE_VALUE / BIG_DIV) {
             R = C;
             G = X;
             B = colorData.MIN_RGB_VALUE;
-        } else if (colorData.MAX_HUE_VALUE / bigDiv <= H && H < colorData.MAX_HUE_VALUE / smallDiv) {
+        } else if (colorData.MAX_HUE_VALUE / BIG_DIV <= H && H < colorData.MAX_HUE_VALUE / SMALL_DIV) {
             R = X;
             G = C;
             B = colorData.MIN_RGB_VALUE;
-        } else if (colorData.MAX_HUE_VALUE / smallDiv <= H && H < colorData.MAX_HUE_VALUE / 2) {
+        } else if (colorData.MAX_HUE_VALUE / SMALL_DIV <= H && H < colorData.MAX_HUE_VALUE / 2) {
             R = colorData.MIN_RGB_VALUE;
             G = C;
             B = X;
-        } else if (colorData.MAX_HUE_VALUE / 2 <= H && H < (2 * colorData.MAX_HUE_VALUE) / smallDiv) {
+        } else if (colorData.MAX_HUE_VALUE / 2 <= H && H < (2 * colorData.MAX_HUE_VALUE) / SMALL_DIV) {
             R = colorData.MIN_RGB_VALUE;
             G = X;
             B = C;
-        } else if ((2 * colorData.MAX_HUE_VALUE) / smallDiv <= H && H < (mult * colorData.MAX_HUE_VALUE) / bigDiv) {
+        } else if ((2 * colorData.MAX_HUE_VALUE) / SMALL_DIV <= H && H < (MULT * colorData.MAX_HUE_VALUE) / BIG_DIV) {
             R = X;
             G = colorData.MIN_RGB_VALUE;
             B = C;
-        } else if ((mult * colorData.MAX_HUE_VALUE) / bigDiv <= H && H < colorData.MAX_HUE_VALUE) {
+        } else if ((MULT * colorData.MAX_HUE_VALUE) / BIG_DIV <= H && H < colorData.MAX_HUE_VALUE) {
             R = C;
             G = colorData.MIN_RGB_VALUE;
             B = X;
         }
-        rgb[0] = Math.round((R + m) * colorData.MAX_RGB_VALUE);
-        rgb[1] = Math.round((G + m) * colorData.MAX_RGB_VALUE);
-        rgb[2] = Math.round((B + m) * colorData.MAX_RGB_VALUE);
+        RGB[0] = Math.round((R + M) * colorData.MAX_RGB_VALUE);
+        RGB[1] = Math.round((G + M) * colorData.MAX_RGB_VALUE);
+        RGB[2] = Math.round((B + M) * colorData.MAX_RGB_VALUE);
 
-        return rgb;
+        return RGB;
     }
 
     rgbToHsl(r: number, g: number, b: number): number[] {
         // DONE
         // scale dowon rgb value to a range of [ 0 , 1 ] from [ 0 , 255 ]
-        const primeR: number = r / colorData.MAX_RGB_VALUE;
-        const primeG: number = g / colorData.MAX_RGB_VALUE;
-        const primeB: number = b / colorData.MAX_RGB_VALUE;
+        const PRIME_R: number = r / colorData.MAX_RGB_VALUE;
+        const PRIME_G: number = g / colorData.MAX_RGB_VALUE;
+        const PRIME_B: number = b / colorData.MAX_RGB_VALUE;
 
         // getting min/max and delta value of primes
-        const max: number = Math.max(primeR, primeG, primeB);
-        const min: number = Math.min(primeR, primeG, primeB);
-        const delta: number = max - min;
+        const MAX: number = Math.max(PRIME_R, PRIME_G, PRIME_B);
+        const MIN: number = Math.min(PRIME_R, PRIME_G, PRIME_B);
+        const DELTA: number = MAX - MIN;
 
         let hue: number = colorData.MIN_HUE_VALUE;
         let saturation: number = colorData.MIN_SATURATION_VALUE;
         let lightness: number = colorData.MIN_LIGHTNESS_VALUE;
         // math conversion formula base on max prime
-        const num = 6;
-        const add = 4;
-        if (delta) {
-            switch (max) {
-                case primeR: hue = (colorData.MAX_HUE_VALUE / num) * (((primeG - primeB) / delta) % num);
-                             break;
-                case primeG: hue = (colorData.MAX_HUE_VALUE / num) * ((primeB - primeR) / delta + 2);
-                             break;
-                case primeB: hue = (colorData.MAX_HUE_VALUE / num) * ((primeR - primeG) / delta + add);
-                             break;
+        const NUM = 6;
+        const ADD = 4;
+        if (DELTA) {
+            switch (MAX) {
+                case PRIME_R: hue = (colorData.MAX_HUE_VALUE / NUM) * (((PRIME_G - PRIME_B) / DELTA) % NUM);
+                              break;
+                case PRIME_G: hue = (colorData.MAX_HUE_VALUE / NUM) * ((PRIME_B - PRIME_R) / DELTA + 2);
+                              break;
+                case PRIME_B: hue = (colorData.MAX_HUE_VALUE / NUM) * ((PRIME_R - PRIME_G) / DELTA + ADD);
+                              break;
             }
         }
 
@@ -134,10 +134,10 @@ export class ColorConvertingService {
             hue = colorData.MAX_HUE_VALUE + hue;
         }
 
-        lightness = (max + min) / 2;
+        lightness = (MAX + MIN) / 2;
 
-        if (delta) {
-            saturation = delta / (1 - Math.abs(2 * lightness - 1));
+        if (DELTA) {
+            saturation = DELTA / (1 - Math.abs(2 * lightness - 1));
         }
 
         const hsl: number[] = [];
@@ -159,112 +159,112 @@ export class ColorConvertingService {
     hexToRgba(hex: string): number[] {
         let colorBits: string = hex;
         // check if first char is a # (ascii code number is 35) and remove it
-        const asciiHashTag = 35;
-        const initValue = -1;
-        const rgba: number[] = [initValue, initValue, initValue, initValue];
-        if (hex.charCodeAt(0) === asciiHashTag) {
+        const ASCII_HASH_TAG = 35;
+        const INIT_VALUE = -1;
+        const RGBA: number[] = [INIT_VALUE, INIT_VALUE, INIT_VALUE, INIT_VALUE];
+        if (hex.charCodeAt(0) === ASCII_HASH_TAG) {
             colorBits = hex.substring(1, hex.length);
         }
         // return -1 if length is to big
         if (colorBits.length > colorData.HEX_NUMBER_MAX_LENGTH) {
-            return rgba;
+            return RGBA;
         }
         // if string is impair return -1 to all value
         if (colorBits.length % 2) {
-            return rgba;
+            return RGBA;
         }
 
-        const buffer: number[] = [];
+        const BUFFER: number[] = [];
         for (let i = 0; i < colorBits.length; i++) {
             // Return -1 on rbga if char is invalide
             if (colorBits.charCodeAt(i) >= colorData.ASCII_a) {
-                buffer[i] = colorBits.charCodeAt(i) - (colorData.ASCII_a - colorData.ASCII_A);
+                BUFFER[i] = colorBits.charCodeAt(i) - (colorData.ASCII_a - colorData.ASCII_A);
             } else {
-                buffer[i] = colorBits.charCodeAt(i);
+                BUFFER[i] = colorBits.charCodeAt(i);
             }
-            if (!this.validateHex(buffer[i])) {
-                return rgba;
+            if (!this.validateHex(BUFFER[i])) {
+                return RGBA;
             }
             // hex letter start at 10
-            if (buffer[i] >= colorData.ASCII_A) {
-                buffer[i] -= colorData.ASCII_A - colorData.HEX_NUMBER_LETTER_MIN_VALUE;
+            if (BUFFER[i] >= colorData.ASCII_A) {
+                BUFFER[i] -= colorData.ASCII_A - colorData.HEX_NUMBER_LETTER_MIN_VALUE;
             } else {
-                buffer[i] -= colorData.ASCII_0;
+                BUFFER[i] -= colorData.ASCII_0;
             }
         }
-        const shifter = 4;
-        for (let j = 0; j < buffer.length / 2; j++) {
+        const SHIFTER = 4;
+        for (let j = 0; j < BUFFER.length / 2; j++) {
             // tslint:disable-next-line: no-bitwise
-            rgba[j] = (buffer[j * 2] << shifter) | buffer[j * 2 + 1];
+            RGBA[j] = (BUFFER[j * 2] << SHIFTER) | BUFFER[j * 2 + 1];
         }
         // lenght without # and alpha
-        const num = 3;
-        const reduceHigh = 7;
-        const reduceLow = 5;
-        if (colorBits.length <= colorData.HEX_NUMBER_MAX_LENGTH - num) {
-            rgba[num] = initValue;
+        const NUM = 3;
+        const REDUCE_HIGH = 7;
+        const REDUCE_LOW = 5;
+        if (colorBits.length <= colorData.HEX_NUMBER_MAX_LENGTH - NUM) {
+            RGBA[NUM] = INIT_VALUE;
         } else {
             // opacity for rgba is between [0,1] while for hex it's [0,255]
-            rgba[num] = rgba[num] / colorData.RGBA_TO_HEX_ALPHA_MODIFIER;
+            RGBA[NUM] = RGBA[NUM] / colorData.RGBA_TO_HEX_ALPHA_MODIFIER;
         }
         // length with only 2 colors
-        if (colorBits.length <= colorData.HEX_NUMBER_MAX_LENGTH - reduceLow) {
-            rgba[2] = initValue;
+        if (colorBits.length <= colorData.HEX_NUMBER_MAX_LENGTH - REDUCE_LOW) {
+            RGBA[2] = INIT_VALUE;
         }
         // lenght with only 1 color
-        if (colorBits.length <= colorData.HEX_NUMBER_MAX_LENGTH - reduceHigh) {
-            rgba[1] = initValue;
+        if (colorBits.length <= colorData.HEX_NUMBER_MAX_LENGTH - REDUCE_HIGH) {
+            RGBA[1] = INIT_VALUE;
         }
-        return rgba;
+        return RGBA;
     }
 
     hsvToHex(H: number, S: number, V: number): string {
         let hex = '';
         // tslint:disable-next-line: no-magic-numbers
-        const rgb: number[] = [-1, -1, -1]; // array of bad index
+        const RGB: number[] = [-1, -1, -1]; // array of bad index
 
-        const bigDiv = 6;
+        const BIG_DIV = 6;
         const C: number = S * V;
-        const X: number = C * (1 - Math.abs(((H / (colorData.MAX_HUE_VALUE / bigDiv)) % 2) - 1));
-        const m: number = V - C;
+        const X: number = C * (1 - Math.abs(((H / (colorData.MAX_HUE_VALUE / BIG_DIV)) % 2) - 1));
+        const M: number = V - C;
 
         let R: number = colorData.MIN_RGB_VALUE;
         let G: number = colorData.MIN_RGB_VALUE;
         let B: number = colorData.MIN_RGB_VALUE;
 
         // Math formula for conversion
-        const smallDiv = 3;
-        const mult = 5;
-        if (colorData.MIN_HUE_VALUE <= H && H < colorData.MAX_HUE_VALUE / bigDiv) {
+        const SMALL_DIV = 3;
+        const MULT = 5;
+        if (colorData.MIN_HUE_VALUE <= H && H < colorData.MAX_HUE_VALUE / BIG_DIV) {
             R = C;
             G = X;
             B = colorData.MIN_RGB_VALUE;
-        } else if (colorData.MAX_HUE_VALUE / bigDiv <= H && H < colorData.MAX_HUE_VALUE / smallDiv) {
+        } else if (colorData.MAX_HUE_VALUE / BIG_DIV <= H && H < colorData.MAX_HUE_VALUE / SMALL_DIV) {
             R = X;
             G = C;
             B = colorData.MIN_RGB_VALUE;
-        } else if (colorData.MAX_HUE_VALUE / smallDiv <= H && H < colorData.MAX_HUE_VALUE / 2) {
+        } else if (colorData.MAX_HUE_VALUE / SMALL_DIV <= H && H < colorData.MAX_HUE_VALUE / 2) {
             R = colorData.MIN_RGB_VALUE;
             G = C;
             B = X;
-        } else if (colorData.MAX_HUE_VALUE / 2 <= H && H < (2 * colorData.MAX_HUE_VALUE) / smallDiv) {
+        } else if (colorData.MAX_HUE_VALUE / 2 <= H && H < (2 * colorData.MAX_HUE_VALUE) / SMALL_DIV) {
             R = colorData.MIN_RGB_VALUE;
             G = X;
             B = C;
-        } else if ((2 * colorData.MAX_HUE_VALUE) / smallDiv <= H && H < (mult * colorData.MAX_HUE_VALUE) / bigDiv) {
+        } else if ((2 * colorData.MAX_HUE_VALUE) / SMALL_DIV <= H && H < (MULT * colorData.MAX_HUE_VALUE) / BIG_DIV) {
             R = X;
             G = colorData.MIN_RGB_VALUE;
             B = C;
-        } else if ((mult * colorData.MAX_HUE_VALUE) / bigDiv <= H && H < colorData.MAX_HUE_VALUE) {
+        } else if ((MULT * colorData.MAX_HUE_VALUE) / BIG_DIV <= H && H < colorData.MAX_HUE_VALUE) {
             R = C;
             G = colorData.MIN_RGB_VALUE;
             B = X;
         }
-        rgb[0] = Math.round((R + m) * colorData.MAX_RGB_VALUE);
-        rgb[1] = Math.round((G + m) * colorData.MAX_RGB_VALUE);
-        rgb[2] = Math.round((B + m) * colorData.MAX_RGB_VALUE);
+        RGB[0] = Math.round((R + M) * colorData.MAX_RGB_VALUE);
+        RGB[1] = Math.round((G + M) * colorData.MAX_RGB_VALUE);
+        RGB[2] = Math.round((B + M) * colorData.MAX_RGB_VALUE);
 
-        hex = '#' + this.rgbToHex(rgb[0]) + this.rgbToHex(rgb[1]) + this.rgbToHex(rgb[2]);
+        hex = '#' + this.rgbToHex(RGB[0]) + this.rgbToHex(RGB[1]) + this.rgbToHex(RGB[2]);
         return hex;
     }
 }

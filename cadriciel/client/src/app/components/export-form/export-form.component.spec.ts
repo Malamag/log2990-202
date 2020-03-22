@@ -61,9 +61,9 @@ describe('ExportFormComponent', () => {
     });
 
     it('should build the form on initialisation', () => {
-        const spy = spyOn(component, 'initForm');
+        const SPY = spyOn(component, 'initForm');
         component.ngOnInit();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     /* it('should ask for doodle on initialisation', () => {
@@ -83,54 +83,54 @@ describe('ExportFormComponent', () => {
     });
 
     it('should call the exportation method on submission', () => {
-        const spy = spyOn(component, 'exportation');
+        const SPY = spyOn(component, 'exportation');
         /*const SUB_BTN: HTMLButtonElement = fixture.debugElement.query(By.css('button[type=submit]')).nativeElement;
         SUB_BTN.click();*/
         component.onSubmit();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should close the form after submission', () => {
-        const spy = spyOn(component, 'closeForm');
+        const SPY = spyOn(component, 'closeForm');
         component.exportation = () => 0;
         component.onSubmit();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should disable the export button on invalid inputs', () => {
         // by default, the export type is undefined --> invalid
-        const spy = spyOn(component, 'onSubmit');
+        const SPY = spyOn(component, 'onSubmit');
         const SUB_BTN: HTMLButtonElement = fixture.debugElement.query(By.css('button[type=submit]')).nativeElement;
 
         SUB_BTN.click();
-        expect(spy).not.toHaveBeenCalled();
+        expect(SPY).not.toHaveBeenCalled();
     });
 
     it('should call the canavs exportation method from ExportationService', () => {
-        const spy = spyOn(expService, 'exportInCanvas');
+        const SPY = spyOn(expService, 'exportInCanvas');
         const FAKE_NAME = 'monDessin';
         const FAKE_TYPE = 'png';
         component.exportation(FAKE_NAME, FAKE_TYPE);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should close the window on cancel click', () => {
         const CANCEL_BTN: HTMLButtonElement = fixture.debugElement.query(By.css('#quitButton')).nativeElement;
-        const spy = spyOn(component, 'closeForm');
+        const SPY = spyOn(component, 'closeForm');
         CANCEL_BTN.click();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should close the form on cancel using the window service', () => {
-        const spy = spyOn(winService, 'closeWindow');
+        const SPY = spyOn(winService, 'closeWindow');
         component.closeForm();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('shoud toggle the filter application on click', () => {
         const FILTER_NUM = 1;
-        const spy = spyOn(imgFilterService, 'toggleFilter');
+        const SPY = spyOn(imgFilterService, 'toggleFilter');
         component.applyFilter(FILTER_NUM);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 });

@@ -6,10 +6,10 @@ import { ModalWindowService } from 'src/app/services/window-handler/modal-window
 import { CanvasBuilderService } from '../../services/new-doodle/canvas-builder.service';
 import { colorData } from '../color-picker/color-data';
 
-const OFFSETY = 10;
-const OFFSETX = 25;
-const SVMAXVALUE = 100;
-const CURSORWIDTH = 6;
+const OFFSET_Y = 10;
+const OFFSET_X = 25;
+const SV_MAX_VALUE = 100;
+const CURSOR_WIDTH = 6;
 const DEFAULT_VALUE = 100;
 @Component({
   selector: 'app-new-draw',
@@ -42,10 +42,10 @@ export class NewDrawComponent implements OnInit {
     private winService: ModalWindowService,
     private router: Router,
     private colorConvert: ColorConvertingService) {
-    this.offsetY = OFFSETY;
-    this.offsetX = OFFSETX;
-    this.svMaxValue = SVMAXVALUE;
-    this.hueCursorWidth = CURSORWIDTH;
+    this.offsetY = OFFSET_Y;
+    this.offsetX = OFFSET_X;
+    this.svMaxValue = SV_MAX_VALUE;
+    this.hueCursorWidth = CURSOR_WIDTH;
     this.hue = 0;
     this.saturation = 0;
     this.value = DEFAULT_VALUE;
@@ -92,8 +92,8 @@ export class NewDrawComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const values = this.newDrawForm.value;
-    this.canvasBuilder.setCanvasFromForm(+values.canvWidth, +values.canvHeight, values.canvColor);
+    const VALUES = this.newDrawForm.value;
+    this.canvasBuilder.setCanvasFromForm(+VALUES.canvWidth, +VALUES.canvHeight, VALUES.canvColor);
     this.canvasBuilder.emitCanvas();
     this.closeModalForm();
     this.router.navigate(['/vue']);

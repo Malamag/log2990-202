@@ -33,15 +33,15 @@ describe('PreviewBoxComponent', () => {
     });
 
     it('should scale the svg on initialisation', () => {
-        const spy = spyOn(component, 'scaleSVG');
+        const SPY = spyOn(component, 'scaleSVG');
         component.ngOnInit();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should initialize the preview box after getting a reference to the svg', () => {
-        const spy = spyOn(component.render, 'appendChild');
+        const SPY = spyOn(component.render, 'appendChild');
         component.ngAfterViewInit();
-        expect(spy).toHaveBeenCalledWith(component.previewBoxRef.nativeElement, component.draw);
+        expect(SPY).toHaveBeenCalledWith(component.previewBoxRef.nativeElement, component.draw);
     });
 
     it('should scale down the height according to the users screen size', () => {

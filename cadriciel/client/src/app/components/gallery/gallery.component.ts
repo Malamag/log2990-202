@@ -196,8 +196,8 @@ export class GalleryComponent implements AfterViewInit {
     }
 
     filter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-        return this.possibleTags.filter((tag: string) => tag.toLowerCase().indexOf(filterValue) === 0);
+        const FILTER_VALUE = value.toLowerCase();
+        return this.possibleTags.filter((tag: string) => tag.toLowerCase().indexOf(FILTER_VALUE) === 0);
     }
 
     continueDrawing(data: SVGData): void {
@@ -208,24 +208,24 @@ export class GalleryComponent implements AfterViewInit {
     }
     // The setAttributes below might be useless, as the subscription in SvgDrawComponent already set all the attributes
     createSVG(data: SVGData): Element {
-        const svg = this.render.createElement('svg', 'http://www.w3.org/2000/svg');
-        this.render.setAttribute(svg, 'width', data.width);
-        this.render.setAttribute(svg, 'height', data.height);
-        const rect = this.render.createElement('rect', 'svg');
+        const SVG = this.render.createElement('svg', 'http://www.w3.org/2000/svg');
+        this.render.setAttribute(SVG, 'width', data.width);
+        this.render.setAttribute(SVG, 'height', data.height);
+        const RECT = this.render.createElement('rect', 'svg');
         if (data.bgColor.charAt(0) !== '#') {
             data.bgColor = '#' + data.bgColor;
         }
-        this.render.setAttribute(rect, 'fill', data.bgColor);
-        this.render.setAttribute(rect, 'height', '100%');
-        this.render.setAttribute(rect, 'width', '100%');
-        this.render.appendChild(svg, rect);
+        this.render.setAttribute(RECT, 'fill', data.bgColor);
+        this.render.setAttribute(RECT, 'height', '100%');
+        this.render.setAttribute(RECT, 'width', '100%');
+        this.render.appendChild(SVG, RECT);
         data.innerHTML.forEach((str) => {
-            const tag = this.render.createElement('g', 'http://www.w3.org/2000/svg');
-            if (tag !== undefined) {
-                tag.innerHTML = str;
-                this.render.appendChild(svg, tag);
+            const TAG = this.render.createElement('g', 'http://www.w3.org/2000/svg');
+            if (TAG !== undefined) {
+                TAG.innerHTML = str;
+                this.render.appendChild(SVG, TAG);
             }
         });
-        return svg;
+        return SVG;
     }
 }
