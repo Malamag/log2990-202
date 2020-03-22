@@ -97,7 +97,7 @@ export class DatabaseService {
                 isFound = tag === myTag.substring(startPos, j);
                 startPos++;
                 if (isFound) {
-                    break;
+                    return isFound;
                 }
             }
         }
