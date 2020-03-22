@@ -80,19 +80,12 @@ describe('PolygonService', () => {
     });
 
     it('should create a valid rectangle svg from one point to another', () => {
-        const firstPoint = new Point(0, 0);
-        const num = 10;
-        const secondPoint = new Point(num, num);
-        const pointsContainer = [firstPoint, secondPoint];
-        const rect = service.createPath(pointsContainer, false);
+        const rect = service.createPath(ptArr, false);
         expect(rect).toContain('<rect');
     });
 
     it('should create a valid polygon svg from one point to another', () => {
-        const first = new Point(0, 0);
-        const num = 10;
-        const second = new Point(num, num);
-        const polygon = service.createPath([first, second], false);
+        const polygon = service.createPath(ptArr, false);
         expect(polygon).toContain('<polygon');
     });
 
@@ -120,16 +113,15 @@ describe('PolygonService', () => {
         service.attr.lineThickness = thick; // simulated border thickness
         const polygon = service.createPath(ptArr, false);
         const expTick = `stroke-width="${thick}"`;
+
         expect(polygon).toContain(expTick);
     });
 
     it('should create a polygon filled with the selected color', () => {
         const color = '#ffffff';
         service.chosenColor = { primColor: color, secColor: color, backColor: color }; // both prim. and sec.
-        const first = new Point(0, 0);
-        const num = 10;
-        const second = new Point(num, num);
-        const polygon = service.createPath([first, second], false);
+        const polygon = service.createPath(ptArr, false);
+
         expect(polygon).toContain(`fill="${color}"`);
     });
 
@@ -137,12 +129,8 @@ describe('PolygonService', () => {
         const prim = '#000000';
         const sec = '#ffffff';
         const back = '#ffffff';
-        const firstPoint = new Point(0, 0);
-        const num = 10;
-        const secondPoint = new Point(num, num);
-        const pointsContainer = [firstPoint, secondPoint];
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-        const polygon = service.createPath(pointsContainer, false);
+        const polygon = service.createPath(ptArr, false);
 
         expect(polygon).toContain(`stroke="${sec}"`);
     });
@@ -153,13 +141,9 @@ describe('PolygonService', () => {
         const sec = '#ffffff';
         const back = '#ffffff';
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-        const first = new Point(0, 0);
-        const num = 10;
-        const second = new Point(num, num);
-        const polygon = service.createPath([first, second], false);
+        const polygon = service.createPath(ptArr, false);
 
         expect(polygon).toContain(`fill="${'none'}"`); // no color for fill
-
         expect(polygon).toContain(`stroke="${sec}"`); // secondary color for border fill
     });
 
@@ -173,7 +157,6 @@ describe('PolygonService', () => {
         const polygon = service.createPath(ptArr, false);
 
         expect(polygon).toContain(`fill="${prim}"`); // primary color fill
-
         expect(polygon).toContain(`stroke="${'none'}"`);
     });
 
@@ -183,30 +166,33 @@ describe('PolygonService', () => {
         const sec = '#ffffff';
         const back = '#ffffff';
         service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-        const first = new Point(0, 0);
-        const num = 10;
-        const second = new Point(num, num);
-        const polygon = service.createPath([first, second], false);
+        const polygon = service.createPath(ptArr, false);
 
         expect(polygon).toContain(`fill="${prim}"`); // no color for fill
-
         expect(polygon).toContain(`stroke="${sec}"`); // secondary color for border fill
     });
 
     it('should not create an polygon if the mouse didnt move', () => {
-        const newArr = [new Point(0, 0), new Point(0, 0)]; // no move
-
+        const newArr = [ptA, ptA]; // no movement
         const polygon = service.createPath(newArr, false);
+        expect(polygon).toEqual('');
+    });
 
-        expect(polygon).toBe('');
+    it('should be not create a polygon if the path has less than 2 points', () => {
+        const path = service.createPath([ptA], false);
+        expect(path).toEqual('');
     });
 
     it('should be named polygon', () => {
-        const firstP = new Point(0, 0);
-        const num = 10;
-        const secondP = new Point(num, num);
-        const path = service.createPath([firstP, secondP], false);
+        const path = service.createPath(ptArr, false);
         const name = 'polygon';
         expect(path).toContain(name);
     });
+
+    it('should align all points inside the perimeter if a point is smaller than ', () => {
+        const path = service.createPath(ptArr, false);
+        const name = 'polygon';
+        expect(path).toContain(name);
+    });
+
 });

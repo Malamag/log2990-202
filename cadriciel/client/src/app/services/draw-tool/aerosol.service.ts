@@ -67,6 +67,15 @@ export class AerosolService extends DrawingTool {
         });
     }
 
+    // cancel the current progress
+  cancel(): void {
+
+    super.cancel();
+
+    // Reinitialize insideCanvas
+    this.insideCanvas = true;
+  }
+
     // click with aerosol in hand
     down(position: Point): void {
         // in case we changed tool while the mouse was down
@@ -75,6 +84,8 @@ export class AerosolService extends DrawingTool {
         // the aerosol should affect the canvas
         this.isDown = true;
 
+        // We need to positions for making a line with the invisible path
+        this.currentPath.push(position);
         this.currentPath.push(position);
 
         // Subscribe to an interval of updates
@@ -90,19 +101,19 @@ export class AerosolService extends DrawingTool {
     // unclick with aerosol in hand
     up(position: Point): void {
         // in case we changed tool while the mouse was down
-        if (!this.ignoreNextUp) {
-            // the pencil should not affect the canvas
-            this.isDown = false;
-
-            // no path is created while outside the canvas
-            if (this.insideCanvas) {
-                // add everything to the canvas
-                this.updateDrawing();
-                this.sub.unsubscribe();
-            }
-        } else {
-            this.ignoreNextUp = false;
+        if (this.ignoreNextUp) {
+            return;
         }
+        // the pencil should not affect the canvas
+        this.isDown = false;
+
+        // no path is created while outside the canvas
+        if (this.insideCanvas) {
+            // add everything to the canvas
+            this.updateDrawing();
+            this.sub.unsubscribe();
+        }
+
     }
 
     // mouse move with aerosol in hand
