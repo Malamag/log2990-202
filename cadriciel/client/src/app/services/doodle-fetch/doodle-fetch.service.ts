@@ -1,6 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { SVGData } from '../../../svg-data';
+import { SVGData } from '../../../../../svg-data';
 import { GridRenderService } from '../grid/grid-render.service';
 
 @Injectable({

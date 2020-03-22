@@ -5,7 +5,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { IndexService } from 'src/app/services/index/index.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
-import { ImageData } from '../../image-data';
+import { ImageData } from '../../../../../image-data';
 
 const LABELS_NUMBER_CAP = 20;
 
