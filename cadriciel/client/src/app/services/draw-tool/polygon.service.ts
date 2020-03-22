@@ -159,7 +159,6 @@ export class PolygonService extends ShapeService {
             for (const corner of this.corners) {
                 corner.x -= SUBSTACTION_X;
             }
-            this.leftPoint -= SUBSTACTION_X;
         }
         // If the the right point value is greater than the initial point where the mouse was down,
         // Adjust the position of all the polygon's points
@@ -168,7 +167,6 @@ export class PolygonService extends ShapeService {
             for (const corner of this.corners) {
                 corner.x += ADDITION_X;
             }
-            this.rightPoint += ADDITION_X;
         }
     }
 }
