@@ -14,6 +14,7 @@ const DEFAULT_DIAMETER = 50;
 @Injectable({
     providedIn: 'root',
 })
+
 export class AerosolService extends DrawingTool {
 
     private attr: AerosolAttributes;
@@ -218,9 +219,9 @@ export class AerosolService extends DrawingTool {
             // Push four points with same radius and changing the angle a little.
             // Seems almost as random, but has less operations to do
             for (let i = 1; i < PT_NUM && this.isDown; i++) {
-                const x = this.lastPoint.x + RADIUS * Math.cos(ANGLE * i);
-                const y = this.lastPoint.y + RADIUS * Math.sin(ANGLE * i);
-                this.points.push(new Point(x, y));
+                const X = this.lastPoint.x + RADIUS * Math.cos(ANGLE * i);
+                const Y = this.lastPoint.y + RADIUS * Math.sin(ANGLE * i);
+                this.points.push(new Point(X, Y));
             }
         }
     }

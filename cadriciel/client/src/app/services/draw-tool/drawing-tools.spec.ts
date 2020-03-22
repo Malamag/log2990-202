@@ -20,21 +20,21 @@ describe('drawingTools', () => {
     });
 
     it('should be created', () => {
-        const testService: DrawingTool = TestBed.get(DrawingTool);
-        expect(testService).toBeTruthy();
+        const TEST_SERVICE: DrawingTool = TestBed.get(DrawingTool);
+        expect(TEST_SERVICE).toBeTruthy();
     });
 
     it('should call a subscription to the choosen colors and emit it', () => {
-        const spy = spyOn(service.colorPick.colorSubject, 'subscribe');
-        const emitSpy = spyOn(service.colorPick, 'emitColors');
+        const SUB_SPY = spyOn(service.colorPick.colorSubject, 'subscribe');
+        const EMIT_SPY = spyOn(service.colorPick, 'emitColors');
         const PRIM = '#ffffff';
         const SEC = '#000000';
         const back = '#ffffff';
         service.colorPick.colors = { primColor: PRIM, secColor: SEC, backColor: back };
 
         service.updateColors();
-        expect(spy).toHaveBeenCalled();
-        expect(emitSpy).toHaveBeenCalled();
+        expect(SUB_SPY).toHaveBeenCalled();
+        expect(EMIT_SPY).toHaveBeenCalled();
     });
 
     it('should set the colors properly after subscription', () => {
@@ -67,8 +67,8 @@ describe('drawingTools', () => {
         service.createPath = () => 'test'; // stub fn
         service.updateProgress();
         const EMPTY = '';
-        const inner: string = service.inProgress.innerHTML;
-        expect(inner).not.toBe(EMPTY);
+        const INNER: string = service.inProgress.innerHTML;
+        expect(INNER).not.toBe(EMPTY);
     });
 
     it('should add the progress to the main drawing and refresh the current progress', () => {
@@ -87,18 +87,18 @@ describe('drawingTools', () => {
     it('should update the drawing if the mouse is going outside canvas', () => {
         service.isDown = true;
         service.createPath = () => 'test';
-        const spy = spyOn(service, 'updateDrawing');
+        const SPY = spyOn(service, 'updateDrawing');
         service.goingOutsideCanvas(new Point(0, 0)); // random point
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should continue drawing when mouse goes back in canvas', () => {
         service.isDown = true; // tool selected and in use
         service.down = () => 0; // defining a function for test purpose
         service.createPath = () => 'test';
-        const spy = spyOn(service, 'down');
+        const SPY = spyOn(service, 'down');
         const PT = new Point(0, 0); // a point in our canvas, arbitrary
         service.goingInsideCanvas(PT);
-        expect(spy).toHaveBeenCalledWith(PT);
+        expect(SPY).toHaveBeenCalledWith(PT);
     });
 });

@@ -42,56 +42,56 @@ describe('SelectionService', () => {
         expect(service).toBeTruthy();
     });
     it('should select all the items', () => {
-        const kbStub = new KeyboardHandlerService();
-        const spyRect = spyOn(service, 'updateBoundingBox');
-        kbStub.keyCode = 65;
-        kbStub.ctrlDown = true;
-        service.updateDown(kbStub);
+        const KB_STUB = new KeyboardHandlerService();
+        const SPY_RECT = spyOn(service, 'updateBoundingBox');
+        KB_STUB.keyCode = 65;
+        KB_STUB.ctrlDown = true;
+        service.updateDown(KB_STUB);
         expect(service.selectedItems[0]).toBeTruthy();
-        expect(spyRect).toHaveBeenCalled();
+        expect(SPY_RECT).toHaveBeenCalled();
     });
     it('should move wirh the arrows to the left direction', () => {
-        const spyMove = spyOn(service, 'moveWithArrowOnce');
-        const kbStub = new KeyboardHandlerService();
-        kbStub.keyCode = 37;
-        service.updateDown(kbStub);
-        expect(spyMove).toHaveBeenCalled();
+        const SPY_MOVE = spyOn(service, 'moveWithArrowOnce');
+        const KB_STUB = new KeyboardHandlerService();
+        KB_STUB.keyCode = 37;
+        service.updateDown(KB_STUB);
+        expect(SPY_MOVE).toHaveBeenCalled();
         expect(service.arrows[0]).toBeTruthy();
     });
 
     it('should move wirh the arrows to the up direction', () => {
-        const spyMove = spyOn(service, 'moveWithArrowOnce');
-        const kbStub = new KeyboardHandlerService();
-        kbStub.keyCode = 38;
-        service.updateDown(kbStub);
-        expect(spyMove).toHaveBeenCalled();
+        const SPY_MOVE = spyOn(service, 'moveWithArrowOnce');
+        const KB_STUB = new KeyboardHandlerService();
+        KB_STUB.keyCode = 38;
+        service.updateDown(KB_STUB);
+        expect(SPY_MOVE).toHaveBeenCalled();
         expect(service.arrows[1]).toBeTruthy();
     });
 
     it('should move with the arrows to right direction', () => {
-        const spyMove = spyOn(service, 'moveWithArrowOnce');
-        const kbStub = new KeyboardHandlerService();
-        kbStub.keyCode = 39;
-        service.updateDown(kbStub);
-        expect(spyMove).toHaveBeenCalled();
+        const SPY_MOVE = spyOn(service, 'moveWithArrowOnce');
+        const KB_STUB = new KeyboardHandlerService();
+        KB_STUB.keyCode = 39;
+        service.updateDown(KB_STUB);
+        expect(SPY_MOVE).toHaveBeenCalled();
         expect(service.arrows[2]).toBeTruthy();
     });
     it('should move with the arrows to the down direction', () => {
-        const spyMoveOnce = spyOn(service, 'moveWithArrowOnce');
-        const kbStub = new KeyboardHandlerService();
-        kbStub.keyCode = 40;
-        service.updateDown(kbStub);
-        expect(spyMoveOnce).toHaveBeenCalled();
+        const SPY_MOVE_ONCE = spyOn(service, 'moveWithArrowOnce');
+        const KB_STUB = new KeyboardHandlerService();
+        KB_STUB.keyCode = 40;
+        service.updateDown(KB_STUB);
+        expect(SPY_MOVE_ONCE).toHaveBeenCalled();
         expect(service.arrows[3]).toBeTruthy();
     });
     it('should move the selection with one arrow to the left ', () => {
-        const spyMove = spyOn(service, 'moveSelection');
-        const spyRect = spyOn(service, 'updateBoundingBox');
+        const SPY_MOVE = spyOn(service, 'moveSelection');
+        const SPY_RECT = spyOn(service, 'updateBoundingBox');
         service.selectedItems = [true, true];
         service.moveWithArrowOnce(true, false, false, false);
         expect(service.movedSelectionWithArrowsOnce).toBeTruthy();
-        expect(spyMove).toHaveBeenCalled();
-        expect(spyRect).toHaveBeenCalled();
+        expect(SPY_MOVE).toHaveBeenCalled();
+        expect(SPY_RECT).toHaveBeenCalled();
         expect(service.singleUseArrows[0]).toBeTruthy();
     });
 
@@ -111,34 +111,34 @@ describe('SelectionService', () => {
     it('should move the selection to the left and to the up direction', () => {
         service.arrows[0] = true;
         service.arrows[1] = true;
-        const spyMove = spyOn(service, 'moveSelection');
-        const spyRect = spyOn(service, 'updateBoundingBox');
+        const SPY_MOVE = spyOn(service, 'moveSelection');
+        const SPY_RECT = spyOn(service, 'updateBoundingBox');
         service.selectedItems = [true, true];
         service.moveWithArrowsLoop();
         expect(service.existingLoop).toBeTruthy();
-        expect(spyMove).toHaveBeenCalled();
-        expect(spyRect).toHaveBeenCalled();
+        expect(SPY_MOVE).toHaveBeenCalled();
+        expect(SPY_RECT).toHaveBeenCalled();
         expect(service.movedSelectionWithArrowsOnce).toBeTruthy();
     });
     it('should move the selection to the right and to the down direction', () => {
         service.arrows[2] = true;
         service.arrows[3] = true;
         service.selectedItems = [true, true];
-        const spyMove = spyOn(service, 'moveSelection');
-        const spyRect = spyOn(service, 'updateBoundingBox');
+        const SPY_MOVE = spyOn(service, 'moveSelection');
+        const SPY_RECT = spyOn(service, 'updateBoundingBox');
         service.moveWithArrowsLoop();
         expect(service.existingLoop).toBeTruthy();
-        expect(spyMove).toHaveBeenCalled();
-        expect(spyRect).toHaveBeenCalled();
+        expect(SPY_MOVE).toHaveBeenCalled();
+        expect(SPY_RECT).toHaveBeenCalled();
         expect(service.movedSelectionWithArrowsOnce).toBeTruthy();
     });
     it('should emit the drawing when the key is up', () => {
         service.arrows[0] = true;
         service.movedSelectionWithArrowsOnce = true;
-        const spyEmit = spyOn(service.interaction, 'emitDrawingDone');
+        const SPY_EMIT = spyOn(service.interaction, 'emitDrawingDone');
         service.updateUp(37);
         expect(service.movedSelectionWithArrowsOnce).toBeFalsy();
-        expect(spyEmit).toHaveBeenCalled();
+        expect(SPY_EMIT).toHaveBeenCalled();
         expect(service.canMoveSelection).toBeFalsy();
         expect(service.arrows[0]).toBeFalsy();
     });
@@ -153,11 +153,11 @@ describe('SelectionService', () => {
     it(' should not call the emit drawing method', () => {
         service.arrows[2] = true;
         service.arrows[3] = true;
-        const spyEmit = spyOn(service.interaction, 'emitDrawingDone');
+        const SPY_EMIT = spyOn(service.interaction, 'emitDrawingDone');
         service.updateUp(39);
         expect(service.arrows[2]).toBeFalsy();
         expect(service.canMoveSelection).toBeTruthy();
-        expect(spyEmit).toHaveBeenCalledTimes(0);
+        expect(SPY_EMIT).toHaveBeenCalledTimes(0);
     });
     it(' should reset the arrow timer', () => {
         service.arrows[3] = true;
@@ -172,39 +172,39 @@ describe('SelectionService', () => {
     it(' should include the points to the current path twice and set some attributes', () => {
         const POINT = new Point(0, 0);
         const RIGHTCLICK = true;
-        const insideWorkingSpace = false;
-        const pushSpy = spyOn(service.currentPath, 'push');
-        const updateSpy = spyOn(service, 'updateProgress');
+        const INSIDE_WORKING_SPACE = false;
+        const PUSH_SPY = spyOn(service.currentPath, 'push');
+        const UPDATE_SPY = spyOn(service, 'updateProgress');
         service.selectedItems = [true, true];
-        service.down(POINT, insideWorkingSpace, RIGHTCLICK);
+        service.down(POINT, INSIDE_WORKING_SPACE, RIGHTCLICK);
         for (let i = 0; i < service.selectedItems.length; ++i) {
             expect(service.invertedItems[i]).toBeFalsy();
         }
         expect(service.ignoreNextUp).toBeFalsy();
         expect(service.isDown).toBeTruthy();
         expect(service.inverted).toBeTruthy();
-        expect(pushSpy).toHaveBeenCalledTimes(2);
-        expect(updateSpy).toHaveBeenCalled();
+        expect(PUSH_SPY).toHaveBeenCalledTimes(2);
+        expect(UPDATE_SPY).toHaveBeenCalled();
         expect(service.movingSelection).toBeFalsy();
     });
 
     it('should empty the selected array and set some attributes', () => {
         service.itemUnderMouse = 3;
         service.selectedItems[3] = false;
-        const rightClick = false;
+        const RIGHT_CLICK = false;
         const POINT = new Point(0, 0);
-        const insideWorkingSpace = false;
-        service.down(POINT, insideWorkingSpace, rightClick);
+        const INSIDE_WORKING_SPACE = false;
+        service.down(POINT, INSIDE_WORKING_SPACE, RIGHT_CLICK);
         expect(service.selectedItems[3]).toBeTruthy();
         expect(service.movingSelection).toBeTruthy();
     });
     it('isDown atrribuute should be truthy and not call functions', () => {
         service.ignoreNextUp = true;
         service.isDown = true;
-        const updateSpy = spyOn(service, 'updateBoundingBox');
+        const UPDATE_SPY = spyOn(service, 'updateBoundingBox');
         service.up(new Point(0, 0));
         expect(service.isDown).toBeTruthy();
-        expect(updateSpy).toHaveBeenCalledTimes(0);
+        expect(UPDATE_SPY).toHaveBeenCalledTimes(0);
     });
     it('should set some attributes and emit the drawing', () => {
         service.currentPath[0] = new Point(0, 0);
@@ -215,13 +215,13 @@ describe('SelectionService', () => {
         service.movingSelection = true;
         service.movedSelectionOnce = true;
         service.itemUnderMouse = 3;
-        const emitSpy = spyOn(service.interaction, 'emitDrawingDone');
+        const EMIT_SPY = spyOn(service.interaction, 'emitDrawingDone');
         service.up(new Point(0, 0));
         expect(service.isDown).toBeFalsy();
         for (let i = 0; i < service.selectedItems.length; ++i) {
             expect(service.invertedItems[i]).toBeFalsy();
         }
-        expect(emitSpy).toHaveBeenCalled();
+        expect(EMIT_SPY).toHaveBeenCalled();
         expect(service.itemUnderMouse).toBeNull();
         expect(service.currentPath.length).toEqual(0);
         expect(service.selectedItems[3]).toBeTruthy();

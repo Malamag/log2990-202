@@ -6,11 +6,13 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
-const DEFAULTLINETHICKNESS = 5;
-const DEFAULTTEXTURE = 0;
+const DEFAULT_LINE_THICKNESS = 5;
+const DEFAULT_TEXTURE = 0;
+
 @Injectable({
     providedIn: 'root',
 })
+
 export class ColorEditorService extends DrawingTool {
     render: Renderer2;
     attr: ToolsAttributes;
@@ -34,7 +36,7 @@ export class ColorEditorService extends DrawingTool {
         canvas: HTMLElement,
     ) {
         super(inProgess, drawing, selected, interaction, colorPick);
-        this.attr = { lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE };
+        this.attr = { lineThickness: DEFAULT_LINE_THICKNESS, texture: DEFAULT_TEXTURE };
         this.updateColors();
         this.updateAttributes();
 
@@ -52,40 +54,40 @@ export class ColorEditorService extends DrawingTool {
 
         window.addEventListener('newDrawing', (e: Event) => {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
-                const el = this.drawing.children[i];
-                const status = el.getAttribute('isListening3');
-                this.render.setAttribute(el, 'checkPreciseEdge2', 'true');
-                if (status !== 'true') {
-                    this.render.setAttribute(el, 'isListening3', 'true');
-                    this.render.listen(el, 'mousemove', () => {
+                const EL = this.drawing.children[i];
+                const STATUS = EL.getAttribute('isListening3');
+                this.render.setAttribute(EL, 'checkPreciseEdge2', 'true');
+                if (STATUS !== 'true') {
+                    this.render.setAttribute(EL, 'isListening3', 'true');
+                    this.render.listen(EL, 'mousemove', () => {
                         // console.log("enter");
                         if (!this.foundAnItem) {
                             // this.highlight(el);
-                            this.render.setAttribute(el, 'checkPreciseEdge2', 'false');
+                            this.render.setAttribute(EL, 'checkPreciseEdge2', 'false');
                             this.foundAnItem = true;
                             if (this.isDown) {
-                                this.changeColor(el);
+                                this.changeColor(EL);
                                 this.foundAnItem = false;
                             }
                         }
                     });
-                    this.render.listen(el, 'mouseleave', () => {
+                    this.render.listen(EL, 'mouseleave', () => {
                         // console.log("leaving");
                         if (this.foundAnItem) {
                             // this.unhighlight(el);
                             this.foundAnItem = false;
-                            this.render.setAttribute(el, 'checkPreciseEdge2', 'true');
+                            this.render.setAttribute(EL, 'checkPreciseEdge2', 'true');
                         }
                     });
-                    this.render.listen(el, 'mousedown', () => {
-                        this.changeColor(el);
+                    this.render.listen(EL, 'mousedown', () => {
+                        this.changeColor(EL);
                         this.foundAnItem = false;
-                        this.render.setAttribute(el, 'checkPreciseEdge2', 'true');
+                        this.render.setAttribute(EL, 'checkPreciseEdge2', 'true');
                     });
-                    this.render.listen(el, 'mouseup', () => {
+                    this.render.listen(EL, 'mouseup', () => {
                         if (!this.foundAnItem) {
                             // this.highlight(el);
-                            this.render.setAttribute(el, 'checkPreciseEdge2', 'false');
+                            this.render.setAttribute(EL, 'checkPreciseEdge2', 'false');
                             this.foundAnItem = false;
                         }
                     });
@@ -155,27 +157,27 @@ export class ColorEditorService extends DrawingTool {
     changeColor(el: Element): void {
         if (this.selected) {
             for (let i = 0; i < el.childElementCount; i++) {
-                const current = el.children[i];
-                if (current.tagName === 'filter') {
+                const CURRENT = el.children[i];
+                if (CURRENT.tagName === 'filter') {
                     continue;
                 }
                 if (this.isRightClick) {
-                    this.changeBorder(current as HTMLElement);
+                    this.changeBorder(CURRENT as HTMLElement);
                 } else {
-                    this.changeFill(current as HTMLElement);
+                    this.changeFill(CURRENT as HTMLElement);
                 }
             }
         }
     }
 
     changeBorder(el: HTMLElement): void {
-        const newColor = el.getAttribute('stroke') !== 'none' ? this.chosenColor.secColor : '';
-        this.render.setAttribute(el, 'stroke', newColor);
+        const NEW_COLOR = el.getAttribute('stroke') !== 'none' ? this.chosenColor.secColor : '';
+        this.render.setAttribute(el, 'stroke', NEW_COLOR);
     }
 
     changeFill(el: HTMLElement): void {
-        const newColor = el.getAttribute('fill') !== 'none' ? this.chosenColor.primColor : '';
-        this.render.setAttribute(el, 'fill', newColor);
+        const NEW_COLOR = el.getAttribute('fill') !== 'none' ? this.chosenColor.primColor : '';
+        this.render.setAttribute(el, 'fill', NEW_COLOR);
     }
 
     // mouse move with pencil in hand
@@ -209,21 +211,21 @@ export class ColorEditorService extends DrawingTool {
     }
 
     checkIfTouching(): void {
-        const canv = this.canvas;
-        const canvasBox = canv ? canv.getBoundingClientRect() : null;
-        const canvOffsetX = canvasBox ? canvasBox.left : 0;
-        const canvOffsetY = canvasBox ? canvasBox.top : 0;
+        const CANV = this.canvas;
+        const CANVAS_BOX = CANV ? CANV.getBoundingClientRect() : null;
+        const CANV_OFFSET_X = CANVAS_BOX ? CANVAS_BOX.left : 0;
+        const CANV_OFFSET_Y = CANVAS_BOX ? CANVAS_BOX.top : 0;
 
         // console.log(`${canvOffsetX}, ${canvOffsetY}`);
         const OFFSET = 10;
 
-        const w = Math.max(OFFSET, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
-        const h = Math.max(OFFSET, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
+        const W = Math.max(OFFSET, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
+        const H = Math.max(OFFSET, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
 
-        const dim = Math.max(w, h);
+        const DIM = Math.max(W, H);
 
-        const tl = new Point(this.currentPath[this.currentPath.length - 1].x - dim / 2, this.currentPath[this.currentPath.length - 1].y - dim / 2);
-        const br = new Point(tl.x + dim, tl.y + dim);
+        const TL = new Point(this.currentPath[this.currentPath.length - 1].x - DIM / 2, this.currentPath[this.currentPath.length - 1].y - DIM / 2);
+        const BR = new Point(TL.x + DIM, TL.y + DIM);
 
         for (let i = 0; i < this.drawing.childElementCount; i++) {
             let touching = false;
@@ -231,10 +233,10 @@ export class ColorEditorService extends DrawingTool {
 
             // item bounding box
             const itemBox = firstChild.getBoundingClientRect();
-            const itemTopLeft: Point = new Point(itemBox.left - canvOffsetX, itemBox.top - canvOffsetY);
-            const itemBottomRight: Point = new Point(itemBox.right - canvOffsetX, itemBox.bottom - canvOffsetY);
+            const itemTopLeft: Point = new Point(itemBox.left - CANV_OFFSET_X, itemBox.top - CANV_OFFSET_Y);
+            const itemBottomRight: Point = new Point(itemBox.right - CANV_OFFSET_X, itemBox.bottom - CANV_OFFSET_Y);
 
-            if (!Point.rectOverlap(tl, br, itemTopLeft, itemBottomRight)) {
+            if (!Point.rectOverlap(TL, BR, itemTopLeft, itemBottomRight)) {
                 // this.unhighlight(firstChild);
                 continue;
             }
@@ -243,10 +245,10 @@ export class ColorEditorService extends DrawingTool {
                 continue;
             }
 
-            const objOffset = (this.drawing.children[i] as HTMLElement).style.transform;
-            const s = objOffset ? objOffset.split(',') : '';
-            const objOffsetX = +s[0].replace(/[^\d.-]/g, '');
-            const objOffsetY = +s[1].replace(/[^\d.-]/g, '');
+            const OBJ_OFFSET = (this.drawing.children[i] as HTMLElement).style.transform;
+            const S = OBJ_OFFSET ? OBJ_OFFSET.split(',') : '';
+            const OBJ_OFFSET_X = +S[0].replace(/[^\d.-]/g, '');
+            const OBJ_OFFSET_Y = +S[1].replace(/[^\d.-]/g, '');
 
             for (let j = 0; j < firstChild.childElementCount; j++) {
                 const secondChild = firstChild.children[j];
@@ -257,34 +259,34 @@ export class ColorEditorService extends DrawingTool {
                     offset = +width;
                 }
 
-                const dim2 = 3 + offset;
+                const DIM2 = 3 + offset;
 
                 if (secondChild.classList.contains('clone') || secondChild.tagName === 'filter') {
                     continue;
                 }
 
-                const path = secondChild as SVGPathElement;
-                const lenght = path.getTotalLength();
-                const inc = lenght / 300;
+                const PATH = secondChild as SVGPathElement;
+                const LENGTH = PATH.getTotalLength();
+                const INC = LENGTH / 300;
 
                 const BAD_COORD = -1;
                 const MAX = 10000;
-                const closest: [Point, number] = [new Point(BAD_COORD, BAD_COORD), MAX];
-                for (let a = 0; a < lenght; a += inc) {
-                    const candidate = new Point(path.getPointAtLength(a).x + objOffsetX, path.getPointAtLength(a).y + objOffsetY);
-                    const dist = Point.distance(this.currentPath[this.currentPath.length - 1], candidate);
-                    if (dist < closest[1]) {
-                        closest[0] = candidate;
-                        closest[1] = dist;
+                const CLOSEST: [Point, number] = [new Point(BAD_COORD, BAD_COORD), MAX];
+                for (let a = 0; a < LENGTH; a += INC) {
+                    const CANDIDATE = new Point(PATH.getPointAtLength(a).x + OBJ_OFFSET_X, PATH.getPointAtLength(a).y + OBJ_OFFSET_Y);
+                    const DIST = Point.distance(this.currentPath[this.currentPath.length - 1], CANDIDATE);
+                    if (DIST < CLOSEST[1]) {
+                        CLOSEST[0] = CANDIDATE;
+                        CLOSEST[1] = DIST;
                     }
                 }
 
                 if (true) {
-                    const good = closest[0];
+                    const GOOD = CLOSEST[0];
                     // console.log(good);
-                    const tlp = new Point(good.x - dim2 / 2, good.y - dim2 / 2);
-                    const brp = new Point(good.x + dim2 / 2, good.y + dim2 / 2);
-                    if (Point.rectOverlap(tlp, brp, tl, br)) {
+                    const TLP = new Point(GOOD.x - DIM2 / 2, GOOD.y - DIM2 / 2);
+                    const BRP = new Point(GOOD.x + DIM2 / 2, GOOD.y + DIM2 / 2);
+                    if (Point.rectOverlap(TLP, BRP, TL, BR)) {
                         touching = true;
                         break;
                     }
@@ -330,13 +332,13 @@ export class ColorEditorService extends DrawingTool {
         // create a divider
         s = '<g style="transform: translate(0px, 0px);" name = "eraser-brush">';
 
-        const w = Math.max(OFFSET, Math.abs(p[p.length - 1].x - p[0].x));
-        const h = Math.max(OFFSET, Math.abs(p[p.length - 1].y - p[0].y));
+        const W = Math.max(OFFSET, Math.abs(p[p.length - 1].x - p[0].x));
+        const H = Math.max(OFFSET, Math.abs(p[p.length - 1].y - p[0].y));
 
-        const dim = Math.max(w, h);
+        const DIM = Math.max(W, H);
 
-        s += `<rect x="${p[p.length - 1].x - dim / 2}" y="${p[p.length - 1].y - dim / 2}"`;
-        s += `width="${dim}" height="${dim}"`;
+        s += `<rect x="${p[p.length - 1].x - DIM / 2}" y="${p[p.length - 1].y - DIM / 2}"`;
+        s += `width="${DIM}" height="${DIM}"`;
 
         s += 'fill="white"';
         s += 'stroke-width="1" stroke="black"';

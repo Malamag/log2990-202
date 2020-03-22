@@ -74,11 +74,11 @@ export class SelectionService extends ShapeService {
 
     window.addEventListener('newDrawing', (e: Event) => {
       for (let i = 0; i < this.drawing.childElementCount; i++) {
-        const el = this.drawing.children[i];
-        const status = el.getAttribute('isListening');
-        if (status !== 'true') {
-          this.render.listen(el, 'mousedown', () => {
-            this.render.setAttribute(el, 'isListening', 'true');
+        const EL = this.drawing.children[i];
+        const STATUS = EL.getAttribute('isListening');
+        if (STATUS !== 'true') {
+          this.render.listen(EL, 'mousedown', () => {
+            this.render.setAttribute(EL, 'isListening', 'true');
             if (!this.foundAnItem) {
               this.itemUnderMouse = i;
               this.foundAnItem = true;
@@ -116,12 +116,12 @@ export class SelectionService extends ShapeService {
       this.arrows[3] = keyboard.keyCode === 40 ? true : this.arrows[3];
     }
 
-    const singleLeft = this.arrows[0] && !this.singleUseArrows[0];
-    const singleUp = this.arrows[1] && !this.singleUseArrows[1];
-    const singleRight = this.arrows[2] && !this.singleUseArrows[2];
-    const singleDown = this.arrows[3] && !this.singleUseArrows[3];
+    const SINGLE_LEFT = this.arrows[0] && !this.singleUseArrows[0];
+    const SINGLE_UP = this.arrows[1] && !this.singleUseArrows[1];
+    const SINGLE_RIGHT = this.arrows[2] && !this.singleUseArrows[2];
+    const SINGLE_DOWN = this.arrows[3] && !this.singleUseArrows[3];
 
-    this.moveWithArrowOnce(singleLeft, singleUp, singleRight, singleDown);
+    this.moveWithArrowOnce(SINGLE_LEFT, SINGLE_UP, SINGLE_RIGHT, SINGLE_DOWN);
   }
 
   moveWithArrowOnce(left: boolean, up: boolean, right: boolean, down: boolean): void {
@@ -318,10 +318,10 @@ export class SelectionService extends ShapeService {
       if (this.movingSelection) {
         this.movedSelectionOnce = true;
 
-        const prevMousePosition = this.currentPath[this.currentPath.length - 1];
-        const offset = new Point(position.x - prevMousePosition.x, position.y - prevMousePosition.y);
+        const PREV_MOUSE_POSITION = this.currentPath[this.currentPath.length - 1];
+        const OFFSET = new Point(position.x - PREV_MOUSE_POSITION.x, position.y - PREV_MOUSE_POSITION.y);
 
-        this.moveSelection(offset.x, offset.y);
+        this.moveSelection(OFFSET.x, OFFSET.y);
       }
 
       // save mouse position
@@ -353,8 +353,8 @@ export class SelectionService extends ShapeService {
       this.selectedItems = [];
     }
 
-    const canv = this.canvas;
-    const canvasBox = canv ? canv.getBoundingClientRect() : null;
+    const CANV = this.canvas;
+    const CANVAS_BOX = CANV ? CANV.getBoundingClientRect() : null;
 
     // default values, is the value valid?
     let minX: [number, boolean] = [1000000000, false];
@@ -371,34 +371,34 @@ export class SelectionService extends ShapeService {
       // iterate through every svg element
       for (let i = 0; i < this.drawing.children[j].childElementCount; i++) {
 
-        const current = this.drawing.children[j].children[i] as HTMLElement;
+        const CURRENT = this.drawing.children[j].children[i] as HTMLElement;
 
         // ignore the brush filters
-        if (current.tagName.toString() == 'filter') { continue; }
+        if (CURRENT.tagName.toString() == 'filter') { continue; }
 
         // offset due to the stroke width
-        const childStrokeWidth = current.getAttribute('stroke-width');
-        const currentOffset = childStrokeWidth ? +childStrokeWidth / 2 : 0;
+        const CHILD_STROKE_WIDTH = CURRENT.getAttribute('stroke-width');
+        const CURRENT_OFFSET = CHILD_STROKE_WIDTH ? + CHILD_STROKE_WIDTH / 2 : 0;
 
         // item bounding box
-        const box = current.getBoundingClientRect();
-        const topLeft: Point = new Point(box.left - currentOffset, box.top - currentOffset);
-        const bottomRight: Point = new Point(box.right + currentOffset, box.bottom + currentOffset);
+        const BOX = CURRENT.getBoundingClientRect();
+        const TOP_LEFT: Point = new Point(BOX.left - CURRENT_OFFSET, BOX.top - CURRENT_OFFSET);
+        const BOTTOM_RIGHT: Point = new Point(BOX.right + CURRENT_OFFSET, BOX.bottom + CURRENT_OFFSET);
 
         // get smallest rectangle that includes every item
-        minX = topLeft.x < minX[0] ? [topLeft.x, true] : [minX[0], minX[1]];
-        maxX = bottomRight.x > maxX[0] ? [bottomRight.x, true] : [maxX[0], maxX[1]];
-        minY = topLeft.y < minY[0] ? [topLeft.y, true] : [minY[0], minY[1]];
-        maxY = bottomRight.y > maxY[0] ? [bottomRight.y, true] : [maxY[0], maxY[1]];
+        minX = TOP_LEFT.x < minX[0] ? [TOP_LEFT.x, true] : [minX[0], minX[1]];
+        maxX = BOTTOM_RIGHT.x > maxX[0] ? [BOTTOM_RIGHT.x, true] : [maxX[0], maxX[1]];
+        minY = TOP_LEFT.y < minY[0] ? [TOP_LEFT.y, true] : [minY[0], minY[1]];
+        maxY = BOTTOM_RIGHT.y > maxY[0] ? [BOTTOM_RIGHT.y, true] : [maxY[0], maxY[1]];
       }
     }
 
     // convert
-    if (canvasBox != null) {
-      minX[0] -= canvasBox.left;
-      maxX[0] -= canvasBox.left;
-      minY[0] -= canvasBox.top;
-      maxY[0] -= canvasBox.top;
+    if (CANVAS_BOX != null) {
+      minX[0] -= CANVAS_BOX.left;
+      maxX[0] -= CANVAS_BOX.left;
+      minY[0] -= CANVAS_BOX.top;
+      maxY[0] -= CANVAS_BOX.top;
     }
 
     this.wrapperDimensions[0] = new Point(minX[0], minY[0]);
@@ -419,26 +419,26 @@ export class SelectionService extends ShapeService {
   // links the selection rectangle with the current drawing and manages the selected items
   retrieveItemsInRect(): void {
 
-    const selectionRectangle = this.inProgress.lastElementChild;
-    const items = this.drawing.children;
+    const SELECTION_RECTANGLE = this.inProgress.lastElementChild;
+    const ITEMS = this.drawing.children;
 
     // selection bounding box
-    const selectionBox = selectionRectangle ? selectionRectangle.getBoundingClientRect() : null;
-    const boxTopLeft: Point = new Point(selectionBox ? selectionBox.left : -1, selectionBox ? selectionBox.top : -1);
-    const boxBottomRight: Point = new Point(selectionBox ? selectionBox.right : -1, selectionBox ? selectionBox.bottom : -1);
+    const SELECTION_BOX = SELECTION_RECTANGLE ? SELECTION_RECTANGLE.getBoundingClientRect() : null;
+    const BOX_TOP_LEFT: Point = new Point(SELECTION_BOX ? SELECTION_BOX.left : -1, SELECTION_BOX ? SELECTION_BOX.top : -1);
+    const BOX_BOTTOM_RIGHT: Point = new Point(SELECTION_BOX ? SELECTION_BOX.right : -1, SELECTION_BOX ? SELECTION_BOX.bottom : -1);
 
-    for (let i = 0; i < items.length; i++) {
+    for (let i = 0; i < ITEMS.length; i++) {
 
       // item bounding box
-      const itemBox = items[i].getBoundingClientRect();
-      const itemTopLeft: Point = new Point(itemBox.left, itemBox.top);
-      const itemBottomRight: Point = new Point(itemBox.right, itemBox.bottom);
+      const ITEM_BOX = ITEMS[i].getBoundingClientRect();
+      const ITEM_TOP_LEFT: Point = new Point(ITEM_BOX.left, ITEM_BOX.top);
+      const ITEM_BOTTOM_RIGHT: Point = new Point(ITEM_BOX.right, ITEM_BOX.bottom);
 
       // check if the two bounding box are overlapping
-      const inside: boolean = Point.rectOverlap(boxTopLeft, boxBottomRight, itemTopLeft, itemBottomRight);
+      const INSIDE: boolean = Point.rectOverlap(BOX_TOP_LEFT, BOX_BOTTOM_RIGHT, ITEM_TOP_LEFT, ITEM_BOTTOM_RIGHT);
 
       // item is inside the selection rectangle -> select/unselect accordingly
-      if (inside) {
+      if (INSIDE) {
         if (this.inverted) {
           this.selectedItems[i] = this.invertedItems[i] == undefined ? true : this.invertedItems[i];
         } else {
@@ -469,13 +469,13 @@ export class SelectionService extends ShapeService {
         if (!this.selectedItems[i]) { continue; }
 
         // get the current item's translate and add the offsets
-        const current = (this.drawing.children[i] as HTMLElement).style.transform;
-        const s = current ? current.split(',') : '';
-        const newX = +(s[0].replace(/[^\d.-]/g, '')) + xoff;
-        const newY = +(s[1].replace(/[^\d.-]/g, '')) + yoff;
+        const CURRENT = (this.drawing.children[i] as HTMLElement).style.transform;
+        const S = CURRENT ? CURRENT.split(',') : '';
+        const NEW_X = +(S[0].replace(/[^\d.-]/g, '')) + xoff;
+        const NEW_Y = +(S[1].replace(/[^\d.-]/g, '')) + yoff;
 
         // set the new values
-        this.render.setStyle(this.drawing.children[i], 'transform', `translate(${newX}px,${newY}px)`);
+        this.render.setStyle(this.drawing.children[i], 'transform', `translate(${NEW_X}px,${NEW_Y}px)`);
       }
     }
   }
@@ -491,25 +491,25 @@ export class SelectionService extends ShapeService {
     }
 
     // first and last points
-    const p1x = p[0].x;
-    const p1y = p[0].y;
-    const p2x = p[p.length - 1].x;
-    const p2y = p[p.length - 1].y;
+    const P1_X = p[0].x;
+    const P1_Y = p[0].y;
+    const P2_X = p[p.length - 1].x;
+    const P2_Y = p[p.length - 1].y;
 
     // calculate the width and height of the rectangle
-    const w = p2x - p1x;
-    const h = p2y - p1y;
+    const W = P2_X - P1_X;
+    const H = P2_Y - P1_Y;
 
     // find top-left corner
-    const startX = w > 0 ? p[0].x : p[p.length - 1].x;
-    const startY = h > 0 ? p[0].y : p[p.length - 1].y;
+    const startX = W > 0 ? p[0].x : p[p.length - 1].x;
+    const startY = H > 0 ? p[0].y : p[p.length - 1].y;
 
     // create a divider
     s = '<g name = "selection-perimeter">';
 
     // set render attributes for the svg rect
     s += `<rect x="${startX}" y="${startY}"`;
-    s += `width="${Math.abs(w)}" height="${Math.abs(h)}"`;
+    s += `width="${Math.abs(W)}" height="${Math.abs(H)}"`;
 
     s += `fill="rgba(${this.inverted ? INVERTED_FILL_COLOR : FILL_COLOR})"`;
     s += `stroke-width="5" stroke="rgba(${this.inverted ? INVERTED_OUTLINE_COLOR : OUTLINE_COLOR})"`;
@@ -519,7 +519,7 @@ export class SelectionService extends ShapeService {
     s += '</g>';
 
     // can't have rectangle with 0 width or height
-    if (w === 0 || h === 0) {
+    if (W === 0 || H === 0) {
       s = '';
     }
 
