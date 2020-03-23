@@ -23,7 +23,7 @@ describe('AerosolService', () => {
                 { provide: KeyboardHandlerService, kbServiceStub },
             ],
         }),
-        ptA = new Point(0, 0);
+            ptA = new Point(0, 0);
         ptB = new Point(1, 2);
         ptArr = [ptA, ptB];
         service = TestBed.get(AerosolService);
@@ -62,6 +62,8 @@ describe('AerosolService', () => {
         const PRIM = '#ffffff';
         const SEC = '#000000';
         const BACK = '#ffffff';
+        service.generatePoint = jasmine.createSpy().and.returnValue(ptA);
+        service.createInvisiblePath = jasmine.createSpy().and.returnValue([ptA, ptB]);
         service.chosenColor = { primColor: PRIM, secColor: SEC, backColor: BACK };
 
         const PATH = service.createPath(ptArr);
@@ -210,6 +212,7 @@ describe('AerosolService', () => {
 
     it('should not update path when the mouse is moved without being clicked inside the canvas', () => {
         service.down(ptA);  // start aerosol by mouse down
+        service.currentPath = ptArr;
         const PATH_SIZE = service.currentPath.length;
         service.up(ptA);  // mouse up inside workspace
         service.move(ptB);  // Move while mouse up
@@ -222,6 +225,7 @@ describe('AerosolService', () => {
 
     it('should not update path when the mouse is moved without being clicked outside the canvas', () => {
         const OUTSIDE_COORD = 0;
+        service.currentPath = ptArr;
         const POINT = new Point(OUTSIDE_COORD, OUTSIDE_COORD);
         service.down(ptA);  // start aerosol by mouse down
         service.goingOutsideCanvas(POINT);
@@ -262,16 +266,16 @@ describe('AerosolService', () => {
 
         expect(SPY).toHaveBeenCalled();
     });
-/*
-    it('should subscribe to the interval when mouse is down and unsubscibe when up', () => {
-        const SPY_SUB = spyOn(service, 'subscribe');
-        service.down(ptA);
-        // tslint:disable-next-line: no-string-literal
-        const SPY_UNSUB = spyOn(service['sub'], 'unsubscribe');
-        service.up(ptA);
+    /*
+        it('should subscribe to the interval when mouse is down and unsubscibe when up', () => {
+            const SPY_SUB = spyOn(service, 'subscribe');
+            service.down(ptA);
+            // tslint:disable-next-line: no-string-literal
+            const SPY_UNSUB = spyOn(service['sub'], 'unsubscribe');
+            service.up(ptA);
 
-        expect(SPY_SUB).toHaveBeenCalled();
-        expect(SPY_UNSUB).toHaveBeenCalled();
-    });
-*/
+            expect(SPY_SUB).toHaveBeenCalled();
+            expect(SPY_UNSUB).toHaveBeenCalled();
+        });
+    */
 });

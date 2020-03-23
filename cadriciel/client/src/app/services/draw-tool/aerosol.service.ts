@@ -93,8 +93,8 @@ export class AerosolService extends DrawingTool {
         // Subscribe to an interval of updates
         this.subscribe();
 
-        // Initialize points array for new path
-        this.points = new Array();
+        // Empty points array for new path
+        this.points = [];
 
         // Start without waiting for subscribe -> gives instant emission at first click
         this.updateProgress();

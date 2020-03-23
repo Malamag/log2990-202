@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule } from '@angular/material';
@@ -7,7 +8,6 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CanvasBuilderService } from '../../services/new-doodle/canvas-builder.service';
 import { NewDrawComponent } from './new-draw.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('NewDrawComponent', () => {
     let component: NewDrawComponent;

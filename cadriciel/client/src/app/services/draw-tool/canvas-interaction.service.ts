@@ -1,36 +1,36 @@
 import { ElementInfo } from './element-info.service';
-import { Point } from './point';
 import { HtmlSvgFactory } from './html-svg-factory.service';
+import { Point } from './point';
 import { SelectionService } from './selection.service';
 
 export class CanvasInteraction {
 
-  static moveElements(xoff: number, yoff: number, selectionTool: SelectionService) {
+  static moveElements(xoff: number, yoff: number, selectionTool: SelectionService): void {
     // if there is at least 1 item selected
     if (selectionTool.selectedItems.includes(true)) {
 
-      // iterate through all items
+      // iterate through all ITEMS
       for (let i = 0; i < Math.min(selectionTool.selectedItems.length, selectionTool.drawing.childElementCount); i++) {
 
         // ignore those who aren't selected
         if (!selectionTool.selectedItems[i]) { continue; }
 
-        // get the current item's translate and add the offsets
-        let newX = ElementInfo.translate(selectionTool.drawing.children[i]).x + xoff;
-        let newY = ElementInfo.translate(selectionTool.drawing.children[i]).y + yoff;
+        // get the CURRENT item's translate and add the offsets
+        const NEW_X = ElementInfo.translate(selectionTool.drawing.children[i]).x + xoff;
+        const NEW_Y = ElementInfo.translate(selectionTool.drawing.children[i]).y + yoff;
 
         // set the new values
-        selectionTool.render.setStyle(selectionTool.drawing.children[i], "transform", `translate(${newX}px,${newY}px)`);
+        selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform', `translate(${NEW_X}px,${NEW_Y}px)`);
       }
     }
   }
 
-  static createBoundingBox(selectionTool: SelectionService) {
+  static createBoundingBox(selectionTool: SelectionService): string {
     if (!selectionTool.selected) {
       selectionTool.selectedItems = [];
     }
 
-    let canvasBox = selectionTool.canvas ? selectionTool.canvas.getBoundingClientRect() : null;
+    const canvasBOX = selectionTool.canvas ? selectionTool.canvas.getBoundingClientRect() : null;
 
     // default values, is the value valid?
     let minX: [number, boolean] = [Infinity, false];
@@ -38,49 +38,55 @@ export class CanvasInteraction {
     let minY: [number, boolean] = [Infinity, false];
     let maxY: [number, boolean] = [-1, false];
 
-    // iterate through all items
+    // iterate through all ITEMS
     for (let j = 0; j < Math.min(selectionTool.selectedItems.length, selectionTool.drawing.childElementCount); j++) {
 
       // ignore those who aren't selected
       if (!selectionTool.selectedItems[j]) { continue; }
 
-      let currentBorder = this.getPreciseBorder(selectionTool.drawing.children[j], [minX, maxX, minY, maxY]);
+      const CURRENT_BORDER = this.getPreciseBorder(selectionTool.drawing.children[j], [minX, maxX, minY, maxY]);
 
-      minX = currentBorder[0];
-      maxX = currentBorder[1];
-      minY = currentBorder[2];
-      maxY = currentBorder[3];
-    };
+      minX = CURRENT_BORDER[0];
+      maxX = CURRENT_BORDER[1];
+      minY = CURRENT_BORDER[2];
+      maxY = CURRENT_BORDER[3];
+    }
 
     // convert
-    if (canvasBox != null) {
-      minX[0] -= canvasBox.left;
-      maxX[0] -= canvasBox.left;
-      minY[0] -= canvasBox.top;
-      maxY[0] -= canvasBox.top;
+    if (canvasBOX != null) {
+      minX[0] -= canvasBOX.left;
+      maxX[0] -= canvasBOX.left;
+      minY[0] -= canvasBOX.top;
+      maxY[0] -= canvasBOX.top;
     }
 
     selectionTool.wrapperDimensions[0] = new Point(minX[0], minY[0]);
     selectionTool.wrapperDimensions[1] = new Point(maxX[0], maxY[0]);
 
-    let wrapper = "";
+    let wrapper = '';
     if (minX[1] && maxX[1] && minY[1] && maxY[1]) {
 
-      let w = maxX[0] - minX[0];
-      let h = maxY[0] - minY[0];
+      const w = maxX[0] - minX[0];
+      const h = maxY[0] - minY[0];
 
-      wrapper += HtmlSvgFactory.svgRectangle("selection", null, minX[0], minY[0], w, h, "0,120,215,0.3", "0,120,215,0.9", 1, null);
+      wrapper += HtmlSvgFactory.svgRectangle('selection', null, minX[0], minY[0], w, h, '0,120,215,0.3', '0,120,215,0.9', 1, null);
 
-      wrapper += HtmlSvgFactory.svgDetailedCircle(2, minX[0] + w / 2, minY[0], [7, 5], ["0,120,215", "0,120,215"], ["255,255,255", "255,255,255"], [0, 2]);
-      wrapper += HtmlSvgFactory.svgDetailedCircle(2, minX[0] + w / 2, maxY[0], [7, 5], ["0,120,215", "0,120,215"], ["255,255,255", "255,255,255"], [0, 2]);
-      wrapper += HtmlSvgFactory.svgDetailedCircle(2, minX[0], minY[0] + h / 2, [7, 5], ["0,120,215", "0,120,215"], ["255,255,255", "255,255,255"], [0, 2]);
-      wrapper += HtmlSvgFactory.svgDetailedCircle(2, maxX[0], minY[0] + h / 2, [7, 5], ["0,120,215", "0,120,215"], ["255,255,255", "255,255,255"], [0, 2]);
+      wrapper +=
+        HtmlSvgFactory.svgDetailedCircle(2, minX[0] + w / 2, minY[0], [7, 5],
+          ['0,120,215', '0,120,215'], ['255,255,255', '255,255,255'], [0, 2]);
+      wrapper +=
+        HtmlSvgFactory.svgDetailedCircle(2, minX[0] + w / 2, maxY[0], [7, 5],
+          ['0,120,215', '0,120,215'], ['255,255,255', '255,255,255'], [0, 2]);
+      wrapper += HtmlSvgFactory.svgDetailedCircle(2, minX[0], minY[0] + h / 2, [7, 5],
+        ['0,120,215', '0,120,215'], ['255,255,255', '255,255,255'], [0, 2]);
+      wrapper += HtmlSvgFactory.svgDetailedCircle(2, maxX[0], minY[0] + h / 2, [7, 5],
+        ['0,120,215', '0,120,215'], ['255,255,255', '255,255,255'], [0, 2]);
     }
 
     return wrapper;
   }
 
-  static getPreciseBorder(item: Element, record?: [number, boolean][]) {
+  static getPreciseBorder(item: Element, record?: [number, boolean][]): [number, boolean][] {
 
     let minX: [number, boolean] = record ? record[0] : [Infinity, false];
     let maxX: [number, boolean] = record ? record[1] : [-1, false];
@@ -90,66 +96,69 @@ export class CanvasInteraction {
     // iterate through every svg element
     for (let i = 0; i < item.childElementCount; i++) {
 
-      let current = item.children[i] as HTMLElement;
+      const CURRENT = item.children[i] as HTMLElement;
 
       // ignore the brush filters
-      if (current.tagName.toString() == "filter") { continue; }
+      if (CURRENT.tagName.toString() === 'filter') { continue; }
 
       // offset due to the stroke width
-      let childStrokeWidth = current.getAttribute("stroke-width");
-      let currentOffset = childStrokeWidth ? +childStrokeWidth / 2 : 0;
+      const childStrokeWidth = CURRENT.getAttribute('stroke-width');
+      const CURRENT_OFFSET = childStrokeWidth ? +childStrokeWidth / 2 : 0;
 
-      // item bounding box
-      let box = current.getBoundingClientRect();
-      let topLeft: Point = new Point(box.left - currentOffset, box.top - currentOffset);
-      let bottomRight: Point = new Point(box.right + currentOffset, box.bottom + currentOffset);
+      // item bounding BOX
+      const BOX = CURRENT.getBoundingClientRect();
+      const TOP_LEFT: Point = new Point(BOX.left - CURRENT_OFFSET, BOX.top - CURRENT_OFFSET);
+      const BOTTOM_RIGHT: Point = new Point(BOX.right + CURRENT_OFFSET, BOX.bottom + CURRENT_OFFSET);
 
       // get smallest rectangle that includes every item
-      minX = topLeft.x < minX[0] ? [topLeft.x, true] : [minX[0], minX[1]];
-      maxX = bottomRight.x > maxX[0] ? [bottomRight.x, true] : [maxX[0], maxX[1]];
-      minY = topLeft.y < minY[0] ? [topLeft.y, true] : [minY[0], minY[1]];
-      maxY = bottomRight.y > maxY[0] ? [bottomRight.y, true] : [maxY[0], maxY[1]];
+      minX = TOP_LEFT.x < minX[0] ? [TOP_LEFT.x, true] : [minX[0], minX[1]];
+      maxX = BOTTOM_RIGHT.x > maxX[0] ? [BOTTOM_RIGHT.x, true] : [maxX[0], maxX[1]];
+      minY = TOP_LEFT.y < minY[0] ? [TOP_LEFT.y, true] : [minY[0], minY[1]];
+      maxY = BOTTOM_RIGHT.y > maxY[0] ? [BOTTOM_RIGHT.y, true] : [maxY[0], maxY[1]];
     }
 
     return [minX, maxX, minY, maxY];
   }
 
-  static retrieveItemsInRect(inProgress: HTMLElement, drawing: HTMLElement, selectedItems: boolean[], invertedItems: boolean[], inverted: boolean) {
+  static retrieveItemsInRect(
+    inProgress: HTMLElement,
+    drawing: HTMLElement,
+    selectedItems: boolean[],
+    invertedITEMS: boolean[],
+    inverted: boolean): void {
 
-    let selectionRectangle = inProgress.lastElementChild;
-    let items = drawing.children;
+    const SELECTION_RECTANGLE = inProgress.lastElementChild;
+    const ITEMS = drawing.children;
 
-    // selection bounding box
-    let selectionBox = selectionRectangle ? selectionRectangle.getBoundingClientRect() : null;
-    let boxTopLeft: Point = new Point(selectionBox ? selectionBox.left : -1, selectionBox ? selectionBox.top : -1);
-    let boxBottomRight: Point = new Point(selectionBox ? selectionBox.right : -1, selectionBox ? selectionBox.bottom : -1);
+    // selection bounding BOX
+    const SELECTION_BOX = SELECTION_RECTANGLE ? SELECTION_RECTANGLE.getBoundingClientRect() : null;
+    const BOX_TOP_LEFT: Point = new Point(SELECTION_BOX ? SELECTION_BOX.left : -1, SELECTION_BOX ? SELECTION_BOX.top : -1);
+    const BOX_BOTTOM_RIGHT: Point = new Point(SELECTION_BOX ? SELECTION_BOX.right : -1, SELECTION_BOX ? SELECTION_BOX.bottom : -1);
 
-    for (let i = 0; i < items.length; i++) {
+    for (let i = 0; i < ITEMS.length; i++) {
 
-      // item bounding box
-      let itemBox = this.getPreciseBorder(items[i]);
-      let itemTopLeft: Point = new Point(itemBox[0][0], itemBox[2][0]);
-      let itemBottomRight: Point = new Point(itemBox[1][0], itemBox[3][0]);
+      // item bounding BOX
+      const ITEM_BOX = this.getPreciseBorder(ITEMS[i]);
+      const ITEM_TOP_LEFT: Point = new Point(ITEM_BOX[0][0], ITEM_BOX[2][0]);
+      const ITEM_BOTTOM_RIGHT: Point = new Point(ITEM_BOX[1][0], ITEM_BOX[3][0]);
 
-      // check if the two bounding box are overlapping
-      let inside: boolean = Point.rectOverlap(boxTopLeft, boxBottomRight, itemTopLeft, itemBottomRight);
+      // check if the two bounding BOX are overlapping
+      const INSIDE: boolean = Point.rectOverlap(BOX_TOP_LEFT, BOX_BOTTOM_RIGHT, ITEM_TOP_LEFT, ITEM_BOTTOM_RIGHT);
 
-      // item is inside the selection rectangle -> select/unselect accordingly
-      if (inside) {
+      // item is INSIDE the selection rectangle -> select/unselect accordingly
+      if (INSIDE) {
         if (inverted) {
-          selectedItems[i] = invertedItems[i] === undefined ? true : invertedItems[i];
+          selectedItems[i] = invertedITEMS[i] === undefined ? true : invertedITEMS[i];
         } else {
           selectedItems[i] = true;
-          invertedItems[i] = false;
+          invertedITEMS[i] = false;
         }
-      }
-      // item is outside the selection rectangle -> select/unselect accordingly
-      else {
+      } else { // item is outside the selection rectangle -> select/unselect accordingly
         if (inverted) {
-          selectedItems[i] = invertedItems[i] === undefined ? false : !invertedItems[i];
+          selectedItems[i] = invertedITEMS[i] === undefined ? false : !invertedITEMS[i];
         } else {
           selectedItems[i] = false;
-          invertedItems[i] = true;
+          invertedITEMS[i] = true;
         }
       }
     }
