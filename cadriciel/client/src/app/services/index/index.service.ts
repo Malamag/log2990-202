@@ -2,8 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { Observable } from 'rxjs';
-//import { catchError } from 'rxjs/operators';
-//import { Message } from '../../../../../common/communication/message';
 import { ImageData } from '../../../../../image-data';
 
 const httpOptions = {
@@ -19,17 +17,6 @@ const httpOptions = {
 export class IndexService {
     private readonly DATABASE_URL: string = 'http://localhost:3000/database/Images/';
     constructor(public http: HttpClient, public snackBar: MatSnackBar) { }
-
-    /* basicGet(): Observable<Message> {
-         return this.http.get<Message>(this.DATABASE_URL).pipe(catchError(this.handleError<Message>('basicGet')));
-     }
- 
-     private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
- 
-         return (error: Error): Observable<T> => {
-             return of(result as T);
-         };
-     }*/
 
     getAllImages(): Observable<ImageData[]> {
         return this.http.get<ImageData[]>(this.DATABASE_URL);
