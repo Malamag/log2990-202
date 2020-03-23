@@ -3,8 +3,8 @@ import { inject, TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material';
 import { of } from 'rxjs';
 //import { Message } from '../../../../../common/communication/message';
-import { SVGData } from '../../../svg-data';
-import { ImageData } from '../../image-data';
+import { SVGData } from '../../../../../svg-data';
+import { ImageData } from '../../../../../image-data';
 import { IndexService } from './index.service';
 import SpyObj = jasmine.SpyObj;
 describe('IndexService', () => {

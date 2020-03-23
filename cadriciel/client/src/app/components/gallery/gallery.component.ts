@@ -186,7 +186,7 @@ export class GalleryComponent implements AfterViewInit {
                 }
             });
         });
-        this.allLoaded = true;
+        this.allLoaded = true
     }
     // source: https://material.angular.io/components/chips/examples
     selected(event: MatAutocompleteSelectedEvent): void {

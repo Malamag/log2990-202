@@ -259,7 +259,7 @@ export class DatabaseService {
     }
 
     validateName(name: string): boolean {
-        return name.length > 0 && name !== null;
+        return name.length > 0;
     }
 
     validateTags(tags: string[]): boolean {
