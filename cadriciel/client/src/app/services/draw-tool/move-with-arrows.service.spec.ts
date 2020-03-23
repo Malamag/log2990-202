@@ -6,7 +6,7 @@ describe('MoveWithArrowsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MoveWithArrows = TestBed.get(MoveWithArrows);
-    expect(service).toBeTruthy();
+    const SERVICE: MoveWithArrows = TestBed.get(MoveWithArrows);
+    expect(SERVICE).toBeTruthy();
   });
 });

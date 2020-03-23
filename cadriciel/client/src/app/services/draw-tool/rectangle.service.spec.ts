@@ -57,9 +57,9 @@ describe('RectangleService', () => {
     });
 
     it('should affect is square attribute to true', ()=>{
-        const keyboard = new KeyboardHandlerService()
-        keyboard.shiftDown = true
-        service.updateDown(keyboard)
+        const KEYBOARD = new KeyboardHandlerService()
+        KEYBOARD.shiftDown = true
+        service.updateDown(KEYBOARD)
         expect(service.isSquare).toBeTruthy()
     })
     it('should set the attributes in the subscription', () => {

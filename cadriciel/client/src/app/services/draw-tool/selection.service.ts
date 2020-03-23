@@ -270,14 +270,14 @@ export class SelectionService extends ShapeService {
         }
 
         // first and last points
-        const p1x = p[0].x;
-        const p1y = p[0].y;
-        const p2x = p[p.length - 1].x;
-        const p2y = p[p.length - 1].y;
+        const P1_X = p[0].x;
+        const P1_Y = p[0].y;
+        const P2_X = p[p.length - 1].x;
+        const P2_Y = p[p.length - 1].y;
 
         // calculate the width and height of the rectangle
-        let w = p2x - p1x;
-        let h = p2y - p1y;
+        let w = P2_X - P1_X;
+        let h = P2_Y - P1_Y;
 
         // find top-left corner
         let startX = w > 0 ? p[0].x : p[p.length - 1].x;
