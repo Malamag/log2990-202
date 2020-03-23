@@ -26,7 +26,8 @@ describe('EllipseService', () => {
         };
 
         ptA = new Point(0, 0); // using a point to test position functions
-        ptB = new Point(1, 2);
+        // tslint:disable-next-line: no-magic-numbers
+        ptB = new Point(5, 7);  // random numbers for test
         ptArr = [ptA, ptB];
 
         primCol = '#000000';
@@ -134,7 +135,8 @@ describe('EllipseService', () => {
     });
 
     it('should render a circle on pressed shift key', () => {
-        const NEW_ARR = [new Point(0, 0), new Point(1, 1)]; // forcing a circle
+        const COORDS = 5;
+        const NEW_ARR = [new Point(0, 0), new Point(COORDS, COORDS)]; // forcing a circle
         const FAKE_CIRCLE = service.createPath(NEW_ARR, false);
 
         service.isSquare = true;
