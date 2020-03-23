@@ -82,7 +82,7 @@ export class DatabaseService {
             try {
                 imageData.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
             } catch (error) {
-                console.log('Invalide id');
+                //console.log('Invalide id');
             }
         });
         return imageData;
