@@ -6,6 +6,8 @@ import { CanvasInteraction } from './canvas-interaction.service';
 import { MoveWithArrows } from './move-with-arrows.service';
 import { Point } from './point';
 import { SelectionService } from './selection.service';
+import { ColorPickingService } from '../colorPicker/color-picking.service';
+import { ColorConvertingService } from '../colorPicker/color-converting.service';
 
 export class FakeInteractionService extends InteractionService { }
 
@@ -80,9 +82,9 @@ describe('SelectionService', () => {
     });
     it('should set the inverted items to false', () => {
         service.selectedItems = [true, true];
-        const POINT = new Point(1 , 1);
+        const POINT = new Point(1, 1);
         service.down(POINT, false, true);
-        for(let i = 0; i < service.selectedItems.length; ++i) {
+        for (let i = 0; i < service.selectedItems.length; ++i) {
             expect(service.invertedItems[i]).toBeFalsy();
         }
     });
@@ -148,7 +150,7 @@ describe('SelectionService', () => {
     it('should not create the bounding box', () => {
         const SPY = spyOn(CanvasInteraction, 'createBoundingBox');
         service.isDown = false;
-        service.move(new Point(1 , 1));
+        service.move(new Point(1, 1));
         expect(SPY).toHaveBeenCalledTimes(0);
     });
     it('should move elements', () => {
@@ -156,7 +158,7 @@ describe('SelectionService', () => {
         service.isDown = true;
         service.movingSelection = true;
         service.currentPath = [new Point(0, 0)];
-        service.move(new Point(1 , 1));
+        service.move(new Point(1, 1));
         expect(SPY).toHaveBeenCalled();
     });
     it('should empty the selected items container', () => {
@@ -185,5 +187,18 @@ describe('SelectionService', () => {
         const NUM = 10;
         const POINT_CONTAINER = [new Point(0, 0), new Point(NUM, 0)];
         expect(service.createPath(POINT_CONTAINER)).toEqual('');
+    });
+
+    it('should construct', () => {
+        const NEW_SEL_SERVICE = new SelectionService(
+            select,
+            select,
+            true,
+            new InteractionService(),
+            new ColorPickingService(new ColorConvertingService()),
+            render,
+            select,
+            select);
+        expect(NEW_SEL_SERVICE).toBeTruthy();
     });
 });

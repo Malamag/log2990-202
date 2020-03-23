@@ -148,7 +148,7 @@ describe('EllipseService', () => {
     it('should create a rectangle with corner at mouse start', () => {
         const RECT = service.createPath(ptArr, false);
 
-        expect(RECT).toEqual('');
+        expect(RECT).toContain('<rect');
     });
 
     it('should create an ellipse filled with the selected color', () => {
