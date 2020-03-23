@@ -1,9 +1,9 @@
 export class HtmlSvgFactory {
 
   static svgRectangle(id: string | null, className: string | null, startX: number, startY: number, width: number,
-    height: number, fill: string, stroke: string, strokeWidth: number, dashArray: number | null) {
-    let rectangle = "";
-    rectangle += "<rect ";
+                      height: number, fill: string, stroke: string, strokeWidth: number, dashArray: number | null): string {
+    let rectangle = '';
+    rectangle += '<rect ';
     if (id) {
       rectangle += `id="${id}"`;
     }
@@ -17,38 +17,39 @@ export class HtmlSvgFactory {
     if (dashArray) {
       rectangle += `stroke-dasharray="${dashArray},${dashArray}"`;
     }
-    rectangle += "/>";
+    rectangle += '/>';
 
     return rectangle;
   }
   static svgDetailedCircle(nbOfLayers: number, centerX: number, centerY: number, radius: number[], fill: string[],
-    stroke: string[], strokeWidth: number[]) {
+                           stroke: string[], strokeWidth: number[]): string {
 
-    let lengthTest: number[] = [radius.length, fill.length, stroke.length, strokeWidth.length];
-    let allEquals: boolean = lengthTest.every(e => e == nbOfLayers);
+    const LENGTH_TEST: number[] = [radius.length, fill.length, stroke.length, strokeWidth.length];
+    const ALL_EQUALS: boolean = LENGTH_TEST.every((e) => e === nbOfLayers);
 
-    if (!allEquals) {
-      return this.svgCircle(centerX, centerY, 10, "255,20,147", "255,20,100", 2);
+    if (!ALL_EQUALS) {
+      const RAD = 10;
+      return this.svgCircle(centerX, centerY, RAD, '255,20,147', '255,20,100', 2);
     }
 
-    let detailedCircle = "";
+    let detailedCircle = '';
     for (let i = 0; i < nbOfLayers; i++) {
       detailedCircle += this.svgCircle(centerX, centerY, radius[i], fill[i], stroke[i], strokeWidth[i]);
     }
     return detailedCircle;
   }
-  static svgCircle(centerX: number, centerY: number, radius: number, fill: string, stroke: string, strokeWidth: number) {
-    let circle = "";
-    circle += "<circle ";
+  static svgCircle(centerX: number, centerY: number, radius: number, fill: string, stroke: string, strokeWidth: number): string {
+    let circle = '';
+    circle += '<circle ';
     circle += `cx="${centerX}" cy="${centerY}"`;
     circle += `r="${radius}"`;
     circle += `fill="rgba(${fill})"`;
     circle += `stroke="rgba(${stroke})" stroke-width="${strokeWidth}"`;
-    circle += "/>";
+    circle += '/>';
     return circle;
   }
 
-  static svgPath() {
-    return "";
+  static svgPath(): string {
+    return '';
   }
 }
