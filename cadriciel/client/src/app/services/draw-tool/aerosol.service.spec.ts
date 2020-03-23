@@ -85,11 +85,11 @@ describe('AerosolService', () => {
         service['attr'].emissionPerSecond = EMISSION;
         const POINTS = 5;
         service.down(new Point(POINTS, POINTS)); // Push the mouse down for simulating the aerosol
-        const SPY = spyOn(service, 'createPath');
+        const SPY_CREATE_PATH = spyOn(service, 'createPath');
         CLOCK.tick(MS_WAIT); // Wait
 
         // Expect createPath function to have been called the same number of time as the wanted emission
-        expect(SPY).toHaveBeenCalledTimes(EMISSION_EXPECTED);
+        expect(SPY_CREATE_PATH).toHaveBeenCalledTimes(EMISSION_EXPECTED);
         CLOCK.uninstall();
     });
 
@@ -248,10 +248,30 @@ describe('AerosolService', () => {
         service.createPath(ptArr);
         service.cancel();
         service.up(ptA);
-        // the mouse should be still up at this point
+
         expect(service.currentPath).toEqual([]);
         expect(SPY).not.toHaveBeenCalled();
-
     });
 
+    it('should unsubscribe on tool change while the mouse is down', () => {
+        service.down(ptA);
+        // tslint:disable-next-line: no-string-literal
+        const SPY = spyOn(service['sub'], 'unsubscribe');
+        const EVENT = new Event('toolChange');
+        window.dispatchEvent(EVENT);
+
+        expect(SPY).toHaveBeenCalled();
+    });
+/*
+    it('should subscribe to the interval when mouse is down and unsubscibe when up', () => {
+        const SPY_SUB = spyOn(service, 'subscribe');
+        service.down(ptA);
+        // tslint:disable-next-line: no-string-literal
+        const SPY_UNSUB = spyOn(service['sub'], 'unsubscribe');
+        service.up(ptA);
+
+        expect(SPY_SUB).toHaveBeenCalled();
+        expect(SPY_UNSUB).toHaveBeenCalled();
+    });
+*/
 });

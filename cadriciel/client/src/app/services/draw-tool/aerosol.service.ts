@@ -40,8 +40,18 @@ export class AerosolService extends DrawingTool {
         this.attr = { emissionPerSecond: DEFAULT_EMISSION_PER_SECOND, diameter: DEFAULT_DIAMETER };
         this.updateColors();
         this.updateAttributes();
+        this.ToolChangeListener();
         this.points = new Array();
         this.insideCanvas = true;
+    }
+
+    ToolChangeListener(): void {
+        window.addEventListener('toolChange', (e: Event) => {
+            if (this.isDown) {
+                this.insideCanvas = true;
+                this.sub.unsubscribe();
+            }
+        });
     }
 
     updateDown(keyboard: KeyboardHandlerService): void {
@@ -66,15 +76,6 @@ export class AerosolService extends DrawingTool {
         this.sub = SRC_INTERVAL.subscribe(() => {
             this.updateProgress();
         });
-    }
-
-    // cancel the current progress
-    cancel(): void {
-
-        super.cancel();
-
-        // Reinitialize insideCanvas
-        this.insideCanvas = true;
     }
 
     // click with aerosol in hand
