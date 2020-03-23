@@ -196,7 +196,7 @@ describe('HtmlSvgFactory', () => {
     const STROKE_WIDTH = 5;
     const EXPECETD_CONTAIN = `stroke="rgba(${STROKE})" stroke-width="${STROKE_WIDTH}"/>`;
     expect(HtmlSvgFactory.svgCircle(CENTER_X, CENTER_Y, RADIUS, FILL, STROKE, STROKE_WIDTH)).toContain(EXPECETD_CONTAIN);
-  })
+  });
   it('should return an empty string', () => {
     expect(HtmlSvgFactory.svgPath()).toEqual('');
   });
