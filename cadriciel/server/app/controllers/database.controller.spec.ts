@@ -1,4 +1,4 @@
-
+/*
 import * as inversify from 'inversify';
 
 import Types from '../types';
@@ -16,4 +16,4 @@ describe('Database service', () => {
         dbController = container.get<DatabaseController>(Types.DatabaseController);
     });
 
-});
+});*/

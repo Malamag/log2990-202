@@ -8,7 +8,7 @@ import { SelectionService } from './selection.service';
 export class FakeInteractionService extends InteractionService { }
 
 describe('SelectionService', () => {
-    let service: SelectionService
+    let service: SelectionService;
     let render: Renderer2;
     let select: any;
     let firstChild: any;
