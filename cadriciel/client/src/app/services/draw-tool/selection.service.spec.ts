@@ -1,4 +1,4 @@
-simport { Renderer2 } from '@angular/core';
+/*import { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
@@ -311,4 +311,4 @@ describe('SelectionService', () => {
         const ret = service.createPath(pointConatiner)
         expect(ret).toContain('<g name = "selection-perimeter">')
     })
-});
+});*/

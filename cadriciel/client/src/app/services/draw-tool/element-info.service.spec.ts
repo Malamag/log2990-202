@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ElementInfoService } from './element-info.service';
+import { ElementInfo } from './element-info.service';
 
 describe('ElementInfoService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const SERVICE: ElementInfoService = TestBed.get(ElementInfoService);
+    const SERVICE: ElementInfo = TestBed.get(ElementInfo);
     expect(SERVICE).toBeTruthy();
   });
 });
