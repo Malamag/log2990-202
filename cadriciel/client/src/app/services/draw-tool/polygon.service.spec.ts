@@ -102,7 +102,9 @@ describe('PolygonService', () => {
         const CORNERS = 7;
         service.attr.numberOfCorners = CORNERS; // simulated border thickness
         service.createPath(ptArr, false);
-        expect(service.corners.length).toEqual(CORNERS);
+
+        // tslint:disable-next-line: no-string-literal
+        expect(service['corners'].length).toEqual(CORNERS);
     });
     /*
         it('should create a rectangle of the correct dimensions from mouse move', () => {
@@ -186,10 +188,51 @@ describe('PolygonService', () => {
         expect(PATH).toContain(NAME);
     });
 
-    it('should align all points inside the perimeter if a point is smaller than ', () => {
-        const PATH = service.createPath(ptArr, false);
-        const NAME = 'polygon';
-        expect(PATH).toContain(NAME);
+    // NOT TESTED YET
+    it('should align all points inside the perimeter if it exceeds to the left ', () => {
+        service.createPath(ptArr, false);
+
+        // tslint:disable-next-line: no-string-literal
+        const POINTS = service['corners'];
+        const OFFSET = 10;
+
+        // tslint:disable-next-line: no-string-literal
+        service['leftPoint'] = service['leftPoint'] - OFFSET;
+        service.alignCorners();
+
+        // tslint:disable-next-line: no-string-literal
+        const NEW_POINTS = service['corners'];
+        let pointsInside = true;
+        for (let i = 0; i < NEW_POINTS.length; i++) {
+            if (NEW_POINTS[i].x !== POINTS[i].x - OFFSET) {
+                pointsInside = false;
+                return;
+            }
+        }
+        expect(pointsInside).toBeTruthy();
+    });
+
+    it('should align all points inside the perimeter if it exceeds to the right ', () => {
+        service.createPath(ptArr, false);
+
+        // tslint:disable-next-line: no-string-literal
+        const POINTS = service['corners'];
+        const OFFSET = 10;
+
+        // tslint:disable-next-line: no-string-literal
+        service['rightPoint'] = service['rightPoint'] + OFFSET;
+        service.alignCorners();
+
+        // tslint:disable-next-line: no-string-literal
+        const NEW_POINTS = service['corners'];
+        let pointsInside = true;
+        for (let i = 0; i < NEW_POINTS.length; i++) {
+            if (NEW_POINTS[i].x !== POINTS[i].x + OFFSET) {
+                pointsInside = false;
+                return;
+            }
+        }
+        expect(pointsInside).toBeTruthy();
     });
 
 });
