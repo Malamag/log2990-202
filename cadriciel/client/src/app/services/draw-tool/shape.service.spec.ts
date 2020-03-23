@@ -51,9 +51,9 @@ describe('ShapeService', () => {
 
     it('should set the attributes in the subscription', () => {
         service.interaction.emitFormsAttributes({ plotType: 0, lineThickness: 0, numberOfCorners: 0 });
-        const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
+        const SPY_INTERACTION = spyOn(service.interaction.$formsAttributes, 'subscribe');
         service.updateAttributes();
-        expect(spyInteraction).toHaveBeenCalled();
+        expect(SPY_INTERACTION).toHaveBeenCalled();
 
         // tslint:disable-next-line: no-string-literal
         expect(service['attr']).toBeDefined();
@@ -66,36 +66,36 @@ describe('ShapeService', () => {
         expect(spy).toHaveBeenCalled();
     });*/
     it('should update the current path on mouse down', () => {
-        const spy = spyOn(service, 'updateProgress');
+        const SPY = spyOn(service, 'updateProgress');
         service.down(ptA);
         expect(service.currentPath.length).toBe(2); // same point added twice to manage static mouse
         expect(service.currentPath).toContain(ptA);
 
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
     it('should update the drawing on mouse up', () => {
         service.down(ptA); // pressing the mouse
-        const spy = spyOn(service, 'updateDrawing');
+        const SPY = spyOn(service, 'updateDrawing');
         service.up(ptA);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
     it('should not update the drawing on mouse up', () => {
         service.ignoreNextUp = true;
-        const spy = spyOn(service, 'updateDrawing');
+        const SPY = spyOn(service, 'updateDrawing');
         service.up(ptA);
-        expect(spy).toHaveBeenCalledTimes(0);
+        expect(SPY).toHaveBeenCalledTimes(0);
     });
     it('should not update the progress on mouse move', () => {
         service.isDown = false;
-        const spy = spyOn(service, 'updateProgress');
+        const SPY = spyOn(service, 'updateProgress');
         service.move(ptA);
-        expect(spy).toHaveBeenCalledTimes(0);
+        expect(SPY).toHaveBeenCalledTimes(0);
     });
     it('should update the progress on mouse mouve', () => {
         service.isDown = true;
-        const spy = spyOn(service, 'updateProgress');
+        const SPY = spyOn(service, 'updateProgress');
         service.move(ptA);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
     it('should set the width and the height', () => {
         service.setdimensions(ptArr);

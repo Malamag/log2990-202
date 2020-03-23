@@ -1,189 +1,215 @@
 import { TestBed } from '@angular/core/testing';
 import { ColorConvertingService } from './color-converting.service';
-const validNumber = 250;
-const invalidNumber = 2520;
+
+const VALID_NUMBER = 250;
+const INVALID_NUMBER = 2520;
+
 describe('ColorConvertingService', () => {
     let service: ColorConvertingService;
     beforeEach(() => {
         TestBed.configureTestingModule({});
         service = new ColorConvertingService();
     });
+
     it('should be created', () => {
         expect(service).toBeTruthy();
     });
+
     it('should return true on valid input', () => {
-        expect(service.validateRGB(validNumber)).toBeTruthy();
+        expect(service.validateRGB(VALID_NUMBER)).toBeTruthy();
     });
+
     it('should return false on invalid input', () => {
-        expect(service.validateRGB(invalidNumber)).toBeFalsy();
+        expect(service.validateRGB(INVALID_NUMBER)).toBeFalsy();
     });
+
     it('should return an empty string on invalid input', () => {
-        const spy = spyOn(service, 'validateRGB');
-        service.rgbToHex(invalidNumber);
-        expect(spy).toHaveBeenCalled();
-        expect(service.rgbToHex(invalidNumber).length).toEqual(0);
+        const SPY = spyOn(service, 'validateRGB');
+        service.rgbToHex(INVALID_NUMBER);
+        expect(SPY).toHaveBeenCalled();
+        expect(service.rgbToHex(INVALID_NUMBER).length).toEqual(0);
     });
+
     it('should not return an empty string on fine rgb input', () => {
-        const spy = spyOn(service, 'validateRGB');
-        service.rgbToHex(validNumber);
-        expect(spy).toHaveBeenCalled();
-        expect(service.rgbToHex(validNumber)).toBeDefined();
+        const SPY = spyOn(service, 'validateRGB');
+        service.rgbToHex(VALID_NUMBER);
+        expect(SPY).toHaveBeenCalled();
+        expect(service.rgbToHex(VALID_NUMBER)).toBeDefined();
     });
+
     it('should return an empty string', () => {
-        const alpha = 250;
-        expect(service.alphaRGBToHex(alpha).length).toEqual(0);
+        const ALPHA = 250;
+        expect(service.alphaRGBToHex(ALPHA).length).toEqual(0);
     });
+
     it('should call rgbToHex', () => {
-        const alpha = 1;
-        const spy = spyOn(service, 'rgbToHex');
-        service.alphaRGBToHex(alpha);
-        expect(spy).toHaveBeenCalled();
+        const ALPHA = 1;
+        const SPY = spyOn(service, 'rgbToHex');
+        service.alphaRGBToHex(ALPHA);
+        expect(SPY).toHaveBeenCalled();
     });
+
     it('validateHSL should return false following a big H number', () => {
-        const h = 3651;
-        const s = 1;
-        const l = 1;
-        expect(service.validateHSL(h, s, l)).toBeFalsy();
+        const H = 3651;
+        const S = 1;
+        const L = 1;
+        expect(service.validateHSL(H, S, L)).toBeFalsy();
     });
+
     it('validateHSL should return false following a big S number', () => {
-        const h = 230;
-        const s = 1.5;
-        const l = 1;
-        expect(service.validateHSL(h, s, l)).toBeFalsy();
+        const H = 230;
+        const S = 1.5;
+        const L = 1;
+        expect(service.validateHSL(H, S, L)).toBeFalsy();
     });
+
     it('validateHSL should return false following a big L number', () => {
-        const h = 230;
-        const s = 1;
-        const l = 1.5;
-        expect(service.validateHSL(h, s, l)).toBeFalsy();
+        const H = 230;
+        const S = 1;
+        const L = 1.5;
+        expect(service.validateHSL(H, S, L)).toBeFalsy();
     });
+
     it('validateHSL should return true following in range numbers', () => {
-        const h = 230;
-        const s = 1;
-        const l = 1;
-        expect(service.validateHSL(h, s, l)).toBeTruthy();
+        const H = 230;
+        const S = 1;
+        const L = 1;
+        expect(service.validateHSL(H, S, L)).toBeTruthy();
     });
+
     it('should return an invalid rgb array', () => {
-        const ret = -1;
-        const h = 230;
-        const s = 1;
-        const l = 1.5;
+        const RET = -1;
+        const H = 230;
+        const S = 1;
+        const L = 1.5;
         let spyObj: jasmine.SpyObj<ColorConvertingService>;
         spyObj = jasmine.createSpyObj('ColorConvertingService', ['validateHSL']);
         spyObj.validateHSL.and.returnValue(false); // we eant validateHSL not to pass
-        const spy = spyOn(service, 'validateHSL');
-        const rgbContainer = service.hslToRgb(h, s, l);
-        expect(spy).toHaveBeenCalled();
-        expect(rgbContainer).toEqual([ret, ret, ret]);
+        const SPY = spyOn(service, 'validateHSL');
+        const RGB_CONTAINER = service.hslToRgb(H, S, L);
+        expect(SPY).toHaveBeenCalled();
+        expect(RGB_CONTAINER).toEqual([RET, RET, RET]);
     });
+
     it('should return a valid RGB array', () => {
-        const rgb = 255;
-        const h = 230;
-        const s = 1;
-        const l = 1;
-        const rgbContainer = service.hslToRgb(h, s, l);
-        expect(rgbContainer).toEqual([rgb, rgb, rgb]); // 8-bits
+        const RGB = 255;
+        const H = 230;
+        const S = 1;
+        const L = 1;
+        const RGB_CONTAINER = service.hslToRgb(H, S, L);
+        expect(RGB_CONTAINER).toEqual([RGB, RGB, RGB]); // 8-bits
     });
+
     it('should return a valid RGB array', () => {
-        const rgb = 255;
-        const h = 50;
-        const s = 1;
-        const l = 1;
-        const rgbContainer = service.hslToRgb(h, s, l);
-        expect(rgbContainer).toEqual([rgb, rgb, rgb]);
+        const RGB = 255;
+        const H = 50;
+        const S = 1;
+        const L = 1;
+        const RGB_CONTAINER = service.hslToRgb(H, S, L);
+        expect(RGB_CONTAINER).toEqual([RGB, RGB, RGB]);
     });
+
     it('should return a valid RGB array', () => {
-        const rgb = 255;
-        const h = 70;
-        const s = 1;
-        const l = 1;
-        const rgbContainer = service.hslToRgb(h, s, l);
-        expect(rgbContainer).toEqual([rgb, rgb, rgb]);
+        const RGB = 255;
+        const H = 70;
+        const S = 1;
+        const L = 1;
+        const RGB_CONTAINER = service.hslToRgb(H, S, L);
+        expect(RGB_CONTAINER).toEqual([RGB, RGB, RGB]);
     });
+
     it('should return a valid RGB array', () => {
-        const rgb = 255;
-        const h = 150;
-        const s = 1;
-        const l = 1;
-        const rgbContainer = service.hslToRgb(h, s, l);
-        expect(rgbContainer).toEqual([rgb, rgb, rgb]);
+        const RGB = 255;
+        const H = 150;
+        const S = 1;
+        const L = 1;
+        const RGB_CONTAINER = service.hslToRgb(H, S, L);
+        expect(RGB_CONTAINER).toEqual([RGB, RGB, RGB]);
     });
+
     it('should return a valid RGB array', () => {
-        const rgb = 255;
-        const h = 270;
-        const s = 1;
-        const l = 1;
-        const rgbContainer = service.hslToRgb(h, s, l);
-        expect(rgbContainer).toEqual([rgb, rgb, rgb]);
+        const RGB = 255;
+        const H = 270;
+        const S = 1;
+        const L = 1;
+        const RGB_CONTAINER = service.hslToRgb(H, S, L);
+        expect(RGB_CONTAINER).toEqual([RGB, RGB, RGB]);
     });
+
     it('should return a valid RGB array', () => {
-        const rgb = 255;
-        const h = 310;
-        const s = 1;
-        const l = 1;
-        const rgbContainer = service.hslToRgb(h, s, l);
-        expect(rgbContainer).toEqual([rgb, rgb, rgb]);
+        const RGB = 255;
+        const H = 310;
+        const S = 1;
+        const L = 1;
+        const RGB_CONTAINER = service.hslToRgb(H, S, L);
+        expect(RGB_CONTAINER).toEqual([RGB, RGB, RGB]);
     });
+
     it('should return a HSL calculated from a RGB input', () => {
-        const mod = 6;
-        const div = 255;
-        const mult = 60;
-        const r = 250;
-        const g = 200;
-        const b = 150;
-        const primR = r / div; // 8-bits, 255
-        const primG = g / div;
-        const primB = b / div;
-        const delta = primR - primB;
-        const hue = mult * (((primG - primB) / delta) % mod);
-        const lightness = (primR + primB) / 2;
-        const saturation = delta / (1 - Math.abs(2 * lightness - 1));
-        expect(service.rgbToHsl(r, g, b)).toEqual([hue, saturation, lightness]);
+        const MOD = 6;
+        const DIV = 255;
+        const MULT = 60;
+        const R = 250;
+        const G = 200;
+        const B = 150;
+        const PRIM_R = R / DIV; // 8-bits, 255
+        const PRIM_G = G / DIV;
+        const PRIM_B = B / DIV;
+        const DELTA = PRIM_R - PRIM_B;
+        const HUE = MULT * (((PRIM_G - PRIM_B) / DELTA) % MOD);
+        const LIGHTNESS = (PRIM_R + PRIM_B) / 2;
+        const SATURATION = DELTA / (1 - Math.abs(2 * LIGHTNESS - 1));
+        expect(service.rgbToHsl(R, G, B)).toEqual([HUE, SATURATION, LIGHTNESS]);
     });
+
     it('should return a hue calculated with green value', () => {
-        const div = 255;
+        const DIV = 255;
         const mult = 60;
-        const r = 200;
-        const g = 250;
-        const b = 150;
-        const primR = r / div;
-        const primG = g / div;
-        const primB = b / div;
-        const delta = primG - primB;
-        const hue = mult * ((primB - primR) / delta + 2);
-        const lightness = (primG + primB) / 2;
-        const saturation = delta / (1 - Math.abs(2 * lightness - 1));
-        expect(service.rgbToHsl(r, g, b)).toEqual([hue, saturation, lightness]);
+        const R = 200;
+        const G = 250;
+        const B = 150;
+        const PRIM_R = R / DIV; // 8-bits, 255
+        const PRIM_G = G / DIV;
+        const PRIM_B = B / DIV;
+        const delta = PRIM_G - PRIM_B;
+        const HUE = mult * ((PRIM_B - PRIM_R) / delta + 2);
+        const LIGHTNESS = (PRIM_G + PRIM_B) / 2;
+        const SATURATION = delta / (1 - Math.abs(2 * LIGHTNESS - 1));
+        expect(service.rgbToHsl(R, G, B)).toEqual([HUE, SATURATION, LIGHTNESS]);
     });
+
     it('should return a hue calculated with blue value', () => {
-        const add = 4;
-        const div = 255;
+        const ADD = 4;
+        const DIV = 255;
         const mult = 60;
-        const r = 200; // arbitrary inputs
-        const g = 150;
-        const b = 250;
-        const primR = r / div;
-        const primG = g / div;
-        const primB = b / div;
-        const delta = primB - primG;
-        const hue = mult * ((primR - primG) / delta + add); // taking the formula
-        const lightness = (primG + primB) / 2;
-        const saturation = delta / (1 - Math.abs(2 * lightness - 1));
-        expect(service.rgbToHsl(r, g, b)).toEqual([hue, saturation, lightness]);
+        const R = 200;  // Arbitrary inputs
+        const G = 150;
+        const B = 250;
+        const PRIM_R = R / DIV; // 8-bits, 255
+        const PRIM_G = G / DIV;
+        const PRIM_B = B / DIV;
+        const delta = PRIM_B - PRIM_G;
+        const HUE = mult * ((PRIM_R - PRIM_G) / delta + ADD); // taking the formula
+        const LIGHTNESS = (PRIM_G + PRIM_B) / 2;
+        const SATURATION = delta / (1 - Math.abs(2 * LIGHTNESS - 1));
+        expect(service.rgbToHsl(R, G, B)).toEqual([HUE, SATURATION, LIGHTNESS]);
     });
+
     it('should return an array with zeros', () => {
-        const r = 0;
-        const g = 0;
-        const b = 0;
-        expect(service.rgbToHsl(r, g, b)).toEqual([0, 0, 0]);
+        const R = 0;
+        const G = 0;
+        const B = 0;
+        expect(service.rgbToHsl(R, G, B)).toEqual([0, 0, 0]);
     });
+
     it('validateHex should return true', () => {
-        const hex = 48;
-        expect(service.validateHex(hex)).toBeTruthy();
+        const HEX = 48;
+        expect(service.validateHex(HEX)).toBeTruthy();
     });
+
     it('validateHex should return false', () => {
-        const hex = 60;
-        expect(service.validateHex(hex)).toBeFalsy();
+        const HEX = 60;
+        expect(service.validateHex(HEX)).toBeFalsy();
     });
     // test last function todo
 });

@@ -43,19 +43,19 @@ export class MouseHandlerService {
     }
 
     windowToCanvas(windowPosition: Point): Point {
-        const canvasX: number = windowPosition.x - this.svgBox.left;
-        const canvasY: number = windowPosition.y - this.svgBox.top;
+        const CANVAS_X: number = windowPosition.x - this.svgBox.left;
+        const CANVAS_Y: number = windowPosition.y - this.svgBox.top;
 
-        return new Point(canvasX, canvasY);
+        return new Point(CANVAS_X, CANVAS_Y);
     }
 
     validPoint(clickedPoint: Point): boolean {
-        const validX: boolean =
+        const VALID_X: boolean =
             clickedPoint.x + this.svgBox.left >= this.svgBox.left && clickedPoint.x + this.svgBox.left <= this.svgBox.right;
-        const validY: boolean =
+        const VALID_Y: boolean =
             clickedPoint.y + this.svgBox.top >= this.svgBox.top && clickedPoint.y + this.svgBox.top <= this.svgBox.bottom;
 
-        return validX && validY;
+        return VALID_X && VALID_Y;
     }
 
     addObserver(newObserver: InputObserver): void {
@@ -104,17 +104,17 @@ export class MouseHandlerService {
     move(e: MouseEvent): void {
         this.updatePosition(e.x, e.y);
 
-        const wasInside: boolean = this.insideWorkspace;
+        const WAS_INSIDE: boolean = this.insideWorkspace;
         this.insideWorkspace = this.validPoint(this.mouseCanvasPosition);
 
         if (this.insideWorkspace) {
-            if (wasInside) {
+            if (WAS_INSIDE) {
                 this.callObserverMove();
             } else {
                 this.callObserverInsideCanvas();
             }
         } else {
-            if (wasInside) {
+            if (WAS_INSIDE) {
                 this.callObserverOutsideCanvas();
             }
         }

@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { IconsService } from './icons.service';
+import { CanvasInteraction } from './canvas-interaction.service';
 
-describe('IconsService', () => {
+describe('CanvasInteractionService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const SERVICE: IconsService = TestBed.get(IconsService);
+    const SERVICE: CanvasInteraction = TestBed.get(CanvasInteraction);
     expect(SERVICE).toBeTruthy();
   });
 });

@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { IconsService } from './icons.service';
+import { MoveWithArrows } from './move-with-arrows.service';
 
-describe('IconsService', () => {
+describe('MoveWithArrowsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const SERVICE: IconsService = TestBed.get(IconsService);
+    const SERVICE: MoveWithArrows = TestBed.get(MoveWithArrows);
     expect(SERVICE).toBeTruthy();
   });
 });

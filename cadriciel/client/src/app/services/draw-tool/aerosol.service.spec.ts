@@ -78,19 +78,19 @@ describe('AerosolService', () => {
         const EMISSION_EXPECTED = EMISSION * TIME;
 
         // Initialize jamsine clock for time ticking
-        const clock = jasmine.clock();
-        clock.install();
+        const CLOCK = jasmine.clock();
+        CLOCK.install();
 
         // tslint:disable-next-line: no-string-literal
         service['attr'].emissionPerSecond = EMISSION;
         const POINTS = 5;
         service.down(new Point(POINTS, POINTS)); // Push the mouse down for simulating the aerosol
-        const spyInteraction = spyOn(service, 'createPath');
-        clock.tick(MS_WAIT); // Wait
+        const SPY = spyOn(service, 'createPath');
+        CLOCK.tick(MS_WAIT); // Wait
 
         // Expect createPath function to have been called the same number of time as the wanted emission
-        expect(spyInteraction).toHaveBeenCalledTimes(EMISSION_EXPECTED);
-        clock.uninstall();
+        expect(SPY).toHaveBeenCalledTimes(EMISSION_EXPECTED);
+        CLOCK.uninstall();
     });
 
     it('should only have points inside the diameter', () => {
@@ -104,14 +104,14 @@ describe('AerosolService', () => {
         const POSITION = new Point(COORDINATE, COORDINATE);
 
         // Initialize jamsine clock for time ticking
-        const clock = jasmine.clock();
-        clock.install();
+        const CLOCK = jasmine.clock();
+        CLOCK.install();
         // tslint:disable-next-line: no-string-literal
         service['attr'].emissionPerSecond = EMISSION;
         // tslint:disable-next-line: no-string-literal
         service['attr'].diameter = DIAMETER;
         service.down(POSITION); // Push the mouse down for simulating the aerosol
-        clock.tick(MS_WAIT); // Wait
+        CLOCK.tick(MS_WAIT); // Wait
 
         // Finish mock aerosol
         service.up(POSITION);
@@ -119,19 +119,19 @@ describe('AerosolService', () => {
         // Look for each individual point if it's in the diameter area
         let pointsInsideDiameter = true;
         // tslint:disable-next-line: no-string-literal
-        for (const point of service['points']) {
+        for (const POINT of service['points']) {
             if (
-                point.x > COORDINATE + RADIUS ||
-                point.y > COORDINATE + RADIUS ||
-                point.x < COORDINATE - RADIUS ||
-                point.y < COORDINATE - RADIUS
+                POINT.x > COORDINATE + RADIUS ||
+                POINT.y > COORDINATE + RADIUS ||
+                POINT.x < COORDINATE - RADIUS ||
+                POINT.y < COORDINATE - RADIUS
             ) {
                 pointsInsideDiameter = false;
                 break;
             }
         }
         expect(pointsInsideDiameter).toBeTruthy();
-        clock.uninstall();
+        CLOCK.uninstall();
     });
 
     it('should have a round linecap and linejoin', () => {

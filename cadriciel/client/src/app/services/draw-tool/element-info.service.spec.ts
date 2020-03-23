@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { IconsService } from './icons.service';
+import { ElementInfoService } from './element-info.service';
 
-describe('IconsService', () => {
+describe('ElementInfoService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const SERVICE: IconsService = TestBed.get(IconsService);
+    const SERVICE: ElementInfoService = TestBed.get(ElementInfoService);
     expect(SERVICE).toBeTruthy();
   });
 });

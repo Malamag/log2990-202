@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { IconsService } from './icons.service';
+import { HtmlSvgFactory } from './html-svg-factory.service';
 
-describe('IconsService', () => {
+describe('HtmlSvgFactoryService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const SERVICE: IconsService = TestBed.get(IconsService);
+    const SERVICE: HtmlSvgFactory = TestBed.get(HtmlSvgFactory);
     expect(SERVICE).toBeTruthy();
   });
 });

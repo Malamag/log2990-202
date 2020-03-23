@@ -17,9 +17,11 @@ const THREE_FOUR_ROTATION  = 270;
 const THREE_EIGHT_ROTATION = 135;
 const FIVE_EIGHT_ROTATION = 225;
 const SEVEN_EIGHT_ROTATION  = 315;
+
 @Injectable({
     providedIn: 'root',
 })
+
 export class LineService extends DrawingTool {
     forcedAngle: boolean;
     currentPos: Point;
@@ -194,14 +196,14 @@ export class LineService extends DrawingTool {
         // if double click, the path is done
         if (wasDoubleClick) {
             // distance between first and last point
-            const dist: number = Point.distance(p[p.length - 1], p[0]);
+            const DIST: number = Point.distance(p[p.length - 1], p[0]);
 
             // threshold in pixels to close the path on itself
-            const pixelThreshold = 3;
-            const distanceToConnect: number = Math.sqrt(Math.pow(pixelThreshold, 2) + Math.pow(pixelThreshold, 2));
+            const PIXEL_THRESHOLD = 3;
+            const DISTANCE_TO_CONNECT: number = Math.sqrt(Math.pow(PIXEL_THRESHOLD, 2) + Math.pow(PIXEL_THRESHOLD, 2));
 
             // connect first and last if they meet distance threshold
-            closeIt = dist <= distanceToConnect;
+            closeIt = DIST <= DISTANCE_TO_CONNECT;
         }
 
         // create a divider
@@ -288,8 +290,8 @@ export class LineService extends DrawingTool {
         }
 
         // add fixed variations to the first point
-        const fixed: Point = new Point(firstPoint.x + xDelta, firstPoint.y + yDelta);
+        const FIXED: Point = new Point(firstPoint.x + xDelta, firstPoint.y + yDelta);
 
-        return fixed;
+        return FIXED;
     }
 }
