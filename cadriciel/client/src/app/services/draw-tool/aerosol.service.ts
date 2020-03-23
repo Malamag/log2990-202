@@ -14,6 +14,7 @@ const DEFAULT_DIAMETER = 50;
 @Injectable({
     providedIn: 'root',
 })
+
 export class AerosolService extends DrawingTool {
 
     private attr: AerosolAttributes;
@@ -53,7 +54,7 @@ export class AerosolService extends DrawingTool {
 
     updateAttributes(): void {
         this.interaction.$aerosolAttributes.subscribe((obj: AerosolAttributes) => {
-                this.attr = { emissionPerSecond: obj.emissionPerSecond, diameter: obj.diameter };
+            this.attr = { emissionPerSecond: obj.emissionPerSecond, diameter: obj.diameter };
         });
     }
 
@@ -68,13 +69,13 @@ export class AerosolService extends DrawingTool {
     }
 
     // cancel the current progress
-  cancel(): void {
+    cancel(): void {
 
-    super.cancel();
+        super.cancel();
 
-    // Reinitialize insideCanvas
-    this.insideCanvas = true;
-  }
+        // Reinitialize insideCanvas
+        this.insideCanvas = true;
+    }
 
     // click with aerosol in hand
     down(position: Point): void {
@@ -164,11 +165,10 @@ export class AerosolService extends DrawingTool {
 
         // Initialize the d string attribute of the path
         let dString = '';
-        const LINE_LENGTH = 1;
         // For each generated point, move to the point and put a tiny line that looks like a point
         for (const POINT of this.points) {
             dString += ` M ${POINT.x} ${POINT.y}`;
-            dString += ` L ${POINT.x + LINE_LENGTH} ${POINT.y + LINE_LENGTH}`;
+            dString += ` L ${POINT.x} ${POINT.y}`;
         }
 
         // Create a radius dependent of the diameter -> 1/100 of the diameter
@@ -178,6 +178,7 @@ export class AerosolService extends DrawingTool {
         this.path += ' <path';
         this.path += ` d="${dString}"`;
         this.path += ` stroke="${this.chosenColor.primColor}"`;
+        this.path += ' stroke-linecap="round"';
         this.path += ' stroke-linejoin="round"';
         this.path += ` stroke-width="${POINT_RADIUS}"`;
         this.path += ' fill="none" /> </g>';
@@ -218,9 +219,9 @@ export class AerosolService extends DrawingTool {
             // Push four points with same radius and changing the angle a little.
             // Seems almost as random, but has less operations to do
             for (let i = 1; i < PT_NUM && this.isDown; i++) {
-                const x = this.lastPoint.x + RADIUS * Math.cos(ANGLE * i);
-                const y = this.lastPoint.y + RADIUS * Math.sin(ANGLE * i);
-                this.points.push(new Point(x, y));
+                const X = this.lastPoint.x + RADIUS * Math.cos(ANGLE * i);
+                const Y = this.lastPoint.y + RADIUS * Math.sin(ANGLE * i);
+                this.points.push(new Point(X, Y));
             }
         }
     }

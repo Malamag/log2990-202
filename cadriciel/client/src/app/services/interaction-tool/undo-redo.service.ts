@@ -37,15 +37,15 @@ export class UndoRedoService extends InteractionTool {
         if (!this.done.length) {
             return;
         }
-        const elem = this.done.pop();
+        const ELEM = this.done.pop();
         this.drawing.innerHTML = '';
-        if (elem != undefined) {
-            this.undone.push(elem);
+        if (ELEM != undefined) {
+            this.undone.push(ELEM);
         }
         if (this.done.length) {
             this.drawing.innerHTML = this.done[this.done.length - 1];
-            const event = new Event('newDrawing');
-            window.dispatchEvent(event);
+            const EVENT = new Event('newDrawing');
+            window.dispatchEvent(EVENT);
         }
     }
     redo(): void {
@@ -53,14 +53,14 @@ export class UndoRedoService extends InteractionTool {
         if (!this.undone.length) {
             return;
         }
-        const elem = this.undone.pop();
+        const ELEM = this.undone.pop();
         this.drawing.innerHTML = '';
-        if (elem != undefined) {
-            this.done.push(elem);
+        if (ELEM != undefined) {
+            this.done.push(ELEM);
         }
         this.drawing.innerHTML = this.done[this.done.length - 1];
-        const event = new Event('newDrawing');
-        window.dispatchEvent(event);
+        const EVENT = new Event('newDrawing');
+        window.dispatchEvent(EVENT);
 
     }
 

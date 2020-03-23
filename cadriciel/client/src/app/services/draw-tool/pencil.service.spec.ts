@@ -10,6 +10,7 @@ export class FakeInteractionService extends InteractionService {}
 export class FakeColorPickingService extends ColorPickingService {}
 export class FakeColorConvertingService extends ColorConvertingService {}
 export class MouseHandlerMock {}
+
 // tslint:enable: max-classes-per-file
 describe('PencilService', () => {
   let service: PencilService;
@@ -37,15 +38,15 @@ describe('PencilService', () => {
 });
 
   it('should be created', () => {
-    const testService: PencilService = TestBed.get(PencilService);
-    expect(testService).toBeTruthy();
+    const TEST_SERVICE: PencilService = TestBed.get(PencilService);
+    expect(TEST_SERVICE).toBeTruthy();
   });
 
   it('should set the attributes in the subscription', () => {
     service.interaction.emitToolsAttributes({lineThickness: 0, texture: 0}); // arbitrary, used to check if the emssion worked
-    const spyInteraction = spyOn(service.interaction.$toolsAttributes, 'subscribe');
+    const SPY_INTERACTION = spyOn(service.interaction.$toolsAttributes, 'subscribe');
     service.updateAttributes();
-    expect(spyInteraction).toHaveBeenCalled();
+    expect(SPY_INTERACTION).toHaveBeenCalled();
     expect(service.attr).toBeDefined();
 
   });
@@ -59,33 +60,33 @@ describe('PencilService', () => {
   });*/
 
   it('should update the current path on mouse down', () => {
-    const spy = spyOn(service,  'updateProgress');
+    const SPY = spyOn(service,  'updateProgress');
     service.down(ptA);
     expect(service.currentPath.length).toBe(2); // same point added twice to manage static mouse
     expect(service.currentPath).toContain(ptA);
 
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
   });
 
   it('should update the drawing on mouse up inside workspace', () => {
     service.down(ptA); // pressing the mouse
-    const spy = spyOn(service, 'updateDrawing');
+    const SPY = spyOn(service, 'updateDrawing');
     service.up(ptA, true); // inside workspce
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
   });
 
   it('should not update the drawing on mouse up outside workspace', () => {
     service.down(ptA); // pressing the mouse
-    const spy = spyOn(service, 'updateDrawing');
+    const SPY = spyOn(service, 'updateDrawing');
     service.up(ptA, false); // inside workspce
-    expect(spy).not.toHaveBeenCalled();
+    expect(SPY).not.toHaveBeenCalled();
   });
 
   it('should not update the drawing of the tool change is on-the-fly', () => {
     service.ignoreNextUp = true; // tool change
-    const spy = spyOn(service, 'updateDrawing');
+    const SPY = spyOn(service, 'updateDrawing');
     service.up(ptA, true);
-    expect(spy).not.toHaveBeenCalled();
+    expect(SPY).not.toHaveBeenCalled();
   });
 
   it('should add the new position in the current path array on mouse down', () => {
@@ -95,66 +96,66 @@ describe('PencilService', () => {
   });
 
   it('should update progress on mouse move', () => {
-    const spy = spyOn(service, 'updateProgress');
+    const SPY = spyOn(service, 'updateProgress');
     service.down(ptA);
     service.move(ptA);
 
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
   });
 
   it('should not draw if the mouse isnt pressed', () => {
-    const spy = spyOn(service, 'updateProgress');
+    const SPY = spyOn(service, 'updateProgress');
     service.move(ptA);
-    expect(spy).not.toHaveBeenCalled();
+    expect(SPY).not.toHaveBeenCalled();
   });
 
   // from here, same goes for the brush as they are similar tools
   it('should create a valid path', () => {
-    const path = service.createPath(ptArr);
-    expect(path).toContain('<path');
+    const PATH = service.createPath(ptArr);
+    expect(PATH).toContain('<path');
   });
 
   it('the path must have the same starting point has the mouse', () => {
-    const path = service.createPath(ptArr);
-    expect(path).toContain(`M ${ptArr[0].x} ${ptArr[0].y} `);
+    const PATH = service.createPath(ptArr);
+    expect(PATH).toContain(`M ${ptArr[0].x} ${ptArr[0].y} `);
   });
 
   it('the path must be pursued by the next point', () => {
-    const path = service.createPath(ptArr);
-    expect(path).toContain(`L ${ptArr[1].x} ${ptArr[1].y} `);  // second and last point of our fake array
+    const PATH = service.createPath(ptArr);
+    expect(PATH).toContain(`L ${ptArr[1].x} ${ptArr[1].y} `);  // second and last point of our fake array
   });
 
   it('should have the primary color as attribute', () => {
-    const prim = '#ffffff';
-    const sec = '#000000';
-    const back = '#ffffff';
-    service.chosenColor = {primColor: prim, secColor: sec, backColor: back};
+    const PRIM = '#ffffff';
+    const SEC = '#000000';
+    const BACK = '#ffffff';
+    service.chosenColor = {primColor: PRIM, secColor: SEC, backColor: BACK};
 
-    const path = service.createPath(ptArr);
+    const PATH = service.createPath(ptArr);
 
-    expect(path).toContain(prim); // we want to see the primary color, but not the secondary!
-    expect(path).not.toContain(sec);
+    expect(PATH).toContain(PRIM); // we want to see the primary color, but not the secondary!
+    expect(PATH).not.toContain(SEC);
 
   });
 
   it('should have the choosen thickness', () => {
-    const thick = 25; // fake thickness used for this test's purpose
-    service.attr.lineThickness = thick;
-    const path = service.createPath(ptArr);
-    expect(path).toContain(`stroke-width="${thick}"`); // svg attribute along with its value
+    const THICK = 25; // fake thickness used for this test's purpose
+    service.attr.lineThickness = THICK;
+    const PATH = service.createPath(ptArr);
+    expect(PATH).toContain(`stroke-width="${THICK}"`); // svg attribute along with its value
   });
 
   it('should have a round linecap and linejoin', () => {
-    const path = service.createPath(ptArr);
+    const PATH = service.createPath(ptArr);
 
-    expect(path).toContain('stroke-linecap="round"');
-    expect(path).toContain('stroke-linejoin="round"');
+    expect(PATH).toContain('stroke-linecap="round"');
+    expect(PATH).toContain('stroke-linejoin="round"');
   });
 
   it('should be named pencil-stroke', () => {
-    const path = service.createPath(ptArr);
-    const name = 'pencil-stroke';
-    expect(path).toContain(name);
+    const PATH = service.createPath(ptArr);
+    const NAME = 'pencil-stroke';
+    expect(PATH).toContain(NAME);
   });
 
 });

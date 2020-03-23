@@ -4,7 +4,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { Observable } from 'rxjs';
 import { ImageData } from '../../../../../image-data';
 
-const httpOptions = {
+const HTTP_OPTIONS = {
     headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -27,7 +27,7 @@ export class IndexService {
     }
 
     deleteImageById(imageId: string): void {
-        this.http.delete<ImageData>(this.DATABASE_URL + imageId, httpOptions).subscribe(
+        this.http.delete<ImageData>(this.DATABASE_URL + imageId, HTTP_OPTIONS).subscribe(
             (data) => this.displayFeedback('Image supprimée avec succès!'),
             (error) => {
                 this.displayFeedback("Erreur lors de la suppression de l'image");
@@ -37,7 +37,7 @@ export class IndexService {
     }
 
     modifyImage(imageData: ImageData): void {
-        httpOptions.headers = httpOptions.headers.set('Authorization', 'my-new-auth-token');
+        HTTP_OPTIONS.headers = HTTP_OPTIONS.headers.set('Authorization', 'my-new-auth-token');
         // this.http.patch<ImageData>(this.DATABASE_URL, imageData, httpOptions).subscribe((data) => { });
     }
 
@@ -46,7 +46,7 @@ export class IndexService {
     }
 
     saveImage(imageData: ImageData): void {
-        this.http.post('http://localhost:3000/database/saveImage', imageData, httpOptions).subscribe(
+        this.http.post('http://localhost:3000/database/saveImage', imageData, HTTP_OPTIONS).subscribe(
             (data) => {
                 this.displayFeedback('Image sauvegardée avec succès');
                 console.log(data);
@@ -60,8 +60,8 @@ export class IndexService {
 
     private displayFeedback(message: string): void {
         const DURATION = 2500;
-        const config = new MatSnackBarConfig();
-        config.duration = DURATION;
-        this.snackBar.open(message, undefined, config);
+        const CONFIG = new MatSnackBarConfig();
+        CONFIG.duration = DURATION;
+        this.snackBar.open(message, undefined, CONFIG);
     }
 }

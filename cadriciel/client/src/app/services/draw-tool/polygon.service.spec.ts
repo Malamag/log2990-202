@@ -10,11 +10,20 @@ describe('PolygonService', () => {
     let ptC: Point;
     let ptArr: Point[];
 
+    // Colors taken for the tests
+    let primCol: string;
+    let secCol: string;
+    let backCol: string;
+
     beforeEach(() => {
         ptA = new Point(0, 0); // using a point to test position functions
         ptB = new Point(1, 2);
         ptC = new Point(1, 2);
         ptArr = [ptA, ptB, ptC];
+
+        primCol = '#000000';
+        secCol = '#ffffff';
+        backCol = '#ffffff';
 
         TestBed.configureTestingModule({
             providers: [
@@ -32,45 +41,45 @@ describe('PolygonService', () => {
     });
 
     it('should be created', () => {
-        const testService: PolygonService = TestBed.get(PolygonService);
-        expect(testService).toBeTruthy();
+        const TEST_SERVICE: PolygonService = TestBed.get(PolygonService);
+        expect(TEST_SERVICE).toBeTruthy();
     });
 
     it('should set the attributes in the subscription', () => {
         service.interaction.emitFormsAttributes({ plotType: 0, lineThickness: 0, numberOfCorners: 0 });
-        const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
+        const SPY_INTERACTION = spyOn(service.interaction.$formsAttributes, 'subscribe');
         service.updateAttributes();
-        expect(spyInteraction).toHaveBeenCalled();
+        expect(SPY_INTERACTION).toHaveBeenCalled();
         expect(service.attr).toBeDefined();
     });
 
     it('should update the current path on mouse down', () => {
-        const spy = spyOn(service, 'updateProgress');
+        const SPY = spyOn(service, 'updateProgress');
         service.down(ptA);
         expect(service.currentPath.length).toBe(2); // same point added twice to manage static mouse
         expect(service.currentPath).toContain(ptA);
 
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should update the drawing on mouse up', () => {
         service.down(ptA); // pressing the mouse
-        const spy = spyOn(service, 'updateDrawing');
+        const SPY = spyOn(service, 'updateDrawing');
         service.up(ptA);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should not update the drawing of the tool change is on-the-fly', () => {
         service.ignoreNextUp = true;
-        const spy = spyOn(service, 'updateDrawing');
+        const SPY = spyOn(service, 'updateDrawing');
         service.up(ptA);
-        expect(spy).not.toHaveBeenCalled();
+        expect(SPY).not.toHaveBeenCalled();
     });
 
     it('should update the progress on mouse down', () => {
-        const spy = spyOn(service, 'updateProgress');
+        const SPY = spyOn(service, 'updateProgress');
         service.down(ptA);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should add the new position in the current path array on mouse down', () => {
@@ -80,20 +89,20 @@ describe('PolygonService', () => {
     });
 
     it('should create a valid rectangle svg from one point to another', () => {
-        const rect = service.createPath(ptArr, false);
-        expect(rect).toContain('<rect');
+        const RECT = service.createPath(ptArr, false);
+        expect(RECT).toContain('<rect');
     });
 
     it('should create a valid polygon svg from one point to another', () => {
-        const polygon = service.createPath(ptArr, false);
-        expect(polygon).toContain('<polygon');
+        const POLYGON = service.createPath(ptArr, false);
+        expect(POLYGON).toContain('<polygon');
     });
 
     it('should change the number of corners of the polygon', () => {
-        const corners = 7;
-        service.attr.numberOfCorners = corners; // simulated border thickness
+        const CORNERS = 7;
+        service.attr.numberOfCorners = CORNERS; // simulated border thickness
         service.createPath(ptArr, false);
-        expect(service.corners.length).toEqual(corners);
+        expect(service.corners.length).toEqual(CORNERS);
     });
     /*
         it('should create a rectangle of the correct dimensions from mouse move', () => {
@@ -109,90 +118,78 @@ describe('PolygonService', () => {
         });
     */
     it('should create a polygon with the selected border thickness', () => {
-        const thick = 1;
-        service.attr.lineThickness = thick; // simulated border thickness
-        const polygon = service.createPath(ptArr, false);
-        const expTick = `stroke-width="${thick}"`;
+        const THICK = 1;
+        service.attr.lineThickness = THICK; // simulated border thickness
+        const POLYGON = service.createPath(ptArr, false);
+        const EXP_THICK = `stroke-width="${THICK}"`;
 
-        expect(polygon).toContain(expTick);
+        expect(POLYGON).toContain(EXP_THICK);
     });
 
     it('should create a polygon filled with the selected color', () => {
-        const color = '#ffffff';
-        service.chosenColor = { primColor: color, secColor: color, backColor: color }; // both prim. and sec.
-        const polygon = service.createPath(ptArr, false);
+        const COLOR = primCol;
+        service.chosenColor = { primColor: COLOR, secColor: COLOR, backColor: COLOR }; // both prim. and sec.
+        const POLYGON = service.createPath(ptArr, false);
 
-        expect(polygon).toContain(`fill="${color}"`);
+        expect(POLYGON).toContain(`fill="${COLOR}"`);
     });
 
     it('should create a border of the selected secondary color', () => {
-        const prim = '#000000';
-        const sec = '#ffffff';
-        const back = '#ffffff';
-        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-        const polygon = service.createPath(ptArr, false);
+        service.chosenColor = { primColor: primCol, secColor: secCol, backColor: backCol };
+        const POLYGON = service.createPath(ptArr, false);
 
-        expect(polygon).toContain(`stroke="${sec}"`);
+        expect(POLYGON).toContain(`stroke="${secCol}"`);
     });
 
     it('should create only an outlined polygon on plottype = 0', () => {
         service.attr.plotType = 0; // init the plot type
-        const prim = '#000000';
-        const sec = '#ffffff';
-        const back = '#ffffff';
-        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-        const polygon = service.createPath(ptArr, false);
+        service.chosenColor = { primColor: primCol, secColor: secCol, backColor: backCol };
+        const POLYGON = service.createPath(ptArr, false);
 
-        expect(polygon).toContain(`fill="${'none'}"`); // no color for fill
-        expect(polygon).toContain(`stroke="${sec}"`); // secondary color for border fill
+        expect(POLYGON).toContain(`fill="${'none'}"`); // no color for fill
+        expect(POLYGON).toContain(`stroke="${secCol}"`); // secondary color for border fill
     });
 
     it('should create only a filled polygon on plottype = 1', () => {
         service.attr.plotType = 1; // init the plot type
-        const prim = '#000000';
-        const sec = '#ffffff';
-        const back = '#ffffff';
-        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
+        service.chosenColor = { primColor: primCol, secColor: secCol, backColor: backCol };
 
-        const polygon = service.createPath(ptArr, false);
+        const POLYGON = service.createPath(ptArr, false);
 
-        expect(polygon).toContain(`fill="${prim}"`); // primary color fill
-        expect(polygon).toContain(`stroke="${'none'}"`);
+        expect(POLYGON).toContain(`fill="${primCol}"`); // primary color fill
+        expect(POLYGON).toContain(`stroke="${'none'}"`);
     });
 
     it('should create a filled and outlined polygon on plottype = 2', () => {
         service.attr.plotType = 2; // init the plot type
-        const prim = '#000000';
-        const sec = '#ffffff';
-        const back = '#ffffff';
-        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-        const polygon = service.createPath(ptArr, false);
+        service.chosenColor = { primColor: primCol, secColor: secCol, backColor: backCol };
+        const POLYGON = service.createPath(ptArr, false);
 
-        expect(polygon).toContain(`fill="${prim}"`); // no color for fill
-        expect(polygon).toContain(`stroke="${sec}"`); // secondary color for border fill
+        expect(POLYGON).toContain(`fill="${primCol}"`); // no color for fill
+        expect(POLYGON).toContain(`stroke="${secCol}"`); // secondary color for border fill
     });
 
     it('should not create an polygon if the mouse didnt move', () => {
-        const newArr = [ptA, ptA]; // no movement
-        const polygon = service.createPath(newArr, false);
-        expect(polygon).toEqual('');
+        const NEW_ARR = [ptA, ptA]; // no movement
+        const POLYGON = service.createPath(NEW_ARR, false);
+        expect(POLYGON).toEqual('');
     });
 
     it('should be not create a polygon if the path has less than 2 points', () => {
-        const path = service.createPath([ptA], false);
-        expect(path).toEqual('');
+        const PATH = service.createPath([ptA], false);
+        expect(PATH).toEqual('');
     });
 
     it('should be named polygon', () => {
-        const path = service.createPath(ptArr, false);
-        const name = 'polygon';
-        expect(path).toContain(name);
+        const PATH = service.createPath(ptArr, false);
+        const NAME = 'polygon';
+        expect(PATH).toContain(NAME);
     });
 
     it('should align all points inside the perimeter if a point is smaller than ', () => {
-        const path = service.createPath(ptArr, false);
-        const name = 'polygon';
-        expect(path).toContain(name);
+        const PATH = service.createPath(ptArr, false);
+        const NAME = 'polygon';
+        expect(PATH).toContain(NAME);
     });
 
 });

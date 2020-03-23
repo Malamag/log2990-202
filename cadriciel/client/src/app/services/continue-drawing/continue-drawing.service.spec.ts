@@ -48,16 +48,16 @@ describe('ContinueDrawingService', () => {
 
   it('ask for doodle and affect the children', async (done: any) => {
     const LOAD_TIME = 15;
-    const askSpy = spyOn(service.doodle, 'askForDoodle');
+    const ASK_SPY = spyOn(service.doodle, 'askForDoodle');
 
     service.doodle.currentDraw = elementStub;
 
     render.appendChild(service.doodle.currentDraw.nativeElement, childElemStub);
-    const svgData: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello', 'hello'] };
-    service.continueDrawing(svgData);
+    const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello', 'hello'] };
+    service.continueDrawing(SVG_DATA);
     setTimeout(() => {
       expect(childElemStub.innerHTML).toEqual('hello');
-      expect(askSpy).toHaveBeenCalled();
+      expect(ASK_SPY).toHaveBeenCalled();
       done();
     }, LOAD_TIME);
   });

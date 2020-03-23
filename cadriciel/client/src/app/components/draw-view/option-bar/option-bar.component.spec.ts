@@ -1,9 +1,11 @@
 import { E, G, O, S } from '@angular/cdk/keycodes';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatButtonModule, MatDialog,
+import {
+    MatButtonModule, MatDialog,
     MatIconModule, MatSliderModule,
-    MatSlideToggleModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+    MatSlideToggleModule, MatToolbarModule, MatTooltipModule
+} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
@@ -46,7 +48,7 @@ describe('OptionBarComponent', () => {
         TestBed.configureTestingModule({
             declarations: [OptionBarComponent],
             imports: [MatButtonModule, MatToolbarModule, MatIconModule, MatTooltipModule, MatSlideToggleModule,
-                 MatSliderModule, RouterTestingModule, BrowserAnimationsModule],
+                MatSliderModule, RouterTestingModule, BrowserAnimationsModule],
             providers: [
                 { provide: MatDialog },
                 { provide: ModalWindowService, useValue: winServiceStub },
@@ -70,6 +72,7 @@ describe('OptionBarComponent', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
     it('should open the new form modal window on ctrl+o', () => {
         fakeKbEvent.keyCode = O; // ctrldown already true
         const SPY = spyOn(component, 'openNewDrawForm');
