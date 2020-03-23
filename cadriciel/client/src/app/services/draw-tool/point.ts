@@ -23,8 +23,8 @@ export class Point {
     }
 
     static insideRectangle(p: Point, tl: Point, br: Point): boolean {
-        const downRight = p.x > tl.x && p.y > tl.y;
-        const upLeft = p.x < br.x && p.y < br.y;
-        return downRight && upLeft;
+        const DOWN_RIGHT = p.x > tl.x && p.y > tl.y;
+        const UP_LEFT = p.x < br.x && p.y < br.y;
+        return DOWN_RIGHT && UP_LEFT;
     }
 }

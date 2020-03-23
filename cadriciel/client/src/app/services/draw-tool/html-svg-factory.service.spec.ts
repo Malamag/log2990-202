@@ -6,7 +6,7 @@ describe('HtmlSvgFactoryService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: HtmlSvgFactory = TestBed.get(HtmlSvgFactory);
-    expect(service).toBeTruthy();
+    const SERVICE: HtmlSvgFactory = TestBed.get(HtmlSvgFactory);
+    expect(SERVICE).toBeTruthy();
   });
 });

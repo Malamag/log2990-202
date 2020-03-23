@@ -6,7 +6,7 @@ describe('CanvasInteractionService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: CanvasInteraction = TestBed.get(CanvasInteraction);
-    expect(service).toBeTruthy();
+    const SERVICE: CanvasInteraction = TestBed.get(CanvasInteraction);
+    expect(SERVICE).toBeTruthy();
   });
 });
