@@ -27,13 +27,6 @@ describe('MiniColorPickerComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('should call hsvToHex an emit the color', () => {
-        const SPY_HSV = spyOn(component.colorConvert, 'hsvToHex');
-        const EMIT_SPY = spyOn(component, 'emitColor');
-        component.setColor();
-        expect(SPY_HSV).toHaveBeenCalled();
-        expect(EMIT_SPY).toHaveBeenCalled();
-    });
     it('should set the hue selector to true and to call the hueSelect', () => {
         const SPY = spyOn(component, 'hueSelect');
         const MOUSE_EVENT = new MouseEvent('mouseDown');

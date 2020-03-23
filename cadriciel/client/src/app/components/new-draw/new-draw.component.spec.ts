@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CanvasBuilderService } from '../../services/new-doodle/canvas-builder.service';
 import { NewDrawComponent } from './new-draw.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('NewDrawComponent', () => {
     let component: NewDrawComponent;
@@ -35,6 +36,7 @@ describe('NewDrawComponent', () => {
                 RouterTestingModule,
             ],
             providers: [By, { provide: KeyboardEvent, useValue: kbEventStub }],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA]
         }).compileComponents();
     }));
 
