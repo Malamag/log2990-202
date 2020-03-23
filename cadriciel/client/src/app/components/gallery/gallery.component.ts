@@ -8,8 +8,8 @@ import { map, startWith } from 'rxjs/operators';
 import { ContinueDrawingService } from 'src/app/services/continue-drawing/continue-drawing.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ShownData } from 'src/app/shown-data';
-import { SVGData } from '../../../../../svg-data';
 import { ImageData } from '../../../../../image-data';
+import { SVGData } from '../../../../../svg-data';
 import { IndexService } from './../../services/index/index.service';
 
 @Component({
@@ -186,7 +186,7 @@ export class GalleryComponent implements AfterViewInit {
                 }
             });
         });
-        this.allLoaded = true
+        this.allLoaded = true;
     }
     // source: https://material.angular.io/components/chips/examples
     selected(event: MatAutocompleteSelectedEvent): void {
