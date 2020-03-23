@@ -28,7 +28,7 @@ describe('EraserService', () => {
     });
 
     it('should be created', () => {
-        const service: EraserService = TestBed.get(EraserService);
-        expect(service).toBeTruthy();
+        const SERVICE: EraserService = TestBed.get(EraserService);
+        expect(SERVICE).toBeTruthy();
     });
 });

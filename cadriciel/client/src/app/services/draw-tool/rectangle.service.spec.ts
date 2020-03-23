@@ -15,6 +15,12 @@ describe('RectangleService', () => {
     let ptB: Point;
     let ptArr: Point[];
     let ptC: Point;
+
+    // Colors taken for the tests
+    let primCol: string;
+    let secCol: string;
+    let backCol: string;
+
     beforeEach(() => {
         kbServiceStub = {
             shiftDown: true,
@@ -25,6 +31,10 @@ describe('RectangleService', () => {
         ptB = new Point(1, 2);
         ptC = new Point(1 , 2);
         ptArr = [ptA, ptB, ptC];
+
+        primCol = '#000000';
+        secCol = '#ffffff';
+        backCol = '#ffffff';
 
         TestBed.configureTestingModule({
             providers: [
@@ -42,52 +52,52 @@ describe('RectangleService', () => {
     });
 
     it('should be created', () => {
-        const testService: RectangleService = TestBed.get(RectangleService);
-        expect(testService).toBeTruthy();
+        const TEST_SERVICE: RectangleService = TestBed.get(RectangleService);
+        expect(TEST_SERVICE).toBeTruthy();
     });
 
     it('should affect is square attribute to true', ()=>{
-        const keyboard = new KeyboardHandlerService()
-        keyboard.shiftDown = true
-        service.updateDown(keyboard)
+        const KEYBOARD = new KeyboardHandlerService()
+        KEYBOARD.shiftDown = true
+        service.updateDown(KEYBOARD)
         expect(service.isSquare).toBeTruthy()
     })
     it('should set the attributes in the subscription', () => {
         service.interaction.emitFormsAttributes({ plotType: 0, lineThickness: 0, numberOfCorners: 0 });
-        const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
+        const SPY_INTERACTION = spyOn(service.interaction.$formsAttributes, 'subscribe');
         service.updateAttributes();
-        expect(spyInteraction).toHaveBeenCalled();
+        expect(SPY_INTERACTION).toHaveBeenCalled();
         // tslint:disable-next-line: no-string-literal
         expect(service['attr']).toBeDefined();
     });
 
     it('should update the current path on mouse down', () => {
-        const spy = spyOn(service, 'updateProgress');
+        const SPY = spyOn(service, 'updateProgress');
         service.down(ptA);
         expect(service.currentPath.length).toBe(2); // same point added twice to manage static mouse
         expect(service.currentPath).toContain(ptA);
 
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should update the drawing on mouse up', () => {
         service.down(ptA); // pressing the mouse
-        const spy = spyOn(service, 'updateDrawing');
+        const SPY = spyOn(service, 'updateDrawing');
         service.up(ptA);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should not update the drawing of the tool change is on-the-fly', () => {
         service.ignoreNextUp = true;
-        const spy = spyOn(service, 'updateDrawing');
+        const SPY = spyOn(service, 'updateDrawing');
         service.up(ptA);
-        expect(spy).not.toHaveBeenCalled();
+        expect(SPY).not.toHaveBeenCalled();
     });
 
     it('should update the progress on mouse down', () => {
-        const spy = spyOn(service, 'updateProgress');
+        const SPY = spyOn(service, 'updateProgress');
         service.down(ptA);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should add the new position in the current path array on mouse down', () => {
@@ -97,120 +107,108 @@ describe('RectangleService', () => {
     });
 
     it('should create a valid rectangle svg from one point to another', () => {
-        const rect = service.createPath(ptArr);
-        expect(rect).toContain('<rect');
+        const RECT = service.createPath(ptArr);
+        expect(RECT).toContain('<rect');
     });
 
     it('should create a rectangle of the correct dimensions from mouse move', () => {
-        const rect = service.createPath(ptArr);
-        const expWidth = `width="${ptB.x - ptA.x}"`;
-        const expHeigth = `height="${ptB.y - ptA.y}"`;
+        const RECT = service.createPath(ptArr);
+        const EXP_WIDTH = `width="${ptB.x - ptA.x}"`;
+        const EXP_HEIGHT = `height="${ptB.y - ptA.y}"`;
 
-        expect(rect).toContain(expWidth);
-        expect(rect).toContain(expHeigth);
+        expect(RECT).toContain(EXP_WIDTH);
+        expect(RECT).toContain(EXP_HEIGHT);
     });
 
     it('should create a rectangle with the selected border thickness', () => {
-        const thick = 1;
+        const THICK = 1;
         // tslint:disable-next-line: no-string-literal
-        service['attr'].lineThickness = thick; // simulated border thickness
-        const rect = service.createPath(ptArr);
-        const expTick = `stroke-width="${thick}"`;
-        expect(rect).toContain(expTick);
+        service['attr'].lineThickness = THICK; // simulated border thickness
+        const RECT = service.createPath(ptArr);
+        const EXP_THICK = `stroke-width="${THICK}"`;
+        expect(RECT).toContain(EXP_THICK);
     });
 
     it('should render a square on pressed shift key', () => {
-        const newArr = [new Point(0, 0), new Point(1, 2), new Point(1, 1)]; // forcing a square
-        const fakeSquare = service.createPath(newArr);
+        const NEW_ARR = [new Point(0, 0), new Point(1, 2), new Point(1, 1)]; // forcing a square
+        const FAKE_SQUARE = service.createPath(NEW_ARR);
 
         // tslint:disable-next-line: no-string-literal
         service['isSquare'] = true;
-        const square = service.createPath(ptArr);
+        const SQUARE = service.createPath(ptArr);
 
-        expect(square).toEqual(fakeSquare);
+        expect(SQUARE).toEqual(FAKE_SQUARE);
     });
 
     it('should create a rectangle with corner at mouse start', () => {
-        const rect = service.createPath(ptArr);
+        const RECT = service.createPath(ptArr);
 
-        expect(rect).toContain(`x="${0}"`);
-        expect(rect).toContain(`y="${0}"`);
+        expect(RECT).toContain(`x="${0}"`);
+        expect(RECT).toContain(`y="${0}"`);
     });
 
     it('should create a rectangle filled with the selected color', () => {
-        const color = '#ffffff';
-        service.chosenColor = { primColor: color, secColor: color, backColor: color }; // both prim. and sec.
+        const COLOR = primCol;
+        service.chosenColor = { primColor: COLOR, secColor: COLOR, backColor: COLOR }; // both prim. and sec.
 
-        const rect = service.createPath(ptArr);
-        expect(rect).toContain(`fill="${color}"`);
+        const RECT = service.createPath(ptArr);
+        expect(RECT).toContain(`fill="${COLOR}"`);
     });
 
     it('should create a border of the selected secondary color', () => {
-        const prim = '#000000';
-        const sec = '#ffffff';
-        const back = '#ffffff';
-        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
-        const rect = service.createPath(ptArr);
+        service.chosenColor = { primColor: primCol, secColor: secCol, backColor: backCol };
+        const RECT = service.createPath(ptArr);
 
-        expect(rect).toContain(`stroke="${sec}"`);
+        expect(RECT).toContain(`stroke="${secCol}"`);
     });
 
     it('should create only an outlined rectangle on plottype = 0', () => {
         // tslint:disable-next-line: no-string-literal
         service['attr'].plotType = 0; // init the plot type
-        const prim = '#000000';
-        const sec = '#ffffff';
-        const back = '#ffffff';
-        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
+        service.chosenColor = { primColor: primCol, secColor: secCol, backColor: backCol };
 
-        const rect = service.createPath(ptArr);
+        const RECT = service.createPath(ptArr);
 
-        expect(rect).toContain(`fill="${'none'}"`); // no color for fill
+        expect(RECT).toContain(`fill="${'none'}"`); // no color for fill
 
-        expect(rect).toContain(`stroke="${sec}"`); // secondary color for border fill
+        expect(RECT).toContain(`stroke="${secCol}"`); // secondary color for border fill
     });
 
     it('should create only a filled rectangle on plottype = 1', () => {
         // tslint:disable-next-line: no-string-literal
         service['attr'].plotType = 1; // init the plot type
-        const prim = '#000000';
-        const sec = '#ffffff';
-        const back = '#ffffff';
-        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
+        service.chosenColor = { primColor: primCol, secColor: secCol, backColor: backCol };
 
-        const rect = service.createPath(ptArr);
+        const RECT = service.createPath(ptArr);
 
-        expect(rect).toContain(`fill="${prim}"`); // primary color fill
+        expect(RECT).toContain(`fill="${primCol}"`); // primary color fill
 
-        expect(rect).toContain(`stroke="${'none'}"`);
+        expect(RECT).toContain(`stroke="${'none'}"`);
     });
 
     it('should create a filled and outlined rectangle on plottype = 2', () => {
         // tslint:disable-next-line: no-string-literal
         service['attr'].plotType = 2; // init the plot type
-        const prim = '#000000';
-        const sec = '#ffffff';
-        const back = '#ffffff';
-        service.chosenColor = { primColor: prim, secColor: sec, backColor: back };
+        service.chosenColor = { primColor: primCol, secColor: secCol, backColor: backCol };
 
-        const rect = service.createPath(ptArr);
+        const RECT = service.createPath(ptArr);
 
-        expect(rect).toContain(`fill="${prim}"`); // no color for fill
+        expect(RECT).toContain(`fill="${primCol}"`); // no color for fill
 
-        expect(rect).toContain(`stroke="${sec}"`); // secondary color for border fill
+        expect(RECT).toContain(`stroke="${secCol}"`); // secondary color for border fill
     });
 
     it('should not create a rectange if the mouse didnt move', () => {
-        const newArr = [new Point(0, 0), new Point(0, 0)]; // no move
+        const NEW_ARR = [ptA, ptA]; // no move
 
-        const rect = service.createPath(newArr);
+        const RECT = service.createPath(NEW_ARR);
 
-        expect(rect).toBe('');
+        expect(RECT).toBe('');
     });
 
     it('should be named rectangle', () => {
-        const path = service.createPath(ptArr);
-        const name = 'rectangle';
-        expect(path).toContain(name);
+        const PATH = service.createPath(ptArr);
+        const NAME = 'rectangle';
+        expect(PATH).toContain(NAME);
     });
 });
