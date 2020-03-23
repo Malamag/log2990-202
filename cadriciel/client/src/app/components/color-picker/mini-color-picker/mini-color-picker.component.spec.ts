@@ -10,7 +10,7 @@ describe('MiniColorPickerComponent', () => {
             declarations: [MiniColorPickerComponent],
             imports: [FormsModule]
         })
-        .compileComponents();
+            .compileComponents();
     }));
     beforeEach(() => {
         fixture = TestBed.createComponent(MiniColorPickerComponent);
@@ -26,13 +26,9 @@ describe('MiniColorPickerComponent', () => {
         component.ngOnInit();
         expect(SPY).toHaveBeenCalled();
     });
-    it('should call the next function', () => {
-        const SPY = spyOn(component.colorSubject, 'next');
-        component.emitColor();
-        expect(SPY).toHaveBeenCalled();
-    });
+
     it('should call hsvToHex an emit the color', () => {
-        const SPY_HSV = spyOn(component, 'hsvToHex');
+        const SPY_HSV = spyOn(component.colorConvert, 'hsvToHex');
         const EMIT_SPY = spyOn(component, 'emitColor');
         component.setColor();
         expect(SPY_HSV).toHaveBeenCalled();
@@ -106,9 +102,9 @@ describe('MiniColorPickerComponent', () => {
         RGB_CONTAINER[1] = Math.round((G + M) * component.cData.MAX_RGB_VALUE);
         RGB_CONTAINER[2] = Math.round((B + M) * component.cData.MAX_RGB_VALUE);
         component.cData.MAX_RGB_VALUE = MAX_RGB;
-        const EXPECTED_STRING = '#' + component.colorconvert.rgbToHex(RGB_CONTAINER[0]) + component.colorconvert.rgbToHex(RGB_CONTAINER[1])
-         + component.colorconvert.rgbToHex(RGB_CONTAINER[2]);
-        const RET = component.hsvToHex(H, S, V);
+        const EXPECTED_STRING = '#' + component.colorConvert.rgbToHex(RGB_CONTAINER[0]) + component.colorConvert.rgbToHex(RGB_CONTAINER[1])
+            + component.colorConvert.rgbToHex(RGB_CONTAINER[2]);
+        const RET = component.colorConvert.hsvToHex(H, S, V);
         expect(RET).toEqual(EXPECTED_STRING);
     });
     it('should return the expected string using the second case', () => {
@@ -132,9 +128,9 @@ describe('MiniColorPickerComponent', () => {
         RGB_CONTAINER[1] = Math.round((G + M) * component.cData.MAX_RGB_VALUE);
         RGB_CONTAINER[2] = Math.round((B + M) * component.cData.MAX_RGB_VALUE);
         component.cData.MAX_RGB_VALUE = MAX_RGB;
-        const EXPECTED_STRING = '#' + component.colorconvert.rgbToHex(RGB_CONTAINER[0]) + component.colorconvert.rgbToHex(RGB_CONTAINER[1])
-         + component.colorconvert.rgbToHex(RGB_CONTAINER[2]);
-        const RET = component.hsvToHex(H, S, V);
+        const EXPECTED_STRING = '#' + component.colorConvert.rgbToHex(RGB_CONTAINER[0]) + component.colorConvert.rgbToHex(RGB_CONTAINER[1])
+            + component.colorConvert.rgbToHex(RGB_CONTAINER[2]);
+        const RET = component.colorConvert.hsvToHex(H, S, V);
         expect(RET).toEqual(EXPECTED_STRING);
     });
     it('should return the expected string using the third case', () => {
@@ -158,9 +154,9 @@ describe('MiniColorPickerComponent', () => {
         RGB_CONTAINER[1] = Math.round((G + M) * component.cData.MAX_RGB_VALUE);
         RGB_CONTAINER[2] = Math.round((B + M) * component.cData.MAX_RGB_VALUE);
         component.cData.MAX_RGB_VALUE = MAX_RGB;
-        const EXPECTED_STRING = '#' + component.colorconvert.rgbToHex(RGB_CONTAINER[0]) + component.colorconvert.rgbToHex(RGB_CONTAINER[1])
-         + component.colorconvert.rgbToHex(RGB_CONTAINER[2]);
-        const RET = component.hsvToHex(H, S, V);
+        const EXPECTED_STRING = '#' + component.colorConvert.rgbToHex(RGB_CONTAINER[0]) + component.colorConvert.rgbToHex(RGB_CONTAINER[1])
+            + component.colorConvert.rgbToHex(RGB_CONTAINER[2]);
+        const RET = component.colorConvert.hsvToHex(H, S, V);
         expect(RET).toEqual(EXPECTED_STRING);
     });
     it('should return the expected string using the fourth case', () => {
@@ -184,9 +180,9 @@ describe('MiniColorPickerComponent', () => {
         RGB_CONTAINER[1] = Math.round((G + M) * component.cData.MAX_RGB_VALUE);
         RGB_CONTAINER[2] = Math.round((B + M) * component.cData.MAX_RGB_VALUE);
         component.cData.MAX_RGB_VALUE = MAX_RGB;
-        const EXPECTED_STRING = '#' + component.colorconvert.rgbToHex(RGB_CONTAINER[0]) + component.colorconvert.rgbToHex(RGB_CONTAINER[1])
-         + component.colorconvert.rgbToHex(RGB_CONTAINER[2]);
-        const RET = component.hsvToHex(H, S, V);
+        const EXPECTED_STRING = '#' + component.colorConvert.rgbToHex(RGB_CONTAINER[0]) + component.colorConvert.rgbToHex(RGB_CONTAINER[1])
+            + component.colorConvert.rgbToHex(RGB_CONTAINER[2]);
+        const RET = component.colorConvert.hsvToHex(H, S, V);
         expect(RET).toEqual(EXPECTED_STRING);
     });
     it('should return the expected string using the fifth case', () => {
@@ -210,9 +206,9 @@ describe('MiniColorPickerComponent', () => {
         RGB_CONTAINER[1] = Math.round((G + M) * component.cData.MAX_RGB_VALUE);
         RGB_CONTAINER[2] = Math.round((B + M) * component.cData.MAX_RGB_VALUE);
         component.cData.MAX_RGB_VALUE = MAX_RGB;
-        const EXPECTED_STRING = '#' + component.colorconvert.rgbToHex(RGB_CONTAINER[0]) + component.colorconvert.rgbToHex(RGB_CONTAINER[1])
-         + component.colorconvert.rgbToHex(RGB_CONTAINER[2]);
-        const RET = component.hsvToHex(H, S, V);
+        const EXPECTED_STRING = '#' + component.colorConvert.rgbToHex(RGB_CONTAINER[0]) + component.colorConvert.rgbToHex(RGB_CONTAINER[1])
+            + component.colorConvert.rgbToHex(RGB_CONTAINER[2]);
+        const RET = component.colorConvert.hsvToHex(H, S, V);
         expect(RET).toEqual(EXPECTED_STRING);
     });
     it('should return the expected string using the fifth case', () => {
@@ -236,9 +232,9 @@ describe('MiniColorPickerComponent', () => {
         RGB_CONTAINER[1] = Math.round((G + M) * component.cData.MAX_RGB_VALUE);
         RGB_CONTAINER[2] = Math.round((B + M) * component.cData.MAX_RGB_VALUE);
         component.cData.MAX_RGB_VALUE = MAX_RGB;
-        const EXPECTED_STRING = '#' + component.colorconvert.rgbToHex(RGB_CONTAINER[0]) + component.colorconvert.rgbToHex(RGB_CONTAINER[1])
-         + component.colorconvert.rgbToHex(RGB_CONTAINER[2]);
-        const RET = component.hsvToHex(H, S, V);
+        const EXPECTED_STRING = '#' + component.colorConvert.rgbToHex(RGB_CONTAINER[0]) + component.colorConvert.rgbToHex(RGB_CONTAINER[1])
+            + component.colorConvert.rgbToHex(RGB_CONTAINER[2]);
+        const RET = component.colorConvert.hsvToHex(H, S, V);
         expect(RET).toEqual(EXPECTED_STRING);
     });
 });
