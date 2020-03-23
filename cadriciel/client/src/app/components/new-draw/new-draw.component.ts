@@ -9,7 +9,6 @@ import { CanvasBuilderService } from '../../services/new-doodle/canvas-builder.s
   templateUrl: './new-draw.component.html',
   styleUrls: ['./new-draw.component.scss'],
 })
-
 export class NewDrawComponent implements OnInit {
   // tslint:disable-next-line: typedef
   newDrawForm: FormGroup;
@@ -23,6 +22,7 @@ export class NewDrawComponent implements OnInit {
     private canvasBuilder: CanvasBuilderService,
     private winService: ModalWindowService,
     private router: Router) {
+
   }
 
   ngOnInit(): void {
@@ -93,6 +93,13 @@ export class NewDrawComponent implements OnInit {
   updateColor(color: string): void {
     this.color = color;
     this.newDrawForm.patchValue({ canvColor: this.color }); // updates value for form
+  }
+
+  onInput(): void {
+
+    if (this.canvColor && this.canvColor.valid) {
+      this.color = this.canvColor.value;
+    }
   }
 
 }

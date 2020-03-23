@@ -16,7 +16,7 @@
 
             <mat-form-field>
                 <mat-label for="canvColor">Couleur (hex)</mat-label>
-                <input matInput type="text" formControlName="canvColor" [value]="color" />
+                <input matInput type="text" formControlName="canvColor" [value]="color" (input)="onInput($event)" />
             </mat-form-field>
 
             <p *ngIf="(canvWidth && canvWidth.invalid) || (canvHeight && canvHeight.invalid)" class="warnMessage">
@@ -26,7 +26,7 @@
             <p *ngIf="canvColor && canvColor.invalid" class="warnMessage">
                 Valeur hexadécimale invalide!
             </p>
-            <app-mini-color-picker (colorToEmit)="updateColor($event)"></app-mini-color-picker>
+            <app-mini-color-picker [color]="color" (colorToEmit)="updateColor($event)"></app-mini-color-picker>
 
             <button mat-raised-button color="primary" id="submitButton" type="submit" [disabled]="newDrawForm.invalid">C'est parti!</button>
         </form>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ColorConvertingService } from 'src/app/services/colorPicker/color-converting.service';
 import { colorData } from '../color-data';
 
@@ -14,19 +14,20 @@ const VALUE = 100;
 })
 export class MiniColorPickerComponent implements OnInit {
     @Output() colorToEmit: EventEmitter<string> = new EventEmitter<string>();
+    @Input() color: string;
+
     // tslint:disable-next-line: typedef
     cData = colorData;
     offsetY: number;
     offsetX: number;
     svMaxValue: number;
     hueCursorWidth: number;
-    color: string;
     hue: number;
     saturation: number;
     value: number;
-    svCursorPos: {};
     isHueSelecting: boolean;
     isSVSelecting: boolean;
+    svCursorPos: {};
 
     constructor(public colorConvert: ColorConvertingService) {
         this.offsetY = OFFSET_Y;
@@ -40,6 +41,7 @@ export class MiniColorPickerComponent implements OnInit {
         this.svCursorPos = { x: this.saturation, y: this.svMaxValue - this.value };
         this.isHueSelecting = false;
         this.isSVSelecting = false;
+
     }
 
     ngOnInit(): void {
@@ -51,6 +53,7 @@ export class MiniColorPickerComponent implements OnInit {
     }
 
     setColor(): void {
+        // Slice(1) removes the #
         this.color = this.colorConvert.hsvToHex(this.hue, this.saturation / this.svMaxValue, this.value / this.svMaxValue).slice(1);
         this.emitColor();
     }
@@ -77,6 +80,7 @@ export class MiniColorPickerComponent implements OnInit {
         this.hue = Math.round((event.offsetY - this.offsetY) * (this.cData.MAX_HUE_VALUE / this.svMaxValue));
         this.setColor();
     }
+
     svSelect(event: MouseEvent): void {
         if (!this.isSVSelecting) {
             return;
