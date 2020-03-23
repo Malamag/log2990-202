@@ -1,14 +1,12 @@
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatAutocompleteModule, MatCardModule, MatChipsModule,
-     MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule,
-      MatProgressSpinnerModule, MatSelectModule, MatSnackBarModule } from '@angular/material';
+import { MatAutocompleteModule, MatCardModule, MatChipsModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatProgressSpinnerModule, MatSelectModule, MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
-import { SVGData } from 'src/svg-data';
-import { ImageData } from '../../image-data';
+import { ImageData } from '../../../../../image-data';
+import { SVGData } from '../../../../../svg-data';
 import { GalleryComponent } from './gallery.component';
 
 describe('GalleryComponent', () => {

@@ -107,6 +107,6 @@ describe('ImageFilterService', () => {
         expect(REMOVE_SPY).toHaveBeenCalled();
         expect(MODIFIER_SPY).toHaveBeenCalled();
         expect(APPEND_SPY).toHaveBeenCalled();
-        expect(service.currentFilter).toBe(service.filterArray[num]);
+        expect(service.currentFilter).toBe(service.filterArray[NUM]);
     });
 });

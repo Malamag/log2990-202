@@ -1,7 +1,7 @@
 import { ElementRef, Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SVGData } from 'src/svg-data';
+import { SVGData } from '../../../../../svg-data';
 import { ContinueDrawingService } from './continue-drawing.service';
 import SpyObj = jasmine.SpyObj;
 describe('ContinueDrawingService', () => {
