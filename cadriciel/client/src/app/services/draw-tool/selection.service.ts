@@ -31,23 +31,23 @@ export class SelectionService extends ShapeService {
     selectedRef: HTMLElement;
 
     itemUnderMouse: number | null;
-    canMoveSelection: boolean ;
-    foundAnItem: boolean ;
+    canMoveSelection: boolean;
+    foundAnItem: boolean;
     selectedItems: boolean[] = [];
     invertedItems: boolean[] = [];
-    movingSelection: boolean ;
+    movingSelection: boolean;
     canvas: HTMLElement;
-    movedSelectionOnce: boolean ;
-    movedMouseOnce: boolean ;
-    inverted: boolean ;
+    movedSelectionOnce: boolean;
+    movedMouseOnce: boolean;
+    inverted: boolean;
     wrapperDimensions: [Point, Point] = [new Point(INIT_VALUE, INIT_VALUE), new Point(INIT_VALUE, INIT_VALUE)];
 
     arrows: [boolean, boolean, boolean, boolean] = [false, false, false, false];
     arrowTimers: [number, number, number, number] = [0, 0, 0, 0];
     singleUseArrows: [boolean, boolean, boolean, boolean] = [false, false, false, false];
-    existingLoop: boolean ;
-    timeCount: number ;
-    movedSelectionWithArrowsOnce: boolean ;
+    existingLoop: boolean;
+    timeCount: number;
+    movedSelectionWithArrowsOnce: boolean;
 
     ARROW_KEY_CODES: [number, number, number, number] = [LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW];
 

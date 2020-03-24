@@ -172,7 +172,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.interaction.$selectedTool.subscribe((toolName: string) => {
             if (toolName === 'Annuler' || toolName === 'Refaire') {
                 this.interactionToolsContainer.get('AnnulerRefaire').apply(toolName);
-            } else if (this.toolsContainer.get(toolName)) {
+            } else if (this.toolsContainer.get(toolName) && !this.toolsContainer.get(toolName).selected) {
                 const event = new Event('toolChange');
                 window.dispatchEvent(event);
                 this.closeTools(this.toolsContainer);

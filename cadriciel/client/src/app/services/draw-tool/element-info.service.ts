@@ -10,5 +10,4 @@ export class ElementInfo {
 
     return new Point(TRANSLATE_X, TRANSLATE_Y);
   }
-
 }
