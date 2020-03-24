@@ -123,7 +123,7 @@ describe('SvgDrawComponent', () => {
     });
 
     it('should call window addEventListener', () => {
-        const TOTAL_LISTENERS = 13;
+        const TOTAL_LISTENERS = 12;
         window.addEventListener = jasmine.createSpy().and.returnValue(0);
         component.ngAfterViewInit();
         expect(window.addEventListener).toHaveBeenCalledTimes(TOTAL_LISTENERS);

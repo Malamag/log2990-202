@@ -1,24 +1,28 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
-import { InteractionService } from '../service-interaction/interaction.service';
-import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
-import { ShapeService } from './shape.service';
-import { HtmlSvgFactory } from './html-svg-factory.service';
+import { InteractionService } from '../service-interaction/interaction.service';
 import { CanvasInteraction } from './canvas-interaction.service';
+import { HtmlSvgFactory } from './html-svg-factory.service';
 import { MoveWithArrows } from './move-with-arrows.service';
+import { Point } from './point';
+import { ShapeService } from './shape.service';
 
-const OUTLINE_COLOR: string = '0, 102, 204, 0.9';
-const FILL_COLOR: string = '0, 102, 204, 0.3';
-const INVERTED_OUTLINE_COLOR: string = '204, 0, 102, 0.9';
-const INVERTED_FILL_COLOR: string = '204, 0, 102, 0.3';
+const OUTLINE_COLOR = '0, 102, 204, 0.9';
+const FILL_COLOR = '0, 102, 204, 0.3';
+const INVERTED_OUTLINE_COLOR = '204, 0, 102, 0.9';
+const INVERTED_FILL_COLOR = '204, 0, 102, 0.3';
 
-const NO_MOUSE_MOVEMENT_TOLERANCE: number = 5;
-const MIN_OFFSET_FOR_SELECTION: number = 10;
+const NO_MOUSE_MOVEMENT_TOLERANCE = 5;
+const MIN_OFFSET_FOR_SELECTION = 10;
 
 const START_ARROW_DELAY = 500;
 const ARROW_MOVEMENT_DELAY = 100;
-
+const LEFT_ARROW = 37;
+const UP_ARROW = 38;
+const RIGHT_ARROW = 39;
+const DOWN_ARROW = 40;
+const INIT_VALUE = -1;
 @Injectable({
     providedIn: 'root',
 })
@@ -27,25 +31,25 @@ export class SelectionService extends ShapeService {
     selectedRef: HTMLElement;
 
     itemUnderMouse: number | null;
-    canMoveSelection: boolean = true;
-    foundAnItem: boolean = false;
+    canMoveSelection: boolean ;
+    foundAnItem: boolean ;
     selectedItems: boolean[] = [];
     invertedItems: boolean[] = [];
-    movingSelection: boolean = false;
+    movingSelection: boolean ;
     canvas: HTMLElement;
-    movedSelectionOnce: boolean = false;
-    movedMouseOnce: boolean = false;
-    inverted: boolean = false;
-    wrapperDimensions: [Point, Point] = [new Point(-1, -1), new Point(-1, -1)];
+    movedSelectionOnce: boolean ;
+    movedMouseOnce: boolean ;
+    inverted: boolean ;
+    wrapperDimensions: [Point, Point] = [new Point(INIT_VALUE, INIT_VALUE), new Point(INIT_VALUE, INIT_VALUE)];
 
     arrows: [boolean, boolean, boolean, boolean] = [false, false, false, false];
     arrowTimers: [number, number, number, number] = [0, 0, 0, 0];
     singleUseArrows: [boolean, boolean, boolean, boolean] = [false, false, false, false];
-    existingLoop: boolean = false;
-    timeCount: number = 0;
-    movedSelectionWithArrowsOnce: boolean = false;
+    existingLoop: boolean ;
+    timeCount: number ;
+    movedSelectionWithArrowsOnce: boolean ;
 
-    ARROW_KEY_CODES: [number, number, number, number] = [37, 38, 39, 40];
+    ARROW_KEY_CODES: [number, number, number, number] = [LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW];
 
     constructor(
         inProgess: HTMLElement,
@@ -62,17 +66,25 @@ export class SelectionService extends ShapeService {
         this.render = render;
         this.selectedRef = selection;
         this.canvas = canvas;
-
+        this.canMoveSelection = true;
+        this.foundAnItem = false;
+        this.movingSelection = false;
+        this.movedSelectionOnce = false;
+        this.movedMouseOnce = false;
+        this.inverted = false;
+        this.existingLoop = false;
+        this.timeCount = 0;
+        this.movedSelectionWithArrowsOnce = false;
         MoveWithArrows.loop(this, START_ARROW_DELAY, ARROW_MOVEMENT_DELAY);
         this.selectedRef.style.pointerEvents = 'none'; // ignore the bounding box on click
 
         window.addEventListener('newDrawing', (e: Event) => {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
-                let el = this.drawing.children[i];
-                let status = el.getAttribute('isListening');
-                if (status !== 'true') {
-                    this.render.listen(el, 'mousedown', () => {
-                        this.render.setAttribute(el, 'isListening', 'true');
+                const EL = this.drawing.children[i];
+                const STATUS = EL.getAttribute('isListening');
+                if (STATUS !== 'true') {
+                    this.render.listen(EL, 'mousedown', () => {
+                        this.render.setAttribute(EL, 'isListening', 'true');
                         if (!this.foundAnItem) {
                             this.itemUnderMouse = i;
                             this.foundAnItem = true;
@@ -95,9 +107,10 @@ export class SelectionService extends ShapeService {
         });
     }
 
-    updateDown(keyboard: KeyboardHandlerService) {
-        //CTRL-A SELECT ALL
-        if (keyboard.keyCode == 65 && keyboard.ctrlDown) {
+    updateDown(keyboard: KeyboardHandlerService): void {
+        // CTRL-A SELECT ALL
+        const CTRL_A = 65;
+        if (keyboard.keyCode === CTRL_A && keyboard.ctrlDown) {
             this.selectedItems = [];
             for (let i = 0; i < this.drawing.children.length; i++) {
                 this.selectedItems[i] = true;
@@ -110,19 +123,19 @@ export class SelectionService extends ShapeService {
                 this.arrows[i] = keyboard.keyCode === this.ARROW_KEY_CODES[i] ? true : this.arrows[i];
             }
         }
+        const POS = 3;
+        const SINGLE_LEFT = this.arrows[0] && !this.singleUseArrows[0];
+        const SINGLE_UP = this.arrows[1] && !this.singleUseArrows[1];
+        const SINGLE_RIGHT = this.arrows[2] && !this.singleUseArrows[2];
+        const SINGLE_DOWN = this.arrows[POS] && !this.singleUseArrows[POS];
 
-        let singleLeft = this.arrows[0] && !this.singleUseArrows[0];
-        let singleUp = this.arrows[1] && !this.singleUseArrows[1];
-        let singleRight = this.arrows[2] && !this.singleUseArrows[2];
-        let singleDown = this.arrows[3] && !this.singleUseArrows[3];
-
-        MoveWithArrows.once(singleLeft, singleUp, singleRight, singleDown, this);
+        MoveWithArrows.once(SINGLE_LEFT, SINGLE_UP, SINGLE_RIGHT, SINGLE_DOWN, this);
     }
 
     // updating on key up
-    updateUp(keyCode: number) {
+    updateUp(keyCode: number): void {
         for (let i = 0; i < this.ARROW_KEY_CODES.length; i++) {
-            if (keyCode == this.ARROW_KEY_CODES[i]) {
+            if (keyCode === this.ARROW_KEY_CODES[i]) {
                 this.arrows[i] = false;
                 this.arrowTimers[i] = 0;
                 this.singleUseArrows[i] = false;
@@ -137,7 +150,7 @@ export class SelectionService extends ShapeService {
         }
     }
 
-    down(position: Point, insideWorkspace: boolean, isRightClick: boolean) {
+    down(position: Point, insideWorkspace: boolean, isRightClick: boolean): void {
         // in case we changed tool while the mouse was down
         this.ignoreNextUp = false;
 
@@ -175,7 +188,7 @@ export class SelectionService extends ShapeService {
     }
 
     // mouse up with selection in hand
-    up(position: Point) {
+    up(position: Point): void {
         // in case we changed tool while the mouse was down
         if (this.ignoreNextUp) {
             return;
@@ -223,7 +236,7 @@ export class SelectionService extends ShapeService {
         this.inProgress.innerHTML = '';
     }
 
-    move(position: Point) {
+    move(position: Point): void {
         // only if the selectionTool is currently affecting the canvas
         if (!this.isDown) {
             return;
@@ -232,10 +245,10 @@ export class SelectionService extends ShapeService {
         if (this.movingSelection) {
             this.movedSelectionOnce = true;
 
-            let prevMousePosition = this.currentPath[this.currentPath.length - 1];
-            let offset = new Point(position.x - prevMousePosition.x, position.y - prevMousePosition.y);
+            const PREVIOUS_MOUSE_POSITION = this.currentPath[this.currentPath.length - 1];
+            const OFFSET = new Point(position.x - PREVIOUS_MOUSE_POSITION.x, position.y - PREVIOUS_MOUSE_POSITION.y);
 
-            CanvasInteraction.moveElements(offset.x, offset.y, this);
+            CanvasInteraction.moveElements(OFFSET.x, OFFSET.y, this);
         }
 
         // save mouse position
@@ -261,10 +274,10 @@ export class SelectionService extends ShapeService {
     }
 
     // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
-    createPath(p: Point[]) {
+    createPath(p: Point[]): string {
         let s = '';
 
-        //We need at least 2 points
+        // We need at least 2 points
         if (p.length < 2) {
             return s;
         }
@@ -276,35 +289,36 @@ export class SelectionService extends ShapeService {
         const P2_Y = p[p.length - 1].y;
 
         // calculate the width and height of the rectangle
-        let w = P2_X - P1_X;
-        let h = P2_Y - P1_Y;
+        const W = P2_X - P1_X;
+        const H = P2_Y - P1_Y;
 
         // find top-left corner
-        let startX = w > 0 ? p[0].x : p[p.length - 1].x;
-        let startY = h > 0 ? p[0].y : p[p.length - 1].y;
+        const START_X = W > 0 ? p[0].x : p[p.length - 1].x;
+        const START_Y = H > 0 ? p[0].y : p[p.length - 1].y;
 
         // create a divider
         s = '<g name = "selection-perimeter">';
 
         // set render attributes for the svg rect
+        const NUM = 5;
         s += HtmlSvgFactory.svgRectangle(
             null,
             null,
-            startX,
-            startY,
-            Math.abs(w),
-            Math.abs(h),
+            START_X,
+            START_Y,
+            Math.abs(W),
+            Math.abs(H),
             this.inverted ? INVERTED_FILL_COLOR : FILL_COLOR,
             this.inverted ? INVERTED_OUTLINE_COLOR : OUTLINE_COLOR,
-            5,
-            5,
+            NUM,
+            NUM,
         );
 
         // end the divider
         s += '</g>';
 
         // can't have rectangle with 0 width or height
-        if (w == 0 || h == 0) {
+        if (W === 0 || H === 0) {
             s = '';
         }
 
