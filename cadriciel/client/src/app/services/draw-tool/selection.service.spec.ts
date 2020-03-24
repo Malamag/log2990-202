@@ -1,13 +1,13 @@
 import { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { ColorConvertingService } from '../colorPicker/color-converting.service';
+import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { CanvasInteraction } from './canvas-interaction.service';
 import { MoveWithArrows } from './move-with-arrows.service';
 import { Point } from './point';
 import { SelectionService } from './selection.service';
-import { ColorPickingService } from '../colorPicker/color-picking.service';
-import { ColorConvertingService } from '../colorPicker/color-converting.service';
 
 export class FakeInteractionService extends InteractionService { }
 
