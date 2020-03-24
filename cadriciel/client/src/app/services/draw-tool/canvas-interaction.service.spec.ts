@@ -2,13 +2,13 @@ import { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { CanvasInteraction } from './canvas-interaction.service';
+import { ElementInfo } from './element-info.service';
 import { Point } from './point';
 import { SelectionService } from './selection.service';
-import { ElementInfo } from './element-info.service';
 
 export class FakeInteractionService extends InteractionService { }
 
-describe('CanvasInteractionService', () => {
+fdescribe('CanvasInteractionService', () => {
   let service: SelectionService;
     // tslint:disable-next-line: prefer-const
   let render: Renderer2;
@@ -20,9 +20,11 @@ describe('CanvasInteractionService', () => {
   beforeEach(() => {
     firstChild = {
       getBoundingClientRect: () => 0,
+      x: 2,
+      y: 2,
     };
     select = {
-      children: [firstChild, firstChild],
+      children: [firstChild , firstChild],
       style: {
           pointerEvents: 'none',
       },
@@ -45,7 +47,7 @@ describe('CanvasInteractionService', () => {
   });
 
   it('should move the selected items', () => {
-    service.selectedItems = [true, true];
+    service.selectedItems = [true, false];
     const OFFSET = 5;
     const SPY = spyOn(ElementInfo, 'translate');
     CanvasInteraction.moveElements(OFFSET, OFFSET, service);
@@ -60,16 +62,17 @@ describe('CanvasInteractionService', () => {
     expect(SPY).not.toHaveBeenCalled();
   });
 
-  it('should create a bounding box', () => {
-    /**/
+  it('should empty the selected items', () => {
+    service.selected = false;
+    CanvasInteraction.createBoundingBox(service);
+    expect(service.selectedItems).toEqual([]);
   });
 
-  it('should get Precise Border', () => {
-    /**/
+  it('should get a precise border two times', () => {
+    service.selectedItems = [true, false];
+    service.selected = true;
+    const SPY = spyOn(CanvasInteraction, 'getPreciseBorder');
+    CanvasInteraction.createBoundingBox(service);
+    expect(SPY).toHaveBeenCalled();
   });
-
-  it('should retrieve the items in rectangle', () => {
-    /**/
-  });
-
 });
