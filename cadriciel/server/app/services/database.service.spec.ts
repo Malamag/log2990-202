@@ -57,7 +57,8 @@ describe('Database service', () => {
     //test getImages() expect matching id
     it('should expect a lenght of one for a seach of one existing image', async () => {
         const metaData: MetaData[] = [{ id: '1', name: 'ok', tags: ['ok'] }];
-        return expect(dbService.getImages(metaData)).to.have.length(1);
+        const result = await dbService.getImages(metaData);
+        return expect(result).to.have.length(1);
     })
     it('should expect a lenght of zero for a seach of one not existing image', async () => {
         const metaData: MetaData[] = [{ id: '1001', name: 'ok', tags: ['ok'] }];
