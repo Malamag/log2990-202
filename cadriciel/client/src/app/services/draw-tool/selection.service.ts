@@ -61,6 +61,7 @@ export class SelectionService extends ShapeService {
     this.selectedRef.style.pointerEvents = "none"; // ignore the bounding box on click
 
     window.addEventListener("newDrawing", (e: Event) => {
+      console.log("asdfghjk");
       for (let i = 0; i < this.drawing.childElementCount; i++) {
         let el = this.drawing.children[i];
         let status = el.getAttribute("isListening");
