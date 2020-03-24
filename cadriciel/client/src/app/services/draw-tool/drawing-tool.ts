@@ -6,9 +6,9 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { InputObserver } from './input-observer';
 import { Point } from './point';
 
-const DEFAULTPRIMARYCOLOR = 'ff0000ff';
-const DEFAULTSECONDARYCOLOR = '000000';
-const DEFAULTBACKCOLOR = 'ffffffff';
+const DEFAULT_PRIMARY_COLOR = 'ff0000ff';
+const DEFAULT_SECONDARY_COLOR = '000000';
+const DEFAULT_BACK_COLOR = 'ffffffff';
 
 @Injectable({
   providedIn: 'root'
@@ -46,8 +46,8 @@ export abstract class DrawingTool extends InputObserver {
 
     this.ignoreNextUp = false;
     this.chosenColor = {
-      primColor: DEFAULTPRIMARYCOLOR, secColor: DEFAULTSECONDARYCOLOR,
-      backColor: DEFAULTBACKCOLOR
+      primColor: DEFAULT_PRIMARY_COLOR, secColor: DEFAULT_SECONDARY_COLOR,
+      backColor: DEFAULT_BACK_COLOR
     };
   }
 
@@ -99,8 +99,8 @@ export abstract class DrawingTool extends InputObserver {
     // add it to the main drawing
     this.drawing.innerHTML += d;
 
-    const event = new Event('newDrawing');
-    window.dispatchEvent(event);
+    const EVENT = new Event('newDrawing');
+    window.dispatchEvent(EVENT);
 
     this.interaction.emitDrawingDone();
     // clear current progress

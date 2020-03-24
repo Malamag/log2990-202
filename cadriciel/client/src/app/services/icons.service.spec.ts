@@ -6,7 +6,7 @@ describe('IconsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: IconsService = TestBed.get(IconsService);
-    expect(service).toBeTruthy();
+    const SERVICE: IconsService = TestBed.get(IconsService);
+    expect(SERVICE).toBeTruthy();
   });
 });

@@ -28,7 +28,7 @@ describe('ColorEditorService', () => {
     });
 
     it('should be created', () => {
-        const service: ColorEditorService = TestBed.get(ColorEditorService);
-        expect(service).toBeTruthy();
+        const SERVICE: ColorEditorService = TestBed.get(ColorEditorService);
+        expect(SERVICE).toBeTruthy();
     });
 });

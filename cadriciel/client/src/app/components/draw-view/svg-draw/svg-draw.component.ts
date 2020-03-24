@@ -197,7 +197,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             mouseHandler.move(e);
         });
         window.addEventListener('mousedown', (e: MouseEvent) => {
-            e.preventDefault();
+            // e.preventDefault();
             mouseHandler.down(e);
         });
 

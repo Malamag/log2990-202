@@ -7,9 +7,9 @@ import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
 // Default attributes of shapes
-const DEFAULTPLOTTYPE = 2;
-const DEFAULTNUMBERCORNERS = 3;
-const DEFAULTLINETHICKNESS = 5;
+const DEFAULT_PLOT_TYPE = 2;
+const DEFAULT_NUMBER_CORNERS = 3;
+const DEFAULT_LINE_THICKNESS = 5;
 
 @Injectable({
     providedIn: 'root'
@@ -39,7 +39,7 @@ export class ShapeService extends DrawingTool {
                 interaction: InteractionService, colorPick: ColorPickingService) {
 
         super(inProgess, drawing, selected, interaction, colorPick);
-        this.attr = { plotType: DEFAULTPLOTTYPE, lineThickness: DEFAULTLINETHICKNESS, numberOfCorners: DEFAULTNUMBERCORNERS };
+        this.attr = { plotType: DEFAULT_PLOT_TYPE, lineThickness: DEFAULT_LINE_THICKNESS, numberOfCorners: DEFAULT_NUMBER_CORNERS };
         this.updateColors();
         this.updateAttributes();
         this.width = 0;

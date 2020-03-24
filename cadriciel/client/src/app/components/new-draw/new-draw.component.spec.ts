@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule } from '@angular/material';
@@ -35,6 +36,7 @@ describe('NewDrawComponent', () => {
                 RouterTestingModule,
             ],
             providers: [By, { provide: KeyboardEvent, useValue: kbEventStub }],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA]
         }).compileComponents();
     }));
 
@@ -153,8 +155,10 @@ describe('NewDrawComponent', () => {
     });
 
     it('should update the new color for the form on change', () => {
+
         const SPY = spyOn(component.newDrawForm, 'patchValue');
-        component.updateColor();
+        const FAKE_COLOR = 'ffffff';
+        component.updateColor(FAKE_COLOR);
         expect(SPY).toHaveBeenCalled();
     });
 

@@ -13,22 +13,22 @@ export class ExportService {
     }
 
     svgToURL(svgElement: Node): string {
-        const data = this.xmlSerializer.serializeToString(svgElement);
-        const blob = new Blob([data], { type: 'image/svg+xml' });
-        const domurl = window.URL;
-        const url = domurl.createObjectURL(blob);
-        return url;
+        const DATA = this.xmlSerializer.serializeToString(svgElement);
+        const BLOB = new Blob([DATA], { type: 'image/svg+xml' });
+        const DOMURL = window.URL;
+        const URL = DOMURL.createObjectURL(BLOB);
+        return URL;
     }
 
     download(name: string, format: string, src: string): void {
         // https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
 
-        const downloadLink = this.render.createElement('a');
-        downloadLink.href = src;
-        downloadLink.download = `${name + '.' + format}`; // produces name.format image
-        this.render.appendChild(document.body, downloadLink);
-        downloadLink.click();
-        this.render.removeChild(document.body, downloadLink);
+        const DOWNLOAD_LINK = this.render.createElement('a');
+        DOWNLOAD_LINK.href = src;
+        DOWNLOAD_LINK.download = `${name + '.' + format}`; // produces name.format image
+        this.render.appendChild(document.body, DOWNLOAD_LINK);
+        DOWNLOAD_LINK.click();
+        this.render.removeChild(document.body, DOWNLOAD_LINK);
     }
 
     exportCanvas(name: string, type: string, canvasRef: HTMLCanvasElement): void {

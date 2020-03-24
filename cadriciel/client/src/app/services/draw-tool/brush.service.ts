@@ -5,12 +5,13 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { PencilService } from './pencil.service';
 import { Point } from './point';
 
-const DEFAULTLINETHICKNESS = 5;
-const DEFAULTTEXTURE = 0;
+const DEFAULT_LINE_THICKNESS = 5;
+const DEFAULT_TEXTURE = 0;
 
 @Injectable({
     providedIn: 'root',
 })
+
 export class BrushService extends PencilService {
     textures: { type: string; intensity: number; frequency: number }[];
     attr: ToolsAttributes;
@@ -23,7 +24,7 @@ export class BrushService extends PencilService {
         super(inProgess, drawing, selected, interaction, colorPick);
         this.updateColors();
         this.updateAttributes();
-        this.attr = { lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE };
+        this.attr = { lineThickness: DEFAULT_LINE_THICKNESS, texture: DEFAULT_TEXTURE };
         // values used as texture presets
         this.textures = [
             { type: 'blured', intensity: 5, frequency: 0 },
@@ -57,22 +58,22 @@ export class BrushService extends PencilService {
 
         // "normalize" the frequency to keep a constant render no mather the width or scale
         const DIV = 10;
-        const frequency = (scale / (width / DIV)) * this.textures[this.attr.texture].frequency;
+        const FREQUENCY = (scale / (width / DIV)) * this.textures[this.attr.texture].frequency;
 
         // create a divider
         s = '<g style="transform: translate(0px, 0px);" name = "brush-stroke">';
 
         // get a unique ID to make sure each stroke has it's own filter
-        const uniqueID = new Date().getTime();
+        const UNIQUE_ID = new Date().getTime();
 
         // create the corresponding svg filter
         if (this.textures[this.attr.texture].type === 'blured') {
-            s += this.createBluredFilter(scale, uniqueID);
+            s += this.createBluredFilter(scale, UNIQUE_ID);
         } else if (this.textures[this.attr.texture].type === 'noise') {
             // we use a displacement map so we need to resize the brush to keep the overall width
             const DISPLACEMENT = 100;
             scale = width / (DISPLACEMENT / scale / (DISPLACEMENT / width));
-            s += this.createNoiseFilter(width, scale, frequency, uniqueID);
+            s += this.createNoiseFilter(width, scale, FREQUENCY, UNIQUE_ID);
             width = width - (width * scale) / 2;
         }
 
@@ -87,7 +88,7 @@ export class BrushService extends PencilService {
         // set render attributes
         s += `"stroke="${this.chosenColor.primColor}" stroke-width="${this.attr.lineThickness}"`;
         s += 'fill="none" stroke-linecap="round" stroke-linejoin="round"';
-        s += `filter="url(#${uniqueID})"/>`;
+        s += `filter="url(#${UNIQUE_ID})"/>`;
         // end the path
 
         // end the divider

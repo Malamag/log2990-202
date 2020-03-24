@@ -39,13 +39,13 @@ export class DoodleFetchService {
     getDrawingDataNoGrid(): SVGData {
         this.gService.removeGrid();
         const innerHTML: string[] = [];
-        const el: Element = this.currentDraw.nativeElement;
-        const childs: HTMLCollection = el.children;
+        const EL: Element = this.currentDraw.nativeElement;
+        const CHILDS: HTMLCollection = EL.children;
 
         // tslint:disable-next-line: prefer-for-of
-        for (let i = 0; i < childs.length; i++) {  // HTMLCollection doesnt have an iterator...
+        for (let i = 0; i < CHILDS.length; i++) {  // HTMLCollection doesnt have an iterator...
             try {
-                innerHTML.push(childs[i].innerHTML);
+                innerHTML.push(CHILDS[i].innerHTML);
             } catch {
                 innerHTML.push('');
                 console.log('Empty InnerHTML');

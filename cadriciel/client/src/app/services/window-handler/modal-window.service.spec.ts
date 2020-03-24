@@ -13,14 +13,14 @@ describe('ModalWindowService', () => {
   let guideComponentSpy: jasmine.SpyObj<UserManualComponent>;
 
   beforeEach(() => {
-    const formSpy = jasmine.createSpy('NewDrawComponent');
-    const guideSpy = jasmine.createSpy('UserManualComponent');
+    const FORM_SPY = jasmine.createSpy('NewDrawComponent');
+    const GUIDE_SPY = jasmine.createSpy('UserManualComponent');
     TestBed.configureTestingModule({
       imports: [MatDialogModule],
       providers: [
         {provide: MatDialog, useClass: MatDialog},
-        {provide: NewDrawComponent, useValue: formSpy},
-        {provide: UserManualComponent, useValue: guideSpy}
+        {provide: NewDrawComponent, useValue: FORM_SPY},
+        {provide: UserManualComponent, useValue: GUIDE_SPY}
       ]
     });
     dialog = TestBed.get(MatDialog);
@@ -31,32 +31,32 @@ describe('ModalWindowService', () => {
   });
 
   it('should be created', () => {
-    const testService: ModalWindowService = TestBed.get(ModalWindowService);
-    expect(testService).toBeTruthy();
+    const TEST_SERVICE: ModalWindowService = TestBed.get(ModalWindowService);
+    expect(TEST_SERVICE).toBeTruthy();
   });
 
   it('should be able to open a new draw form modal window', () => {
-    const spy = spyOn(dialog, 'open');
+    const SPY = spyOn(dialog, 'open');
     service.openWindow(NewDrawComponent);
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
 
     expect(formComponentSpy).toBeDefined();
 
   });
 
   it('should be able to open a user manual modal window', () => {
-    const spy = spyOn(dialog, 'open');
+    const SPY = spyOn(dialog, 'open');
     service.openWindow(UserManualComponent);
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
 
     expect(guideComponentSpy).toBeDefined();
 
   });
 
   it('should be able to close a modal window', () => {
-    const spy = spyOn(dialog, 'closeAll');
+    const SPY = spyOn(dialog, 'closeAll');
     service.closeWindow();
-    expect(spy).toHaveBeenCalled();
+    expect(SPY).toHaveBeenCalled();
   });
 
   it('should never have an undefined MatDialogConfig', () => {

@@ -23,7 +23,7 @@ describe('AerosolService', () => {
                 { provide: KeyboardHandlerService, kbServiceStub },
             ],
         }),
-        ptA = new Point(0, 0);
+            ptA = new Point(0, 0);
         ptB = new Point(1, 2);
         ptArr = [ptA, ptB];
         service = TestBed.get(AerosolService);
@@ -62,6 +62,8 @@ describe('AerosolService', () => {
         const PRIM = '#ffffff';
         const SEC = '#000000';
         const BACK = '#ffffff';
+        service.generatePoint = jasmine.createSpy().and.returnValue(ptA);
+        service.createInvisiblePath = jasmine.createSpy().and.returnValue([ptA, ptB]);
         service.chosenColor = { primColor: PRIM, secColor: SEC, backColor: BACK };
 
         const PATH = service.createPath(ptArr);
@@ -78,19 +80,19 @@ describe('AerosolService', () => {
         const EMISSION_EXPECTED = EMISSION * TIME;
 
         // Initialize jamsine clock for time ticking
-        const clock = jasmine.clock();
-        clock.install();
+        const CLOCK = jasmine.clock();
+        CLOCK.install();
 
         // tslint:disable-next-line: no-string-literal
         service['attr'].emissionPerSecond = EMISSION;
         const POINTS = 5;
         service.down(new Point(POINTS, POINTS)); // Push the mouse down for simulating the aerosol
-        const spyInteraction = spyOn(service, 'createPath');
-        clock.tick(MS_WAIT); // Wait
+        const SPY_CREATE_PATH = spyOn(service, 'createPath');
+        CLOCK.tick(MS_WAIT); // Wait
 
         // Expect createPath function to have been called the same number of time as the wanted emission
-        expect(spyInteraction).toHaveBeenCalledTimes(EMISSION_EXPECTED);
-        clock.uninstall();
+        expect(SPY_CREATE_PATH).toHaveBeenCalledTimes(EMISSION_EXPECTED);
+        CLOCK.uninstall();
     });
 
     it('should only have points inside the diameter', () => {
@@ -104,14 +106,14 @@ describe('AerosolService', () => {
         const POSITION = new Point(COORDINATE, COORDINATE);
 
         // Initialize jamsine clock for time ticking
-        const clock = jasmine.clock();
-        clock.install();
+        const CLOCK = jasmine.clock();
+        CLOCK.install();
         // tslint:disable-next-line: no-string-literal
         service['attr'].emissionPerSecond = EMISSION;
         // tslint:disable-next-line: no-string-literal
         service['attr'].diameter = DIAMETER;
         service.down(POSITION); // Push the mouse down for simulating the aerosol
-        clock.tick(MS_WAIT); // Wait
+        CLOCK.tick(MS_WAIT); // Wait
 
         // Finish mock aerosol
         service.up(POSITION);
@@ -119,19 +121,19 @@ describe('AerosolService', () => {
         // Look for each individual point if it's in the diameter area
         let pointsInsideDiameter = true;
         // tslint:disable-next-line: no-string-literal
-        for (const point of service['points']) {
+        for (const POINT of service['points']) {
             if (
-                point.x > COORDINATE + RADIUS ||
-                point.y > COORDINATE + RADIUS ||
-                point.x < COORDINATE - RADIUS ||
-                point.y < COORDINATE - RADIUS
+                POINT.x > COORDINATE + RADIUS ||
+                POINT.y > COORDINATE + RADIUS ||
+                POINT.x < COORDINATE - RADIUS ||
+                POINT.y < COORDINATE - RADIUS
             ) {
                 pointsInsideDiameter = false;
                 break;
             }
         }
         expect(pointsInsideDiameter).toBeTruthy();
-        clock.uninstall();
+        CLOCK.uninstall();
     });
 
     it('should have a round linecap and linejoin', () => {
@@ -210,6 +212,7 @@ describe('AerosolService', () => {
 
     it('should not update path when the mouse is moved without being clicked inside the canvas', () => {
         service.down(ptA);  // start aerosol by mouse down
+        service.currentPath = ptArr;
         const PATH_SIZE = service.currentPath.length;
         service.up(ptA);  // mouse up inside workspace
         service.move(ptB);  // Move while mouse up
@@ -222,6 +225,7 @@ describe('AerosolService', () => {
 
     it('should not update path when the mouse is moved without being clicked outside the canvas', () => {
         const OUTSIDE_COORD = 0;
+        service.currentPath = ptArr;
         const POINT = new Point(OUTSIDE_COORD, OUTSIDE_COORD);
         service.down(ptA);  // start aerosol by mouse down
         service.goingOutsideCanvas(POINT);
@@ -248,10 +252,30 @@ describe('AerosolService', () => {
         service.createPath(ptArr);
         service.cancel();
         service.up(ptA);
-        // the mouse should be still up at this point
+
         expect(service.currentPath).toEqual([]);
         expect(SPY).not.toHaveBeenCalled();
-
     });
 
+    it('should unsubscribe on tool change while the mouse is down', () => {
+        service.down(ptA);
+        // tslint:disable-next-line: no-string-literal
+        const SPY = spyOn(service['sub'], 'unsubscribe');
+        const EVENT = new Event('toolChange');
+        window.dispatchEvent(EVENT);
+
+        expect(SPY).toHaveBeenCalled();
+    });
+    /*
+        it('should subscribe to the interval when mouse is down and unsubscibe when up', () => {
+            const SPY_SUB = spyOn(service, 'subscribe');
+            service.down(ptA);
+            // tslint:disable-next-line: no-string-literal
+            const SPY_UNSUB = spyOn(service['sub'], 'unsubscribe');
+            service.up(ptA);
+
+            expect(SPY_SUB).toHaveBeenCalled();
+            expect(SPY_UNSUB).toHaveBeenCalled();
+        });
+    */
 });

@@ -2,12 +2,12 @@ import { Point } from './point';
 
 export class ElementInfo {
 
-  static translate(el: Element) {
-    let translateString = (el as HTMLElement).style.transform;
-    let translateValues = translateString ? translateString.split(",") : "";
-    let translateX = +(translateValues[0].replace(/[^\d.-]/g, ''));
-    let translateY = +(translateValues[1].replace(/[^\d.-]/g, ''));
+  static translate(el: Element): Point {
+    const TRANSLATE_STRING = (el as HTMLElement).style.transform;
+    const TRANSLATE_VALUES = TRANSLATE_STRING ? TRANSLATE_STRING.split(',') : '';
+    const TRANSLATE_X = +(TRANSLATE_VALUES[0].replace(/[^\d.-]/g, ''));
+    const TRANSLATE_Y = +(TRANSLATE_VALUES[1].replace(/[^\d.-]/g, ''));
 
-    return new Point(translateX, translateY);
+    return new Point(TRANSLATE_X, TRANSLATE_Y);
   }
 }

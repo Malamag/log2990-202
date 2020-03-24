@@ -16,8 +16,8 @@ describe('CanvasBuilderService', () => {
     });
 
     it('should be created', () => {
-        const testService: CanvasBuilderService = TestBed.get(CanvasBuilderService);
-        expect(testService).toBeTruthy();
+        const TEST_SERVICE: CanvasBuilderService = TestBed.get(CanvasBuilderService);
+        expect(TEST_SERVICE).toBeTruthy();
     });
 
     it('should create a canvas from form data', () => {
@@ -38,17 +38,17 @@ describe('CanvasBuilderService', () => {
     });
 
     it('should whipe an existing doodle', () => {
-        const elem: ElementRef = new ElementRef(SvgDrawComponent);
-        const draw = '<rect />';
-        elem.nativeElement.innerHTML = draw;
+        const ELEM: ElementRef = new ElementRef(SvgDrawComponent);
+        const DRAW = '<rect />';
+        ELEM.nativeElement.innerHTML = DRAW;
 
-        service.wipeDraw(elem);
-        expect(elem.nativeElement.innerHTML).not.toContain(draw);
+        service.wipeDraw(ELEM);
+        expect(ELEM.nativeElement.innerHTML).not.toContain(DRAW);
     });
 
     it('should get a valid default color', () => {
-        const col = service.getDefColor();
-        expect(col).toMatch(/^[a-fA-F0-9]{6}$/);
+        const COL = service.getDefColor();
+        expect(COL).toMatch(/^[a-fA-F0-9]{6}$/);
     });
 
     it('should get a white default color', () => {
@@ -57,10 +57,10 @@ describe('CanvasBuilderService', () => {
     });
 
     it('should emit the new canvas', () => {
-        const spy = spyOn(service.canvSubject, 'next');
+        const SPY = spyOn(service.canvSubject, 'next');
         service.emitCanvas();
-        expect(spy).toHaveBeenCalled();
-        expect(spy).toHaveBeenCalledWith(service.newCanvas);
+        expect(SPY).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalledWith(service.newCanvas);
     });
 
     it('should return a default canvas with default attributes', () => {

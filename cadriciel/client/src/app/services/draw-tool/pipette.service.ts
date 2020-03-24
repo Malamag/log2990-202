@@ -8,6 +8,7 @@ import { Point } from './point';
     providedIn: 'root',
 })
 export class PipetteService extends InputObserver {
+
     cPick: ColorPickingService;
     interact: InteractionService;
     clickedColor: Uint8ClampedArray | number[];
@@ -71,25 +72,31 @@ export class PipetteService extends InputObserver {
         this.cPick.updateDisplay(color);
     }
 
-    doubleClick(): void {
-        /*no behavior for double click*/
-    }
-    goingOutsideCanvas(): void {
-        /*Nothing happens when going outside canvas*/
-    }
-    goingInsideCanvas(): void {
-        /*Nothing specific happens when going inside canvas*/
-    }
-    cancel(): void {
-        /*Nothing specific happens on cancel */
-    }
     updateDown(): void {
-        /*Nothing to update during mouse down. Color is sent on click*/
+        // throw new Error('Method not implemented.');
     }
+
     updateUp(): void {
-        /*Nothing to update during mouse up. Color is sent on click*/
+        // throw new Error('Method not implemented.');
     }
+
+    cancel(): void {
+        // throw new Error('Method not implemented.');
+    }
+
     up(): void {
-        /*Nothing to specific during mouse up*/
+        // throw new Error('Method not implemented.');
+    }
+
+    doubleClick(): void {
+        // throw new Error('Method not implemented.');
+    }
+
+    goingOutsideCanvas(): void {
+        // throw new Error('Method not implemented.');
+    }
+
+    goingInsideCanvas(): void {
+        // throw new Error('Method not implemented.');
     }
 }

@@ -14,6 +14,7 @@ const DEFAULT_DIAMETER = 50;
 @Injectable({
     providedIn: 'root',
 })
+
 export class AerosolService extends DrawingTool {
 
     private attr: AerosolAttributes;
@@ -39,8 +40,18 @@ export class AerosolService extends DrawingTool {
         this.attr = { emissionPerSecond: DEFAULT_EMISSION_PER_SECOND, diameter: DEFAULT_DIAMETER };
         this.updateColors();
         this.updateAttributes();
+        this.ToolChangeListener();
         this.points = new Array();
         this.insideCanvas = true;
+    }
+
+    ToolChangeListener(): void {
+        window.addEventListener('toolChange', (e: Event) => {
+            if (this.isDown) {
+                this.insideCanvas = true;
+                this.sub.unsubscribe();
+            }
+        });
     }
 
     updateDown(keyboard: KeyboardHandlerService): void {
@@ -67,15 +78,6 @@ export class AerosolService extends DrawingTool {
         });
     }
 
-    // cancel the current progress
-    cancel(): void {
-
-        super.cancel();
-
-        // Reinitialize insideCanvas
-        this.insideCanvas = true;
-    }
-
     // click with aerosol in hand
     down(position: Point): void {
         // in case we changed tool while the mouse was down
@@ -91,8 +93,8 @@ export class AerosolService extends DrawingTool {
         // Subscribe to an interval of updates
         this.subscribe();
 
-        // Initialize points array for new path
-        this.points = new Array();
+        // Empty points array for new path
+        this.points = [];
 
         // Start without waiting for subscribe -> gives instant emission at first click
         this.updateProgress();
@@ -218,9 +220,9 @@ export class AerosolService extends DrawingTool {
             // Push four points with same radius and changing the angle a little.
             // Seems almost as random, but has less operations to do
             for (let i = 1; i < PT_NUM && this.isDown; i++) {
-                const x = this.lastPoint.x + RADIUS * Math.cos(ANGLE * i);
-                const y = this.lastPoint.y + RADIUS * Math.sin(ANGLE * i);
-                this.points.push(new Point(x, y));
+                const X = this.lastPoint.x + RADIUS * Math.cos(ANGLE * i);
+                const Y = this.lastPoint.y + RADIUS * Math.sin(ANGLE * i);
+                this.points.push(new Point(X, Y));
             }
         }
     }

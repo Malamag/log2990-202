@@ -13,6 +13,7 @@ const DATABASE_COLLECTION = 'Images';
 @injectable()
 export class DatabaseService {
     collection: Collection<MetaData>;
+    jsonFile: string;
     private options: MongoClientOptions = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -28,6 +29,7 @@ export class DatabaseService {
                 console.error('Erreur de connexion. Terminaison du processus');
                 // process.exit(1);
             });
+        this.jsonFile = '../data.json';
     }
 
     async getAllImages(): Promise<ImageData[]> {
@@ -73,7 +75,7 @@ export class DatabaseService {
 
     getImages(metaData: MetaData[]): ImageData[] {
         const imageData: ImageData[] = [];
-        const jsonData = fs.readFileSync('../data.json');
+        const jsonData = fs.readFileSync(this.jsonFile);
         const drawingsList = JSON.parse(jsonData.toString());
         metaData.forEach((data: MetaData) => {
             const image: Image = drawingsList.drawings.filter((drawing: Image) => {
@@ -82,7 +84,7 @@ export class DatabaseService {
             try {
                 imageData.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
             } catch (error) {
-                console.log('Invalide id');
+                //throw new Error('Invalide id');
             }
         });
         return imageData;
@@ -120,7 +122,7 @@ export class DatabaseService {
         return buffer;
     }
     async deleteImageById(imageId: string): Promise<void> {
-        fs.readFile('../data.json', (err, data) => {
+        fs.readFile(this.jsonFile, (err, data) => {
             // Convert string (old data) to JSON
             const drawingsList = JSON.parse(data.toString());
 
@@ -130,15 +132,14 @@ export class DatabaseService {
             // Convert JSON to string
             const listToJson = JSON.stringify(drawingsList);
             // Replace all data in the data.json with new ones
-            fs.writeFile('../data.json', listToJson, (error) => {
+            fs.writeFile(this.jsonFile, listToJson, (error) => {
                 if (error) {
                     throw error;
                 }
                 console.log('The "data to append" was appended to file!');
             });
         });
-        return this.collection
-            .findOneAndDelete({ id: imageId })
+        this.collection.findOneAndDelete({ id: imageId })
             .then(() => {
                 /* nothing to do after findOneAndDelete, .then necessary (empty block) */
             })
@@ -148,7 +149,7 @@ export class DatabaseService {
     }
 
     async modifyImage(imageData: ImageData): Promise<void> {
-        fs.readFile('../data.json', (err, data) => {
+        fs.readFile(this.jsonFile, (err, data) => {
             // Convert string (old data) to JSON
             const drawingsList = JSON.parse(data.toString());
             const jsonObj = { id: imageData.id, svgElement: imageData.svgElement };
@@ -160,7 +161,7 @@ export class DatabaseService {
             // Convert JSON to string
             const listToJson = JSON.stringify(drawingsList);
             // Replace all data in the data.json with new ones
-            fs.writeFile('../data.json', listToJson, (error) => {
+            fs.writeFile(this.jsonFile, listToJson, (error) => {
                 if (error) {
                     throw error;
                 }
@@ -192,9 +193,9 @@ export class DatabaseService {
                 if (data !== null) {
                     image = data;
                 } else {
-                    throw new Error('Invalide image data');
+                    throw new Error('Image data is null');
                 }
-                fs.readFile('../data.json', (err, readData) => {
+                fs.readFile(this.jsonFile, (err, readData) => {
                     // Convert string (old data) to JSON
                     const drawingsList = JSON.parse(readData.toString());
                     const jsonObj = { id: image.id, svgElement: image.svgElement };
@@ -203,7 +204,7 @@ export class DatabaseService {
                     // Convert JSON to string
                     const listToJson = JSON.stringify(drawingsList);
                     // Replace all data in the data.json with new ones
-                    fs.writeFile('../data.json', listToJson, (error) => {
+                    fs.writeFile(this.jsonFile, listToJson, (error) => {
                         if (error) {
                             throw error;
                         }
@@ -216,7 +217,7 @@ export class DatabaseService {
                 });
             })
             .catch(() => {
-                console.log('Invalide image data');
+                //throw new Error('Invalide image data');
             });
     }
 
@@ -231,7 +232,6 @@ export class DatabaseService {
                 // Generate a new id
                 imageData.id = new Date().getUTCMilliseconds() + '';
             }
-            console.log(imageData.name.length);
             if (!this.validateName(imageData.name)) {
                 console.log('Empty name');
                 return null;
@@ -241,7 +241,11 @@ export class DatabaseService {
                 return null;
             }
             return imageData;
-        });
+        })
+            .catch(() => {
+                return null;
+                //throw new Error("Fail to get images");
+            });
     }
 
     validateId(id: string, data: ImageData[]): boolean {
@@ -259,7 +263,7 @@ export class DatabaseService {
     }
 
     validateName(name: string): boolean {
-        return name.length > 0 && name !== null;
+        return name.length > 0;
     }
 
     validateTags(tags: string[]): boolean {

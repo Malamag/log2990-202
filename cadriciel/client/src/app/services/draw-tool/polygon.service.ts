@@ -9,7 +9,7 @@ import { ShapeService } from './shape.service';
 })
 export class PolygonService extends ShapeService {
     // All corners of the polygon
-    corners: Point[];
+    private corners: Point[];
 
     // Point for the middle of the perimeter
     private middleX: number;
@@ -155,17 +155,17 @@ export class PolygonService extends ShapeService {
         // If the the left point value is smaller than the initial point where the mouse was down,
         // Adjust the position of all the polygon's points
         if (this.leftPoint < this.startX) {
-            const SUBSTACTION_X = this.leftPoint - this.startX;
-            for (const corner of this.corners) {
-                corner.x -= SUBSTACTION_X;
+            const OFFSET =  this.startX - this.leftPoint;
+            for (const CORNER of this.corners) {
+                CORNER.x += OFFSET;
             }
         }
         // If the the right point value is greater than the initial point where the mouse was down,
         // Adjust the position of all the polygon's points
         if (this.rightPoint > this.startX) {
-            const ADDITION_X = this.startX - this.rightPoint;
-            for (const corner of this.corners) {
-                corner.x += ADDITION_X;
+            const OFFSET = this.startX - this.rightPoint;
+            for (const CORNER of this.corners) {
+                CORNER.x += OFFSET;
             }
         }
     }

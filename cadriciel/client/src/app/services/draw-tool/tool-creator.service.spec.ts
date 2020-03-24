@@ -19,10 +19,10 @@ describe('ToolCreator', () => {
   let service: ToolCreator;
 
   beforeEach(() => {
-    const penSpy = jasmine.createSpy('PencilService');
-    const rectSpy = jasmine.createSpy('RectangleService');
-    const lineSpy = jasmine.createSpy('LineService');
-    const brushSpy = jasmine.createSpy('BrushService');
+    const PEN_SPY = jasmine.createSpy('PencilService');
+    const RECT_SPY = jasmine.createSpy('RectangleService');
+    const LINE_SPY = jasmine.createSpy('LineService');
+    const BRUSH_SPY = jasmine.createSpy('BrushService');
 
     colorConvertingStub = {
       hsvToHex: () => '',
@@ -40,10 +40,10 @@ describe('ToolCreator', () => {
       providers: [
         ToolCreator,
         { provide: HTMLElement, useValue: {} },
-        { provide: PencilService, useValue: penSpy },
-        { provide: RectangleService, useValue: rectSpy },
-        { provide: BrushService, useValue: brushSpy },
-        { provide: LineService, useValue: lineSpy },
+        { provide: PencilService, useValue: PEN_SPY },
+        { provide: RectangleService, useValue: RECT_SPY },
+        { provide: BrushService, useValue: BRUSH_SPY },
+        { provide: LineService, useValue: LINE_SPY },
         { provide: InteractionService, useValue: FakeItService },
         { provide: ColorPickingService, useValue: FakeCpService },
         { provide: ColorConvertingService, useValue: colorConvertingStub }]
@@ -53,28 +53,28 @@ describe('ToolCreator', () => {
   });
 
   it('should be created', () => {
-    const testService: ToolCreator = TestBed.get(ToolCreator);
-    expect(testService).toBeTruthy();
+    const TEST_SERVICE: ToolCreator = TestBed.get(ToolCreator);
+    expect(TEST_SERVICE).toBeTruthy();
   });
 
   it('should create a new pencil service', () => {
-    const pen = service.CreatePencil(true, new FakeItService(), new FakeCpService(colorConvertingStub));
-    expect(pen).toEqual(jasmine.any(PencilService)); // checks if object is if the right instance
+    const PEN = service.CreatePencil(true, new FakeItService(), new FakeCpService(colorConvertingStub));
+    expect(PEN).toEqual(jasmine.any(PencilService)); // checks if object is if the right instance
   });
 
   it('should create a new brush service', () => {
-    const brush = service.CreateBrush(true, new FakeItService(), new FakeCpService(colorConvertingStub));
-    expect(brush).toEqual(jasmine.any(BrushService));
+    const BRUSH = service.CreateBrush(true, new FakeItService(), new FakeCpService(colorConvertingStub));
+    expect(BRUSH).toEqual(jasmine.any(BrushService));
   });
 
   it('should create a new rectangle service', () => {
-    const rect = service.CreateRectangle(true, new FakeItService(), new FakeCpService(colorConvertingStub));
-    expect(rect).toEqual(jasmine.any(RectangleService));
+    const RECT = service.CreateRectangle(true, new FakeItService(), new FakeCpService(colorConvertingStub));
+    expect(RECT).toEqual(jasmine.any(RectangleService));
   });
 
   it('should create a new line service', () => {
-    const line = service.CreateLine(true, new FakeItService(), new FakeCpService(colorConvertingStub));
-    expect(line).toEqual(jasmine.any(LineService));
+    const LINE = service.CreateLine(true, new FakeItService(), new FakeCpService(colorConvertingStub));
+    expect(LINE).toEqual(jasmine.any(LineService));
   });
 
 });

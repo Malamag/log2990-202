@@ -17,6 +17,7 @@ describe('PipetteService', () => {
     let ptA: Point;
     let ptB: Point;
     const VAL = 255;
+
     // let ptArr: Point[];
     beforeEach(() => {
         fakeData = {
@@ -47,8 +48,8 @@ describe('PipetteService', () => {
     });
 
     it('should be created', () => {
-        const testService: PipetteService = TestBed.get(PipetteService);
-        expect(testService).toBeTruthy();
+        const TEST_SERVICE: PipetteService = TestBed.get(PipetteService);
+        expect(TEST_SERVICE).toBeTruthy();
     });
 
     it('should get canvas context in subscription', () => {
@@ -60,27 +61,27 @@ describe('PipetteService', () => {
     });
 
     it('should call image data conversion on mouse down', () => {
-        const spy = spyOn(service, 'imgDataConversion');
+        const SPY = spyOn(service, 'imgDataConversion');
         service.down(ptA);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should emit the selected color with right click boolean', () => {
         const COLOR = '#FFFFFFFF';
         service.colorStr = COLOR;
-        const spy = spyOn(service, 'emitSelectedColor');
+        const SPY = spyOn(service, 'emitSelectedColor');
         service.down(ptA, true, true); // is right click and in the workspace
-        expect(spy).toHaveBeenCalledWith(COLOR, true);
+        expect(SPY).toHaveBeenCalledWith(COLOR, true);
     });
 
     it('should emit the converted preview color on mouse move', () => {
         const COLOR = '#ffffffff';
         service.colorStr = COLOR;
-        const imgDataSpy = spyOn(service, 'imgDataConversion');
-        const emitSpy = spyOn(service.interact, 'emitPreviewColor');
+        const IMG_DATA_SPY = spyOn(service, 'imgDataConversion');
+        const EMIT_SPY = spyOn(service.interact, 'emitPreviewColor');
         service.move(ptB);
-        expect(imgDataSpy).toHaveBeenCalledWith(ptB);
-        expect(emitSpy).toHaveBeenCalledWith(COLOR);
+        expect(IMG_DATA_SPY).toHaveBeenCalledWith(ptB);
+        expect(EMIT_SPY).toHaveBeenCalledWith(COLOR);
     });
 
     it('should get the image data at the point on valid canvas context with data conversion', () => {
@@ -88,21 +89,21 @@ describe('PipetteService', () => {
         service['canvasContext'] = canvasContextStub;
 
         canvasContextStub.getImageData = jasmine.createSpy().and.returnValue(fakeData);
-        const buildSpy = spyOn(service, 'buildImageData');
+        const BUILD_SPY = spyOn(service, 'buildImageData');
         const SQUARE_SIZE = 1; // 1px
         service.imgDataConversion(ptB);
         expect(canvasContextStub.getImageData).toHaveBeenCalledWith(ptB.x, ptB.y, SQUARE_SIZE, SQUARE_SIZE);
-        expect(buildSpy).toHaveBeenCalled();
+        expect(BUILD_SPY).toHaveBeenCalled();
     });
 
     it('should not get the image data on null canvas context', () => {
         // tslint:disable-next-line: no-string-literal
         service['canvasContext'] = null;
         canvasContextStub.getImageData = jasmine.createSpy().and.returnValue(fakeData);
-        const buildSpy = spyOn(service, 'buildImageData');
+        const BUILD_SPY = spyOn(service, 'buildImageData');
         service.imgDataConversion(ptB);
         expect(canvasContextStub.getImageData).not.toHaveBeenCalled();
-        expect(buildSpy).not.toHaveBeenCalled();
+        expect(BUILD_SPY).not.toHaveBeenCalled();
     });
 
     it('should convert the rgba values to a color hexadecimal string', () => {
@@ -116,37 +117,47 @@ describe('PipetteService', () => {
     it('should call the rbgToHex converter on every array element', () => {
         const DATA_ARR = [VAL, VAL, VAL, VAL];
         service.clickedColor = DATA_ARR;
-        const spy = spyOn(service.cPick.colorConvert, 'rgbToHex');
+        const SPY = spyOn(service.cPick.colorConvert, 'rgbToHex');
         service.buildImageData();
-        expect(spy).toHaveBeenCalledTimes(DATA_ARR.length);
+        expect(SPY).toHaveBeenCalledTimes(DATA_ARR.length);
     });
 
     it('should set the secondary color on right click and emit it', () => {
         const FAKE_SEC_COLOR = '#000000ff';
-        const spy = spyOn(service.cPick, 'emitColors');
+        const SPY = spyOn(service.cPick, 'emitColors');
         service.emitSelectedColor(FAKE_SEC_COLOR, true);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should set the primary color on left click and emit it', () => {
         const FAKE_PRIM_COLOR = '#000000ff';
-        const spy = spyOn(service.cPick, 'emitColors');
+        const SPY = spyOn(service.cPick, 'emitColors');
         service.emitSelectedColor(FAKE_PRIM_COLOR, false);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should update the color picker display after choosing a color', () => {
-        const spy = spyOn(service.cPick, 'updateDisplay');
+        const SPY = spyOn(service.cPick, 'updateDisplay');
         const FAKE_COLOR = '#000000ff';
         service.emitSelectedColor(FAKE_COLOR);
-        expect(spy).toHaveBeenCalledWith(FAKE_COLOR);
+        expect(SPY).toHaveBeenCalledWith(FAKE_COLOR);
     });
 
     it('should have a canvas context subscription in its constructor', () => {
         const IT_SERVICE = new InteractionService();
-        const spy = spyOn(IT_SERVICE.$canvasContext, 'subscribe');
+        const SPY = spyOn(IT_SERVICE.$canvasContext, 'subscribe');
         const PIP_TEST = new PipetteService(true, IT_SERVICE, new ColorPickingService(new ColorConvertingService()));
         expect(PIP_TEST).toBeTruthy();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
+
+    /*it('should throw an error on unimplemented methods', () => {
+        expect(() => service.updateDown()).toThrowError('Method not implemented.');
+        expect(() => service.updateUp()).toThrowError('Method not implemented.');
+        expect(() => service.cancel()).toThrowError('Method not implemented.');
+        expect(() => service.up()).toThrowError('Method not implemented.');
+        expect(() => service.doubleClick()).toThrowError('Method not implemented.');
+        expect(() => service.goingInsideCanvas()).toThrowError('Method not implemented.');
+        expect(() => service.goingOutsideCanvas()).toThrowError('Method not implemented.');
+    });*/
 });
