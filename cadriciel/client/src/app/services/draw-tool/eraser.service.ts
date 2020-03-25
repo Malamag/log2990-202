@@ -7,8 +7,8 @@ import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 import { CanvasInteraction } from './canvas-interaction.service';
 
-const DEFAULTLINETHICKNESS = 5;
-const DEFAULTTEXTURE = 0;
+const DEFAULT_LINE_THICKNESS = 5;
+const DEFAULT_TEXTURE = 0;
 @Injectable({
     providedIn: 'root',
 })
@@ -33,7 +33,7 @@ export class EraserService extends DrawingTool {
         canvas: HTMLElement,
     ) {
         super(inProgess, drawing, selected, interaction, colorPick);
-        this.attr = { lineThickness: DEFAULTLINETHICKNESS, texture: DEFAULTTEXTURE };
+        this.attr = { lineThickness: DEFAULT_LINE_THICKNESS, texture: DEFAULT_TEXTURE };
         this.updateColors();
         this.updateAttributes();
 
@@ -117,15 +117,16 @@ export class EraserService extends DrawingTool {
             let clone: Element = this.render.createElement('g', 'http://www.w3.org/2000/svg');
             (clone as HTMLElement).innerHTML = el.innerHTML;
             for (let i = 0; i < el.childElementCount; i++) {
+                if (el.children[i].classList.contains("invisiblePath")) {
+                    this.render.removeChild(clone, clone.children[i]);
+                }
                 let originalWidth: string | null = (el.children[i] as HTMLElement).getAttribute('stroke-width');
                 let originalWidthNumber = originalWidth ? +originalWidth : 0;
                 let wider: number = Math.max(10, originalWidthNumber + 10);
                 this.render.setAttribute(clone.children[i], 'stroke-width', `${wider}`);
 
-
                 let originalStrokeColor: string | null = (el.children[i] as HTMLElement).getAttribute('stroke');
                 let originalFillColor: string | null = (el.children[i] as HTMLElement).getAttribute('fill');
-                //248 256
                 let refcolor: string | null = originalStrokeColor != 'none' ? originalStrokeColor : originalFillColor;
 
                 let originalStrokeRGB: [number, number, number] = [0, 0, 0];
@@ -190,8 +191,8 @@ export class EraserService extends DrawingTool {
         let canvOffsetX = canvasBox ? canvasBox.left : 0;
         let canvOffsetY = canvasBox ? canvasBox.top : 0;
 
-        let w = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
-        let h = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
+        let w = Math.max(this.attr.lineThickness, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
+        let h = Math.max(this.attr.lineThickness, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
 
         let dim = Math.max(w, h);
 
@@ -297,8 +298,8 @@ export class EraserService extends DrawingTool {
         // create a divider
         s = '<g style="transform: translate(0px, 0px);" name = "eraser-brush">';
 
-        let w = Math.max(10, Math.abs(p[p.length - 1].x - p[0].x));
-        let h = Math.max(10, Math.abs(p[p.length - 1].y - p[0].y));
+        let w = Math.max(this.attr.lineThickness, Math.abs(p[p.length - 1].x - p[0].x));
+        let h = Math.max(this.attr.lineThickness, Math.abs(p[p.length - 1].y - p[0].y));
 
         let dim = Math.max(w, h);
 

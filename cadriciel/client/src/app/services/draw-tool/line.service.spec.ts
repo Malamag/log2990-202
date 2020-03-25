@@ -318,4 +318,22 @@ describe('LineService', () => {
         const NEW_Y = -1;
         expect(REDIR.y).toEqual(NEW_Y);
     });
+
+    it('should cancel de line if escape key is pressed', () => {
+        const ESCAPE = 27;
+        kbServiceStub.keyCode = ESCAPE;
+        const SPY = spyOn(service, 'cancel');
+        service.updateDown(kbServiceStub);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should update the line progress if backspace key is pressed', () => {
+        const BCKSPACE = 8;
+        kbServiceStub.keyCode = BCKSPACE;
+        service.currentPath = [ptA, ptB, ptA, ptB];
+        const SPY = spyOn(service, 'updateProgress');
+        service.updateDown(kbServiceStub);
+        expect(SPY).toHaveBeenCalledWith(false);
+    });
+
 });

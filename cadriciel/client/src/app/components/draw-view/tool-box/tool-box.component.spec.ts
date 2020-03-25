@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { Z } from '@angular/cdk/keycodes';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import {
@@ -17,7 +18,16 @@ import { ToolBoxComponent } from './tool-box.component';
 describe('ToolBoxComponent', () => {
     let component: ToolBoxComponent;
     let fixture: ComponentFixture<ToolBoxComponent>;
+    // tslint:disable-next-line: no-any
+    let kbEventStub: any;
     beforeEach(async(() => {
+        kbEventStub = {
+            ctrlKey: true,
+            keyCode: Z,
+            shiftKey: true,
+            key: 'c'
+        };
+
         TestBed.configureTestingModule({
             declarations: [ToolBoxComponent, ColorPickerComponent],
             imports: [
@@ -31,6 +41,9 @@ describe('ToolBoxComponent', () => {
                 FormsModule,
                 HttpClientModule,
             ],
+            providers: [
+                { provide: KeyboardEvent, useValue: kbEventStub }
+            ]
         }).compileComponents();
     }));
 
@@ -60,6 +73,7 @@ describe('ToolBoxComponent', () => {
         component.updateBoard(MOCK_KEY);
         expect(SPY).toHaveBeenCalled();
     });
+
     it('should not call buttonAction', () => {
         const MOCK_KEY = new KeyboardEvent('keyup', {
             key: 'r',
@@ -68,4 +82,43 @@ describe('ToolBoxComponent', () => {
         const SPY_OBJ = spyOn(component, 'buttonAction');
         expect(SPY_OBJ).toHaveBeenCalledTimes(0);
     });
+
+    it('should call button action when ctrl+shift+z keys are pressed', () => {
+        const SPY = spyOn(component, 'buttonAction');
+        component.updateBoard(kbEventStub);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should call button action when ctrl+z keys are pressed', () => {
+        kbEventStub.shiftKey = false;
+        const SPY = spyOn(component, 'buttonAction');
+        component.updateBoard(kbEventStub);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should call button action for a tool selection if ctrl+z are not pressed', () => {
+        kbEventStub.ctrlKey = false;
+        const SPY = spyOn(component, 'buttonAction');
+        component.updateBoard(kbEventStub);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should not call button action on invalid key', () => {
+        kbEventStub.ctrlKey = false;
+        kbEventStub.key = 'p';
+        const SPY = spyOn(component, 'buttonAction');
+        component.updateBoard(kbEventStub);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should disable the undo/redo buttons on subscription activation', () => {
+
+        const DISABLED_BTNS = [true, false];
+
+        component.ngOnInit();
+        component.interactionService.emitEnableDisable(DISABLED_BTNS);
+        expect(component.disableUndo).toBeTruthy();
+        expect(component.disableRedo).toBeFalsy();
+    });
+
 });

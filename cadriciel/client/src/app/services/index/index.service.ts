@@ -53,7 +53,7 @@ export class IndexService {
             },
             (error) => {
                 this.displayFeedback('Erreur lors de la sauvegarde!');
-                console.log(error);
+
             }
         );
     }

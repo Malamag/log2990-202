@@ -31,23 +31,23 @@ export class SelectionService extends ShapeService {
     selectedRef: HTMLElement;
 
     itemUnderMouse: number | null;
-    canMoveSelection: boolean = true;
-    foundAnItem: boolean = false;
+    canMoveSelection: boolean;
+    foundAnItem: boolean;
     selectedItems: boolean[] = [];
     invertedItems: boolean[] = [];
-    movingSelection: boolean = false;
+    movingSelection: boolean;
     canvas: HTMLElement;
-    movedSelectionOnce: boolean = false;
-    movedMouseOnce: boolean = false;
-    inverted: boolean = false;
+    movedSelectionOnce: boolean;
+    movedMouseOnce: boolean;
+    inverted: boolean;
     wrapperDimensions: [Point, Point] = [new Point(INIT_VALUE, INIT_VALUE), new Point(INIT_VALUE, INIT_VALUE)];
 
     arrows: [boolean, boolean, boolean, boolean] = [false, false, false, false];
     arrowTimers: [number, number, number, number] = [0, 0, 0, 0];
     singleUseArrows: [boolean, boolean, boolean, boolean] = [false, false, false, false];
-    existingLoop: boolean = false;
-    timeCount: number = 0;
-    movedSelectionWithArrowsOnce: boolean = false;
+    existingLoop: boolean;
+    timeCount: number;
+    movedSelectionWithArrowsOnce: boolean;
 
     ARROW_KEY_CODES: [number, number, number, number] = [LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW];
 
@@ -66,7 +66,15 @@ export class SelectionService extends ShapeService {
         this.render = render;
         this.selectedRef = selection;
         this.canvas = canvas;
-
+        this.canMoveSelection = true;
+        this.foundAnItem = false;
+        this.movingSelection = false;
+        this.movedSelectionOnce = false;
+        this.movedMouseOnce = false;
+        this.inverted = false;
+        this.existingLoop = false;
+        this.timeCount = 0;
+        this.movedSelectionWithArrowsOnce = false;
         MoveWithArrows.loop(this, START_ARROW_DELAY, ARROW_MOVEMENT_DELAY);
         this.selectedRef.style.pointerEvents = 'none'; // ignore the bounding box on click
 
@@ -119,7 +127,7 @@ export class SelectionService extends ShapeService {
         const SINGLE_LEFT = this.arrows[0] && !this.singleUseArrows[0];
         const SINGLE_UP = this.arrows[1] && !this.singleUseArrows[1];
         const SINGLE_RIGHT = this.arrows[2] && !this.singleUseArrows[2];
-        const SINGLE_DOWN = this.arrows[POS] && !this.singleUseArrows[3];
+        const SINGLE_DOWN = this.arrows[POS] && !this.singleUseArrows[POS];
 
         MoveWithArrows.once(SINGLE_LEFT, SINGLE_UP, SINGLE_RIGHT, SINGLE_DOWN, this);
     }

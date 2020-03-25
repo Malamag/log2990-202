@@ -73,30 +73,30 @@ export class PipetteService extends InputObserver {
     }
 
     updateDown(): void {
-        throw new Error('Method not implemented.');
+        // throw new Error('Method not implemented.');
     }
 
     updateUp(): void {
-        throw new Error('Method not implemented.');
+        // throw new Error('Method not implemented.');
     }
 
     cancel(): void {
-        throw new Error('Method not implemented.');
+        // throw new Error('Method not implemented.');
     }
 
     up(): void {
-        throw new Error('Method not implemented.');
+        // throw new Error('Method not implemented.');
     }
 
     doubleClick(): void {
-        throw new Error('Method not implemented.');
+        // throw new Error('Method not implemented.');
     }
 
     goingOutsideCanvas(): void {
-        throw new Error('Method not implemented.');
+        // throw new Error('Method not implemented.');
     }
 
     goingInsideCanvas(): void {
-        throw new Error('Method not implemented.');
+        // throw new Error('Method not implemented.');
     }
 }

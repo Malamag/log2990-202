@@ -109,4 +109,22 @@ describe('ImageFilterService', () => {
         expect(APPEND_SPY).toHaveBeenCalled();
         expect(service.currentFilter).toBe(service.filterArray[NUM]);
     });
+
+    it('should not call removeChild if the filter is undefined', () => {
+        service.currentFilter = undefined;
+        const NUM = 1;
+        const SPY = spyOn(service.renderer, 'removeChild');
+        service.renderer.setAttribute = () => 0;
+        service.renderer.appendChild = () => 0;
+        service.toggleFilter(doodle, NUM);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should ot call removeChild if the filter is undefined on no filter index', () => {
+        const NUM = -1; // no filter
+        service.currentFilter = undefined;
+        const SPY = spyOn(service.renderer, 'removeChild');
+        service.toggleFilter(doodle, NUM);
+        expect(SPY).not.toHaveBeenCalled();
+    });
 });

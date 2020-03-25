@@ -62,8 +62,8 @@ describe('AerosolService', () => {
         const PRIM = '#ffffff';
         const SEC = '#000000';
         const BACK = '#ffffff';
-        service.generatePoint = jasmine.createSpy().and.returnValue(ptA);
-        service.createInvisiblePath = jasmine.createSpy().and.returnValue([ptA, ptB]);
+        spyOn(service, 'generatePoint').and.callFake(() => ptA);
+        spyOn(service, 'createInvisiblePath').and.callFake(() => [ptA, ptB]);
         service.chosenColor = { primColor: PRIM, secColor: SEC, backColor: BACK };
 
         const PATH = service.createPath(ptArr);
@@ -214,6 +214,7 @@ describe('AerosolService', () => {
         service.down(ptA);  // start aerosol by mouse down
         service.currentPath = ptArr;
         const PATH_SIZE = service.currentPath.length;
+        service.createPath = jasmine.createSpy().and.returnValue(0);
         service.up(ptA);  // mouse up inside workspace
         service.move(ptB);  // Move while mouse up
         service.down(ptA);  // start aerosol again
@@ -257,25 +258,4 @@ describe('AerosolService', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it('should unsubscribe on tool change while the mouse is down', () => {
-        service.down(ptA);
-        // tslint:disable-next-line: no-string-literal
-        const SPY = spyOn(service['sub'], 'unsubscribe');
-        const EVENT = new Event('toolChange');
-        window.dispatchEvent(EVENT);
-
-        expect(SPY).toHaveBeenCalled();
-    });
-    /*
-        it('should subscribe to the interval when mouse is down and unsubscibe when up', () => {
-            const SPY_SUB = spyOn(service, 'subscribe');
-            service.down(ptA);
-            // tslint:disable-next-line: no-string-literal
-            const SPY_UNSUB = spyOn(service['sub'], 'unsubscribe');
-            service.up(ptA);
-
-            expect(SPY_SUB).toHaveBeenCalled();
-            expect(SPY_UNSUB).toHaveBeenCalled();
-        });
-    */
 });

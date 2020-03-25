@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { GalleryComponent } from '../gallery/gallery.component';
 import { NewDrawComponent } from '../new-draw/new-draw.component';
 import { UserManualComponent } from '../user-manual/user-manual.component';
 import { EntryPointComponent } from './entry-point.component';
@@ -12,18 +13,18 @@ describe('EntryPointComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EntryPointComponent ],
+      declarations: [EntryPointComponent],
       imports:
-      [ MatFormFieldModule,
-        MatIconModule,
-        MatSnackBarModule,
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatDialogModule
-      ],
+        [MatFormFieldModule,
+          MatIconModule,
+          MatSnackBarModule,
+          BrowserAnimationsModule,
+          MatButtonModule,
+          MatDialogModule
+        ],
 
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -77,6 +78,27 @@ describe('EntryPointComponent', () => {
     const GUIDE_SPY = spyOn(component, 'openUserManual');
     expect(FORM_SPY).not.toHaveBeenCalled();
     expect(GUIDE_SPY).not.toHaveBeenCalled();
+  });
+
+  it('should open the gallery on proper shortcut name', () => {
+    const NAME = 'Ouvrir';
+    const SPY = spyOn(component, 'openGallery');
+    component.execute(NAME);
+    expect(SPY).toHaveBeenCalled();
+  });
+
+  it('should call the window service method to open the gallery', () => {
+    const SPY = spyOn(component.winService, 'openWindow');
+    component.openGallery();
+    expect(SPY).toHaveBeenCalledWith(GalleryComponent);
+  });
+
+  /* This test is only a placeholder for further methods implemented in the execute func */
+  it('should call the statements on continuing a doodle', () => {
+    const SPY = spyOn(console, 'log');
+    const NAME = 'Continuer';
+    component.execute(NAME);
+    expect(SPY).toHaveBeenCalledWith(NAME);
   });
 
 });

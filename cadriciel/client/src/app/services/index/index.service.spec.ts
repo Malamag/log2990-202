@@ -91,11 +91,12 @@ describe('IndexService', () => {
             expect(error).toEqual(expectedError);
         }
     }));
-    /*
+
     it('should open a snack bar', inject([IndexService], (service: IndexService) => {
         const openSpy = spyOn(service.snackBar, 'open');
         const feedback = 'hello';
-        service.['displayFeedback'](feedback);
+        // tslint:disable-next-line: no-string-literal
+        service['displayFeedback'](feedback);
         expect(openSpy).toHaveBeenCalled();
-    }));*/
+    }));
 });

@@ -191,7 +191,7 @@ export class AerosolService extends DrawingTool {
     // for it not having to highlight every lines of the aerosol path
     createInvisiblePath(p: Point[]): void {
         // start the path
-        this.path += ' <path name="invisiblePath" d="';
+        this.path += ' <path class="invisiblePath" d="';
         // move to the first point
         this.path += `M ${p[0].x} ${p[0].y} `;
         // for each succeding point, connect it with a line
