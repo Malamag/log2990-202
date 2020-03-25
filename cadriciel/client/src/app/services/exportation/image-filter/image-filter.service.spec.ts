@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ImageFilterService } from './image-filter.service';
 
-fdescribe('ImageFilterService', () => {
+describe('ImageFilterService', () => {
     let service: ImageFilterService;
 
     // tslint:disable-next-line: no-any
@@ -114,6 +114,8 @@ fdescribe('ImageFilterService', () => {
         service.currentFilter = undefined;
         const NUM = 1;
         const SPY = spyOn(service.renderer, 'removeChild');
+        service.renderer.setAttribute = () => 0;
+        service.renderer.appendChild = () => 0;
         service.toggleFilter(doodle, NUM);
         expect(SPY).not.toHaveBeenCalled();
     });

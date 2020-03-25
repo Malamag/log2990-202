@@ -46,7 +46,7 @@ describe('ContinueDrawingService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('ask for doodle and affect the children', async (done: any) => {
+  it('should ask for doodle and affect the children', async (done: DoneFn) => {
     const LOAD_TIME = 15;
     const ASK_SPY = spyOn(service.doodle, 'askForDoodle');
 
@@ -61,4 +61,18 @@ describe('ContinueDrawingService', () => {
       done();
     }, LOAD_TIME);
   });
+
+  it('should affect empty innerhtml for undefined data', async (done: DoneFn) => {
+    const LOAD_TIME = 15;
+    service.doodle.currentDraw = elementStub;
+
+    render.appendChild(service.doodle.currentDraw.nativeElement, childElemStub);
+    const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: [] };
+    service.continueDrawing(SVG_DATA);
+    setTimeout(() => {
+      expect(childElemStub.innerHTML).toEqual('');
+      done();
+    }, LOAD_TIME);
+  });
+
 });
