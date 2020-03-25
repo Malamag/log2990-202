@@ -125,6 +125,9 @@ describe('Database service', () => {
         const result = await dbService.getAllImages();
         return expect(result).to.have.length(expectedLenght);
     })
+    it('should throw an error if trying to delete invalide image', async () => {
+        return expect(() => dbService.deleteImageById('1101')).to.throw();
+    })
     //test saveImage()
     it('should expect a lenght of one more after adding an image to test collection', async () => {
         const expectedLenght = (await dbService.getAllImages()).length + 1;

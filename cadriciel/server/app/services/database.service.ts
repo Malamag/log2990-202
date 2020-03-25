@@ -146,7 +146,7 @@ export class DatabaseService {
                 /* nothing to do after findOneAndDelete, .then necessary (empty block) */
             })
             .catch(() => {
-                throw new Error("Impposible de supprimer l'image");
+                throw new TypeError("Impposible de supprimer l'image");
             });
     }
 
