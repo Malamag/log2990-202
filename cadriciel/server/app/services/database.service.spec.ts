@@ -20,7 +20,7 @@ describe('Database service', () => {
     //let client: MongoClient;
     //let assert = require('assert');
 
-    before(async () => {
+    beforeEach(async () => {
         container = new inversify.Container();
         container.bind(Types.DatabaseService).to(DatabaseService);
         dbService = container.get<DatabaseService>(Types.DatabaseService);
@@ -34,7 +34,7 @@ describe('Database service', () => {
                                 return await db.createCollection('test', { size: 512000, w: 'majority' })
                                     .then(async (collection: Collection<MetaData>) => {
                                         dbService.collection = collection;
-                                        console.log('Collection succesfully created')
+                                        //console.log('Collection succesfully created')
                                         return Promise.resolve();
                                     })
                                     .catch(() => { console.log('Fail to create collection') });
@@ -45,15 +45,13 @@ describe('Database service', () => {
             })
             .catch(() => { console.log('Fail to get db url') });
         dbService.jsonFile = '../jsonTest.json';
-    });
-    beforeEach(async () => {
         const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
         // create 10 images with id 0 to 9 for testing purpose
         for (let i = 0; i < 10; i++) {
             let imageData: ImageData = { id: i.toString(), svgElement: svg, name: 'ok', tags: ['ok'] };
             await dbService.saveImage(imageData);
         }
-    })
+    });
     afterEach(async () => {
         dbService.clearData();
     })
@@ -64,22 +62,31 @@ describe('Database service', () => {
         return expect(result).to.have.length(10);
     })
     //test getImagesByTags()
-    it('should expect a lenght of one for a seach of one existing image', async () => {
+    it('should expect a lenght of 10 for a result of 10 matching image', async () => {
         const result = await dbService.getImagesByTags('ok');
         return expect(result).to.have.length(10);
     })
+    it('should expect a lenght of zero for a result of no matching image', async () => {
+        const result = await dbService.getImagesByTags('blue');
+        return expect(result).to.have.length(0);
+    })
+    it('should expect all images if no tags are given', async () => {
+        const expectedLenght = (await (dbService.getAllImages())).length;
+        const result = await dbService.getImagesByTags('');
+        return expect(result).to.have.length(expectedLenght);
+    })
     //test getImages() expect matching id
-    it('should expect a lenght of one for a seach of one existing image', async () => {
+    it('should expect a lenght of one for a search of one existing image', async () => {
         const metaData: MetaData[] = [{ id: '1', name: 'ok', tags: ['ok'] }];
         const result = await dbService.getImages(metaData);
         return expect(result).to.have.length(1);
     })
-    it('should expect a lenght of zero for a seach of one not existing image', async () => {
+    it('should expect a lenght of zero for a search of one not existing image', async () => {
         const metaData: MetaData[] = [{ id: '1001', name: 'ok', tags: ['ok'] }];
         const result = await dbService.getImages(metaData);
         return expect(result).to.have.length(0);
     })
-    it('should expect a lenght of a 5 for a seach of 5 existing image', async () => {
+    it('should expect a lenght of a 5 for a search of 5 existing image', async () => {
         const metaData: MetaData[] = [{ id: '1', name: 'ok', tags: [''] },
         { id: '2', name: 'ok', tags: [''] },
         { id: '3', name: 'ok', tags: [''] },
@@ -138,6 +145,24 @@ describe('Database service', () => {
         const imageData: ImageData = { id: '1001', svgElement: svg, name: '', tags: [''] };
         return await dbService.validateImageData(imageData).should.eventually.equal(null);
     })*/
+    it('should not accept an invalide name', async () => {
+        const svg: SVGData = { height: '0', width: '0', innerHTML: [''], bgColor: '' };
+        const imagesData: ImageData = { id: '0', svgElement: svg, name: '', tags: [''] };
+        const result = await (dbService.validateImageData(imagesData));
+        return expect(result).to.be.null;
+    })
+    it('should not accept an invalide tag', async () => {
+        const svg: SVGData = { height: '0', width: '0', innerHTML: [''], bgColor: '' };
+        const imagesData: ImageData = { id: '0', svgElement: svg, name: 'ok', tags: ['@#$%'] };
+        const result = await (dbService.validateImageData(imagesData));
+        return expect(result).to.be.null;
+    })
+    it('should accept a valide image', async () => {
+        const svg: SVGData = { height: '0', width: '0', innerHTML: [''], bgColor: '' };
+        const imagesData: ImageData = { id: '0', svgElement: svg, name: 'ok', tags: ['ok'] };
+        const result = await (dbService.validateImageData(imagesData));
+        return expect(result).to.be.not.null;
+    })
     //test validateId()
     it('should accept an unique Id', (done: Mocha.Done) => {
         const svg: SVGData = { height: '0', width: '0', innerHTML: [''], bgColor: '' };
@@ -169,4 +194,10 @@ describe('Database service', () => {
         expect(dbService.validateTags(['@34,/', 'afhhsy'])).to.be.false;
         done();
     });
+    //test clearData()
+    it('should clear data', async () => {
+        await dbService.clearData();
+        const result = await (dbService.getAllImages());
+        return expect(result).to.have.length(0);
+    })
 });
