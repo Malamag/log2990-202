@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatSnackBar, MatSnackBarConfig} from '@angular/material';
+import { MatDialog, MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { menuItems } from '../../functionality';
 import { ModalWindowService } from '../../services/window-handler/modal-window.service';
 import { GalleryComponent } from '../gallery/gallery.component';
@@ -56,20 +56,21 @@ export class EntryPointComponent implements OnInit {
         // statements;
         this.openGallery();
         break;
-     }
-     case 'Guide': {
-       this.openUserManual();
-       break;
-    }
-      case 'Continuer': {
-    // statements;
-    break;
-   }
-    default: {
-       // statements;
-     break;
       }
-   }
+      case 'Guide': {
+        this.openUserManual();
+        break;
+      }
+      case 'Continuer': {
+        // statements;
+        console.log(shortcutName);
+        break;
+      }
+      default: {
+        // statements;
+        break;
+      }
+    }
   }
 
 }
