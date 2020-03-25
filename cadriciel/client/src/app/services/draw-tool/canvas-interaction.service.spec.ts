@@ -3,13 +3,13 @@ import { TestBed } from '@angular/core/testing';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { CanvasInteraction } from './canvas-interaction.service';
 import { ElementInfo } from './element-info.service';
+import { HtmlSvgFactory } from './html-svg-factory.service';
 import { Point } from './point';
 import { SelectionService } from './selection.service';
-import { HtmlSvgFactory } from './html-svg-factory.service';
 
 export class FakeInteractionService extends InteractionService { }
 
-fdescribe('CanvasInteractionService', () => {
+describe('CanvasInteractionService', () => {
   let service: SelectionService;
   // tslint:disable-next-line: prefer-const
   let render = jasmine.createSpyObj('Renderer2', ['setStyle']);
@@ -46,9 +46,9 @@ fdescribe('CanvasInteractionService', () => {
     });
 
     service = TestBed.get(SelectionService);
-    ElementInfo.translate = jasmine.createSpy().and.returnValue(new Point(0, 2));
-    HtmlSvgFactory.svgDetailedCircle = jasmine.createSpy().and.returnValue('fakeCircle');
-    HtmlSvgFactory.svgRectangle = jasmine.createSpy().and.returnValue('fakeRect');
+    spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 2));
+    spyOn(HtmlSvgFactory, 'svgDetailedCircle').and.returnValue('fakeCircle');
+    spyOn(HtmlSvgFactory, 'svgRectangle').and.returnValue('fakeRect');
   });
 
   it('should move the selected items', () => {
@@ -80,8 +80,10 @@ fdescribe('CanvasInteractionService', () => {
 
     // tslint:disable-next-line: no-magic-numbers
     const FAKE_BORDER = [[0, true], [4, true], [3, true], [4, true]];
+    const OLD_METHOD = CanvasInteraction.getPreciseBorder;
     CanvasInteraction.getPreciseBorder = jasmine.createSpy().and.returnValue(FAKE_BORDER);
     CanvasInteraction.createBoundingBox(service);
     expect(CanvasInteraction.getPreciseBorder).toHaveBeenCalled();
+    CanvasInteraction.getPreciseBorder = OLD_METHOD; // Replaces the spy
   });
 });

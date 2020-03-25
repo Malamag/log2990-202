@@ -137,7 +137,7 @@ export class CanvasInteraction {
     const SELECTION_BOX = SELECTION_RECTANGLE ? SELECTION_RECTANGLE.getBoundingClientRect() : null;
     const BOX_TOP_LEFT: Point = new Point(SELECTION_BOX ? SELECTION_BOX.left : INIT_VALUE, SELECTION_BOX ? SELECTION_BOX.top : INIT_VALUE);
     const BOX_BOTTOM_RIGHT: Point = new Point(SELECTION_BOX ? SELECTION_BOX.right : INIT_VALUE,
-       SELECTION_BOX ? SELECTION_BOX.bottom : INIT_VALUE);
+      SELECTION_BOX ? SELECTION_BOX.bottom : INIT_VALUE);
 
     for (let i = 0; i < ITEMS.length; i++) {
 

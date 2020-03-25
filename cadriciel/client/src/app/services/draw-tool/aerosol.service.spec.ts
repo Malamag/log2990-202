@@ -257,25 +257,4 @@ describe('AerosolService', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it('should unsubscribe on tool change while the mouse is down', () => {
-        service.down(ptA);
-        // tslint:disable-next-line: no-string-literal
-        const SPY = spyOn(service['sub'], 'unsubscribe');
-        const EVENT = new Event('toolChange');
-        window.dispatchEvent(EVENT);
-
-        expect(SPY).toHaveBeenCalled();
-    });
-    /*
-        it('should subscribe to the interval when mouse is down and unsubscibe when up', () => {
-            const SPY_SUB = spyOn(service, 'subscribe');
-            service.down(ptA);
-            // tslint:disable-next-line: no-string-literal
-            const SPY_UNSUB = spyOn(service['sub'], 'unsubscribe');
-            service.up(ptA);
-
-            expect(SPY_SUB).toHaveBeenCalled();
-            expect(SPY_UNSUB).toHaveBeenCalled();
-        });
-    */
 });
