@@ -20,7 +20,8 @@ describe('SelectionService', () => {
 
     beforeEach(() => {
         firstChild = {
-            getBoundingClientRect: () => 0
+            getBoundingClientRect: () => 0,
+            getAttribute: () => 0
         };
         select = {
             children: [firstChild, firstChild],
@@ -42,6 +43,7 @@ describe('SelectionService', () => {
         });
         service = TestBed.get(SelectionService);
         service.selectedItems = [false, false, false];
+        service.drawing = select;
     });
 
     it('should be created', () => {

@@ -9,6 +9,7 @@ import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboa
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
 import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { SvgDrawComponent } from './svg-draw.component';
+import { Canvas } from 'src/app/models/canvas.model';
 
 const width = 67;
 const height = 10;
@@ -43,6 +44,7 @@ describe('SvgDrawComponent', () => {
 
         gridServiceStub = {
             initGrid: () => 0,
+            removeGrid: () => 0
         };
 
         TestBed.configureTestingModule({
@@ -123,10 +125,9 @@ describe('SvgDrawComponent', () => {
     });
 
     it('should call window addEventListener', () => {
-        const TOTAL_LISTENERS = 12;
         window.addEventListener = jasmine.createSpy().and.returnValue(0);
         component.ngAfterViewInit();
-        expect(window.addEventListener).toHaveBeenCalledTimes(TOTAL_LISTENERS);
+        expect(window.addEventListener).toHaveBeenCalled();
     });
 
     it('should call the mouse down listener on mouse down', () => {
@@ -184,5 +185,27 @@ describe('SvgDrawComponent', () => {
         const TOOL = 'Rectangle'; // arbitrary tool selection
         component.interaction.emitSelectedTool(TOOL);
         expect(component.toolsContainer.get(TOOL).selected).toBeTruthy();
+    });
+
+    it('should define the doodle fetch attributes in the subscription', () => {
+        const TEST_COLOR = 'ffffff';
+
+        component.ngAfterViewInit();
+        component.doodleFetch.askForDoodle();
+        expect(component.doodleFetch.widthAttr).toBeDefined();
+        expect(component.doodleFetch.heightAttr).toBeDefined();
+        expect(component.doodleFetch.backColor).toEqual(TEST_COLOR);
+    });
+
+    it('should reinit the grid after the new canvas attributes', () => {
+        const CANVAS: Canvas = { canvasWidth: 1000, canvasHeight: 2000, canvasColor: 'ffffff' };
+        // tslint:disable-next-line: no-string-literal
+        const REM_SPY = spyOn(component['gridService'], 'removeGrid');
+        // tslint:disable-next-line: no-string-literal
+        const INIT_SPY = spyOn(component['gridService'], 'initGrid');
+        component.reinitGridFromSub();
+        component.interaction.emitGridAttributes(CANVAS);
+        expect(REM_SPY).toHaveBeenCalled();
+        expect(INIT_SPY).toHaveBeenCalled();
     });
 });

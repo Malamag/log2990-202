@@ -25,7 +25,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         private canvBuilder: CanvasBuilderService,
         public interaction: InteractionService,
         public colorPick: ColorPickingService,
-        private doodleFetch: DoodleFetchService,
+        public doodleFetch: DoodleFetchService,
         private render: Renderer2,
         private gridService: GridRenderService,
     ) {
@@ -206,9 +206,9 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         });
 
         // Prevent right-click menu
-        window.oncontextmenu = (e: MouseEvent) => {
+        window.addEventListener('contextmenu', (e: MouseEvent) => {
             e.preventDefault();
-        };
+        });
 
         // Keyboard listeners
         window.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -234,7 +234,6 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.interaction.$canvasAttributes.subscribe((newDoodle: Canvas) => {
             this.gridService.removeGrid();
             this.gridService.initGrid(this.gridRef.nativeElement, newDoodle.canvasWidth, newDoodle.canvasHeight, newDoodle.canvasColor);
-            console.log(newDoodle);
         });
     }
 }
