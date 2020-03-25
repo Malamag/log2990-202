@@ -19,7 +19,7 @@ describe('MoveWithArrows', () => {
   beforeEach(() => {
     firstChild = {
       getBoundingClientRect: () => 0,
-  };
+    };
     select = {
       children: [firstChild, firstChild],
       style: {
