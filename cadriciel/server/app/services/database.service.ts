@@ -187,8 +187,8 @@ export class DatabaseService {
     }
 
     async saveImage(imageData: ImageData): Promise<void> {
-        this.validateImageData(imageData)
-            .then((data) => {
+        await this.validateImageData(imageData)
+            .then(async (data) => {
                 let image: ImageData;
                 if (data !== null) {
                     image = data;

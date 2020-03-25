@@ -26,16 +26,17 @@ describe('Database service', () => {
         container.bind(Types.DatabaseService).to(DatabaseService);
         dbService = container.get<DatabaseService>(Types.DatabaseService);
         await server.getConnectionString()
-            .then((url) => {
-                MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-                    .then((client) => {
-                        server.getDbName()
-                            .then((dbName) => {
+            .then(async (url) => {
+                return await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+                    .then(async (client) => {
+                        return await server.getDbName()
+                            .then(async (dbName) => {
                                 let db = client.db(dbName);
-                                db.createCollection('test', { size: 512000, w: 'majority' })
-                                    .then((collection: Collection<MetaData>) => {
+                                return await db.createCollection('test', { size: 512000, w: 'majority' })
+                                    .then(async (collection: Collection<MetaData>) => {
                                         dbService.collection = collection;
                                         console.log('Collection succesfully created')
+                                        return Promise.resolve();
                                     })
                                     .catch(() => { console.log('Fail to create collection') });
                             })
@@ -47,7 +48,7 @@ describe('Database service', () => {
         dbService.jsonFile = '../jsonTest.json';
         const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
         const imageData: ImageData = { id: '1', svgElement: svg, name: 'ok', tags: ['ok'] };
-        await dbService.saveImage(imageData);
+        return await dbService.saveImage(imageData);
     });
     afterEach(() => {
     })
@@ -56,8 +57,11 @@ describe('Database service', () => {
     //test getImagesByTags() expect stringToArray - expect/spy getImages() - tags test - expect/spy searchTag()
     //test getImages() expect matching id
     it('should expect a lenght of one for a seach of one existing image', async () => {
-        const metaData: MetaData[] = [{ id: '1', name: 'ok', tags: ['ok'] }];
-        const result = await dbService.getImages(metaData);
+        const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
+        const imageData: ImageData = { id: '11', svgElement: svg, name: 'ok', tags: ['ok'] };
+        await dbService.saveImage(imageData);
+        const metaData: MetaData[] = [{ id: '11', name: 'ok', tags: ['ok'] }];
+        const result = dbService.getImages(metaData);
         return expect(result).to.have.length(1);
     })
     it('should expect a lenght of zero for a seach of one not existing image', async () => {
@@ -93,14 +97,14 @@ describe('Database service', () => {
         done();
     })
     //test deleteImageById()
-    /*it('should delete the image with the choosen id', async () => {
-        //const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
-        //const imageData: ImageData = { id: '10', svgElement: svg, name: 'ok', tags: ['ok'] };
-        //await dbService.saveImage(imageData);
+    it('should delete the image with the choosen id', async () => {
+        const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
+        const imageData: ImageData = { id: '10', svgElement: svg, name: 'ok', tags: ['ok'] };
+        await dbService.saveImage(imageData);
         await dbService.deleteImageById('1');
-        //const metaData: MetaData[] = [{ id: '1', name: 'ok', tags: ['ok'] }];
-        return expect(dbService.collection.find({})).to.have.length(1);
-    })*/
+        const metaData: MetaData[] = [{ id: '1', name: 'ok', tags: ['ok'] }];
+        return expect(dbService.getImages(metaData)).to.have.length(1);
+    })
     //test saveImage()
     //test validateImageData()
     /*it('should not accept image if collection is full', async () => {
