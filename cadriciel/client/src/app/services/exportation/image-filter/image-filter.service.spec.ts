@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ImageFilterService } from './image-filter.service';
 
-describe('ImageFilterService', () => {
+fdescribe('ImageFilterService', () => {
     let service: ImageFilterService;
 
     // tslint:disable-next-line: no-any
@@ -108,5 +108,21 @@ describe('ImageFilterService', () => {
         expect(MODIFIER_SPY).toHaveBeenCalled();
         expect(APPEND_SPY).toHaveBeenCalled();
         expect(service.currentFilter).toBe(service.filterArray[NUM]);
+    });
+
+    it('should not call removeChild if the filter is undefined', () => {
+        service.currentFilter = undefined;
+        const NUM = 1;
+        const SPY = spyOn(service.renderer, 'removeChild');
+        service.toggleFilter(doodle, NUM);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should ot call removeChild if the filter is undefined on no filter index', () => {
+        const NUM = -1; // no filter
+        service.currentFilter = undefined;
+        const SPY = spyOn(service.renderer, 'removeChild');
+        service.toggleFilter(doodle, NUM);
+        expect(SPY).not.toHaveBeenCalled();
     });
 });
