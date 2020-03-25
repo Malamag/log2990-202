@@ -62,8 +62,8 @@ describe('AerosolService', () => {
         const PRIM = '#ffffff';
         const SEC = '#000000';
         const BACK = '#ffffff';
-        service.generatePoint = jasmine.createSpy().and.returnValue(ptA);
-        service.createInvisiblePath = jasmine.createSpy().and.returnValue([ptA, ptB]);
+        spyOn(service, 'generatePoint').and.callFake(() => ptA);
+        spyOn(service, 'createInvisiblePath').and.callFake(() => [ptA, ptB]);
         service.chosenColor = { primColor: PRIM, secColor: SEC, backColor: BACK };
 
         const PATH = service.createPath(ptArr);
@@ -214,6 +214,7 @@ describe('AerosolService', () => {
         service.down(ptA);  // start aerosol by mouse down
         service.currentPath = ptArr;
         const PATH_SIZE = service.currentPath.length;
+        service.createPath = jasmine.createSpy().and.returnValue(0);
         service.up(ptA);  // mouse up inside workspace
         service.move(ptB);  // Move while mouse up
         service.down(ptA);  // start aerosol again
