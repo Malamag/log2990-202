@@ -56,6 +56,15 @@ export const menuItems = [
          Aussi, elle vous permet d'appliquer des filtres sur le dessin que vous voulez exporter.`,
         description: `Pour ouvrir la fenêtre d'exportation, vous pouvez appuyer appuyer sur l'icône appropriée de la barre des options,
         comme vous pouvez l'ouvrir en faisant la touche 'ctrl+E' de votre clavier`,
+        icon: 'cloud_download',
+    },
+    {
+        name: 'Sauvegarder dessin',
+        shortcutName: 'sauvegarde',
+        shortDescription: `Permet de sauvegarder un dessin sur la base de données de l'application. Lors de la sauvegarde, vous devez entrer un nom non vide
+        à votre dessin, comme vous pouvez y mettre des étiquettes`,
+        description: `Pour ouvrir la fenêtre de sauvegarde, vous pouvez appuyer appuyer sur l'icône appropriée de la barre des options,
+        comme vous pouvez l'ouvrir en faisant la touche 'ctrl+S' de votre clavier`,
         icon: 'save',
     },
 ];

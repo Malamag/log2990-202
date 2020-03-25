@@ -98,7 +98,7 @@ export class EraserService extends DrawingTool {
 
             if (this.erasedSomething) {
                 this.interaction.emitDrawingDone();
-                //console.log("now");
+                
             }
             this.erasedSomething = false;
         }
