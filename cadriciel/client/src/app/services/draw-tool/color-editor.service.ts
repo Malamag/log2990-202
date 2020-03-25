@@ -15,10 +15,6 @@ export class ColorEditorService extends DrawingTool {
     render: Renderer2;
     attr: ToolsAttributes;
 
-    foundAnItem: boolean;
-
-    erasedSomething: boolean;
-
     canvas: HTMLElement;
 
     isRightClick: boolean;
@@ -46,20 +42,9 @@ export class ColorEditorService extends DrawingTool {
 
         this.render = render;
 
-        this.foundAnItem = false;
-
-        this.erasedSomething = false;
-
         this.inProgress.style.pointerEvents = 'none';
 
         this.isRightClick = false;
-
-        window.addEventListener('toolChange', (e: Event) => {
-            this.foundAnItem = false;
-            for (let i = 0; i < this.drawing.childElementCount; i++) {
-                //this.unhighlight(this.drawing.children[i]);
-            }
-        });
     }
     updateAttributes() {
         this.interaction.$toolsAttributes.subscribe(obj => {
