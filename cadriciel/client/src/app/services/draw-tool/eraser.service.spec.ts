@@ -6,7 +6,7 @@ import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
 import { Point } from './point';
 
-fdescribe('EraserService', () => {
+describe('EraserService', () => {
 
     //let fakeInteractionService: InteractionService;
     //let fakeColorPickingService: ColorPickingService;

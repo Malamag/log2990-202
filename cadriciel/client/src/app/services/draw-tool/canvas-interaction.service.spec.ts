@@ -9,7 +9,7 @@ import { SelectionService } from './selection.service';
 
 export class FakeInteractionService extends InteractionService { }
 
-describe('CanvasInteractionService', () => {
+fdescribe('CanvasInteractionService', () => {
   let service: SelectionService;
   // tslint:disable-next-line: prefer-const
   let render = jasmine.createSpyObj('Renderer2', ['setStyle']);
@@ -17,8 +17,14 @@ describe('CanvasInteractionService', () => {
   let select: any;
   // tslint:disable-next-line: no-any
   let firstChild: any;
-
+  let fakeDomRECT: any;
   beforeEach(() => {
+    fakeDomRECT = {
+      left: 200,
+      top: 150,
+      right: 0,
+      bottom: 50,
+    }
     firstChild = {
       getBoundingClientRect: () => 0,
       x: 2,
@@ -85,5 +91,39 @@ describe('CanvasInteractionService', () => {
     CanvasInteraction.createBoundingBox(service);
     expect(CanvasInteraction.getPreciseBorder).toHaveBeenCalled();
     CanvasInteraction.getPreciseBorder = OLD_METHOD; // Replaces the spy
+  });
+  it('should return an invalid border', () => {
+    const ITEM = document.createElement('input');
+    const FIRST_CHILD = document.createElement('filter');
+    const SECOND_CHILD = document.createElement('g');
+    ITEM.appendChild(FIRST_CHILD);
+    ITEM.appendChild(SECOND_CHILD);
+    const TUPLE = [0, true];
+    const POS = 3;
+    const RET = CanvasInteraction.getPreciseBorder(ITEM);
+    expect(RET[0]).toEqual(TUPLE);
+    expect(RET[1]).toEqual(TUPLE);
+    expect(RET[2]).toEqual(TUPLE);
+    expect(RET[POS]).toEqual(TUPLE);
+  });
+  it('should return a valid border', () => {
+    const ITEM = document.createElement('input');
+    const FIRST_CHILD = document.createElement('filter');
+    const SECOND_CHILD = document.createElement('g');
+    ITEM.appendChild(FIRST_CHILD);
+    SECOND_CHILD.setAttribute('stroke-width', '10');
+    const POS = 3;
+    const NUM = 100;
+    ITEM.appendChild(SECOND_CHILD);
+    const FIRST_RECORD: [number, boolean] = [NUM, true];
+    const SECOND_RECORD: [number, boolean] = [NUM, false];
+    const THIRD_RECORD: [number, boolean] = [NUM, true];
+    const FOURTH_RECORD: [number, boolean] = [NUM, false];
+    SECOND_CHILD.getBoundingClientRect = jasmine.createSpy().and.returnValue(fakeDomRECT);
+    const RET = CanvasInteraction.getPreciseBorder(ITEM, [FIRST_RECORD, SECOND_RECORD, THIRD_RECORD, FOURTH_RECORD]);
+    expect(RET[0]).toEqual(FIRST_RECORD);
+    expect(RET[1]).toEqual(SECOND_RECORD);
+    expect(RET[2]).toEqual(THIRD_RECORD);
+    expect(RET[POS]).toEqual(FOURTH_RECORD);
   });
 });
