@@ -98,7 +98,7 @@ export class EraserService extends DrawingTool {
 
             if (this.erasedSomething) {
                 this.interaction.emitDrawingDone();
-                //console.log("now");
+                
             }
             this.erasedSomething = false;
         }
@@ -122,7 +122,7 @@ export class EraserService extends DrawingTool {
                 let wider: number = Math.max(10, originalWidthNumber + 10);
                 this.render.setAttribute(clone.children[i], 'stroke-width', `${wider}`);
 
-                //console.log(window.getComputedStyle(el.children[i]).getPropertyValue("stroke"));
+
                 let originalStrokeColor: string | null = (el.children[i] as HTMLElement).getAttribute('stroke');
                 let originalFillColor: string | null = (el.children[i] as HTMLElement).getAttribute('fill');
                 //248 256

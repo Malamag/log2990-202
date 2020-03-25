@@ -26,7 +26,7 @@ describe('ExportService', () => {
             drawImage: (img: CanvasImageSource, dx: number, dy: number) => 1,
         };
         nativeElemStub = {
-            toDataURL: (data: string) => 0,
+            toDataURL: (data: string) => '0',
             getContext: (ctx: string) => ctxStub, // true in an if-clause
         };
         elementStub = {
@@ -72,7 +72,7 @@ describe('ExportService', () => {
         const SPY = spyOn(service, 'download');
 
         service.exportCanvas(NAME, TYPE, nativeElemStub);
-        expect(SPY).toHaveBeenCalledWith(NAME, TYPE, 0);
+        expect(SPY).toHaveBeenCalledWith(NAME, TYPE, '0');
     });
 
     it('should produce an url during exportation', () => {
