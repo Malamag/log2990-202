@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { injectable } from 'inversify';
-import { Collection, FilterQuery, MongoClient, MongoClientOptions, UpdateQuery } from 'mongodb';
+import { Collection, MongoClient, MongoClientOptions } from 'mongodb';
 import 'reflect-metadata';
 import { Image } from '../Image';
 import { ImageData } from '../../../image-data';
@@ -23,7 +23,7 @@ export class DatabaseService {
         MongoClient.connect(DATABASE_URL, this.options)
             .then((client: MongoClient) => {
                 this.collection = client.db(DATABASE_NAME).collection(DATABASE_COLLECTION);
-                console.error('connexion ok ');
+                //console.error('connexion ok ');
             })
             .catch(() => {
                 console.error('Erreur de connexion. Terminaison du processus');
@@ -46,6 +46,9 @@ export class DatabaseService {
 
     async getImagesByTags(tags: string): Promise<ImageData[]> {
         const tagsArray = this.stringToArray(tags);
+        if (tags.length === 0) {
+            return this.getAllImages();
+        }
         return this.collection
             .find({})
             .toArray()
@@ -65,10 +68,6 @@ export class DatabaseService {
                             }
                         });
                     })
-                /*const buffer : ImageData[] = [];
-                if (tags === 'none') {
-                    return buffer;
-                }*/
                 return imageData;
             })
             .catch((error: Error) => {
@@ -146,46 +145,8 @@ export class DatabaseService {
             .then(() => {
                 /* nothing to do after findOneAndDelete, .then necessary (empty block) */
             })
-            .catch((error: Error) => {
-                throw new Error("Impposible de supprimer l'image");
-            });
-    }
-
-    async modifyImage(imageData: ImageData): Promise<void> {
-        fs.readFile(this.jsonFile, (err, data) => {
-            // Convert string (old data) to JSON
-            const drawingsList = JSON.parse(data.toString());
-            const jsonObj = { id: imageData.id, svgElement: imageData.svgElement };
-            drawingsList.drawings = drawingsList.drawings.filter((imgData: Image) => {
-                return imgData.id !== imageData.id;
-            });
-            // Add new data to my drawings list
-            drawingsList.drawings.push(jsonObj);
-            // Convert JSON to string
-            const listToJson = JSON.stringify(drawingsList);
-            // Replace all data in the data.json with new ones
-            fs.writeFile(this.jsonFile, listToJson, (error) => {
-                if (error) {
-                    throw error;
-                }
-                console.log('The "data to append" was appended to file!');
-            });
-        });
-        const filterQuery: FilterQuery<ImageData> = { id: imageData.id };
-        const udateQuery: UpdateQuery<ImageData> = {
-            $set: {
-                id: imageData.id,
-                name: imageData.name,
-                tags: imageData.tags,
-            },
-        };
-        this.collection
-            .updateOne(filterQuery, udateQuery)
-            .then(() => {
-                /* nothing to do after updating image, .then necessary (empty block) */
-            })
             .catch(() => {
-                throw new Error("Impossible de mette à jour l'image");
+                throw new TypeError("Impposible de supprimer l'image");
             });
     }
 
@@ -196,7 +157,8 @@ export class DatabaseService {
                 if (data !== null) {
                     image = data;
                 } else {
-                    throw new Error('Image data is null');
+                    //throw new TypeError('Image data is null');
+                    return;
                 }
                 // Convert string (old data) to JSON
                 const jsonData = fs.readFileSync(this.jsonFile);
@@ -208,59 +170,41 @@ export class DatabaseService {
                 const listToJson = JSON.stringify(drawingsList);
                 fs.writeFileSync(this.jsonFile, listToJson);
                 const metadata: MetaData = { id: image.id, name: image.name, tags: image.tags };
-                this.collection.insertOne(metadata).catch((error: Error) => {
-                    throw error;
-                });
-                /*fs.readFile(this.jsonFile, (err, readData) => {
-                    // Convert string (old data) to JSON
-                    const drawingsList = JSON.parse(readData.toString());
-                    const jsonObj = { id: image.id, svgElement: image.svgElement };
-                    // Add new data to my drawings list
-                    drawingsList.drawings.push(jsonObj);
-                    // Convert JSON to string
-                    const listToJson = JSON.stringify(drawingsList);
-                    // Replace all data in the data.json with new ones
-                    fs.writeFile(this.jsonFile, listToJson, (error) => {
-                        if (error) {
-                            throw error;
-                        }
-                        console.log('The "data to append" was appended to file!');
+                return await this.collection.insertOne(metadata)
+                    .then(() => {
+                        return Promise.resolve();
+                    })
+                    .catch((error: Error) => {
+                        throw error;
                     });
-                });
-                const metadata: MetaData = { id: image.id, name: image.name, tags: image.tags };
-                this.collection.insertOne(metadata).catch((error: Error) => {
-                    throw error;
-                });*/
-                return Promise.resolve();
             })
-            .catch(() => {
-                //throw new Error('Invalide image data');
-            });
     }
 
     async validateImageData(imageData: ImageData): Promise<ImageData | null> {
         const MAX_DATA_AMOUNT = 1000;
-        return this.getAllImages().then((data) => {
-            if (data.length >= MAX_DATA_AMOUNT) {
-                return null;
-            }
-            while (!this.validateId(imageData.id, data)) {
-                // Generate a new id
-                imageData.id = new Date().getUTCMilliseconds() + '';
-            }
-            if (!this.validateName(imageData.name)) {
-                console.log('Empty name');
-                return null;
-            }
-            if (!this.validateTags(imageData.tags)) {
-                console.log('Invalide tags');
-                return null;
-            }
-            return imageData;
-        })
-            .catch(() => {
-                return null;
-                //throw new Error("Fail to get images");
+        return this.getAllImages()
+            .then((data) => {
+                if (data.length >= MAX_DATA_AMOUNT) {
+                    //throw new TypeError('Collection is full');
+                    return null;
+                }
+                while (!this.validateId(imageData.id, data)) {
+                    // Generate a new id
+                    imageData.id = new Date().getUTCMilliseconds() + '';
+                }
+                if (!this.validateName(imageData.name)) {
+                    //throw new TypeError('Empty name');
+                    return null;
+                }
+                if (!this.validateTags(imageData.tags)) {
+                    //throw new TypeError('Invalide tags');
+                    return null;
+                }
+                return imageData;
+            })
+            .catch((error) => {
+                //return null;
+                throw error;
             });
     }
 
