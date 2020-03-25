@@ -5,16 +5,17 @@ import { CanvasInteraction } from './canvas-interaction.service';
 import { ElementInfo } from './element-info.service';
 import { Point } from './point';
 import { SelectionService } from './selection.service';
+import { HtmlSvgFactory } from './html-svg-factory.service';
 
 export class FakeInteractionService extends InteractionService { }
 
 fdescribe('CanvasInteractionService', () => {
   let service: SelectionService;
-    // tslint:disable-next-line: prefer-const
-  let render: Renderer2;
-    // tslint:disable-next-line: no-any
+  // tslint:disable-next-line: prefer-const
+  let render = jasmine.createSpyObj('Renderer2', ['setStyle']);
+  // tslint:disable-next-line: no-any
   let select: any;
-    // tslint:disable-next-line: no-any
+  // tslint:disable-next-line: no-any
   let firstChild: any;
 
   beforeEach(() => {
@@ -24,9 +25,9 @@ fdescribe('CanvasInteractionService', () => {
       y: 2,
     };
     select = {
-      children: [firstChild , firstChild],
+      children: [firstChild, firstChild],
       style: {
-          pointerEvents: 'none',
+        pointerEvents: 'none',
       },
       childElementCount: 2,
       innerHTML: 'test',
@@ -34,32 +35,37 @@ fdescribe('CanvasInteractionService', () => {
     };
     TestBed.configureTestingModule({
       providers: [
-          { provide: Point },
-          { provide: HTMLElement, useValue: select },
-          { provide: Number, useValue: 0 },
-          { provide: String, useValue: '' },
-          { provide: Boolean, useValue: true },
-          { provide: InteractionService, useClass: FakeInteractionService },
-          { provide: Renderer2, useValue: render },
+        { provide: Point },
+        { provide: HTMLElement, useValue: select },
+        { provide: Number, useValue: 0 },
+        { provide: String, useValue: '' },
+        { provide: Boolean, useValue: true },
+        { provide: InteractionService, useClass: FakeInteractionService },
+        { provide: Renderer2, useValue: render },
       ],
-  });
+    });
+
     service = TestBed.get(SelectionService);
+    ElementInfo.translate = jasmine.createSpy().and.returnValue(new Point(0, 2));
+    HtmlSvgFactory.svgDetailedCircle = jasmine.createSpy().and.returnValue('fakeCircle');
+    HtmlSvgFactory.svgRectangle = jasmine.createSpy().and.returnValue('fakeRect');
   });
 
   it('should move the selected items', () => {
     service.selectedItems = [true, false];
     const OFFSET = 5;
-    const SPY = spyOn(ElementInfo, 'translate');
+
+    service.drawing = select;
     CanvasInteraction.moveElements(OFFSET, OFFSET, service);
-    expect(SPY).toHaveBeenCalled();
+    expect(ElementInfo.translate).toHaveBeenCalled();
   });
 
   it('should not move the items not selected', () => {
     service.selectedItems = [false, false];
     const OFFSET = 5;
-    const SPY = spyOn(ElementInfo, 'translate');
+
     CanvasInteraction.moveElements(OFFSET, OFFSET, service);
-    expect(SPY).not.toHaveBeenCalled();
+    expect(ElementInfo.translate).not.toHaveBeenCalled();
   });
 
   it('should empty the selected items', () => {
@@ -71,8 +77,11 @@ fdescribe('CanvasInteractionService', () => {
   it('should get a precise border two times', () => {
     service.selectedItems = [true, false];
     service.selected = true;
-    const SPY = spyOn(CanvasInteraction, 'getPreciseBorder');
+
+    // tslint:disable-next-line: no-magic-numbers
+    const FAKE_BORDER = [[0, true], [4, true], [3, true], [4, true]];
+    CanvasInteraction.getPreciseBorder = jasmine.createSpy().and.returnValue(FAKE_BORDER);
     CanvasInteraction.createBoundingBox(service);
-    expect(SPY).toHaveBeenCalled();
+    expect(CanvasInteraction.getPreciseBorder).toHaveBeenCalled();
   });
 });
