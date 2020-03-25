@@ -8,7 +8,6 @@ import { DatabaseService } from './database.service';
 import { expect } from 'chai';
 import { ImageData } from '../../../image-data';
 import { SVGData } from '../../../svg-data';
-//import { MetaData } from '../metadata'
 import { MongoMemoryServer as MMS } from 'mongodb-memory-server';
 import { MetaData } from '../metadata';
 
@@ -46,27 +45,32 @@ describe('Database service', () => {
             })
             .catch(() => { console.log('Fail to get db url') });
         dbService.jsonFile = '../jsonTest.json';
-        const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
-        const imageData: ImageData = { id: '1', svgElement: svg, name: 'ok', tags: ['ok'] };
-        return await dbService.saveImage(imageData);
     });
-    afterEach(() => {
+    beforeEach(async () => {
+        const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
+        // create 10 images with id 0 to 9 for testing purpose
+        for (let i = 0; i < 10; i++) {
+            let imageData: ImageData = { id: i.toString(), svgElement: svg, name: 'ok', tags: ['ok'] };
+            await dbService.saveImage(imageData);
+        }
+    })
+    afterEach(async () => {
+        dbService.clearData();
     })
     //test connect() yes/no
     //test getAllImages() expect/spy getImages()
     //test getImagesByTags() expect stringToArray - expect/spy getImages() - tags test - expect/spy searchTag()
     //test getImages() expect matching id
     it('should expect a lenght of one for a seach of one existing image', async () => {
-        const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
-        const imageData: ImageData = { id: '11', svgElement: svg, name: 'ok', tags: ['ok'] };
-        await dbService.saveImage(imageData);
-        const metaData: MetaData[] = [{ id: '11', name: 'ok', tags: ['ok'] }];
-        const result = dbService.getImages(metaData);
+        const metaData: MetaData[] = [{ id: '1', name: 'ok', tags: ['ok'] }];
+        const result = await dbService.getImages(metaData);
         return expect(result).to.have.length(1);
     })
     it('should expect a lenght of zero for a seach of one not existing image', async () => {
+        await dbService.clearData();
         const metaData: MetaData[] = [{ id: '1001', name: 'ok', tags: ['ok'] }];
-        return expect(dbService.getImages(metaData)).to.have.length(0);
+        const result = await dbService.getImages(metaData);
+        return expect(result).to.have.length(0);
     })
     /*it('should expect a lenght of a 5 for a seach of 5 existing image', (done: Mocha.Done) => {
         const metaData: MetaData[] = [{ id: '1001', name: '', tags: [''] }];
@@ -98,24 +102,19 @@ describe('Database service', () => {
     })
     //test deleteImageById()
     it('should delete the image with the choosen id', async () => {
-        const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
-        const imageData: ImageData = { id: '10', svgElement: svg, name: 'ok', tags: ['ok'] };
-        await dbService.saveImage(imageData);
+        const expectedLenght = (await dbService.getAllImages()).length - 1;
         await dbService.deleteImageById('1');
-        const metaData: MetaData[] = [{ id: '1', name: 'ok', tags: ['ok'] }];
-        return expect(dbService.getImages(metaData)).to.have.length(1);
+        const result = await dbService.getAllImages();
+        return expect(result).to.have.length(expectedLenght);
     })
     //test saveImage()
     //test validateImageData()
     /*it('should not accept image if collection is full', async () => {
         const MAX_DATA_AMOUNT = 1000;
         const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
-        for (let i = 0; i < MAX_DATA_AMOUNT; i++) {
+        for (let i = (await dbService.getAllImages()).length - 1; i < MAX_DATA_AMOUNT; i++) {
             let imageData: ImageData = { id: i.toString(), svgElement: svg, name: 'ok', tags: ['ok'] };
             await dbService.saveImage(imageData);
-            for (let j = 0; j < 50; j++) {
-                console.log('waiting');
-            }
         }
         const imageData: ImageData = { id: '1001', svgElement: svg, name: '', tags: [''] };
         return await dbService.validateImageData(imageData).should.eventually.equal(null);
