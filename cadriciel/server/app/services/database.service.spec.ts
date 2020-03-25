@@ -58,8 +58,16 @@ describe('Database service', () => {
         dbService.clearData();
     })
     //test connect() yes/no
-    //test getAllImages() expect/spy getImages()
-    //test getImagesByTags() expect stringToArray - expect/spy getImages() - tags test - expect/spy searchTag()
+    //test getAllImages()
+    it('should expect a lenght of ten when getting all images', async () => {
+        const result = await dbService.getAllImages();
+        return expect(result).to.have.length(10);
+    })
+    //test getImagesByTags()
+    it('should expect a lenght of one for a seach of one existing image', async () => {
+        const result = await dbService.getImagesByTags('ok');
+        return expect(result).to.have.length(10);
+    })
     //test getImages() expect matching id
     it('should expect a lenght of one for a seach of one existing image', async () => {
         const metaData: MetaData[] = [{ id: '1', name: 'ok', tags: ['ok'] }];
@@ -67,16 +75,19 @@ describe('Database service', () => {
         return expect(result).to.have.length(1);
     })
     it('should expect a lenght of zero for a seach of one not existing image', async () => {
-        await dbService.clearData();
         const metaData: MetaData[] = [{ id: '1001', name: 'ok', tags: ['ok'] }];
         const result = await dbService.getImages(metaData);
         return expect(result).to.have.length(0);
     })
-    /*it('should expect a lenght of a 5 for a seach of 5 existing image', (done: Mocha.Done) => {
-        const metaData: MetaData[] = [{ id: '1001', name: '', tags: [''] }];
-        expect(dbService.getImages(metaData)).to.have.length(0);
-        done();
-    })*/
+    it('should expect a lenght of a 5 for a seach of 5 existing image', async () => {
+        const metaData: MetaData[] = [{ id: '1', name: 'ok', tags: [''] },
+        { id: '2', name: 'ok', tags: [''] },
+        { id: '3', name: 'ok', tags: [''] },
+        { id: '4', name: 'ok', tags: [''] },
+        { id: '5', name: 'ok', tags: [''] }];
+        const result = await dbService.getImages(metaData);
+        return expect(result).to.have.length(5);
+    })
     //test searchTag()
     it('should expect to be true if tag is include in tags array', (done: Mocha.Done) => {
         const tag = 'al';
@@ -108,6 +119,14 @@ describe('Database service', () => {
         return expect(result).to.have.length(expectedLenght);
     })
     //test saveImage()
+    it('should expect a lenght of one more after adding an image to test collection', async () => {
+        const expectedLenght = (await dbService.getAllImages()).length + 1;
+        const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
+        const imageData: ImageData = { id: '10', svgElement: svg, name: 'ok', tags: ['ok'] };
+        await dbService.saveImage(imageData);
+        const result = await dbService.getAllImages();
+        return expect(result).to.have.length(expectedLenght);
+    })
     //test validateImageData()
     /*it('should not accept image if collection is full', async () => {
         const MAX_DATA_AMOUNT = 1000;
