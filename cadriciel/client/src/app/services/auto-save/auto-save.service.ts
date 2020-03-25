@@ -16,26 +16,10 @@ export class AutoSaveService {
     this.height = 'height';
     this.bgColor = 'color';
     this.innerHTML = 'htmlElem';
+    this.doodle.askForDoodle();
     this.editingSave();
     this.newSave();
   }
-  clearingLocalStorage(data: SVGData): void {
-    if (localStorage.getItem(this.width)) {
-      localStorage.removeItem(this.width);
-    }
-    if (localStorage.getItem(this.height)) {
-      localStorage.removeItem(this.height);
-    }
-    if (localStorage.getItem(this.bgColor)) {
-      localStorage.remove(this.bgColor);
-    }
-    for (let i = 0; i < data.innerHTML.length; ++i) {
-      if (localStorage.getItem(this.innerHTML + i.toString())) {
-        localStorage.removeItem(this.innerHTML + i.toString());
-      }
-    }
-  }
-
   saveLocal(data: SVGData): void {
     localStorage.setItem(this.width, data.width);
     localStorage.setItem(this.height, data.height);
@@ -51,7 +35,6 @@ export class AutoSaveService {
         return;
       }
       const SVG_DATA = this.doodle.getDrawingDataNoGrid();
-      this.clearingLocalStorage(SVG_DATA);
       this.saveLocal(SVG_DATA);
     });
   }
@@ -62,7 +45,6 @@ export class AutoSaveService {
         return;
       }
       const SVG_DATA = this.doodle.getDrawingDataNoGrid();
-      this.clearingLocalStorage(SVG_DATA);
       this.saveLocal(SVG_DATA);
       console.log('new');
     });
