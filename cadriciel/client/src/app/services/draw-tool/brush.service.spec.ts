@@ -8,7 +8,7 @@ import { Point } from './point';
 
 export class FakeInteractionService extends InteractionService { }
 
-fdescribe('BrushService', () => {
+describe('BrushService', () => {
     let service: BrushService;
     let ptA: Point;
     let ptB: Point;

@@ -1,7 +1,19 @@
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatAutocompleteModule, MatCardModule, MatChipsModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatProgressSpinnerModule, MatSelectModule, MatSnackBarModule } from '@angular/material';
+import {
+    MatAutocompleteModule,
+    MatCardModule,
+    MatChipsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatSelectModule,
+    MatSnackBarModule
+} from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
@@ -14,6 +26,7 @@ describe('GalleryComponent', () => {
     let fixture: ComponentFixture<GalleryComponent>;
     // tslint:disable-next-line: no-any
     let tagAdd: any;
+
     // tslint:disable-next-line: no-any
     let fakeEvent: any;
     beforeEach(async(() => {
@@ -55,6 +68,11 @@ describe('GalleryComponent', () => {
                 value: 'hello',
             },
         };
+
+    });
+
+    afterEach(() => {
+        component.shownDrawings = [];
     });
 
     it('should create', () => {
@@ -190,5 +208,39 @@ describe('GalleryComponent', () => {
         const FILTER_SPY = spyOn(component.possibleTags, 'filter');
         component.filter(VALUE);
         expect(FILTER_SPY).toHaveBeenCalled();
+    });
+
+    it('should stop event propagation on key down', () => {
+        const SPY = spyOn(component, 'blockEvent');
+        fixture.debugElement.query(By.css('.gallery')).triggerEventHandler('keydown', {
+            key: '0'
+        });
+
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should call stop propagation when blocking an event', () => {
+        const EV = new KeyboardEvent('keydown', {
+            key: 'P'
+        });
+
+        const SPY = spyOn(EV, 'stopPropagation');
+        component.blockEvent(EV);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should append child if the g tag is defined', () => {
+        spyOn(component.render, 'createElement').and.returnValue({ innerHTML: 'g' });
+        component.render.setAttribute = jasmine.createSpy().and.returnValue('');
+        const SPY = spyOn(component.render, 'appendChild');
+        const TEST_DATA: SVGData = {
+            width: '100',
+            height: '100',
+            bgColor: 'ffffff',
+            innerHTML: ['<div>Hello World</div>']
+        };
+        component.createSVG(TEST_DATA);
+        expect(SPY).toHaveBeenCalledTimes(2);
+
     });
 });
