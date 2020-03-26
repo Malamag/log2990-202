@@ -152,14 +152,14 @@ export class CanvasInteraction {
       // item is INSIDE the selection rectangle -> select/unselect accordingly
       if (INSIDE) {
         if (inverted) {
-          selectedItems[i] = invertedITEMS[i] === undefined ? true : invertedITEMS[i];
+          selectedItems[i] = invertedITEMS[i] == undefined ? true : invertedITEMS[i];
         } else {
           selectedItems[i] = true;
           invertedITEMS[i] = false;
         }
       } else { // item is outside the selection rectangle -> select/unselect accordingly
         if (inverted) {
-          selectedItems[i] = invertedITEMS[i] === undefined ? false : !invertedITEMS[i];
+          selectedItems[i] = invertedITEMS[i] == undefined ? false : !invertedITEMS[i];
         } else {
           selectedItems[i] = false;
           invertedITEMS[i] = true;

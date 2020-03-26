@@ -17,6 +17,7 @@ fdescribe('CanvasInteractionService', () => {
   let select: any;
   // tslint:disable-next-line: no-any
   let firstChild: any;
+  // tslint:disable-next-line: no-any
   let fakeDomRECT: any;
   beforeEach(() => {
     fakeDomRECT = {
@@ -24,7 +25,8 @@ fdescribe('CanvasInteractionService', () => {
       top: 150,
       right: 0,
       bottom: 50,
-    }
+    };
+
     firstChild = {
       getBoundingClientRect: () => 0,
       x: 2,
@@ -37,17 +39,18 @@ fdescribe('CanvasInteractionService', () => {
       },
       childElementCount: 2,
       innerHTML: 'test',
-      getBoundingClientRect: () => 0,
+      getBoundingClientRect: () => fakeDomRECT,
+      lastElementChild: firstChild
     };
     TestBed.configureTestingModule({
       providers: [
-        { provide: Point },
         { provide: HTMLElement, useValue: select },
         { provide: Number, useValue: 0 },
         { provide: String, useValue: '' },
         { provide: Boolean, useValue: true },
         { provide: InteractionService, useClass: FakeInteractionService },
         { provide: Renderer2, useValue: render },
+        { provide: DOMRect, useValue: fakeDomRECT }
       ],
     });
 
@@ -55,6 +58,7 @@ fdescribe('CanvasInteractionService', () => {
     spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 2));
     spyOn(HtmlSvgFactory, 'svgDetailedCircle').and.returnValue('fakeCircle');
     spyOn(HtmlSvgFactory, 'svgRectangle').and.returnValue('fakeRect');
+
   });
 
   it('should move the selected items', () => {
@@ -125,5 +129,21 @@ fdescribe('CanvasInteractionService', () => {
     expect(RET[1]).toEqual(SECOND_RECORD);
     expect(RET[2]).toEqual(THIRD_RECORD);
     expect(RET[POS]).toEqual(FOURTH_RECORD);
+  });
+
+  it('should check if the item is inside the selection rectangle', () => {
+    const SPY = spyOn(Point, 'rectOverlap');
+    CanvasInteraction.retrieveItemsInRect(select, select, [true], [true], false);
+    expect(SPY).toHaveBeenCalled();
+  });
+
+  it('should invert the selection for every selected item', () => {
+    const SEL = [false, true, true];
+    const INV_SEL = [true, false, true];
+
+    spyOn(Point, 'rectOverlap').and.returnValue(true);
+    CanvasInteraction.retrieveItemsInRect(select, select, SEL, INV_SEL, true);
+
+    expect(SEL).toEqual(INV_SEL);
   });
 });
