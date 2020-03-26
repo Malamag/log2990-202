@@ -11,12 +11,18 @@ describe('AerosolService', () => {
     let ptArr: Point[];
     // tslint:disable-next-line: no-any
     let kbServiceStub: any;
+    // tslint:disable-next-line: no-any
+    let htmlElemStub: any;
 
     beforeEach(() => {
+        htmlElemStub = {
+            getAttribute: () => 0
+        };
         kbServiceStub = {};
         TestBed.configureTestingModule({
             providers: [
-                { provide: HTMLElement, useValue: {} },
+                { provide: HTMLElement, useValue: htmlElemStub },
+                { provide: Element, useValue: htmlElemStub },
                 { provide: Boolean, useValue: false },
                 { provide: Number, useValue: 0 },
                 { provide: String, useValue: '' },

@@ -9,7 +9,7 @@ import { SelectionService } from './selection.service';
 
 export class FakeInteractionService extends InteractionService { }
 
-fdescribe('CanvasInteractionService', () => {
+describe('CanvasInteractionService', () => {
   let service: SelectionService;
   // tslint:disable-next-line: prefer-const
   let render = jasmine.createSpyObj('Renderer2', ['setStyle']);
