@@ -125,9 +125,10 @@ fdescribe('CanvasInteractionService', () => {
     const FOURTH_RECORD: [number, boolean] = [NUM, false];
     SECOND_CHILD.getBoundingClientRect = jasmine.createSpy().and.returnValue(fakeDomRECT);
     const RET = CanvasInteraction.getPreciseBorder(ITEM, [FIRST_RECORD, SECOND_RECORD, THIRD_RECORD, FOURTH_RECORD]);
-    expect(RET[0]).toEqual(FIRST_RECORD);
+
+    expect(RET[0]).toEqual([0, true]);
     expect(RET[1]).toEqual(SECOND_RECORD);
-    expect(RET[2]).toEqual(THIRD_RECORD);
+    expect(RET[2]).toEqual([0, true]);
     expect(RET[POS]).toEqual(FOURTH_RECORD);
   });
 
@@ -138,8 +139,8 @@ fdescribe('CanvasInteractionService', () => {
   });
 
   it('should invert the selection for every selected item', () => {
-    const SEL = [false, true, true];
-    const INV_SEL = [true, false, true];
+    const SEL = [false, true]; // 2 children (see select stub)
+    const INV_SEL = [true, false];
 
     spyOn(Point, 'rectOverlap').and.returnValue(true);
     CanvasInteraction.retrieveItemsInRect(select, select, SEL, INV_SEL, true);
