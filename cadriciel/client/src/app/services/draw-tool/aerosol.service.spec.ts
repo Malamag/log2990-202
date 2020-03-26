@@ -27,6 +27,16 @@ fdescribe('AerosolService', () => {
         ptB = new Point(1, 2);
         ptArr = [ptA, ptB];
         service = TestBed.get(AerosolService);
+        // tslint:disable-next-line: no-string-literal
+        service['points'].push(ptA);
+        // tslint:disable-next-line: no-string-literal
+        service['points'].push(ptB);
+
+    });
+
+    afterEach(() => {
+        // tslint:disable-next-line: no-string-literal
+        service['points'] = [];
     });
 
     it('should be created', () => {
@@ -54,8 +64,9 @@ fdescribe('AerosolService', () => {
     });
 
     it('the path must be pursued by the next point', () => {
+        service.createInvisiblePath = jasmine.createSpy().and.returnValue(0);
         const PATH = service.createPath(ptArr);
-        expect(PATH).toContain(`L ${ptArr[1].x} ${ptArr[1].y} `); // second and last point of our fake array
+        expect(PATH).toContain(`L ${ptArr[1].x} ${ptArr[1].y}`); // second and last point of our fake array
     });
 
     it('should have the primary color as attribute', () => {
@@ -138,6 +149,7 @@ fdescribe('AerosolService', () => {
 
     it('should have a round linecap and linejoin', () => {
         // For lines to be mostly round (we want points)
+
         const PATH = service.createPath(ptArr);
 
         expect(PATH).toContain('stroke-linecap="round"');
@@ -151,9 +163,11 @@ fdescribe('AerosolService', () => {
     });
 
     it('should create a valid invisible path', () => {
-
-        const PATH = service.createPath(ptArr);
-        expect(PATH).toContain('invisiblePath');
+        // tslint:disable-next-line: no-string-literal
+        service['path'] = '';
+        service.createInvisiblePath(ptArr);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['path']).toContain('invisiblePath');
     });
 
     it('should have none stroke and none fill as attribute for the invisible path', () => {
