@@ -147,4 +147,39 @@ describe('CanvasInteractionService', () => {
 
     expect(SEL).toEqual(INV_SEL);
   });
+  it('should not invert the selection for every selected item', () => {
+    const SEL = [false, true, true];
+    const INV_SEL = [true, true, true];
+
+    spyOn(Point, 'rectOverlap').and.returnValue(true);
+    CanvasInteraction.retrieveItemsInRect(select, select, SEL, INV_SEL, false);
+    for (let i = 0; i < SEL.length; ++i) {
+      expect(SEL[i]).toBeTruthy();
+    }
+    expect(INV_SEL[0]).toBeFalsy();
+    expect(INV_SEL[1]).toBeFalsy();
+    expect(INV_SEL[2]).toBeTruthy();
+  });
+  it('should not invert the selection for every selected item if not inside the box', () => {
+    const SEL = [false, true, true];
+    const INV_SEL = [false, false, false];
+
+    spyOn(Point, 'rectOverlap').and.returnValue(false);
+    CanvasInteraction.retrieveItemsInRect(select, select, SEL, INV_SEL, true);
+    for (let i = 0; i < SEL.length; ++i) {
+      expect(SEL[i]).toBeTruthy();
+    }
+  });
+  it('should call rect over lap with invalid points', () => {
+    const ELEM = document.createElement('div');
+    const DRAWING = document.createElement('g');
+    const CHILD = document.createElement('div');
+    DRAWING.appendChild(CHILD);
+    const INIT_VALUE = -1;
+    const POINT = new Point(INIT_VALUE, INIT_VALUE);
+    const OTHER_POINT = new Point(Infinity,Infinity);
+    const SPY = spyOn(Point, 'rectOverlap');
+    CanvasInteraction.retrieveItemsInRect(ELEM, DRAWING, [true], [true], false);
+    expect(SPY).toHaveBeenCalledWith(POINT, POINT, OTHER_POINT, POINT);
+  });
 });
