@@ -103,14 +103,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         });
         this.reinitGridFromSub();
     }
-
-    ngAfterViewInit(): void {
-        this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
-        this.initGridVisibility();
-        const KEYBOARD_HANDLER: KeyboardHandlerService = new KeyboardHandlerService();
-        const MOUSE_HANDLER = new MouseHandlerService(this.svg.nativeElement);
-
-        // create all the tools
+    createTools(): void {
         const TC = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
 
         const PENCIL = TC.CreatePencil(true, this.interaction, this.colorPick);
@@ -119,7 +112,6 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         const BRUSH = TC.CreateBrush(false, this.interaction, this.colorPick);
         const AEROSOL = TC.CreateAerosol(false, this.interaction, this.colorPick);
         const ELLIPSE = TC.CreateEllipse(false, this.interaction, this.colorPick);
-        const UNDO_REDO: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
         const POLYGON = TC.CreatePolygon(false, this.interaction, this.colorPick);
         const SELECT = TC.CreateSelection(
             false,
@@ -148,9 +140,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.svg.nativeElement,
         );
 
-        const pipette = TC.CreatePipette(false, this.interaction, this.colorPick);
-
-        this.interactionToolsContainer.set('AnnulerRefaire', UNDO_REDO);
+        const PIPETTE = TC.CreatePipette(false, this.interaction, this.colorPick);
         this.toolsContainer.set('Rectangle', RECT);
         this.toolsContainer.set('Ligne', LINE);
         this.toolsContainer.set('Pinceau', BRUSH);
@@ -160,9 +150,20 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Polygone', POLYGON);
         this.toolsContainer.set('Sélectionner', SELECT);
         this.toolsContainer.set('Efface', ERASER);
-        this.toolsContainer.set('ApplicateurCouleur', COLOE_EDITOR);
-        this.toolsContainer.set('Pipette', pipette);
+        this.toolsContainer.set('Applicateur de couleur', COLOE_EDITOR);
+        this.toolsContainer.set('Pipette', PIPETTE);
 
+    }
+    ngAfterViewInit(): void {
+        this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+        this.initGridVisibility();
+        const KEYBOARD_HANDLER: KeyboardHandlerService = new KeyboardHandlerService();
+        const MOUSE_HANDLER = new MouseHandlerService(this.svg.nativeElement);
+
+        // create all the tools
+        this.createTools();
+        const UNDO_REDO: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
+        this.interactionToolsContainer.set('AnnulerRefaire', UNDO_REDO);
         this.interaction.$cancelToolsObs.subscribe((sig: boolean) => {
             if (sig) {
                 this.closeTools(this.toolsContainer);

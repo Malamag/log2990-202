@@ -4,7 +4,7 @@ import { ColorEditorService } from './color-editor.service';
 import { Point } from './point';
 //import { ColorConvertingService } from '../colorPicker/color-converting.service';
 
-fdescribe('ColorEditorService', () => {
+describe('ColorEditorService', () => {
     //let fakeColorConvertingService: ColorConvertingService;
     let service : ColorEditorService
     // tslint:disable-next-line: no-any

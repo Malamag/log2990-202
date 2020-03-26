@@ -1,6 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CanvasSwitchDirective } from 'src/app/directives/canvas-switch.directive';
+import { Canvas } from 'src/app/models/canvas.model';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { PencilService } from 'src/app/services/draw-tool/pencil.service';
 import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
@@ -9,7 +10,6 @@ import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboa
 import { MouseHandlerService } from 'src/app/services/mouse-handler/mouse-handler.service';
 import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { SvgDrawComponent } from './svg-draw.component';
-import { Canvas } from 'src/app/models/canvas.model';
 
 const width = 67;
 const height = 10;
@@ -35,6 +35,7 @@ describe('SvgDrawComponent', () => {
             move: () => 0,
             down: () => 0,
             up: () => 0,
+            preventDefault: () => 0,
         };
 
         kbHandlerStub = {
@@ -123,7 +124,10 @@ describe('SvgDrawComponent', () => {
         component.ngOnInit();
         expect(SPY_OBJ).toHaveBeenCalled();
     });
-
+    it('the length of the container should be greater than zero', () => {
+        component.createTools();
+        expect(component.toolsContainer.size).toBeGreaterThan(0);
+    })
     it('should call window addEventListener', () => {
         window.addEventListener = jasmine.createSpy().and.returnValue(0);
         component.ngAfterViewInit();
@@ -147,7 +151,14 @@ describe('SvgDrawComponent', () => {
         component.ngAfterViewInit(); // prepares the event listeners
         expect(SPY_DOWN).toHaveBeenCalled();
     });
-
+    it('should call the prevent default', () => {
+        const SPY_PREVENT = spyOn(mouseHandlerStub, 'preventDefault');
+        window.addEventListener = jasmine.createSpy().and.callFake(() => {
+            mouseHandlerStub.preventDefault();
+        });
+        component.ngAfterViewInit();
+        expect(SPY_PREVENT).toHaveBeenCalled();
+    })
     it('should call the mouse up listener on mouse up', () => {
         const SPY_DOWN = spyOn(mouseHandlerStub, 'up');
         window.addEventListener = jasmine.createSpy().and.callFake(() => {
