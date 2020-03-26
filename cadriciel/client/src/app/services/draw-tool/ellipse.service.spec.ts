@@ -3,9 +3,10 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 import { InteractionService } from '../service-interaction/interaction.service';
 import { EllipseService } from './ellipse.service';
 import { Point } from './point';
+import { ShapeService } from './shape.service';
 
 export class FakeInteractionService extends InteractionService { }
-describe('EllipseService', () => {
+fdescribe('EllipseService', () => {
 
     // tslint:disable-next-line: no-any
     let kbServiceStub: any;
@@ -14,12 +15,22 @@ describe('EllipseService', () => {
     let ptB: Point;
     let ptArr: Point[];
 
+    // tslint:disable-next-line: no-any
+    let shapeServiceStub: any;
+
     // Colors taken for the tests
     let primCol: string;
     let secCol: string;
     let backCol: string;
 
     beforeEach(() => {
+        shapeServiceStub = {
+            width: 5,
+            height: 2,
+            setDimensions: () => 0,
+            updateDown: () => 0
+        };
+
         kbServiceStub = {
             shiftDown: true,
             ctrlDown: true,
@@ -44,6 +55,7 @@ describe('EllipseService', () => {
                 { provide: Boolean, useValue: true },
                 { provide: InteractionService, useClass: FakeInteractionService },
                 { provide: KeyboardHandlerService, useValue: kbServiceStub },
+                { provide: ShapeService, useValue: shapeServiceStub }
             ],
         });
         service = TestBed.get(EllipseService);
@@ -212,4 +224,41 @@ describe('EllipseService', () => {
         const NAME = 'ellipse';
         expect(PATH).toContain(NAME);
     });
+
+    it('should set square boolean on shift down', () => {
+        service.updateDown(kbServiceStub);
+        expect(service.isSquare).toBeTruthy();
+    });
+
+    it('should return an empty string if there is not enough points to compute', () => {
+        const TEST_ARR = [ptB];
+        const HTML_STR = service.createPath(TEST_ARR, false);
+        expect(HTML_STR).toEqual('');
+    });
+
+    it('should return an empty string if width or height equal 0', () => {
+        service.attr.plotType = 1;
+        const HTML_STR = service.createPath([new Point(0, 0), new Point(0, 0)], false);
+        expect(HTML_STR).toEqual('');
+    });
+
+    it('should set smallest dimension between width and height', () => {
+        const BOUND = 7;
+        service.isSquare = true;
+        const H_TEST = [new Point(0, 2), new Point(0, BOUND)];
+        const W_TEST = [new Point(0, 0), new Point(BOUND, 0)];
+
+        service.setdimensions(H_TEST);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['smallest']).toEqual(service.width);
+        service.setdimensions(W_TEST);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['smallest']).toEqual(service.height);
+    });
+
+    it('should not add the rectangular perimeter on remove boolean equals true', () => {
+        const FULL_STR = service.createPath(ptArr, true); // removePerimeter is true
+        expect(FULL_STR).not.toContain('rect');
+    });
+
 });
