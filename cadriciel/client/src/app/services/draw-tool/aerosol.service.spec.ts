@@ -4,7 +4,7 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 import { AerosolService } from './aerosol.service';
 import { Point } from './point';
 
-describe('AerosolService', () => {
+fdescribe('AerosolService', () => {
     let service: AerosolService;
     let ptA: Point;
     let ptB: Point;
@@ -151,13 +151,18 @@ describe('AerosolService', () => {
     });
 
     it('should create a valid invisible path', () => {
+
         const PATH = service.createPath(ptArr);
         expect(PATH).toContain('invisiblePath');
     });
 
-    it('should have nor stroke nor fill as attribute for the invisible path', () => {
+    it('should have none stroke and none fill as attribute for the invisible path', () => {
         const STROKE = 'stroke="none"';
         const FILL = 'fill="none"';
+        spyOn(service, 'createInvisiblePath').and.callFake(() => {
+            // tslint:disable-next-line: no-string-literal
+            service['path'] += STROKE; // trivial, the spied method always returns this
+        });
         const PATH = service.createPath(ptArr);
 
         expect(PATH).toContain(STROKE);
@@ -256,6 +261,32 @@ describe('AerosolService', () => {
 
         expect(service.currentPath).toEqual([]);
         expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should unsubscribe from the tool on change', () => {
+        service.subscribe();
+        // tslint:disable-next-line: no-string-literal
+        const SPY = spyOn(service['sub'], 'unsubscribe');
+
+        service.isDown = true;
+        service.toolChangeListener();
+        window.dispatchEvent(new Event('toolChange'));
+
+        expect(SPY).toHaveBeenCalled();
+
+    });
+
+    it('should not unsubscribe from the tool on change if mouse is not down', () => {
+        service.subscribe();
+        // tslint:disable-next-line: no-string-literal
+        const SPY = spyOn(service['sub'], 'unsubscribe');
+
+        service.isDown = false;
+        service.toolChangeListener();
+        window.dispatchEvent(new Event('toolChange'));
+
+        expect(SPY).not.toHaveBeenCalled();
+
     });
 
 });

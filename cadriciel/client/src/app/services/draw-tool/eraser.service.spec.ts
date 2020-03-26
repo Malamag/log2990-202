@@ -1,16 +1,16 @@
 import { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { EraserService } from './eraser.service';
-import { InteractionService } from '../service-interaction/interaction.service';
-import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
+import { ColorPickingService } from '../colorPicker/color-picking.service';
+import { InteractionService } from '../service-interaction/interaction.service';
+import { EraserService } from './eraser.service';
 import { Point } from './point';
 
-fdescribe('EraserService', () => {
+describe('EraserService', () => {
 
-    //let fakeInteractionService: InteractionService;
-    //let fakeColorPickingService: ColorPickingService;
-    let fakeColorConvertingService: ColorConvertingService
+    // let fakeInteractionService: InteractionService;
+    // let fakeColorPickingService: ColorPickingService;
+    let fakeColorConvertingService: ColorConvertingService;
     let service: EraserService;
     // tslint:disable-next-line: no-any
     let rdStub: any;
@@ -22,8 +22,8 @@ fdescribe('EraserService', () => {
             style: {
                 pointerEvents: 'none',
             },
-            innerHTML: "",
-            getBoundingClientRect: () =>0,
+            innerHTML: '',
+            getBoundingClientRect: () => 0,
         };
         rdStub = {
             createElement: () => document.createElement('g'),
@@ -62,15 +62,22 @@ fdescribe('EraserService', () => {
         service.updateAttributes();
         expect(SPY).toHaveBeenCalled();
     });
-    -
-        it('should add an event listener for event of type toolChange on the eraser', () => {
-            let colorPick: ColorPickingService = new ColorPickingService(fakeColorConvertingService);
-            let interaction: InteractionService = new InteractionService();
-            window.addEventListener = jasmine.createSpy();
-            let test: EraserService = new EraserService(htmlElementStub, htmlElementStub, true, interaction, colorPick, rdStub, htmlElementStub, htmlElementStub);
-            expect(test).toBeDefined();
-            expect(window.addEventListener).toHaveBeenCalled();
-        });
+    it('should add an event listener for event of type toolChange on the eraser', () => {
+        const colorPick: ColorPickingService = new ColorPickingService(fakeColorConvertingService);
+        const interaction: InteractionService = new InteractionService();
+        window.addEventListener = jasmine.createSpy();
+        const test: EraserService = new EraserService(
+            htmlElementStub,
+            htmlElementStub,
+            true,
+            interaction,
+            colorPick,
+            rdStub,
+            htmlElementStub,
+            htmlElementStub);
+        expect(test).toBeDefined();
+        expect(window.addEventListener).toHaveBeenCalled();
+    });
 
     it('should add the same point twice to currentPath', () => {
         const SPY = spyOn(service.currentPath, 'push');
@@ -117,7 +124,7 @@ fdescribe('EraserService', () => {
     });
 
     it('should erase an element', () => {
-        let dummyElement: Element = document.createElement('g');
+        const dummyElement: Element = document.createElement('g');
         service.render.removeChild = jasmine.createSpy('removeChild', service.render.removeChild);
         service.selected = true;
         service.erase(dummyElement);
@@ -125,9 +132,9 @@ fdescribe('EraserService', () => {
     });
 
     it('should unhighlight an element', () => {
-        let dummyElement: Element = document.createElement('g');
-        let childDummyElement: Element = document.createElement('g');
-        childDummyElement.className = "clone";
+        const dummyElement: Element = document.createElement('g');
+        const childDummyElement: Element = document.createElement('g');
+        childDummyElement.className = 'clone';
         dummyElement.appendChild(childDummyElement);
         const SPY = spyOn(service.render, 'removeChild');
         service.unhighlight(dummyElement);
@@ -136,10 +143,10 @@ fdescribe('EraserService', () => {
 
     it('should append a clone element of the highlighted element', () => {
         service.selected = true;
-        let dummyElement: Element = document.createElement('g');
-        let childDummyElement: Element = document.createElement('g');
+        const dummyElement: Element = document.createElement('g');
+        const childDummyElement: Element = document.createElement('g');
         dummyElement.appendChild(childDummyElement);
-        const SPY = spyOn(service.render,'insertBefore');
+        const SPY = spyOn(service.render, 'insertBefore');
         service.highlight(dummyElement);
         expect(SPY).toHaveBeenCalled();
 
@@ -147,10 +154,10 @@ fdescribe('EraserService', () => {
 
     it('should not append a clone element of the highlighted element', () => {
         service.selected = false;
-        let dummyElement: Element = document.createElement('g');
-        let childDummyElement: Element = document.createElement('g');
+        const dummyElement: Element = document.createElement('g');
+        const childDummyElement: Element = document.createElement('g');
         dummyElement.appendChild(childDummyElement);
-        const SPY = spyOn(service.render,'insertBefore');
+        const SPY = spyOn(service.render, 'insertBefore');
         service.highlight(dummyElement);
         expect(SPY).not.toHaveBeenCalled();
 
@@ -158,41 +165,40 @@ fdescribe('EraserService', () => {
 
     it('should set the attribute (stroke color, stroke width and class) of the clone to highlight', () => {
         service.selected = true;
-        let dummyElement: Element = document.createElement('g');
-        let childDummyElement: Element = document.createElement('g');
+        const dummyElement: Element = document.createElement('g');
+        const childDummyElement: Element = document.createElement('g');
         dummyElement.appendChild(childDummyElement);
-        const SPY = spyOn(service.render,'setAttribute');
+        const SPY = spyOn(service.render, 'setAttribute');
         service.highlight(dummyElement);
         expect(SPY).toHaveBeenCalledTimes(3);
     });
-    
 
     it('should get the attribute (stroke color, stroke width and class) of the original item to highlight', () => {
         service.selected = true;
-        let dummyElement: Element = document.createElement('g');
-        let childDummyElement: Element = document.createElement('g');
+        const dummyElement: Element = document.createElement('g');
+        const childDummyElement: Element = document.createElement('g');
         dummyElement.appendChild(childDummyElement);
-        const SPY = spyOn(childDummyElement,'getAttribute');
+        const SPY = spyOn(childDummyElement, 'getAttribute');
         service.highlight(dummyElement);
         expect(SPY).toHaveBeenCalledTimes(3);
     });
 
     it('should check if the first child element contains a class name clone', () => {
         service.selected = true;
-        let dummyElement: Element = document.createElement('g');
-        let childDummyElement: Element = document.createElement('g');
+        const dummyElement: Element = document.createElement('g');
+        const childDummyElement: Element = document.createElement('g');
         dummyElement.appendChild(childDummyElement);
-        const SPY = spyOn(childDummyElement.classList,'contains');
+        const SPY = spyOn(childDummyElement.classList, 'contains');
         service.highlight(dummyElement);
         expect(SPY).toHaveBeenCalled();
     });
 
     it('should check if the first child element contains a class name clone', () => {
         service.selected = true;
-        let dummyElement: Element = document.createElement('g');
-        let childDummyElement: Element = document.createElement('g');
+        const dummyElement: Element = document.createElement('g');
+        const childDummyElement: Element = document.createElement('g');
         dummyElement.appendChild(childDummyElement);
-        const SPY = spyOn(childDummyElement.classList,'contains');
+        const SPY = spyOn(childDummyElement.classList, 'contains');
         service.unhighlight(dummyElement);
         expect(SPY).toHaveBeenCalled();
     });
@@ -203,7 +209,7 @@ fdescribe('EraserService', () => {
         service.down(new Point(2, 1));
         expect(SPY).toHaveBeenCalled();
     });
-    
+
     /* it('should remove the first element of the current path and return it while the length of the current path is above 3', () => {
         const SPY = spyOn(service.currentPath, 'shift');
         service.currentPath.push(new Point(3,2),new Point(3,4),new Point(3,2),new Point(3,4))
@@ -227,23 +233,18 @@ fdescribe('EraserService', () => {
     });
 
     it('should get the canvas bounding client rect when checking if touching', () => {
-        service.currentPath.push(new Point(2,1));
+        service.currentPath.push(new Point(2, 1));
         const SPY = spyOn(service.canvas, 'getBoundingClientRect');
         service.checkIfTouching();
         expect(SPY).toHaveBeenCalled();
     });
 
     it('should erase the first child if touching and on mouse down', () => {
-        service.drawing.childElementCount 
-        service.currentPath.push(new Point(2,1));
+        service.drawing.childElementCount;
+        service.currentPath.push(new Point(2, 1));
         const SPY = spyOn(service, 'erase');
         service.checkIfTouching();
         expect(SPY).toHaveBeenCalled();
     });
-
-    
-
-
-
 
 });

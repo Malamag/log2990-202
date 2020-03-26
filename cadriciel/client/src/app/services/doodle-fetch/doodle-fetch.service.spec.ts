@@ -84,4 +84,12 @@ describe('DoodleFetchService', () => {
         const TEST_RET = service.getDrawingDataNoGrid();
         expect(TEST_RET.innerHTML.length).toEqual(nativeElemStub.children.length);
     });
+
+    it('should push an empty html string on error', () => {
+
+        elementStub.nativeElement.children = [undefined];
+        service.currentDraw = elementStub;
+        const TEST_DATA = service.getDrawingDataNoGrid();
+        expect(TEST_DATA.innerHTML[0]).toEqual('');
+    });
 });

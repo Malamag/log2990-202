@@ -35,8 +35,9 @@ export class ShapeService extends DrawingTool {
     protected stroke: string;
     protected fill: string;
 
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
-                interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(
+        inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
+        interaction: InteractionService, colorPick: ColorPickingService) {
 
         super(inProgess, drawing, selected, interaction, colorPick);
         this.attr = { plotType: DEFAULT_PLOT_TYPE, lineThickness: DEFAULT_LINE_THICKNESS, numberOfCorners: DEFAULT_NUMBER_CORNERS };
@@ -53,7 +54,7 @@ export class ShapeService extends DrawingTool {
     }
 
     updateAttributes(): void {
-        this.interaction.$formsAttributes.subscribe((obj: FormsAttribute) => {
+        this.interaction.$formsAttributes.subscribe((obj: FormsAttribute | undefined) => {
             if (obj) {
                 // Getting attributes for a shape
                 this.attr = { plotType: obj.plotType, lineThickness: obj.lineThickness, numberOfCorners: obj.numberOfCorners };

@@ -81,8 +81,11 @@ export class SelectionService extends ShapeService {
         window.addEventListener('newDrawing', (e: Event) => {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
                 const EL = this.drawing.children[i];
-                const STATUS = EL.getAttribute('isListening');
-                if (STATUS !== 'true') {
+                let status: string | null;
+
+                EL ? status = EL.getAttribute('isListening') : status = null;
+
+                if (status !== 'true') {
                     this.render.listen(EL, 'mousedown', () => {
                         this.render.setAttribute(EL, 'isListening', 'true');
                         if (!this.foundAnItem) {

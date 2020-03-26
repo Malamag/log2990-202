@@ -68,7 +68,7 @@ export class InteractionService {
         this.lineAttributes.next(attr);
     }
 
-    emitFormsAttributes(attr: FormsAttribute): void {
+    emitFormsAttributes(attr: FormsAttribute | undefined): void {
         this.formsAttributes.next(attr);
     }
 

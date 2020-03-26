@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
+import { FormsAttribute } from '../attributes/attribute-form';
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -58,13 +59,7 @@ describe('ShapeService', () => {
         // tslint:disable-next-line: no-string-literal
         expect(service['attr']).toBeDefined();
     });
-    /*
-    it('should update progress on move', () => {
-        const spy = spyOn(service, 'updateProgress');
-        service.down(ptA); // simulating a mouse down at given point
-        service.update(kbServiceStub);
-        expect(spy).toHaveBeenCalled();
-    });*/
+
     it('should update the current path on mouse down', () => {
         const SPY = spyOn(service, 'updateProgress');
         service.down(ptA);
@@ -127,4 +122,37 @@ describe('ShapeService', () => {
         // tslint:disable-next-line: no-string-literal
         expect(service['svgString']).toContain(FILL);
     });
+
+    it('should not update progress if the key is not down', () => {
+        service.isDown = false;
+        const SPY = spyOn(service, 'updateProgress');
+        service.updateDown(kbServiceStub);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should update progress if the key is down', () => {
+        service.isDown = true;
+        const SPY = spyOn(service, 'updateProgress');
+        service.updateDown(kbServiceStub);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should update the attributes on subscription activation if the object is defined', () => {
+        const TEST_ATTR: FormsAttribute = { plotType: 1, lineThickness: 50, numberOfCorners: 4 };
+        service.updateAttributes();
+        service.interaction.emitFormsAttributes(TEST_ATTR);
+        expect(service.attr).toEqual(TEST_ATTR);
+    });
+
+    it('should not update the attributes on subscription if the object is undefined', () => {
+        const TEST_ATTR: FormsAttribute = { plotType: 1, lineThickness: 50, numberOfCorners: 4 };
+
+        service.attr = TEST_ATTR;
+        service.updateAttributes();
+
+        service.interaction.emitFormsAttributes(undefined);
+
+        expect(service.attr).toBeDefined(); // attributes have not been updated
+    });
+
 });
