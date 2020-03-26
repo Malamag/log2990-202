@@ -2,9 +2,7 @@ import { ElementInfo } from './element-info.service';
 import { HtmlSvgFactory } from './html-svg-factory.service';
 import { Point } from './point';
 import { SelectionService } from './selection.service';
-
 export class CanvasInteraction {
-
   static moveElements(xoff: number, yoff: number, selectionTool: SelectionService): void {
     // if there is at least 1 item selected
     if (!selectionTool.selectedItems.includes(true)) {
