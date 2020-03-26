@@ -5,6 +5,7 @@ import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { EraserService } from './eraser.service';
 import { Point } from './point';
+import { ElementInfo } from './element-info.service';
 
 describe('EraserService', () => {
 
@@ -24,6 +25,7 @@ describe('EraserService', () => {
             },
             innerHTML: '',
             getBoundingClientRect: () => 0,
+            firstElementChild:()=> true
         };
         rdStub = {
             createElement: () => document.createElement('g'),
@@ -240,9 +242,23 @@ describe('EraserService', () => {
     });
 
     it('should erase the first child if touching and on mouse down', () => {
-        service.drawing.childElementCount;
+
+        service.isDown = true;
+
+        const dummyElement: Element = document.createElement('g');
+        const childDummyElement: Element = document.createElement('g');
+        const grandChildDummyElement: Element = document.createElement('g');
+        childDummyElement.appendChild(grandChildDummyElement);
+        dummyElement.appendChild(childDummyElement);
+        service.drawing = dummyElement as HTMLElement;
+
+        spyOn(htmlElementStub, 'firstElementChild');
+
         service.currentPath.push(new Point(2, 1));
         const SPY = spyOn(service, 'erase');
+        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0,0));
+        spyOn(Point, 'rectOverlap').and.returnValue(true);
+        spyOn(service, 'checkIfPathIntersection').and.returnValue(true);
         service.checkIfTouching();
         expect(SPY).toHaveBeenCalled();
     });

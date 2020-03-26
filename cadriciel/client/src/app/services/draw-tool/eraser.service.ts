@@ -6,6 +6,7 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 import { CanvasInteraction } from './canvas-interaction.service';
+import { ElementInfo } from './element-info.service';
 
 const DEFAULT_LINE_THICKNESS = 5;
 const DEFAULT_TEXTURE = 0;
@@ -216,10 +217,14 @@ export class EraserService extends DrawingTool {
                 continue;
             }
 
+            let objOffset : Point = ElementInfo.translate(this.drawing.children[i]);
+
+            /*
             let objOffset = (this.drawing.children[i] as HTMLElement).style.transform;
             let s = objOffset ? objOffset.split(',') : '';
             let objOffsetX = +s[0].replace(/[^\d.-]/g, '');
             let objOffsetY = +s[1].replace(/[^\d.-]/g, '');
+            */
 
             for (let j = 0; j < firstChild.childElementCount; j++) {
                 let secondChild = firstChild.children[j];
@@ -244,22 +249,7 @@ export class EraserService extends DrawingTool {
 
                 if (this.inProgress.firstElementChild) {
                     let test = this.inProgress.firstElementChild.firstElementChild as SVGGeometryElement;
-                    let l = test.getTotalLength();
-
-                    let path = secondChild as SVGGeometryElement;
-
-                    for (let v = 0; v < l; v += dim / 10) {
-                        let testPoint = test.getPointAtLength(v);
-                        testPoint.x -= objOffsetX;
-                        testPoint.y -= objOffsetY;
-                        if (
-                            path.isPointInStroke(testPoint) ||
-                            (path.isPointInFill(testPoint) && secondChild.getAttribute('fill') != 'none')
-                        ) {
-                            touching = true;
-                            break;
-                        }
-                    }
+                    touching = this.checkIfPathIntersection(test, secondChild, dim/10, objOffset, secondChild.getAttribute('fill') != 'none')
                 }
             }
 
@@ -279,6 +269,26 @@ export class EraserService extends DrawingTool {
                 this.unhighlight(firstChild);
             }
         }
+    }
+
+    checkIfPathIntersection(path : SVGGeometryElement, candidateElement : Element, precision : number, candidateOffset : Point, candidateIsFilled : boolean){
+        
+        let l = path.getTotalLength();
+
+        let candidate = candidateElement as SVGGeometryElement;
+        
+        for (let v = 0; v < l; v += precision) {
+            let testPoint = path.getPointAtLength(v);
+            testPoint.x -= candidateOffset.x;
+            testPoint.y -= candidateOffset.y;
+            if (
+                candidate.isPointInStroke(testPoint) ||
+                (candidate.isPointInFill(testPoint) && candidateIsFilled)
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // mouse doubleClick with pencil in hand
