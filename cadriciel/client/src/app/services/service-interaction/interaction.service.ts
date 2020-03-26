@@ -64,7 +64,7 @@ export class InteractionService {
         this.selectedTool.next(tool);
     }
 
-    emitLineAttributes(attr: LineAttributes): void {
+    emitLineAttributes(attr: LineAttributes | undefined): void {
         this.lineAttributes.next(attr);
     }
 
@@ -72,11 +72,11 @@ export class InteractionService {
         this.formsAttributes.next(attr);
     }
 
-    emitToolsAttributes(attr: ToolsAttributes): void {
+    emitToolsAttributes(attr: ToolsAttributes | undefined): void {
         this.toolsAttributes.next(attr);
     }
 
-    emitAerosolAttributes(attr: AerosolAttributes): void {
+    emitAerosolAttributes(attr: AerosolAttributes | undefined): void {
         this.aerosolAttributes.next(attr);
     }
 
