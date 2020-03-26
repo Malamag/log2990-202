@@ -6,7 +6,7 @@ import { Point } from './point';
 import { ShapeService } from './shape.service';
 
 export class FakeInteractionService extends InteractionService { }
-fdescribe('EllipseService', () => {
+describe('EllipseService', () => {
 
     // tslint:disable-next-line: no-any
     let kbServiceStub: any;
