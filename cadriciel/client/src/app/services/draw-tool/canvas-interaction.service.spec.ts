@@ -87,9 +87,9 @@ describe('CanvasInteractionService', () => {
   it('should get a precise border two times', () => {
     service.selectedItems = [true, false];
     service.selected = true;
-
-    // tslint:disable-next-line: no-magic-numbers
-    const FAKE_BORDER = [[0, true], [4, true], [3, true], [4, true]];
+    const SMALL_NUM = 3;
+    const BIG_NUM = 4;
+    const FAKE_BORDER = [[0, true], [BIG_NUM, true], [SMALL_NUM, true], [BIG_NUM, true]];
     const OLD_METHOD = CanvasInteraction.getPreciseBorder;
     CanvasInteraction.getPreciseBorder = jasmine.createSpy().and.returnValue(FAKE_BORDER);
     CanvasInteraction.createBoundingBox(service);
@@ -153,9 +153,10 @@ describe('CanvasInteractionService', () => {
 
     spyOn(Point, 'rectOverlap').and.returnValue(true);
     CanvasInteraction.retrieveItemsInRect(select, select, SEL, INV_SEL, false);
-    for (let i = 0; i < SEL.length; ++i) {
-      expect(SEL[i]).toBeTruthy();
-    }
+    SEL.forEach((sel) => {
+      expect(sel).toBeTruthy();
+    });
+
     expect(INV_SEL[0]).toBeFalsy();
     expect(INV_SEL[1]).toBeFalsy();
     expect(INV_SEL[2]).toBeTruthy();
@@ -166,20 +167,41 @@ describe('CanvasInteractionService', () => {
 
     spyOn(Point, 'rectOverlap').and.returnValue(false);
     CanvasInteraction.retrieveItemsInRect(select, select, SEL, INV_SEL, true);
-    for (let i = 0; i < SEL.length; ++i) {
-      expect(SEL[i]).toBeTruthy();
-    }
+    SEL.forEach((sel) => {
+      expect(sel).toBeTruthy();
+    });
   });
-  it('should call rect over lap with invalid points', () => {
-    const ELEM = document.createElement('div');
-    const DRAWING = document.createElement('g');
-    const CHILD = document.createElement('div');
-    DRAWING.appendChild(CHILD);
-    const INIT_VALUE = -1;
-    const POINT = new Point(INIT_VALUE, INIT_VALUE);
-    const OTHER_POINT = new Point(Infinity,Infinity);
+  it('the selected items should be set to true when there is not items to invert', () => {
+    const SEL = [false, true, true];
+    spyOn(Point, 'rectOverlap').and.returnValue(true);
+    CanvasInteraction.retrieveItemsInRect(select, select, SEL, [], true);
+    SEL.forEach((sel) => {
+      expect(sel).toBeTruthy();
+    });
+  });
+
+  it('the selected items should be set to false when there is not items to invert and not inside the box', () => {
+    const SEL = [false, true, false];
+    spyOn(Point, 'rectOverlap').and.returnValue(false);
+    CanvasInteraction.retrieveItemsInRect(select, select, SEL, [], true);
+    SEL.forEach((sel) => {
+      expect(sel).toBeFalsy();
+    });
+  });
+  it('should call rect over lap with the expected points', () => {
+    const OLD_METHOD = CanvasInteraction.getPreciseBorder;
+    const SMALL_NUM = 3;
+    const BIG_NUM = 4;
+    const FAKE_BORDER = [[0, true], [BIG_NUM, true], [SMALL_NUM, true], [BIG_NUM, true]];
+    CanvasInteraction.getPreciseBorder = jasmine.createSpy().and.returnValue(FAKE_BORDER);
+    firstChild.getBoundingClientRect = jasmine.createSpy().and.returnValue(fakeDomRECT);
     const SPY = spyOn(Point, 'rectOverlap');
-    CanvasInteraction.retrieveItemsInRect(ELEM, DRAWING, [true], [true], false);
-    expect(SPY).toHaveBeenCalledWith(POINT, POINT, OTHER_POINT, POINT);
+    const FIRST_POINT = new Point(fakeDomRECT.left, fakeDomRECT.top);
+    const SECOND_POINT = new Point(fakeDomRECT.right, fakeDomRECT.bottom);
+    const THIRD_POINT = new Point(0 , SMALL_NUM);
+    const FOURTH_POINT = new Point(BIG_NUM, BIG_NUM);
+    CanvasInteraction.retrieveItemsInRect(select, select, [true, true], [false, false], true);
+    expect(SPY).toHaveBeenCalledWith(FIRST_POINT, SECOND_POINT, THIRD_POINT, FOURTH_POINT);
+    CanvasInteraction.getPreciseBorder = OLD_METHOD;
   });
 });
