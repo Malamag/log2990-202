@@ -107,21 +107,21 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
         this.initGridVisibility();
-        const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
-        const mouseHandler = new MouseHandlerService(this.svg.nativeElement);
+        const KEYBOARD_HANDLER: KeyboardHandlerService = new KeyboardHandlerService();
+        const MOUSE_HANDLER = new MouseHandlerService(this.svg.nativeElement);
 
         // create all the tools
-        const tc = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
+        const TC = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
 
-        const pencil = tc.CreatePencil(true, this.interaction, this.colorPick);
-        const rect = tc.CreateRectangle(false, this.interaction, this.colorPick);
-        const line = tc.CreateLine(false, this.interaction, this.colorPick);
-        const brush = tc.CreateBrush(false, this.interaction, this.colorPick);
-        const aerosol = tc.CreateAerosol(false, this.interaction, this.colorPick);
-        const ellipse = tc.CreateEllipse(false, this.interaction, this.colorPick);
-        const undoRedo: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
-        const polygon = tc.CreatePolygon(false, this.interaction, this.colorPick);
-        const selection = tc.CreateSelection(
+        const PENCIL = TC.CreatePencil(true, this.interaction, this.colorPick);
+        const RECT = TC.CreateRectangle(false, this.interaction, this.colorPick);
+        const LINE = TC.CreateLine(false, this.interaction, this.colorPick);
+        const BRUSH = TC.CreateBrush(false, this.interaction, this.colorPick);
+        const AEROSOL = TC.CreateAerosol(false, this.interaction, this.colorPick);
+        const ELLIPSE = TC.CreateEllipse(false, this.interaction, this.colorPick);
+        const UNDO_REDO: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
+        const POLYGON = TC.CreatePolygon(false, this.interaction, this.colorPick);
+        const SELECT = TC.CreateSelection(
             false,
             this.interaction,
             this.colorPick,
@@ -130,7 +130,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.svg.nativeElement,
         );
 
-        const eraser = tc.CreateEraser(
+        const ERASER = TC.CreateEraser(
             false,
             this.interaction,
             this.colorPick,
@@ -139,7 +139,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.svg.nativeElement,
         );
 
-        const colorEditor = tc.CreateColorEditor(
+        const COLOE_EDITOR = TC.CreateColorEditor(
             false,
             this.interaction,
             this.colorPick,
@@ -148,19 +148,19 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.svg.nativeElement,
         );
 
-        const pipette = tc.CreatePipette(false, this.interaction, this.colorPick);
+        const pipette = TC.CreatePipette(false, this.interaction, this.colorPick);
 
-        this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
-        this.toolsContainer.set('Rectangle', rect);
-        this.toolsContainer.set('Ligne', line);
-        this.toolsContainer.set('Pinceau', brush);
-        this.toolsContainer.set('Crayon', pencil);
-        this.toolsContainer.set('Aérosol', aerosol);
-        this.toolsContainer.set('Ellipse', ellipse);
-        this.toolsContainer.set('Polygone', polygon);
-        this.toolsContainer.set('Sélectionner', selection);
-        this.toolsContainer.set('Efface', eraser);
-        this.toolsContainer.set('ApplicateurCouleur', colorEditor);
+        this.interactionToolsContainer.set('AnnulerRefaire', UNDO_REDO);
+        this.toolsContainer.set('Rectangle', RECT);
+        this.toolsContainer.set('Ligne', LINE);
+        this.toolsContainer.set('Pinceau', BRUSH);
+        this.toolsContainer.set('Crayon', PENCIL);
+        this.toolsContainer.set('Aérosol', AEROSOL);
+        this.toolsContainer.set('Ellipse', ELLIPSE);
+        this.toolsContainer.set('Polygone', POLYGON);
+        this.toolsContainer.set('Sélectionner', SELECT);
+        this.toolsContainer.set('Efface', ERASER);
+        this.toolsContainer.set('ApplicateurCouleur', COLOE_EDITOR);
         this.toolsContainer.set('Pipette', pipette);
 
         this.interaction.$cancelToolsObs.subscribe((sig: boolean) => {
@@ -179,30 +179,30 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
                 this.toolsContainer.get(toolName).selected = true;
             }
 
-            mouseHandler.updateWindowSize();
+            MOUSE_HANDLER.updateWindowSize();
         });
 
         // Subscribe each tool to keyboard and mouse
         this.toolsContainer.forEach((element: InputObserver) => {
-            keyboardHandler.addToolObserver(element);
-            mouseHandler.addObserver(element);
+            KEYBOARD_HANDLER.addToolObserver(element);
+            MOUSE_HANDLER.addObserver(element);
         });
 
         window.addEventListener('resize', () => {
-            mouseHandler.updateWindowSize();
+            MOUSE_HANDLER.updateWindowSize();
         });
 
         // Mouse listeners
         window.addEventListener('mousemove', (e: MouseEvent) => {
-            mouseHandler.move(e);
+            MOUSE_HANDLER.move(e);
         });
         window.addEventListener('mousedown', (e: MouseEvent) => {
             // e.preventDefault();
-            mouseHandler.down(e);
+            MOUSE_HANDLER.down(e);
         });
 
         window.addEventListener('mouseup', (e: MouseEvent) => {
-            mouseHandler.up(e);
+            MOUSE_HANDLER.up(e);
         });
 
         // Prevent right-click menu
@@ -212,10 +212,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
         // Keyboard listeners
         window.addEventListener('keydown', (e: KeyboardEvent) => {
-            keyboardHandler.logkey(e);
+            KEYBOARD_HANDLER.logkey(e);
         });
         window.addEventListener('keyup', (e: KeyboardEvent) => {
-            keyboardHandler.reset(e);
+            KEYBOARD_HANDLER.reset(e);
         });
 
         window.dispatchEvent(new Event('resize'));

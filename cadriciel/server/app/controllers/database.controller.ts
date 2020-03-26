@@ -50,16 +50,6 @@ export class DatabaseController {
                 });
         });
 
-        this.router.patch('/Images', async (req: Request, res: Response, next: NextFunction) => {
-            this.databaseService.modifyImage(req.body)
-                .then(() => {
-                    res.sendStatus(Httpstatus.OK);
-                })
-                .catch((error: Error) => {
-                    res.status(Httpstatus.NOT_FOUND).send(error.message);
-                });
-        });
-
         /* this.router.get('/populateDB', (req: Request, res: Response, next: NextFunction) => {
              this.databaseService.populateDB();
              res.sendStatus(Httpstatus.OK);
