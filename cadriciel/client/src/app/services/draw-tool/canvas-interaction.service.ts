@@ -90,6 +90,7 @@ export class CanvasInteraction {
   static getPreciseBorder(item: Element, record?: [number, boolean][]): [number, boolean][] {
     const INIT_VALUE = -1;
     const POS = 3;
+
     let minX: [number, boolean] = record ? record[0] : [Infinity, false];
     let maxX: [number, boolean] = record ? record[1] : [INIT_VALUE, false];
     let minY: [number, boolean] = record ? record[2] : [Infinity, false];
