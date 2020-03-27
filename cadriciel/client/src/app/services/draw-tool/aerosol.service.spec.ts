@@ -28,8 +28,8 @@ describe('AerosolService', () => {
                 { provide: String, useValue: '' },
                 { provide: KeyboardHandlerService, kbServiceStub },
             ],
-        }),
-            ptA = new Point(0, 0);
+        });
+        ptA = new Point(0, 0);
         ptB = new Point(1, 2);
         ptArr = [ptA, ptB];
         service = TestBed.get(AerosolService);
@@ -37,6 +37,7 @@ describe('AerosolService', () => {
         service['points'].push(ptA);
         // tslint:disable-next-line: no-string-literal
         service['points'].push(ptB);
+        // tslint:disable-next-line: no-string-literal
         service['lastPoint'] = new Point(1, 1);
 
     });
