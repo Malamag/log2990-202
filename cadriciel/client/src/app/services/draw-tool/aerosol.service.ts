@@ -173,7 +173,7 @@ export class AerosolService extends DrawingTool {
         }
 
         // Create a radius dependent of the diameter -> 1/100 of the diameter
-        const DIVIDER = 100;
+        const DIVIDER = 10;
         const POINT_RADIUS = this.attr.diameter / DIVIDER;
         // Create the path of points
         this.path += ' <path';
