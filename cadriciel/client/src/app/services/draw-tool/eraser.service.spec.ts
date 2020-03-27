@@ -242,9 +242,7 @@ describe('EraserService', () => {
     });
 
     it('should erase the first child if touching and on mouse down', () => {
-
         service.isDown = true;
-
         const dummyElement: Element = document.createElement('g');
         const childDummyElement: Element = document.createElement('g');
         const grandChildDummyElement: Element = document.createElement('g');

@@ -121,4 +121,93 @@ describe('ColorEditorService', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
+    it('should set the stroke attribute to the chosen secondary color if the color is different or there is no color', () => {
+        const dummyElement: HTMLElement = document.createElement('g');
+        service.chosenColor.secColor = 'red';
+        dummyElement.setAttribute('stroke', 'blue');
+        const SPY = spyOn(service.render, 'setAttribute');
+        service.changeBorder(dummyElement);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should not set the stroke attribute to the chosen secondary color if the color is different or there is no color', () => {
+        const dummyElement: HTMLElement = document.createElement('g');
+        service.chosenColor.secColor = 'blue';
+        dummyElement.setAttribute('stroke', 'blue');
+        const SPY = spyOn(service.render, 'setAttribute');
+        service.changeBorder(dummyElement);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should set the fill attribute to the chosen secondary color if the color is different or there is no color', () => {
+        const dummyElement: HTMLElement = document.createElement('g');
+        service.chosenColor.primColor = 'red';
+        dummyElement.setAttribute('fill', 'blue');
+        const SPY = spyOn(service.render, 'setAttribute');
+        service.changeFill(dummyElement);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should not set the fill attribute to the chosen secondary color if the color is different or there is no color', () => {
+        const dummyElement: HTMLElement = document.createElement('g');
+        service.chosenColor.primColor = 'blue';
+        dummyElement.setAttribute('fill', 'blue');
+        const SPY = spyOn(service.render, 'setAttribute');
+        service.changeFill(dummyElement);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should add a point to the current path on mouse move', () => {
+        const SPY = spyOn(service.currentPath, 'push');
+        service.checkIfTouching = jasmine.createSpy();
+        service.move(new Point(2, 1));
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should call updateProgress on mouse move', () => {
+        const SPY = spyOn(service, 'updateProgress');
+        service.checkIfTouching = jasmine.createSpy();
+        service.move(new Point(2, 1));
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should call checkIfTouching on mouse move', () => {
+        const SPY = spyOn(service, 'checkIfTouching');
+        service.move(new Point(2, 1));
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    // replace name.
+    it('should create a container named eraser-brush', () => {
+        let ptArr : Point[] = [];
+        ptArr.push(new Point(2,3),new Point(2,2));
+        const PATH = service.createPath(ptArr);
+        expect(PATH).toContain('name = "eraser-brush"');
+      });
+    
+      
+    it('should have a fill attribute', () => {
+        let ptArr : Point[] = [];
+        ptArr.push(new Point(2,3),new Point(2,2));
+        service.chosenColor.primColor = 'blue'
+        const PATH = service.createPath(ptArr);
+        expect(PATH).toContain('fill="blue"');
+      });
+
+      it('should have a stroke width attribute of 3', () => {
+        let ptArr : Point[] = [];
+        ptArr.push(new Point(2,3),new Point(2,2));
+        const PATH = service.createPath(ptArr);
+        expect(PATH).toContain('stroke-width="3"');
+      });
+
+      it('should have a stroke attribute', () => {
+        let ptArr : Point[] = [];
+        ptArr.push(new Point(2,3),new Point(2,2));
+        service.chosenColor.secColor = 'blue'
+        const PATH = service.createPath(ptArr);
+        expect(PATH).toContain('stroke="blue"');
+      });
+
+      
 });
