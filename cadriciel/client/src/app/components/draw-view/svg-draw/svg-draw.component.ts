@@ -131,7 +131,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.svg.nativeElement,
         );
 
-        const COLOE_EDITOR = TC.CreateColorEditor(
+        const COLOR_EDITOR = TC.CreateColorEditor(
             false,
             this.interaction,
             this.colorPick,
@@ -150,7 +150,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Polygone', POLYGON);
         this.toolsContainer.set('Sélectionner', SELECT);
         this.toolsContainer.set('Efface', ERASER);
-        this.toolsContainer.set('Applicateur de couleur', COLOE_EDITOR);
+        this.toolsContainer.set('ApplicateurCouleur', COLOR_EDITOR);
         this.toolsContainer.set('Pipette', PIPETTE);
 
     }
