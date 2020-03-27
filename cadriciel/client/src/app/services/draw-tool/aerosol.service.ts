@@ -176,7 +176,7 @@ export class AerosolService extends DrawingTool {
         const DIVIDER = 10;
         const POINT_RADIUS = this.attr.diameter / DIVIDER;
         // Create the path of points
-        this.path += ' <path';
+        this.path += ' <path class="aerosolPoints"';
         this.path += ` d="${dString}"`;
         this.path += ` stroke="${this.chosenColor.primColor}"`;
         this.path += ' stroke-linecap="round"';
