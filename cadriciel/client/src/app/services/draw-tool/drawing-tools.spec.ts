@@ -10,6 +10,7 @@ describe('drawingTools', () => {
         TestBed.configureTestingModule({
             providers: [
                 { provide: HTMLElement, useValue: { getAttribute: () => 0 } },
+                { provide: Element, useValue: { getAttribute: () => 0 } },
                 { provide: Boolean, useValue: false },
                 { provide: Number, useValue: 0 },
                 { provide: String, useValue: '' },

@@ -34,6 +34,7 @@ describe('SelectionService', () => {
             providers: [
                 { provide: Point },
                 { provide: HTMLElement, useValue: select },
+                { provide: Element, useValue: select },
                 { provide: Number, useValue: 0 },
                 { provide: String, useValue: '' },
                 { provide: Boolean, useValue: true },
