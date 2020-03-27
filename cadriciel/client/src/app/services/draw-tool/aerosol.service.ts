@@ -41,7 +41,7 @@ export class AerosolService extends DrawingTool {
         this.updateColors();
         this.updateAttributes();
         this.toolChangeListener();
-        this.points = new Array();
+        this.points = [];
         this.insideCanvas = true;
     }
 
