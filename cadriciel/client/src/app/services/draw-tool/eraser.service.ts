@@ -249,7 +249,8 @@ export class EraserService extends DrawingTool {
             for (let j = 0; j < fullItem.childElementCount; j++) {
                 let itemComponent = fullItem.children[j];
 
-                // ignore non-shape components
+                // ignore useless or non-shape components
+                if(itemComponent.classList.contains('aerosolPoints')) {break;}
                 if (
                     itemComponent.classList.contains('clone') ||
                     itemComponent.classList.contains('noHighlights') ||
