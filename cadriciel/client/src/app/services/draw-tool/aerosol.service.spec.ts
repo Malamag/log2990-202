@@ -43,6 +43,7 @@ describe('AerosolService', () => {
     afterEach(() => {
         // tslint:disable-next-line: no-string-literal
         service['points'] = [];
+
     });
 
     it('should be created', () => {
@@ -110,6 +111,7 @@ describe('AerosolService', () => {
         // Expect createPath function to have been called the same number of time as the wanted emission
         expect(SPY_CREATE_PATH).toHaveBeenCalledTimes(EMISSION_EXPECTED);
         CLOCK.uninstall();
+        service.up(ptA);
     });
 
     it('should only have points inside the diameter', () => {
@@ -196,6 +198,7 @@ describe('AerosolService', () => {
         service.down(ptA);  // start aerosol inside canvas and move outside
         service.goingOutsideCanvas(OUTSIDE_POINT);
         expect(SPY).toHaveBeenCalled();
+        service.up(ptA);
     });
 
     it('should start a new path if it goes back inside the canvas after going outside while the mouse is clicked', () => {
@@ -209,6 +212,7 @@ describe('AerosolService', () => {
         service.goingInsideCanvas(POINT);
         expect(SPY).toHaveBeenCalledTimes(EXPECTED_CALLED_TIMES);
         expect(service.currentPath.length).toEqual(PATH_SIZE);
+        service.up(ptA);
     });
 
     it('should not start a new path if it goes back inside the canvas after going outside with a mouse up', () => {
@@ -224,6 +228,7 @@ describe('AerosolService', () => {
         service.down(ptA);
         expect(SPY).toHaveBeenCalledTimes(EXPECTED_CALLED_TIMES);
         expect(service.currentPath.length).toEqual(PATH_SIZE);
+        service.up(ptA);
     });
 
     it('should update path when the mouse is moved while being clicked inside the canvas', () => {
@@ -233,6 +238,7 @@ describe('AerosolService', () => {
 
         // It should have the points from the down button and from the move
         expect(++pathSize).toEqual(service.currentPath.length);
+        service.up(ptA);
     });
 
     it('should not update path when the mouse is moved without being clicked inside the canvas', () => {
@@ -246,6 +252,7 @@ describe('AerosolService', () => {
 
         // it shouldn't have taken the path before the mouse down
         expect(PATH_SIZE).toEqual(service.currentPath.length);
+        service.up(ptA);
 
     });
 
@@ -261,6 +268,8 @@ describe('AerosolService', () => {
 
         // There shouldn't be more points since we moved OUTSIDE the canvas
         expect(PATH_SIZE).toEqual(service.currentPath.length);
+        service.up(ptA);
+
     });
 
     it('should not make the mouse clicked when going outside the canvas', () => {
