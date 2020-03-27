@@ -130,6 +130,9 @@ export class PolygonService extends ShapeService {
     }
 
     createPerimeter(removePerimeter: boolean): void {
+        if (removePerimeter) {
+            return;
+        }
         // width between the max and min values of the points in x
         let widthPerimeter = this.leftPoint - this.rightPoint;
 
@@ -148,13 +151,10 @@ export class PolygonService extends ShapeService {
         widthPerimeter += this.attr.lineThickness;
         heightPerimeter += this.attr.lineThickness;
 
-        if (!removePerimeter) {
-            // Create perimeter if mouse is still down
-            this.svgString += `<rect x="${PER_START_X}" y="${PER_START_Y}"`;
-            this.svgString += `width="${Math.abs(widthPerimeter)}" height="${Math.abs(heightPerimeter)}"`;
-            this.svgString += 'style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"';
-            this.svgString += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
-        }
+        this.svgString += `<rect x="${PER_START_X}" y="${PER_START_Y}"`;
+        this.svgString += `width="${Math.abs(widthPerimeter)}" height="${Math.abs(heightPerimeter)}"`;
+        this.svgString += 'style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"';
+        this.svgString += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
     }
 
     // Align points of the polygon with the area where we drag the mouse
