@@ -158,7 +158,9 @@ export class ColorEditorService extends DrawingTool {
 
     // when we go from inside to outside the canvas
     goingOutsideCanvas() {
-        // nothing happens since we might want to readjust the shape once back in
+        // remove brush preview while outside
+        this.currentPath = [];
+        this.inProgress.innerHTML = '';
     }
 
     // when we go from outside to inside the canvas
