@@ -2,7 +2,7 @@ import { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { UndoRedoService } from './undo-redo.service';
 
-describe('UndoRedoService', () => {
+fdescribe('UndoRedoService', () => {
     let service: UndoRedoService;
     // tslint:disable-next-line: no-any
     let drawingStub: any;
@@ -115,9 +115,22 @@ describe('UndoRedoService', () => {
         expect(SPY).toHaveBeenCalled();
         expect(UPDATE_SPY).toHaveBeenCalled();
     });
+    it('should not call any function', () => {
+        const NAME = 'hello';
+        const SPY = spyOn(service, 'redo');
+        service.apply(NAME);
+        expect(SPY).not.toHaveBeenCalled();
+    })
     it('should emit enable disable', () => {
         const EMIT_SPY = spyOn(service.interact, 'emitEnableDisable');
         service.updateButtons();
         expect(EMIT_SPY).toHaveBeenCalled();
     });
+    it('should emit enable buttoms', () => {
+        service.done.push('hello');
+        service.undone.push('world');
+        const EMIT_SPY = spyOn(service.interact, 'emitEnableDisable');
+        service.updateButtons();
+        expect(EMIT_SPY).toHaveBeenCalledWith([false, false]);
+    })
 });
