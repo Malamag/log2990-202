@@ -1,22 +1,16 @@
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-    MatAutocompleteModule,
-    MatCardModule,
-    MatChipsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    MatSelectModule,
-    MatSnackBarModule
-} from '@angular/material';
+import { MatAutocompleteModule, MatCardModule,
+     MatChipsModule, MatDialogModule,
+      MatFormFieldModule, MatIconModule,
+       MatInputModule, MatProgressSpinnerModule,
+        MatSelectModule, MatSnackBarModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
+import { ShownData } from 'src/app/shown-data';
 import { ImageData } from '../../../../../image-data';
 import { SVGData } from '../../../../../svg-data';
 import { GalleryComponent } from './gallery.component';
@@ -26,7 +20,8 @@ describe('GalleryComponent', () => {
     let fixture: ComponentFixture<GalleryComponent>;
     // tslint:disable-next-line: no-any
     let tagAdd: any;
-
+    // tslint:disable-next-line: no-any
+    let fakeAdd: any;
     // tslint:disable-next-line: no-any
     let fakeEvent: any;
     beforeEach(async(() => {
@@ -57,6 +52,10 @@ describe('GalleryComponent', () => {
         spyOn(component.index, 'getImagesByTags').and.returnValue(of([]));
         spyOn(component.index, 'getAllImages').and.returnValue(of([]));
         fixture.detectChanges();
+        fakeAdd = {
+            value: '',
+            input: undefined,
+        };
         tagAdd = {
             input: {
                 value: 'hello',
@@ -111,12 +110,41 @@ describe('GalleryComponent', () => {
         expect(CREATE_SPY).toHaveBeenCalled();
         expect(APPEND_SPY).toHaveBeenCalled();
     });
+    it('should not add the tag', () => {
+        const SPY = spyOn(component.tags, 'push');
+        component.addTag(fakeAdd);
+        expect(SPY).toHaveBeenCalledTimes(0);
+    })
     it('should throw the error and get all the images', () => {
         const ID = 'hello';
         component.index.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
         const TEXT = component.render.createText('Aucun dessin ne se trouve sur le serveur');
         component.delete(ID);
         expect(component.text).toEqual(TEXT);
+    });
+    it('should delete locally the id', () => {
+        const ID = '570';
+        component.index.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
+        const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const SVG = component.render.createElement('div');
+        const DATA: ShownData = { id: '570', svgElement: SVG, name: 'welcome', tags: ['hello', 'new'],
+         data:  SVG_DATA, width: +SVG_DATA.width, height: +SVG_DATA.height};
+        component.shownDrawings = [DATA];
+        const SPY = spyOn(component.shownDrawings, 'splice');
+        component.delete(ID);
+        expect(SPY).toHaveBeenCalled();
+    });
+    it('should not delete locally the id', () => {
+        const ID = '170';
+        component.index.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
+        const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
+        const SVG = component.render.createElement('div');
+        const DATA: ShownData = { id: '570', svgElement: SVG, name: 'welcome', tags: ['hello', 'new'],
+         data:  SVG_DATA, width: +SVG_DATA.width, height: +SVG_DATA.height};
+        component.shownDrawings = [DATA];
+        const SPY = spyOn(component.shownDrawings, 'splice');
+        component.delete(ID);
+        expect(SPY).toHaveBeenCalledTimes(0);
     });
     it('should show a message instead of images', () => {
         component.index.getAllImages = jasmine.createSpy().and.returnValue(of([]));
@@ -202,6 +230,11 @@ describe('GalleryComponent', () => {
         expect(CREATE_SPY).toHaveBeenCalledTimes(NB_CALLS_CREATE);
         expect(ATTRIBUTE_SPY).toHaveBeenCalledTimes(NB_CALLS_ATTR);
         expect(APPEND_SPY).toHaveBeenCalled();
+    });
+    it('should not add another hash to the background color', () => {
+        const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: '#ffffff', innerHTML: ['hello', 'hello'] };
+        component.createSVG(SVG_DATA);
+        expect(SVG_DATA.bgColor).toEqual('#ffffff');
     });
     it('should lower case the value and filter the value from possible tags container', () => {
         const VALUE = 'black';

@@ -23,7 +23,7 @@ describe('LineService', () => {
                 { provide: String, useValue: '' },
                 { provide: Boolean, useValue: true },
                 { provide: Number, useValue: 0 },
-                { provide: HTMLElement, useValue: {} },
+                { provide: HTMLElement, useValue: { getAttribute: () => 0 } },
                 { provide: KeyboardHandlerService, useValue: kbServiceStub },
             ],
         });

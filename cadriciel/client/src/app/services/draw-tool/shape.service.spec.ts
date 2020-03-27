@@ -30,7 +30,7 @@ describe('ShapeService', () => {
 
         TestBed.configureTestingModule({
             providers: [
-                { provide: HTMLElement, useValue: {} },
+                { provide: HTMLElement, useValue: { getAttribute: () => 0 } },
                 { provide: Boolean, useValue: true },
                 { provide: ColorPickingService, useValue: {} },
                 { provide: InteractionService, useValue: new InteractionService() },

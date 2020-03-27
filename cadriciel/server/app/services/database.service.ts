@@ -1,9 +1,9 @@
 import fs from 'fs';
 import { injectable } from 'inversify';
-import { Collection, MongoClient, MongoClientOptions } from 'mongodb';
+import { Collection, DeleteWriteOpResultObject, MongoClient, MongoClientOptions } from 'mongodb';
 import 'reflect-metadata';
-import { Image } from '../Image';
 import { ImageData } from '../../../image-data';
+import { Image } from '../Image';
 import { MetaData } from '../metadata';
 
 const DATABASE_URL = 'mongodb+srv://Equipe202:Equipe202@cluster0-kusq4.mongodb.net/test?retryWrites=true&w=majority';
@@ -23,7 +23,7 @@ export class DatabaseService {
         MongoClient.connect(DATABASE_URL, this.options)
             .then((client: MongoClient) => {
                 this.collection = client.db(DATABASE_NAME).collection(DATABASE_COLLECTION);
-                //console.error('connexion ok ');
+                console.error('connexion ok ');
             })
             .catch(() => {
                 console.error('Erreur de connexion. Terminaison du processus');
@@ -36,7 +36,7 @@ export class DatabaseService {
         return this.collection
             .find({})
             .toArray()
-            .then((metaData: MetaData[]) => {
+            .then(async (metaData: MetaData[]) => {
                 return this.getImages(metaData);
             })
             .catch((error: Error) => {
@@ -67,7 +67,7 @@ export class DatabaseService {
                                 imageData.push(data);
                             }
                         });
-                    })
+                    });
                 return imageData;
             })
             .catch((error: Error) => {
@@ -86,7 +86,7 @@ export class DatabaseService {
             try {
                 imageData.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
             } catch (error) {
-                //throw new Error('Invalide id');
+                // throw new Error('Invalide id');
             }
         });
         return imageData;
@@ -157,7 +157,7 @@ export class DatabaseService {
                 if (data !== null) {
                     image = data;
                 } else {
-                    //throw new TypeError('Image data is null');
+                    // throw new TypeError('Image data is null');
                     return;
                 }
                 // Convert string (old data) to JSON
@@ -171,13 +171,13 @@ export class DatabaseService {
                 fs.writeFileSync(this.jsonFile, listToJson);
                 const metadata: MetaData = { id: image.id, name: image.name, tags: image.tags };
                 return await this.collection.insertOne(metadata)
-                    .then(() => {
+                    .then(async () => {
                         return Promise.resolve();
                     })
                     .catch((error: Error) => {
                         throw error;
                     });
-            })
+            });
     }
 
     async validateImageData(imageData: ImageData): Promise<ImageData | null> {
@@ -185,7 +185,7 @@ export class DatabaseService {
         return this.getAllImages()
             .then((data) => {
                 if (data.length >= MAX_DATA_AMOUNT) {
-                    //throw new TypeError('Collection is full');
+                    // throw new TypeError('Collection is full');
                     return null;
                 }
                 while (!this.validateId(imageData.id, data)) {
@@ -193,17 +193,17 @@ export class DatabaseService {
                     imageData.id = new Date().getUTCMilliseconds() + '';
                 }
                 if (!this.validateName(imageData.name)) {
-                    //throw new TypeError('Empty name');
+                    // throw new TypeError('Empty name');
                     return null;
                 }
                 if (!this.validateTags(imageData.tags)) {
-                    //throw new TypeError('Invalide tags');
+                    // throw new TypeError('Invalide tags');
                     return null;
                 }
                 return imageData;
             })
             .catch((error) => {
-                //return null;
+                // return null;
                 throw error;
             });
     }
@@ -214,10 +214,10 @@ export class DatabaseService {
                 return image.id === id;
             }).length
         ) {
-            //console.log('ID not unique');
+            // console.log('ID not unique');
             return false;
         } else {
-            //console.log('ID is unique');
+            // console.log('ID is unique');
             return true;
         }
     }
@@ -236,7 +236,7 @@ export class DatabaseService {
         });
         return validTags;
     }
-    async clearData() {
+    async clearData(): Promise<DeleteWriteOpResultObject> {
         const jsonData = fs.readFileSync(this.jsonFile);
         const drawingsList = JSON.parse(jsonData.toString());
         drawingsList.drawings = [];

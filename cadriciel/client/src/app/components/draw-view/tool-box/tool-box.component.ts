@@ -50,7 +50,7 @@ export class ToolBoxComponent implements OnInit {
             } else {
                 this.buttonAction(this.selectingToolsMap.get('ctrl+z'));
             }
-        } else if (this.selectingToolsMap.has(event.key)) {
+        } else if (this.selectingToolsMap.has(event.key) && !event.ctrlKey) {
             this.buttonAction(this.selectingToolsMap.get(event.key));
         }
     }
