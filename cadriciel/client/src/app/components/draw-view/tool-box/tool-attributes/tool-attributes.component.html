@@ -111,7 +111,7 @@
     <!-- for the eraser -->
     <div *ngSwitchCase="'Efface'" (mouseleave) = "updateTools()">
         <label> Épaisseur du trait: {{ lineThickness }} px </label>
-        <mat-slider thumbLabel type="range" min="1" max="50" [(ngModel)]="lineThickness"></mat-slider> <br />
+        <mat-slider thumbLabel type="range" min="3" max="50" [(ngModel)]="lineThickness"></mat-slider> <br />
     </div>
     <!-- for the text -->
     <div *ngSwitchCase="'Texte'">
