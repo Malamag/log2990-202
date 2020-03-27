@@ -174,7 +174,10 @@ describe('NewDrawComponent', () => {
         component.ngOnInit();
         component.inputEntered = false;
         window.dispatchEvent(new Event('resize'));
-        expect(SPY).toHaveBeenCalledTimes(1); // called at first init
+        setTimeout(() => {
+            expect(SPY).toHaveBeenCalledTimes(1); // called at first init
+        }, 50);
+
     });
 
     // tslint:disable-next-line: only-arrow-functions
