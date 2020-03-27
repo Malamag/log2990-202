@@ -235,4 +235,24 @@ describe('PolygonService', () => {
         expect(pointsInside).toBeTruthy();
     });
 
+    it('should have width to be dependant of stroke width', () => {
+        const lineThickness = 20;
+        service.attr.lineThickness = lineThickness;
+        const PATH = service.createPath(ptArr, false);
+        // tslint:disable-next-line: no-string-literal
+        const WIDTH_EXPECTED = service['leftPoint'] - service['rightPoint'] + service.attr.lineThickness;
+        expect(PATH).toContain(`width="${WIDTH_EXPECTED}"`);
+    });
+
+    it('should have width to be dependant of stroke height', () => {
+        const lineThickness = 20;
+        service.attr.lineThickness = lineThickness;
+        const PATH = service.createPath(ptArr, false);
+        const END_Y_POINT = Math.floor(service.attr.numberOfCorners / 2);
+        // tslint:disable-next-line: no-string-literal
+        let heightExpected = Math.abs(service['startY'] - service['corners'][END_Y_POINT].y);
+        heightExpected += service.attr.lineThickness;
+        expect(PATH).toContain(`height="${heightExpected}"`);
+    });
+
 });
