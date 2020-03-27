@@ -4,7 +4,7 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 import { AerosolService } from './aerosol.service';
 import { Point } from './point';
 
-describe('AerosolService', () => {
+fdescribe('AerosolService', () => {
     let service: AerosolService;
     let ptA: Point;
     let ptB: Point;

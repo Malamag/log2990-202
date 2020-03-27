@@ -129,6 +129,26 @@ export class PolygonService extends ShapeService {
         this.alignCorners();
     }
 
+    // Align points of the polygon with the area where we drag the mouse
+    alignCorners(): void {
+        // If the the left point value is smaller than the initial point where the mouse was down,
+        // Adjust the position of all the polygon's points
+        if (this.leftPoint < this.startX) {
+            const OFFSET =  this.startX - this.leftPoint;
+            for (const CORNER of this.corners) {
+                CORNER.x += OFFSET;
+            }
+        }
+        // If the the right point value is greater than the initial point where the mouse was down,
+        // Adjust the position of all the polygon's points
+        if (this.rightPoint > this.startX) {
+            const OFFSET = this.startX - this.rightPoint;
+            for (const CORNER of this.corners) {
+                CORNER.x += OFFSET;
+            }
+        }
+    }
+
     createPerimeter(removePerimeter: boolean): void {
         if (removePerimeter) {
             return;
@@ -157,23 +177,4 @@ export class PolygonService extends ShapeService {
         this.svgString += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
     }
 
-    // Align points of the polygon with the area where we drag the mouse
-    alignCorners(): void {
-        // If the the left point value is smaller than the initial point where the mouse was down,
-        // Adjust the position of all the polygon's points
-        if (this.leftPoint < this.startX) {
-            const OFFSET =  this.startX - this.leftPoint;
-            for (const CORNER of this.corners) {
-                CORNER.x += OFFSET;
-            }
-        }
-        // If the the right point value is greater than the initial point where the mouse was down,
-        // Adjust the position of all the polygon's points
-        if (this.rightPoint > this.startX) {
-            const OFFSET = this.startX - this.rightPoint;
-            for (const CORNER of this.corners) {
-                CORNER.x += OFFSET;
-            }
-        }
-    }
 }
