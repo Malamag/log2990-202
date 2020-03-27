@@ -23,6 +23,7 @@ describe('UndoRedoService', () => {
         service = TestBed.get(UndoRedoService);
         service.done = [];
         service.undone = [];
+        service.drawing = drawingStub;
     });
 
     it('should be created', () => {

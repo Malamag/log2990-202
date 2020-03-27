@@ -188,7 +188,6 @@ describe('PolygonService', () => {
         expect(PATH).toContain(NAME);
     });
 
-    // NOT TESTED YET
     it('should align all points inside the perimeter if it exceeds to the left ', () => {
         service.createPath(ptArr, false);
 
@@ -204,9 +203,9 @@ describe('PolygonService', () => {
         const NEW_POINTS = service['corners'];
         let pointsInside = true;
         for (let i = 0; i < NEW_POINTS.length; i++) {
-            if (NEW_POINTS[i].x !== POINTS[i].x - OFFSET) {
+            if (NEW_POINTS[i].x !== POINTS[i].x) {
                 pointsInside = false;
-                return;
+                break;
             }
         }
         expect(pointsInside).toBeTruthy();
@@ -227,12 +226,37 @@ describe('PolygonService', () => {
         const NEW_POINTS = service['corners'];
         let pointsInside = true;
         for (let i = 0; i < NEW_POINTS.length; i++) {
-            if (NEW_POINTS[i].x !== POINTS[i].x + OFFSET) {
+            if (NEW_POINTS[i].x !== POINTS[i].x) {
                 pointsInside = false;
-                return;
+                break;
             }
         }
         expect(pointsInside).toBeTruthy();
+    });
+
+    it('should have perimeter width to be dependant of stroke width', () => {
+        const lineThickness = 20;
+        service.attr.lineThickness = lineThickness;
+        const PATH = service.createPath(ptArr, false);
+        // tslint:disable-next-line: no-string-literal
+        const WIDTH_EXPECTED = service['leftPoint'] - service['rightPoint'] + service.attr.lineThickness;
+        expect(PATH).toContain(`width="${WIDTH_EXPECTED}"`);
+    });
+
+    it('should have perimeter height to be dependant of stroke height', () => {
+        const lineThickness = 20;
+        service.attr.lineThickness = lineThickness;
+        const PATH = service.createPath(ptArr, false);
+        const END_Y_POINT = Math.floor(service.attr.numberOfCorners / 2);
+        // tslint:disable-next-line: no-string-literal
+        let heightExpected = Math.abs(service['startY'] - service['corners'][END_Y_POINT].y);
+        heightExpected += service.attr.lineThickness;
+        expect(PATH).toContain(`height="${heightExpected}"`);
+    });
+
+    it('should not create perimeter if the polygon is finished updating', () => {
+        const PATH = service.createPath(ptArr, true);
+        expect(PATH).not.toContain('<rect');
     });
 
 });

@@ -130,24 +130,31 @@ export class PolygonService extends ShapeService {
     }
 
     createPerimeter(removePerimeter: boolean): void {
+        if (removePerimeter) {
+            return;
+        }
         // width between the max and min values of the points in x
-        const WIDTH_PERIMETER = this.leftPoint - this.rightPoint;
+        let widthPerimeter = this.leftPoint - this.rightPoint;
 
         // the lowest point in the canvas in y
         const END_Y_POINT = Math.floor(this.attr.numberOfCorners / 2);
         // height between min and max value of the points in y
-        const HEIGHT_PERIMETER = this.startY - this.corners[END_Y_POINT].y;
+        let heightPerimeter = Math.abs(this.startY - this.corners[END_Y_POINT].y);
 
         // Assign start values of the rectangle depending on where we drag the mouse
-        const PER_START_X = this.width > 0 ? this.startX : this.startX - WIDTH_PERIMETER;
-        const PER_START_Y = this.height > 0 ? this.startY : this.startY - HEIGHT_PERIMETER;
-        if (!removePerimeter) {
-            // Create perimeter if mouse is still down
-            this.svgString += `<rect x="${PER_START_X}" y="${PER_START_Y}"`;
-            this.svgString += `width="${Math.abs(WIDTH_PERIMETER)}" height="${Math.abs(HEIGHT_PERIMETER)}"`;
-            this.svgString += 'style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"';
-            this.svgString += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
-        }
+        const PER_START_X = this.width > 0 ? this.startX - this.attr.lineThickness / 2 :
+                            this.startX - widthPerimeter - this.attr.lineThickness / 2;
+        const PER_START_Y = this.height > 0 ? this.startY - this.attr.lineThickness / 2 :
+                            this.startY - heightPerimeter - this.attr.lineThickness / 2;
+
+        // Add width and height depending on stroke thickness
+        widthPerimeter += this.attr.lineThickness;
+        heightPerimeter += this.attr.lineThickness;
+
+        this.svgString += `<rect x="${PER_START_X}" y="${PER_START_Y}"`;
+        this.svgString += `width="${Math.abs(widthPerimeter)}" height="${Math.abs(heightPerimeter)}"`;
+        this.svgString += 'style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"';
+        this.svgString += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
     }
 
     // Align points of the polygon with the area where we drag the mouse

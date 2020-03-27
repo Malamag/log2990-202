@@ -80,7 +80,7 @@ export class SelectionService extends ShapeService {
 
         window.addEventListener('newDrawing', (e: Event) => {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
-                const EL = this.drawing.children[i];
+                const EL: Element = this.drawing.children[i];
                 let status: string | null;
 
                 EL ? status = EL.getAttribute('isListening') : status = null;
