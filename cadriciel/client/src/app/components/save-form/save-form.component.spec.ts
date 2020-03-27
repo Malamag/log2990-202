@@ -79,7 +79,7 @@ describe('SaveFormComponent', () => {
     const SPY = spyOn(component.labels, 'splice');
     component.remove('helle');
     expect(SPY).not.toHaveBeenCalled();
-  })
+  });
   it('should add a label', () => {
     const DUMMY_ELEMENT = document.createElement('input');
     const mockUpEvent: MatChipInputEvent = {
