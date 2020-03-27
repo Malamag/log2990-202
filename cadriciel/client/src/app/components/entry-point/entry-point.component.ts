@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatSnackBar, MatSnackBarConfig} from '@angular/material';
+import { MatDialog, MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { menuItems } from '../../functionality';
+import { ContinueDrawingService } from '../../services/continue-drawing/continue-drawing.service';
 import { ModalWindowService } from '../../services/window-handler/modal-window.service';
 import { GalleryComponent } from '../gallery/gallery.component';
 import { NewDrawComponent } from '../new-draw/new-draw.component';
@@ -17,7 +18,7 @@ export class EntryPointComponent implements OnInit {
   menuItems: object = {};
   winService: ModalWindowService;
 
-  constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {
+  constructor(private snackBar: MatSnackBar, private dialog: MatDialog , private drawing: ContinueDrawingService) {
     this.winService = new ModalWindowService(this.dialog);
     this.menuItems = menuItems;
   }
@@ -46,6 +47,9 @@ export class EntryPointComponent implements OnInit {
     this.winService.openWindow(GalleryComponent);
   }
 
+  continue(): void {
+    this.drawing.continueAutoSaved();
+  }
   execute(shortcutName: string): void {
     switch (shortcutName) {
       case 'Créer': {
@@ -62,8 +66,8 @@ export class EntryPointComponent implements OnInit {
        break;
     }
       case 'Continuer': {
-    // statements;
-    break;
+        this.continue();
+        break;
    }
     default: {
        // statements;

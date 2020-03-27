@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Canvas } from 'src/app/models/canvas.model';
 import { ChoosenColors } from 'src/app/models/choosen-colors.model';
+import { AutoSaveService } from 'src/app/services/auto-save/auto-save.service';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
@@ -12,7 +13,6 @@ import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboa
 import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
-import { AutoSaveService } from 'src/app/services/auto-save/auto-save.service';
 
 @Component({
     selector: 'app-svg-draw',
@@ -21,7 +21,7 @@ import { AutoSaveService } from 'src/app/services/auto-save/auto-save.service';
 })
 export class SvgDrawComponent implements OnInit, AfterViewInit {
     showGrid: boolean;
-
+    save: AutoSaveService;
     constructor(
         private canvBuilder: CanvasBuilderService,
         public interaction: InteractionService,
@@ -229,7 +229,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         });
 
         this.bgroundChangeSubscription();
-        const save = new AutoSaveService(this.interaction, this.doodleFetch);
+        this.save = new AutoSaveService(this.interaction, this.doodleFetch);
     }
 
     reinitGridFromSub(): void {
