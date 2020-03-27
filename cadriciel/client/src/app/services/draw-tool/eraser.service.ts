@@ -219,13 +219,6 @@ export class EraserService extends DrawingTool {
 
             let objOffset : Point = ElementInfo.translate(this.drawing.children[i]);
 
-            /*
-            let objOffset = (this.drawing.children[i] as HTMLElement).style.transform;
-            let s = objOffset ? objOffset.split(',') : '';
-            let objOffsetX = +s[0].replace(/[^\d.-]/g, '');
-            let objOffsetY = +s[1].replace(/[^\d.-]/g, '');
-            */
-
             for (let j = 0; j < firstChild.childElementCount; j++) {
                 let secondChild = firstChild.children[j];
 
