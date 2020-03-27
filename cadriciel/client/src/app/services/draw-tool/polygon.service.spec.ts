@@ -94,35 +94,23 @@ describe('PolygonService', () => {
     });
 
     it('should create a valid polygon svg from one point to another', () => {
-        const POLYGON = service.createPath(ptArr, false);
+        const POLYGON = service.createPath(ptArr, true);
         expect(POLYGON).toContain('<polygon');
     });
 
     it('should change the number of corners of the polygon', () => {
         const CORNERS = 7;
         service.attr.numberOfCorners = CORNERS; // simulated border thickness
-        service.createPath(ptArr, false);
+        service.createPath(ptArr, true);
 
         // tslint:disable-next-line: no-string-literal
         expect(service['corners'].length).toEqual(CORNERS);
     });
-    /*
-        it('should create a rectangle of the correct dimensions from mouse move', () => {
-            const first = new Point(0, 0);
-            const num = 10;
-            const second = new Point(num , num);
-            const add = 5;
-            const rect = service.createPath([first, second], false);
-            const expWidth = `width="${second.x - first.x + add}"`;
-            const expHeigth = `height="${second.y - first.y + add}"`;
-            expect(rect).toContain(expWidth);
-            expect(rect).toContain(expHeigth);
-        });
-    */
+
     it('should create a polygon with the selected border thickness', () => {
         const THICK = 1;
         service.attr.lineThickness = THICK; // simulated border thickness
-        const POLYGON = service.createPath(ptArr, false);
+        const POLYGON = service.createPath(ptArr, true);
         const EXP_THICK = `stroke-width="${THICK}"`;
 
         expect(POLYGON).toContain(EXP_THICK);
@@ -131,14 +119,14 @@ describe('PolygonService', () => {
     it('should create a polygon filled with the selected color', () => {
         const COLOR = primCol;
         service.chosenColor = { primColor: COLOR, secColor: COLOR, backColor: COLOR }; // both prim. and sec.
-        const POLYGON = service.createPath(ptArr, false);
+        const POLYGON = service.createPath(ptArr, true);
 
         expect(POLYGON).toContain(`fill="${COLOR}"`);
     });
 
     it('should create a border of the selected secondary color', () => {
         service.chosenColor = { primColor: primCol, secColor: secCol, backColor: backCol };
-        const POLYGON = service.createPath(ptArr, false);
+        const POLYGON = service.createPath(ptArr, true);
 
         expect(POLYGON).toContain(`stroke="${secCol}"`);
     });
@@ -146,7 +134,7 @@ describe('PolygonService', () => {
     it('should create only an outlined polygon on plottype = 0', () => {
         service.attr.plotType = 0; // init the plot type
         service.chosenColor = { primColor: primCol, secColor: secCol, backColor: backCol };
-        const POLYGON = service.createPath(ptArr, false);
+        const POLYGON = service.createPath(ptArr, true);
 
         expect(POLYGON).toContain(`fill="${'none'}"`); // no color for fill
         expect(POLYGON).toContain(`stroke="${secCol}"`); // secondary color for border fill
@@ -156,7 +144,7 @@ describe('PolygonService', () => {
         service.attr.plotType = 1; // init the plot type
         service.chosenColor = { primColor: primCol, secColor: secCol, backColor: backCol };
 
-        const POLYGON = service.createPath(ptArr, false);
+        const POLYGON = service.createPath(ptArr, true);
 
         expect(POLYGON).toContain(`fill="${primCol}"`); // primary color fill
         expect(POLYGON).toContain(`stroke="${'none'}"`);
@@ -165,7 +153,7 @@ describe('PolygonService', () => {
     it('should create a filled and outlined polygon on plottype = 2', () => {
         service.attr.plotType = 2; // init the plot type
         service.chosenColor = { primColor: primCol, secColor: secCol, backColor: backCol };
-        const POLYGON = service.createPath(ptArr, false);
+        const POLYGON = service.createPath(ptArr, true);
 
         expect(POLYGON).toContain(`fill="${primCol}"`); // no color for fill
         expect(POLYGON).toContain(`stroke="${secCol}"`); // secondary color for border fill
@@ -173,65 +161,69 @@ describe('PolygonService', () => {
 
     it('should not create an polygon if the mouse didnt move', () => {
         const NEW_ARR = [ptA, ptA]; // no movement
-        const POLYGON = service.createPath(NEW_ARR, false);
+        const POLYGON = service.createPath(NEW_ARR, true);
         expect(POLYGON).toEqual('');
     });
 
     it('should be not create a polygon if the path has less than 2 points', () => {
-        const PATH = service.createPath([ptA], false);
+        const PATH = service.createPath([ptA], true);
         expect(PATH).toEqual('');
     });
 
     it('should be named polygon', () => {
-        const PATH = service.createPath(ptArr, false);
+        const PATH = service.createPath(ptArr, true);
         const NAME = 'polygon';
         expect(PATH).toContain(NAME);
     });
 
     it('should align all points inside the perimeter if it exceeds to the left ', () => {
-        service.createPath(ptArr, false);
+        service.createPath(ptArr, true);
 
         // tslint:disable-next-line: no-string-literal
         const POINTS = service['corners'];
-        const OFFSET = 10;
 
+        // Need to assign the values and not the object for the test to work
+        const POINT_A = POINTS[0].x;
+        const POINT_B = POINTS[1].x;
+        const POINT_C = POINTS[2].x;
+
+        const OFFSET = 10;
+        // tslint:disable-next-line: no-string-literal
+        service['startX'] = service['leftPoint'];
         // tslint:disable-next-line: no-string-literal
         service['leftPoint'] = service['leftPoint'] - OFFSET;
         service.alignCorners();
 
-        // tslint:disable-next-line: no-string-literal
-        const NEW_POINTS = service['corners'];
-        let pointsInside = true;
-        for (let i = 0; i < NEW_POINTS.length; i++) {
-            if (NEW_POINTS[i].x !== POINTS[i].x) {
-                pointsInside = false;
-                break;
-            }
-        }
-        expect(pointsInside).toBeTruthy();
+        // Expect alignCorners to have moved the points by the OFFSET amount
+        expect(POINTS[0].x).toEqual(POINT_A + OFFSET);
+        expect(POINTS[1].x).toEqual(POINT_B + OFFSET);
+        expect(POINTS[2].x).toEqual(POINT_C + OFFSET);
+
     });
 
     it('should align all points inside the perimeter if it exceeds to the right ', () => {
-        service.createPath(ptArr, false);
+        service.createPath(ptArr, true);
 
         // tslint:disable-next-line: no-string-literal
         const POINTS = service['corners'];
-        const OFFSET = 10;
 
+        // Need to assign the values and not the object for the test to work
+        const POINT_A = POINTS[0].x;
+        const POINT_B = POINTS[1].x;
+        const POINT_C = POINTS[2].x;
+
+        const OFFSET = 10;
+        // tslint:disable-next-line: no-string-literal
+        service['startX'] = service['rightPoint'];
         // tslint:disable-next-line: no-string-literal
         service['rightPoint'] = service['rightPoint'] + OFFSET;
         service.alignCorners();
 
-        // tslint:disable-next-line: no-string-literal
-        const NEW_POINTS = service['corners'];
-        let pointsInside = true;
-        for (let i = 0; i < NEW_POINTS.length; i++) {
-            if (NEW_POINTS[i].x !== POINTS[i].x) {
-                pointsInside = false;
-                break;
-            }
-        }
-        expect(pointsInside).toBeTruthy();
+        // Expect alignCorners to have moved the points by the OFFSET amount
+        expect(POINTS[0].x).toEqual(POINT_A - OFFSET);
+        expect(POINTS[1].x).toEqual(POINT_B - OFFSET);
+        expect(POINTS[2].x).toEqual(POINT_C - OFFSET);
+
     });
 
     it('should have perimeter width to be dependant of stroke width', () => {
