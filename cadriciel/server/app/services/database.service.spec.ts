@@ -126,7 +126,14 @@ describe('Database service', () => {
         return expect(result).to.have.length(expectedLenght);
     })
     it('should throw an error if trying to delete invalide image', async () => {
-        return expect(() => dbService.deleteImageById('1101')).to.throw();
+        const ERROR = new Error("Impposible de supprimer l'image");
+        try {
+            dbService.deleteImageById('1101');
+        }
+        catch (error) {
+            return expect(error).to.equal(ERROR);
+        }
+        return false;
     })
     //test saveImage()
     it('should expect a lenght of one more after adding an image to test collection', async () => {

@@ -37,6 +37,7 @@ describe('AerosolService', () => {
         service['points'].push(ptA);
         // tslint:disable-next-line: no-string-literal
         service['points'].push(ptB);
+        service['lastPoint'] = new Point(1, 1);
 
     });
 
