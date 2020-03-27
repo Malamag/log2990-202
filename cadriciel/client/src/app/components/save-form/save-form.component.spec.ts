@@ -16,8 +16,13 @@ describe('SaveFormComponent', () => {
   let dFetchStub: any;
   let winService: ModalWindowService;
   let index: IndexService;
+  // tslint:disable-next-line: no-any
+  let fakeAdd: any;
   beforeEach(async(() => {
-
+    fakeAdd = {
+      value: '',
+      input: undefined,
+  };
     dFetchStub = {
       askForDoodle: () => 0,
       getDrawingWithoutGrid: () => 0,
@@ -69,7 +74,12 @@ describe('SaveFormComponent', () => {
     component.remove('test');
     expect(SPY).toHaveBeenCalled();
   });
-
+  it('should not remove the label', () => {
+    component.labels = ['test'];
+    const SPY = spyOn(component.labels, 'splice');
+    component.remove('helle');
+    expect(SPY).not.toHaveBeenCalled();
+  })
   it('should add a label', () => {
     const DUMMY_ELEMENT = document.createElement('input');
     const mockUpEvent: MatChipInputEvent = {
@@ -82,13 +92,9 @@ describe('SaveFormComponent', () => {
   });
 
   it('should not add the label if it contains symbols', () => {
-    const DUMMY_ELEMENT = document.createElement('input');
-    const mockUpEvent: MatChipInputEvent = {
-      input: DUMMY_ELEMENT,
-      value: '!%!@!#!@#!',
-    };
+    component.containsSymbols = true;
     const SPY = spyOn(component.labels, 'push');
-    component.add(mockUpEvent);
+    component.add(fakeAdd);
     expect(SPY).not.toHaveBeenCalled();
   });
 

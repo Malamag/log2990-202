@@ -55,7 +55,7 @@ describe('GalleryComponent', () => {
         fakeAdd = {
             value: '',
             input: undefined,
-        }
+        };
         tagAdd = {
             input: {
                 value: 'hello',
