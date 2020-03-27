@@ -52,7 +52,7 @@ export class ContinueDrawingService {
     const MAX = 10;
     let w = '';
     let h = '';
-    let backColor = '';
+    let backColor = '#ffffff';
     const INNER: string[] = [];
     w = localStorage.getItem(WIDTH) as string;
     h = localStorage.getItem(HEIGHT) as string;
