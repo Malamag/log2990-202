@@ -60,7 +60,7 @@ export class EraserService extends DrawingTool {
 
     // updating on key change
     updateDown(keyboard: KeyboardHandlerService) {
-        // keyboard has no effect on pencil
+        // keyboard has no effect on eraser
     }
 
     // updating on key up
@@ -68,12 +68,12 @@ export class EraserService extends DrawingTool {
         // nothing happens for eraser tool
     }
 
-    // mouse down with pencil in hand
+    // mouse down with eraser in hand
     down(position: Point) {
         // in case we changed tool while the mouse was down
         this.ignoreNextUp = false;
 
-        // the pencil should affect the canvas
+        // the eraser should affect the canvas
         this.isDown = true;
 
         // add the same point twice in case the mouse doesnt move
@@ -86,7 +86,7 @@ export class EraserService extends DrawingTool {
         this.checkIfTouching();
     }
 
-    // mouse up with pencil in hand
+    // mouse up with eraser in hand
     up(position: Point, insideWorkspace: boolean) {
         // in case we changed tool while the mouse was down
         if (!this.ignoreNextUp) {
@@ -170,23 +170,20 @@ export class EraserService extends DrawingTool {
         }
     }
 
-    // mouse move with pencil in hand
+    // mouse move with eraser in hand
     move(position: Point) {
-        // only if the pencil is currently affecting the canvas
-        if (true) {
-            // save mouse position
-            this.currentPath.push(position);
+        // save mouse position
+        this.currentPath.push(position);
 
-            // to generate a square that connects every two points we need 3 points total at any given time [X - 0 - X]
-            while (this.currentPath.length > 3) {
-                this.currentPath.shift();
-            }
-
-            this.updateProgress();
-
-            // look for an item that intersects the eraser brush
-            this.checkIfTouching();
+        // to generate a square that connects every two points we need 3 points total at any given time [X - 0 - X]
+        while (this.currentPath.length > 3) {
+            this.currentPath.shift();
         }
+
+        this.updateProgress();
+
+        // look for an item that intersects the eraser brush
+        this.checkIfTouching();
     }
 
     // when we go from inside to outside the canvas
@@ -199,6 +196,7 @@ export class EraserService extends DrawingTool {
         // nothing happens since we just update the preview
     }
 
+    // handles what happens when the eraser brush is touching an item
     checkIfTouching() {
         // get the canvas offset
         let canvasBox = this.canvas ? this.canvas.getBoundingClientRect() : null;
@@ -313,12 +311,12 @@ export class EraserService extends DrawingTool {
         return touching;
     }
 
-    // mouse doubleClick with pencil in hand
+    // mouse doubleClick with eraser in hand
     doubleClick(position: Point) {
-        // since its down -> up -> down -> up -> doubleClick, nothing more happens for the pencil
+        // since its down -> up -> down -> up -> doubleClick, nothing more happens for the eraser
     }
 
-    // Creates an svg path that connects every points of currentPath with the pencil attributes
+    // Creates an svg path that connects every points of currentPath with the eraser attributes
     createPath(p: Point[]) {
         let s = '';
 
