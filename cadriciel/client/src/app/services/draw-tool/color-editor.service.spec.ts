@@ -1,23 +1,61 @@
 import { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { CanvasInteraction } from './canvas-interaction.service';
 import { ColorEditorService } from './color-editor.service';
+import { ElementInfo } from './element-info.service';
 import { Point } from './point';
-//import { ColorConvertingService } from '../colorPicker/color-converting.service';
-
-describe('ColorEditorService', () => {
-    //let fakeColorConvertingService: ColorConvertingService;
-    let service : ColorEditorService
+// import { ColorConvertingService } from '../colorPicker/color-converting.service';
+const TEST_PT = new Point(1, 1);
+fdescribe('ColorEditorService', () => {
+    // let fakeColorConvertingService: ColorConvertingService;
+    let service: ColorEditorService;
     // tslint:disable-next-line: no-any
     let rdStub: any;
     // tslint:disable-next-line: no-any
     let htmlElementStub: any;
+    // tslint:disable-next-line: no-any
+    let elemStub: any;
+    // tslint:disable-next-line: no-any
+    let childElemStub: any;
+    // tslint:disable-next-line: no-any
+    let classlistStub: any;
+    let ptA: Point;
+    let ptB: Point;
     beforeEach(() => {
+        classlistStub = {
+            contains: () => false,
+            tagName: 'filter'
+        };
+        childElemStub = {
+            innerHTML: 'Hello World',
+            tagName: 'filter',
+            children: [{ classList: classlistStub, tagName: 'filter' }, { classList: classlistStub, tagName: 'rect' }],
+            childElementCount: 2
+
+        };
+        elemStub = {
+            getTotalLength: () => 2, // random value for test purpose
+            isPointInStroke: () => true,
+            isPointInFill: () => true,
+            getAttribute: () => '',
+            getPointAtLength: () => TEST_PT,
+            children: [htmlElementStub, htmlElementStub],
+            childElementCount: 2
+        };
         htmlElementStub = {
             style: {
                 pointerEvents: 'none',
             },
             innerHTML: '',
             getBoundingClientRect: () => 0,
+            firstElementChild: {
+                innerHTML: 'test',
+                firstElementChild: {
+                    innerHTML: 'test2'
+                }
+            },
+            children: [childElemStub, childElemStub],
+            childElementCount: 2
         };
         rdStub = {
             createElement: () => document.createElement('g'),
@@ -28,14 +66,19 @@ describe('ColorEditorService', () => {
         };
         TestBed.configureTestingModule({
             providers: [
+                { provide: Element, useValue: elemStub },
+                { provide: SVGGeometryElement, useValue: elemStub },
                 { provide: HTMLElement, useValue: htmlElementStub },
                 { provide: Boolean, useValue: false },
                 { provide: Number, useValue: 0 },
                 { provide: String, useValue: '' },
                 { provide: Renderer2, useValue: rdStub },
+                { provide: DOMPoint, useValue: TEST_PT }
             ],
         });
         service = TestBed.get(ColorEditorService);
+        ptA = new Point(0, 0);
+        ptB = new Point(1, 1);
     });
 
     it('should be created', () => {
@@ -56,7 +99,7 @@ describe('ColorEditorService', () => {
         service.updateAttributes();
         expect(SPY).toHaveBeenCalled();
     });
-    
+
     it('should add the same point twice to currentPath', () => {
         const SPY = spyOn(service.currentPath, 'push');
         service.checkIfTouching = jasmine.createSpy();
@@ -66,13 +109,13 @@ describe('ColorEditorService', () => {
     it('should call updateProgress on mouse down', () => {
         const SPY = spyOn(service, 'updateProgress');
         service.checkIfTouching = jasmine.createSpy();
-        service.down(new Point(2, 1),true,true);
+        service.down(new Point(2, 1), true, true);
         expect(SPY).toHaveBeenCalled();
     });
 
     it('should call checkIfTouching on mouse down', () => {
         const SPY = spyOn(service, 'checkIfTouching');
-        service.down(new Point(2, 1),true,true);
+        service.down(new Point(2, 1), true, true);
         expect(SPY).toHaveBeenCalled();
     });
 
@@ -178,36 +221,112 @@ describe('ColorEditorService', () => {
     });
 
     // replace name.
-    it('should create a container named eraser-brush', () => {
-        let ptArr : Point[] = [];
-        ptArr.push(new Point(2,3),new Point(2,2));
+    it('should create a container named colorEditor-brush', () => {
+        const ptArr: Point[] = [];
+        // tslint:disable-next-line: no-magic-numbers
+        ptArr.push(new Point(2, 3), new Point(2, 2));
         const PATH = service.createPath(ptArr);
-        expect(PATH).toContain('name = "eraser-brush"');
-      });
-    
-      
+        expect(PATH).toContain('name = "colorEditor-brush"');
+    });
+
     it('should have a fill attribute', () => {
-        let ptArr : Point[] = [];
-        ptArr.push(new Point(2,3),new Point(2,2));
-        service.chosenColor.primColor = 'blue'
+        const ptArr: Point[] = [];
+        // tslint:disable-next-line: no-magic-numbers
+        ptArr.push(new Point(2, 3), new Point(2, 2));
+        service.chosenColor.primColor = 'blue';
         const PATH = service.createPath(ptArr);
         expect(PATH).toContain('fill="blue"');
-      });
+    });
 
-      it('should have a stroke width attribute of 3', () => {
-        let ptArr : Point[] = [];
-        ptArr.push(new Point(2,3),new Point(2,2));
+    it('should have a stroke width attribute of 3', () => {
+        const ptArr: Point[] = [];
+        // tslint:disable-next-line: no-magic-numbers
+        ptArr.push(new Point(2, 3), new Point(2, 2));
         const PATH = service.createPath(ptArr);
         expect(PATH).toContain('stroke-width="3"');
-      });
+    });
 
-      it('should have a stroke attribute', () => {
-        let ptArr : Point[] = [];
-        ptArr.push(new Point(2,3),new Point(2,2));
-        service.chosenColor.secColor = 'blue'
+    it('should have a stroke attribute', () => {
+        const ptArr: Point[] = [];
+        // tslint:disable-next-line: no-magic-numbers
+        ptArr.push(new Point(2, 3), new Point(2, 2));
+        service.chosenColor.secColor = 'blue';
         const PATH = service.createPath(ptArr);
         expect(PATH).toContain('stroke="blue"');
-      });
+    });
 
-      
+    it('should return true if the color editor is touching an element', () => {
+        const TEST_TOUCH = service.checkIfPathIntersection(elemStub, elemStub, 2, new Point(1, 1), true);
+        expect(TEST_TOUCH).toBe(true);
+    });
+
+    it('should call the changeColor method if the mouse is down and the click is touching an element', () => {
+        service.isDown = true;
+        service.inProgress = htmlElementStub;
+        service.currentPath = [ptA, ptB, ptA];
+        service.drawing = htmlElementStub;
+        spyOn(CanvasInteraction, 'getPreciseBorder').and.returnValue([[2, true], [0, true], [1, true], [2, true]]);
+        spyOn(service, 'checkIfPathIntersection').and.returnValue(true);
+        spyOn(Point, 'rectOverlap').and.returnValue(true);
+        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
+        const SPY = spyOn(service, 'changeColor');
+        service.checkIfTouching();
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should not call the changeColor method if the mouse is up and the click is touching an element', () => {
+        service.isDown = false;
+        service.inProgress = htmlElementStub;
+        service.currentPath = [ptA, ptB, ptA];
+        service.drawing = htmlElementStub;
+        spyOn(CanvasInteraction, 'getPreciseBorder').and.returnValue([[2, true], [0, true], [1, true], [2, true]]);
+        spyOn(service, 'checkIfPathIntersection').and.returnValue(true);
+        spyOn(Point, 'rectOverlap').and.returnValue(true);
+        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
+        const SPY = spyOn(service, 'changeColor');
+        service.checkIfTouching();
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should empty the inProgress innerHTML and empty the array when going outside canvas', () => {
+        service.currentPath = [ptA, ptB];
+        service.inProgress.innerHTML = 'test';
+        service.goingOutsideCanvas();
+        expect(service.currentPath).toEqual([]);
+        expect(service.inProgress.innerHTML).toEqual('');
+    });
+
+    it('should shift through the current path if it has too many points on move', () => {
+        service.currentPath = [ptA, ptB, ptA, ptB, ptA];
+        spyOn(service, 'updateProgress').and.returnValue();
+        spyOn(service, 'checkIfTouching').and.returnValue();
+        const SPY = spyOn(service.currentPath, 'shift').and.callThrough();
+        service.move(ptA);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should not call changeFill on left click and filter tagName', () => {
+        elemStub.children = [{ tagName: 'filter' }];
+        elemStub.childElementCount = 1;
+        service.selected = true;
+        service.isRightClick = false;
+        const SPY = spyOn(service, 'changeFill');
+        service.changeColor(elemStub);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not call the translate method if the color editor doesnt overlap an element', () => {
+        service.isDown = false;
+        service.inProgress = htmlElementStub;
+        service.currentPath = [ptA, ptB, ptA];
+        service.drawing = htmlElementStub;
+        spyOn(CanvasInteraction, 'getPreciseBorder').and.returnValue([[2, true], [0, true], [1, true], [2, true]]);
+
+        spyOn(Point, 'rectOverlap').and.returnValue(false);
+
+        const SPY = spyOn(ElementInfo, 'translate');
+        service.checkIfTouching();
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
 });

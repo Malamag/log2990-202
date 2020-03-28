@@ -25,7 +25,8 @@ describe('ToolBoxComponent', () => {
             ctrlKey: true,
             keyCode: Z,
             shiftKey: true,
-            key: 'c'
+            key: 'c',
+            preventDefault: () => 0
         };
 
         TestBed.configureTestingModule({
