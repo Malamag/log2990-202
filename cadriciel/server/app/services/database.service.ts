@@ -23,7 +23,7 @@ export class DatabaseService {
         MongoClient.connect(DATABASE_URL, this.options)
             .then((client: MongoClient) => {
                 this.collection = client.db(DATABASE_NAME).collection(DATABASE_COLLECTION);
-                console.error('connexion ok ');
+                //console.error('connexion ok ');
             })
             .catch(() => {
                 console.error('Erreur de connexion. Terminaison du processus');
@@ -46,9 +46,6 @@ export class DatabaseService {
 
     async getImagesByTags(tags: string): Promise<ImageData[]> {
         const tagsArray = this.stringToArray(tags);
-        if (tags.length === 0) {
-            return this.getAllImages();
-        }
         return this.collection
             .find({})
             .toArray()
@@ -146,65 +143,64 @@ export class DatabaseService {
                 /* nothing to do after findOneAndDelete, .then necessary (empty block) */
             })
             .catch(() => {
-                throw new TypeError("Impposible de supprimer l'image");
+                throw new TypeError("Imposible de supprimer l'image");
             });
     }
 
     async saveImage(imageData: ImageData): Promise<void> {
-        return await this.validateImageData(imageData)
-            .then(async (data) => {
-                let image: ImageData;
+        await this.validateImageData(imageData)
+            .then((data) => {
                 if (data !== null) {
-                    image = data;
-                } else {
-                    // throw new TypeError('Image data is null');
-                    return;
-                }
-                // Convert string (old data) to JSON
-                const jsonData = fs.readFileSync(this.jsonFile);
-                const drawingsList = JSON.parse(jsonData.toString());
-                const jsonObj = { id: image.id, svgElement: image.svgElement };
-                // Add new data to my drawings list
-                drawingsList.drawings.push(jsonObj);
-                // Convert JSON to string
-                const listToJson = JSON.stringify(drawingsList);
-                fs.writeFileSync(this.jsonFile, listToJson);
-                const metadata: MetaData = { id: image.id, name: image.name, tags: image.tags };
-                return await this.collection.insertOne(metadata)
-                    .then(async () => {
-                        return Promise.resolve();
-                    })
-                    .catch((error: Error) => {
-                        throw error;
+                    this.save(data).catch((err) => {
+                        throw err;
                     });
-            });
+                }
+            })
+            .catch((err) => {
+                throw err;
+            })
+    }
+    async save(image: ImageData): Promise<void> {
+        // Convert string (old data) to JSON
+        const jsonData = fs.readFileSync(this.jsonFile);
+        const drawingsList = JSON.parse(jsonData.toString());
+        const jsonObj = { id: image.id, svgElement: image.svgElement };
+        // Add new data to my drawings list
+        drawingsList.drawings.push(jsonObj);
+        // Convert JSON to string
+        const listToJson = JSON.stringify(drawingsList);
+        fs.writeFileSync(this.jsonFile, listToJson);
+        const metadata: MetaData = { id: image.id, name: image.name, tags: image.tags };
+        this.collection.insertOne(metadata).catch(() => {
+            throw new Error('Fail to insert data');
+        });
     }
 
     async validateImageData(imageData: ImageData): Promise<ImageData | null> {
         const MAX_DATA_AMOUNT = 1000;
-        return this.getAllImages()
-            .then((data) => {
+        return await this.getAllImages()
+            .then(async (data) => {
                 if (data.length >= MAX_DATA_AMOUNT) {
-                    // throw new TypeError('Collection is full');
-                    return null;
+                    throw new Error('Collection is full');
+                    //return null;
                 }
                 while (!this.validateId(imageData.id, data)) {
                     // Generate a new id
                     imageData.id = new Date().getUTCMilliseconds() + '';
                 }
                 if (!this.validateName(imageData.name)) {
-                    // throw new TypeError('Empty name');
-                    return null;
+                    throw new Error('Empty name');
+                    //return null;
                 }
                 if (!this.validateTags(imageData.tags)) {
-                    // throw new TypeError('Invalide tags');
-                    return null;
+                    throw new Error('Invalide tags');
+                    //return null;
                 }
                 return imageData;
+
             })
-            .catch((error) => {
-                // return null;
-                throw error;
+            .catch((err) => {
+                throw err//new Error('Validation failure');
             });
     }
 
