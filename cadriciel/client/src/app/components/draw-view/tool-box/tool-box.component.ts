@@ -42,6 +42,7 @@ export class ToolBoxComponent implements OnInit {
     }
     @HostListener('document: keydown', ['$event'])
     updateBoard(event: KeyboardEvent): void {
+        event.preventDefault();
         // keyCode 90 for z
         // tslint:disable-next-line: deprecation
         if (event.ctrlKey && event.keyCode === Z_KEY_CODE) {
