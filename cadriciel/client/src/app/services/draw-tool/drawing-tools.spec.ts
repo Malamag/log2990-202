@@ -102,4 +102,18 @@ describe('drawingTools', () => {
         service.goingInsideCanvas(PT);
         expect(SPY).toHaveBeenCalledWith(PT);
     });
+
+    it('should not call update drawing if the mouse is not down', () => {
+        service.isDown = false;
+        const SPY = spyOn(service, 'updateDrawing');
+        service.goingOutsideCanvas(new Point(0, 0));
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not call down method if the mouse is not down', () => {
+        service.isDown = false;
+        service.down = jasmine.createSpy();
+        service.goingInsideCanvas(new Point(0, 0));
+        expect(service.down).not.toHaveBeenCalled();
+    });
 });

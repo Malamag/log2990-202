@@ -2,7 +2,7 @@ import { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { UndoRedoService } from './undo-redo.service';
 
-fdescribe('UndoRedoService', () => {
+describe('UndoRedoService', () => {
     let service: UndoRedoService;
     // tslint:disable-next-line: no-any
     let drawingStub: any;

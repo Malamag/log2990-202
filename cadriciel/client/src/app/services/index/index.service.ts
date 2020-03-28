@@ -30,8 +30,8 @@ export class IndexService {
         this.http.delete<ImageData>(this.DATABASE_URL + imageId, HTTP_OPTIONS).subscribe(
             (data) => this.displayFeedback('Image supprimée avec succès!'),
             (error) => {
-                this.displayFeedback("Erreur lors de la suppression de l'image");
-                console.log(error);
+                // this.displayFeedback("Erreur lors de la suppression de l'image");
+                // console.log(error);
             }
         );
     }
@@ -49,12 +49,13 @@ export class IndexService {
         this.http.post('http://localhost:3000/database/saveImage', imageData, HTTP_OPTIONS).subscribe(
             (data) => {
                 this.displayFeedback('Image sauvegardée avec succès');
-                console.log(data);
+                // console.log(data);
             },
             (error) => {
-                this.displayFeedback('Erreur lors de la sauvegarde!');
+                // this.displayFeedback('Erreur lors de la sauvegarde!');
 
             }
+
         );
     }
 

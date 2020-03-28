@@ -5,6 +5,8 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
+import { CanvasInteraction } from './canvas-interaction.service';
+import { ElementInfo } from './element-info.service';
 
 const DEFAULTLINETHICKNESS = 5;
 const DEFAULTTEXTURE = 0;
@@ -13,12 +15,15 @@ const DEFAULTTEXTURE = 0;
 })
 export class ColorEditorService extends DrawingTool {
     render: Renderer2;
+
     attr: ToolsAttributes;
 
     canvas: HTMLElement;
 
+    // to change stroke color
     isRightClick: boolean;
 
+    // used for undo-redo
     changedColorOnce: boolean;
 
     constructor(
@@ -42,10 +47,9 @@ export class ColorEditorService extends DrawingTool {
 
         this.render = render;
 
-        this.inProgress.style.pointerEvents = 'none';
-
         this.isRightClick = false;
     }
+
     updateAttributes() {
         this.interaction.$toolsAttributes.subscribe(obj => {
             if (obj) {
@@ -54,24 +58,25 @@ export class ColorEditorService extends DrawingTool {
         });
         this.colorPick.emitColors();
     }
+
     // updating on key change
     updateDown(keyboard: KeyboardHandlerService) {
-        // keyboard has no effect on pencil
+        // keyboard has no effect on color-editor
     }
 
     // updating on key up
     updateUp(keyCode: number) {
-        // nothing happens for eraser tool
+        // nothing happens for color-editor tool
     }
 
-    // mouse down with pencil in hand
+    // mouse down with color-editor in hand
     down(position: Point, insideWorkspace: boolean, isRightClick: boolean) {
         this.isRightClick = isRightClick;
 
         // in case we changed tool while the mouse was down
         this.ignoreNextUp = false;
 
-        // the pencil should affect the canvas
+        // the color-editor should affect the canvas
         this.isDown = true;
 
         // add the same point twice in case the mouse doesnt move
@@ -80,40 +85,46 @@ export class ColorEditorService extends DrawingTool {
 
         this.updateProgress();
 
+        // 
         this.checkIfTouching();
     }
 
-    // mouse up with pencil in hand
+    // mouse up with color-editor in hand
     up(position: Point, insideWorkspace: boolean) {
         // in case we changed tool while the mouse was down
         if (!this.ignoreNextUp) {
-            // the pencil should not affect the canvas
+            // the color-editor should not affect the canvas
             this.isDown = false;
 
+            // save canvas state for undo-redo
             if (this.changedColorOnce) {
                 this.interaction.emitDrawingDone();
             }
+            // reset
             this.changedColorOnce = false;
         }
     }
 
+    // change the color of an element (fill : left click, stroke : right click)
     changeColor(el: Element) {
         if (this.selected) {
-            console.log(this.isRightClick);
+            // iterate on every component of the element
             for (let i = 0; i < el.childElementCount; i++) {
-                let current = el.children[i];
-                if (current.tagName == 'filter') {
+                let itemComponent = el.children[i];
+                // ignore componenent that do not have a color to change
+                if (itemComponent.tagName == 'filter') {
                     continue;
                 }
                 if (this.isRightClick) {
-                    this.changeBorder(current as HTMLElement);
+                    this.changeBorder(itemComponent as HTMLElement);
                 } else {
-                    this.changeFill(current as HTMLElement);
+                    this.changeFill(itemComponent as HTMLElement);
                 }
             }
         }
     }
 
+    // change the stroke color of an element
     changeBorder(el: HTMLElement) {
         if (el.getAttribute('stroke') != this.chosenColor.secColor && el.getAttribute('stroke') != 'none') {
             this.render.setAttribute(el, 'stroke', this.chosenColor.secColor);
@@ -121,6 +132,7 @@ export class ColorEditorService extends DrawingTool {
         }
     }
 
+    // change the fill color of an element
     changeFill(el: HTMLElement) {
         if (el.getAttribute('fill') != this.chosenColor.primColor && el.getAttribute('fill') != 'none') {
             this.render.setAttribute(el, 'fill', this.chosenColor.primColor);
@@ -128,26 +140,27 @@ export class ColorEditorService extends DrawingTool {
         }
     }
 
-    // mouse move with pencil in hand
+    // mouse move with color-editor in hand
     move(position: Point) {
-        // only if the pencil is currently affecting the canvas
-        if (true) {
-            // save mouse position
-            this.currentPath.push(position);
+        // save mouse position
+        this.currentPath.push(position);
 
-            while (this.currentPath.length > 3) {
-                this.currentPath.shift();
-            }
-
-            this.updateProgress();
-
-            this.checkIfTouching();
+        // to generate a square that connects every two points we need 3 points total at any given time [X - 0 - X]
+        while (this.currentPath.length > 3) {
+            this.currentPath.shift();
         }
+
+        this.updateProgress();
+
+        // look for an item that intersects the color-editor brush
+        this.checkIfTouching();
     }
 
     // when we go from inside to outside the canvas
     goingOutsideCanvas() {
-        // nothing happens since we might want to readjust the shape once back in
+        // remove brush preview while outside
+        this.currentPath = [];
+        this.inProgress.innerHTML = '';
     }
 
     // when we go from outside to inside the canvas
@@ -156,77 +169,110 @@ export class ColorEditorService extends DrawingTool {
     }
 
     checkIfTouching() {
-        let w = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x));
-        let h = Math.max(10, Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y));
+        // get the canvas offset
+        let canvasBox = this.canvas ? this.canvas.getBoundingClientRect() : null;
+        let canvOffsetX = canvasBox ? canvasBox.left : 0;
+        let canvOffsetY = canvasBox ? canvasBox.top : 0;
 
+        // compute the color-editor brush dimension
+        let w = Math.max(
+            this.attr.lineThickness,
+            Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x)
+        );
+        let h = Math.max(
+            this.attr.lineThickness,
+            Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y)
+        );
+
+        // it's a square
         let dim = Math.max(w, h);
 
+        let topLeft = new Point(
+            this.currentPath[this.currentPath.length - 1].x - dim / 2,
+            this.currentPath[this.currentPath.length - 1].y - dim / 2,
+        );
+        let bottomRight = new Point(topLeft.x + dim, topLeft.y + dim);
+
+        // iterate every item
         for (let i = this.drawing.childElementCount - 1; i >= 0; i--) {
+
             let touching = false;
-            let firstChild = this.drawing.children[i];
+            // pencil-stroke, line-segments, etc.
+            let fullItem = this.drawing.children[i];
 
-            let objOffset = (this.drawing.children[i] as HTMLElement).style.transform;
-            let s = objOffset ? objOffset.split(',') : '';
-            let objOffsetX = +s[0].replace(/[^\d.-]/g, '');
-            let objOffsetY = +s[1].replace(/[^\d.-]/g, '');
+            // item bounding box
+            let itemBox = CanvasInteraction.getPreciseBorder(fullItem);
+            let itemTopLeft: Point = new Point(itemBox[0][0] - canvOffsetX, itemBox[2][0] - canvOffsetY);
+            let itemBottomRight: Point = new Point(itemBox[1][0] - canvOffsetX, itemBox[3][0] - canvOffsetY);
 
-            for (let j = 0; j < firstChild.childElementCount; j++) {
-                let secondChild = firstChild.children[j];
+            //if the bounding boxes do not overlap, no need for edge detection
+            if (!Point.rectOverlap(topLeft, bottomRight, itemTopLeft, itemBottomRight)) {
+                continue;
+            }
 
-                let width = (secondChild as HTMLElement).getAttribute('stroke-width');
-                let offset = 0;
-                if (width) {
-                    offset = +width;
-                } // only to be able to run the tests
-                else {
-                    offset = offset;
-                }
-                //let dim2 = 3 + offset;
+            // the offset of the current item
+            let objOffset: Point = ElementInfo.translate(fullItem);
 
+            // iterate on every component of the current item for edge detection
+            for (let j = 0; j < fullItem.childElementCount; j++) {
+                let itemComponent = fullItem.children[j];
+
+                // ignore useless or non-shape components
+                if(itemComponent.classList.contains('aerosolPoints')) {break;}
                 if (
-                    secondChild.classList.contains('clone') ||
-                    secondChild.classList.contains('noHighlights') ||
-                    secondChild.tagName == 'filter'
+                    itemComponent.classList.contains('clone') ||
+                    itemComponent.classList.contains('noHighlights') ||
+                    itemComponent.tagName == 'filter'
                 ) {
                     continue;
                 }
 
-                if (this.inProgress.firstElementChild) {
-                    let test = this.inProgress.firstElementChild.firstElementChild as SVGGeometryElement;
-                    let l = test.getTotalLength();
-
-                    let path = secondChild as SVGGeometryElement;
-
-                    for (let v = 0; v < l; v += dim / 10) {
-                        let testPoint = test.getPointAtLength(v);
-                        testPoint.x -= objOffsetX;
-                        testPoint.y -= objOffsetY;
-                        if (
-                            path.isPointInStroke(testPoint) ||
-                            (path.isPointInFill(testPoint) && secondChild.getAttribute('fill') != 'none')
-                        ) {
-                            touching = true;
-                            break;
-                        }
-                    }
+                // check the intersection between the color-editor and the item component
+                if (this.inProgress.firstElementChild && this.inProgress.firstElementChild.firstElementChild) {
+                    let colorEditorElement = this.inProgress.firstElementChild.firstElementChild;
+                    touching = this.checkIfPathIntersection(colorEditorElement, itemComponent, dim / 10, objOffset, touching)
                 }
             }
 
+            // if there is a match
             if (touching) {
                 if (this.isDown) {
-                    this.changeColor(firstChild);
+                    this.changeColor(fullItem);
                 }
                 break;
             }
         }
     }
 
-    // mouse doubleClick with pencil in hand
-    doubleClick(position: Point) {
-        // since its down -> up -> down -> up -> doubleClick, nothing more happens for the pencil
+    // iterate on points that compose the color-editor perimeter and check if they appear in the fill or stroke of the candidate
+    checkIfPathIntersection(colorEditorElement: Element, candidateElement: Element, precision: number, objOffset: Point, touching: boolean) {
+
+        let colorEditorBrush = colorEditorElement as SVGGeometryElement;
+        let colorEditorPerimeter = colorEditorBrush.getTotalLength();
+
+        let candidate = candidateElement as SVGGeometryElement;
+
+        for (let v = 0; v < colorEditorPerimeter; v += precision) {
+            let testPoint = colorEditorBrush.getPointAtLength(v);
+            testPoint.x -= objOffset.x;
+            testPoint.y -= objOffset.y;
+            if (
+                candidate.isPointInStroke(testPoint) ||
+                (candidate.isPointInFill(testPoint) && candidateElement.getAttribute('fill') != 'none')
+            ) {
+                touching = true;
+                break;
+            }
+        }
+        return touching;
     }
 
-    // Creates an svg path that connects every points of currentPath with the pencil attributes
+    // mouse doubleClick with color-editor in hand
+    doubleClick(position: Point) {
+        // since its down -> up -> down -> up -> doubleClick, nothing more happens for the color-editor
+    }
+
+    // Creates an svg path that connects every points of currentPath with the color-editor attributes
     createPath(p: Point[]) {
         let s = '';
 
@@ -236,7 +282,7 @@ export class ColorEditorService extends DrawingTool {
         }
 
         // create a divider
-        s = '<g style="transform: translate(0px, 0px);" name = "eraser-brush">';
+        s = '<g style="transform: translate(0px, 0px);" name = "colorEditor-brush">';
 
         let w = Math.max(10, Math.abs(p[p.length - 1].x - p[0].x));
         let h = Math.max(10, Math.abs(p[p.length - 1].y - p[0].y));

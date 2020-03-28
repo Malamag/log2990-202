@@ -3,9 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { InteractionService } from '../service-interaction/interaction.service';
+import { ElementInfo } from './element-info.service';
 import { EraserService } from './eraser.service';
 import { Point } from './point';
-import { ElementInfo } from './element-info.service';
 
 describe('EraserService', () => {
 
@@ -25,7 +25,7 @@ describe('EraserService', () => {
             },
             innerHTML: '',
             getBoundingClientRect: () => 0,
-            firstElementChild:()=> true
+            firstElementChild: () => true
         };
         rdStub = {
             createElement: () => document.createElement('g'),
@@ -105,7 +105,7 @@ describe('EraserService', () => {
         const SPY = spyOn(service.interaction, 'emitDrawingDone');
         service.erasedSomething = true;
         service.ignoreNextUp = false;
-        service.up(new Point(2, 1), true);
+        service.up(new Point(2, 1), false);
         expect(SPY).toHaveBeenCalled();
     });
 
@@ -254,7 +254,7 @@ describe('EraserService', () => {
 
         service.currentPath.push(new Point(2, 1));
         const SPY = spyOn(service, 'erase');
-        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0,0));
+        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
         spyOn(Point, 'rectOverlap').and.returnValue(true);
         spyOn(service, 'checkIfPathIntersection').and.returnValue(true);
         service.checkIfTouching();

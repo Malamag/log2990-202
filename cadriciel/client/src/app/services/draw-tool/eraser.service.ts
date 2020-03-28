@@ -3,10 +3,10 @@ import { ToolsAttributes } from '../attributes/tools-attribute';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
-import { DrawingTool } from './drawing-tool';
-import { Point } from './point';
 import { CanvasInteraction } from './canvas-interaction.service';
+import { DrawingTool } from './drawing-tool';
 import { ElementInfo } from './element-info.service';
+import { Point } from './point';
 
 const DEFAULT_LINE_THICKNESS = 5;
 const DEFAULT_TEXTURE = 0;
@@ -50,7 +50,7 @@ export class EraserService extends DrawingTool {
     }
 
     updateAttributes() {
-        this.interaction.$toolsAttributes.subscribe(obj => {
+        this.interaction.$toolsAttributes.subscribe((obj) => {
             if (obj) {
                 this.attr = { lineThickness: obj.lineThickness, texture: obj.texture };
             }
@@ -60,7 +60,7 @@ export class EraserService extends DrawingTool {
 
     // updating on key change
     updateDown(keyboard: KeyboardHandlerService) {
-        // keyboard has no effect on pencil
+        // keyboard has no effect on eraser
     }
 
     // updating on key up
@@ -68,12 +68,12 @@ export class EraserService extends DrawingTool {
         // nothing happens for eraser tool
     }
 
-    // mouse down with pencil in hand
+    // mouse down with eraser in hand
     down(position: Point) {
         // in case we changed tool while the mouse was down
         this.ignoreNextUp = false;
 
-        // the pencil should affect the canvas
+        // the eraser should affect the canvas
         this.isDown = true;
 
         // add the same point twice in case the mouse doesnt move
@@ -86,7 +86,7 @@ export class EraserService extends DrawingTool {
         this.checkIfTouching();
     }
 
-    // mouse up with pencil in hand
+    // mouse up with eraser in hand
     up(position: Point, insideWorkspace: boolean) {
         // in case we changed tool while the mouse was down
         if (!this.ignoreNextUp) {
@@ -101,7 +101,7 @@ export class EraserService extends DrawingTool {
             // reset
             this.erasedSomething = false;
             // look for an item that intersects the eraser brush
-            this.checkIfTouching();
+            if (insideWorkspace) { this.checkIfTouching(); }
         }
     }
 
@@ -115,41 +115,41 @@ export class EraserService extends DrawingTool {
 
     // highlights a 'g' tag by adding a clone of it as a new child
     highlight(el: Element) {
-        //make sure that the element is valid and not already a clone
+        // make sure that the element is valid and not already a clone
         if (!(this.selected && el.firstElementChild && !el.firstElementChild.classList.contains('clone'))) {
             return;
         }
 
         // create a clone of the element
-        let clone: Element = this.render.createElement('g', 'http://www.w3.org/2000/svg');
+        const clone: Element = this.render.createElement('g', 'http://www.w3.org/2000/svg');
         (clone as HTMLElement).innerHTML = el.innerHTML;
 
         // iterate on every children of the element
         for (let i = 0; i < el.childElementCount; i++) {
             // remove the ones that should not be highlighted
-            if (el.children[i].classList.contains("invisiblePath")) {
+            if (el.children[i].classList.contains('invisiblePath')) {
                 this.render.removeChild(clone, clone.children[i]);
             }
             // increase the stroke-width of the clone so it can be visible behind the original
-            let originalWidth: string | null = (el.children[i] as HTMLElement).getAttribute('stroke-width');
-            let originalWidthNumber = originalWidth ? +originalWidth : 0;
-            let wider: number = Math.max(10, originalWidthNumber + 10);
+            const originalWidth: string | null = (el.children[i] as HTMLElement).getAttribute('stroke-width');
+            const originalWidthNumber = originalWidth ? +originalWidth : 0;
+            const wider: number = Math.max(10, originalWidthNumber + 10);
             this.render.setAttribute(clone.children[i], 'stroke-width', `${wider}`);
 
             // set the color of the clone
-            let originalStrokeColor: string | null = (el.children[i] as HTMLElement).getAttribute('stroke');
-            let originalFillColor: string | null = (el.children[i] as HTMLElement).getAttribute('fill');
-            let refcolor: string | null = originalStrokeColor != 'none' ? originalStrokeColor : originalFillColor;
+            const originalStrokeColor: string | null = (el.children[i] as HTMLElement).getAttribute('stroke');
+            const originalFillColor: string | null = (el.children[i] as HTMLElement).getAttribute('fill');
+            const refcolor: string | null = originalStrokeColor != 'none' ? originalStrokeColor : originalFillColor;
             // chose the perfect red color for maximum visibility
-            let originalStrokeRGB: [number, number, number] = [0, 0, 0];
+            const originalStrokeRGB: [number, number, number] = [0, 0, 0];
             if (refcolor && refcolor != 'none') {
                 originalStrokeRGB[0] = parseInt(refcolor[1] + refcolor[2], 16);
                 originalStrokeRGB[1] = parseInt(refcolor[3] + refcolor[4], 16);
                 originalStrokeRGB[2] = parseInt(refcolor[5] + refcolor[6], 16);
             }
             // if original has a red value high enough, make it darker
-            let redHighlight: number = 255;
-            let originalTooRed = originalStrokeRGB[0] > (255 / 4) * 3;
+            let redHighlight = 255;
+            const originalTooRed = originalStrokeRGB[0] > (255 / 4) * 3;
             if (originalTooRed) {
                 redHighlight = (originalStrokeRGB[0] / 4) * 3;
             }
@@ -161,7 +161,7 @@ export class EraserService extends DrawingTool {
         this.render.insertBefore(el, clone, el.firstElementChild);
     }
 
-    //unhighlights the element by removing all of his "clone" children
+    // unhighlights the element by removing all of his "clone" children
     unhighlight(el: Element) {
         if (el.firstElementChild) {
             if (el.firstElementChild.classList.contains('clone')) {
@@ -170,28 +170,27 @@ export class EraserService extends DrawingTool {
         }
     }
 
-    // mouse move with pencil in hand
+    // mouse move with eraser in hand
     move(position: Point) {
-        // only if the pencil is currently affecting the canvas
-        if (true) {
-            // save mouse position
-            this.currentPath.push(position);
+        // save mouse position
+        this.currentPath.push(position);
 
-            // to generate a square that connects every two points we need 3 points total at any given time [X - 0 - X]
-            while (this.currentPath.length > 3) {
-                this.currentPath.shift();
-            }
-
-            this.updateProgress();
-
-            // look for an item that intersects the eraser brush
-            this.checkIfTouching();
+        // to generate a square that connects every two points we need 3 points total at any given time [X - 0 - X]
+        while (this.currentPath.length > 3) {
+            this.currentPath.shift();
         }
+
+        this.updateProgress();
+
+        // look for an item that intersects the eraser brush
+        this.checkIfTouching();
     }
 
     // when we go from inside to outside the canvas
     goingOutsideCanvas() {
-        // nothing happens since we might want to readjust the shape once back in
+        // remove brush preview while outside
+        this.currentPath = [];
+        this.inProgress.innerHTML = '';
     }
 
     // when we go from outside to inside the canvas
@@ -199,58 +198,59 @@ export class EraserService extends DrawingTool {
         // nothing happens since we just update the preview
     }
 
+    // handles what happens when the eraser brush is touching an item
     checkIfTouching() {
         // get the canvas offset
-        let canvasBox = this.canvas ? this.canvas.getBoundingClientRect() : null;
-        let canvOffsetX = canvasBox ? canvasBox.left : 0;
-        let canvOffsetY = canvasBox ? canvasBox.top : 0;
+        const canvasBox = this.canvas ? this.canvas.getBoundingClientRect() : null;
+        const canvOffsetX = canvasBox ? canvasBox.left : 0;
+        const canvOffsetY = canvasBox ? canvasBox.top : 0;
 
         // compute the eraser brush dimension
-        let w = Math.max(
+        const w = Math.max(
             this.attr.lineThickness,
             Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x)
         );
-        let h = Math.max(
+        const h = Math.max(
             this.attr.lineThickness,
             Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y)
         );
 
         // it's a square
-        let dim = Math.max(w, h);
+        const dim = Math.max(w, h);
 
-        let topLeft = new Point(
+        const topLeft = new Point(
             this.currentPath[this.currentPath.length - 1].x - dim / 2,
             this.currentPath[this.currentPath.length - 1].y - dim / 2,
         );
-        let bottomRight = new Point(topLeft.x + dim, topLeft.y + dim);
+        const bottomRight = new Point(topLeft.x + dim, topLeft.y + dim);
 
         // iterate every item (do it backwards so no shift is needed when we delete an item)
         for (let i = this.drawing.childElementCount - 1; i >= 0; i--) {
 
             let touching = false;
             // pencil-stroke, line-segments, etc.
-            let fullItem = this.drawing.children[i];
+            const fullItem = this.drawing.children[i];
 
             // item bounding box
-            let itemBox = CanvasInteraction.getPreciseBorder(fullItem);
-            let itemTopLeft: Point = new Point(itemBox[0][0] - canvOffsetX, itemBox[2][0] - canvOffsetY);
-            let itemBottomRight: Point = new Point(itemBox[1][0] - canvOffsetX, itemBox[3][0] - canvOffsetY);
+            const itemBox = CanvasInteraction.getPreciseBorder(fullItem);
+            const itemTopLeft: Point = new Point(itemBox[0][0] - canvOffsetX, itemBox[2][0] - canvOffsetY);
+            const itemBottomRight: Point = new Point(itemBox[1][0] - canvOffsetX, itemBox[3][0] - canvOffsetY);
 
-            //if the bounding boxes do not overlap, no need for edge detection
+            // if the bounding boxes do not overlap, no need for edge detection
             if (!Point.rectOverlap(topLeft, bottomRight, itemTopLeft, itemBottomRight)) {
                 this.unhighlight(fullItem);
                 continue;
             }
 
             // the offset of the current item
-            let objOffset: Point = ElementInfo.translate(fullItem);
+            const objOffset: Point = ElementInfo.translate(fullItem);
 
             // iterate on every component of the current item for edge detection
             for (let j = 0; j < fullItem.childElementCount; j++) {
-                let itemComponent = fullItem.children[j];
+                const itemComponent = fullItem.children[j];
 
                 // ignore useless or non-shape components
-                if(itemComponent.classList.contains('aerosolPoints')) {break;}
+                if (itemComponent.classList.contains('aerosolPoints')) { break; }
                 if (
                     itemComponent.classList.contains('clone') ||
                     itemComponent.classList.contains('noHighlights') ||
@@ -261,8 +261,8 @@ export class EraserService extends DrawingTool {
 
                 // check the intersection between the eraser and the item component
                 if (this.inProgress.firstElementChild && this.inProgress.firstElementChild.firstElementChild) {
-                    let eraserElement = this.inProgress.firstElementChild.firstElementChild;
-                    touching = this.checkIfPathIntersection(eraserElement, itemComponent, dim / 10, objOffset, touching)
+                    const eraserElement = this.inProgress.firstElementChild.firstElementChild;
+                    touching = this.checkIfPathIntersection(eraserElement, itemComponent, dim / 10, objOffset, touching);
                 }
             }
 
@@ -281,9 +281,7 @@ export class EraserService extends DrawingTool {
                     }
                 }
                 break;
-            }
-            // no match
-            else {
+            } else {
                 // nothing should be highlighted
                 this.unhighlight(fullItem);
             }
@@ -293,13 +291,13 @@ export class EraserService extends DrawingTool {
     // iterate on points that compose the eraser perimeter and check if they appear in the fill or stroke of the candidate
     checkIfPathIntersection(eraserElement: Element, candidateElement: Element, precision: number, objOffset: Point, touching: boolean) {
 
-        let eraserBrush = eraserElement as SVGGeometryElement;
-        let eraserPerimeter = eraserBrush.getTotalLength();
+        const eraserBrush = eraserElement as SVGGeometryElement;
+        const eraserPerimeter = eraserBrush.getTotalLength();
 
-        let candidate = candidateElement as SVGGeometryElement;
+        const candidate = candidateElement as SVGGeometryElement;
 
         for (let v = 0; v < eraserPerimeter; v += precision) {
-            let testPoint = eraserBrush.getPointAtLength(v);
+            const testPoint = eraserBrush.getPointAtLength(v);
             testPoint.x -= objOffset.x;
             testPoint.y -= objOffset.y;
             if (
@@ -313,12 +311,12 @@ export class EraserService extends DrawingTool {
         return touching;
     }
 
-    // mouse doubleClick with pencil in hand
+    // mouse doubleClick with eraser in hand
     doubleClick(position: Point) {
-        // since its down -> up -> down -> up -> doubleClick, nothing more happens for the pencil
+        // since its down -> up -> down -> up -> doubleClick, nothing more happens for the eraser
     }
 
-    // Creates an svg path that connects every points of currentPath with the pencil attributes
+    // Creates an svg path that connects every points of currentPath with the eraser attributes
     createPath(p: Point[]) {
         let s = '';
 
@@ -330,16 +328,16 @@ export class EraserService extends DrawingTool {
         // create a divider
         s = '<g style="transform: translate(0px, 0px);" name = "eraser-brush">';
 
-        let w = Math.max(this.attr.lineThickness, Math.abs(p[p.length - 1].x - p[0].x));
-        let h = Math.max(this.attr.lineThickness, Math.abs(p[p.length - 1].y - p[0].y));
+        const w = Math.max(this.attr.lineThickness, Math.abs(p[p.length - 1].x - p[0].x));
+        const h = Math.max(this.attr.lineThickness, Math.abs(p[p.length - 1].y - p[0].y));
 
-        let dim = Math.max(w, h);
+        const dim = Math.max(w, h);
 
         s += `<rect x="${p[p.length - 1].x - dim / 2}" y="${p[p.length - 1].y - dim / 2}"`;
         s += `width="${dim}" height="${dim}"`;
 
-        s += `fill="white"`;
-        s += `stroke-width="1" stroke="black"`;
+        s += 'fill="white"';
+        s += 'stroke-width="1" stroke="black"';
 
         // end the divider
         s += '</g>';
