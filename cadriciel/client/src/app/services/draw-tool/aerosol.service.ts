@@ -41,7 +41,7 @@ export class AerosolService extends DrawingTool {
         this.updateColors();
         this.updateAttributes();
         this.toolChangeListener();
-        this.points = [];
+        this.points = new Array();
         this.insideCanvas = true;
     }
 
@@ -173,10 +173,10 @@ export class AerosolService extends DrawingTool {
         }
 
         // Create a radius dependent of the diameter -> 1/100 of the diameter
-        const DIVIDER = 10;
+        const DIVIDER = 100;
         const POINT_RADIUS = this.attr.diameter / DIVIDER;
         // Create the path of points
-        this.path += ' <path class="aerosolPoints"';
+        this.path += ' <path';
         this.path += ` d="${dString}"`;
         this.path += ` stroke="${this.chosenColor.primColor}"`;
         this.path += ' stroke-linecap="round"';
