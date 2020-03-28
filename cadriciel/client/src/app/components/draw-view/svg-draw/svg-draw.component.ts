@@ -150,7 +150,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Polygone', POLYGON);
         this.toolsContainer.set('Sélectionner', SELECT);
         this.toolsContainer.set('Efface', ERASER);
-        this.toolsContainer.set('ApplicateurCouleur', COLOR_EDITOR);
+        this.toolsContainer.set('Applicateur de couleur', COLOR_EDITOR);
         this.toolsContainer.set('Pipette', PIPETTE);
 
     }
