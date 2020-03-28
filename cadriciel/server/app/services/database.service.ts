@@ -91,11 +91,10 @@ export class DatabaseService {
 
     searchTag(tag: string, tags: string[]): boolean {
         let isFound = false;
-
         for (const myTag of tags) {
             let startPos = 0;
             for (let j: number = tag.length; j <= myTag.length; j++) {
-                isFound = tag === myTag.substring(startPos, j);
+                isFound = (tag === myTag.substring(startPos, j));
                 startPos++;
                 if (isFound) {
                     return isFound;
