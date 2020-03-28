@@ -79,7 +79,7 @@ export class GalleryComponent implements AfterViewInit {
         }
         // resets the input after insertion
         if (INPUT) {
-            INPUT.value = ' ';
+            INPUT.value = '';
         }
         this.tagCtrl.setValue(null);
     }

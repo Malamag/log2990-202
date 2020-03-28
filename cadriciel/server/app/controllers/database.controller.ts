@@ -30,7 +30,6 @@ export class DatabaseController {
         });
 
         this.router.get('/Images/:tags', async (req: Request, res: Response, next: NextFunction) => {
-            console.log(req.params.tags);
             this.databaseService.getImagesByTags(req.params.tags)
                 .then((imageData: ImageData[]) => {
                     res.json(imageData);
