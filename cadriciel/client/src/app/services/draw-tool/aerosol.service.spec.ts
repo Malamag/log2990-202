@@ -294,7 +294,7 @@ describe('AerosolService', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it('should unsubscribe from the tool on change', () => {
+    /*it('should unsubscribe from the tool on change', () => {
         service.subscribe();
         // tslint:disable-next-line: no-string-literal
         const SPY = spyOn(service['sub'], 'unsubscribe');
@@ -305,7 +305,7 @@ describe('AerosolService', () => {
 
         expect(SPY).toHaveBeenCalled();
 
-    });
+    });*/
 
     it('should not unsubscribe from the tool on change if mouse is not down', () => {
         service.subscribe();

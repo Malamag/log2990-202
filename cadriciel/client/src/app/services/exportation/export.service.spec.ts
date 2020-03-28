@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ElementRef } from '@angular/core';
 import { ExportService } from './export.service';
 
-fdescribe('ExportService', () => {
+describe('ExportService', () => {
     let service: ExportService;
     // tslint:disable-next-line: no-any
     let elementStub: any;
