@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ElementRef } from '@angular/core';
 import { ExportService } from './export.service';
 
-describe('ExportService', () => {
+fdescribe('ExportService', () => {
     let service: ExportService;
     // tslint:disable-next-line: no-any
     let elementStub: any;
@@ -82,36 +82,31 @@ describe('ExportService', () => {
     });
 
     it('should load an image in a <canvas> element', () => {
-        const SPY = spyOn(service, 'loadImageInCanvas');
-        service.svgToURL = () => '';
+        const SPY = spyOn(service, 'loadImageInCanvas').and.callThrough();
+        service.svgToURL = () => '../../assets/images/bruit1.png';
 
         service.exportInCanvas(elementStub, nativeElemStub);
         expect(SPY).toHaveBeenCalled();
     });
 
-    it('should draw an image in the <canvas> element on load', () => {
-        const IMG: HTMLImageElement = new Image();
+    it('should draw the image in the context', () => {
 
-        const SPY = spyOn(ctxStub, 'drawImage');
-        IMG.onload = () => {
-            ctxStub.drawImage(IMG, 0, 0);
-        };
-        IMG.dispatchEvent(new Event('load'));
-        service.loadImageInCanvas(IMG, ctxStub, elementStub);
-        expect(SPY).toHaveBeenCalled();
+        const SPY_LOAD = spyOn(service, 'loadImageInCanvas').and.callThrough();
+        service.svgToURL = () => '../../assets/images/bruit1.png';
+
+        service.exportInCanvas(elementStub, nativeElemStub);
+        expect(SPY_LOAD).toHaveBeenCalled();
+
     });
 
-    it('should call canvas exportation if name and type are defined', () => {
-        const IMG: HTMLImageElement = new Image();
-        const NAME = 'fakeName';
-        const TYPE = 'fakeType';
-        const SPY = spyOn(service, 'exportCanvas');
-        IMG.onload = () => {
-            service.exportCanvas(NAME, TYPE, elementStub);
-        };
-        IMG.dispatchEvent(new Event('load'));
-        service.loadImageInCanvas(IMG, ctxStub, elementStub, NAME, TYPE);
-        expect(SPY).toHaveBeenCalled();
+    it('should export the canvas on defined name and type', async () => {
+        const SPY_LOAD = spyOn(service, 'loadImageInCanvas').and.callThrough();
+        const NAME = 'test dessin';
+        const FORMAT = 'png';
+        service.svgToURL = () => '../../assets/images/bruit1.png';
+
+        service.exportInCanvas(elementStub, nativeElemStub, NAME, FORMAT);
+        expect(SPY_LOAD).toHaveBeenCalled();
     });
 
     it('should create and manage a download link using renderer', () => {
@@ -131,5 +126,12 @@ describe('ExportService', () => {
         service.xmlSerializer.serializeToString = jasmine.createSpy().and.returnValue('test');
         const TEST_URL = service.svgToURL(elementStub);
         expect(TEST_URL).toBeDefined();
+    });
+
+    it('should not load image if the context is undefined', () => {
+        nativeElemStub.getContext = () => null;
+        const SPY = spyOn(service, 'loadImageInCanvas');
+        service.exportInCanvas(elementStub, nativeElemStub);
+        expect(SPY).not.toHaveBeenCalled();
     });
 });

@@ -127,7 +127,7 @@ describe('SvgDrawComponent', () => {
     it('the length of the container should be greater than zero', () => {
         component.createTools();
         expect(component.toolsContainer.size).toBeGreaterThan(0);
-    })
+    });
     it('should call window addEventListener', () => {
         window.addEventListener = jasmine.createSpy().and.returnValue(0);
         component.ngAfterViewInit();
@@ -158,7 +158,7 @@ describe('SvgDrawComponent', () => {
         });
         component.ngAfterViewInit();
         expect(SPY_PREVENT).toHaveBeenCalled();
-    })
+    });
     it('should call the mouse up listener on mouse up', () => {
         const SPY_DOWN = spyOn(mouseHandlerStub, 'up');
         window.addEventListener = jasmine.createSpy().and.callFake(() => {
