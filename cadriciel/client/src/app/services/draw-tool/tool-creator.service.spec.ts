@@ -39,7 +39,8 @@ describe('ToolCreator', () => {
     TestBed.configureTestingModule({
       providers: [
         ToolCreator,
-        { provide: HTMLElement, useValue: {} },
+        { provide: HTMLElement, useValue: { getAttribute: () => 0 } },
+        { provide: Element, useValue: { getAttribute: () => 0 } },
         { provide: PencilService, useValue: PEN_SPY },
         { provide: RectangleService, useValue: RECT_SPY },
         { provide: BrushService, useValue: BRUSH_SPY },

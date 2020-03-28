@@ -1,6 +1,6 @@
 .form-container {
-    height: 75vh;
-    width: 30vw;
+    height: auto;
+    width: auto;
 }
 
 canvas {
@@ -17,4 +17,13 @@ canvas {
 
 h1 {
     text-align: center;
+}
+
+#submit-btn {
+    width: 25%;
+}
+
+button {
+    margin-top: 5%;
+    margin-bottom: 5%;
 }
