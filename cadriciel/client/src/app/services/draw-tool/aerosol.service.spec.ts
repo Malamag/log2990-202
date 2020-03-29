@@ -1,10 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
+import { Subscription } from 'rxjs';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { AerosolService } from './aerosol.service';
 import { Point } from './point';
 
 describe('AerosolService', () => {
+    // tslint:disable-next-line: no-any
+    let createInvisPath: any;
+    // tslint:disable-next-line: no-any
+    let genPoint: any;
     let service: AerosolService;
     let ptA: Point;
     let ptB: Point;
@@ -13,8 +18,12 @@ describe('AerosolService', () => {
     let kbServiceStub: any;
     // tslint:disable-next-line: no-any
     let htmlElemStub: any;
-
+    // tslint:disable-next-line: no-any
+    let fakeSub: any;
     beforeEach(() => {
+        fakeSub = {
+            unsubscribe: () => 0
+        };
         htmlElemStub = {
             getAttribute: () => 0
         };
@@ -26,7 +35,8 @@ describe('AerosolService', () => {
                 { provide: Boolean, useValue: false },
                 { provide: Number, useValue: 0 },
                 { provide: String, useValue: '' },
-                { provide: KeyboardHandlerService, kbServiceStub },
+                { provide: KeyboardHandlerService, useValue: kbServiceStub },
+                { provide: Subscription, useValue: fakeSub }
             ],
         });
         ptA = new Point(0, 0);
@@ -39,6 +49,12 @@ describe('AerosolService', () => {
         service['points'].push(ptB);
         // tslint:disable-next-line: no-string-literal
         service['lastPoint'] = new Point(1, 1);
+        // tslint:disable-next-line: no-string-literal
+        service['sub'] = fakeSub;
+        createInvisPath = service.createInvisiblePath;
+        genPoint = service.generatePoint;
+        service.createInvisiblePath = () => 0;
+        service.generatePoint = () => 0;
 
     });
 
@@ -175,6 +191,7 @@ describe('AerosolService', () => {
     it('should create a valid invisible path', () => {
         // tslint:disable-next-line: no-string-literal
         service['path'] = '';
+        service.createInvisiblePath = createInvisPath; // reassign the former function
         service.createInvisiblePath(ptArr);
         // tslint:disable-next-line: no-string-literal
         expect(service['path']).toContain('invisiblePath');
@@ -247,7 +264,7 @@ describe('AerosolService', () => {
         service.down(ptA);  // start aerosol by mouse down
         service.currentPath = ptArr;
         const PATH_SIZE = service.currentPath.length;
-        service.createPath = jasmine.createSpy().and.returnValue(0);
+        spyOn(service, 'createPath').and.returnValue('<path>');
         service.up(ptA);  // mouse up inside workspace
         service.move(ptB);  // Move while mouse up
         service.down(ptA);  // start aerosol again
@@ -292,7 +309,7 @@ describe('AerosolService', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it('should unsubscribe from the tool on change', () => {
+    it('should unsubscribe from the tool on change', async () => {
         service.subscribe();
         // tslint:disable-next-line: no-string-literal
         const SPY = spyOn(service['sub'], 'unsubscribe');
@@ -324,4 +341,19 @@ describe('AerosolService', () => {
         expect(service['insideCanvas']).toBeTruthy();
     });
 
+    it('should generate 8 random points on mouse down with a diameter of 15px', () => {
+        service.isDown = true;
+        const TEST_DIAM = 15;
+        // tslint:disable-next-line: no-string-literal
+        service['attr'].diameter = TEST_DIAM;
+        service.generatePoint = genPoint;
+        const EXP_LEN = 8;
+        // tslint:disable-next-line: no-string-literal
+        service['points'] = [];
+        service.generatePoint();
+        // tslint:disable-next-line: no-string-literal
+        expect(service['points'].length).toEqual(EXP_LEN);
+    });
+
+    // tslint:disable-next-line: max-file-line-count
 });
