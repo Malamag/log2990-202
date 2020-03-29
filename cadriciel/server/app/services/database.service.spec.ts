@@ -3,7 +3,7 @@ import * as inversify from 'inversify';
 
 import Types from '../types';
 
-import { Collection,/* FilterQuery,*/ MongoClient/*, MongoClientOptions, UpdateQuery*/ } from 'mongodb';
+import { Collection, MongoClient } from 'mongodb';
 import { DatabaseService } from './database.service';
 import { expect } from 'chai';
 import { ImageData } from '../../../image-data';
@@ -17,9 +17,6 @@ describe('Database service', () => {
     let dbService: DatabaseService;
     let container: inversify.Container;
     let server = new MMS();
-    //let testCollection: Collection<MetaData>;
-    //let client: MongoClient;
-    //let assert = require('assert');
 
     beforeEach(async () => {
         container = new inversify.Container();
@@ -166,12 +163,8 @@ describe('Database service', () => {
             });
         }
         //const imageData: ImageData = { id: '1001', svgElement: svg, name: 'ok', tags: ['ok'] };
-        /*setTimeout(async () => {
-            return await dbService.saveImage(imageData).catch((error) => {
-                expect(error).to.be.equal(ERROR);
-            });
-        }, 260000)*/
-        //return; 
+
+        //return;
 
     }).timeout(300000);
     it('should not accept an invalide name', async () => {
