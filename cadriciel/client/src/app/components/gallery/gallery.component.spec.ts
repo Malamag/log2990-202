@@ -17,7 +17,7 @@ import { ImageData } from '../../../../../image-data';
 import { SVGData } from '../../../../../svg-data';
 import { GalleryComponent } from './gallery.component';
 
-fdescribe('GalleryComponent', () => {
+describe('GalleryComponent', () => {
     let component: GalleryComponent;
     let fixture: ComponentFixture<GalleryComponent>;
     // tslint:disable-next-line: no-any
