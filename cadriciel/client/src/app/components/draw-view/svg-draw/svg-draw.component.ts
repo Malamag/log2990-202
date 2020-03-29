@@ -66,7 +66,6 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     bgroundChangeSubscription(): void {
         this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
-
             if (choosenColors) {
                 this.backColor = choosenColors.backColor;
                 this.gridService.updateColor(this.backColor);
@@ -76,7 +75,6 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     initCanvas(): void {
         this.canvBuilder.canvSubject.subscribe((canvas: Canvas) => {
-
             if (canvas === undefined || canvas === null) {
                 canvas = this.canvBuilder.getDefCanvas();
             }
@@ -84,7 +82,8 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.width = canvas.canvasWidth;
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
-            if (canvas.wipeAll === true || canvas.wipeAll === undefined) { // if no attribute is specified, the doodle will be w
+            if (canvas.wipeAll === true || canvas.wipeAll === undefined) {
+                // if no attribute is specified, the doodle will be w
                 this.canvBuilder.wipeDraw(this.frameRef);
             }
 
@@ -236,7 +235,6 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.interaction.$canvasAttributes.subscribe((newDoodle: Canvas) => {
             this.gridService.removeGrid();
             this.gridService.initGrid(this.gridRef.nativeElement, newDoodle.canvasWidth, newDoodle.canvasHeight, newDoodle.canvasColor);
-            console.log(newDoodle);
         });
     }
 }
