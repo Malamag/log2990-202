@@ -7,7 +7,7 @@ import { ElementInfo } from './element-info.service';
 import { EraserService } from './eraser.service';
 import { Point } from './point';
 
-fdescribe('EraserService', () => {
+describe('EraserService', () => {
 
     // let fakeInteractionService: InteractionService;
     // let fakeColorPickingService: ColorPickingService;
@@ -29,7 +29,7 @@ fdescribe('EraserService', () => {
             isPointInStroke: (p: Point) => false,
             isPointInFill: (p: Point) => false,
             getAttribute: (s: string) => 'none',
-        }
+        };
         firstChild = {
             firstElementChild: firstChild,
             getTotalLength : () => 1,
@@ -185,22 +185,24 @@ fdescribe('EraserService', () => {
 
     it('should set the attribute (stroke color, stroke width and class) of the clone to highlight', () => {
         service.selected = true;
+        const NB_CALLS = 3;
         const dummyElement: Element = document.createElement('g');
         const childDummyElement: Element = document.createElement('g');
         dummyElement.appendChild(childDummyElement);
         const SPY = spyOn(service.render, 'setAttribute');
         service.highlight(dummyElement);
-        expect(SPY).toHaveBeenCalledTimes(3);
+        expect(SPY).toHaveBeenCalledTimes(NB_CALLS);
     });
 
     it('should get the attribute (stroke color, stroke width and class) of the original item to highlight', () => {
         service.selected = true;
+        const NB_CALLS = 3;
         const dummyElement: Element = document.createElement('g');
         const childDummyElement: Element = document.createElement('g');
         dummyElement.appendChild(childDummyElement);
         const SPY = spyOn(childDummyElement, 'getAttribute');
         service.highlight(dummyElement);
-        expect(SPY).toHaveBeenCalledTimes(3);
+        expect(SPY).toHaveBeenCalledTimes(NB_CALLS);
     });
 
     it('should check if the first child element contains a class name clone', () => {

@@ -1,8 +1,8 @@
+import { F12 } from '@angular/cdk/keycodes';
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { toolsItems } from '../../../functionality';
 import { IconsService } from '../../../services/icons.service';
-import { F12 } from '@angular/cdk/keycodes';
 const Z_KEY_CODE = 90;
 @Component({
     selector: 'app-tool-box',

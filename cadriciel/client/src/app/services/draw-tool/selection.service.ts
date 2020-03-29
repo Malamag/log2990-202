@@ -130,12 +130,12 @@ export class SelectionService extends ShapeService {
                 this.arrows[i] = keyboard.keyCode === this.ARROW_KEY_CODES[i] ? true : this.arrows[i];
             }
         }
-
+        const POS = 3;
         // to handle single 'click' on arrow keys
         const SINGLE_LEFT = this.arrows[0] && !this.singleUseArrows[0];
         const SINGLE_UP = this.arrows[1] && !this.singleUseArrows[1];
         const SINGLE_RIGHT = this.arrows[2] && !this.singleUseArrows[2];
-        const SINGLE_DOWN = this.arrows[3] && !this.singleUseArrows[3];
+        const SINGLE_DOWN = this.arrows[POS] && !this.singleUseArrows[POS];
 
         MoveWithArrows.once(SINGLE_LEFT, SINGLE_UP, SINGLE_RIGHT, SINGLE_DOWN, this);
     }

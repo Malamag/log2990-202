@@ -100,7 +100,7 @@ describe('GalleryComponent', () => {
         const SPY = spyOn(component.tagCtrl, 'setValue');
         component.addTag(tagAdd);
         expect(SPY).toHaveBeenCalled();
-        expect(tagAdd.input.value).toEqual(' ');
+        expect(tagAdd.input.value).toEqual('');
         expect(component.tags.length).toBeGreaterThan(0);
     });
     it('should call renderer functions', () => {
@@ -114,7 +114,7 @@ describe('GalleryComponent', () => {
         const SPY = spyOn(component.tags, 'push');
         component.addTag(fakeAdd);
         expect(SPY).toHaveBeenCalledTimes(0);
-    })
+    });
     it('should throw the error and get all the images', () => {
         const ID = 'hello';
         component.index.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
