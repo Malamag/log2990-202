@@ -56,12 +56,13 @@ describe('RectangleService', () => {
         expect(TEST_SERVICE).toBeTruthy();
     });
 
-    it('should affect is square attribute to true', ()=>{
-        const KEYBOARD = new KeyboardHandlerService()
-        KEYBOARD.shiftDown = true
-        service.updateDown(KEYBOARD)
-        expect(service.isSquare).toBeTruthy()
-    })
+    it('should affect is square attribute to true', () => {
+        const KEYBOARD = new KeyboardHandlerService();
+        KEYBOARD.shiftDown = true;
+        service.updateDown(KEYBOARD);
+        expect(service.isSquare).toBeTruthy();
+    });
+
     it('should set the attributes in the subscription', () => {
         service.interaction.emitFormsAttributes({ plotType: 0, lineThickness: 0, numberOfCorners: 0 });
         const SPY_INTERACTION = spyOn(service.interaction.$formsAttributes, 'subscribe');

@@ -120,7 +120,7 @@ describe('UndoRedoService', () => {
         const SPY = spyOn(service, 'redo');
         service.apply(NAME);
         expect(SPY).not.toHaveBeenCalled();
-    })
+    });
     it('should emit enable disable', () => {
         const EMIT_SPY = spyOn(service.interact, 'emitEnableDisable');
         service.updateButtons();
@@ -132,5 +132,5 @@ describe('UndoRedoService', () => {
         const EMIT_SPY = spyOn(service.interact, 'emitEnableDisable');
         service.updateButtons();
         expect(EMIT_SPY).toHaveBeenCalledWith([false, false]);
-    })
+    });
 });

@@ -11,21 +11,39 @@ describe('EraserService', () => {
 
     // let fakeInteractionService: InteractionService;
     // let fakeColorPickingService: ColorPickingService;
+    // tslint:disable-next-line: prefer-const
     let fakeColorConvertingService: ColorConvertingService;
     let service: EraserService;
     // tslint:disable-next-line: no-any
     let rdStub: any;
     // tslint:disable-next-line: no-any
     let htmlElementStub: any;
-
+    // tslint:disable-next-line: no-any
+    let firstChild: any;
+    // tslint:disable-next-line: no-any
+    let fakeChild: any;
     beforeEach(() => {
+        fakeChild = {
+            getTotalLength : () => 1,
+            getPointAtLength: (v: number) => new Point(1, 1),
+            isPointInStroke: (p: Point) => false,
+            isPointInFill: (p: Point) => false,
+            getAttribute: (s: string) => 'none',
+        };
+        firstChild = {
+            firstElementChild: firstChild,
+            getTotalLength : () => 1,
+            getPointAtLength: (v: number) => new Point(1, 1),
+            isPointInStroke: (p: Point) => true,
+            isPointInFill: (p: Point) => true,
+        };
         htmlElementStub = {
             style: {
                 pointerEvents: 'none',
             },
             innerHTML: '',
             getBoundingClientRect: () => 0,
-            firstElementChild: () => true
+            firstElementChild: firstChild,
         };
         rdStub = {
             createElement: () => document.createElement('g'),
@@ -167,22 +185,24 @@ describe('EraserService', () => {
 
     it('should set the attribute (stroke color, stroke width and class) of the clone to highlight', () => {
         service.selected = true;
+        const NB_CALLS = 3;
         const dummyElement: Element = document.createElement('g');
         const childDummyElement: Element = document.createElement('g');
         dummyElement.appendChild(childDummyElement);
         const SPY = spyOn(service.render, 'setAttribute');
         service.highlight(dummyElement);
-        expect(SPY).toHaveBeenCalledTimes(3);
+        expect(SPY).toHaveBeenCalledTimes(NB_CALLS);
     });
 
     it('should get the attribute (stroke color, stroke width and class) of the original item to highlight', () => {
         service.selected = true;
+        const NB_CALLS = 3;
         const dummyElement: Element = document.createElement('g');
         const childDummyElement: Element = document.createElement('g');
         dummyElement.appendChild(childDummyElement);
         const SPY = spyOn(childDummyElement, 'getAttribute');
         service.highlight(dummyElement);
-        expect(SPY).toHaveBeenCalledTimes(3);
+        expect(SPY).toHaveBeenCalledTimes(NB_CALLS);
     });
 
     it('should check if the first child element contains a class name clone', () => {
@@ -212,14 +232,14 @@ describe('EraserService', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    /* it('should remove the first element of the current path and return it while the length of the current path is above 3', () => {
+    it('should remove the first element of the current path and return it while the length of the current path is above 3', () => {
         const SPY = spyOn(service.currentPath, 'shift');
-        service.currentPath.push(new Point(3,2),new Point(3,4),new Point(3,2),new Point(3,4))
-        //console.log(service.currentPath);
-        service.move(new Point(2, 3));
         service.checkIfTouching = jasmine.createSpy();
-        expect(SPY).toHaveBeenCalledTimes(2);
-    });  */
+        const Y = 3;
+        service.currentPath = [new Point(1, 0), new Point(1, 2)];
+        service.move(new Point(2, Y));
+        expect(SPY).toHaveBeenCalled();
+    });
 
     it('should call updateProgress on mouse move', () => {
         const SPY = spyOn(service, 'updateProgress');
@@ -260,5 +280,92 @@ describe('EraserService', () => {
         service.checkIfTouching();
         expect(SPY).toHaveBeenCalled();
     });
+    it('should unhighlight the first child if touching and on mouse down', () => {
+        service.isDown = true;
+        const dummyElement: Element = document.createElement('g');
+        const childDummyElement: Element = document.createElement('g');
+        const grandChildDummyElement: Element = document.createElement('g');
+        childDummyElement.appendChild(grandChildDummyElement);
+        dummyElement.appendChild(childDummyElement);
+        service.drawing = dummyElement as HTMLElement;
 
+        spyOn(htmlElementStub, 'firstElementChild');
+
+        service.currentPath.push(new Point(2, 1));
+        const SPY = spyOn(service, 'unhighlight');
+        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
+        spyOn(Point, 'rectOverlap').and.returnValue(false);
+        spyOn(service, 'checkIfPathIntersection').and.returnValue(true);
+        service.checkIfTouching();
+        expect(SPY).toHaveBeenCalled();
+    });
+    it('should erase the first child if touching and on mouse up', () => {
+        service.isDown = false;
+        const dummyElement: Element = document.createElement('g');
+        const childDummyElement: Element = document.createElement('g');
+        const grandChildDummyElement: Element = document.createElement('g');
+        const secondChildDummyElement: Element = document.createElement('g');
+        childDummyElement.appendChild(grandChildDummyElement);
+        dummyElement.appendChild(childDummyElement);
+        dummyElement.appendChild(secondChildDummyElement);
+        service.drawing = dummyElement as HTMLElement;
+
+        spyOn(htmlElementStub, 'firstElementChild');
+
+        service.currentPath.push(new Point(2, 1));
+        const UNHEIGHLIGHT_SPY = spyOn(service, 'unhighlight');
+        const SPY = spyOn(service, 'highlight');
+        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
+        spyOn(Point, 'rectOverlap').and.returnValue(true);
+        spyOn(service, 'checkIfPathIntersection').and.returnValue(true);
+        service.checkIfTouching();
+        expect(SPY).toHaveBeenCalled();
+        expect(UNHEIGHLIGHT_SPY).toHaveBeenCalled();
+    });
+    it('should unhighlight if not touching', () => {
+        service.isDown = true;
+        const dummyElement: Element = document.createElement('g');
+        const childDummyElement: Element = document.createElement('g');
+        const grandChildDummyElement: Element = document.createElement('g');
+        childDummyElement.appendChild(grandChildDummyElement);
+        dummyElement.appendChild(childDummyElement);
+        service.drawing = dummyElement as HTMLElement;
+
+        spyOn(htmlElementStub, 'firstElementChild');
+
+        service.currentPath.push(new Point(2, 1));
+        const SPY = spyOn(service, 'unhighlight');
+        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
+        spyOn(Point, 'rectOverlap').and.returnValue(true);
+        spyOn(service, 'checkIfPathIntersection').and.returnValue(false);
+        service.checkIfTouching();
+        expect(SPY).toHaveBeenCalled();
+    });
+    it('should return in intersection', () => {
+        let TOUCHING = false;
+        TOUCHING = service.checkIfPathIntersection(firstChild, firstChild, 1, new Point(0, 0), TOUCHING);
+        expect(TOUCHING).toBeTruthy();
+    });
+    it('should not return in intersection', () => {
+        let TOUCHING = false;
+        TOUCHING = service.checkIfPathIntersection(firstChild, fakeChild, 1, new Point(0, 0), TOUCHING);
+        expect(TOUCHING).toBeFalsy();
+    });
+    it('should return an empty string', () => {
+        const POINTS_CONTAINER = [new Point(0, 0)];
+        const RET = service.createPath(POINTS_CONTAINER);
+        expect(RET).toEqual('');
+    });
+    it('should contain a g tag', () => {
+        const POINTS_CONTAINER = [new Point(0, 0), new Point(1, 1)];
+        const EXPECTED_CONTAIN = '<g';
+        const RET = service.createPath(POINTS_CONTAINER);
+        expect(RET).toContain(EXPECTED_CONTAIN);
+    });
+    it('should empty the cyrrent path container', () => {
+        service.currentPath = [new Point(1, 1)];
+        service.goingOutsideCanvas();
+        expect(service.currentPath).toEqual([]);
+    });
+// tslint:disable-next-line: max-file-line-count
 });

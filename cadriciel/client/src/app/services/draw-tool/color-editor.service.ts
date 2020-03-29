@@ -171,6 +171,7 @@ export class ColorEditorService extends DrawingTool {
 
     checkIfTouching(): void {
         // get the canvas offset
+        const DIV = 10;
         const canvasBox = this.canvas ? this.canvas.getBoundingClientRect() : null;
         const canvOffsetX = canvasBox ? canvasBox.left : 0;
         const canvOffsetY = canvasBox ? canvasBox.top : 0;
@@ -201,9 +202,10 @@ export class ColorEditorService extends DrawingTool {
             // pencil-stroke, line-segments, etc.
             const fullItem = this.drawing.children[i];
             // item bounding box
+            const POS = 3;
             const itemBox = CanvasInteraction.getPreciseBorder(fullItem);
             const itemTopLeft: Point = new Point(itemBox[0][0] - canvOffsetX, itemBox[2][0] - canvOffsetY);
-            const itemBottomRight: Point = new Point(itemBox[1][0] - canvOffsetX, itemBox[3][0] - canvOffsetY);
+            const itemBottomRight: Point = new Point(itemBox[1][0] - canvOffsetX, itemBox[POS][0] - canvOffsetY);
             // if the bounding boxes do not overlap, no need for edge detection
             if (!Point.rectOverlap(topLeft, bottomRight, itemTopLeft, itemBottomRight)) {
                 continue;
@@ -227,7 +229,7 @@ export class ColorEditorService extends DrawingTool {
                 // check the intersection between the color-editor and the item component
                 if (this.inProgress.firstElementChild && this.inProgress.firstElementChild.firstElementChild) {
                     const colorEditorElement = this.inProgress.firstElementChild.firstElementChild;
-                    touching = this.checkIfPathIntersection(colorEditorElement, itemComponent, dim / 10, objOffset, touching);
+                    touching = this.checkIfPathIntersection(colorEditorElement, itemComponent, dim / DIV, objOffset, touching);
 
                 }
             }
@@ -286,9 +288,9 @@ export class ColorEditorService extends DrawingTool {
 
         // create a divider
         s = '<g style="transform: translate(0px, 0px);" name = "colorEditor-brush">';
-
-        const w = Math.max(10, Math.abs(p[p.length - 1].x - p[0].x));
-        const h = Math.max(10, Math.abs(p[p.length - 1].y - p[0].y));
+        const WIDTH = 10;
+        const w = Math.max(WIDTH, Math.abs(p[p.length - 1].x - p[0].x));
+        const h = Math.max(WIDTH, Math.abs(p[p.length - 1].y - p[0].y));
 
         const dim = Math.max(w, h);
 
