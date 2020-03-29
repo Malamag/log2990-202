@@ -255,7 +255,6 @@ describe('AerosolService', () => {
         // it shouldn't have taken the path before the mouse down
         expect(PATH_SIZE).toEqual(service.currentPath.length);
         service.up(ptA);
-
     });
 
     it('should not update path when the mouse is moved without being clicked outside the canvas', () => {
@@ -271,7 +270,6 @@ describe('AerosolService', () => {
         // There shouldn't be more points since we moved OUTSIDE the canvas
         expect(PATH_SIZE).toEqual(service.currentPath.length);
         service.up(ptA);
-
     });
 
     it('should not make the mouse clicked when going outside the canvas', () => {
@@ -294,7 +292,7 @@ describe('AerosolService', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    /*it('should unsubscribe from the tool on change', () => {
+    it('should unsubscribe from the tool on change', () => {
         service.subscribe();
         // tslint:disable-next-line: no-string-literal
         const SPY = spyOn(service['sub'], 'unsubscribe');
@@ -304,10 +302,9 @@ describe('AerosolService', () => {
         window.dispatchEvent(new Event('toolChange'));
 
         expect(SPY).toHaveBeenCalled();
+    });
 
-    });*/
-
-    it('should not unsubscribe from the tool on change if mouse is not down', () => {
+    it('should not unsubscribe on tool change if mouse is not down', () => {
         service.subscribe();
         // tslint:disable-next-line: no-string-literal
         const SPY = spyOn(service['sub'], 'unsubscribe');
@@ -315,9 +312,16 @@ describe('AerosolService', () => {
         service.isDown = false;
         service.toolChangeListener();
         window.dispatchEvent(new Event('toolChange'));
-
         expect(SPY).not.toHaveBeenCalled();
+    });
 
+    it('should reinitialize insideCanvas on tool change', () => {
+        service.isDown = true;
+        service.toolChangeListener();
+        window.dispatchEvent(new Event('toolChange'));
+
+        // tslint:disable-next-line: no-string-literal
+        expect(service['insideCanvas']).toBeTruthy();
     });
 
 });
