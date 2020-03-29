@@ -1,11 +1,13 @@
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatAutocompleteModule, MatCardModule,
-     MatChipsModule, MatDialogModule,
-      MatFormFieldModule, MatIconModule,
-       MatInputModule, MatProgressSpinnerModule,
-        MatSelectModule, MatSnackBarModule } from '@angular/material';
+import {
+    MatAutocompleteModule, MatCardModule,
+    MatChipsModule, MatDialogModule,
+    MatFormFieldModule, MatIconModule,
+    MatInputModule, MatProgressSpinnerModule,
+    MatSelectModule, MatSnackBarModule
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -15,7 +17,7 @@ import { ImageData } from '../../../../../image-data';
 import { SVGData } from '../../../../../svg-data';
 import { GalleryComponent } from './gallery.component';
 
-describe('GalleryComponent', () => {
+fdescribe('GalleryComponent', () => {
     let component: GalleryComponent;
     let fixture: ComponentFixture<GalleryComponent>;
     // tslint:disable-next-line: no-any
@@ -127,8 +129,10 @@ describe('GalleryComponent', () => {
         component.index.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
         const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const SVG = component.render.createElement('div');
-        const DATA: ShownData = { id: '570', svgElement: SVG, name: 'welcome', tags: ['hello', 'new'],
-         data:  SVG_DATA, width: +SVG_DATA.width, height: +SVG_DATA.height};
+        const DATA: ShownData = {
+            id: '570', svgElement: SVG, name: 'welcome', tags: ['hello', 'new'],
+            data: SVG_DATA, width: +SVG_DATA.width, height: +SVG_DATA.height
+        };
         component.shownDrawings = [DATA];
         const SPY = spyOn(component.shownDrawings, 'splice');
         component.delete(ID);
@@ -139,8 +143,10 @@ describe('GalleryComponent', () => {
         component.index.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
         const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const SVG = component.render.createElement('div');
-        const DATA: ShownData = { id: '570', svgElement: SVG, name: 'welcome', tags: ['hello', 'new'],
-         data:  SVG_DATA, width: +SVG_DATA.width, height: +SVG_DATA.height};
+        const DATA: ShownData = {
+            id: '570', svgElement: SVG, name: 'welcome', tags: ['hello', 'new'],
+            data: SVG_DATA, width: +SVG_DATA.width, height: +SVG_DATA.height
+        };
         component.shownDrawings = [DATA];
         const SPY = spyOn(component.shownDrawings, 'splice');
         component.delete(ID);
@@ -275,5 +281,19 @@ describe('GalleryComponent', () => {
         component.createSVG(TEST_DATA);
         expect(SPY).toHaveBeenCalledTimes(2);
 
+    });
+
+    it('should slice the possible tags array if the tag is undefined', () => {
+        const SPY = spyOn(component.possibleTags, 'slice');
+        component.addTag(fakeAdd);
+        component.tagCtrl.setValue(undefined);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should call the filtermethod if the tag is defined', () => {
+        const SPY = spyOn(component, 'filter');
+        component.addTag(tagAdd);
+        component.tagCtrl.setValue(tagAdd);
+        expect(SPY).toHaveBeenCalled();
     });
 });

@@ -2,7 +2,7 @@ import { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { UndoRedoService } from './undo-redo.service';
 
-fdescribe('UndoRedoService', () => {
+describe('UndoRedoService', () => {
     let service: UndoRedoService;
     // tslint:disable-next-line: no-any
     let drawingStub: any;
@@ -140,6 +140,8 @@ fdescribe('UndoRedoService', () => {
         const SPY = spyOn(service.undone, 'push').and.callThrough();
         service.undo();
         expect(SPY).not.toHaveBeenCalled();
+        service.undone = []; // avoids interfering with other tests
+        service.done = [];
     });
 
     it('should not push in the done array if the element is undefined', () => {
@@ -148,5 +150,7 @@ fdescribe('UndoRedoService', () => {
         const SPY = spyOn(service.done, 'push').and.callThrough();
         service.redo();
         expect(SPY).not.toHaveBeenCalled();
+        service.undone = [];
+        service.done = [];
     });
 });
