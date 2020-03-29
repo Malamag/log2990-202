@@ -1,22 +1,19 @@
+import { E, G, O, S } from '@angular/cdk/keycodes';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-    MatButtonModule,
-    MatDialog,
-    MatIconModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatToolbarModule,
-    MatTooltipModule,
+    MatButtonModule, MatDialog,
+    MatIconModule, MatSliderModule,
+    MatSlideToggleModule, MatToolbarModule, MatTooltipModule
 } from '@angular/material';
-
-import { E, G, O } from '@angular/cdk/keycodes';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
-import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ExportFormComponent } from '../../export-form/export-form.component';
 import { NewDrawComponent } from '../../new-draw/new-draw.component';
+import { SaveFormComponent } from '../../save-form/save-form.component';
 import { OptionBarComponent } from './option-bar.component';
 
 describe('OptionBarComponent', () => {
@@ -50,7 +47,8 @@ describe('OptionBarComponent', () => {
 
         TestBed.configureTestingModule({
             declarations: [OptionBarComponent],
-            imports: [MatButtonModule, MatToolbarModule, MatIconModule, MatTooltipModule, MatSlideToggleModule, MatSliderModule],
+            imports: [MatButtonModule, MatToolbarModule, MatIconModule, MatTooltipModule, MatSlideToggleModule,
+                MatSliderModule, RouterTestingModule, BrowserAnimationsModule],
             providers: [
                 { provide: MatDialog },
                 { provide: ModalWindowService, useValue: winServiceStub },
@@ -75,93 +73,86 @@ describe('OptionBarComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should add observers on construction', () => {
-        window.addEventListener = jasmine.createSpy().and.callThrough();
-        const TEST_SERVICE = new OptionBarComponent(winServiceStub, new InteractionService(), new KeyboardHandlerService(), gridRenderStub);
-        expect(TEST_SERVICE).toBeTruthy();
-        expect(window.addEventListener).toHaveBeenCalled();
-    });
-
     it('should open the new form modal window on ctrl+o', () => {
         fakeKbEvent.keyCode = O; // ctrldown already true
-        const spy = spyOn(component, 'openNewDrawForm');
+        const SPY = spyOn(component, 'openNewDrawForm');
         component.setShortcutEvent(fakeKbEvent);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should open a modal window for the user guide', () => {
         component.winService.openWindow = () => 0; // fake window opener
-        const spy = spyOn(component.winService, 'openWindow');
+        const SPY = spyOn(component.winService, 'openWindow');
         component.openUserGuide();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should emit a boolean using the observer', () => {
-        const spy = spyOn(component.interaction, 'emitCancel');
+        const SPY = spyOn(component.interaction, 'emitCancel');
         component.sendSigKill();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should open a modal for the new draw form window', () => {
-        const spyObj: jasmine.SpyObj<OptionBarComponent> = jasmine.createSpyObj('OptionBarComponent', ['openNewDrawForm']);
-        spyObj.openNewDrawForm.and.callFake(() => {
+        const SPY_OBJ: jasmine.SpyObj<OptionBarComponent> = jasmine.createSpyObj('OptionBarComponent', ['openNewDrawForm']);
+        SPY_OBJ.openNewDrawForm.and.callFake(() => {
             component.winService.openWindow(NewDrawComponent); //  to skip the confirm window
         });
-        const spy = spyOn(component.winService, 'openWindow');
+        const SPY = spyOn(component.winService, 'openWindow');
         component.openNewDrawForm();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should call a new draw form on shortcut', () => {
-        const spy = spyOn(component, 'openNewDrawForm');
+        const SPY = spyOn(component, 'openNewDrawForm');
         component.setShortcutEvent(fakeKbEvent);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should open a modal for the export form window', () => {
-        const spyObj: jasmine.SpyObj<OptionBarComponent> = jasmine.createSpyObj('OptionBarComponent', ['openExportForm']);
-        spyObj.openExportForm.and.callFake(() => {
+        const SPY_OBJ: jasmine.SpyObj<OptionBarComponent> = jasmine.createSpyObj('OptionBarComponent', ['openExportForm']);
+        SPY_OBJ.openExportForm.and.callFake(() => {
             component.winService.openWindow(ExportFormComponent); //  to skip the confirm window
         });
-        const spy = spyOn(component.winService, 'openWindow');
+        const SPY = spyOn(component.winService, 'openWindow');
         component.openNewDrawForm();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should not open the new draw form on negative confimation', () => {
         window.confirm = jasmine.createSpy().and.returnValue(false);
 
-        const spy = spyOn(component.winService, 'openWindow');
+        const SPY = spyOn(component.winService, 'openWindow');
         component.openNewDrawForm();
-        expect(spy).not.toHaveBeenCalled();
+        expect(SPY).not.toHaveBeenCalled();
     });
 
     it('should open the new draw form on positive confimation', () => {
         window.confirm = jasmine.createSpy().and.returnValue(true);
 
-        const spy = spyOn(component.winService, 'openWindow');
+        const SPY = spyOn(component.winService, 'openWindow');
         component.openNewDrawForm();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should call the window handler method to open the export form', () => {
-        const spy = spyOn(component.winService, 'openWindow');
+        const SPY = spyOn(component.winService, 'openWindow');
         component.openExportForm();
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should call grid toggle when G is pressed', () => {
         fakeKbEvent.keyCode = G;
-        const spy = spyOn(component, 'toggleGrid');
+        const SPY = spyOn(component, 'toggleGrid');
         component.setShortcutEvent(fakeKbEvent);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should open the exportationForm on ctrl+e', () => {
         fakeKbEvent.keyCode = E; // ctrldown already true
-        const spy = spyOn(component, 'openExportForm');
+        const SPY = spyOn(component, 'openExportForm');
         component.setShortcutEvent(fakeKbEvent);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should call the grid spacing update with proper increment when numpad PLUS is pressed', () => {
@@ -171,9 +162,9 @@ describe('OptionBarComponent', () => {
         component.stepVal = BASE_VAL;
         const SPACE_ADD = 5;
 
-        const spy = spyOn(component.gridService, 'updateSpacing');
+        const SPY = spyOn(component.gridService, 'updateSpacing');
         component.setShortcutEvent(fakeKbEvent);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
         expect(component.stepVal).toEqual(BASE_VAL + SPACE_ADD);
     });
 
@@ -184,9 +175,9 @@ describe('OptionBarComponent', () => {
         component.stepVal = BASE_VAL;
         const SPACE_MINUS = 5;
 
-        const spy = spyOn(component.gridService, 'updateSpacing');
+        const SPY = spyOn(component.gridService, 'updateSpacing');
         component.setShortcutEvent(fakeKbEvent);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
         expect(component.stepVal).toEqual(BASE_VAL - SPACE_MINUS);
     });
 
@@ -196,9 +187,9 @@ describe('OptionBarComponent', () => {
         fakeKbEvent.keyCode = DASH;
         const BASE_VAL = 30;
         component.stepVal = BASE_VAL;
-        const spy = spyOn(component.gridService, 'updateSpacing');
+        const SPY = spyOn(component.gridService, 'updateSpacing');
         component.setShortcutEvent(fakeKbEvent);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should call the grid spacing update when shift and equal are pressed (+ sign)', () => {
@@ -207,9 +198,9 @@ describe('OptionBarComponent', () => {
         fakeKbEvent.keyCode = EQUAL;
         const BASE_VAL = 30;
         component.stepVal = BASE_VAL;
-        const spy = spyOn(component.gridService, 'updateSpacing');
+        const SPY = spyOn(component.gridService, 'updateSpacing');
         component.setShortcutEvent(fakeKbEvent);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should not allow increments when max spacing is reached', () => {
@@ -218,9 +209,9 @@ describe('OptionBarComponent', () => {
         component.stepVal = VALUE;
         const NUMPAD_PLUS = 107;
         fakeKbEvent.keyCode = NUMPAD_PLUS;
-        const spy = spyOn(component.gridService, 'updateSpacing');
+        const SPY = spyOn(component.gridService, 'updateSpacing');
         component.setShortcutEvent(fakeKbEvent);
-        expect(spy).not.toHaveBeenCalled();
+        expect(SPY).not.toHaveBeenCalled();
     });
 
     it('should not allow decrements when min spacing is reached', () => {
@@ -229,47 +220,52 @@ describe('OptionBarComponent', () => {
         component.stepVal = VALUE;
         const NUMPAD_MINUS = 109;
         fakeKbEvent.keyCode = NUMPAD_MINUS;
-        const spy = spyOn(component.gridService, 'updateSpacing');
+        const SPY = spyOn(component.gridService, 'updateSpacing');
         component.setShortcutEvent(fakeKbEvent);
-        expect(spy).not.toHaveBeenCalled();
+        expect(SPY).not.toHaveBeenCalled();
     });
 
     it('should toggle the grid boolean and call the service toggle method', () => {
         component.gridSelected = true;
-        const spy = spyOn(component.gridService, 'toggleGridVisibility');
+        const SPY = spyOn(component.gridService, 'toggleGridVisibility');
         component.toggleGrid();
         expect(component.gridSelected).toBeFalsy();
-        expect(spy).toHaveBeenCalledWith(false);
+        expect(SPY).toHaveBeenCalledWith(false);
     });
 
     it('should call the grid service spacing update', () => {
-        const spy = spyOn(component.gridService, 'updateSpacing');
+        const SPY = spyOn(component.gridService, 'updateSpacing');
         const VAL = 50;
         component.stepVal = VAL;
         component.updateSpacing();
-        expect(spy).toHaveBeenCalledWith(VAL);
+        expect(SPY).toHaveBeenCalledWith(VAL);
     });
 
     it('should call the grid service alpha update', () => {
-        const spy = spyOn(component.gridService, 'updateTransparency');
+        const SPY = spyOn(component.gridService, 'updateTransparency');
         const ALPHA_VAL = 50;
         component.alphaVal = ALPHA_VAL;
         component.updateAlpha();
-        expect(spy).toHaveBeenCalledWith(ALPHA_VAL);
+        expect(SPY).toHaveBeenCalledWith(ALPHA_VAL);
     });
 
-    it('should set the shortcut on keyboard event', () => {
-        const spy = spyOn(component, 'setShortcutEvent');
-        const TEST_COMPONENT = new OptionBarComponent(winServiceStub, new InteractionService(), kbService, gridRenderStub);
-        window.dispatchEvent(new KeyboardEvent('keydown'));
-        expect(TEST_COMPONENT).toBeTruthy();
-        expect(spy).toHaveBeenCalled();
-    });
-
-    it('should not open the galley when user chooses to cancel action', () => {
+    it('should not open the gallery when user chooses to cancel action', () => {
         window.confirm = jasmine.createSpy().and.returnValue(false); // cancel action
-        const spy = spyOn(component.winService, 'openWindow');
+        const SPY = spyOn(component.winService, 'openWindow');
         component.openGallery();
-        expect(spy).not.toHaveBeenCalled();
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should open the save form on ctrl+s', () => {
+        fakeKbEvent.keyCode = S; // ctrldown already true
+        const SPY = spyOn(component, 'openSaveForm');
+        component.setShortcutEvent(fakeKbEvent);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should open the save form using the window handler', () => {
+        const SPY = spyOn(component.winService, 'openWindow');
+        component.openSaveForm();
+        expect(SPY).toHaveBeenCalledWith(SaveFormComponent);
     });
 });

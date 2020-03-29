@@ -5,170 +5,199 @@ import { Point } from './point';
 import { ShapeService } from './shape.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
-
 export class PolygonService extends ShapeService {
+    // All corners of the polygon
+    private corners: Point[];
 
-  private displayPolygon: boolean  // False if polygon is too small
+    // Point for the middle of the perimeter
+    private middleX: number;
+    private middleY: number;
+    // min and max values for x
+    private leftPoint: number;
+    private rightPoint: number;
 
-  // Point for the middle of the perimeter
-  private middleX: number;
-  private middleY: number;
-  // min and max values for x
-  private leftPoint: number;
-  private rightPoint: number;
-  // All corners of the polygon
-  private corners: Point[];
-
-  constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
-              interaction: InteractionService, colorPick: ColorPickingService) {
-    super(inProgess, drawing, selected, interaction, colorPick);
-    this.displayPolygon = false;
-    this.leftPoint = 0;
-    this.rightPoint = 0;
-    this.corners = [];
-  }
-
-  // Creates an svg polygon that connects the first and last points of currentPath with the rectangle attributes
-  createPath(p: Point[], removePerimeter: boolean) {
-
-    // We need at least 2 points
-    if (p.length < 2) {
-      return '';
+    constructor(
+        inProgess: HTMLElement,
+        drawing: HTMLElement,
+        selected: boolean,
+        interaction: InteractionService,
+        colorPick: ColorPickingService,
+    ) {
+        super(inProgess, drawing, selected, interaction, colorPick);
+        this.leftPoint = 0;
+        this.rightPoint = 0;
+        this.corners = [];
     }
 
-    this.setdimensions(p);
+    // Creates an svg polygon that connects the first and last points of currentPath with the rectangle attributes
+    createPath(p: Point[], removePerimeter: boolean): string {
+        // We need at least 2 points
+        if (p.length < 2) {
+            return '';
+        }
 
-    // The Polygon won't display if smaller than 10px -> 10 chosen by ergonomy
-    // const MinValue = 10;
-    // if (Math.abs(this.width) < MinValue && Math.abs(this.height) < MinValue) {
-    //   return '';
-    // }
+        this.setdimensions(p);
 
-    // Set the polygon's corners
-    this.setCorners(p);
+        // Set the polygon's corners
+        this.setCorners(p);
 
-    // create a divider
-    this.svgString = '<g name = "polygon" style="transform: translate(0px, 0px);" >';
+        // create a divider
+        this.svgString = '<g name = "polygon" style="transform: translate(0px, 0px);" >';
 
-    // set all points used as corners for the polygon
-    this.svgString += '<polygon points="';
-    for (let i = 0; i < this.attr.numberOfCorners; i++){
-      this.svgString += ` ${this.corners[i].x},${this.corners[i].y}`;
-    }
-    this.svgString += '"';
+        // set all points used as corners for the polygon
+        this.svgString += '<polygon points="';
+        for (let i = 0; i < this.attr.numberOfCorners; i++) {
+            this.svgString += ` ${this.corners[i].x},${this.corners[i].y}`;
+        }
+        // Finish svg string for the points of the polygon
+        this.svgString += '"';
 
-    this.setAttributesToPath();
+        this.setAttributesToPath();
 
-    this.createPerimeter(removePerimeter);
+        this.createPerimeter(removePerimeter);
 
-    // end the divider
-    this.svgString += '</g>'
+        // end the divider
+        this.svgString += '</g>';
 
-    // need to display?
-    if (!this.displayPolygon) {
-      this.svgString = '';
-    }
+        if (this.width === 0 || this.height === 0) {
+            return '';
+        }
 
-    return this.svgString;
-  }
-
-  setdimensions(p: Point[]) {
-
-    super.setdimensions(p);
-
-    this.startX = p[0].x;
-    this.startY = p[0].y;
-
-    // we need regular polygons ->
-    // get smallest absolute value between the width and the height
-    this.smallest = Math.abs(this.width) < Math.abs(this.height) ? Math.abs(this.width) : Math.abs(this.height);
-
-    if (this.width > 0) {
-      this.middleX = this.startX + this.smallest / 2;
-    } else {
-      this.middleX = this.startX - this.smallest / 2;
-    }
-    if (this.height > 0) {
-      this.middleY = this.startY + this.smallest / 2;
-    } else {
-      this.middleY = this.startY - this.smallest / 2;
-    }
-  }
-
-  setCorners(p: Point[]) {
-
-    // Initilize values used for determining the other polygon's corners
-    let rotateAngle = 3 * Math.PI / 2;
-    let x;
-    let y;
-    this.leftPoint = this.middleX;
-    this.rightPoint = this.middleX;
-    for (let i = 0; i < this.attr.numberOfCorners; i++){
-      // Formula for the outside angles of the polygon : 2*PI/n
-      // Assigning length for x and y sides depending on the axis
-      if (this.width > 0) {
-        x = this.middleX - this.smallest * Math.cos(rotateAngle) / 2;
-      } else {
-        x = this.middleX + this.smallest * Math.cos(rotateAngle) / 2;
-      }
-      if (this.height > 0) {
-        y = this.middleY + this.smallest * Math.sin(rotateAngle) / 2;
-      } else {
-        y = this.middleY - this.smallest * Math.sin(rotateAngle) / 2;
-      }
-
-      // Assigning max and min for x
-      if (this.leftPoint > x) {
-        this.leftPoint = x;
-      } else if (this.rightPoint < x) {
-        this.rightPoint = x;
-      }
-
-      // Put new point in the array of corners
-      this.corners[i] = new Point(x, y);
-      rotateAngle += (2 * Math.PI / this.attr.numberOfCorners);
+        return this.svgString;
     }
 
-    // can't have rectangle with 0 width or height
-    if (this.width === 0 || this.height === 0) {
-      this.displayPolygon = false;
-    } else {
-      this.displayPolygon = true;
+    setdimensions(p: Point[]): void {
+        super.setdimensions(p);
+
+        // Assign values of the first mouse down
+        this.startX = p[0].x;
+        this.startY = p[0].y;
+
+        // we need regular polygons ->
+        // get smallest absolute value between the width and the height
+        this.smallest = Math.abs(this.width) < Math.abs(this.height) ? Math.abs(this.width) : Math.abs(this.height);
+
+        // Assign the middle point for the polygon
+        if (this.width > 0) {
+            this.middleX = this.startX + this.smallest / 2;
+        } else {
+            this.middleX = this.startX - this.smallest / 2;
+        }
+        if (this.height > 0) {
+            this.middleY = this.startY + this.smallest / 2;
+        } else {
+            this.middleY = this.startY - this.smallest / 2;
+        }
     }
 
-    this.alignCorners();
-  }
+    setCorners(p: Point[]): void {
+        // Initilize values used for determining the other polygon's corners
+        // tslint:disable-next-line: no-magic-numbers
+        let rotateAngle = (3 * Math.PI) / 2; // 3PI/2
+        let x;
+        let y;
+        this.leftPoint = this.middleX;
+        this.rightPoint = this.middleX;
 
-  createPerimeter(removePerimeter: boolean) {
-    const WIDTH_PERIMETER = this.rightPoint - this.leftPoint;
-    const END_Y_POINT = Math.floor(this.attr.numberOfCorners / 2);
-    const HEIGHT_PERIMETER = this.startY - this.corners[END_Y_POINT].y;
+        for (let i = 0; i < this.attr.numberOfCorners; i++) {
+            // Assigning all points of the polygon depending on the axis (where the mouse is dragged)
+            if (this.width > 0) {
+                x = this.middleX - (this.smallest * Math.cos(rotateAngle)) / 2;
+            } else {
+                x = this.middleX + (this.smallest * Math.cos(rotateAngle)) / 2;
+            }
+            if (this.height > 0) {
+                y = this.middleY + (this.smallest * Math.sin(rotateAngle)) / 2;
+            } else {
+                y = this.middleY - (this.smallest * Math.sin(rotateAngle)) / 2;
+            }
 
-    const PER_START_X = this.width > 0 ? this.startX : this.startX - WIDTH_PERIMETER;
-    const PER_START_Y = this.height > 0 ? this.startY : this.startY - HEIGHT_PERIMETER;
-    if (!removePerimeter) {
-    this.svgString += `<rect x="${PER_START_X}" y="${PER_START_Y}"`;
-    this.svgString += `width="${Math.abs(WIDTH_PERIMETER)}" height="${Math.abs(HEIGHT_PERIMETER)}"`;
-    this.svgString += 'style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"';
-    this.svgString += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
-    }
-  }
+            // Assigning max and min for x
+            if (this.leftPoint < x) {
+                this.leftPoint = x;
+            } else if (this.rightPoint > x) {
+                this.rightPoint = x;
+            }
 
-  alignCorners() {
-    if (this.leftPoint > this.startX) {
-      const SUBSTACTION_X = this.leftPoint - this.startX;
-      for (const corner of this.corners) {
-        corner.x -= SUBSTACTION_X;
-      }
+            // Put new point in the array of corners
+            this.corners[i] = new Point(x, y);
+            rotateAngle += (2 * Math.PI) / this.attr.numberOfCorners;
+        }
+
+        this.alignCorners();
     }
-    if (this.rightPoint < this.startX) {
-      const ADDITION_X = this.startX - this.rightPoint;
-      for (const corner of this.corners) {
-        corner.x += ADDITION_X;
-      }
+
+    // Align points of the polygon with the area where we drag the mouse
+    alignCorners(): void {
+        // If the the left point value is smaller than the initial point where the mouse was down,
+        // Adjust the position of all the polygon's points
+        if (this.leftPoint < this.startX) {
+            const OFFSET =  this.startX - this.leftPoint;
+            for (const CORNER of this.corners) {
+                CORNER.x += OFFSET;
+            }
+        }
+        // If the the right point value is greater than the initial point where the mouse was down,
+        // Adjust the position of all the polygon's points
+        if (this.rightPoint > this.startX) {
+            const OFFSET = this.startX - this.rightPoint;
+            for (const CORNER of this.corners) {
+                CORNER.x += OFFSET;
+            }
+        }
     }
-  }
+
+    createPerimeter(removePerimeter: boolean): void {
+        if (removePerimeter) {
+            return;
+        }
+        // width between the max and min values of the points in x
+        let widthPerimeter = this.leftPoint - this.rightPoint;
+
+        // the lowest point in the canvas in y
+        const END_Y_POINT = Math.floor(this.attr.numberOfCorners / 2);
+        // height between min and max value of the points in y
+        let heightPerimeter = Math.abs(this.startY - this.corners[END_Y_POINT].y);
+
+        let perStartX;
+        let perStartY;
+        const triangleNumberOfCorners = 3;
+        const diamondNumberOfCorners = 4;
+        if (this.attr.numberOfCorners === triangleNumberOfCorners) {
+            // tslint:disable-next-line: no-magic-numbers
+            const triangleOffset = (this.attr.lineThickness * (3 * Math.PI) / 10);
+            perStartX = this.width > 0 ? this.startX - triangleOffset :
+                            this.startX - widthPerimeter - triangleOffset;
+            perStartY = this.height > 0 ? this.startY - triangleOffset : // tslint:disable-next-line: no-magic-numbers
+                            this.startY - heightPerimeter - 5 * triangleOffset / 9;
+            widthPerimeter += triangleOffset * 2;
+            heightPerimeter += triangleOffset + (this.attr.lineThickness / 2);
+        } else if (this.attr.numberOfCorners === diamondNumberOfCorners) {
+            // tslint:disable-next-line: no-magic-numbers
+            const diamondOffset = (this.attr.lineThickness * (2 * Math.PI) / 9);
+            perStartX = this.width > 0 ? this.startX - diamondOffset :
+                            this.startX - widthPerimeter - diamondOffset;
+            perStartY = this.height > 0 ? this.startY - diamondOffset :
+                            this.startY - heightPerimeter - diamondOffset;
+            widthPerimeter += diamondOffset * 2;
+            heightPerimeter += diamondOffset * 2;
+        } else {
+            // Assign start values of the rectangle depending on where we drag the mouse
+            perStartX = this.width > 0 ? this.startX - this.attr.lineThickness / 2 :
+                            this.startX - widthPerimeter - this.attr.lineThickness / 2;
+            perStartY = this.height > 0 ? this.startY - this.attr.lineThickness / 2 :
+                            this.startY - heightPerimeter - this.attr.lineThickness / 2;
+                            // Add width and height depending on stroke thickness
+            widthPerimeter += this.attr.lineThickness;
+            heightPerimeter += this.attr.lineThickness;
+        }
+
+        this.svgString += `<rect x="${perStartX}" y="${perStartY}"`;
+        this.svgString += `width="${Math.abs(widthPerimeter)}" height="${Math.abs(heightPerimeter)}"`;
+        this.svgString += 'style="stroke:lightgrey;stroke-width:2;fill-opacity:0.0;stroke-opacity:0.9"';
+        this.svgString += `stroke-width="${this.attr.lineThickness}" stroke-dasharray="4"/>`;
+    }
 
 }

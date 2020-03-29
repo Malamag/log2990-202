@@ -1,16 +1,15 @@
 import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { Canvas } from 'src/app/models/Canvas.model';
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { Canvas } from 'src/app/models/canvas.model';
+import { ChoosenColors } from 'src/app/models/choosen-colors.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
 import { InputObserver } from 'src/app/services/draw-tool/input-observer';
-import { PipetteService } from 'src/app/services/draw-tool/pipette.service';
 import { ToolCreator } from 'src/app/services/draw-tool/tool-creator';
-import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
+import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
 
@@ -21,12 +20,12 @@ import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handl
 })
 export class SvgDrawComponent implements OnInit, AfterViewInit {
     showGrid: boolean;
-    pipette: PipetteService; // needed in the canvas switch directive as an Input element
+
     constructor(
         private canvBuilder: CanvasBuilderService,
         public interaction: InteractionService,
         public colorPick: ColorPickingService,
-        private doodleFetch: DoodleFetchService,
+        public doodleFetch: DoodleFetchService,
         private render: Renderer2,
         private gridService: GridRenderService,
     ) {
@@ -38,7 +37,9 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     height: number;
     backColor: string;
 
+    // tslint:disable-next-line: typedef
     toolsContainer = new Map();
+    // tslint:disable-next-line: typedef
     interactionToolsContainer = new Map();
 
     @ViewChild('inPrgress', { static: false }) inProgress: ElementRef;
@@ -48,7 +49,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     @ViewChild('drawingSpace', { static: false }) drawingSpace: ElementRef;
     @ViewChild('selectedItems', { static: false }) selectedItems: ElementRef;
     @ViewChild('grid', { static: false }) gridRef: ElementRef;
-
+    @ViewChild('container', { static: false }) cntRef: ElementRef;
     workingSpace: HTMLElement;
 
     ngOnInit(): void {
@@ -64,6 +65,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     bgroundChangeSubscription(): void {
         this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
+
             if (choosenColors) {
                 this.backColor = choosenColors.backColor;
                 this.gridService.updateColor(this.backColor);
@@ -73,86 +75,95 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     initCanvas(): void {
         this.canvBuilder.canvSubject.subscribe((canvas: Canvas) => {
+
             if (canvas === undefined || canvas === null) {
                 canvas = this.canvBuilder.getDefCanvas();
             }
+
             this.width = canvas.canvasWidth;
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
-            this.canvBuilder.whipeDraw(this.frameRef);
+            if (canvas.wipeAll === true || canvas.wipeAll === undefined) { // if no attribute is specified, the doodle will be w
+                this.canvBuilder.wipeDraw(this.frameRef);
+            }
+
             if (this.gridService.grid) {
-                this.gridService.removeGrid();
-                this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+                if (this.gridRef) {
+                    this.gridService.removeGrid();
+                    this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+                }
             }
         });
-        this.canvBuilder.emitCanvas();
+        this.canvBuilder.emitCanvas(); // if a page reload is called, the canvas will not be undefined
     }
 
     initGridVisibility(): void {
         this.interaction.$showGrid.subscribe((show: boolean) => {
             this.showGrid = show;
         });
+        this.reinitGridFromSub();
     }
+    createTools(): void {
+        const TC = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
 
+        const PENCIL = TC.CreatePencil(true, this.interaction, this.colorPick);
+        const RECT = TC.CreateRectangle(false, this.interaction, this.colorPick);
+        const LINE = TC.CreateLine(false, this.interaction, this.colorPick);
+        const BRUSH = TC.CreateBrush(false, this.interaction, this.colorPick);
+        const AEROSOL = TC.CreateAerosol(false, this.interaction, this.colorPick);
+        const ELLIPSE = TC.CreateEllipse(false, this.interaction, this.colorPick);
+        const POLYGON = TC.CreatePolygon(false, this.interaction, this.colorPick);
+        const SELECT = TC.CreateSelection(
+            false,
+            this.interaction,
+            this.colorPick,
+            this.render,
+            this.selectedItems.nativeElement,
+            this.svg.nativeElement,
+        );
+
+        const ERASER = TC.CreateEraser(
+            false,
+            this.interaction,
+            this.colorPick,
+            this.render,
+            this.selectedItems.nativeElement,
+            this.svg.nativeElement,
+        );
+
+        const COLOR_EDITOR = TC.CreateColorEditor(
+            false,
+            this.interaction,
+            this.colorPick,
+            this.render,
+            this.selectedItems.nativeElement,
+            this.svg.nativeElement,
+        );
+
+        const PIPETTE = TC.CreatePipette(false, this.interaction, this.colorPick);
+        this.toolsContainer.set('Rectangle', RECT);
+        this.toolsContainer.set('Ligne', LINE);
+        this.toolsContainer.set('Pinceau', BRUSH);
+        this.toolsContainer.set('Crayon', PENCIL);
+        this.toolsContainer.set('Aérosol', AEROSOL);
+        this.toolsContainer.set('Ellipse', ELLIPSE);
+        this.toolsContainer.set('Polygone', POLYGON);
+        this.toolsContainer.set('Sélectionner', SELECT);
+        this.toolsContainer.set('Efface', ERASER);
+        this.toolsContainer.set('Applicateur de couleur', COLOR_EDITOR);
+        this.toolsContainer.set('Pipette', PIPETTE);
+
+    }
     ngAfterViewInit(): void {
         this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
         this.initGridVisibility();
-        const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
-        const mouseHandler = new MouseHandlerService(this.svg.nativeElement);
+        const KEYBOARD_HANDLER: KeyboardHandlerService = new KeyboardHandlerService();
+        const MOUSE_HANDLER = new MouseHandlerService(this.svg.nativeElement);
 
         // create all the tools
-        const tc = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
-
-        const pencil = tc.CreatePencil(true, this.interaction, this.colorPick);
-        const rect = tc.CreateRectangle(false, this.interaction, this.colorPick);
-        const line = tc.CreateLine(false, this.interaction, this.colorPick);
-        const brush = tc.CreateBrush(false, this.interaction, this.colorPick);
-        const aerosol = tc.CreateAerosol(false, this.interaction, this.colorPick);
-        const ellipse = tc.CreateEllipse(false, this.interaction, this.colorPick);
-        const undoRedo: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
-        const polygon = tc.CreatePolygon(false, this.interaction, this.colorPick);
-        const selection = tc.CreateSelection(
-            false,
-            this.interaction,
-            this.colorPick,
-            this.render,
-            this.selectedItems.nativeElement,
-            this.svg.nativeElement,
-        );
-
-        const eraser = tc.CreateEraser(
-            false,
-            this.interaction,
-            this.colorPick,
-            this.render,
-            this.selectedItems.nativeElement,
-            this.svg.nativeElement,
-        );
-
-        const colorEditor = tc.CreateColorEditor(
-            false,
-            this.interaction,
-            this.colorPick,
-            this.render,
-            this.selectedItems.nativeElement,
-            this.svg.nativeElement,
-        );
-
-        this.pipette = tc.CreatePipette(false, this.interaction, this.colorPick);
-
-        this.interactionToolsContainer.set('AnnulerRefaire', undoRedo);
-        this.toolsContainer.set('Rectangle', rect);
-        this.toolsContainer.set('Ligne', line);
-        this.toolsContainer.set('Pinceau', brush);
-        this.toolsContainer.set('Crayon', pencil);
-        this.toolsContainer.set('Aérosol', aerosol);
-        this.toolsContainer.set('Ellipse', ellipse);
-        this.toolsContainer.set('Polygone', polygon);
-        this.toolsContainer.set('Sélectionner', selection);
-        this.toolsContainer.set('Efface', eraser);
-        this.toolsContainer.set('ApplicateurCouleur', colorEditor);
-        this.toolsContainer.set('Pipette', this.pipette);
-
+        this.createTools();
+        const UNDO_REDO: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
+        this.interactionToolsContainer.set('AnnulerRefaire', UNDO_REDO);
         this.interaction.$cancelToolsObs.subscribe((sig: boolean) => {
             if (sig) {
                 this.closeTools(this.toolsContainer);
@@ -162,56 +173,50 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.interaction.$selectedTool.subscribe((toolName: string) => {
             if (toolName === 'Annuler' || toolName === 'Refaire') {
                 this.interactionToolsContainer.get('AnnulerRefaire').apply(toolName);
-            } else if (this.toolsContainer.get(toolName)) {
+            } else if (this.toolsContainer.get(toolName) && !this.toolsContainer.get(toolName).selected) {
                 const event = new Event('toolChange');
                 window.dispatchEvent(event);
                 this.closeTools(this.toolsContainer);
                 this.toolsContainer.get(toolName).selected = true;
             }
-            /* if (toolName === 'Pipette') {
-                // ... or, eventually, bucket tool
-                mouseHandler.svgCanvas = this.pixelMatrixRef.nativeElement;
-                //
-            } else {
-                mouseHandler.svgCanvas = this.svg.nativeElement;
-            }*/
-            mouseHandler.updateWindowSize();
+
+            MOUSE_HANDLER.updateWindowSize();
         });
 
         // Subscribe each tool to keyboard and mouse
         this.toolsContainer.forEach((element: InputObserver) => {
-            keyboardHandler.addToolObserver(element);
-            mouseHandler.addObserver(element);
+            KEYBOARD_HANDLER.addToolObserver(element);
+            MOUSE_HANDLER.addObserver(element);
         });
 
         window.addEventListener('resize', () => {
-            mouseHandler.updateWindowSize();
+            MOUSE_HANDLER.updateWindowSize();
         });
 
         // Mouse listeners
         window.addEventListener('mousemove', (e: MouseEvent) => {
-            mouseHandler.move(e);
+            MOUSE_HANDLER.move(e);
         });
         window.addEventListener('mousedown', (e: MouseEvent) => {
-            e.preventDefault();
-            mouseHandler.down(e);
+            // e.preventDefault();
+            MOUSE_HANDLER.down(e);
         });
 
         window.addEventListener('mouseup', (e: MouseEvent) => {
-            mouseHandler.up(e);
+            MOUSE_HANDLER.up(e);
         });
 
         // Prevent right-click menu
-        window.oncontextmenu = (e: MouseEvent) => {
+        window.addEventListener('contextmenu', (e: MouseEvent) => {
             e.preventDefault();
-        };
+        });
 
         // Keyboard listeners
         window.addEventListener('keydown', (e: KeyboardEvent) => {
-            keyboardHandler.logkey(e);
+            KEYBOARD_HANDLER.logkey(e);
         });
         window.addEventListener('keyup', (e: KeyboardEvent) => {
-            keyboardHandler.reset(e);
+            KEYBOARD_HANDLER.reset(e);
         });
 
         window.dispatchEvent(new Event('resize'));
@@ -220,7 +225,16 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.doodleFetch.currentDraw = this.svg;
             this.doodleFetch.widthAttr = this.width;
             this.doodleFetch.heightAttr = this.height;
+            this.doodleFetch.backColor = this.backColor;
         });
+
         this.bgroundChangeSubscription();
+    }
+
+    reinitGridFromSub(): void {
+        this.interaction.$canvasAttributes.subscribe((newDoodle: Canvas) => {
+            this.gridService.removeGrid();
+            this.gridService.initGrid(this.gridRef.nativeElement, newDoodle.canvasWidth, newDoodle.canvasHeight, newDoodle.canvasColor);
+        });
     }
 }

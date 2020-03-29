@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
+import { ChoosenColors } from 'src/app/models/choosen-colors.model';
 import { ColorPickingService } from '../../services/colorPicker/color-picking.service';
 import { colorData } from './color-data';
 
@@ -10,17 +10,19 @@ import { colorData } from './color-data';
     styleUrls: ['./color-picker.component.scss'],
 })
 export class ColorPickerComponent implements OnInit {
+    // because it is an interface
+    // tslint:disable-next-line: typedef
     cData = colorData;
     colorSubsc: Subscription;
 
-    constructor(public colorPicking: ColorPickingService) {}
+    constructor(public colorPicking: ColorPickingService) { }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.initColors();
         this.colorPicking.emitColors();
     }
 
-    initColors() {
+    initColors(): void {
         const DEF_PRIM = '#000000ff';
         const DEF_SEC = '#ff0000ff';
         const DEF_BG = '#ffffffff';
@@ -34,7 +36,7 @@ export class ColorPickerComponent implements OnInit {
         });
     }
 
-    setColor(color: number[]) {
+    setColor(color: number[]): void {
         this.colorPicking.setColor(color);
     }
 
@@ -78,7 +80,8 @@ export class ColorPickerComponent implements OnInit {
     onRadioButtonChange(newColorMode: string): void {
         this.colorPicking.onRadioButtonChange(newColorMode);
     }
-    swapInputDisplay() {
+
+    swapInputDisplay(): void {
         this.colorPicking.swapInputDisplay();
     }
 
@@ -92,10 +95,10 @@ export class ColorPickerComponent implements OnInit {
         this.colorPicking.onSLSliderInput();
     }
 
-    get svgStyles(): any {
+    get svgStyles(): {} {
         return { transform: 'translate(50px,50px) rotate(' + this.cData.currentHue + 'deg) translate(-50px,-50px)' };
     }
-    get cursorStyles(): any {
+    get cursorStyles(): {} {
         return { transform: 'translate(' + this.cData.slCursorX + 'px,' + this.cData.slCursorY + 'px)' };
     }
     // change primary alpha when primary slide change

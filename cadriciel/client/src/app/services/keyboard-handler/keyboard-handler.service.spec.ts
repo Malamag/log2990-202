@@ -15,8 +15,9 @@ describe('KeyboardHandlerService', () => {
         observerStub = {
             selected: true,
 
-            update: () => 0,
+            updateDown: () => 0,
             cancel: () => 0,
+            updateUp: () => 0,
         };
 
         TestBed.configureTestingModule({
@@ -27,15 +28,27 @@ describe('KeyboardHandlerService', () => {
     });
 
     it('should be created', () => {
-        const testService: KeyboardHandlerService = TestBed.get(KeyboardHandlerService);
-        expect(testService).toBeTruthy();
+        const TEST_SERVICE: KeyboardHandlerService = TestBed.get(KeyboardHandlerService);
+        expect(TEST_SERVICE).toBeTruthy();
     });
-
+    it('should update up all the observers', () => {
+        const NUM = 10;
+        service.toolObservers = [observerStub, observerStub];
+        const SPY = spyOn(observerStub, 'updateUp');
+        service.updateUpToolObservers(NUM);
+        expect(SPY).toHaveBeenCalled();
+    });
+    it('should update down all the observers', () => {
+        service.toolObservers = [observerStub, observerStub];
+        const SPY = spyOn(observerStub, 'updateDown');
+        service.updateDownToolObservers();
+        expect(SPY).toHaveBeenCalled();
+    });
     it('should properly add tool observers', () => {
         service.toolObservers = [];
 
-        const obs = observerStub;
-        service.addToolObserver(obs);
+        const OBS = observerStub;
+        service.addToolObserver(OBS);
         expect(service.toolObservers.length).toBe(1); // adding only 1 tool observer to the arrays
     });
 
@@ -46,13 +59,13 @@ describe('KeyboardHandlerService', () => {
             // declares an array of 10 elements
             service.toolObservers.push(observerStub);
         }
-        const goodShortcut = 0;
-        service.keyCode = goodShortcut;
-        service.toolshortcuts.push(goodShortcut);
-        const spy = spyOn(observerStub, 'cancel');
+        const GOOD_SHORTCUT = 0;
+        service.keyCode = GOOD_SHORTCUT;
+        service.toolshortcuts.push(GOOD_SHORTCUT);
+        const SPY = spyOn(observerStub, 'cancel');
         service.checkForToolChange();
 
-        expect(spy).toHaveBeenCalledTimes(LEN);
+        expect(SPY).toHaveBeenCalledTimes(LEN);
     });
 
     it('should select the right tool on valid shortcut', () => {
@@ -63,36 +76,36 @@ describe('KeyboardHandlerService', () => {
             // declares an array of 10 elements
             service.toolObservers.push(observerStub);
         }
-        const goodShortcut = 0;
-        service.keyCode = goodShortcut;
-        service.toolshortcuts.push(goodShortcut);
+        const GOOD_SHORTCUT = 0;
+        service.keyCode = GOOD_SHORTCUT;
+        service.toolshortcuts.push(GOOD_SHORTCUT);
         service.checkForToolChange();
 
         expect(service.toolObservers[0].selected).toBeTruthy();
     });
 
     it('should not update tool selection on invalid keycode', () => {
-        const badKey = -1;
-        const goodKey = 69;
-        service.keyCode = goodKey;
+        const BAD_KEY = -1;
+        const GOOD_KEY = 69;
+        service.keyCode = GOOD_KEY;
         service.toolObservers = [];
         service.toolObservers.push(observerStub);
         service.toolshortcuts = [];
-        service.toolshortcuts.push(badKey);
+        service.toolshortcuts.push(BAD_KEY);
 
-        const spy = spyOn(service.toolshortcuts, 'indexOf');
+        const SPY = spyOn(service.toolshortcuts, 'indexOf');
         service.checkForToolChange();
-        expect(spy).not.toHaveBeenCalled(); // undefined -> no update
+        expect(SPY).not.toHaveBeenCalled(); // undefined -> no update
     });
 
     it('should get the key information and the observers must be updated and the change check is done', () => {
-        const mockKey: KeyboardEvent = new KeyboardEvent('keydown', {
+        const MOCK_KEY: KeyboardEvent = new KeyboardEvent('keydown', {
             key: 'Shift',
             ctrlKey: false,
             shiftKey: true,
         });
 
-        service.logkey(mockKey);
+        service.logkey(MOCK_KEY);
 
         expect(service.keyString).toBe('Shift');
 
@@ -102,14 +115,14 @@ describe('KeyboardHandlerService', () => {
 
     it('on reset the keyboard attributes are reseted and the tools have been updated', () => {
         // let initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
-        const mockKey: KeyboardEvent = new KeyboardEvent('keyup', {
+        const MOCK_KEY: KeyboardEvent = new KeyboardEvent('keyup', {
             key: 'Shift',
             ctrlKey: false,
             shiftKey: true,
             // keycode is a read-only attribute
         });
-        service.logkey(mockKey);
-        service.reset(mockKey);
+        service.logkey(MOCK_KEY);
+        service.reset(MOCK_KEY);
         expect(service.keyString).toBe('');
         const INVALID = -1;
         expect(service.keyCode).toBe(INVALID);

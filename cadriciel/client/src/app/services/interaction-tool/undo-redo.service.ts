@@ -1,6 +1,6 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { InteractionService } from '../service-interaction/interaction.service';
-import { InteractionTool } from './interactionTool';
+import { InteractionTool } from './interaction-tool';
 
 @Injectable({
     providedIn: 'root',
@@ -11,58 +11,60 @@ export class UndoRedoService extends InteractionTool {
         this.updateDoneContainer();
         this.updateContainer();
     }
-    updateContainer() {
+    updateContainer(): void {
         this.interact.$drawingDone.subscribe((sig) => {
-            if (sig) {
-                if (this.undone.length > 0) {
-                    this.undone = [];
-                }
-                this.done.push(this.drawing.innerHTML);
-                this.updateButtons();
+            if (!sig) {
+                return;
             }
-        });
-    }
-    updateDoneContainer() {
-        this.interact.$canvasRedone.subscribe((sig) => {
-            if (sig) {
-                this.done = [];
+            if (this.undone.length > 0) {
                 this.undone = [];
             }
-
+            this.done.push(this.drawing.innerHTML);
+            this.updateButtons();
         });
     }
-    undo() {
+    updateDoneContainer(): void {
+        this.interact.$drawingContinued.subscribe((sig) => {
+            if (!sig) {
+                return;
+            }
+            this.done = [];
+            this.done.push(this.drawing.innerHTML);
+            this.undone = [];
+        });
+    }
+    undo(): void {
         if (!this.done.length) {
             return;
         }
-        const elem = this.done.pop();
+        const ELEM = this.done.pop();
         this.drawing.innerHTML = '';
-        if (elem != undefined) {
-            this.undone.push(elem);
+        if (ELEM != undefined) {
+            this.undone.push(ELEM);
         }
         if (this.done.length) {
             this.drawing.innerHTML = this.done[this.done.length - 1];
-            const event = new Event('newDrawing');
-            window.dispatchEvent(event);
+            const EVENT = new Event('newDrawing');
+            window.dispatchEvent(EVENT);
         }
     }
-    redo() {
+    redo(): void {
 
         if (!this.undone.length) {
             return;
         }
-        const elem = this.undone.pop();
+        const ELEM = this.undone.pop();
         this.drawing.innerHTML = '';
-        if (elem != undefined) {
-            this.done.push(elem);
+        if (ELEM != undefined) {
+            this.done.push(ELEM);
         }
         this.drawing.innerHTML = this.done[this.done.length - 1];
-        const event = new Event('newDrawing');
-        window.dispatchEvent(event);
+        const EVENT = new Event('newDrawing');
+        window.dispatchEvent(EVENT);
 
     }
 
-    apply(name: string) {
+    apply(name: string): void {
         if (name === 'Annuler') {
             this.undo();
         } else if (name === 'Refaire') {
@@ -70,7 +72,7 @@ export class UndoRedoService extends InteractionTool {
         }
         this.updateButtons();
     }
-    updateButtons() {
+    updateButtons(): void {
         let disableUndo = true;
         let disableRedo = true;
         this.done.length ? (disableUndo = false) : (disableUndo = true);

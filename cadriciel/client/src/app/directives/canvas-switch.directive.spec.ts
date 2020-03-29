@@ -13,7 +13,7 @@ import { CanvasSwitchDirective } from './canvas-switch.directive';
         </svg>
     `,
 })
-class TestCanvasSwitchComponent {}
+class TestCanvasSwitchComponent { }
 /*
 This method for testing directives is inspired from
 ASIM. 2020. 'Testing Directives'. [En ligne]: https://codecraft.tv/courses/angular/unit-testing/directives/
@@ -73,13 +73,14 @@ describe('CanvasSwitchDirective', () => {
 
     it('should create an instance', () => {
         expect(component).toBeTruthy();
-        const directive = new CanvasSwitchDirective(elemStub, exServiceStub, itService, rdStub);
-        expect(directive).toBeTruthy();
+        const DIRECTIVE = new CanvasSwitchDirective(elemStub, exServiceStub, itService, rdStub);
+        expect(DIRECTIVE).toBeTruthy();
         expect(dir).toBeTruthy();
     });
 
     it('should set the image to convert in subscription execution', () => {
         dir.ngAfterViewInit();
+        itService.emitCanvasContext = jasmine.createSpy().and.returnValue(0);
         itService.emitSvgCanvasConversion(true);
         // tslint:disable-next-line: no-string-literal
         expect(dir['imageToConvert']).toEqual(dir['element'].nativeElement);
@@ -89,12 +90,14 @@ describe('CanvasSwitchDirective', () => {
         jasmine.clock().install(); // the spied function is in a timer
 
         // tslint:disable-next-line: no-string-literal
-        const spy = spyOn(dir['exService'], 'exportInCanvas');
+        const SPY = spyOn(dir['exService'], 'exportInCanvas');
+        itService.emitCanvasContext = jasmine.createSpy().and.returnValue(0);
+
         dir.ngAfterViewInit();
         itService.emitSvgCanvasConversion(true);
         const TIME = 50; // arbitrary 'large' amount of ms
         jasmine.clock().tick(TIME);
-        expect(spy).toHaveBeenCalled(); // called in subscription and on AfterViewInit
+        expect(SPY).toHaveBeenCalled(); // called in subscription and on AfterViewInit
         jasmine.clock().uninstall();
     });
 
@@ -102,28 +105,33 @@ describe('CanvasSwitchDirective', () => {
         jasmine.clock().install(); // the spied function is in a timer
 
         // tslint:disable-next-line: no-string-literal
-        const spy = spyOn(dir['exService'], 'exportInCanvas');
+        const SPY = spyOn(dir['exService'], 'exportInCanvas');
+        itService.emitCanvasContext = jasmine.createSpy().and.returnValue(0);
+
         dir.ngAfterViewInit();
         itService.emitSvgCanvasConversion(false);
         const TIME = 50;
         jasmine.clock().tick(TIME);
-        expect(spy).not.toHaveBeenCalled(); // called on AfterViewInit only
+        expect(SPY).not.toHaveBeenCalled(); // called on AfterViewInit only
         jasmine.clock().uninstall();
     });
 
     it('should create a canvas element in the subscription', () => {
+        itService.emitCanvasContext = jasmine.createSpy().and.returnValue(0);
+
         // tslint:disable-next-line: no-string-literal
-        const spy = spyOn(dir['renderer'], 'createElement');
+        const SPY = spyOn(dir['renderer'], 'createElement');
         dir.ngAfterViewInit();
+
         itService.emitSvgCanvasConversion(true);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should set the canvas attributes in subscription', () => {
         // tslint:disable-next-line: no-string-literal
-        const spy = spyOn(dir['renderer'], 'setAttribute');
+        const SPY = spyOn(dir['renderer'], 'setAttribute');
         dir.ngAfterViewInit();
         itService.emitSvgCanvasConversion(true);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 });

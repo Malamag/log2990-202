@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
+import { FormsAttribute } from '../attributes/attribute-form';
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -7,10 +8,11 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { Point } from './point';
 import { ShapeService } from './shape.service';
 
-export class FakeInteractionService extends InteractionService {}
+export class FakeInteractionService extends InteractionService { }
 
 describe('ShapeService', () => {
     let service: ShapeService;
+    // tslint:disable-next-line: no-any
     let kbServiceStub: any;
     let ptA: Point;
     let ptB: Point;
@@ -28,7 +30,7 @@ describe('ShapeService', () => {
 
         TestBed.configureTestingModule({
             providers: [
-                { provide: HTMLElement, useValue: {} },
+                { provide: HTMLElement, useValue: { getAttribute: () => 0 } },
                 { provide: Boolean, useValue: true },
                 { provide: ColorPickingService, useValue: {} },
                 { provide: InteractionService, useValue: new InteractionService() },
@@ -40,7 +42,8 @@ describe('ShapeService', () => {
         service = TestBed.get(ShapeService);
         service.ignoreNextUp = false;
         service.isDown = false;
-        service.attr = { plotType: 0, lineThickness: 5, numberOfCorners: 3 };
+        // tslint:disable-next-line: no-string-literal
+        service['attr'] = { plotType: 0, lineThickness: 5, numberOfCorners: 3 };
     });
 
     it('should be created', () => {
@@ -49,71 +52,107 @@ describe('ShapeService', () => {
 
     it('should set the attributes in the subscription', () => {
         service.interaction.emitFormsAttributes({ plotType: 0, lineThickness: 0, numberOfCorners: 0 });
-        const spyInteraction = spyOn(service.interaction.$formsAttributes, 'subscribe');
+        const SPY_INTERACTION = spyOn(service.interaction.$formsAttributes, 'subscribe');
         service.updateAttributes();
-        expect(spyInteraction).toHaveBeenCalled();
-        expect(service.attr).toBeDefined();
+        expect(SPY_INTERACTION).toHaveBeenCalled();
+
+        // tslint:disable-next-line: no-string-literal
+        expect(service['attr']).toBeDefined();
     });
-    /*
-    it('should update progress on move', () => {
-        const spy = spyOn(service, 'updateProgress');
-        service.down(ptA); // simulating a mouse down at given point
-        service.update(kbServiceStub);
-        expect(spy).toHaveBeenCalled();
-    });*/
+
     it('should update the current path on mouse down', () => {
-        const spy = spyOn(service, 'updateProgress');
+        const SPY = spyOn(service, 'updateProgress');
         service.down(ptA);
         expect(service.currentPath.length).toBe(2); // same point added twice to manage static mouse
         expect(service.currentPath).toContain(ptA);
 
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
     it('should update the drawing on mouse up', () => {
         service.down(ptA); // pressing the mouse
-        const spy = spyOn(service, 'updateDrawing');
+        const SPY = spyOn(service, 'updateDrawing');
         service.up(ptA);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
     it('should not update the drawing on mouse up', () => {
         service.ignoreNextUp = true;
-        const spy = spyOn(service, 'updateDrawing');
+        const SPY = spyOn(service, 'updateDrawing');
         service.up(ptA);
-        expect(spy).toHaveBeenCalledTimes(0);
+        expect(SPY).toHaveBeenCalledTimes(0);
     });
     it('should not update the progress on mouse move', () => {
         service.isDown = false;
-        const spy = spyOn(service, 'updateProgress');
+        const SPY = spyOn(service, 'updateProgress');
         service.move(ptA);
-        expect(spy).toHaveBeenCalledTimes(0);
+        expect(SPY).toHaveBeenCalledTimes(0);
     });
     it('should update the progress on mouse mouve', () => {
         service.isDown = true;
-        const spy = spyOn(service, 'updateProgress');
+        const SPY = spyOn(service, 'updateProgress');
         service.move(ptA);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
     it('should set the width and the height', () => {
         service.setdimensions(ptArr);
-        expect(service.width).toEqual(ptB.x - ptA.x);
-        expect(service.height).toEqual(ptB.y - ptA.y);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['width']).toEqual(ptB.x - ptA.x);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['height']).toEqual(ptB.y - ptA.y);
     });
 
     it('should not fill the shape', () => {
         const NOFILL_MODE = 0;
-        service.attr.plotType = NOFILL_MODE;
+        // tslint:disable-next-line: no-string-literal
+        service['attr'].plotType = NOFILL_MODE;
         service.setAttributesToPath();
         const FILL = 'fill="none"';
 
-        expect(service.svgString).toContain(FILL);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['svgString']).toContain(FILL);
     });
     it('should not have a stroke and fill the shape', () => {
-        service.attr = { plotType: 1, lineThickness: 5, numberOfCorners: 3 };
+        // tslint:disable-next-line: no-string-literal
+        service['attr'] = { plotType: 1, lineThickness: 5, numberOfCorners: 3 };
         service.setAttributesToPath();
         const STROKE_FILL = 'stroke="none"';
         const FILL = 'fill="#000000ff"'; // base color
 
-        expect(service.svgString).toContain(STROKE_FILL);
-        expect(service.svgString).toContain(FILL);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['svgString']).toContain(STROKE_FILL);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['svgString']).toContain(FILL);
     });
+
+    it('should not update progress if the key is not down', () => {
+        service.isDown = false;
+        const SPY = spyOn(service, 'updateProgress');
+        service.updateDown(kbServiceStub);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should update progress if the key is down', () => {
+        service.isDown = true;
+        const SPY = spyOn(service, 'updateProgress');
+        service.updateDown(kbServiceStub);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should update the attributes on subscription activation if the object is defined', () => {
+        const TEST_ATTR: FormsAttribute = { plotType: 1, lineThickness: 50, numberOfCorners: 4 };
+        service.updateAttributes();
+        service.interaction.emitFormsAttributes(TEST_ATTR);
+        expect(service.attr).toEqual(TEST_ATTR);
+    });
+
+    it('should not update the attributes on subscription if the object is undefined', () => {
+        const TEST_ATTR: FormsAttribute = { plotType: 1, lineThickness: 50, numberOfCorners: 4 };
+
+        service.attr = TEST_ATTR;
+        service.updateAttributes();
+
+        service.interaction.emitFormsAttributes(undefined);
+
+        expect(service.attr).toBeDefined(); // attributes have not been updated
+    });
+
 });

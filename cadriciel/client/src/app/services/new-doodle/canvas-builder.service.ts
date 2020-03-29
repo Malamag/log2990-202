@@ -1,9 +1,9 @@
 import { ElementRef, Injectable } from '@angular/core';
 
-import { Canvas } from '../../models/Canvas.model';
+import { Canvas } from '../../models/canvas.model';
 
 import { Subject } from 'rxjs';
-import { colorCircles } from '../../palette';
+
 import { InteractionService } from '../service-interaction/interaction.service';
 
 @Injectable({
@@ -43,21 +43,10 @@ export class CanvasBuilderService {
 
     emitCanvas(): void {
         this.canvSubject.next(this.newCanvas);
-        this.interact.emitCanvasRedone();
+        this.interact.emitContinueDrawing();
     }
 
-    getPalleteAttributes(): {} {
-        const CENTERX = 30; // Centre cx, defines spaces between color palette dots
-        let space = CENTERX;
-
-        for (const color of colorCircles) {
-            color.cx = space; // modifies palette array containing only 0 values
-            space += CENTERX;
-        }
-        return colorCircles;
-    }
-
-    whipeDraw(myDoodle: ElementRef | undefined): void {
+    wipeDraw(myDoodle: ElementRef | undefined): void {
         if (myDoodle) {
             // element is defined
             myDoodle.nativeElement.innerHTML = '';

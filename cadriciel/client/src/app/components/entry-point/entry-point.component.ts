@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatSnackBar, MatSnackBarConfig} from '@angular/material';
+import { MatDialog, MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { menuItems } from '../../functionality';
 import { ModalWindowService } from '../../services/window-handler/modal-window.service';
 import { GalleryComponent } from '../gallery/gallery.component';
@@ -13,37 +13,40 @@ import { UserManualComponent } from '../user-manual/user-manual.component';
 
 })
 export class EntryPointComponent implements OnInit {
-  menuItems = menuItems;
+
+  menuItems: object = {};
   winService: ModalWindowService;
 
   constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {
     this.winService = new ModalWindowService(this.dialog);
+    this.menuItems = menuItems;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.onOpen(); // opens snackbar at the bottom of the page
   }
 
-  onOpen() {
-    const config = new MatSnackBarConfig();
-    config.duration = 2500; // temps de visibilité de la barre de bienvenue (ms)
-    this.snackBar.open('Bienvenue !', undefined, config);
+  onOpen(): void {
+    const CONFIG = new MatSnackBarConfig();
+    const DURATION = 2500;
+    CONFIG.duration = DURATION; // temps de visibilité de la barre de bienvenue (ms)
+    this.snackBar.open('Bienvenue !', undefined, CONFIG);
   }
 
-  openUserManual() {
+  openUserManual(): void {
 
     this.winService.openWindow(UserManualComponent);
   }
 
-  openCreateNew() {
+  openCreateNew(): void {
     this.winService.openWindow(NewDrawComponent);
   }
 
-  openGallery() {
+  openGallery(): void {
     this.winService.openWindow(GalleryComponent);
   }
 
-  execute(shortcutName: string) {
+  execute(shortcutName: string): void {
     switch (shortcutName) {
       case 'Créer': {
         this.openCreateNew();
@@ -53,20 +56,21 @@ export class EntryPointComponent implements OnInit {
         // statements;
         this.openGallery();
         break;
-     }
-     case 'Guide': {
-       this.openUserManual();
-       break;
-    }
-      case 'Continuer': {
-    // statements;
-    break;
-   }
-    default: {
-       // statements;
-     break;
       }
-   }
+      case 'Guide': {
+        this.openUserManual();
+        break;
+      }
+      case 'Continuer': {
+        // statements;
+        console.log(shortcutName);
+        break;
+      }
+      default: {
+        // statements;
+        break;
+      }
+    }
   }
 
 }

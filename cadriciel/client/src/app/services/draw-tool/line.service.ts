@@ -6,12 +6,22 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
-const DEFAULTJUNCTION = true;
-const DEFAULTJUNCTIONRADIUS = 6;
-const DEFAULTLINETHICKNESS = 5;
+const DEFAULT_JUNCTION = true;
+const DEFAULT_JUNCTION_RADIUS = 6;
+const DEFAULT_LINE_THICKNESS = 5;
+const FULL_ROTATION = 360;
+const HALF_ROTATION = 180;
+const ONE_FOUR_ROTATION = 90;
+const ONE_HEIGHT_ROTATION = 45;
+const THREE_FOUR_ROTATION = 270;
+const THREE_EIGHT_ROTATION = 135;
+const FIVE_EIGHT_ROTATION = 225;
+const SEVEN_EIGHT_ROTATION = 315;
+
 @Injectable({
     providedIn: 'root',
 })
+
 export class LineService extends DrawingTool {
     forcedAngle: boolean;
     currentPos: Point;
@@ -24,7 +34,7 @@ export class LineService extends DrawingTool {
         interaction: InteractionService,
         colorPick: ColorPickingService) {
         super(inProgess, drawing, selected, interaction, colorPick);
-        this.attr = { junction: DEFAULTJUNCTION, lineThickness: DEFAULTLINETHICKNESS, junctionDiameter: DEFAULTJUNCTIONRADIUS };
+        this.attr = { junction: DEFAULT_JUNCTION, lineThickness: DEFAULT_LINE_THICKNESS, junctionDiameter: DEFAULT_JUNCTION_RADIUS };
         this.forcedAngle = false;
         this.currentPos = new Point(0, 0);
         this.updateAttributes();
@@ -135,7 +145,7 @@ export class LineService extends DrawingTool {
                     this.isDown = false;
 
                     if (this.currentPath.length >= 2) {
-                        // Down is called twice before we get here -> remove the excess 2 points
+                        // down() is always called twice before we get here (double click = down + down) -> remove the excess 2 points
                         this.currentPath.pop();
                         this.currentPath.pop();
                     }
@@ -186,14 +196,14 @@ export class LineService extends DrawingTool {
         // if double click, the path is done
         if (wasDoubleClick) {
             // distance between first and last point
-            const dist: number = Point.distance(p[p.length - 1], p[0]);
+            const DIST: number = Point.distance(p[p.length - 1], p[0]);
 
             // threshold in pixels to close the path on itself
-            const pixelThreshold = 3;
-            const distanceToConnect: number = Math.sqrt(Math.pow(pixelThreshold, 2) + Math.pow(pixelThreshold, 2));
+            const PIXEL_THRESHOLD = 3;
+            const DISTANCE_TO_CONNECT: number = Math.sqrt(Math.pow(PIXEL_THRESHOLD, 2) + Math.pow(PIXEL_THRESHOLD, 2));
 
             // connect first and last if they meet distance threshold
-            closeIt = dist <= distanceToConnect;
+            closeIt = DIST <= DISTANCE_TO_CONNECT;
         }
 
         // create a divider
@@ -243,45 +253,45 @@ export class LineService extends DrawingTool {
         // calculate angle (radians) from x axis (counterclockwise) in first quadrant
         let angle = Math.atan(Math.abs(yDelta) / Math.abs(xDelta));
         // convert in degrees
-        angle = (360 * angle) / (2 * Math.PI);
+        angle = (FULL_ROTATION * angle) / (2 * Math.PI);
 
         // adjust for 2nd, 3rd and 4th quadrants
         if (xDelta < 0) {
-            angle = 180 - angle;
+            angle = HALF_ROTATION - angle;
         }
         if (yDelta > 0) {
-            angle = 360 - angle;
+            angle = FULL_ROTATION - angle;
         }
 
         // get closest multiple of 45
-        angle = 45 * Math.round(angle / 45);
+        angle = ONE_HEIGHT_ROTATION * Math.round(angle / ONE_HEIGHT_ROTATION);
 
         // 360 degrees is the same as 0
-        if (angle == 360) {
+        if (angle === FULL_ROTATION) {
             angle = 0;
         }
 
         // new point will be at same y
-        if (angle == 180 || angle == 0) {
+        if (angle === HALF_ROTATION || angle === 0) {
             yDelta = 0;
         }
 
         // new point will be at same x
-        if (angle == 90 || angle == 270) {
+        if (angle === ONE_FOUR_ROTATION || angle === THREE_FOUR_ROTATION) {
             xDelta = 0;
         }
 
         // same distance in y as in x
-        if (angle == 45 || angle == 135) {
+        if (angle === ONE_HEIGHT_ROTATION || angle === THREE_EIGHT_ROTATION) {
             yDelta = -Math.abs(xDelta);
         }
-        if (angle == 225 || angle == 315) {
+        if (angle === FIVE_EIGHT_ROTATION || angle === SEVEN_EIGHT_ROTATION) {
             yDelta = Math.abs(xDelta);
         }
 
         // add fixed variations to the first point
-        const fixed: Point = new Point(firstPoint.x + xDelta, firstPoint.y + yDelta);
+        const FIXED: Point = new Point(firstPoint.x + xDelta, firstPoint.y + yDelta);
 
-        return fixed;
+        return FIXED;
     }
 }

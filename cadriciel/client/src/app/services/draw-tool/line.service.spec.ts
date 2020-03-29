@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
+import { LineAttributes } from '../attributes/line-attributes';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { LineService } from './line.service';
 import { Point } from './point';
@@ -23,7 +24,7 @@ describe('LineService', () => {
                 { provide: String, useValue: '' },
                 { provide: Boolean, useValue: true },
                 { provide: Number, useValue: 0 },
-                { provide: HTMLElement, useValue: {} },
+                { provide: HTMLElement, useValue: { getAttribute: () => 0 } },
                 { provide: KeyboardHandlerService, useValue: kbServiceStub },
             ],
         });
@@ -36,17 +37,17 @@ describe('LineService', () => {
     });
 
     it('should be created', () => {
-        const testService: LineService = TestBed.get(LineService);
-        expect(testService).toBeTruthy();
+        const TEST_SERVICE: LineService = TestBed.get(LineService);
+        expect(TEST_SERVICE).toBeTruthy();
     });
 
     it('should set the attributes in the subscription', () => {
         service.interaction.emitLineAttributes({ junction: true, lineThickness: 0, junctionDiameter: 0 }); // arbitrary line attr
 
-        const spyInteraction = spyOn(service.interaction.$lineAttributes, 'subscribe');
+        const SPY_INTERACTION = spyOn(service.interaction.$lineAttributes, 'subscribe');
         service.updateAttributes();
 
-        expect(spyInteraction).toHaveBeenCalled();
+        expect(SPY_INTERACTION).toHaveBeenCalled();
         expect(service.attr).toBeDefined(); // the line attributes have been recieved!
     });
     /*
@@ -80,31 +81,31 @@ describe('LineService', () => {
 
     it('should add the same point twice in the array if the mouse doesnt move', () => {
         service.currentPath.length = 0;
-        const spy = spyOn(service.currentPath, 'push');
+        const SPY = spyOn(service.currentPath, 'push');
         service.down(ptA, true); // mouse is inside workspace
-        expect(spy).toHaveBeenCalledTimes(2); // point twice in array
-        expect(spy).toHaveBeenCalledWith(ptA);
+        expect(SPY).toHaveBeenCalledTimes(2); // point twice in array
+        expect(SPY).toHaveBeenCalledWith(ptA);
     });
 
     it('should add the same point once if the current path is not finished', () => {
         service.currentPath.push(new Point(1, 1));
-        const spy = spyOn(service.currentPath, 'push');
+        const SPY = spyOn(service.currentPath, 'push');
         service.down(ptA, true);
-        expect(spy).toHaveBeenCalledTimes(1);
-        expect(spy).toHaveBeenCalledWith(ptA);
+        expect(SPY).toHaveBeenCalledTimes(1);
+        expect(SPY).toHaveBeenCalledWith(ptA);
     });
 
     it('should update progress after mouse down', () => {
-        const spy = spyOn(service, 'updateProgress');
+        const SPY = spyOn(service, 'updateProgress');
         service.down(ptA, true);
-        expect(spy).toHaveBeenCalledWith(false); // not a dblclick
+        expect(SPY).toHaveBeenCalledWith(false); // not a dblclick
     });
 
     it('should push a new point if the current path has only one', () => {
         service.currentPath.push(ptA);
-        const spy = spyOn(service.currentPath, 'push');
+        const SPY = spyOn(service.currentPath, 'push');
         service.move(ptB); // we move to point b
-        expect(spy).toHaveBeenCalledWith(ptB);
+        expect(SPY).toHaveBeenCalledWith(ptB);
     });
 
     it('should update the current path after the new position', () => {
@@ -113,55 +114,55 @@ describe('LineService', () => {
 
         service.move(ptA); // moving back again to pointA
 
-        const newPos = service.currentPath[service.currentPath.length - 1];
-        expect(newPos).toBe(ptA);
+        const NEW_POS = service.currentPath[service.currentPath.length - 1];
+        expect(NEW_POS).toBe(ptA);
     });
 
     it('should call the progress update on move', () => {
-        const spy = spyOn(service, 'updateProgress');
+        const SPY = spyOn(service, 'updateProgress');
         service.move(ptB);
-        expect(spy).toHaveBeenCalledWith(false); // still not a dblclick on update
+        expect(SPY).toHaveBeenCalledWith(false); // still not a dblclick on update
     });
 
     it('should cancel if there is not at least 4 mouse actions (points)', () => {
         // se "doubleClick" method
         const inWorkspace = true;
-        const spy = spyOn(service, 'cancel');
+        const SPY = spyOn(service, 'cancel');
         service.doubleClick(ptA, inWorkspace);
-        expect(spy).toHaveBeenCalled();
+        expect(SPY).toHaveBeenCalled();
     });
 
     it('should pop the current path twice if it has 4 points or more', () => {
-        const inWorkspace = true;
-        const spy = spyOn(service.currentPath, 'pop');
+        const IN_WORKSPACE = true;
+        const SPY = spyOn(service.currentPath, 'pop');
         service.currentPath.push(ptA);
         service.currentPath.push(new Point(0, 0)); // adding some points
         service.currentPath.push(new Point(1, 2));
         service.currentPath.push(new Point(0, 2));
 
-        service.doubleClick(ptA, inWorkspace);
-        expect(spy).toHaveBeenCalledTimes(2); // called pop twice
+        service.doubleClick(ptA, IN_WORKSPACE);
+        expect(SPY).toHaveBeenCalledTimes(2); // called pop twice
     });
 
     it('should cut the line on double click', () => {
-        const inWorkspace = true;
-        const spy = spyOn(service, 'updateDrawing');
+        const IN_WORKSPACE = true;
+        const SPY = spyOn(service, 'updateDrawing');
 
         service.currentPath.push(new Point(1, 1));
         service.currentPath.push(new Point(0, 2)); // adding supplementary points
         service.currentPath.push(new Point(1, 2));
         service.currentPath.push(new Point(2, 2)); // needs at least 4
 
-        service.doubleClick(ptA, inWorkspace); // arbitrary point in ws
-        expect(spy).toHaveBeenCalledWith(true); // it was a double click, cutting the line
+        service.doubleClick(ptA, IN_WORKSPACE); // arbitrary point in ws
+        expect(SPY).toHaveBeenCalledWith(true); // it was a double click, cutting the line
     });
 
     it('should not cut the line on double click if line is incomplete', () => {
-        const inWorkspace = true;
-        const spy = spyOn(service, 'updateDrawing');
+        const IN_WORKSPACE = true;
+        const SPY = spyOn(service, 'updateDrawing');
 
-        service.doubleClick(ptA, inWorkspace); // arbitrary point in ws
-        expect(spy).not.toHaveBeenCalled(); // it was a double click, cutting the line
+        service.doubleClick(ptA, IN_WORKSPACE); // arbitrary point in ws
+        expect(SPY).not.toHaveBeenCalled(); // it was a double click, cutting the line
     });
 
     // for some reason, the test never passes.
@@ -179,63 +180,63 @@ describe('LineService', () => {
 
     it('should not call a forced angle if not chosen', () => {
         service.forcedAngle = false;
-        const spy = spyOn(service, 'pointAtForcedAngle');
+        const SPY = spyOn(service, 'pointAtForcedAngle');
         service.createPath(ptArr, false);
-        expect(spy).not.toHaveBeenCalled();
+        expect(SPY).not.toHaveBeenCalled();
     });
 
     it('the line should be named line-segments', () => {
-        const line = service.createPath(ptArr, false); // not a double click
-        expect(line).toContain('line-segments');
+        const LINE = service.createPath(ptArr, false); // not a double click
+        expect(LINE).toContain('line-segments');
     });
 
     it('should create a valid svg line (from path)', () => {
-        const line = service.createPath(ptArr, false); // not a double click
-        expect(line).toContain('<path');
+        const LINE = service.createPath(ptArr, false); // not a double click
+        expect(LINE).toContain('<path');
     });
 
     it('should be closed on double click', () => {
         const DBL = true;
-        const line = service.createPath(ptArr, DBL);
+        const LINE = service.createPath(ptArr, DBL);
         const CLOSE = 'Z'; // character for cutting the line
 
-        expect(line).toContain(CLOSE);
+        expect(LINE).toContain(CLOSE);
     });
 
     it('should be able to be continuated if no click', () => {
         const DBL = false;
-        const line = service.createPath(ptArr, DBL);
+        const LINE = service.createPath(ptArr, DBL);
         const CLOSE = 'Z';
 
-        expect(line).not.toContain(CLOSE);
+        expect(LINE).not.toContain(CLOSE);
     });
 
     it('should contain the starting point coordinates', () => {
-        const line = service.createPath(ptArr, false);
-        expect(line).toContain(`M ${ptA.x} ${ptA.y} `); // first point in our point array
+        const LINE = service.createPath(ptArr, false);
+        expect(LINE).toContain(`M ${ptA.x} ${ptA.y} `); // first point in our point array
     });
 
     it('should be composed of the succeeding points', () => {
         ptArr.push(new Point(2, 2)); // this new point has not been placed yet.
 
-        const line = service.createPath(ptArr, false);
-        expect(line).toContain(`L ${ptB.x} ${ptB.y} `); // ptB is the succeeding point
+        const LINE = service.createPath(ptArr, false);
+        expect(LINE).toContain(`L ${ptB.x} ${ptB.y} `); // ptB is the succeeding point
     });
 
     it('should have the primary color as attribute', () => {
         const PRIM = '#ffffff';
         const SEC = '#000000';
-        const back = '#ffffff';
-        service.chosenColor = { primColor: PRIM, secColor: SEC, backColor: back };
-        const line = service.createPath(ptArr, false);
-        expect(line).toContain(`"stroke="${PRIM}"`);
+        const BACK = '#ffffff';
+        service.chosenColor = { primColor: PRIM, secColor: SEC, backColor: BACK };
+        const LINE = service.createPath(ptArr, false);
+        expect(LINE).toContain(`"stroke="${PRIM}"`);
     });
 
     it('should have the choosen thickness as attribute', () => {
         const THICK = 5; // arbitrary, for test purpose
 
-        const line = service.createPath(ptArr, false);
-        expect(line).toContain(`stroke-width="${THICK}"`);
+        const LINE = service.createPath(ptArr, false);
+        expect(LINE).toContain(`stroke-width="${THICK}"`);
     });
 
     it('should render a circle as junction if choosen', () => {
@@ -243,8 +244,8 @@ describe('LineService', () => {
         const DIAM = 10;
         service.attr.junctionDiameter = DIAM;
 
-        const line = service.createPath(ptArr, false);
-        expect(line).toContain('<circle');
+        const LINE = service.createPath(ptArr, false);
+        expect(LINE).toContain('<circle');
     });
 
     it('should render a circle as junction of the choosen diameter', () => {
@@ -252,14 +253,14 @@ describe('LineService', () => {
         const DIAM = 10;
         service.attr.junctionDiameter = DIAM;
 
-        const line = service.createPath(ptArr, false);
-        expect(line).toContain(`r="${DIAM / 2}"`);
+        const LINE = service.createPath(ptArr, false);
+        expect(LINE).toContain(`r="${DIAM / 2}"`);
     });
 
     it('should return the same point on forced angle if it was horizontal', () => {
         const PT = new Point(1, 0);
-        const point = service.pointAtForcedAngle(ptA, PT); // (1,1) and (2,1), forming an horizontal line
-        expect(point).toEqual(PT);
+        const POINT = service.pointAtForcedAngle(ptA, PT); // (1,1) and (2,1), forming an horizontal line
+        expect(POINT).toEqual(PT);
     });
 
     it('should redirect the point to a forced angle of 0 degrees', () => {
@@ -318,4 +319,67 @@ describe('LineService', () => {
         const NEW_Y = -1;
         expect(REDIR.y).toEqual(NEW_Y);
     });
+
+    it('should cancel de line if escape key is pressed', () => {
+        const ESCAPE = 27;
+        kbServiceStub.keyCode = ESCAPE;
+        const SPY = spyOn(service, 'cancel');
+        service.updateDown(kbServiceStub);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should update the line progress if backspace key is pressed', () => {
+        const BCKSPACE = 8;
+        kbServiceStub.keyCode = BCKSPACE;
+        service.currentPath = [ptA, ptB, ptA, ptB];
+        const SPY = spyOn(service, 'updateProgress');
+        service.updateDown(kbServiceStub);
+        expect(SPY).toHaveBeenCalledWith(false);
+    });
+
+    it('should not add circles (junction points) on false boolean', () => {
+        service.attr.junction = false;
+        const LINE_STR = service.createPath(ptArr, false);
+        expect(LINE_STR).not.toContain('circle');
+    });
+
+    it('should not update drawing if the mouse is outside workspace', () => {
+        const SPY = spyOn(service, 'updateDrawing');
+        service.doubleClick(ptA, false);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not update progress if the mouse is not down on move', () => {
+        service.isDown = false;
+        const SPY = spyOn(service, 'updateProgress');
+        service.move(ptA);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not update progress if the mouse is not down on updateDown', () => {
+        service.isDown = false;
+        const SPY = spyOn(service, 'updateProgress');
+        service.updateDown(kbServiceStub);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not update progress if there is not enough points to compute', () => {
+        service.isDown = false;
+        service.currentPath = [ptA];
+        const BCKSPACE = 8;
+        kbServiceStub.keyCode = BCKSPACE;
+        const SPY = spyOn(service, 'updateProgress');
+        service.updateDown(kbServiceStub);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not update attributes if undefined in the subscription', () => {
+        const LINE_ATTR: LineAttributes = { junction: false, lineThickness: 25, junctionDiameter: 10 };
+        service.attr = LINE_ATTR;
+        service.updateAttributes();
+        service.interaction.emitLineAttributes(undefined);
+        expect(service.attr).toEqual(LINE_ATTR);
+    });
+
+    // tslint:disable-next-line: max-file-line-count
 });
