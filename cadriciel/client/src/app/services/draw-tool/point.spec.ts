@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Point } from './point';
 
-fdescribe('Point', () => {
+describe('Point', () => {
     let point: Point;
     beforeEach(() => {
         TestBed.configureTestingModule({});
