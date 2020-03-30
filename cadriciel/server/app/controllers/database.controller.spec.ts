@@ -1,7 +1,10 @@
 import * as inversify from 'inversify';
 
 import Types from '../types';
-import { Collection,/* FilterQuery,*/ MongoClient/*, MongoClientOptions, UpdateQuery*/ } from 'mongodb';
+import {
+    Collection,/* FilterQuery,*/ MongoClient,/*, MongoClientOptions, UpdateQuery*/
+    Db
+} from 'mongodb';
 import { DatabaseController } from './database.controller';
 import { MongoMemoryServer as MMS } from 'mongodb-memory-server';
 import { MetaData } from '../metadata';
@@ -23,19 +26,23 @@ describe('Database service', () => {
     let containerSer: inversify.Container;
     let server = new MMS();
     let app: Application;
+    let db: Db;
     beforeEach(async () => {
         containerSer = new inversify.Container();
         containerSer.bind(Types.DatabaseService).to(DatabaseService);
         dbService = containerSer.get<DatabaseService>(Types.DatabaseService);
         dbController = new DatabaseController(dbService);
         app = new Application(dbController);
+
+    });
+    async function initDB() {
         await server.getConnectionString()
             .then(async (url) => {
                 return await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
                     .then(async (client) => {
                         return await server.getDbName()
                             .then(async (dbName) => {
-                                let db = client.db(dbName);
+                                db = client.db(dbName);
                                 return await db.createCollection('test', { size: 512000, w: 'majority' })
                                     .then(async (collection: Collection<MetaData>) => {
                                         dbService.collection = collection;
@@ -58,61 +65,99 @@ describe('Database service', () => {
             let imageData: ImageData = { id: i.toString(), svgElement: svg, name: 'ok', tags: ['ok'] };
             await dbService.saveImage(imageData);
         }
-    });
+    }
     //getAll
-    it('should Get all images in database', async () => {
-        return await chai.request(app.app).get('/Images')
+    it('should return NO_CONTENT status if Get allImages was call successfully', async () => {
+        await initDB();
+        return await chai.request(app.app).get('/database/Images')
             .then(res => {
                 chai.expect(res).to.have.status(Httpstatus.OK);
             });
 
     })
-    it('should return NOT_FOUND if request fail', async () => {
-        return await chai.request(app.app).get('/Images')
+    it('should return NOT_FOUND status if Get allImages was call unsuccessfully', async () => {
+        return await chai.request(app.app).get('/database/Images')
             .then(res => {
                 chai.expect(res).to.have.status(Httpstatus.NOT_FOUND);
+            })
+
+    })
+    it('should throw an error if Get allImages as fail', async () => {
+        await initDB();
+        await db.dropDatabase();
+        return await chai.request(app.app).get('/database/Images')
+            .catch((err) => {
+                return Promise.reject(err);
             });
 
     })
     //getByTags
-    it('should return true if request is ok', async () => {
-        return await chai.request(app.app).get('/Images/:tags')
+    it('should return NO_CONTENT status if Get imagesByTags was call successfully', async () => {
+        await initDB();
+        return await chai.request(app.app).get('/database/Images/:tags')
             .then(res => {
                 chai.expect(res).to.have.status(Httpstatus.OK);
             });
 
     })
-    it('should return NOT_FOUND if request as fail', async () => {
-        return await chai.request(app.app).get('/Images/:tags')
+    it('should return NOT_FOUND status if Get imagesByTags was call unsuccessfully', async () => {
+        return await chai.request(app.app).get('/database/Images/:tags')
+            .send({ tags: '@#$T' })
             .then(res => {
                 chai.expect(res).to.have.status(Httpstatus.NOT_FOUND);
+            })
+    })
+    it('should throw an error if Get imagesByTags as fail', async () => {
+        await initDB();
+        await db.dropDatabase();
+        return await chai.request(app.app).get('/database/Images/:tags')
+            .send('@#$T')
+            .catch((err) => {
+                return Promise.reject(err);
             });
-
     })
     //Delete
-    it('should Get all images in database', async () => {
-        return await chai.request(app.app).delete('/Images/:id')
+    it('should return NO_CONTENT status if Delete was call successfully', async () => {
+        await initDB();
+        return await chai.request(app.app).delete('/database/Images/:id')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', 'my-auth-token')
             .then(res => {
-                chai.expect(res).to.have.status(Httpstatus.OK);
-            });
-
+                chai.expect(res).to.have.status(Httpstatus.NO_CONTENT);
+            })
+            .catch();
     })
-    it('should return NOT_FOUND if request fail', async () => {
-        return await chai.request(app.app).delete('/Images/:id')
+    it('should return NOT_FOUND status if Delete was call unsuccessfully', async () => {
+        return await chai.request(app.app).delete('/database/Images/:id')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', 'my-auth-token')
             .then(res => {
                 chai.expect(res).to.have.status(Httpstatus.NOT_FOUND);
+            })
+            .catch();
+    })
+    it('should throw an error if Delete as fail', async () => {
+        await initDB();
+        await db.dropDatabase();
+        return await chai.request(app.app).delete('/database/Images/:id')
+            .catch((err) => {
+                return Promise.reject(err);
             });
     })
     //Post
-    it('should Get all images in database', async () => {
-        return await chai.request(app.app).post('/saveImage')
+    it('should return OK status if Post was call successfully', async () => {
+        await initDB();
+        const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
+        const imageData: ImageData = { id: '30', svgElement: svg, name: 'ok', tags: ['ok'] };
+        return await chai.request(app.app).post('/database/saveImage')
+            .send(imageData)
             .then(res => {
                 chai.expect(res).to.have.status(Httpstatus.OK);
             });
 
     })
-    it('should return NOT_FOUND if request fail', async () => {
-        return await chai.request(app.app).post('/saveImage')
+    it('should return NO_FOUND status if Post was call unsuccessfully', async () => {
+        return await chai.request(app.app).post('/database/saveImage')
             .then(res => {
                 chai.expect(res).to.have.status(Httpstatus.NOT_FOUND);
             });
