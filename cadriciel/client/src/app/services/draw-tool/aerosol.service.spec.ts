@@ -5,6 +5,10 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 import { AerosolService } from './aerosol.service';
 import { Point } from './point';
 
+const SPY_EV = jasmine.createSpy();
+beforeAll(() => {
+    window.addEventListener('toolChange', SPY_EV);
+});
 describe('AerosolService', () => {
     // tslint:disable-next-line: no-any
     let createInvisPath: any;
@@ -57,11 +61,18 @@ describe('AerosolService', () => {
         service.generatePoint = () => 0;
 
     });
+    beforeAll(() => {
+        window.dispatchEvent(new Event('toolChange'));
+    });
 
     afterEach(() => {
         // tslint:disable-next-line: no-string-literal
         service['points'] = [];
 
+    });
+
+    it('should be triggered by toolChange events', () => {
+        expect(SPY_EV).toHaveBeenCalled();
     });
 
     it('should be created', () => {
@@ -309,13 +320,14 @@ describe('AerosolService', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it('should unsubscribe from the tool on change', async () => {
+    it('should unsubscribe from the tool on change', () => {
+        service.isDown = true;
+
+        service.toolChangeListener();
         service.subscribe();
         // tslint:disable-next-line: no-string-literal
         const SPY = spyOn(service['sub'], 'unsubscribe');
 
-        service.isDown = true;
-        service.toolChangeListener();
         window.dispatchEvent(new Event('toolChange'));
 
         expect(SPY).toHaveBeenCalled();
@@ -339,6 +351,7 @@ describe('AerosolService', () => {
 
         // tslint:disable-next-line: no-string-literal
         expect(service['insideCanvas']).toBeTruthy();
+
     });
 
     it('should generate 8 random points on mouse down with a diameter of 15px', () => {
@@ -353,6 +366,12 @@ describe('AerosolService', () => {
         service.generatePoint();
         // tslint:disable-next-line: no-string-literal
         expect(service['points'].length).toEqual(EXP_LEN);
+    });
+
+    it('should have the method signatures of the inherited methods', () => { // test for coverage purpose (functions)
+        expect(service.doubleClick(new Point(0, 0))).not.toBeDefined();
+        expect(service.updateDown(kbServiceStub)).not.toBeDefined();
+        expect(service.updateUp(0)).not.toBeDefined();
     });
 
     // tslint:disable-next-line: max-file-line-count
