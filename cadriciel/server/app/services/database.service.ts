@@ -23,7 +23,7 @@ export class DatabaseService {
         MongoClient.connect(DATABASE_URL, this.options)
             .then((client: MongoClient) => {
                 this.collection = client.db(DATABASE_NAME).collection(DATABASE_COLLECTION);
-                //console.error('connexion ok ');
+                // console.error('connexion ok ');
             })
             .catch(() => {
                 console.error('Erreur de connexion. Terminaison du processus');
@@ -150,12 +150,12 @@ export class DatabaseService {
         await this.validateImageData(imageData)
             .then((data) => {
                 if (data !== null) {
-                    this.save(data)
+                    this.save(data);
                 }
             })
             .catch((err) => {
                 throw err;
-            })
+            });
     }
     async save(image: ImageData): Promise<void> {
         // Convert string (old data) to JSON
@@ -169,7 +169,7 @@ export class DatabaseService {
         fs.writeFileSync(this.jsonFile, listToJson);
         const metadata: MetaData = { id: image.id, name: image.name, tags: image.tags };
         this.collection.insertOne(metadata).catch((err) => {
-            throw err//new Error('Fail to insert data');
+            throw err; // new Error('Fail to insert data');
         });
     }
 
@@ -194,7 +194,7 @@ export class DatabaseService {
 
             })
             .catch((err) => {
-                throw err//new Error('Validation failure');
+                throw err; // new Error('Validation failure');
             });
     }
 
