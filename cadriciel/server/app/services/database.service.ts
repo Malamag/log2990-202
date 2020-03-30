@@ -150,9 +150,7 @@ export class DatabaseService {
         await this.validateImageData(imageData)
             .then((data) => {
                 if (data !== null) {
-                    this.save(data).catch((err) => {
-                        throw err;
-                    });
+                    this.save(data)
                 }
             })
             .catch((err) => {
@@ -170,8 +168,8 @@ export class DatabaseService {
         const listToJson = JSON.stringify(drawingsList);
         fs.writeFileSync(this.jsonFile, listToJson);
         const metadata: MetaData = { id: image.id, name: image.name, tags: image.tags };
-        this.collection.insertOne(metadata).catch(() => {
-            throw new Error('Fail to insert data');
+        this.collection.insertOne(metadata).catch((err) => {
+            throw err//new Error('Fail to insert data');
         });
     }
 
@@ -181,7 +179,6 @@ export class DatabaseService {
             .then(async (data) => {
                 if (data.length >= MAX_DATA_AMOUNT) {
                     throw new Error('Collection is full');
-                    //return null;
                 }
                 while (!this.validateId(imageData.id, data)) {
                     // Generate a new id
@@ -189,11 +186,9 @@ export class DatabaseService {
                 }
                 if (!this.validateName(imageData.name)) {
                     throw new Error('Empty name');
-                    //return null;
                 }
                 if (!this.validateTags(imageData.tags)) {
                     throw new Error('Invalide tags');
-                    //return null;
                 }
                 return imageData;
 

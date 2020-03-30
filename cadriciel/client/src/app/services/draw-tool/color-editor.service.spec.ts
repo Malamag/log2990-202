@@ -6,7 +6,7 @@ import { ElementInfo } from './element-info.service';
 import { Point } from './point';
 // import { ColorConvertingService } from '../colorPicker/color-converting.service';
 const TEST_PT = new Point(1, 1);
-describe('ColorEditorService', () => {
+fdescribe('ColorEditorService', () => {
     // let fakeColorConvertingService: ColorConvertingService;
     let service: ColorEditorService;
     // tslint:disable-next-line: no-any
@@ -213,7 +213,6 @@ describe('ColorEditorService', () => {
         service.move(new Point(2, 1));
         expect(SPY).toHaveBeenCalled();
     });
-
     it('should call checkIfTouching on mouse move', () => {
         const SPY = spyOn(service, 'checkIfTouching');
         service.move(new Point(2, 1));
@@ -281,6 +280,19 @@ describe('ColorEditorService', () => {
         service.drawing = htmlElementStub;
         spyOn(CanvasInteraction, 'getPreciseBorder').and.returnValue([[2, true], [0, true], [1, true], [2, true]]);
         spyOn(service, 'checkIfPathIntersection').and.returnValue(true);
+        spyOn(Point, 'rectOverlap').and.returnValue(true);
+        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
+        const SPY = spyOn(service, 'changeColor');
+        service.checkIfTouching();
+        expect(SPY).not.toHaveBeenCalled();
+    });
+    it('should not change the color if not touching and mouse is down', () => {
+        service.isDown = true;
+        service.inProgress = htmlElementStub;
+        service.currentPath = [ptA, ptB, ptA];
+        service.drawing = htmlElementStub;
+        spyOn(CanvasInteraction, 'getPreciseBorder').and.returnValue([[2, true], [0, true], [1, true], [2, true]]);
+        spyOn(service, 'checkIfPathIntersection').and.returnValue(false);
         spyOn(Point, 'rectOverlap').and.returnValue(true);
         spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
         const SPY = spyOn(service, 'changeColor');

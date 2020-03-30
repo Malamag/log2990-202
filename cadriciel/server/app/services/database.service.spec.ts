@@ -22,6 +22,8 @@ describe('Database service', () => {
         container = new inversify.Container();
         container.bind(Types.DatabaseService).to(DatabaseService);
         dbService = container.get<DatabaseService>(Types.DatabaseService);
+    })
+    async function initDB() {
         await server.getConnectionString()
             .then(async (url) => {
                 return await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -32,7 +34,7 @@ describe('Database service', () => {
                                 return await db.createCollection('test', { size: 512000, w: 'majority' })
                                     .then(async (collection: Collection<MetaData>) => {
                                         dbService.collection = collection;
-                                        //console.log('Collection succesfully created')
+                                        console.log('Collection succesfully created')
                                         return Promise.resolve();
                                     })
                                     .catch(() => { console.log('Fail to create collection') });
@@ -43,47 +45,50 @@ describe('Database service', () => {
             })
             .catch(() => { console.log('Fail to get db url') });
         dbService.jsonFile = '../jsonTest.json';
-        try { dbService.clearData(); }
-        catch{ }
+        //dbService.clearData().catch(() => { });
         const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
         // create 10 images with id 0 to 9 for testing purpose
         for (let i = 0; i < 10; i++) {
             let imageData: ImageData = { id: i.toString(), svgElement: svg, name: 'ok', tags: ['ok'] };
             await dbService.saveImage(imageData);
         }
-    })
+    }
     afterEach(async () => {
-        try { dbService.clearData(); }
-        catch{ }
+        dbService.clearData().catch(() => { });
     })
-    //test connect() yes/no
     //test getAllImages()
     it('should expect a lenght of ten when getting all images', async () => {
+        await initDB();
         const result = await dbService.getAllImages();
         return expect(result).to.have.length(10);
     }).timeout(30000)
     //test getImagesByTags()
     it('should expect a lenght of 10 for a result of 10 matching image', async () => {
+        await initDB();
         const result = await dbService.getImagesByTags('ok');
         return expect(result).to.have.length(10);
     })
     it('should expect a lenght of zero for a result of no matching image', async () => {
+        await initDB();
         const result = await dbService.getImagesByTags('blue');
         return expect(result).to.have.length(0);
     })
 
     //test getImages() expect matching id
     it('should expect a lenght of one for a search of one existing image', async () => {
+        await initDB();
         const metaData: MetaData[] = [{ id: '1', name: 'ok', tags: ['ok'] }];
         const result = await dbService.getImages(metaData);
         return expect(result).to.have.length(1);
     })
     it('should expect a lenght of zero for a search of one not existing image', async () => {
+        await initDB();
         const metaData: MetaData[] = [{ id: '1001', name: 'ok', tags: ['ok'] }];
         const result = await dbService.getImages(metaData);
         return expect(result).to.have.length(0);
     })
     it('should expect a lenght of a 5 for a search of 5 existing image', async () => {
+        await initDB();
         const metaData: MetaData[] = [{ id: '1', name: 'ok', tags: [''] },
         { id: '2', name: 'ok', tags: [''] },
         { id: '3', name: 'ok', tags: [''] },
@@ -117,20 +122,23 @@ describe('Database service', () => {
     })
     //test deleteImageById()
     it('should delete the image with the choosen id', async () => {
+        await initDB();
         const expectedLenght = (await dbService.getAllImages()).length - 1;
         await dbService.deleteImageById('1');
         const result = await dbService.getAllImages();
         return expect(result).to.have.length(expectedLenght);
     })
     it('should throw an error if fail to delete image', async () => {
+        await initDB();
         const ERROR = new Error("Imposible de supprimer l'image");
-        dbService.deleteImageById('1101').catch((error) => {
-            return expect(error).to.equal(ERROR);
+        return await dbService.deleteImageById('1101').catch((err) => {
+            //return Promise.reject(err);
+            expect(err).to.equal(ERROR);
         });
-        return false;
     })
     //test saveImage()
     it('should expect a lenght of one more after adding an image to test collection', async () => {
+        await initDB();
         const expectedLenght = (await dbService.getAllImages()).length + 1;
         const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
         const imageData: ImageData = { id: '10', svgElement: svg, name: 'ok', tags: ['ok'] };
@@ -139,47 +147,56 @@ describe('Database service', () => {
         return expect(result).to.have.length(expectedLenght);
     })
     it('should throw an error if image to save is invalide', async () => {
+        await initDB();
+        const ERROR = new Error('Empty name');
         const svg: SVGData = { height: '0', width: '0', innerHTML: [''], bgColor: '' };
         const imageData: ImageData = { id: '0', svgElement: svg, name: '', tags: [''] };
-        return dbService.saveImage(imageData).catch((error) => {
+        return dbService.saveImage(imageData).catch((err) => {
+            return expect(err).to.equal(ERROR);
         });
     })
-    it('should throw an error if fail to insert image', async () => {
-        dbService.collection.drop;
+    //test save()
+    it('should throw an error if save() fail to insert image', async () => {
+        await initDB()
         const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
         const imageData: ImageData = { id: '10', svgElement: svg, name: 'ok', tags: ['ok'] };
-        return dbService.saveImage(imageData).catch((error) => {
+        return dbService.save(imageData).catch((err) => {
+            return Promise.reject(err);
         });
     })
     //test validateImageData()
     it('should not accept image if collection is full', async () => {
-        const ERROR = new Error('Collection is full');
+        await initDB();
+        //const ERROR = new Error('Collection is full');
         const MAX_DATA_AMOUNT = 1000;
         const svg: SVGData = { height: '0', width: '0', innerHTML: ['caucue'], bgColor: 'red' };
         for (let i = 10; i < MAX_DATA_AMOUNT + 10; i++) {
             let imageData: ImageData = { id: i.toString(), svgElement: svg, name: 'ok', tags: ['ok'] };
-            await dbService.saveImage(imageData).catch((error) => {
-                return expect(error).to.be.equal(ERROR);
+            await dbService.saveImage(imageData).catch((err) => {
+                return Promise.reject(err);
             });
         }
-        //const imageData: ImageData = { id: '1001', svgElement: svg, name: 'ok', tags: ['ok'] };
-
-        //return;
-
     }).timeout(300000);
     it('should not accept an invalide name', async () => {
+        await initDB();
+        const ERROR = new Error('Empty name');
         const svg: SVGData = { height: '0', width: '0', innerHTML: [''], bgColor: '' };
         const imageData: ImageData = { id: '0', svgElement: svg, name: '', tags: [''] };
-        return dbService.saveImage(imageData).catch((error) => {
+        return dbService.saveImage(imageData).catch((err) => {
+            return expect(err).to.equal(ERROR);
         });
     })
     it('should not accept an invalide tag', async () => {
+        await initDB();
+        const ERROR = new Error('Invalide tags');
         const svg: SVGData = { height: '0', width: '0', innerHTML: [''], bgColor: '' };
         const imageData: ImageData = { id: '0', svgElement: svg, name: 'ok', tags: ['@#$%'] };
-        return dbService.saveImage(imageData).catch((error) => {
+        return dbService.saveImage(imageData).catch((err) => {
+            return expect(err).to.equal(ERROR);
         });
     })
     it('should accept a valide image', async () => {
+        await initDB();
         const svg: SVGData = { height: '0', width: '0', innerHTML: [''], bgColor: '' };
         const imagesData: ImageData = { id: '0', svgElement: svg, name: 'ok', tags: ['ok'] };
         const result = await (dbService.validateImageData(imagesData));
@@ -218,6 +235,7 @@ describe('Database service', () => {
     });
     //test clearData()
     it('should clear data', async () => {
+        await initDB();
         await dbService.clearData();
         const result = await (dbService.getAllImages());
         return expect(result).to.have.length(0);
