@@ -18,6 +18,7 @@ describe('drawingTools', () => {
         });
 
         service = TestBed.get(DrawingTool);
+        spyOn(window, 'dispatchEvent');
     });
 
     it('should be created', () => {

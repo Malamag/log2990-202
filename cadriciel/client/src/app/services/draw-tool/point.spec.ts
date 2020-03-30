@@ -41,7 +41,7 @@ describe('Point', () => {
         const BR1 = new Point(COORD, 0);
         const TL2 = new Point(HUND, 0);
         const RESULT = Point.rectOverlap(TL1, BR1, TL2, BR2);
-        expect(RESULT).toBeFalsy();
+        expect(RESULT).toBe(false);
     });
 
     it(' should be inside the rectangle', () => {
@@ -52,5 +52,15 @@ describe('Point', () => {
         const BR = new Point(TW, TW);
         const RESULT = Point.insideRectangle(P, TL, BR);
         expect(RESULT).toBeTruthy();
+    });
+
+    it(' should overlap', () => {
+        const COORD = 10;
+        const TL1 = new Point(0, 0);
+        const BR2 = new Point(COORD, 0);
+        const BR1 = new Point(COORD, 0);
+        const TL2 = new Point(0, 0);
+        const RESULT = Point.rectOverlap(TL1, BR1, TL2, BR2);
+        expect(RESULT).toBe(true);
     });
 });

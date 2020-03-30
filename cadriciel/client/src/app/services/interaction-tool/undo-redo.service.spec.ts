@@ -133,4 +133,24 @@ describe('UndoRedoService', () => {
         service.updateButtons();
         expect(EMIT_SPY).toHaveBeenCalledWith([false, false]);
     });
+
+    it('should not push in the undone array if the element is undefined', () => {
+        service.done.push('hello');
+        spyOn(service.done, 'pop').and.returnValue(undefined);
+        const SPY = spyOn(service.undone, 'push').and.callThrough();
+        service.undo();
+        expect(SPY).not.toHaveBeenCalled();
+        service.undone = []; // avoids interfering with other tests
+        service.done = [];
+    });
+
+    it('should not push in the done array if the element is undefined', () => {
+        service.undone.push('world');
+        spyOn(service.undone, 'pop').and.returnValue(undefined);
+        const SPY = spyOn(service.done, 'push').and.callThrough();
+        service.redo();
+        expect(SPY).not.toHaveBeenCalled();
+        service.undone = [];
+        service.done = [];
+    });
 });
