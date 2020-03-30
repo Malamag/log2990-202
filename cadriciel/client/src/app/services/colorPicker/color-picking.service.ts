@@ -246,8 +246,7 @@ export class ColorPickingService {
     }
     updateDisplay(
         hex: string,
-        // tslint:disable-next-line: no-magic-numbers
-        rgb: number[] = this.colorConvert.hexToRgba(hex.substring(1, 9)),
+        rgb: number[] = this.colorConvert.hexToRgba(hex.substring(1, hex.length - 1)),
         hsl: number[] = this.colorConvert.rgbToHsl(rgb[0], rgb[1], rgb[2]),
     ): void {
         // RGBA value of last color for display
