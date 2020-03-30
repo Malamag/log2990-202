@@ -9,7 +9,7 @@ import { SelectionService } from './selection.service';
 
 export class FakeInteractionService extends InteractionService { }
 
-describe('CanvasInteractionService', () => {
+fdescribe('CanvasInteractionService', () => {
   let service: SelectionService;
   // tslint:disable-next-line: prefer-const
   let render = jasmine.createSpyObj('Renderer2', ['setStyle']);
@@ -31,6 +31,7 @@ describe('CanvasInteractionService', () => {
       getBoundingClientRect: () => 0,
       x: 2,
       y: 2,
+      tagName: 'filter'
     };
     select = {
       children: [firstChild, firstChild],
@@ -198,10 +199,65 @@ describe('CanvasInteractionService', () => {
     const SPY = spyOn(Point, 'rectOverlap');
     const FIRST_POINT = new Point(fakeDomRECT.left, fakeDomRECT.top);
     const SECOND_POINT = new Point(fakeDomRECT.right, fakeDomRECT.bottom);
-    const THIRD_POINT = new Point(0 , SMALL_NUM);
+    const THIRD_POINT = new Point(0, SMALL_NUM);
     const FOURTH_POINT = new Point(BIG_NUM, BIG_NUM);
     CanvasInteraction.retrieveItemsInRect(select, select, [true, true], [false, false], true);
     expect(SPY).toHaveBeenCalledWith(FIRST_POINT, SECOND_POINT, THIRD_POINT, FOURTH_POINT);
     CanvasInteraction.getPreciseBorder = OLD_METHOD;
   });
+
+  it('should get a precise border two times on null canvas', () => {
+    service.selectedItems = [true, false];
+    select = null;
+    service.canvas = select;
+    service.selected = true;
+    const SMALL_NUM = 3;
+    const BIG_NUM = 4;
+    const FAKE_BORDER = [[0, true], [BIG_NUM, true], [SMALL_NUM, true], [BIG_NUM, true]];
+    const OLD_METHOD = CanvasInteraction.getPreciseBorder;
+    CanvasInteraction.getPreciseBorder = jasmine.createSpy().and.returnValue(FAKE_BORDER);
+    CanvasInteraction.createBoundingBox(service);
+    expect(CanvasInteraction.getPreciseBorder).toHaveBeenCalled();
+    CanvasInteraction.getPreciseBorder = OLD_METHOD; // Replaces the spy
+  });
+
+  it('should return a valid border', () => {
+    const ITEM = select;
+    const SECOND_CHILD = document.createElement('g');
+
+    SECOND_CHILD.setAttribute('stroke-width', '10');
+    const POS = 3;
+    const FIRST_RECORD: [number, boolean] = [0, true];
+    const SECOND_RECORD: [number, boolean] = [0, false];
+    const THIRD_RECORD: [number, boolean] = [0, true];
+    const FOURTH_RECORD: [number, boolean] = [0, false];
+    SECOND_CHILD.getBoundingClientRect = jasmine.createSpy().and.returnValue(fakeDomRECT);
+    const RET = CanvasInteraction.getPreciseBorder(ITEM, [FIRST_RECORD, SECOND_RECORD, THIRD_RECORD, FOURTH_RECORD]);
+
+    expect(RET[0]).toEqual(FIRST_RECORD);
+    expect(RET[1]).toEqual(SECOND_RECORD);
+    expect(RET[2]).toEqual(THIRD_RECORD);
+    expect(RET[POS]).toEqual(FOURTH_RECORD);
+  });
+
+  it('should call rect over lap with the expected invalid points on null selection Rectangle', () => {
+    select.lastElementChild = null;
+    const OLD_METHOD = CanvasInteraction.getPreciseBorder;
+    const SMALL_NUM = 3;
+    const BIG_NUM = 4;
+    const FAKE_BORDER = [[0, true], [BIG_NUM, true], [SMALL_NUM, true], [BIG_NUM, true]];
+    CanvasInteraction.getPreciseBorder = jasmine.createSpy().and.returnValue(FAKE_BORDER);
+    firstChild.getBoundingClientRect = jasmine.createSpy().and.returnValue(fakeDomRECT);
+    const SPY = spyOn(Point, 'rectOverlap');
+    // tslint:disable-next-line: no-magic-numbers
+    const FIRST_POINT = new Point(-1, -1);
+    // tslint:disable-next-line: no-magic-numbers
+    const SECOND_POINT = new Point(-1, -1);
+    const THIRD_POINT = new Point(0, SMALL_NUM);
+    const FOURTH_POINT = new Point(BIG_NUM, BIG_NUM);
+    CanvasInteraction.retrieveItemsInRect(select, select, [true, true], [false, false], true);
+    expect(SPY).toHaveBeenCalledWith(FIRST_POINT, SECOND_POINT, THIRD_POINT, FOURTH_POINT);
+    CanvasInteraction.getPreciseBorder = OLD_METHOD;
+  });
+
 });
