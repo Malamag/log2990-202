@@ -1,6 +1,6 @@
 import { HtmlSvgFactory } from './html-svg-factory.service';
 
-fdescribe('HtmlSvgFactory', () => {
+describe('HtmlSvgFactory', () => {
 
   it('should contain the rect tag', () => {
     const ID = '1';

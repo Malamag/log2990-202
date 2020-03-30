@@ -173,4 +173,10 @@ describe('PencilService', () => {
     expect(service.attr).toEqual(TEST_ATTR); // no change
   });
 
+  it('should have the signatures of the inherited methods', () => {
+    expect(service.updateDown(kbServiceStub)).not.toBeDefined(); // only used for coverage purposes
+    expect(service.updateUp(0)).not.toBeDefined();
+    expect(service.doubleClick(new Point(0, 0))).not.toBeDefined();
+  });
+
 });

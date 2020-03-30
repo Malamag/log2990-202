@@ -10,7 +10,7 @@ import { ShapeService } from './shape.service';
 
 export class FakeInteractionService extends InteractionService { }
 
-describe('ShapeService', () => {
+fdescribe('ShapeService', () => {
     let service: ShapeService;
     // tslint:disable-next-line: no-any
     let kbServiceStub: any;
@@ -153,6 +153,14 @@ describe('ShapeService', () => {
         service.interaction.emitFormsAttributes(undefined);
 
         expect(service.attr).toBeDefined(); // attributes have not been updated
+    });
+
+    it('should have the inherited methods signatures', () => {
+        expect(service.doubleClick(new Point(0, 0))).not.toBeDefined(); // test for coverage purposes
+        expect(service.goingOutsideCanvas()).not.toBeDefined();
+        expect(service.goingInsideCanvas()).not.toBeDefined();
+        expect(service.updateUp(0)).not.toBeDefined();
+
     });
 
 });
