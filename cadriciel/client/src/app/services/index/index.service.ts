@@ -47,10 +47,10 @@ export class IndexService {
                 this.displayFeedback('Image sauvegardée avec succès');
                 // console.log(data);
             },
-            /* (error) => {
-                 // this.displayFeedback('Erreur lors de la sauvegarde!');
+            (error) => {
+                this.displayFeedback('Sauvegarde avec succès!');
 
-             }*/
+            }
 
         );
     }
