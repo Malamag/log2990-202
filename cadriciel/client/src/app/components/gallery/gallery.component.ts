@@ -10,7 +10,7 @@ import { ModalWindowService } from 'src/app/services/window-handler/modal-window
 import { ShownData } from 'src/app/shown-data';
 import { ImageData } from '../../../../../image-data';
 import { SVGData } from '../../../../../svg-data';
-import { IndexService } from './../../services/index/index.service';
+import { ConnectionService } from '../../services/connection/connection.service';
 
 @Component({
     selector: 'app-gallery',
@@ -38,7 +38,7 @@ export class GalleryComponent implements AfterViewInit {
     @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
     constructor(
-        public index: IndexService,
+        public index: ConnectionService,
         render: Renderer2,
         public winService: ModalWindowService,
         public continueDraw: ContinueDrawingService,

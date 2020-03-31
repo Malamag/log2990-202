@@ -14,7 +14,7 @@ const HTTP_OPTIONS = {
 @Injectable({
     providedIn: 'root',
 })
-export class IndexService {
+export class ConnectionService {
     private readonly DATABASE_URL: string = 'http://localhost:3000/database/Images/';
     constructor(public http: HttpClient, public snackBar: MatSnackBar) { }
 

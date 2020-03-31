@@ -4,8 +4,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { MatChipInputEvent, MatDialogModule, MatSnackBarModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { ConnectionService } from 'src/app/services/connection/connection.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { IndexService } from 'src/app/services/index/index.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { SaveFormComponent } from './save-form.component';
 
@@ -15,7 +15,7 @@ describe('SaveFormComponent', () => {
   // tslint:disable-next-line: no-any
   let dFetchStub: any;
   let winService: ModalWindowService;
-  let index: IndexService;
+  let index: ConnectionService;
   // tslint:disable-next-line: no-any
   let fakeAdd: any;
   beforeEach(async(() => {
@@ -32,7 +32,7 @@ describe('SaveFormComponent', () => {
     TestBed.configureTestingModule({
       declarations: [SaveFormComponent],
       imports: [MatDialogModule, HttpClientTestingModule, MatSnackBarModule],
-      providers: [ModalWindowService, FormBuilder, { provide: DoodleFetchService, useValue: dFetchStub }, IndexService],
+      providers: [ModalWindowService, FormBuilder, { provide: DoodleFetchService, useValue: dFetchStub }, ConnectionService],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents();
@@ -41,7 +41,7 @@ describe('SaveFormComponent', () => {
   beforeEach(() => {
     dFetchStub.askForDoodle();
     winService = TestBed.get(ModalWindowService);
-    index = TestBed.get(IndexService);
+    index = TestBed.get(ConnectionService);
     fixture = TestBed.createComponent(SaveFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
