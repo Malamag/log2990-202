@@ -173,11 +173,10 @@ describe('NewDrawComponent', () => {
         const SPY = spyOn(component, 'resizeCanvas');
         component.ngOnInit();
         component.inputEntered = false;
-        const TIME_OUT = 50;
+
         window.dispatchEvent(new Event('resize'));
-        setTimeout(() => {
-            expect(SPY).toHaveBeenCalledTimes(1); // called at first init
-        }, TIME_OUT);
+
+        expect(SPY).toHaveBeenCalledTimes(1); // called at first init
 
     });
 
