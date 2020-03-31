@@ -22,9 +22,9 @@ import { ColorConvertingService } from './color-converting.service';
     providedIn: 'root',
 })
 export class ColorPickingService {
+    private readonly hexLen: number = 9; // #ffffffff has 9 chars
     // tslint:disable-next-line: typedef
     cData = colorData; // Interface for Color data
-
     colors: ChoosenColors;
     colorSubject: Subject<ChoosenColors> = new Subject<ChoosenColors>(); // le constuire à qqpart
     constructor(public colorConvert: ColorConvertingService) { }
@@ -246,7 +246,7 @@ export class ColorPickingService {
     }
     updateDisplay(
         hex: string,
-        rgb: number[] = this.colorConvert.hexToRgba(hex.substring(1, hex.length - 1)),
+        rgb: number[] = this.colorConvert.hexToRgba(hex.substring(1, this.hexLen)),
         hsl: number[] = this.colorConvert.rgbToHsl(rgb[0], rgb[1], rgb[2]),
     ): void {
         // RGBA value of last color for display
@@ -372,7 +372,7 @@ export class ColorPickingService {
                 break;
             case this.cData.GREEN_INPUT_FIELD:
                 ret += '#' + this.cData.hexColorInput.substring(0, 2) + this.cData.greenHexInput +
-                 this.cData.hexColorInput.substring(SMALL_SUB, BIG_SUB);
+                    this.cData.hexColorInput.substring(SMALL_SUB, BIG_SUB);
                 break;
             case this.cData.BLUE_INPUT_FIELD:
                 ret += '#' + this.cData.hexColorInput.substring(0, SMALL_SUB) + this.cData.blueHexInput;
