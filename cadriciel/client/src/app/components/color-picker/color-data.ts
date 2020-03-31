@@ -17,11 +17,11 @@ const HEX_F = 70; // f
 const HEX_BACKSPACE = 8;
 export const colorData = {
     currentHue: 0,
-    primaryColor: '#ff0000ff',
+    primaryColor: '#000000ff',
     primaryAlpha: 1,
     primarySaturation: 0,
     primaryLightness: 0,
-    secondaryColor: '#000000ff',
+    secondaryColor: '#ff0000ff',
     secondaryAlpha: 1,
     secondarySaturation: 0,
     secondaryLightness: 0,
