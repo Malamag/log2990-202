@@ -84,7 +84,7 @@ export class SelectionService extends ShapeService {
                 const EL: Element = this.drawing.children[i];
                 let status: string | null;
 
-                EL ? status = EL.getAttribute('isListening') : status = null;
+                status = EL.getAttribute('isListening');
 
                 if (status !== 'true') {
                     this.render.listen(EL, 'mousedown', () => {

@@ -45,7 +45,8 @@ describe('SvgDrawComponent', () => {
 
         gridServiceStub = {
             initGrid: () => 0,
-            removeGrid: () => 0
+            removeGrid: () => 0,
+            updateColor: () => 0
         };
 
         TestBed.configureTestingModule({

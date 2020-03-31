@@ -34,6 +34,7 @@ describe('SelectionService', () => {
             providers: [
                 { provide: Point },
                 { provide: HTMLElement, useValue: select },
+                { provide: HTMLCollection, useValue: select.children },
                 { provide: Element, useValue: select },
                 { provide: Number, useValue: 0 },
                 { provide: String, useValue: '' },
@@ -45,6 +46,7 @@ describe('SelectionService', () => {
         service = TestBed.get(SelectionService);
         service.selectedItems = [false, false, false];
         service.drawing = select;
+        service.inProgress = select;
     });
 
     it('should be created', () => {

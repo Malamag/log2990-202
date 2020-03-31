@@ -45,11 +45,9 @@ export class ConnectionService {
         this.http.post('http://localhost:3000/database/saveImage', imageData, HTTP_OPTIONS).subscribe(
             (data) => {
                 this.displayFeedback('Image sauvegardée avec succès');
-                // console.log(data);
             },
             (error) => {
-                this.displayFeedback('Sauvegarde avec succès!');
-
+                // console.log(data);
             }
 
         );
