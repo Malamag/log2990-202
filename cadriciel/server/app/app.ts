@@ -1,11 +1,10 @@
-import * as bodyParser from 'body-parser';
-import * as cookieParser from 'cookie-parser';
-import * as cors from 'cors';
-import * as express from 'express';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import express from 'express';
 import { inject, injectable } from 'inversify';
-import * as logger from 'morgan';
-import { DateController } from './controllers/date.controller';
-import { IndexController } from './controllers/index.controller';
+import logger from 'morgan';
+import { DatabaseController } from './controllers/database.controller';
 import Types from './types';
 
 @injectable()
@@ -14,8 +13,7 @@ export class Application {
     app: express.Application;
 
     constructor(
-        @inject(Types.IndexController) private indexController: IndexController,
-        @inject(Types.DateController) private dateController: DateController,
+        @inject(Types.DatabaseController) private databaseController: DatabaseController,
     ) {
         this.app = express();
 
@@ -35,8 +33,7 @@ export class Application {
 
     bindRoutes(): void {
         // Notre application utilise le routeur de notre API `Index`
-        this.app.use('/api/index', this.indexController.router);
-        this.app.use('/api/date', this.dateController.router);
+        this.app.use('/database', this.databaseController.router);
         this.errorHandling();
     }
 

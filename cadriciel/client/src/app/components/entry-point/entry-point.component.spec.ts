@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { GalleryComponent } from '../gallery/gallery.component';
 import { NewDrawComponent } from '../new-draw/new-draw.component';
 import { UserManualComponent } from '../user-manual/user-manual.component';
 import { EntryPointComponent } from './entry-point.component';
@@ -12,18 +13,18 @@ describe('EntryPointComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EntryPointComponent ],
+      declarations: [EntryPointComponent],
       imports:
-      [ MatFormFieldModule,
-        MatIconModule,
-        MatSnackBarModule,
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatDialogModule
-      ],
+        [MatFormFieldModule,
+          MatIconModule,
+          MatSnackBarModule,
+          BrowserAnimationsModule,
+          MatButtonModule,
+          MatDialogModule
+        ],
 
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -45,38 +46,59 @@ describe('EntryPointComponent', () => {
 
   it('should open the user guide on click', () => {
     const NAME = 'Guide';
-    const openGuide = spyOn(component, 'openUserManual');
+    const OPEN_GUIDE = spyOn(component, 'openUserManual');
     component.execute(NAME);
-    expect(openGuide).toHaveBeenCalled();
+    expect(OPEN_GUIDE).toHaveBeenCalled();
   });
 
   it('should open a snack bar on initialisation', () => {
-    const open = spyOn(component, 'onOpen');
+    const OPEN = spyOn(component, 'onOpen');
     component.ngOnInit(); // initialisation of entry point
-    expect(open).toHaveBeenCalled();
+    expect(OPEN).toHaveBeenCalled();
   });
 
   it('should use the window handler service to open the new draw form', () => {
-    const winService = component.winService;
-    const spy = spyOn(winService, 'openWindow');
+    const WIN_SERVICE = component.winService;
+    const SPY = spyOn(WIN_SERVICE, 'openWindow');
     component.openCreateNew();
-    expect(spy).toHaveBeenCalledWith(NewDrawComponent);
+    expect(SPY).toHaveBeenCalledWith(NewDrawComponent);
   });
 
   it('should use the window handler service to open the new draw form', () => {
-    const winService = component.winService;
-    const spy = spyOn(winService, 'openWindow');
+    const WIN_SERVICE = component.winService;
+    const SPY = spyOn(WIN_SERVICE, 'openWindow');
     component.openUserManual();
-    expect(spy).toHaveBeenCalledWith(UserManualComponent);
+    expect(SPY).toHaveBeenCalledWith(UserManualComponent);
   });
 
   it('should not open any window on invalid input', () => {
     const INVALID = '';
     component.execute(INVALID);
-    const formSpy = spyOn(component, 'openCreateNew');
-    const guideSpy = spyOn(component, 'openUserManual');
-    expect(formSpy).not.toHaveBeenCalled();
-    expect(guideSpy).not.toHaveBeenCalled();
+    const FORM_SPY = spyOn(component, 'openCreateNew');
+    const GUIDE_SPY = spyOn(component, 'openUserManual');
+    expect(FORM_SPY).not.toHaveBeenCalled();
+    expect(GUIDE_SPY).not.toHaveBeenCalled();
+  });
+
+  it('should open the gallery on proper shortcut name', () => {
+    const NAME = 'Ouvrir';
+    const SPY = spyOn(component, 'openGallery');
+    component.execute(NAME);
+    expect(SPY).toHaveBeenCalled();
+  });
+
+  it('should call the window service method to open the gallery', () => {
+    const SPY = spyOn(component.winService, 'openWindow');
+    component.openGallery();
+    expect(SPY).toHaveBeenCalledWith(GalleryComponent);
+  });
+
+  /* This test is only a placeholder for further methods implemented in the execute func */
+  it('should call the statements on continuing a doodle', () => {
+    const SPY = spyOn(console, 'log');
+    const NAME = 'Continuer';
+    component.execute(NAME);
+    expect(SPY).toHaveBeenCalledWith(NAME);
   });
 
 });

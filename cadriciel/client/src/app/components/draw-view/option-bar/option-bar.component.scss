@@ -1,7 +1,29 @@
-.topToolBar{
-    height: 9vh;  //risque d'être changé pour un %
+.topToolBar {
+    height: 9vh; //risque d'être changé pour un %
 }
 
 .topBtn {
     margin-right: 3px;
+}
+
+#grid-toggle {
+    position: absolute;
+    left: 90%;
+    padding: 2%;
+}
+
+#sliders-container {
+    margin-left: 50%;
+    margin-top: 2%;
+}
+
+.slider-label {
+    position: absolute;
+    top: 1%;
+    margin-left: 2%;
+}
+
+.slider-val {
+    font-size: small;
+    margin-right: 2%;
 }

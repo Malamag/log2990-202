@@ -2,19 +2,18 @@ import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.ser
 import { Point } from './point';
 
 export abstract class InputObserver {
-
-    constructor(shortcut: number, selected: boolean) {
-        this.shortcut = shortcut;
+    constructor(selected: boolean) {
         this.selected = selected;
     }
     shortcut: number;
     selected: boolean;
     // Keyboard
-    abstract update(keyboard: KeyboardHandlerService): void;
+    abstract updateDown(keyboard: KeyboardHandlerService): void;
+    abstract updateUp(keyCode: number): void;
     abstract cancel(): void;
 
     // Mouse
-    abstract down(position: Point, insideWorkspace?: boolean): void;
+    abstract down(position: Point, insideWorkspace?: boolean, isRightClick?: boolean): void;
     abstract up(position: Point, insideWorkspace?: boolean): void;
     abstract move(position: Point): void;
     abstract doubleClick(position: Point, insideWorkspace?: boolean): void;

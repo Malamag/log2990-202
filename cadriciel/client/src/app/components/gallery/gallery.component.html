@@ -1,0 +1,60 @@
+<div class="gallery" (keydown)="blockEvent($event)">
+    <h1>Galerie</h1>
+    <div *ngIf="allLoaded === false || allLoaded === undefined || shownDrawings.length === 0">
+        <mat-spinner [diameter]="32" id="progress-all"></mat-spinner>
+    </div>
+
+    <mat-form-field class="header">
+        <mat-chip-list #tagList>
+            <mat-chip *ngFor="let tag of tags" (removed)="removeTag(tag)">
+                {{ tag }}
+                <mat-icon matChipRemove>clear</mat-icon>
+            </mat-chip>
+
+            <input
+                matInput
+                #tagInput
+                [formControl]="tagCtrl"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="tagList"
+                [matChipInputSeparatorKeyCodes]="inputTagSeparators"
+                placeholder="Étiquette..."
+                (matChipInputTokenEnd)="addTag($event)"
+                (keydown)="blockEvent($event)"
+            />
+            <button id="filter-btn" mat-stroked-button color="primary" (click)="getImagesByTags()">Filtrer</button>
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSlected)="selected($event)">
+            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                {{ tag }}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <div id="cards-container" #cardsContainer>
+        <mat-card class="drawing" *ngFor="let drawing of shownDrawings">
+            <div *ngIf="shownDrawings.length === 0 || hasLoaded === false; else elseBlock">
+                <mat-spinner></mat-spinner>
+            </div>
+            <ng-template #elseBlock>
+                <mat-card-header>
+                    <mat-card-title> {{ drawing.name }} </mat-card-title>
+                    <mat-card-subtitle> {{ drawing.tags }} </mat-card-subtitle>
+                </mat-card-header>
+                <!---
+                <img mat-card-image src='https://cdn.instructables.com/F1F/IFEN/GW88TP3T/F1FIFENGW88TP3T.LARGE.jpg?auto=webp&fit=bounds' />
+                -->
+                <app-preview-box class="preview-box" [draw]="drawing.svgElement" [svgW]="drawing.width" [svgH]="drawing.height">
+                </app-preview-box>
+                <mat-card-actions>
+                    <button mat-stroked-button color="warn" (click)="delete(drawing.id)">
+                        <mat-icon matTooltip="Supprimer"> delete </mat-icon>
+                    </button>
+                    <button mat-stroked-button color="basic">
+                        <mat-icon matTooltip="Continuer dessin" (click)="continueDrawing(drawing.data)"> arrow_right_alt</mat-icon>
+                    </button>
+                </mat-card-actions>
+            </ng-template>
+        </mat-card>
+    </div>
+</div>

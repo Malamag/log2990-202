@@ -4,246 +4,297 @@ import { Point } from '../draw-tool/point';
 import { MouseHandlerService } from './mouse-handler.service';
 
 describe('MouseHandlerService', () => {
-  let iObserverStub: any;
-  let htmlElemStub: any;
-  let clientRectStub: any;
-  let mouseEventStub: any;
-  let service: MouseHandlerService;
+    // tslint:disable-next-line: no-any
+    let iObserverStub: any;
+    // tslint:disable-next-line: no-any
+    let htmlElemStub: any;
+    // tslint:disable-next-line: no-any
+    let clientRectStub: any;
+    // tslint:disable-next-line: no-any
+    let mouseEventStub: any;
+    let service: MouseHandlerService;
 
-  let pt: Point;
-  beforeEach(() => {
-    iObserverStub = {
-      shortcut: 0,
-      selected: true,
+    let pt: Point;
+    beforeEach(() => {
+        iObserverStub = {
+            shortcut: 0,
+            selected: true,
 
-      update: () => 0,
-      cancel: () => 0,
-      move: (pt: Point) => 0,
-      down: (pt: Point) => 0,
-      goingOutsideCanvas: (pt: Point) => 0,
-      goingInsideCanvas: (pt: Point) => 0,
-      up: (pt: Point) => 0,
-      doubleClick: () => 0
-    }
+            update: () => 0,
+            cancel: () => 0,
+            move: (ptM: Point) => 0,
+            down: (ptD: Point) => 0,
+            goingOutsideCanvas: (ptO: Point) => 0,
+            goingInsideCanvas: (ptI: Point) => 0,
+            up: (ptU: Point) => 0,
+            doubleClick: () => 0,
+        };
 
-    clientRectStub = {
-      left: 0,
-      right: 0,
-      bottom: 0,
-      top: 0
-    }
+        clientRectStub = {
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: 0,
+        };
 
-    mouseEventStub = {
-      x: 0,
-      y: 0
-    }
+        mouseEventStub = {
+            x: 0,
+            y: 0,
+        };
 
-    htmlElemStub = {getBoundingClientRect: () => new DOMRect()}
+        htmlElemStub = { getBoundingClientRect: () => new DOMRect() };
 
-    TestBed.configureTestingModule({
-      providers: [
-        MouseHandlerService,
-        {provide: HTMLElement, useValue: htmlElemStub},
-        {provide: InputObserver, useValue: iObserverStub}]
+        TestBed.configureTestingModule({
+            providers: [
+                MouseHandlerService,
+                { provide: HTMLElement, useValue: htmlElemStub },
+                { provide: InputObserver, useValue: iObserverStub },
+            ],
+        });
+        service = TestBed.get(MouseHandlerService);
+        pt = new Point(2, 2); // arbitrary coords
     });
-    service = TestBed.get(MouseHandlerService);
-    pt = new Point(2, 2); // arbitrary coords
-  });
 
-  it('should be created', () => {
-    const service: MouseHandlerService = TestBed.get(MouseHandlerService);
-    expect(service).toBeTruthy();
-  });
+    it('should be created', () => {
+        const TEST_SERVICE: MouseHandlerService = TestBed.get(MouseHandlerService);
+        expect(TEST_SERVICE).toBeTruthy();
+    });
 
- /* it('should be responsive to a window resize', ()=>{
+    /* it('should be responsive to a window resize', ()=>{
     service.svgCanvas = htmlElemStub;
     const spy = spyOn(service.svgCanvas, "getBoundingClientRect")
     service.updateWindowSize();
     expect(spy).toHaveBeenCalled();
   });*/
 
-  it('should return a new point according to the new canvas size', () => {
-    const PT = service.windowToCanvas(pt);
-    expect(PT).toBeDefined();
-  });
+    it('should return a new point according to the new canvas size', () => {
+        const PT = service.windowToCanvas(pt);
+        expect(PT).toBeDefined();
+    });
 
-  it('should return true if clicked point is valid (in the svg area)', () => {
-    service.svgBox = clientRectStub;
-    const LEFT = 5;
-    const TOP = 5;
-    const RIGHT = 10; // still 10 units to the right
-    const BOT = 10;
+    it('should return true if clicked point is valid (in the svg area)', () => {
+        service.svgBox = clientRectStub;
+        const LEFT = 5;
+        const TOP = 5;
+        const RIGHT = 10; // still 10 units to the right
+        const BOT = 10;
 
-    service.svgBox.left = LEFT;
-    service.svgBox.top = TOP;
-    service.svgBox.right = RIGHT;
-    service.svgBox.bottom = BOT;
+        service.svgBox.left = LEFT;
+        service.svgBox.top = TOP;
+        service.svgBox.right = RIGHT;
+        service.svgBox.bottom = BOT;
 
-    const OK = service.validPoint(pt); // our default point must be valid
-    expect(OK).toBeTruthy();
+        const OK = service.validPoint(pt); // our default point must be valid
+        expect(OK).toBeTruthy();
+    });
 
-  });
+    it('should return false if a clicked point is invalid', () => {
+        service.svgBox = clientRectStub;
+        // tslint:disable-next-line: no-magic-numbers
+        const PT = new Point(-1, 0); // out of bounds!
+        const LEFT = 5;
+        const TOP = 5;
+        const RIGHT = 10; // still 10 units to the right
+        const BOT = 10;
 
-  it('should return false if a clicked point is invalid', () => {
-    service.svgBox = clientRectStub;
-    const PT = new Point(-1, 0); // out of bounds!
-    const LEFT = 5;
-    const TOP = 5;
-    const RIGHT = 10; // still 10 units to the right
-    const BOT = 10;
+        service.svgBox.left = LEFT;
+        service.svgBox.top = TOP;
+        service.svgBox.right = RIGHT;
+        service.svgBox.bottom = BOT;
 
-    service.svgBox.left = LEFT;
-    service.svgBox.top = TOP;
-    service.svgBox.right = RIGHT;
-    service.svgBox.bottom = BOT;
+        const OK = service.validPoint(PT); // our default point must be valid
+        expect(OK).toBeFalsy();
+    });
 
-    const OK = service.validPoint(PT); // our default point must be valid
-    expect(OK).toBeFalsy();
-  });
+    it('should be able to add an input observer', () => {
+        const IP_OBS = iObserverStub; // our stub input observer
+        const SPY = spyOn(service.observers, 'push');
+        service.addObserver(IP_OBS);
+        expect(SPY).toHaveBeenCalledWith(IP_OBS);
+    });
 
-  it('should be able to add an input observer', () => {
-    const IP_OBS = iObserverStub; // our stub input observer
-    const spy = spyOn(service.observers, 'push');
-    service.addObserver(IP_OBS);
-    expect(spy).toHaveBeenCalledWith(IP_OBS);
-  });
+    it('should update the mouse position according to the canvas', () => {
+        const X = 5; // test points
+        const Y = 5;
+        const SPY = spyOn(service, 'windowToCanvas');
+        service.updatePosition(X, Y);
+        expect(service.mouseWindowPosition).toEqual(new Point(X, Y));
+        expect(SPY).toHaveBeenCalledWith(service.mouseWindowPosition);
+    });
 
-  it('should update the mouse position according to the canvas', () => {
-    const X = 5; // test points
-    const Y = 5;
-    const spy = spyOn(service, 'windowToCanvas');
-    service.updatePosition(X, Y);
-    expect(service.mouseWindowPosition).toEqual(new Point(X, Y));
-    expect(spy).toHaveBeenCalledWith(service.mouseWindowPosition);
-  });
+    it('should update the position when mouse is down', () => {
+        const SPY = spyOn(service, 'updatePosition');
+        service.down(mouseEventStub);
 
-  it('should update the position when mouse is down', () => {
-    const spy = spyOn(service, 'updatePosition');
-    service.down(mouseEventStub);
+        expect(SPY).toHaveBeenCalledWith(mouseEventStub.x, mouseEventStub.y);
+    });
 
-    expect(spy).toHaveBeenCalledWith(mouseEventStub.x, mouseEventStub.y);
-  });
+    it('should call an observer (down) if the event started in the workspace', () => {
+        const STUB_VALUE = true;
+        service.validPoint = () => STUB_VALUE; // fake function always returning true
+        const SPY = spyOn(service, 'callObserverDown');
+        service.down(mouseEventStub);
+        expect(SPY).toHaveBeenCalled();
+    });
 
-  it('should call an observer (down) if the event started in the workspace', () => {
-    const stubValue = true;
-    service.validPoint = () => stubValue; // fake function always returning true
-    const spy = spyOn(service, 'callObserverDown');
-    service.down(mouseEventStub);
-    expect(spy).toHaveBeenCalled();
-  });
+    it('should not call an observer if the click was out', () => {
+        service.validPoint = jasmine.createSpy().and.returnValue(false);
+        const SPY = spyOn(service, 'callObserverDown');
+        service.down(mouseEventStub);
+        expect(SPY).not.toHaveBeenCalled();
+    });
 
-  it('should not call an observer if the click was out', () => {
-    service.startedInsideWorkspace = false;
-    const spy = spyOn(service, 'callObserverDown');
-    service.down(mouseEventStub);
-    expect(spy).not.toHaveBeenCalled();
-  });
+    it('should update the position when mouse is up', () => {
+        const SPY = spyOn(service, 'updatePosition');
+        service.up(mouseEventStub);
 
-  it('should update the position when mouse is up', () => {
+        expect(SPY).toHaveBeenCalledWith(mouseEventStub.x, mouseEventStub.y);
+    });
 
-    const spy = spyOn(service, 'updatePosition');
-    service.up(mouseEventStub);
+    it('should call an observer (up) if the event started in the workspace', () => {
+        const STUB_VALUE = true;
+        service.startedInsideWorkspace = STUB_VALUE;
+        const SPY = spyOn(service, 'callObserverUp');
+        service.validPoint = () => STUB_VALUE;
+        service.up(mouseEventStub);
+        expect(SPY).toHaveBeenCalled();
+    });
 
-    expect(spy).toHaveBeenCalledWith(mouseEventStub.x, mouseEventStub.y);
-  });
+    it('should put the first click to false after first click', () => {
+        service.isFirstClick = true;
+        service.up(mouseEventStub);
+        expect(service.isFirstClick).toBeFalsy();
+    });
 
-  it('should call an observer (up) if the event started in the workspace', () => {
-    const stubValue = true;
-    service.startedInsideWorkspace = stubValue;
-    const spy = spyOn(service, 'callObserverUp');
-    service.validPoint = () => stubValue;
-    service.up(mouseEventStub);
-    expect(spy).toHaveBeenCalled();
-  });
+    it('should call the double click observer after a double click', () => {
+        jasmine.clock().install(); // setting a clock
+        service.isFirstClick = true;
+        service.numberOfClicks = 2; // double click
+        const SPY = spyOn(service, 'callObserverDoubleClick');
 
-  it('should put the first click to false after first click', () => {
-    service.isFirstClick = true;
-    service.up(mouseEventStub);
-    expect(service.isFirstClick).toBeFalsy();
-  });
+        service.up(mouseEventStub);
+        const TIME = 200; // the function's timeout
+        jasmine.clock().tick(TIME + 1); // waiting a bit longer
 
-  it('should call the double click observer after a double click', () => {
-    jasmine.clock().install(); // setting a clock
-    service.isFirstClick = true;
-    service.numberOfClicks = 2; // double click
-    const spy = spyOn(service, 'callObserverDoubleClick');
+        expect(SPY).toHaveBeenCalled();
+        jasmine.clock().uninstall(); // remove the clock
+    });
 
-    service.up(mouseEventStub);
-    const TIME = 200; // the function's timeout
-    jasmine.clock().tick(TIME + 1); // waiting a bit longer
+    it('should call an observer if the mouse is outside the canvas', () => {
+        service.validPoint = jasmine.createSpy().and.returnValue(false);
+        service.insideWorkspace = true;
+        const SPY = spyOn(service, 'callObserverOutsideCanvas');
+        service.move(mouseEventStub);
+        expect(SPY).toHaveBeenCalled();
+    });
 
-    expect(spy).toHaveBeenCalled();
-    jasmine.clock().uninstall(); // remove the clock
-  });
+    it('should call the move observer if mouse moved in workspace', () => {
+        const SPY = spyOn(service, 'callObserverMove');
 
-  it('should call an observer if the mouse is outside the canvas', () => {
-    service.insideWorkspace = true;
-    const spy = spyOn(service, 'callObserverOutsideCanvas');
-    service.move(mouseEventStub);
-    expect(spy).toHaveBeenCalled();
-  });
+        service.validPoint = jasmine.createSpy().and.returnValue(true); // fake function
+        service.insideWorkspace = true;
 
-  it('should call the move observer if mouse moved in workspace', () => {
-    const spy = spyOn(service, 'callObserverMove');
-    const stubValue = true;
-    service.validPoint = () => stubValue; // fake function
-    service.insideWorkspace = true;
+        service.move(mouseEventStub);
+        expect(SPY).toHaveBeenCalled();
+    });
 
-    service.move(mouseEventStub);
-    expect(spy).toHaveBeenCalled();
-  });
+    it('should call the observer if the mouse is outside canvas', () => {
+        const SPY = spyOn(service, 'callObserverInsideCanvas');
 
-  it('should call the observer if the mouse is outside canvas', () => {
-    const spy = spyOn(service, 'callObserverInsideCanvas');
+        const STUB_VALUE = true;
+        service.validPoint = () => STUB_VALUE;
+        service.insideWorkspace = false;
 
-    const stubValue = true;
-    service.validPoint = () => stubValue;
-    service.insideWorkspace = false;
+        service.move(mouseEventStub);
+        expect(SPY).toHaveBeenCalled();
+    });
 
-    service.move(mouseEventStub);
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it('should call move on every observer', () => {
-    service.observers = [iObserverStub, iObserverStub, iObserverStub];
-    const spy = spyOn(iObserverStub, 'move');
-    service.callObserverMove();
-    expect(spy).toHaveBeenCalledTimes(service.observers.length);
-  });
-
+    it('should call move on every observer', () => {
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'move');
+        service.callObserverMove();
+        expect(SPY).toHaveBeenCalledTimes(service.observers.length);
+    });
+    /*
   it('should call down on every observer', () => {
     service.observers = [iObserverStub, iObserverStub, iObserverStub];
     const spy = spyOn(iObserverStub, 'down');
     service.callObserverDown();
     expect(spy).toHaveBeenCalledTimes(service.observers.length);
-  });
+  });*/
 
-  it('should call outside canvas on every observer', () => {
-    service.observers = [iObserverStub, iObserverStub, iObserverStub];
-    const spy = spyOn(iObserverStub, 'goingOutsideCanvas');
-    service.callObserverOutsideCanvas();
-    expect(spy).toHaveBeenCalledTimes(service.observers.length);
-  });
+    it('should call outside canvas on every observer', () => {
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'goingOutsideCanvas');
+        service.callObserverOutsideCanvas();
+        expect(SPY).toHaveBeenCalledTimes(service.observers.length);
+    });
 
-  it('should call inside canvas on every observer', () => {
-    service.observers = [iObserverStub, iObserverStub, iObserverStub];
-    const spy = spyOn(iObserverStub, 'goingInsideCanvas');
-    service.callObserverInsideCanvas();
-    expect(spy).toHaveBeenCalledTimes(service.observers.length);
-  });
+    it('should call inside canvas on every observer', () => {
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'goingInsideCanvas');
+        service.callObserverInsideCanvas();
+        expect(SPY).toHaveBeenCalledTimes(service.observers.length);
+    });
 
-  it('should call up on every observer', () => {
-    service.observers = [iObserverStub, iObserverStub, iObserverStub];
-    const spy = spyOn(iObserverStub, 'up');
-    service.callObserverUp();
-    expect(spy).toHaveBeenCalledTimes(service.observers.length);
-  });
+    it('should call up on every observer', () => {
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'up');
+        service.callObserverUp();
+        expect(SPY).toHaveBeenCalledTimes(service.observers.length);
+    });
 
-  it('should call double click on every observer', () => {
-    service.observers = [iObserverStub, iObserverStub, iObserverStub];
-    const spy = spyOn(iObserverStub, 'doubleClick');
-    service.callObserverDoubleClick();
-    expect(spy).toHaveBeenCalledTimes(service.observers.length);
-  });
+    it('should call double click on every observer', () => {
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'doubleClick');
+        service.callObserverDoubleClick();
+        expect(SPY).toHaveBeenCalledTimes(service.observers.length);
+    });
 
+    it('should call down click on every observer', () => {
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'down');
+        service.callObserverDown(false);
+        expect(SPY).toHaveBeenCalledTimes(service.observers.length);
+    });
+    /************ */
+    it('should not call outside canvas on unselected observer', () => {
+        iObserverStub.selected = false;
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'goingOutsideCanvas');
+        service.callObserverOutsideCanvas();
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not call inside canvas on unselected observer', () => {
+        iObserverStub.selected = false;
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'goingInsideCanvas');
+        service.callObserverInsideCanvas();
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not call up on unselected observer', () => {
+        iObserverStub.selected = false;
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'up');
+        service.callObserverUp();
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not call double click unselected observer', () => {
+        iObserverStub.selected = false;
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'doubleClick');
+        service.callObserverDoubleClick();
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not call down click on unselected observer', () => {
+        iObserverStub.selected = false;
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'doubleClick');
+        service.down(mouseEventStub);
+        expect(SPY).not.toHaveBeenCalled();
+    });
 });

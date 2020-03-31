@@ -1,144 +1,248 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { Subscription} from 'rxjs';
-import { Canvas } from 'src/app/models/Canvas.model';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Canvas } from 'src/app/models/canvas.model';
+import { ChoosenColors } from 'src/app/models/choosen-colors.model';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
-import { DrawingTool } from 'src/app/services/draw-tool/drawingTool';
-import { ToolCreator } from 'src/app/services/draw-tool/toolCreator';
-import { CanvasBuilderService } from 'src/app/services/drawing/canvas-builder.service';
+import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
+import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
+import { InputObserver } from 'src/app/services/draw-tool/input-observer';
+import { ToolCreator } from 'src/app/services/draw-tool/tool-creator';
+import { GridRenderService } from 'src/app/services/grid/grid-render.service';
+import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.service';
 import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboard-handler.service';
+import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
-import { ChoosenColors } from 'src/app/models/ChoosenColors.model';
 
 @Component({
-  selector: 'app-svg-draw',
-  templateUrl: './svg-draw.component.html',
-  styleUrls: ['./svg-draw.component.scss']
+    selector: 'app-svg-draw',
+    templateUrl: './svg-draw.component.html', // changed file type
+    styleUrls: ['./svg-draw.component.scss'],
 })
-export class SvgDrawComponent implements OnInit, OnDestroy, AfterViewInit {
+export class SvgDrawComponent implements OnInit, AfterViewInit {
+    showGrid: boolean;
 
-  constructor(private canvBuilder: CanvasBuilderService, public interaction: InteractionService, public colorPick: ColorPickingService) { }
-  canvas: Canvas;
-  canvasSubscr: Subscription;
-  backgroundColorSub: Subscription;
-  width: number;
-  height: number;
-  backColor: string;
+    constructor(
+        private canvBuilder: CanvasBuilderService,
+        public interaction: InteractionService,
+        public colorPick: ColorPickingService,
+        public doodleFetch: DoodleFetchService,
+        private render: Renderer2,
+        private gridService: GridRenderService,
+    ) {
+        this.showGrid = false;
+    }
+    canvas: Canvas;
 
-  toolsContainer = new Map();
+    width: number;
+    height: number;
+    backColor: string;
 
-  @ViewChild('inPrgress', {static: false})inProgress: ElementRef
-  @ViewChild('canvas', {static: false})svg: ElementRef
+    // tslint:disable-next-line: typedef
+    toolsContainer = new Map();
+    // tslint:disable-next-line: typedef
+    interactionToolsContainer = new Map();
 
-  @ViewChild('frame', {static: false}) frameRef: ElementRef;
-  workingSpace: HTMLElement
+    @ViewChild('inPrgress', { static: false }) inProgress: ElementRef;
+    @ViewChild('canvas', { static: false }) svg: ElementRef;
 
-  ngOnInit() {
-    this.interaction.$refObs.subscribe((ref) => {
-      this.workingSpace = ref.nativeElement
-    })
+    @ViewChild('frame', { static: false }) frameRef: ElementRef;
+    @ViewChild('drawingSpace', { static: false }) drawingSpace: ElementRef;
+    @ViewChild('selectedItems', { static: false }) selectedItems: ElementRef;
+    @ViewChild('grid', { static: false }) gridRef: ElementRef;
+    @ViewChild('container', { static: false }) cntRef: ElementRef;
+    workingSpace: HTMLElement;
 
-    this.initCanvas();
+    ngOnInit(): void {
+        this.initCanvas();
+    }
 
-    
+    closeTools(map: Map<string, DrawingTool>): void {
+        map.forEach((el: DrawingTool) => {
+            el.selected = false;
+            el.cancel();
+        });
+    }
 
-  }
+    bgroundChangeSubscription(): void {
+        this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
 
-  closeTools(map: Map<string, DrawingTool>) {
-    map.forEach((el) => {
-      el.selected = false;
-    })
-  }
+            if (choosenColors) {
+                this.backColor = choosenColors.backColor;
+                this.colorPick.cData.primaryColor = choosenColors.primColor;
+                this.colorPick.cData.secondaryColor = choosenColors.secColor;
+                this.colorPick.cData.backgroundColor = choosenColors.backColor;
+                this.colorPick.setColorsFromForm(choosenColors.primColor, choosenColors.secColor, choosenColors.backColor);
+                this.gridService.updateColor(this.backColor);
+            }
+        });
+    }
 
-  bgroundChangeSubscription(){
-    this.backgroundColorSub = this.colorPick.colorSubject.subscribe(
-      (choosenColors: ChoosenColors)=>{
-        this.backColor = choosenColors.backColor;
-    });
-  }
+    initCanvas(): void {
+        this.canvBuilder.canvSubject.subscribe((canvas: Canvas) => {
 
-  initCanvas() {
-    this.canvasSubscr = this.canvBuilder.canvSubject.subscribe(
-      (canvas: Canvas) => {
-        if (canvas === undefined || canvas === null) {
-          canvas = this.canvBuilder.getDefCanvas();
-        }
-        this.width = canvas.canvasWidth;
-        this.height = canvas.canvasHeight;
-        this.backColor = canvas.canvasColor;
-        this.canvBuilder.whipeDraw(this.frameRef);
-      }
-    );
-    this.canvBuilder.emitCanvas();
-  }
+            if (canvas === undefined || canvas === null) {
+                canvas = this.canvBuilder.getDefCanvas();
+            }
 
-  ngAfterViewInit() {
+            this.width = canvas.canvasWidth;
+            this.height = canvas.canvasHeight;
+            this.backColor = canvas.canvasColor;
+            this.colorPick.cData.backgroundColor = canvas.canvasColor;
 
-    const keyboardHandler: KeyboardHandlerService = new KeyboardHandlerService();
-    const mouseHandler = new MouseHandlerService(this.svg.nativeElement, this.workingSpace);
-    const color1 = '1167B1';
-    const color2 = '000000';
+            this.colorPick.setColorsFromForm(this.colorPick.cData.primaryColor, this.colorPick.cData.secondaryColor, canvas.canvasColor);
+            this.colorPick.emitColors();
+            if (canvas.wipeAll === true || canvas.wipeAll === undefined) { // if no attribute is specified, the doodle will be w
+                this.canvBuilder.wipeDraw(this.frameRef);
+            }
 
-    // Create all the tools
-    const tc = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
+            if (this.gridService.grid) {
+                if (this.gridRef) {
+                    this.gridService.removeGrid();
+                    this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+                }
+            }
+        });
+        this.canvBuilder.emitCanvas(); // if a page reload is called, the canvas will not be undefined
+    }
 
-    const pencil = tc.CreatePencil(true, 10, color1, 67, this.interaction, this.colorPick);
-    const rect = tc.CreateRectangle(false, 3, color1, color2, 2, 49, this.interaction, this.colorPick);
-    const line = tc.CreateLine(false, 3, color2, true, 15, 76, this.interaction, this.colorPick);
-    const brush = tc.CreateBrush(false, 50, color1, 4, 87, this.interaction, this.colorPick);
+    initGridVisibility(): void {
+        this.interaction.$showGrid.subscribe((show: boolean) => {
+            this.showGrid = show;
+        });
+        this.reinitGridFromSub();
+    }
+    createTools(): void {
+        const TC = new ToolCreator(this.inProgress.nativeElement, this.frameRef.nativeElement);
 
-    this.toolsContainer.set('Rectangle', rect);
-    this.toolsContainer.set('Ligne', line);
-    this.toolsContainer.set('Pinceau', brush);
-    this.toolsContainer.set('Crayon', pencil);
-    this.interaction.$cancelToolsObs.subscribe((sig) => {
-      if (sig) {
-          this.closeTools(this.toolsContainer)
-      }
-    })
-    this.interaction.$selectedTool.subscribe((toolName) => {
-      if (this.toolsContainer.get(toolName)) {
-        this.closeTools(this.toolsContainer);
-        this.toolsContainer.get(toolName).selected = true;
-      }
-    })
+        const PENCIL = TC.CreatePencil(true, this.interaction, this.colorPick);
+        const RECT = TC.CreateRectangle(false, this.interaction, this.colorPick);
+        const LINE = TC.CreateLine(false, this.interaction, this.colorPick);
+        const BRUSH = TC.CreateBrush(false, this.interaction, this.colorPick);
+        const AEROSOL = TC.CreateAerosol(false, this.interaction, this.colorPick);
+        const ELLIPSE = TC.CreateEllipse(false, this.interaction, this.colorPick);
+        const POLYGON = TC.CreatePolygon(false, this.interaction, this.colorPick);
+        const SELECT = TC.CreateSelection(
+            false,
+            this.interaction,
+            this.colorPick,
+            this.render,
+            this.selectedItems.nativeElement,
+            this.svg.nativeElement,
+        );
 
-    // Subscribe each tool to keyboard and mouse
-    this.toolsContainer.forEach((element) => {
-      keyboardHandler.addToolObserver(element);
-      mouseHandler.addObserver(element);
-    });
+        const ERASER = TC.CreateEraser(
+            false,
+            this.interaction,
+            this.colorPick,
+            this.render,
+            this.selectedItems.nativeElement,
+            this.svg.nativeElement,
+        );
 
-    window.addEventListener('resize', function() {
-      mouseHandler.updateWindowSize();
-    });
+        const COLOR_EDITOR = TC.CreateColorEditor(
+            false,
+            this.interaction,
+            this.colorPick,
+            this.render,
+            this.selectedItems.nativeElement,
+            this.svg.nativeElement,
+        );
 
-    // Mouse listeners
-    window.addEventListener('mousemove', function(e) {
-      mouseHandler.move(e);
-    });
-    window.addEventListener('mousedown', function(e) {
-      mouseHandler.down(e);
+        const PIPETTE = TC.CreatePipette(false, this.interaction, this.colorPick);
+        this.toolsContainer.set('Rectangle', RECT);
+        this.toolsContainer.set('Ligne', LINE);
+        this.toolsContainer.set('Pinceau', BRUSH);
+        this.toolsContainer.set('Crayon', PENCIL);
+        this.toolsContainer.set('Aérosol', AEROSOL);
+        this.toolsContainer.set('Ellipse', ELLIPSE);
+        this.toolsContainer.set('Polygone', POLYGON);
+        this.toolsContainer.set('Sélectionner', SELECT);
+        this.toolsContainer.set('Efface', ERASER);
+        this.toolsContainer.set('Applicateur de couleur', COLOR_EDITOR);
+        this.toolsContainer.set('Pipette', PIPETTE);
 
-    });
-    window.addEventListener('mouseup', function(e) {
-      mouseHandler.up(e);
-    });
+    }
+    ngAfterViewInit(): void {
+        this.gridService.initGrid(this.gridRef.nativeElement, this.width, this.height, this.backColor);
+        this.initGridVisibility();
+        const KEYBOARD_HANDLER: KeyboardHandlerService = new KeyboardHandlerService();
+        const MOUSE_HANDLER = new MouseHandlerService(this.svg.nativeElement);
 
-    // Keyboard listeners
-    window.addEventListener('keydown', function(e) {
-      keyboardHandler.logkey(e);
-    });
-    window.addEventListener('keyup', function(e) {
-      keyboardHandler.reset(e);
-    });
-    window.dispatchEvent(new Event('resize'));
-    this.bgroundChangeSubscription();
-  }
+        // create all the tools
+        this.createTools();
+        const UNDO_REDO: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
+        this.interactionToolsContainer.set('AnnulerRefaire', UNDO_REDO);
+        this.interaction.$cancelToolsObs.subscribe((sig: boolean) => {
+            if (sig) {
+                this.closeTools(this.toolsContainer);
+            }
+        });
 
-  ngOnDestroy() { // quand le component est détruit, la subscription n'existe plus
-    this.canvasSubscr.unsubscribe();
+        this.interaction.$selectedTool.subscribe((toolName: string) => {
+            if (toolName === 'Annuler' || toolName === 'Refaire') {
+                this.interactionToolsContainer.get('AnnulerRefaire').apply(toolName);
+            } else if (this.toolsContainer.get(toolName) && !this.toolsContainer.get(toolName).selected) {
+                const event = new Event('toolChange');
+                window.dispatchEvent(event);
+                this.closeTools(this.toolsContainer);
+                this.toolsContainer.get(toolName).selected = true;
+            }
 
-  }
+            MOUSE_HANDLER.updateWindowSize();
+        });
 
+        // Subscribe each tool to keyboard and mouse
+        this.toolsContainer.forEach((element: InputObserver) => {
+            KEYBOARD_HANDLER.addToolObserver(element);
+            MOUSE_HANDLER.addObserver(element);
+        });
+
+        window.addEventListener('resize', () => {
+            MOUSE_HANDLER.updateWindowSize();
+        });
+
+        // Mouse listeners
+        window.addEventListener('mousemove', (e: MouseEvent) => {
+            MOUSE_HANDLER.move(e);
+        });
+        window.addEventListener('mousedown', (e: MouseEvent) => {
+            // e.preventDefault();
+            MOUSE_HANDLER.down(e);
+        });
+
+        window.addEventListener('mouseup', (e: MouseEvent) => {
+            MOUSE_HANDLER.up(e);
+        });
+
+        // Prevent right-click menu
+        window.addEventListener('contextmenu', (e: MouseEvent) => {
+            e.preventDefault();
+        });
+
+        // Keyboard listeners
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
+            KEYBOARD_HANDLER.logkey(e);
+        });
+        window.addEventListener('keyup', (e: KeyboardEvent) => {
+            KEYBOARD_HANDLER.reset(e);
+        });
+
+        window.dispatchEvent(new Event('resize'));
+
+        this.doodleFetch.ask.subscribe(() => {
+            this.doodleFetch.currentDraw = this.svg;
+            this.doodleFetch.widthAttr = this.width;
+            this.doodleFetch.heightAttr = this.height;
+            this.doodleFetch.backColor = this.backColor;
+        });
+
+        this.bgroundChangeSubscription();
+    }
+
+    reinitGridFromSub(): void {
+        this.interaction.$canvasAttributes.subscribe((newDoodle: Canvas) => {
+            this.gridService.removeGrid();
+            this.gridService.initGrid(this.gridRef.nativeElement, newDoodle.canvasWidth, newDoodle.canvasHeight, newDoodle.canvasColor);
+        });
+    }
 }

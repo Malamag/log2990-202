@@ -1,12 +1,28 @@
 <div>
     <app-color-picker></app-color-picker>
 </div>
-<div class= "drawingTools" *ngFor="let func of funcTools; index as id">
-    <div>
-        <button class="toolBtn" mat-icon-button color="primary" matTooltip={{func.name}} matTooltipPosition = "after" (click)="buttonAction(func.name)">
-            <img src={{func.icon}} class="toolIcon"> 
-        </button>    
+<div class="drawingTools" *ngFor="let func of funcTools">
+    <div *ngIf="func.name === 'Annuler' || func.name ==='Refaire'; else elseBlock">
+        <div *ngIf="func.name ==='Annuler'; else redoBlock">
+            <button [disabled]="disableUndo" class="toolBtn" mat-icon-button color="primary" matTooltip={{func.name}}
+                matTooltipPosition="after" (click)="buttonAction(func.name)">
+                <mat-icon svgIcon={{func.icon}}></mat-icon>
+            </button>
+        </div>
+        <ng-template #redoBlock>
+            <button [disabled]="disableRedo" class="toolBtn" mat-icon-button color="primary" matTooltip={{func.name}}
+                matTooltipPosition="after" (click)="buttonAction(func.name)">
+                <mat-icon svgIcon={{func.icon}}></mat-icon>
+            </button>
+        </ng-template>
     </div>
+    <ng-template #elseBlock>
+        <div>
+            <button class="toolBtn" mat-icon-button color="primary" matTooltip={{func.name}} matTooltipPosition="after"
+                (click)="buttonAction(func.name)">
+                <mat-icon [ngClass]="(activeButton === func.name)? 'selected':'notSelected'" svgIcon={{func.icon}}></mat-icon>
+               
+            </button>
+        </div>
+    </ng-template>
 </div>
-
-

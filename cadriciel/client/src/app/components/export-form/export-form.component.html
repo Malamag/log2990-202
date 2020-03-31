@@ -1,0 +1,42 @@
+<div class="form-container">
+    <div>
+        <h1>Exporter un dessin</h1>
+        <form [formGroup]="exportForm" (submit)="onSubmit()">
+            <mat-form-field>
+                <mat-label for="doodleName">Nom du dessin</mat-label>
+                <input matInput type="text" formControlName="doodleName" />
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label for="formatSel">Format d'exportation</mat-label>
+                <mat-select formControlName="formatSel" required>
+                    <mat-option *ngFor="let format of formats" [value]="format.type">
+                        {{ format.view }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+
+        <mat-form-field>
+            <mat-label>Appliquer un filtre</mat-label>
+            <mat-select [(ngModel)]="selectedFilter" (ngModelChange)="applyFilter($event)">
+                <mat-option *ngFor="let filter of filters" [value]="filter.num">
+                    {{ filter.view }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!--preview-->
+        <div id="prev">
+            <app-preview-box [draw]="doodle" [svgW]="cWidth" [svgH]="cHeigth"></app-preview-box>
+        </div>
+
+        <button mat-raised-button id="submit-btn" color="primary" type="submit" (click)="onSubmit()" [disabled]="exportForm.invalid">
+            Exporter
+        </button>
+        <button mat-button id="quitButton" (click)="closeForm()">Cancel</button>
+        <span id="dimensions">{{ cWidth }}px X {{ cHeigth }}px</span>
+    </div>
+    <canvas #imgConvert [width]="cWidth" [height]="cHeigth"></canvas>
+    <!--hidden canvas element used for conversion-->
+</div>
