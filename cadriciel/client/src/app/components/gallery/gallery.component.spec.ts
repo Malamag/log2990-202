@@ -51,8 +51,8 @@ describe('GalleryComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(GalleryComponent);
         component = fixture.componentInstance;
-        spyOn(component.index, 'getImagesByTags').and.returnValue(of([]));
-        spyOn(component.index, 'getAllImages').and.returnValue(of([]));
+        spyOn(component.connect, 'getImagesByTags').and.returnValue(of([]));
+        spyOn(component.connect, 'getAllImages').and.returnValue(of([]));
         fixture.detectChanges();
         fakeAdd = {
             value: '',
@@ -119,14 +119,14 @@ describe('GalleryComponent', () => {
     });
     it('should throw the error and get all the images', () => {
         const ID = 'hello';
-        component.index.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
+        component.connect.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
         const TEXT = component.render.createText('Aucun dessin ne se trouve sur le serveur');
         component.delete(ID);
         expect(component.text).toEqual(TEXT);
     });
     it('should delete locally the id', () => {
         const ID = '570';
-        component.index.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
+        component.connect.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
         const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const SVG = component.render.createElement('div');
         const DATA: ShownData = {
@@ -140,7 +140,7 @@ describe('GalleryComponent', () => {
     });
     it('should not delete locally the id', () => {
         const ID = '170';
-        component.index.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
+        component.connect.deleteImageById = jasmine.createSpy().and.throwError('lelement nexist pas');
         const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const SVG = component.render.createElement('div');
         const DATA: ShownData = {
@@ -153,7 +153,7 @@ describe('GalleryComponent', () => {
         expect(SPY).toHaveBeenCalledTimes(0);
     });
     it('should show a message instead of images', () => {
-        component.index.getAllImages = jasmine.createSpy().and.returnValue(of([]));
+        component.connect.getAllImages = jasmine.createSpy().and.returnValue(of([]));
         const APPEND_SPY = spyOn(component.render, 'appendChild');
         component.getAllImages();
         of([]).subscribe(() => {
@@ -163,7 +163,7 @@ describe('GalleryComponent', () => {
     it('should create an svg and get tags', () => {
         const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const DATA: ImageData = { id: '570', svgElement: SVG_DATA, name: 'welcome', tags: ['hello', 'new'] };
-        component.index.getAllImages = jasmine.createSpy().and.returnValue(of([DATA, DATA]));
+        component.connect.getAllImages = jasmine.createSpy().and.returnValue(of([DATA, DATA]));
         const CREATE_SPY = spyOn(component, 'createSVG');
         const GET_SPY = spyOn(component, 'getAllTags');
         component.getAllImages();
@@ -181,7 +181,7 @@ describe('GalleryComponent', () => {
     it(' should show the message that there is no elements with corresponding tags', () => {
         component.tags = ['hello', 'hello'];
         const TEXT = component.render.createText('Aucun dessin correspond a vos critères de recherche');
-        component.index.getImagesByTags = jasmine.createSpy().and.returnValue(of([]));
+        component.connect.getImagesByTags = jasmine.createSpy().and.returnValue(of([]));
         component.getImagesByTags();
         of([]).subscribe(() => {
             expect(component.text.textContent).toEqual(TEXT.textContent);
@@ -192,7 +192,7 @@ describe('GalleryComponent', () => {
         const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const DATA: ImageData = { id: '570', svgElement: SVG_DATA, name: 'welcome', tags: ['hello', 'new'] };
         const SPY = spyOn(component, 'createSVG');
-        component.index.getImagesByTags = jasmine.createSpy().and.returnValues(of([DATA, DATA]));
+        component.connect.getImagesByTags = jasmine.createSpy().and.returnValues(of([DATA, DATA]));
         component.getImagesByTags();
         of([DATA, DATA]).subscribe(() => {
             expect(SPY).toHaveBeenCalled();

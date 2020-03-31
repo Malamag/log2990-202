@@ -21,7 +21,7 @@ export class SaveFormComponent implements OnInit, AfterContentInit {
     private winService: ModalWindowService,
     private formBuilder: FormBuilder,
     private doodleFetch: DoodleFetchService,
-    private index: ConnectionService) { }
+    private connect: ConnectionService) { }
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   labels: string[];
   selectable: boolean;
@@ -86,7 +86,7 @@ export class SaveFormComponent implements OnInit, AfterContentInit {
     const ID: string = new Date().getUTCMilliseconds() + '';
     const DOODLE_STRING = this.doodleFetch.getDrawingDataNoGrid();
     const IMAGE_DATA: ImageData = { id: ID, name: this.saveForm.value.doodleName, tags: this.labels, svgElement: DOODLE_STRING };
-    this.index.saveImage(IMAGE_DATA);
+    this.connect.saveImage(IMAGE_DATA);
     this.winService.closeWindow();
 
   }

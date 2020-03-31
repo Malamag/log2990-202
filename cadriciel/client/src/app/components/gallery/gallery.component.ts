@@ -38,7 +38,7 @@ export class GalleryComponent implements AfterViewInit {
     @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto', { static: false }) autoComplete: MatAutocomplete;
     constructor(
-        public index: ConnectionService,
+        public connect: ConnectionService,
         render: Renderer2,
         public winService: ModalWindowService,
         public continueDraw: ContinueDrawingService,
@@ -93,7 +93,7 @@ export class GalleryComponent implements AfterViewInit {
     delete(id: string): void {
         this.allLoaded = false;
         try {
-            this.index.deleteImageById(id);
+            this.connect.deleteImageById(id);
         } catch (error) {
             this.text = this.render.createText("L'élément ne peut pas être effacé car il n'existe pas sur le serveur");
         }
@@ -114,7 +114,7 @@ export class GalleryComponent implements AfterViewInit {
     getAllImages(): void {
         this.showMessage();
 
-        this.index.getAllImages().subscribe((data: ImageData[]) => {
+        this.connect.getAllImages().subscribe((data: ImageData[]) => {
             this.shownDrawings = [];
             if (data.length === 0) {
                 this.render.removeChild(this.cardsContainer.nativeElement, this.text);
@@ -149,7 +149,7 @@ export class GalleryComponent implements AfterViewInit {
         }
         this.showMessage();
         this.render.removeChild(this.cardsContainer, this.text);
-        this.index.getImagesByTags(this.tags).subscribe((data: ImageData[]) => {
+        this.connect.getImagesByTags(this.tags).subscribe((data: ImageData[]) => {
             this.shownDrawings = [];
             if (data.length === 0) {
                 this.text = this.render.createText('Aucun dessin correspond a vos critères de recherche');
