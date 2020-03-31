@@ -32,3 +32,18 @@ img {
 #poly-slider {
     padding-top: 5vh;
 }
+
+@media only screen and (max-height: 800px) {
+    .btn-container {
+        gap: 0%;
+    }
+
+    #poly-slider,
+    .mode-btn {
+        padding-top: 0vh;
+    }
+
+    #label-space {
+        display: none;
+    }
+}
