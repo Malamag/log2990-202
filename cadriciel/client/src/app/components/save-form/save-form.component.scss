@@ -1,6 +1,8 @@
 .form-container {
     height: 70vh;
     width: 30vw;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .chipContainer {
     width: 100%;

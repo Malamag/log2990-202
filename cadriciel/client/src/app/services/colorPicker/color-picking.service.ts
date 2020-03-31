@@ -226,23 +226,23 @@ export class ColorPickingService {
     // DISPLAY/UPDATE
     // Update last color table with a new color
     updateLastColor(newColor: string): void {
-        const SUB = 7;
-        this.cData.lastColorRects.forEach((color) => {
-            if (color.fill === newColor.substring(0, SUB)) {
+        const HEX_SUBSTR = 7; // #ffffff as 7 chars - 1 for # and 6 for hex values
+        for (const COLOR of this.cData.lastColorRects) {
+            if (COLOR.fill === newColor.substring(0, HEX_SUBSTR)) {
                 return;
             }
-        });
-        this.cData.lastColorRects.forEach((color) => {
-            if (color.fill === 'none') {
-                color.fill = newColor.substring(0, SUB);
-                color.stroke = 'white';
+        }
+        for (const COLOR of this.cData.lastColorRects) {
+            if (COLOR.fill === 'none') {
+                COLOR.fill = newColor.substring(0, HEX_SUBSTR);
+                COLOR.stroke = 'white';
                 return;
             }
-        });
+        }
         for (let i = 0; i < this.cData.lastColorRects.length - 1; i++) {
             this.cData.lastColorRects[i].fill = this.cData.lastColorRects[i + 1].fill;
         }
-        this.cData.lastColorRects[this.cData.lastColorRects.length - 1].fill = newColor.substring(0, SUB);
+        this.cData.lastColorRects[this.cData.lastColorRects.length - 1].fill = newColor.substring(0, HEX_SUBSTR);
     }
     updateDisplay(
         hex: string,

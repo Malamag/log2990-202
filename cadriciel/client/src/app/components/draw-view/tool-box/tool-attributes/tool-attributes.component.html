@@ -7,17 +7,17 @@
     >
         <label> Épaisseur du contour: {{ lineThickness }} px </label>
         <mat-slider thumbLabel type="range" min="1" max="30" [(ngModel)]="lineThickness"></mat-slider> <br />
+        <br />
+        <label> Type de tracé </label>
+        <mat-radio-group class="btn-container">
+            <mat-radio-button class="mode-btn" [value]="2" [checked]="true" (click)="plotType = 2"> Plein avec contour</mat-radio-button>
 
-        <label> Type de tracé </label> <br />
-        <mat-radio-group>
-            <br />
-            <mat-radio-button [value]="2" [checked]="true" (click)="plotType = 2"> Plein avec contour</mat-radio-button> <br /><br />
-            <mat-radio-button [value]="0" (click)="plotType = 0"> Contour</mat-radio-button> <br /><br />
-            <mat-radio-button [value]="1" (click)="plotType = 1"> Plein </mat-radio-button> <br />
+            <mat-radio-button class="mode-btn" [value]="0" (click)="plotType = 0"> Contour</mat-radio-button>
+            <mat-radio-button class="mode-btn" [value]="1" (click)="plotType = 1"> Plein </mat-radio-button>
         </mat-radio-group>
         <br />
         <!-- sides for the polygon-->
-        <div *ngSwitchCase="'Polygone'" (mouseleave)="updateForms()">
+        <div id="poly-slider" *ngSwitchCase="'Polygone'" (mouseleave)="updateForms()">
             <label> Nombre de côtés</label>
             <mat-slider thumbLabel tickInterval="1" type="range" min="3" max="12" [(ngModel)]="numberCorners"> </mat-slider><br />
         </div>
@@ -109,7 +109,7 @@
         <mat-slider thumbLabel type="range" min="5" max="50" [(ngModel)]="junctionRadius"></mat-slider> <br />
     </div>
     <!-- for the eraser -->
-    <div *ngSwitchCase="'Efface'" (mouseleave) = "updateTools()">
+    <div *ngSwitchCase="'Efface'" (mouseleave)="updateTools()">
         <label> Épaisseur du trait: {{ lineThickness }} px </label>
         <mat-slider thumbLabel type="range" min="3" max="50" [(ngModel)]="lineThickness"></mat-slider> <br />
     </div>
