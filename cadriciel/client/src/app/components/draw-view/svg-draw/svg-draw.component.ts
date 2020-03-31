@@ -71,6 +71,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
                 this.colorPick.cData.primaryColor = choosenColors.primColor;
                 this.colorPick.cData.secondaryColor = choosenColors.secColor;
                 this.colorPick.cData.backgroundColor = choosenColors.backColor;
+                this.colorPick.setColorsFromForm(choosenColors.primColor, choosenColors.secColor, choosenColors.backColor);
                 this.gridService.updateColor(this.backColor);
             }
         });
@@ -87,6 +88,9 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.height = canvas.canvasHeight;
             this.backColor = canvas.canvasColor;
             this.colorPick.cData.backgroundColor = canvas.canvasColor;
+
+            this.colorPick.setColorsFromForm(this.colorPick.cData.primaryColor, this.colorPick.cData.secondaryColor, canvas.canvasColor);
+            this.colorPick.emitColors();
             if (canvas.wipeAll === true || canvas.wipeAll === undefined) { // if no attribute is specified, the doodle will be w
                 this.canvBuilder.wipeDraw(this.frameRef);
             }
