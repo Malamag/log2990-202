@@ -1,11 +1,11 @@
 import { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ToolsAttributes } from '../attributes/tools-attribute';
+import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { CanvasInteraction } from './canvas-interaction.service';
 import { ColorEditorService } from './color-editor.service';
 import { ElementInfo } from './element-info.service';
 import { Point } from './point';
-import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 // import { ColorConvertingService } from '../colorPicker/color-converting.service';
 const TEST_PT = new Point(1, 1);
 fdescribe('ColorEditorService', () => {
