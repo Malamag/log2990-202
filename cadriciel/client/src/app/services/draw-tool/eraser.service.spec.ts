@@ -8,9 +8,6 @@ import { EraserService } from './eraser.service';
 import { Point } from './point';
 
 describe('EraserService', () => {
-
-    // let fakeInteractionService: InteractionService;
-    // let fakeColorPickingService: ColorPickingService;
     // tslint:disable-next-line: prefer-const
     let fakeColorConvertingService: ColorConvertingService;
     let service: EraserService;
@@ -29,6 +26,7 @@ describe('EraserService', () => {
             isPointInStroke: (p: Point) => false,
             isPointInFill: (p: Point) => false,
             getAttribute: (s: string) => 'none',
+            classList: 'rect',
         };
         firstChild = {
             firstElementChild: firstChild,
@@ -182,12 +180,31 @@ describe('EraserService', () => {
         expect(SPY).not.toHaveBeenCalled();
 
     });
-
+    it('should not remove the child', () => {
+        const DUMMY_ELEM = document.createElement('div');
+        const CHILD = document.createElement('div');
+        DUMMY_ELEM.appendChild(CHILD);
+        service.selected = false;
+        service.erase(CHILD);
+        expect(DUMMY_ELEM.childElementCount).toEqual(1);
+    });
+    it('should remove the child from the clone', () => {
+        service.selected = true;
+        const DUMMY_ELEM = document.createElement('g');
+        const CHILD = document.createElement('g');
+        CHILD.className = 'invisiblePath';
+        DUMMY_ELEM.appendChild(CHILD);
+        const SPY = spyOn(service.render, 'removeChild');
+        service.highlight(DUMMY_ELEM);
+        expect(SPY).toHaveBeenCalled();
+    });
     it('should set the attribute (stroke color, stroke width and class) of the clone to highlight', () => {
         service.selected = true;
         const NB_CALLS = 3;
         const dummyElement: Element = document.createElement('g');
         const childDummyElement: Element = document.createElement('g');
+        childDummyElement.setAttribute('stroke', '#ff00000');
+        childDummyElement.setAttribute('fill', '#f000000');
         dummyElement.appendChild(childDummyElement);
         const SPY = spyOn(service.render, 'setAttribute');
         service.highlight(dummyElement);
@@ -236,7 +253,7 @@ describe('EraserService', () => {
         const SPY = spyOn(service.currentPath, 'shift');
         service.checkIfTouching = jasmine.createSpy();
         const Y = 3;
-        service.currentPath = [new Point(1, 0), new Point(1, 2)];
+        service.currentPath = [new Point(1, 0), new Point(1, 2), new Point(1, 1)];
         service.move(new Point(2, Y));
         expect(SPY).toHaveBeenCalled();
     });
@@ -260,86 +277,108 @@ describe('EraserService', () => {
         service.checkIfTouching();
         expect(SPY).toHaveBeenCalled();
     });
-
-    it('should erase the first child if touching and on mouse down', () => {
+    it('should unhighlight elements and does not call loop action', () => {
+        service.currentPath = [new Point(0, 0), new Point(1, 1)];
         service.isDown = true;
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        const grandChildDummyElement: Element = document.createElement('g');
-        childDummyElement.appendChild(grandChildDummyElement);
-        dummyElement.appendChild(childDummyElement);
-        service.drawing = dummyElement as HTMLElement;
-
-        spyOn(htmlElementStub, 'firstElementChild');
-
-        service.currentPath.push(new Point(2, 1));
-        const SPY = spyOn(service, 'erase');
-        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
-        spyOn(Point, 'rectOverlap').and.returnValue(true);
-        spyOn(service, 'checkIfPathIntersection').and.returnValue(true);
-        service.checkIfTouching();
-        expect(SPY).toHaveBeenCalled();
-    });
-    it('should unhighlight the first child if touching and on mouse down', () => {
-        service.isDown = true;
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        const grandChildDummyElement: Element = document.createElement('g');
-        childDummyElement.appendChild(grandChildDummyElement);
-        dummyElement.appendChild(childDummyElement);
-        service.drawing = dummyElement as HTMLElement;
-
-        spyOn(htmlElementStub, 'firstElementChild');
-
-        service.currentPath.push(new Point(2, 1));
-        const SPY = spyOn(service, 'unhighlight');
-        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
+        const DUMMY_ELEMENT: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        const GRAND_CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        CHILD_DUMMY_ELEMENT.appendChild(GRAND_CHILD_DUMMY_ELEMENT);
+        DUMMY_ELEMENT.appendChild(CHILD_DUMMY_ELEMENT);
+        service.drawing = DUMMY_ELEMENT as HTMLElement;
         spyOn(Point, 'rectOverlap').and.returnValue(false);
-        spyOn(service, 'checkIfPathIntersection').and.returnValue(true);
-        service.checkIfTouching();
-        expect(SPY).toHaveBeenCalled();
-    });
-    it('should erase the first child if touching and on mouse up', () => {
-        service.isDown = false;
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        const grandChildDummyElement: Element = document.createElement('g');
-        const secondChildDummyElement: Element = document.createElement('g');
-        childDummyElement.appendChild(grandChildDummyElement);
-        dummyElement.appendChild(childDummyElement);
-        dummyElement.appendChild(secondChildDummyElement);
-        service.drawing = dummyElement as HTMLElement;
-
-        spyOn(htmlElementStub, 'firstElementChild');
-
-        service.currentPath.push(new Point(2, 1));
-        const UNHEIGHLIGHT_SPY = spyOn(service, 'unhighlight');
-        const SPY = spyOn(service, 'highlight');
-        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
-        spyOn(Point, 'rectOverlap').and.returnValue(true);
-        spyOn(service, 'checkIfPathIntersection').and.returnValue(true);
-        service.checkIfTouching();
-        expect(SPY).toHaveBeenCalled();
-        expect(UNHEIGHLIGHT_SPY).toHaveBeenCalled();
-    });
-    it('should unhighlight if not touching', () => {
-        service.isDown = true;
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        const grandChildDummyElement: Element = document.createElement('g');
-        childDummyElement.appendChild(grandChildDummyElement);
-        dummyElement.appendChild(childDummyElement);
-        service.drawing = dummyElement as HTMLElement;
-
-        spyOn(htmlElementStub, 'firstElementChild');
-
-        service.currentPath.push(new Point(2, 1));
         const SPY = spyOn(service, 'unhighlight');
-        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
-        spyOn(Point, 'rectOverlap').and.returnValue(true);
-        spyOn(service, 'checkIfPathIntersection').and.returnValue(false);
         service.checkIfTouching();
         expect(SPY).toHaveBeenCalled();
+    });
+    it('should erase the element', () => {
+        service.currentPath = [new Point(0, 0), new Point(1, 1)];
+        service.isDown = true;
+        const DUMMY_ELEMENT: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        const GRAND_CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        CHILD_DUMMY_ELEMENT.appendChild(GRAND_CHILD_DUMMY_ELEMENT);
+        DUMMY_ELEMENT.appendChild(CHILD_DUMMY_ELEMENT);
+        service.drawing = DUMMY_ELEMENT as HTMLElement;
+        spyOn(Point, 'rectOverlap').and.returnValue(true);
+        spyOn(service, 'loopAction').and.returnValue(true);
+        const SPY = spyOn(service, 'erase');
+        service.checkIfTouching();
+        expect(SPY).toHaveBeenCalled();
+    });
+    it('should unhilight elements', () => {
+        service.currentPath = [new Point(0, 0), new Point(1, 1)];
+        service.isDown = false;
+        const DUMMY_ELEMENT: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        const SECOND_DUMMY_CHILD = document.createElement('g');
+        const GRAND_CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        CHILD_DUMMY_ELEMENT.appendChild(GRAND_CHILD_DUMMY_ELEMENT);
+        DUMMY_ELEMENT.appendChild(CHILD_DUMMY_ELEMENT);
+        DUMMY_ELEMENT.appendChild(SECOND_DUMMY_CHILD);
+        service.drawing = DUMMY_ELEMENT as HTMLElement;
+        spyOn(Point, 'rectOverlap').and.returnValue(true);
+        spyOn(service, 'loopAction').and.returnValue(true);
+        const SPY = spyOn(service, 'unhighlight');
+        service.checkIfTouching();
+        expect(SPY).toHaveBeenCalled();
+    });
+    it('should highlight the element if touching but not down', () => {
+        service.currentPath = [new Point(0, 0), new Point(1, 1)];
+        service.isDown = false;
+        const DUMMY_ELEMENT: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        const GRAND_CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        CHILD_DUMMY_ELEMENT.appendChild(GRAND_CHILD_DUMMY_ELEMENT);
+        DUMMY_ELEMENT.appendChild(CHILD_DUMMY_ELEMENT);
+        service.drawing = DUMMY_ELEMENT as HTMLElement;
+        spyOn(Point, 'rectOverlap').and.returnValue(true);
+        spyOn(service, 'loopAction').and.returnValue(true);
+        const SPY = spyOn(service, 'highlight');
+        service.checkIfTouching();
+        expect(SPY).toHaveBeenCalled();
+    });
+    it('should unhighlight elements if not touching and mouse is down', () => {
+        service.currentPath = [new Point(0, 0), new Point(1, 1)];
+        service.isDown = true;
+        const DUMMY_ELEMENT: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        const GRAND_CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        CHILD_DUMMY_ELEMENT.appendChild(GRAND_CHILD_DUMMY_ELEMENT);
+        DUMMY_ELEMENT.appendChild(CHILD_DUMMY_ELEMENT);
+        service.drawing = DUMMY_ELEMENT as HTMLElement;
+        spyOn(Point, 'rectOverlap').and.returnValue(true);
+        spyOn(service, 'loopAction').and.returnValue(false);
+        const SPY = spyOn(service, 'unhighlight');
+        service.checkIfTouching();
+        expect(SPY).toHaveBeenCalled();
+    });
+    it('should not check the path intersection', () => {
+        const DIM = 6;
+        const DUMMY_ITEM = document.createElement('g');
+        const FIRST_CHILD = document.createElement('div');
+        FIRST_CHILD.className = 'aerosolPoints';
+        DUMMY_ITEM.appendChild(FIRST_CHILD);
+        const SECOND_CHILD = document.createElement('g');
+        SECOND_CHILD.className = 'clone';
+        DUMMY_ITEM.appendChild(SECOND_CHILD);
+        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
+        const SPY = spyOn(service, 'checkIfPathIntersection');
+        service.loopAction(DUMMY_ITEM, false, DIM);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+    it('should check the path intersection one time', () => {
+        const DIM = 6;
+        const DUMMY_ITEM = document.createElement('g');
+        const FIRST_CHILD = document.createElement('div');
+        DUMMY_ITEM.appendChild(FIRST_CHILD);
+        const SECOND_CHILD = document.createElement('g');
+        SECOND_CHILD.className = 'clone';
+        DUMMY_ITEM.appendChild(SECOND_CHILD);
+        spyOn(ElementInfo, 'translate').and.returnValue(new Point(0, 0));
+        const SPY = spyOn(service, 'checkIfPathIntersection');
+        service.loopAction(DUMMY_ITEM, false, DIM);
+        expect(SPY).toHaveBeenCalledTimes(1);
     });
     it('should return in intersection', () => {
         let TOUCHING = false;

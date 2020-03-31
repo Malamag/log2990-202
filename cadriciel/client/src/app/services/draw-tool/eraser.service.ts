@@ -249,32 +249,6 @@ export class EraserService extends DrawingTool {
                 continue;
             }
             touching = this.loopAction(fullItem, touching, dim);
-            /*
-            // the offset of the current item
-            const objOffset: Point = ElementInfo.translate(fullItem);
-
-            // iterate on every component of the current item for edge detection
-            for (let j = 0; j < fullItem.childElementCount; j++) {
-                const itemComponent = fullItem.children[j];
-
-                // ignore useless or non-shape components
-                if (itemComponent.classList.contains('aerosolPoints')) { break; }
-                if (
-                    itemComponent.classList.contains('clone') ||
-                    itemComponent.classList.contains('noHighlights') ||
-                    itemComponent.tagName === 'filter'
-                ) {
-                    continue;
-                }
-
-                // check the intersection between the eraser and the item component
-                if (this.inProgress.firstElementChild && this.inProgress.firstElementChild.firstElementChild) {
-                    const eraserElement = this.inProgress.firstElementChild.firstElementChild;
-                    const DIV = 10;
-                    touching = this.checkIfPathIntersection(eraserElement, itemComponent, dim / DIV, objOffset, touching);
-                }
-            }
-            */
             // if there is a match
             if (touching) {
                 // erase if mouse down, else highlight
@@ -323,7 +297,6 @@ export class EraserService extends DrawingTool {
         }
         return touching;
     }
-
     // iterate on points that compose the eraser perimeter and check if they appear in the fill or stroke of the candidate
     checkIfPathIntersection(eraserElement: Element, candidateElement: Element, precision: number,
                             objOffset: Point, touching: boolean): boolean {
@@ -347,7 +320,6 @@ export class EraserService extends DrawingTool {
         }
         return touching;
     }
-
     // mouse doubleClick with eraser in hand
     doubleClick(position: Point): void {
         // since its down -> up -> down -> up -> doubleClick, nothing more happens for the eraser

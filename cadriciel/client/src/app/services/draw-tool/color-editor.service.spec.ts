@@ -8,7 +8,7 @@ import { Point } from './point';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 // import { ColorConvertingService } from '../colorPicker/color-converting.service';
 const TEST_PT = new Point(1, 1);
-fdescribe('ColorEditorService', () => {
+describe('ColorEditorService', () => {
     // let fakeColorConvertingService: ColorConvertingService;
     let service: ColorEditorService;
     // tslint:disable-next-line: no-any
