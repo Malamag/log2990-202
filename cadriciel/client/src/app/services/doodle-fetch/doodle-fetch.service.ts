@@ -48,7 +48,6 @@ export class DoodleFetchService {
                 innerHTML.push(CHILDS[i].innerHTML);
             } catch {
                 innerHTML.push('');
-                console.log('Empty InnerHTML');
             }
         }
         const SVG_DATA: SVGData = {

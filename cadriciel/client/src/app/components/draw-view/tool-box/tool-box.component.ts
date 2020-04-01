@@ -1,3 +1,4 @@
+import { F12 } from '@angular/cdk/keycodes';
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { toolsItems } from '../../../functionality';
@@ -35,13 +36,17 @@ export class ToolBoxComponent implements OnInit {
         this.selectingToolsMap.set('ctrl+shift+z', 'Refaire');
         this.selectingToolsMap.set('s', 'Sélectionner');
         this.selectingToolsMap.set('e', 'Efface');
-        this.selectingToolsMap.set('r', 'ApplicateurCouleur');
+        this.selectingToolsMap.set('r', 'Applicateur de couleur');
         this.selectingToolsMap.set('i', 'Pipette');
         this.disableUndo = true;
         this.disableRedo = true;
     }
     @HostListener('document: keydown', ['$event'])
     updateBoard(event: KeyboardEvent): void {
+        // tslint:disable-next-line: deprecation
+        if (event.keyCode !== F12) {
+            event.preventDefault();
+        }
         // keyCode 90 for z
         // tslint:disable-next-line: deprecation
         if (event.ctrlKey && event.keyCode === Z_KEY_CODE) {
@@ -50,7 +55,7 @@ export class ToolBoxComponent implements OnInit {
             } else {
                 this.buttonAction(this.selectingToolsMap.get('ctrl+z'));
             }
-        } else if (this.selectingToolsMap.has(event.key)) {
+        } else if (this.selectingToolsMap.has(event.key) && !event.ctrlKey) {
             this.buttonAction(this.selectingToolsMap.get(event.key));
         }
     }

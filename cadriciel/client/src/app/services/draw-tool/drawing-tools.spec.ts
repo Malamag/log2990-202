@@ -9,7 +9,8 @@ describe('drawingTools', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                { provide: HTMLElement, useValue: {} },
+                { provide: HTMLElement, useValue: { getAttribute: () => 0 } },
+                { provide: Element, useValue: { getAttribute: () => 0 } },
                 { provide: Boolean, useValue: false },
                 { provide: Number, useValue: 0 },
                 { provide: String, useValue: '' },
@@ -17,6 +18,7 @@ describe('drawingTools', () => {
         });
 
         service = TestBed.get(DrawingTool);
+        spyOn(window, 'dispatchEvent');
     });
 
     it('should be created', () => {
@@ -100,5 +102,19 @@ describe('drawingTools', () => {
         const PT = new Point(0, 0); // a point in our canvas, arbitrary
         service.goingInsideCanvas(PT);
         expect(SPY).toHaveBeenCalledWith(PT);
+    });
+
+    it('should not call update drawing if the mouse is not down', () => {
+        service.isDown = false;
+        const SPY = spyOn(service, 'updateDrawing');
+        service.goingOutsideCanvas(new Point(0, 0));
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not call down method if the mouse is not down', () => {
+        service.isDown = false;
+        service.down = jasmine.createSpy();
+        service.goingInsideCanvas(new Point(0, 0));
+        expect(service.down).not.toHaveBeenCalled();
     });
 });

@@ -60,20 +60,20 @@ export class EntryPointComponent implements OnInit {
         // statements;
         this.openGallery();
         break;
-     }
-     case 'Guide': {
-       this.openUserManual();
-       break;
-    }
+      }
+      case 'Guide': {
+        this.openUserManual();
+        break;
+      }
       case 'Continuer': {
         this.continue();
         break;
-   }
-    default: {
-       // statements;
-     break;
       }
-   }
+      default: {
+       // statements;
+        break;
+      }
+    }
   }
 
 }

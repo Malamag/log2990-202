@@ -17,3 +17,33 @@ img {
 #pipette-prev {
     position: relative;
 }
+
+.btn-container {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    gap: 25%;
+}
+
+.mode-btn {
+    padding-top: 1vh;
+}
+
+#poly-slider {
+    padding-top: 5vh;
+}
+
+@media only screen and (max-height: 800px) {
+    .btn-container {
+        gap: 0%;
+    }
+
+    #poly-slider,
+    .mode-btn {
+        padding-top: 0vh;
+    }
+
+    #label-space {
+        display: none;
+    }
+}

@@ -22,9 +22,9 @@ import { ColorConvertingService } from './color-converting.service';
     providedIn: 'root',
 })
 export class ColorPickingService {
+    private readonly hexLen: number = 9; // #ffffffff has 9 chars
     // tslint:disable-next-line: typedef
     cData = colorData; // Interface for Color data
-
     colors: ChoosenColors;
     colorSubject: Subject<ChoosenColors> = new Subject<ChoosenColors>(); // le constuire à qqpart
     constructor(public colorConvert: ColorConvertingService) { }
@@ -226,28 +226,27 @@ export class ColorPickingService {
     // DISPLAY/UPDATE
     // Update last color table with a new color
     updateLastColor(newColor: string): void {
-        const SUB = 7;
-        this.cData.lastColorRects.forEach((color) => {
-            if (color.fill === newColor.substring(0, SUB)) {
+        const HEX_SUBSTR = 7; // #ffffff as 7 chars - 1 for # and 6 for hex values
+        for (const COLOR of this.cData.lastColorRects) {
+            if (COLOR.fill === newColor.substring(0, HEX_SUBSTR)) {
                 return;
             }
-        });
-        this.cData.lastColorRects.forEach((color) => {
-            if (color.fill === 'none') {
-                color.fill = newColor.substring(0, SUB);
-                color.stroke = 'white';
+        }
+        for (const COLOR of this.cData.lastColorRects) {
+            if (COLOR.fill === 'none') {
+                COLOR.fill = newColor.substring(0, HEX_SUBSTR);
+                COLOR.stroke = 'white';
                 return;
             }
-        });
+        }
         for (let i = 0; i < this.cData.lastColorRects.length - 1; i++) {
             this.cData.lastColorRects[i].fill = this.cData.lastColorRects[i + 1].fill;
         }
-        this.cData.lastColorRects[this.cData.lastColorRects.length - 1].fill = newColor.substring(0, SUB);
+        this.cData.lastColorRects[this.cData.lastColorRects.length - 1].fill = newColor.substring(0, HEX_SUBSTR);
     }
     updateDisplay(
         hex: string,
-        // tslint:disable-next-line: no-magic-numbers
-        rgb: number[] = this.colorConvert.hexToRgba(hex.substring(1, 9)),
+        rgb: number[] = this.colorConvert.hexToRgba(hex.substring(1, this.hexLen)),
         hsl: number[] = this.colorConvert.rgbToHsl(rgb[0], rgb[1], rgb[2]),
     ): void {
         // RGBA value of last color for display
@@ -373,7 +372,7 @@ export class ColorPickingService {
                 break;
             case this.cData.GREEN_INPUT_FIELD:
                 ret += '#' + this.cData.hexColorInput.substring(0, 2) + this.cData.greenHexInput +
-                 this.cData.hexColorInput.substring(SMALL_SUB, BIG_SUB);
+                    this.cData.hexColorInput.substring(SMALL_SUB, BIG_SUB);
                 break;
             case this.cData.BLUE_INPUT_FIELD:
                 ret += '#' + this.cData.hexColorInput.substring(0, SMALL_SUB) + this.cData.blueHexInput;

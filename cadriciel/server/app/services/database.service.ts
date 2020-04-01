@@ -1,9 +1,9 @@
 import fs from 'fs';
 import { injectable } from 'inversify';
-import { Collection, FilterQuery, MongoClient, MongoClientOptions, UpdateQuery } from 'mongodb';
+import { Collection, DeleteWriteOpResultObject, MongoClient, MongoClientOptions } from 'mongodb';
 import 'reflect-metadata';
-import { Image } from '../Image';
 import { ImageData } from '../../../image-data';
+import { Image } from '../image';
 import { MetaData } from '../metadata';
 
 const DATABASE_URL = 'mongodb+srv://Equipe202:Equipe202@cluster0-kusq4.mongodb.net/test?retryWrites=true&w=majority';
@@ -23,7 +23,7 @@ export class DatabaseService {
         MongoClient.connect(DATABASE_URL, this.options)
             .then((client: MongoClient) => {
                 this.collection = client.db(DATABASE_NAME).collection(DATABASE_COLLECTION);
-                console.error('connexion ok ');
+                // console.error('connexion ok ');
             })
             .catch(() => {
                 console.error('Erreur de connexion. Terminaison du processus');
@@ -36,7 +36,7 @@ export class DatabaseService {
         return this.collection
             .find({})
             .toArray()
-            .then((metaData: MetaData[]) => {
+            .then(async (metaData: MetaData[]) => {
                 return this.getImages(metaData);
             })
             .catch((error: Error) => {
@@ -50,22 +50,21 @@ export class DatabaseService {
             .find({})
             .toArray()
             .then((metaData: MetaData[]) => {
-                const buffer: ImageData[] = this.getImages(metaData);
-                if (tags === 'none') {
-                    return buffer;
-                }
                 const imageData: ImageData[] = [];
-                buffer.forEach((data: ImageData) => {
-                    let asTag = false;
-                    tagsArray.forEach((tag) => {
-                        if (this.searchTag(tag, data.tags)) {
-                            asTag = true;
-                        }
+                this.getImages(metaData)
+                    .then((buffer) => {
+                        buffer.forEach((data: ImageData) => {
+                            let asTag = false;
+                            tagsArray.forEach((tag) => {
+                                if (this.searchTag(tag, data.tags)) {
+                                    asTag = true;
+                                }
+                            });
+                            if (asTag) {
+                                imageData.push(data);
+                            }
+                        });
                     });
-                    if (asTag) {
-                        imageData.push(data);
-                    }
-                });
                 return imageData;
             })
             .catch((error: Error) => {
@@ -73,7 +72,7 @@ export class DatabaseService {
             });
     }
 
-    getImages(metaData: MetaData[]): ImageData[] {
+    async getImages(metaData: MetaData[]): Promise<ImageData[]> {
         const imageData: ImageData[] = [];
         const jsonData = fs.readFileSync(this.jsonFile);
         const drawingsList = JSON.parse(jsonData.toString());
@@ -84,7 +83,7 @@ export class DatabaseService {
             try {
                 imageData.push({ id: data.id, name: data.name, tags: data.tags, svgElement: image[0].svgElement });
             } catch (error) {
-                //throw new Error('Invalide id');
+                // throw new Error('Invalide id');
             }
         });
         return imageData;
@@ -92,11 +91,10 @@ export class DatabaseService {
 
     searchTag(tag: string, tags: string[]): boolean {
         let isFound = false;
-
         for (const myTag of tags) {
             let startPos = 0;
             for (let j: number = tag.length; j <= myTag.length; j++) {
-                isFound = tag === myTag.substring(startPos, j);
+                isFound = (tag === myTag.substring(startPos, j));
                 startPos++;
                 if (isFound) {
                     return isFound;
@@ -143,108 +141,60 @@ export class DatabaseService {
             .then(() => {
                 /* nothing to do after findOneAndDelete, .then necessary (empty block) */
             })
-            .catch((error: Error) => {
-                throw new Error("Impposible de supprimer l'image");
-            });
-    }
-
-    async modifyImage(imageData: ImageData): Promise<void> {
-        fs.readFile(this.jsonFile, (err, data) => {
-            // Convert string (old data) to JSON
-            const drawingsList = JSON.parse(data.toString());
-            const jsonObj = { id: imageData.id, svgElement: imageData.svgElement };
-            drawingsList.drawings = drawingsList.drawings.filter((imgData: Image) => {
-                return imgData.id !== imageData.id;
-            });
-            // Add new data to my drawings list
-            drawingsList.drawings.push(jsonObj);
-            // Convert JSON to string
-            const listToJson = JSON.stringify(drawingsList);
-            // Replace all data in the data.json with new ones
-            fs.writeFile(this.jsonFile, listToJson, (error) => {
-                if (error) {
-                    throw error;
-                }
-                console.log('The "data to append" was appended to file!');
-            });
-        });
-        const filterQuery: FilterQuery<ImageData> = { id: imageData.id };
-        const udateQuery: UpdateQuery<ImageData> = {
-            $set: {
-                id: imageData.id,
-                name: imageData.name,
-                tags: imageData.tags,
-            },
-        };
-        this.collection
-            .updateOne(filterQuery, udateQuery)
-            .then(() => {
-                /* nothing to do after updating image, .then necessary (empty block) */
-            })
             .catch(() => {
-                throw new Error("Impossible de mette à jour l'image");
+                throw new TypeError("Imposible de supprimer l'image");
             });
     }
 
     async saveImage(imageData: ImageData): Promise<void> {
-        this.validateImageData(imageData)
+        await this.validateImageData(imageData)
             .then((data) => {
-                let image: ImageData;
                 if (data !== null) {
-                    image = data;
-                } else {
-                    throw new Error('Image data is null');
+                    this.save(data);
                 }
-                fs.readFile(this.jsonFile, (err, readData) => {
-                    // Convert string (old data) to JSON
-                    const drawingsList = JSON.parse(readData.toString());
-                    const jsonObj = { id: image.id, svgElement: image.svgElement };
-                    // Add new data to my drawings list
-                    drawingsList.drawings.push(jsonObj);
-                    // Convert JSON to string
-                    const listToJson = JSON.stringify(drawingsList);
-                    // Replace all data in the data.json with new ones
-                    fs.writeFile(this.jsonFile, listToJson, (error) => {
-                        if (error) {
-                            throw error;
-                        }
-                        console.log('The "data to append" was appended to file!');
-                    });
-                });
-                const metadata: MetaData = { id: image.id, name: image.name, tags: image.tags };
-                this.collection.insertOne(metadata).catch((error: Error) => {
-                    throw error;
-                });
             })
-            .catch(() => {
-                //throw new Error('Invalide image data');
+            .catch((err) => {
+                throw err;
             });
+    }
+    async save(image: ImageData): Promise<void> {
+        // Convert string (old data) to JSON
+        const jsonData = fs.readFileSync(this.jsonFile);
+        const drawingsList = JSON.parse(jsonData.toString());
+        const jsonObj = { id: image.id, svgElement: image.svgElement };
+        // Add new data to my drawings list
+        drawingsList.drawings.push(jsonObj);
+        // Convert JSON to string
+        const listToJson = JSON.stringify(drawingsList);
+        fs.writeFileSync(this.jsonFile, listToJson);
+        const metadata: MetaData = { id: image.id, name: image.name, tags: image.tags };
+        this.collection.insertOne(metadata).catch((err) => {
+            throw err; // new Error('Fail to insert data');
+        });
     }
 
     async validateImageData(imageData: ImageData): Promise<ImageData | null> {
         const MAX_DATA_AMOUNT = 1000;
-        return this.getAllImages().then((data) => {
-            console.log(data.length);
-            if (data.length >= MAX_DATA_AMOUNT) {
-                return null;
-            }
-            while (!this.validateId(imageData.id, data)) {
-                // Generate a new id
-                imageData.id = new Date().getUTCMilliseconds() + '';
-            }
-            if (!this.validateName(imageData.name)) {
-                console.log('Empty name');
-                return null;
-            }
-            if (!this.validateTags(imageData.tags)) {
-                console.log('Invalide tags');
-                return null;
-            }
-            return imageData;
-        })
-            .catch(() => {
-                return null;
-                //throw new Error("Fail to get images");
+        return await this.getAllImages()
+            .then(async (data) => {
+                if (data.length >= MAX_DATA_AMOUNT) {
+                    throw new Error('Collection is full');
+                }
+                while (!this.validateId(imageData.id, data)) {
+                    // Generate a new id
+                    imageData.id = new Date().getUTCMilliseconds() + '';
+                }
+                if (!this.validateName(imageData.name)) {
+                    throw new Error('Empty name');
+                }
+                if (!this.validateTags(imageData.tags)) {
+                    throw new Error('Invalide tags');
+                }
+                return imageData;
+
+            })
+            .catch((err) => {
+                throw err; // new Error('Validation failure');
             });
     }
 
@@ -254,10 +204,10 @@ export class DatabaseService {
                 return image.id === id;
             }).length
         ) {
-            console.log('ID not unique');
+            // console.log('ID not unique');
             return false;
         } else {
-            console.log('ID is unique');
+            // console.log('ID is unique');
             return true;
         }
     }
@@ -275,5 +225,14 @@ export class DatabaseService {
             }
         });
         return validTags;
+    }
+    async clearData(): Promise<DeleteWriteOpResultObject> {
+        const jsonData = fs.readFileSync(this.jsonFile);
+        const drawingsList = JSON.parse(jsonData.toString());
+        drawingsList.drawings = [];
+        // Convert JSON to string
+        const listToJson = JSON.stringify(drawingsList);
+        fs.writeFileSync(this.jsonFile, listToJson);
+        return await this.collection.deleteMany({});
     }
 }

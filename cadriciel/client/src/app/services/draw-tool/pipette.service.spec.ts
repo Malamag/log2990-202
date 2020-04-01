@@ -151,13 +151,13 @@ describe('PipetteService', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    /*it('should throw an error on unimplemented methods', () => {
-        expect(() => service.updateDown()).toThrowError('Method not implemented.');
-        expect(() => service.updateUp()).toThrowError('Method not implemented.');
-        expect(() => service.cancel()).toThrowError('Method not implemented.');
-        expect(() => service.up()).toThrowError('Method not implemented.');
-        expect(() => service.doubleClick()).toThrowError('Method not implemented.');
-        expect(() => service.goingInsideCanvas()).toThrowError('Method not implemented.');
-        expect(() => service.goingOutsideCanvas()).toThrowError('Method not implemented.');
-    });*/
+    it('should have all unimplemented methods from the bas class', () => {
+        expect(service.updateDown()).not.toBeDefined();
+        expect(service.updateUp()).not.toBeDefined();
+        expect(service.cancel()).not.toBeDefined();
+        expect(service.up()).not.toBeDefined();
+        expect(service.doubleClick()).not.toBeDefined();
+        expect(service.goingInsideCanvas()).not.toBeDefined();
+        expect(service.goingOutsideCanvas()).not.toBeDefined();
+    });
 });

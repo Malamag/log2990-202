@@ -30,7 +30,6 @@ export class DatabaseController {
         });
 
         this.router.get('/Images/:tags', async (req: Request, res: Response, next: NextFunction) => {
-            console.log(req.params.tags);
             this.databaseService.getImagesByTags(req.params.tags)
                 .then((imageData: ImageData[]) => {
                     res.json(imageData);
@@ -44,16 +43,6 @@ export class DatabaseController {
             this.databaseService.deleteImageById(req.params.id)
                 .then(() => {
                     res.sendStatus(Httpstatus.NO_CONTENT).send();
-                })
-                .catch((error: Error) => {
-                    res.status(Httpstatus.NOT_FOUND).send(error.message);
-                });
-        });
-
-        this.router.patch('/Images', async (req: Request, res: Response, next: NextFunction) => {
-            this.databaseService.modifyImage(req.body)
-                .then(() => {
-                    res.sendStatus(Httpstatus.OK);
                 })
                 .catch((error: Error) => {
                     res.status(Httpstatus.NOT_FOUND).send(error.message);

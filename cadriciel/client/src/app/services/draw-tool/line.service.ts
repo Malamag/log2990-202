@@ -13,10 +13,10 @@ const FULL_ROTATION = 360;
 const HALF_ROTATION = 180;
 const ONE_FOUR_ROTATION = 90;
 const ONE_HEIGHT_ROTATION = 45;
-const THREE_FOUR_ROTATION  = 270;
+const THREE_FOUR_ROTATION = 270;
 const THREE_EIGHT_ROTATION = 135;
 const FIVE_EIGHT_ROTATION = 225;
-const SEVEN_EIGHT_ROTATION  = 315;
+const SEVEN_EIGHT_ROTATION = 315;
 
 @Injectable({
     providedIn: 'root',
@@ -145,7 +145,7 @@ export class LineService extends DrawingTool {
                     this.isDown = false;
 
                     if (this.currentPath.length >= 2) {
-                        // Down is called twice before we get here -> remove the excess 2 points
+                        // down() is always called twice before we get here (double click = down + down) -> remove the excess 2 points
                         this.currentPath.pop();
                         this.currentPath.pop();
                     }

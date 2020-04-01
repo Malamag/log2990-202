@@ -2,9 +2,7 @@ import { ElementInfo } from './element-info.service';
 import { HtmlSvgFactory } from './html-svg-factory.service';
 import { Point } from './point';
 import { SelectionService } from './selection.service';
-
 export class CanvasInteraction {
-
   static moveElements(xoff: number, yoff: number, selectionTool: SelectionService): void {
     // if there is at least 1 item selected
     if (!selectionTool.selectedItems.includes(true)) {
@@ -90,6 +88,7 @@ export class CanvasInteraction {
   static getPreciseBorder(item: Element, record?: [number, boolean][]): [number, boolean][] {
     const INIT_VALUE = -1;
     const POS = 3;
+
     let minX: [number, boolean] = record ? record[0] : [Infinity, false];
     let maxX: [number, boolean] = record ? record[1] : [INIT_VALUE, false];
     let minY: [number, boolean] = record ? record[2] : [Infinity, false];
@@ -137,7 +136,7 @@ export class CanvasInteraction {
     const SELECTION_BOX = SELECTION_RECTANGLE ? SELECTION_RECTANGLE.getBoundingClientRect() : null;
     const BOX_TOP_LEFT: Point = new Point(SELECTION_BOX ? SELECTION_BOX.left : INIT_VALUE, SELECTION_BOX ? SELECTION_BOX.top : INIT_VALUE);
     const BOX_BOTTOM_RIGHT: Point = new Point(SELECTION_BOX ? SELECTION_BOX.right : INIT_VALUE,
-       SELECTION_BOX ? SELECTION_BOX.bottom : INIT_VALUE);
+      SELECTION_BOX ? SELECTION_BOX.bottom : INIT_VALUE);
 
     for (let i = 0; i < ITEMS.length; i++) {
 
@@ -152,14 +151,14 @@ export class CanvasInteraction {
       // item is INSIDE the selection rectangle -> select/unselect accordingly
       if (INSIDE) {
         if (inverted) {
-          selectedItems[i] = invertedITEMS[i] === undefined ? true : invertedITEMS[i];
+          selectedItems[i] = invertedITEMS[i] == undefined ? true : invertedITEMS[i];
         } else {
           selectedItems[i] = true;
           invertedITEMS[i] = false;
         }
       } else { // item is outside the selection rectangle -> select/unselect accordingly
         if (inverted) {
-          selectedItems[i] = invertedITEMS[i] === undefined ? false : !invertedITEMS[i];
+          selectedItems[i] = invertedITEMS[i] == undefined ? false : !invertedITEMS[i];
         } else {
           selectedItems[i] = false;
           invertedITEMS[i] = true;

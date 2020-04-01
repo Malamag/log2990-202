@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { ToolsAttributes } from '../attributes/tools-attribute';
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -6,10 +7,10 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { PencilService } from './pencil.service';
 import { Point } from './point';
 // tslint:disable: max-classes-per-file
-export class FakeInteractionService extends InteractionService {}
-export class FakeColorPickingService extends ColorPickingService {}
-export class FakeColorConvertingService extends ColorConvertingService {}
-export class MouseHandlerMock {}
+export class FakeInteractionService extends InteractionService { }
+export class FakeColorPickingService extends ColorPickingService { }
+export class FakeColorConvertingService extends ColorConvertingService { }
+export class MouseHandlerMock { }
 
 // tslint:enable: max-classes-per-file
 describe('PencilService', () => {
@@ -22,20 +23,20 @@ describe('PencilService', () => {
   beforeEach(() => {
     kbServiceStub = {};
     TestBed.configureTestingModule({
-    providers: [
-      {provide: HTMLElement, useValue: {}},
-      {provide: Boolean, useValue: false},
-      {provide: Number, useValue: 0},
-      {provide: String, useValue: ''},
-      {provide: KeyboardHandlerService, useValue: kbServiceStub}]
+      providers: [
+        { provide: HTMLElement, useValue: {} },
+        { provide: Boolean, useValue: false },
+        { provide: Number, useValue: 0 },
+        { provide: String, useValue: '' },
+        { provide: KeyboardHandlerService, useValue: kbServiceStub }]
 
-  });
+    });
     ptA = new Point(0, 0); // using a point to test position functions
     ptB = new Point(1, 2);
     ptArr = [ptA, ptB];
     service = TestBed.get(PencilService);
 
-});
+  });
 
   it('should be created', () => {
     const TEST_SERVICE: PencilService = TestBed.get(PencilService);
@@ -43,24 +44,24 @@ describe('PencilService', () => {
   });
 
   it('should set the attributes in the subscription', () => {
-    service.interaction.emitToolsAttributes({lineThickness: 0, texture: 0}); // arbitrary, used to check if the emssion worked
+    service.interaction.emitToolsAttributes({ lineThickness: 0, texture: 0 }); // arbitrary, used to check if the emssion worked
     const SPY_INTERACTION = spyOn(service.interaction.$toolsAttributes, 'subscribe');
     service.updateAttributes();
     expect(SPY_INTERACTION).toHaveBeenCalled();
     expect(service.attr).toBeDefined();
 
   });
-/*
-  it('should update progress on mouse down', () => {
-    const spy = spyOn(service, 'updateProgress');
-    service.down(ptA); // simulating a mouse down at given point
-    service.update(kbServiceStub);
+  /*
+    it('should update progress on mouse down', () => {
+      const spy = spyOn(service, 'updateProgress');
+      service.down(ptA); // simulating a mouse down at given point
+      service.update(kbServiceStub);
 
-    expect(spy).toHaveBeenCalled();
-  });*/
+      expect(spy).toHaveBeenCalled();
+    });*/
 
   it('should update the current path on mouse down', () => {
-    const SPY = spyOn(service,  'updateProgress');
+    const SPY = spyOn(service, 'updateProgress');
     service.down(ptA);
     expect(service.currentPath.length).toBe(2); // same point added twice to manage static mouse
     expect(service.currentPath).toContain(ptA);
@@ -129,7 +130,7 @@ describe('PencilService', () => {
     const PRIM = '#ffffff';
     const SEC = '#000000';
     const BACK = '#ffffff';
-    service.chosenColor = {primColor: PRIM, secColor: SEC, backColor: BACK};
+    service.chosenColor = { primColor: PRIM, secColor: SEC, backColor: BACK };
 
     const PATH = service.createPath(ptArr);
 
@@ -156,6 +157,26 @@ describe('PencilService', () => {
     const PATH = service.createPath(ptArr);
     const NAME = 'pencil-stroke';
     expect(PATH).toContain(NAME);
+  });
+
+  it('should return an empty html string if there is not enough points to compute', () => {
+    const TEST_ARR = [ptA];
+    const HTML_STR = service.createPath(TEST_ARR);
+    expect(HTML_STR).toEqual('');
+  });
+
+  it('should not set the attributes if they are undefined in the sub', () => {
+    const TEST_ATTR: ToolsAttributes = { lineThickness: 50, texture: 0 };
+    service.attr = TEST_ATTR;
+    service.updateAttributes();
+    service.interaction.emitToolsAttributes(undefined);
+    expect(service.attr).toEqual(TEST_ATTR); // no change
+  });
+
+  it('should have the signatures of the inherited methods', () => {
+    expect(service.updateDown(kbServiceStub)).not.toBeDefined(); // only used for coverage purposes
+    expect(service.updateUp(0)).not.toBeDefined();
+    expect(service.doubleClick(new Point(0, 0))).not.toBeDefined();
   });
 
 });

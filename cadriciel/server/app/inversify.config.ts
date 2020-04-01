@@ -10,7 +10,6 @@ const container: Container = new Container();
 container.bind(Types.Server).to(Server);
 container.bind(Types.Application).to(Application);
 
-
 container.bind(Types.DatabaseController).to(DatabaseController);
 container.bind(Types.DatabaseService).to(DatabaseService);
 

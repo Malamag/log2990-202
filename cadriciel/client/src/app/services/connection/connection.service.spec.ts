@@ -4,9 +4,9 @@ import { MatSnackBarModule } from '@angular/material';
 import { of } from 'rxjs';
 import { ImageData } from '../../../../../image-data';
 import { SVGData } from '../../../../../svg-data';
-import { IndexService } from './index.service';
+import { ConnectionService } from './connection.service';
 import SpyObj = jasmine.SpyObj;
-describe('IndexService', () => {
+describe('ConnectionService', () => {
     let httpClientSpy: SpyObj<HttpClient>;
     beforeEach(() => {
         httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'delete', 'patch', 'post']);
@@ -22,7 +22,7 @@ describe('IndexService', () => {
     afterEach(() => {
         httpClientSpy.patch.calls.reset();
     });
-    it('should return the expected iamgeData informations', inject([IndexService], (service: IndexService) => {
+    it('should return the expected iamgeData informations', inject([ConnectionService], (service: ConnectionService) => {
         const EXPECTED_SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const EXPECTED_DATA: ImageData = { id: '570', svgElement: EXPECTED_SVG_DATA, name: 'welcome', tags: ['hello', 'new'] };
         httpClientSpy.get.and.returnValue(of([EXPECTED_DATA]));
@@ -30,7 +30,7 @@ describe('IndexService', () => {
             expect(data).toEqual([EXPECTED_DATA]);
         });
     }));
-    it('should get the expected data', inject([IndexService], (service: IndexService) => {
+    it('should get the expected data', inject([ConnectionService], (service: ConnectionService) => {
         const EXPECTED_SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const EXPECTED_DATA: ImageData = { id: '570', svgElement: EXPECTED_SVG_DATA, name: 'welcome', tags: ['hello', 'new'] };
         httpClientSpy.get.and.returnValue(of([EXPECTED_DATA]));
@@ -39,7 +39,7 @@ describe('IndexService', () => {
             expect(data).toEqual([EXPECTED_DATA]);
         });
     }));
-    it('should throw an error that the element can not be deleted', inject([IndexService], (service: IndexService) => {
+    it('should throw an error that the element can not be deleted', inject([ConnectionService], (service: ConnectionService) => {
         const MESSAGE = 'failed to delete';
         httpClientSpy.delete.and.throwError(MESSAGE);
         const EXPECTED_ERROR = new Error(MESSAGE);
@@ -50,7 +50,7 @@ describe('IndexService', () => {
             expect(error).toEqual(EXPECTED_ERROR);
         }
     }));
-    it('should display a feedback', inject([IndexService], (service: IndexService) => {
+    it('should display a feedback', inject([ConnectionService], (service: ConnectionService) => {
         // tslint:disable-next-line: no-string-literal
         service['displayFeedback'] = jasmine.createSpy();
         const ID = '570';
@@ -63,13 +63,13 @@ describe('IndexService', () => {
             expect(service['displayFeedback']).toHaveBeenCalled();
         });
     }));
-    it('should patch the information', inject([IndexService], (service: IndexService) => {
+    it('should patch the information', inject([ConnectionService], (service: ConnectionService) => {
         const EXPECTED_SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const EXPECTED_DATA: ImageData = { id: '570', svgElement: EXPECTED_SVG_DATA, name: 'welcome', tags: ['hello', 'new'] };
         service.modifyImage(EXPECTED_DATA);
         expect(httpClientSpy.patch.calls.count()).toBe(0);
     }));
-    it('should display a positive feedback', inject([IndexService], (service: IndexService) => {
+    it('should display a positive feedback', inject([ConnectionService], (service: ConnectionService) => {
         const EXPECTED_SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const EXPECTED_DATA: ImageData = { id: '570', svgElement: EXPECTED_SVG_DATA, name: 'welcome', tags: ['hello', 'new'] };
         httpClientSpy.post.and.returnValue(of(EXPECTED_DATA));
@@ -79,7 +79,7 @@ describe('IndexService', () => {
         // tslint:disable-next-line: no-string-literal
         expect(service['displayFeedback']).toHaveBeenCalled();
     }));
-    it('should throw an error', inject([IndexService], (service: IndexService) => {
+    it('should throw an error', inject([ConnectionService], (service: ConnectionService) => {
         const EXPECTED_SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
         const EXPECTED_DATA: ImageData = { id: '570', svgElement: EXPECTED_SVG_DATA, name: 'welcome', tags: ['hello', 'new'] };
         const message = 'error while saving';
@@ -91,11 +91,12 @@ describe('IndexService', () => {
             expect(error).toEqual(expectedError);
         }
     }));
-    /*
-    it('should open a snack bar', inject([IndexService], (service: IndexService) => {
+
+    it('should open a snack bar', inject([ConnectionService], (service: ConnectionService) => {
         const openSpy = spyOn(service.snackBar, 'open');
         const feedback = 'hello';
-        service.['displayFeedback'](feedback);
+        // tslint:disable-next-line: no-string-literal
+        service['displayFeedback'](feedback);
         expect(openSpy).toHaveBeenCalled();
-    }));*/
+    }));
 });

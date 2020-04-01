@@ -40,12 +40,12 @@ export class AerosolService extends DrawingTool {
         this.attr = { emissionPerSecond: DEFAULT_EMISSION_PER_SECOND, diameter: DEFAULT_DIAMETER };
         this.updateColors();
         this.updateAttributes();
-        this.ToolChangeListener();
+        this.toolChangeListener();
         this.points = new Array();
         this.insideCanvas = true;
     }
 
-    ToolChangeListener(): void {
+    toolChangeListener(): void {
         window.addEventListener('toolChange', (e: Event) => {
             if (this.isDown) {
                 this.insideCanvas = true;

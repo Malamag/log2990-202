@@ -14,7 +14,7 @@ const HTTP_OPTIONS = {
 @Injectable({
     providedIn: 'root',
 })
-export class IndexService {
+export class ConnectionService {
     private readonly DATABASE_URL: string = 'http://localhost:3000/database/Images/';
     constructor(public http: HttpClient, public snackBar: MatSnackBar) { }
 
@@ -29,10 +29,10 @@ export class IndexService {
     deleteImageById(imageId: string): void {
         this.http.delete<ImageData>(this.DATABASE_URL + imageId, HTTP_OPTIONS).subscribe(
             (data) => this.displayFeedback('Image supprimée avec succès!'),
-            (error) => {
-                this.displayFeedback("Erreur lors de la suppression de l'image");
-                console.log(error);
-            }
+            /* (error) => {
+                 // this.displayFeedback("Erreur lors de la suppression de l'image");
+                 // console.log(error);
+             }*/
         );
     }
 
@@ -41,20 +41,15 @@ export class IndexService {
         // this.http.patch<ImageData>(this.DATABASE_URL, imageData, httpOptions).subscribe((data) => { });
     }
 
-    populatedBd(): void {
-        // this.http.get<ImageData[]>('http://localhost:3000/database/populateDB').subscribe((data) => { });
-    }
-
     saveImage(imageData: ImageData): void {
         this.http.post('http://localhost:3000/database/saveImage', imageData, HTTP_OPTIONS).subscribe(
             (data) => {
                 this.displayFeedback('Image sauvegardée avec succès');
-                console.log(data);
             },
             (error) => {
-                this.displayFeedback('Erreur lors de la sauvegarde!');
-                console.log(error);
+                // console.log(data);
             }
+
         );
     }
 

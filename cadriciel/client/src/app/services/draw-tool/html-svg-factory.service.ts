@@ -1,7 +1,8 @@
 export class HtmlSvgFactory {
 
-  static svgRectangle(id: string | null, className: string | null, startX: number, startY: number, width: number,
-                      height: number, fill: string, stroke: string, strokeWidth: number, dashArray: number | null): string {
+  static svgRectangle(
+    id: string | null, className: string | null, startX: number, startY: number, width: number,
+    height: number, fill: string, stroke: string, strokeWidth: number, dashArray: number | null): string {
     let rectangle = '';
     rectangle += '<rect ';
     if (id) {
@@ -21,8 +22,9 @@ export class HtmlSvgFactory {
 
     return rectangle;
   }
-  static svgDetailedCircle(nbOfLayers: number, centerX: number, centerY: number, radius: number[], fill: string[],
-                           stroke: string[], strokeWidth: number[]): string {
+  static svgDetailedCircle(
+    nbOfLayers: number, centerX: number, centerY: number, radius: number[], fill: string[],
+    stroke: string[], strokeWidth: number[]): string {
 
     const LENGTH_TEST: number[] = [radius.length, fill.length, stroke.length, strokeWidth.length];
     const ALL_EQUALS: boolean = LENGTH_TEST.every((e) => e === nbOfLayers);
