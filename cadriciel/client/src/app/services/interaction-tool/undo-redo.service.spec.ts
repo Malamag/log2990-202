@@ -23,6 +23,7 @@ describe('UndoRedoService', () => {
         service = TestBed.get(UndoRedoService);
         service.done = [];
         service.undone = [];
+        service.drawing = drawingStub;
     });
 
     it('should be created', () => {
@@ -114,9 +115,42 @@ describe('UndoRedoService', () => {
         expect(SPY).toHaveBeenCalled();
         expect(UPDATE_SPY).toHaveBeenCalled();
     });
+    it('should not call any function', () => {
+        const NAME = 'hello';
+        const SPY = spyOn(service, 'redo');
+        service.apply(NAME);
+        expect(SPY).not.toHaveBeenCalled();
+    });
     it('should emit enable disable', () => {
         const EMIT_SPY = spyOn(service.interact, 'emitEnableDisable');
         service.updateButtons();
         expect(EMIT_SPY).toHaveBeenCalled();
+    });
+    it('should emit enable buttoms', () => {
+        service.done.push('hello');
+        service.undone.push('world');
+        const EMIT_SPY = spyOn(service.interact, 'emitEnableDisable');
+        service.updateButtons();
+        expect(EMIT_SPY).toHaveBeenCalledWith([false, false]);
+    });
+
+    it('should not push in the undone array if the element is undefined', () => {
+        service.done.push('hello');
+        spyOn(service.done, 'pop').and.returnValue(undefined);
+        const SPY = spyOn(service.undone, 'push').and.callThrough();
+        service.undo();
+        expect(SPY).not.toHaveBeenCalled();
+        service.undone = []; // avoids interfering with other tests
+        service.done = [];
+    });
+
+    it('should not push in the done array if the element is undefined', () => {
+        service.undone.push('world');
+        spyOn(service.undone, 'pop').and.returnValue(undefined);
+        const SPY = spyOn(service.done, 'push').and.callThrough();
+        service.redo();
+        expect(SPY).not.toHaveBeenCalled();
+        service.undone = [];
+        service.done = [];
     });
 });

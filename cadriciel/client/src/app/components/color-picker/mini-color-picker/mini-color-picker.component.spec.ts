@@ -9,18 +9,21 @@ describe('MiniColorPickerComponent', () => {
         TestBed.configureTestingModule({
             declarations: [MiniColorPickerComponent],
             imports: [FormsModule]
-        })
-            .compileComponents();
+        }).compileComponents();
+
     }));
+
     beforeEach(() => {
         fixture = TestBed.createComponent(MiniColorPickerComponent);
         component = fixture.componentInstance;
         component.cData = colorData;
         fixture.detectChanges();
     });
+
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
     it('should emit a color', () => {
         const SPY = spyOn(component, 'emitColor');
         component.ngOnInit();
@@ -34,6 +37,7 @@ describe('MiniColorPickerComponent', () => {
         expect(component.isHueSelecting).toBeTruthy();
         expect(SPY).toHaveBeenCalled();
     });
+
     it('should set the SV selector to true and to call the svSelect', () => {
         const SPY = spyOn(component, 'svSelect');
         const MOUSE_EVENT = new MouseEvent('mouseDown');
@@ -41,11 +45,13 @@ describe('MiniColorPickerComponent', () => {
         expect(component.isSVSelecting).toBeTruthy();
         expect(SPY).toHaveBeenCalled();
     });
+
     it('should set the selectiong attributes to false', () => {
         component.onMouseUp();
         expect(component.isSVSelecting).toBeFalsy();
         expect(component.isHueSelecting).toBeFalsy();
     });
+
     it('hue select should not call set Color', () => {
         const SPY = spyOn(component, 'setColor');
         component.isHueSelecting = false;
@@ -53,6 +59,7 @@ describe('MiniColorPickerComponent', () => {
         component.hueSelect(MOUSE_EVENT);
         expect(SPY).toHaveBeenCalledTimes(0);
     });
+
     it('hue select should call set color ', () => {
         const SPY = spyOn(component, 'setColor');
         component.isHueSelecting = true;
@@ -67,6 +74,7 @@ describe('MiniColorPickerComponent', () => {
         component.svSelect(MOUSE_EVENT);
         expect(SPY).toHaveBeenCalledTimes(0);
     });
+
     it('sv select should call set color ', () => {
         const SPY = spyOn(component, 'setColor');
         component.isSVSelecting = true;
@@ -74,6 +82,7 @@ describe('MiniColorPickerComponent', () => {
         component.svSelect(MOUSE_EVENT);
         expect(SPY).toHaveBeenCalled();
     });
+
     it('should return the expected string using the first case', () => {
         const H = 59;
         const S = 10;
@@ -100,6 +109,7 @@ describe('MiniColorPickerComponent', () => {
         const RET = component.colorConvert.hsvToHex(H, S, V);
         expect(RET).toEqual(EXPECTED_STRING);
     });
+
     it('should return the expected string using the second case', () => {
         const H = 70;
         const S = 10;
@@ -126,6 +136,7 @@ describe('MiniColorPickerComponent', () => {
         const RET = component.colorConvert.hsvToHex(H, S, V);
         expect(RET).toEqual(EXPECTED_STRING);
     });
+
     it('should return the expected string using the third case', () => {
         const H = 130;
         const S = 10;
@@ -152,6 +163,7 @@ describe('MiniColorPickerComponent', () => {
         const RET = component.colorConvert.hsvToHex(H, S, V);
         expect(RET).toEqual(EXPECTED_STRING);
     });
+
     it('should return the expected string using the fourth case', () => {
         const H = 200;
         const S = 10;
@@ -178,6 +190,7 @@ describe('MiniColorPickerComponent', () => {
         const RET = component.colorConvert.hsvToHex(H, S, V);
         expect(RET).toEqual(EXPECTED_STRING);
     });
+
     it('should return the expected string using the fifth case', () => {
         const H = 250;
         const S = 10;
@@ -204,6 +217,7 @@ describe('MiniColorPickerComponent', () => {
         const RET = component.colorConvert.hsvToHex(H, S, V);
         expect(RET).toEqual(EXPECTED_STRING);
     });
+
     it('should return the expected string using the fifth case', () => {
         const H = 310;
         const S = 10;
@@ -229,5 +243,13 @@ describe('MiniColorPickerComponent', () => {
             + component.colorConvert.rgbToHex(RGB_CONTAINER[2]);
         const RET = component.colorConvert.hsvToHex(H, S, V);
         expect(RET).toEqual(EXPECTED_STRING);
+    });
+
+    it('should convert and emit the color on set method', () => {
+        const SPY_CONV = spyOn(component.colorConvert, 'hsvToHex').and.returnValue('#ffffff');
+        const SPY_EMIT = spyOn(component, 'emitColor');
+        component.setColor();
+        expect(SPY_CONV).toHaveBeenCalled();
+        expect(SPY_EMIT).toHaveBeenCalled();
     });
 });

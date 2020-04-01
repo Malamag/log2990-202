@@ -162,6 +162,24 @@ describe('NewDrawComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
+    it('should resize the canvas dimension on window resize', () => {
+        const SPY = spyOn(component, 'resizeCanvas');
+        component.ngOnInit();
+        window.dispatchEvent(new Event('resize'));
+        expect(SPY).toHaveBeenCalled(); // at init and in the handler
+    });
+
+    it('should not call canvasResize if an input has been entered', () => {
+        const SPY = spyOn(component, 'resizeCanvas');
+        component.ngOnInit();
+        component.inputEntered = false;
+
+        window.dispatchEvent(new Event('resize'));
+
+        expect(SPY).toHaveBeenCalledTimes(1); // called at first init
+
+    });
+
     // tslint:disable-next-line: only-arrow-functions
     function setInputValue(name: string, value: number | string | undefined): void {
         const INPUT = fixture.debugElement.query(By.css(name)).nativeElement; // Find the input in DOM
@@ -169,4 +187,5 @@ describe('NewDrawComponent', () => {
         INPUT.dispatchEvent(new Event('input')); // Create new input event for wanted input
         fixture.detectChanges();
     }
+
 });

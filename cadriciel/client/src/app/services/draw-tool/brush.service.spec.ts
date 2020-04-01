@@ -143,4 +143,29 @@ describe('BrushService', () => {
         service.createPath(ptArr);
         expect(SPY).toHaveBeenCalled();
     });
+
+    it('should return an empty html string if there is not enough points to compute', () => {
+        const TEST_ARR = [ptA];
+        const HTML_STR = service.createPath(TEST_ARR);
+        expect(HTML_STR).toEqual('');
+    });
+
+    it('should not assign the attributes if they are undefined', () => {
+        service.attr = { lineThickness: 0, texture: 0 };
+        service.updateAttributes();
+        service.interaction.emitToolsAttributes(undefined);
+        expect(service.attr).toBeDefined();
+    });
+
+    it('should not create any filter if no valid texture type has been selected', () => {
+        const SPY_BLUR = spyOn(service, 'createBluredFilter');
+        const SPY_NOISE = spyOn(service, 'createNoiseFilter');
+
+        service.textures[service.attr.texture].type = 'testTexture';
+
+        service.createPath(ptArr);
+
+        expect(SPY_BLUR).not.toHaveBeenCalled();
+        expect(SPY_NOISE).not.toHaveBeenCalled();
+    });
 });

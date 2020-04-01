@@ -76,13 +76,21 @@ export class SelectionService extends ShapeService {
         this.timeCount = 0;
         this.movedSelectionWithArrowsOnce = false;
         MoveWithArrows.loop(this, START_ARROW_DELAY, ARROW_MOVEMENT_DELAY);
-        this.selectedRef.style.pointerEvents = 'none'; // ignore the bounding box on click
+        this.selectedRef.style.pointerEvents = 'none'; // ignore the selection bounding box on click
 
+        // whenever a new item is added, link it to a mousedown event to handle single click
         window.addEventListener('newDrawing', (e: Event) => {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
-                const EL = this.drawing.children[i];
-                const STATUS = EL.getAttribute('isListening');
-                if (STATUS !== 'true') {
+                const EL: Element = this.drawing.children[i];
+                let status: string | null;
+
+                try { // in case the getAttribute method is not implemented for the selected item
+                    status = EL.getAttribute('isListening');
+                } catch (err) {
+                    status = null;
+                }
+
+                if (status !== 'true') {
                     this.render.listen(EL, 'mousedown', () => {
                         this.render.setAttribute(EL, 'isListening', 'true');
                         if (!this.foundAnItem) {
@@ -94,6 +102,7 @@ export class SelectionService extends ShapeService {
             }
         });
 
+        // reset on tool change
         window.addEventListener('toolChange', (e: Event) => {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
                 this.selectedItems = [];
@@ -107,8 +116,9 @@ export class SelectionService extends ShapeService {
         });
     }
 
+    // when a key is pressed
     updateDown(keyboard: KeyboardHandlerService): void {
-        // CTRL-A SELECT ALL
+        // CTRL-A to select all
         const CTRL_A = 65;
         if (keyboard.keyCode === CTRL_A && keyboard.ctrlDown) {
             this.selectedItems = [];
@@ -118,12 +128,14 @@ export class SelectionService extends ShapeService {
             this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
         }
 
+        // only if a key has not been released
         if (!keyboard.released) {
             for (let i = 0; i < this.ARROW_KEY_CODES.length; i++) {
                 this.arrows[i] = keyboard.keyCode === this.ARROW_KEY_CODES[i] ? true : this.arrows[i];
             }
         }
         const POS = 3;
+        // to handle single 'click' on arrow keys
         const SINGLE_LEFT = this.arrows[0] && !this.singleUseArrows[0];
         const SINGLE_UP = this.arrows[1] && !this.singleUseArrows[1];
         const SINGLE_RIGHT = this.arrows[2] && !this.singleUseArrows[2];
@@ -134,6 +146,7 @@ export class SelectionService extends ShapeService {
 
     // updating on key up
     updateUp(keyCode: number): void {
+        // turn off arrows that are no longer pressed and reset their timer for constant movement
         for (let i = 0; i < this.ARROW_KEY_CODES.length; i++) {
             if (keyCode === this.ARROW_KEY_CODES[i]) {
                 this.arrows[i] = false;
@@ -142,8 +155,10 @@ export class SelectionService extends ShapeService {
             }
         }
 
+        // can only move selection if there is at least one arrow pressed
         this.canMoveSelection = this.arrows.includes(true);
 
+        // save current state for undo-redo if we are done moving the selection
         if (this.movedSelectionWithArrowsOnce && !this.arrows.includes(true)) {
             this.movedSelectionWithArrowsOnce = false;
             this.interaction.emitDrawingDone();
@@ -242,7 +257,9 @@ export class SelectionService extends ShapeService {
             return;
         }
 
+        // if we want to move the selection
         if (this.movingSelection) {
+            // used for undo-redo
             this.movedSelectionOnce = true;
 
             const PREVIOUS_MOUSE_POSITION = this.currentPath[this.currentPath.length - 1];

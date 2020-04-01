@@ -2,8 +2,8 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { ConnectionService } from 'src/app/services/connection/connection.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
-import { IndexService } from 'src/app/services/index/index.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
 import { ImageData } from '../../../../../image-data';
 
@@ -21,7 +21,7 @@ export class SaveFormComponent implements OnInit, AfterContentInit {
     private winService: ModalWindowService,
     private formBuilder: FormBuilder,
     private doodleFetch: DoodleFetchService,
-    private index: IndexService) { }
+    private connect: ConnectionService) { }
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   labels: string[];
   selectable: boolean;
@@ -86,7 +86,7 @@ export class SaveFormComponent implements OnInit, AfterContentInit {
     const ID: string = new Date().getUTCMilliseconds() + '';
     const DOODLE_STRING = this.doodleFetch.getDrawingDataNoGrid();
     const IMAGE_DATA: ImageData = { id: ID, name: this.saveForm.value.doodleName, tags: this.labels, svgElement: DOODLE_STRING };
-    this.index.saveImage(IMAGE_DATA);
+    this.connect.saveImage(IMAGE_DATA);
     this.winService.closeWindow();
 
   }

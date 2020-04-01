@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
+import { LineAttributes } from '../attributes/line-attributes';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { LineService } from './line.service';
 import { Point } from './point';
@@ -23,7 +24,7 @@ describe('LineService', () => {
                 { provide: String, useValue: '' },
                 { provide: Boolean, useValue: true },
                 { provide: Number, useValue: 0 },
-                { provide: HTMLElement, useValue: {} },
+                { provide: HTMLElement, useValue: { getAttribute: () => 0 } },
                 { provide: KeyboardHandlerService, useValue: kbServiceStub },
             ],
         });
@@ -318,4 +319,67 @@ describe('LineService', () => {
         const NEW_Y = -1;
         expect(REDIR.y).toEqual(NEW_Y);
     });
+
+    it('should cancel de line if escape key is pressed', () => {
+        const ESCAPE = 27;
+        kbServiceStub.keyCode = ESCAPE;
+        const SPY = spyOn(service, 'cancel');
+        service.updateDown(kbServiceStub);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should update the line progress if backspace key is pressed', () => {
+        const BCKSPACE = 8;
+        kbServiceStub.keyCode = BCKSPACE;
+        service.currentPath = [ptA, ptB, ptA, ptB];
+        const SPY = spyOn(service, 'updateProgress');
+        service.updateDown(kbServiceStub);
+        expect(SPY).toHaveBeenCalledWith(false);
+    });
+
+    it('should not add circles (junction points) on false boolean', () => {
+        service.attr.junction = false;
+        const LINE_STR = service.createPath(ptArr, false);
+        expect(LINE_STR).not.toContain('circle');
+    });
+
+    it('should not update drawing if the mouse is outside workspace', () => {
+        const SPY = spyOn(service, 'updateDrawing');
+        service.doubleClick(ptA, false);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not update progress if the mouse is not down on move', () => {
+        service.isDown = false;
+        const SPY = spyOn(service, 'updateProgress');
+        service.move(ptA);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not update progress if the mouse is not down on updateDown', () => {
+        service.isDown = false;
+        const SPY = spyOn(service, 'updateProgress');
+        service.updateDown(kbServiceStub);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not update progress if there is not enough points to compute', () => {
+        service.isDown = false;
+        service.currentPath = [ptA];
+        const BCKSPACE = 8;
+        kbServiceStub.keyCode = BCKSPACE;
+        const SPY = spyOn(service, 'updateProgress');
+        service.updateDown(kbServiceStub);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+
+    it('should not update attributes if undefined in the subscription', () => {
+        const LINE_ATTR: LineAttributes = { junction: false, lineThickness: 25, junctionDiameter: 10 };
+        service.attr = LINE_ATTR;
+        service.updateAttributes();
+        service.interaction.emitLineAttributes(undefined);
+        expect(service.attr).toEqual(LINE_ATTR);
+    });
+
+    // tslint:disable-next-line: max-file-line-count
 });

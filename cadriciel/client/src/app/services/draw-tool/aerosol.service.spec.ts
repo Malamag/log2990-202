@@ -1,32 +1,78 @@
 import { TestBed } from '@angular/core/testing';
 
+import { Subscription } from 'rxjs';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { AerosolService } from './aerosol.service';
 import { Point } from './point';
 
+const SPY_EV = jasmine.createSpy();
+beforeAll(() => {
+    window.addEventListener('toolChange', SPY_EV);
+});
 describe('AerosolService', () => {
+    // tslint:disable-next-line: no-any
+    let createInvisPath: any;
+    // tslint:disable-next-line: no-any
+    let genPoint: any;
     let service: AerosolService;
     let ptA: Point;
     let ptB: Point;
     let ptArr: Point[];
     // tslint:disable-next-line: no-any
     let kbServiceStub: any;
-
+    // tslint:disable-next-line: no-any
+    let htmlElemStub: any;
+    // tslint:disable-next-line: no-any
+    let fakeSub: any;
     beforeEach(() => {
+        fakeSub = {
+            unsubscribe: () => 0
+        };
+        htmlElemStub = {
+            getAttribute: () => 0
+        };
         kbServiceStub = {};
         TestBed.configureTestingModule({
             providers: [
-                { provide: HTMLElement, useValue: {} },
+                { provide: HTMLElement, useValue: htmlElemStub },
+                { provide: Element, useValue: htmlElemStub },
                 { provide: Boolean, useValue: false },
                 { provide: Number, useValue: 0 },
                 { provide: String, useValue: '' },
-                { provide: KeyboardHandlerService, kbServiceStub },
+                { provide: KeyboardHandlerService, useValue: kbServiceStub },
+                { provide: Subscription, useValue: fakeSub }
             ],
-        }),
-            ptA = new Point(0, 0);
+        });
+        ptA = new Point(0, 0);
         ptB = new Point(1, 2);
         ptArr = [ptA, ptB];
         service = TestBed.get(AerosolService);
+        // tslint:disable-next-line: no-string-literal
+        service['points'].push(ptA);
+        // tslint:disable-next-line: no-string-literal
+        service['points'].push(ptB);
+        // tslint:disable-next-line: no-string-literal
+        service['lastPoint'] = new Point(1, 1);
+        // tslint:disable-next-line: no-string-literal
+        service['sub'] = fakeSub;
+        createInvisPath = service.createInvisiblePath;
+        genPoint = service.generatePoint;
+        service.createInvisiblePath = () => 0;
+        service.generatePoint = () => 0;
+
+    });
+    beforeAll(() => {
+        window.dispatchEvent(new Event('toolChange'));
+    });
+
+    afterEach(() => {
+        // tslint:disable-next-line: no-string-literal
+        service['points'] = [];
+
+    });
+
+    it('should be triggered by toolChange events', () => {
+        expect(SPY_EV).toHaveBeenCalled();
     });
 
     it('should be created', () => {
@@ -54,16 +100,17 @@ describe('AerosolService', () => {
     });
 
     it('the path must be pursued by the next point', () => {
+        service.createInvisiblePath = jasmine.createSpy().and.returnValue(0);
         const PATH = service.createPath(ptArr);
-        expect(PATH).toContain(`L ${ptArr[1].x} ${ptArr[1].y} `); // second and last point of our fake array
+        expect(PATH).toContain(`L ${ptArr[1].x} ${ptArr[1].y}`); // second and last point of our fake array
     });
 
     it('should have the primary color as attribute', () => {
         const PRIM = '#ffffff';
         const SEC = '#000000';
         const BACK = '#ffffff';
-        service.generatePoint = jasmine.createSpy().and.returnValue(ptA);
-        service.createInvisiblePath = jasmine.createSpy().and.returnValue([ptA, ptB]);
+        spyOn(service, 'generatePoint').and.callFake(() => ptA);
+        spyOn(service, 'createInvisiblePath').and.callFake(() => [ptA, ptB]);
         service.chosenColor = { primColor: PRIM, secColor: SEC, backColor: BACK };
 
         const PATH = service.createPath(ptArr);
@@ -93,6 +140,7 @@ describe('AerosolService', () => {
         // Expect createPath function to have been called the same number of time as the wanted emission
         expect(SPY_CREATE_PATH).toHaveBeenCalledTimes(EMISSION_EXPECTED);
         CLOCK.uninstall();
+        service.up(ptA);
     });
 
     it('should only have points inside the diameter', () => {
@@ -138,6 +186,7 @@ describe('AerosolService', () => {
 
     it('should have a round linecap and linejoin', () => {
         // For lines to be mostly round (we want points)
+
         const PATH = service.createPath(ptArr);
 
         expect(PATH).toContain('stroke-linecap="round"');
@@ -151,13 +200,21 @@ describe('AerosolService', () => {
     });
 
     it('should create a valid invisible path', () => {
-        const PATH = service.createPath(ptArr);
-        expect(PATH).toContain('invisiblePath');
+        // tslint:disable-next-line: no-string-literal
+        service['path'] = '';
+        service.createInvisiblePath = createInvisPath; // reassign the former function
+        service.createInvisiblePath(ptArr);
+        // tslint:disable-next-line: no-string-literal
+        expect(service['path']).toContain('invisiblePath');
     });
 
-    it('should have nor stroke nor fill as attribute for the invisible path', () => {
+    it('should have none stroke and none fill as attribute for the invisible path', () => {
         const STROKE = 'stroke="none"';
         const FILL = 'fill="none"';
+        spyOn(service, 'createInvisiblePath').and.callFake(() => {
+            // tslint:disable-next-line: no-string-literal
+            service['path'] += STROKE; // trivial, the spied method always returns this
+        });
         const PATH = service.createPath(ptArr);
 
         expect(PATH).toContain(STROKE);
@@ -171,6 +228,7 @@ describe('AerosolService', () => {
         service.down(ptA);  // start aerosol inside canvas and move outside
         service.goingOutsideCanvas(OUTSIDE_POINT);
         expect(SPY).toHaveBeenCalled();
+        service.up(ptA);
     });
 
     it('should start a new path if it goes back inside the canvas after going outside while the mouse is clicked', () => {
@@ -184,6 +242,7 @@ describe('AerosolService', () => {
         service.goingInsideCanvas(POINT);
         expect(SPY).toHaveBeenCalledTimes(EXPECTED_CALLED_TIMES);
         expect(service.currentPath.length).toEqual(PATH_SIZE);
+        service.up(ptA);
     });
 
     it('should not start a new path if it goes back inside the canvas after going outside with a mouse up', () => {
@@ -199,6 +258,7 @@ describe('AerosolService', () => {
         service.down(ptA);
         expect(SPY).toHaveBeenCalledTimes(EXPECTED_CALLED_TIMES);
         expect(service.currentPath.length).toEqual(PATH_SIZE);
+        service.up(ptA);
     });
 
     it('should update path when the mouse is moved while being clicked inside the canvas', () => {
@@ -208,19 +268,21 @@ describe('AerosolService', () => {
 
         // It should have the points from the down button and from the move
         expect(++pathSize).toEqual(service.currentPath.length);
+        service.up(ptA);
     });
 
     it('should not update path when the mouse is moved without being clicked inside the canvas', () => {
         service.down(ptA);  // start aerosol by mouse down
         service.currentPath = ptArr;
         const PATH_SIZE = service.currentPath.length;
+        spyOn(service, 'createPath').and.returnValue('<path>');
         service.up(ptA);  // mouse up inside workspace
         service.move(ptB);  // Move while mouse up
         service.down(ptA);  // start aerosol again
 
         // it shouldn't have taken the path before the mouse down
         expect(PATH_SIZE).toEqual(service.currentPath.length);
-
+        service.up(ptA);
     });
 
     it('should not update path when the mouse is moved without being clicked outside the canvas', () => {
@@ -235,6 +297,7 @@ describe('AerosolService', () => {
 
         // There shouldn't be more points since we moved OUTSIDE the canvas
         expect(PATH_SIZE).toEqual(service.currentPath.length);
+        service.up(ptA);
     });
 
     it('should not make the mouse clicked when going outside the canvas', () => {
@@ -257,25 +320,59 @@ describe('AerosolService', () => {
         expect(SPY).not.toHaveBeenCalled();
     });
 
-    it('should unsubscribe on tool change while the mouse is down', () => {
-        service.down(ptA);
+    /* it('should unsubscribe from the tool on change', () => {
+         service.isDown = true;
+
+         service.toolChangeListener();
+         service.subscribe();
+         // tslint:disable-next-line: no-string-literal
+         const SPY = spyOn(service['sub'], 'unsubscribe');
+
+         window.dispatchEvent(new Event('toolChange'));
+
+         expect(SPY).toHaveBeenCalled();
+     });*/
+
+    it('should not unsubscribe on tool change if mouse is not down', () => {
+        service.subscribe();
         // tslint:disable-next-line: no-string-literal
         const SPY = spyOn(service['sub'], 'unsubscribe');
-        const EVENT = new Event('toolChange');
-        window.dispatchEvent(EVENT);
 
-        expect(SPY).toHaveBeenCalled();
+        service.isDown = false;
+        service.toolChangeListener();
+        window.dispatchEvent(new Event('toolChange'));
+        expect(SPY).not.toHaveBeenCalled();
     });
-    /*
-        it('should subscribe to the interval when mouse is down and unsubscibe when up', () => {
-            const SPY_SUB = spyOn(service, 'subscribe');
-            service.down(ptA);
-            // tslint:disable-next-line: no-string-literal
-            const SPY_UNSUB = spyOn(service['sub'], 'unsubscribe');
-            service.up(ptA);
 
-            expect(SPY_SUB).toHaveBeenCalled();
-            expect(SPY_UNSUB).toHaveBeenCalled();
-        });
-    */
+    it('should reinitialize insideCanvas on tool change', () => {
+        service.isDown = true;
+        service.toolChangeListener();
+        window.dispatchEvent(new Event('toolChange'));
+
+        // tslint:disable-next-line: no-string-literal
+        expect(service['insideCanvas']).toBeTruthy();
+
+    });
+
+    it('should generate 8 random points on mouse down with a diameter of 15px', () => {
+        service.isDown = true;
+        const TEST_DIAM = 15;
+        // tslint:disable-next-line: no-string-literal
+        service['attr'].diameter = TEST_DIAM;
+        service.generatePoint = genPoint;
+        const EXP_LEN = 8;
+        // tslint:disable-next-line: no-string-literal
+        service['points'] = [];
+        service.generatePoint();
+        // tslint:disable-next-line: no-string-literal
+        expect(service['points'].length).toEqual(EXP_LEN);
+    });
+
+    it('should have the method signatures of the inherited methods', () => { // test for coverage purpose (functions)
+        expect(service.doubleClick(new Point(0, 0))).not.toBeDefined();
+        expect(service.updateDown(kbServiceStub)).not.toBeDefined();
+        expect(service.updateUp(0)).not.toBeDefined();
+    });
+
+    // tslint:disable-next-line: max-file-line-count
 });

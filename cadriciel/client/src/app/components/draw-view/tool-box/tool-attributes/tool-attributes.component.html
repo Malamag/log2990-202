@@ -7,17 +7,17 @@
     >
         <label> Épaisseur du contour: {{ lineThickness }} px </label>
         <mat-slider thumbLabel type="range" min="1" max="30" [(ngModel)]="lineThickness"></mat-slider> <br />
+        <br id="label-space" />
+        <label> Type de tracé </label>
+        <mat-radio-group class="btn-container">
+            <mat-radio-button class="mode-btn" [value]="2" [checked]="true" (click)="plotType = 2"> Plein avec contour</mat-radio-button>
 
-        <label> Type de tracé </label> <br />
-        <mat-radio-group>
-            <br />
-            <mat-radio-button [value]="2" [checked]="true" (click)="plotType = 2"> Plein avec contour</mat-radio-button> <br /><br />
-            <mat-radio-button [value]="0" (click)="plotType = 0"> Contour</mat-radio-button> <br /><br />
-            <mat-radio-button [value]="1" (click)="plotType = 1"> Plein </mat-radio-button> <br />
+            <mat-radio-button class="mode-btn" [value]="0" (click)="plotType = 0"> Contour</mat-radio-button>
+            <mat-radio-button class="mode-btn" [value]="1" (click)="plotType = 1"> Plein </mat-radio-button>
         </mat-radio-group>
         <br />
         <!-- sides for the polygon-->
-        <div *ngSwitchCase="'Polygone'" (mouseleave)="updateForms()">
+        <div id="poly-slider" *ngSwitchCase="'Polygone'" (mouseleave)="updateForms()">
             <label> Nombre de côtés</label>
             <mat-slider thumbLabel tickInterval="1" type="range" min="3" max="12" [(ngModel)]="numberCorners"> </mat-slider><br />
         </div>
@@ -55,27 +55,27 @@
                 >Flou
                 <img src="../../../../../assets/images/flou.png" />
             </mat-radio-button>
-            <br /><br />
+            <br />
             <mat-radio-button [value]="1" (click)="texture = 1">
                 Bruit 1
                 <img src="../../../../../assets/images/bruit1.png" />
             </mat-radio-button>
-            <br /><br />
+            <br />
             <mat-radio-button [value]="2" (click)="texture = 2">
                 Bruit 2
                 <img src="../../../../../assets/images/bruit2.png" />
             </mat-radio-button>
-            <br /><br />
+            <br />
             <mat-radio-button [value]="3" (click)="texture = 3">
                 Bruit 3
                 <img src="../../../../../assets/images/bruit3.png" />
             </mat-radio-button>
-            <br /><br />
+            <br />
             <mat-radio-button [value]="4" (click)="texture = 4">
                 Bruit 4
                 <img src="../../../../../assets/images/bruit4.png" />
             </mat-radio-button>
-            <br /><br />
+            <br />
         </mat-radio-group>
     </div>
     <!-- for the calligraphy-->
@@ -109,9 +109,9 @@
         <mat-slider thumbLabel type="range" min="5" max="50" [(ngModel)]="junctionRadius"></mat-slider> <br />
     </div>
     <!-- for the eraser -->
-    <div *ngSwitchCase="'Efface'">
-        <label> Taille (px) </label>
-        <input type="text" value="2" /> px <br />
+    <div *ngSwitchCase="'Efface'" (mouseleave)="updateTools()">
+        <label> Épaisseur du trait: {{ lineThickness }} px </label>
+        <mat-slider thumbLabel type="range" min="3" max="50" [(ngModel)]="lineThickness"></mat-slider> <br />
     </div>
     <!-- for the text -->
     <div *ngSwitchCase="'Texte'">

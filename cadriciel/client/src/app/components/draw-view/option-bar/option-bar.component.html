@@ -13,19 +13,15 @@
             (click)="openUserGuide()" (click)="sendSigKill()">
             <mat-icon class="topIcon"> {{ funcMenu[2].icon }}</mat-icon>
         </button>
-        <button class="topBtn" mat-mini-fab color="primary" matTooltip="{{ funcMenu[3].name }}"
-            (click)="openNewDrawForm()" (click)="sendSigKill()">
-            <mat-icon class="topIcon"> {{ funcMenu[3].icon }}</mat-icon>
-        </button>
 
         <button class="topBtn" mat-mini-fab color="primary" matTooltip="{{ funcMenu[4].name }}"
             (click)="openExportForm()" (click)="sendSigKill()">
             <mat-icon class="topIcon">{{ funcMenu[4].icon }}</mat-icon>
         </button>
 
-        <button class="topBtn" mat-mini-fab color="primary" matTooltip={{funcMenu[4].name}} (click)="openSaveForm()"
+        <button class="topBtn" mat-mini-fab color="primary" matTooltip={{funcMenu[5].name}} (click)="openSaveForm()"
             (click)="sendSigKill()">
-            <mat-icon class="topIcon">redo</mat-icon>
+            <mat-icon class="topIcon">{{funcMenu[5].icon}}</mat-icon>
         </button>
 
     </div>

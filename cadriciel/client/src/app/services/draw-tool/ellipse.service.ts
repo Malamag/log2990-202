@@ -16,8 +16,9 @@ export class EllipseService extends ShapeService {
 
     attr: FormsAttribute;
 
-    constructor(inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
-                interaction: InteractionService, colorPick: ColorPickingService) {
+    constructor(
+        inProgess: HTMLElement, drawing: HTMLElement, selected: boolean,
+        interaction: InteractionService, colorPick: ColorPickingService) {
 
         super(inProgess, drawing, selected, interaction, colorPick);
         this.isSquare = false;
@@ -69,7 +70,7 @@ export class EllipseService extends ShapeService {
 
         // For eliminating bug with large lineThickness and small area
         if ((this.attr.plotType !== 1) && Math.abs(this.width) < this.attr.lineThickness
-                                        && Math.abs(this.height) < this.attr.lineThickness) {
+            && Math.abs(this.height) < this.attr.lineThickness) {
             return '';
         }
 

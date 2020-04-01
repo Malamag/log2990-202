@@ -1,6 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CanvasSwitchDirective } from 'src/app/directives/canvas-switch.directive';
+import { Canvas } from 'src/app/models/canvas.model';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { PencilService } from 'src/app/services/draw-tool/pencil.service';
 import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
@@ -34,6 +35,7 @@ describe('SvgDrawComponent', () => {
             move: () => 0,
             down: () => 0,
             up: () => 0,
+            preventDefault: () => 0,
         };
 
         kbHandlerStub = {
@@ -43,6 +45,8 @@ describe('SvgDrawComponent', () => {
 
         gridServiceStub = {
             initGrid: () => 0,
+            removeGrid: () => 0,
+            updateColor: () => 0
         };
 
         TestBed.configureTestingModule({
@@ -121,12 +125,14 @@ describe('SvgDrawComponent', () => {
         component.ngOnInit();
         expect(SPY_OBJ).toHaveBeenCalled();
     });
-
+    it('the length of the container should be greater than zero', () => {
+        component.createTools();
+        expect(component.toolsContainer.size).toBeGreaterThan(0);
+    });
     it('should call window addEventListener', () => {
-        const TOTAL_LISTENERS = 12;
         window.addEventListener = jasmine.createSpy().and.returnValue(0);
         component.ngAfterViewInit();
-        expect(window.addEventListener).toHaveBeenCalledTimes(TOTAL_LISTENERS);
+        expect(window.addEventListener).toHaveBeenCalled();
     });
 
     it('should call the mouse down listener on mouse down', () => {
@@ -146,7 +152,14 @@ describe('SvgDrawComponent', () => {
         component.ngAfterViewInit(); // prepares the event listeners
         expect(SPY_DOWN).toHaveBeenCalled();
     });
-
+    it('should call the prevent default', () => {
+        const SPY_PREVENT = spyOn(mouseHandlerStub, 'preventDefault');
+        window.addEventListener = jasmine.createSpy().and.callFake(() => {
+            mouseHandlerStub.preventDefault();
+        });
+        component.ngAfterViewInit();
+        expect(SPY_PREVENT).toHaveBeenCalled();
+    });
     it('should call the mouse up listener on mouse up', () => {
         const SPY_DOWN = spyOn(mouseHandlerStub, 'up');
         window.addEventListener = jasmine.createSpy().and.callFake(() => {
@@ -184,5 +197,27 @@ describe('SvgDrawComponent', () => {
         const TOOL = 'Rectangle'; // arbitrary tool selection
         component.interaction.emitSelectedTool(TOOL);
         expect(component.toolsContainer.get(TOOL).selected).toBeTruthy();
+    });
+
+    it('should define the doodle fetch attributes in the subscription', () => {
+        const TEST_COLOR = 'ffffff';
+
+        component.ngAfterViewInit();
+        component.doodleFetch.askForDoodle();
+        expect(component.doodleFetch.widthAttr).toBeDefined();
+        expect(component.doodleFetch.heightAttr).toBeDefined();
+        expect(component.doodleFetch.backColor).toEqual(TEST_COLOR);
+    });
+
+    it('should reinit the grid after the new canvas attributes', () => {
+        const CANVAS: Canvas = { canvasWidth: 1000, canvasHeight: 2000, canvasColor: 'ffffff' };
+        // tslint:disable-next-line: no-string-literal
+        const REM_SPY = spyOn(component['gridService'], 'removeGrid');
+        // tslint:disable-next-line: no-string-literal
+        const INIT_SPY = spyOn(component['gridService'], 'initGrid');
+        component.reinitGridFromSub();
+        component.interaction.emitGridAttributes(CANVAS);
+        expect(REM_SPY).toHaveBeenCalled();
+        expect(INIT_SPY).toHaveBeenCalled();
     });
 });

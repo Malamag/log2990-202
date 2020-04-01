@@ -30,6 +30,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
             'Pipette',
             'Aérosol',
             'ApplicateurCouleur',
+            'Efface',
         ];
         const DEF_THICK = 5;
         const DEF_TEXTURE = 0;

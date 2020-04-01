@@ -21,7 +21,11 @@ export class ExportService {
     }
 
     download(name: string, format: string, src: string): void {
-        // https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
+        /* The method to download and serialize the file is inspired by:
+        Communauté StackOverflow (2015). "How do I save/export an SVG file after creating an SVG with D3.js (IE, safari and chrome)?"
+         [en ligne] URL:
+        https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
+        */
 
         const DOWNLOAD_LINK = this.render.createElement('a');
         DOWNLOAD_LINK.href = src;
@@ -32,7 +36,11 @@ export class ExportService {
     }
 
     exportCanvas(name: string, type: string, canvasRef: HTMLCanvasElement): void {
-        // https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
+        /* The method to transformthe file in png/jpg is inspired by:
+            Communauté StackOverflow (2015). "HTML5 Canvas to PNG File"
+            [en ligne] URL:
+            https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
+        */
         if (type === 'svg') {
             this.download(name, type, this.imageURL);
         } else {
@@ -41,8 +49,6 @@ export class ExportService {
     }
 
     exportInCanvas(svgElem: Node, canvasRef: HTMLCanvasElement, name?: string, type?: string): void {
-        // https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
-
         const CTX: CanvasRenderingContext2D | null = canvasRef.getContext('2d');
         if (CTX) {
             const IMG = new Image();

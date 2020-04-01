@@ -1,4 +1,4 @@
-.drawForm >* {
+.drawForm > * {
     display: flex;
     flex-direction: column;
     overflow-y: hidden;
@@ -9,7 +9,7 @@ h1 {
 }
 
 .form-container {
-   padding: 20px;
+    padding: 20px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -22,19 +22,5 @@ h1 {
     font-size: 12px;
     color: rgb(255, 46, 46);
     position: absolute;
-    top: 77%;
+    top: 65%;
 }
-
-#palette {
-    height: 28px;
-    width: 240px;
-    position: relative;
-    margin-bottom: 5%;
-}
-
-.paletteElem {
-    display: flex;
-    flex-direction: row;
-    cursor: pointer;
-}
-

@@ -1,47 +1,54 @@
 <div class="form-container" (keydown)="blockEvent($event)">
-
     <h1>Sauvegarder un dessin</h1>
-    <form [formGroup]="saveForm" >
+    <form [formGroup]="saveForm">
         <mat-form-field>
             <mat-label for="doodleName">Nom du dessin</mat-label>
             <input matInput type="text" formControlName="doodleName" />
         </mat-form-field>
-        <br>
+        <br />
         <mat-form-field class="chipContainer" hintLabel="10 lettres et/ou chiffres maximum (symboles non autorisés)">
-            <mat-label >Liste d'étiquettes</mat-label>
+            <mat-label>Liste d'étiquettes</mat-label>
             <mat-chip-list #chipList>
-                <mat-chip *ngFor="let label of labels; index as i" [selectable]="selectable" [removable]="removable"
-                    (removed)="remove(labels[i])">
-                    {{labels[i]}}
+                <mat-chip
+                    *ngFor="let label of labels; index as i"
+                    [selectable]="selectable"
+                    [removable]="removable"
+                    (removed)="remove(labels[i])"
+                >
+                    {{ labels[i] }}
                     <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                 </mat-chip>
 
-                <input placeholder="Ajouter une étiquette..." #input maxlength="10"
-                    [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
+                <input
+                    placeholder="Ajouter une étiquette..."
+                    #input
+                    maxlength="10"
+                    [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="add($event)"
+                />
             </mat-chip-list>
-            <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
+            <mat-hint align="end">{{ input.value?.length || 0 }}/10</mat-hint>
         </mat-form-field>
         <div *ngIf="containsSymbols">
             <p class="warnMessage">L'étiquette ne peut pas contenir de symboles.</p>
-            
         </div>
-        <br>
+        <br />
         <div *ngIf="labelsIsFull">
             <p class="warnMessage">Le nombre maximal d'étiquettes est 20.</p>
         </div>
 
-        <br>
-        <br>
+        <br />
+        <br />
     </form>
     <!--preview-->
     <div id="prev">
         <app-preview-box [draw]="doodle" [svgW]="cWidth" [svgH]="cHeigth"></app-preview-box>
     </div>
-    <button mat-raised-button color="primary" (click)="saveImage()">Sauvegarder</button>
-        <button mat-button id="quitButton" (click)="closeForm()">Cancel</button>
-        <span id="dimensions">{{ cWidth }}px X {{ cHeigth }}px</span>
-    
+    <button mat-raised-button id="submit-btn" color="primary" (click)="saveImage()">Sauvegarder</button>
+    <button mat-button id="quitButton" (click)="closeForm()">Cancel</button>
+    <span id="dimensions">{{ cWidth }}px X {{ cHeigth }}px</span>
+
     <canvas #imgConvert [width]="cWidth" [height]="cHeigth"></canvas>
     <!--hidden canvas element used for conversion-->
 </div>
