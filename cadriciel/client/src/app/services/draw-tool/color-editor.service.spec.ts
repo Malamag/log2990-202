@@ -145,60 +145,60 @@ describe('ColorEditorService', () => {
     });
 
     it('should change color border when right click', () => {
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        dummyElement.appendChild(childDummyElement);
+        const DUMMY_ELEM: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEM: Element = document.createElement('g');
+        DUMMY_ELEM.appendChild(CHILD_DUMMY_ELEM);
         const SPY = spyOn(service, 'changeBorder');
         service.isRightClick = true;
         service.selected = true;
-        service.changeColor(dummyElement);
+        service.changeColor(DUMMY_ELEM);
         expect(SPY).toHaveBeenCalled();
     });
 
     it('should change color fill when left click', () => {
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        dummyElement.appendChild(childDummyElement);
+        const DUMMY_ELEM: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEM: Element = document.createElement('g');
+        DUMMY_ELEM.appendChild(CHILD_DUMMY_ELEM);
         const SPY = spyOn(service, 'changeFill');
         service.isRightClick = false;
         service.selected = true;
-        service.changeColor(dummyElement);
+        service.changeColor(DUMMY_ELEM);
         expect(SPY).toHaveBeenCalled();
     });
 
     it('should set the stroke attribute to the chosen secondary color if the color is different or there is no color', () => {
-        const dummyElement: HTMLElement = document.createElement('g');
+        const DUMMY_ELEM: HTMLElement = document.createElement('g');
         service.chosenColor.secColor = 'red';
-        dummyElement.setAttribute('stroke', 'blue');
+        DUMMY_ELEM.setAttribute('stroke', 'blue');
         const SPY = spyOn(service.render, 'setAttribute');
-        service.changeBorder(dummyElement);
+        service.changeBorder(DUMMY_ELEM);
         expect(SPY).toHaveBeenCalled();
     });
 
     it('should not set the stroke attribute to the chosen secondary color if the color is different or there is no color', () => {
-        const dummyElement: HTMLElement = document.createElement('g');
+        const DUMMY_ELEM: HTMLElement = document.createElement('g');
         service.chosenColor.secColor = 'blue';
-        dummyElement.setAttribute('stroke', 'blue');
+        DUMMY_ELEM.setAttribute('stroke', 'blue');
         const SPY = spyOn(service.render, 'setAttribute');
-        service.changeBorder(dummyElement);
+        service.changeBorder(DUMMY_ELEM);
         expect(SPY).not.toHaveBeenCalled();
     });
 
     it('should set the fill attribute to the chosen secondary color if the color is different or there is no color', () => {
-        const dummyElement: HTMLElement = document.createElement('g');
+        const DUMMY_ELEM: HTMLElement = document.createElement('g');
         service.chosenColor.primColor = 'red';
-        dummyElement.setAttribute('fill', 'blue');
+        DUMMY_ELEM.setAttribute('fill', 'blue');
         const SPY = spyOn(service.render, 'setAttribute');
-        service.changeFill(dummyElement);
+        service.changeFill(DUMMY_ELEM);
         expect(SPY).toHaveBeenCalled();
     });
 
     it('should not set the fill attribute to the chosen secondary color if the color is different or there is no color', () => {
-        const dummyElement: HTMLElement = document.createElement('g');
+        const DUMMY_ELEM: HTMLElement = document.createElement('g');
         service.chosenColor.primColor = 'blue';
-        dummyElement.setAttribute('fill', 'blue');
+        DUMMY_ELEM.setAttribute('fill', 'blue');
         const SPY = spyOn(service.render, 'setAttribute');
-        service.changeFill(dummyElement);
+        service.changeFill(DUMMY_ELEM);
         expect(SPY).not.toHaveBeenCalled();
     });
 
@@ -223,36 +223,36 @@ describe('ColorEditorService', () => {
 
     // replace name.
     it('should create a container named colorEditor-brush', () => {
-        const ptArr: Point[] = [];
+        const PT_ARR: Point[] = [];
         // tslint:disable-next-line: no-magic-numbers
-        ptArr.push(new Point(2, 3), new Point(2, 2));
-        const PATH = service.createPath(ptArr);
+        PT_ARR.push(new Point(2, 3), new Point(2, 2));
+        const PATH = service.createPath(PT_ARR);
         expect(PATH).toContain('name = "colorEditor-brush"');
     });
 
     it('should have a fill attribute', () => {
-        const ptArr: Point[] = [];
+        const PT_ARR: Point[] = [];
         // tslint:disable-next-line: no-magic-numbers
-        ptArr.push(new Point(2, 3), new Point(2, 2));
+        PT_ARR.push(new Point(2, 3), new Point(2, 2));
         service.chosenColor.primColor = 'blue';
-        const PATH = service.createPath(ptArr);
+        const PATH = service.createPath(PT_ARR);
         expect(PATH).toContain('fill="blue"');
     });
 
     it('should have a stroke width attribute of 3', () => {
-        const ptArr: Point[] = [];
+        const PT_ARR: Point[] = [];
         // tslint:disable-next-line: no-magic-numbers
-        ptArr.push(new Point(2, 3), new Point(2, 2));
-        const PATH = service.createPath(ptArr);
+        PT_ARR.push(new Point(2, 3), new Point(2, 2));
+        const PATH = service.createPath(PT_ARR);
         expect(PATH).toContain('stroke-width="3"');
     });
 
     it('should have a stroke attribute', () => {
-        const ptArr: Point[] = [];
+        const PT_ARR: Point[] = [];
         // tslint:disable-next-line: no-magic-numbers
-        ptArr.push(new Point(2, 3), new Point(2, 2));
+        PT_ARR.push(new Point(2, 3), new Point(2, 2));
         service.chosenColor.secColor = 'blue';
-        const PATH = service.createPath(ptArr);
+        const PATH = service.createPath(PT_ARR);
         expect(PATH).toContain('stroke="blue"');
     });
 
