@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { Collection, DeleteWriteOpResultObject, MongoClient, MongoClientOptions } from 'mongodb';
 import 'reflect-metadata';
 import { ImageData } from '../../../image-data';
-import { Image } from '../Image';
+import { Image } from '../image';
 import { MetaData } from '../metadata';
 
 const DATABASE_URL = 'mongodb+srv://Equipe202:Equipe202@cluster0-kusq4.mongodb.net/test?retryWrites=true&w=majority';
