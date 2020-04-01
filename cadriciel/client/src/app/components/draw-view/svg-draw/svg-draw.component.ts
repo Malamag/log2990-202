@@ -12,7 +12,6 @@ import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboa
 import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
-import { AutoSaveService } from 'src/app/services/auto-save/auto-save.service';
 
 @Component({
     selector: 'app-svg-draw',
@@ -238,7 +237,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         });
 
         this.bgroundChangeSubscription();
-        const save = new AutoSaveService(this.interaction, this.doodleFetch);
+        // const save = new AutoSaveService(this.interaction, this.doodleFetch);
     }
 
     reinitGridFromSub(): void {
