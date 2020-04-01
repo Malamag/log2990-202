@@ -123,49 +123,49 @@ export class EraserService extends DrawingTool {
         }
 
         // create a clone of the element
-        const clone: Element = this.render.createElement('g', 'http://www.w3.org/2000/svg');
-        (clone as HTMLElement).innerHTML = el.innerHTML;
+        const CLONE: Element = this.render.createElement('g', 'http://www.w3.org/2000/svg');
+        (CLONE as HTMLElement).innerHTML = el.innerHTML;
         const ADD = 10;
         // iterate on every children of the element
         for (let i = 0; i < el.childElementCount; i++) {
             // remove the ones that should not be highlighted
             if (el.children[i].classList.contains('invisiblePath')) {
-                this.render.removeChild(clone, clone.children[i]);
+                this.render.removeChild(CLONE, CLONE.children[i]);
             }
             // increase the stroke-width of the clone so it can be visible behind the original
-            const originalWidth: string | null = (el.children[i] as HTMLElement).getAttribute('stroke-width');
-            const originalWidthNumber = originalWidth ? +originalWidth : 0;
-            const wider: number = Math.max(ADD, originalWidthNumber + ADD);
-            this.render.setAttribute(clone.children[i], 'stroke-width', `${wider}`);
+            const ORIGINAL_WIDTH: string | null = (el.children[i] as HTMLElement).getAttribute('stroke-width');
+            const ORIGINAL_WIDTH_NUMBER = ORIGINAL_WIDTH ? +ORIGINAL_WIDTH : 0;
+            const WIDER: number = Math.max(ADD, ORIGINAL_WIDTH_NUMBER + ADD);
+            this.render.setAttribute(CLONE.children[i], 'stroke-width', `${WIDER}`);
 
             // set the color of the clone
-            const originalStrokeColor: string | null = (el.children[i] as HTMLElement).getAttribute('stroke');
-            const originalFillColor: string | null = (el.children[i] as HTMLElement).getAttribute('fill');
-            const refcolor: string | null = originalStrokeColor !== 'none' ? originalStrokeColor : originalFillColor;
+            const ORIGINAL_STROKE_COLOR: string | null = (el.children[i] as HTMLElement).getAttribute('stroke');
+            const ORIGINAL_FILL_COLOR: string | null = (el.children[i] as HTMLElement).getAttribute('fill');
+            const REF_COLOR: string | null = ORIGINAL_STROKE_COLOR !== 'none' ? ORIGINAL_STROKE_COLOR : ORIGINAL_FILL_COLOR;
             // chose the perfect red color for maximum visibility
-            const originalStrokeRGB: [number, number, number] = [0, 0, 0];
-            if (refcolor && refcolor !== 'none') {
+            const ORIGINAL_STROKE_RGB: [number, number, number] = [0, 0, 0];
+            if (REF_COLOR && REF_COLOR !== 'none') {
                 const THREE = 3;
                 const FOUR = 4; const FIVE = 5; const SIX = 6;
-                originalStrokeRGB[0] = parseInt(refcolor[1] + refcolor[2], 16);
-                originalStrokeRGB[1] = parseInt(refcolor[THREE] + refcolor[FOUR], 16);
-                originalStrokeRGB[2] = parseInt(refcolor[FIVE] + refcolor[SIX], 16);
+                ORIGINAL_STROKE_RGB[0] = parseInt(REF_COLOR[1] + REF_COLOR[2], 16);
+                ORIGINAL_STROKE_RGB[1] = parseInt(REF_COLOR[THREE] + REF_COLOR[FOUR], 16);
+                ORIGINAL_STROKE_RGB[2] = parseInt(REF_COLOR[FIVE] + REF_COLOR[SIX], 16);
             }
             // if original has a red value high enough, make it darker
-            let redHighlight = 255;
+            let RED_HIGHLIGHT = 255;
             const MAX_RGB = 255;
             const DIV = 4;
             const MULT = 3;
-            const originalTooRed = originalStrokeRGB[0] > (MAX_RGB / DIV) * MULT;
-            if (originalTooRed) {
-                redHighlight = (originalStrokeRGB[0] / DIV) * MULT;
+            const ORIGINAL_TOO_RED = ORIGINAL_STROKE_RGB[0] > (MAX_RGB / DIV) * MULT;
+            if (ORIGINAL_TOO_RED) {
+                RED_HIGHLIGHT = (ORIGINAL_STROKE_RGB[0] / DIV) * MULT;
             }
-            this.render.setAttribute(clone.children[i], 'stroke', `rgb(${redHighlight},0,0)`);
+            this.render.setAttribute(CLONE.children[i], 'stroke', `rgb(${RED_HIGHLIGHT},0,0)`);
         }
         // mark the clone
-        this.render.setAttribute(clone, 'class', 'clone');
+        this.render.setAttribute(CLONE, 'class', 'clone');
         // insert it as a new child behind all the existing ones
-        this.render.insertBefore(el, clone, el.firstElementChild);
+        this.render.insertBefore(el, CLONE, el.firstElementChild);
     }
 
     // unhighlights the element by removing all of his "clone" children
@@ -208,54 +208,54 @@ export class EraserService extends DrawingTool {
     // handles what happens when the eraser brush is touching an item
     checkIfTouching(): void {
         // get the canvas offset
-        const canvasBox = this.canvas ? this.canvas.getBoundingClientRect() : null;
-        const canvOffsetX = canvasBox ? canvasBox.left : 0;
-        const canvOffsetY = canvasBox ? canvasBox.top : 0;
+        const CANVAS_BOX = this.canvas ? this.canvas.getBoundingClientRect() : null;
+        const CANV_OFFSET_X = CANVAS_BOX ? CANVAS_BOX.left : 0;
+        const CANV_OFFSET_Y = CANVAS_BOX ? CANVAS_BOX.top : 0;
 
         // compute the eraser brush dimension
-        const w = Math.max(
+        const W = Math.max(
             this.attr.lineThickness,
             Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x)
         );
-        const h = Math.max(
+        const H = Math.max(
             this.attr.lineThickness,
             Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y)
         );
 
         // it's a square
-        const dim = Math.max(w, h);
+        const DIM = Math.max(W, H);
 
-        const topLeft = new Point(
-            this.currentPath[this.currentPath.length - 1].x - dim / 2,
-            this.currentPath[this.currentPath.length - 1].y - dim / 2,
+        const TOP_LEFT = new Point(
+            this.currentPath[this.currentPath.length - 1].x - DIM / 2,
+            this.currentPath[this.currentPath.length - 1].y - DIM / 2,
         );
-        const bottomRight = new Point(topLeft.x + dim, topLeft.y + dim);
+        const BOTTOM_RIGHT = new Point(TOP_LEFT.x + DIM, TOP_LEFT.y + DIM);
         const POS = 3;
         // iterate every item (do it backwards so no shift is needed when we delete an item)
         for (let i = this.drawing.childElementCount - 1; i >= 0; i--) {
 
             let touching = false;
             // pencil-stroke, line-segments, etc.
-            const fullItem = this.drawing.children[i];
+            const FULL_ITEM = this.drawing.children[i];
 
             // item bounding box
-            const itemBox = CanvasInteraction.getPreciseBorder(fullItem);
-            const itemTopLeft: Point = new Point(itemBox[0][0] - canvOffsetX, itemBox[2][0] - canvOffsetY);
-            const itemBottomRight: Point = new Point(itemBox[1][0] - canvOffsetX, itemBox[POS][0] - canvOffsetY);
+            const ITEM_BOX = CanvasInteraction.getPreciseBorder(FULL_ITEM);
+            const ITEM_TOP_LEFT: Point = new Point(ITEM_BOX[0][0] - CANV_OFFSET_X, ITEM_BOX[2][0] - CANV_OFFSET_Y);
+            const ITEM_BOTTOM_RIGHT: Point = new Point(ITEM_BOX[1][0] - CANV_OFFSET_X, ITEM_BOX[POS][0] - CANV_OFFSET_Y);
 
             // if the bounding boxes do not overlap, no need for edge detection
-            if (!Point.rectOverlap(topLeft, bottomRight, itemTopLeft, itemBottomRight)) {
-                this.unhighlight(fullItem);
+            if (!Point.rectOverlap(TOP_LEFT, BOTTOM_RIGHT, ITEM_TOP_LEFT, ITEM_BOTTOM_RIGHT)) {
+                this.unhighlight(FULL_ITEM);
                 continue;
             }
-            touching = this.loopAction(fullItem, touching, dim);
+            touching = this.loopAction(FULL_ITEM, touching, DIM);
             // if there is a match
             if (touching) {
                 // erase if mouse down, else highlight
                 if (this.isDown) {
-                    this.erase(fullItem);
+                    this.erase(FULL_ITEM);
                 } else {
-                    this.highlight(fullItem);
+                    this.highlight(FULL_ITEM);
                     // only one hightlight at a time
                     for (let k = 0; k < this.drawing.childElementCount; k++) {
                         if (k !== i) {
@@ -266,53 +266,53 @@ export class EraserService extends DrawingTool {
                 break;
             } else {
                 // nothing should be highlighted
-                this.unhighlight(fullItem);
+                this.unhighlight(FULL_ITEM);
             }
         }
     }
-    loopAction(fullItem: Element, touching: boolean, dim: number ): boolean {
+    loopAction(fullItem: Element, touching: boolean, dim: number): boolean {
         // the offset of the current item
-        const objOffset: Point = ElementInfo.translate(fullItem);
+        const OBJ_OFFSET: Point = ElementInfo.translate(fullItem);
 
         // iterate on every component of the current item for edge detection
         for (let j = 0; j < fullItem.childElementCount; j++) {
-            const itemComponent = fullItem.children[j];
+            const ITEM_COMPONENT = fullItem.children[j];
 
             // ignore useless or non-shape components
-            if (itemComponent.classList.contains('aerosolPoints')) { break; }
+            if (ITEM_COMPONENT.classList.contains('aerosolPoints')) { break; }
             if (
-                itemComponent.classList.contains('clone') ||
-                itemComponent.classList.contains('noHighlights') ||
-                itemComponent.tagName === 'filter'
+                ITEM_COMPONENT.classList.contains('clone') ||
+                ITEM_COMPONENT.classList.contains('noHighlights') ||
+                ITEM_COMPONENT.tagName === 'filter'
             ) {
                 continue;
             }
-
             // check the intersection between the eraser and the item component
             if (this.inProgress.firstElementChild && this.inProgress.firstElementChild.firstElementChild) {
                 const eraserElement = this.inProgress.firstElementChild.firstElementChild;
                 const DIV = 10;
-                touching = this.checkIfPathIntersection(eraserElement, itemComponent, dim / DIV, objOffset, touching);
+                touching = this.checkIfPathIntersection(eraserElement, ITEM_COMPONENT, dim / DIV, OBJ_OFFSET, touching);
             }
         }
         return touching;
     }
     // iterate on points that compose the eraser perimeter and check if they appear in the fill or stroke of the candidate
-    checkIfPathIntersection(eraserElement: Element, candidateElement: Element, precision: number,
-                            objOffset: Point, touching: boolean): boolean {
+    checkIfPathIntersection(
+        eraserElement: Element, candidateElement: Element, precision: number,
+        objOffset: Point, touching: boolean): boolean {
 
-        const eraserBrush = eraserElement as SVGGeometryElement;
-        const eraserPerimeter = eraserBrush.getTotalLength();
+        const ERASER_BRUSH = eraserElement as SVGGeometryElement;
+        const ERASER_PERIMETER = ERASER_BRUSH.getTotalLength();
 
-        const candidate = candidateElement as SVGGeometryElement;
+        const CANDIDATE = candidateElement as SVGGeometryElement;
 
-        for (let v = 0; v < eraserPerimeter; v += precision) {
-            const testPoint = eraserBrush.getPointAtLength(v);
-            testPoint.x -= objOffset.x;
-            testPoint.y -= objOffset.y;
+        for (let v = 0; v < ERASER_PERIMETER; v += precision) {
+            const TEST_POINT = ERASER_BRUSH.getPointAtLength(v);
+            TEST_POINT.x -= objOffset.x;
+            TEST_POINT.y -= objOffset.y;
             if (
-                candidate.isPointInStroke(testPoint) ||
-                (candidate.isPointInFill(testPoint) && candidateElement.getAttribute('fill') !== 'none')
+                CANDIDATE.isPointInStroke(TEST_POINT) ||
+                (CANDIDATE.isPointInFill(TEST_POINT) && candidateElement.getAttribute('fill') !== 'none')
             ) {
                 touching = true;
                 break;
@@ -333,11 +333,11 @@ export class EraserService extends DrawingTool {
         }
         // create a divider
         s = '<g style="transform: translate(0px, 0px);" name = "eraser-brush">';
-        const w = Math.max(this.attr.lineThickness, Math.abs(p[p.length - 1].x - p[0].x));
-        const h = Math.max(this.attr.lineThickness, Math.abs(p[p.length - 1].y - p[0].y));
-        const dim = Math.max(w, h);
-        s += `<rect x="${p[p.length - 1].x - dim / 2}" y="${p[p.length - 1].y - dim / 2}"`;
-        s += `width="${dim}" height="${dim}"`;
+        const W = Math.max(this.attr.lineThickness, Math.abs(p[p.length - 1].x - p[0].x));
+        const H = Math.max(this.attr.lineThickness, Math.abs(p[p.length - 1].y - p[0].y));
+        const DIM = Math.max(W, H);
+        s += `<rect x="${p[p.length - 1].x - DIM / 2}" y="${p[p.length - 1].y - DIM / 2}"`;
+        s += `width="${DIM}" height="${DIM}"`;
 
         s += 'fill="white"';
         s += 'stroke-width="1" stroke="black"';

@@ -2,6 +2,7 @@ import { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
+import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { ElementInfo } from './element-info.service';
 import { EraserService } from './eraser.service';
@@ -21,7 +22,7 @@ describe('EraserService', () => {
     let fakeChild: any;
     beforeEach(() => {
         fakeChild = {
-            getTotalLength : () => 1,
+            getTotalLength: () => 1,
             getPointAtLength: (v: number) => new Point(1, 1),
             isPointInStroke: (p: Point) => false,
             isPointInFill: (p: Point) => false,
@@ -30,7 +31,7 @@ describe('EraserService', () => {
         };
         firstChild = {
             firstElementChild: firstChild,
-            getTotalLength : () => 1,
+            getTotalLength: () => 1,
             getPointAtLength: (v: number) => new Point(1, 1),
             isPointInStroke: (p: Point) => true,
             isPointInFill: (p: Point) => true,
@@ -60,6 +61,7 @@ describe('EraserService', () => {
             ],
         });
         service = TestBed.get(EraserService);
+        service.currentPath = [];
     });
 
     it('should be created', () => {
@@ -81,15 +83,15 @@ describe('EraserService', () => {
         expect(SPY).toHaveBeenCalled();
     });
     it('should add an event listener for event of type toolChange on the eraser', () => {
-        const colorPick: ColorPickingService = new ColorPickingService(fakeColorConvertingService);
-        const interaction: InteractionService = new InteractionService();
+        const COLOR_PICK: ColorPickingService = new ColorPickingService(fakeColorConvertingService);
+        const INTERACTION: InteractionService = new InteractionService();
         window.addEventListener = jasmine.createSpy();
         const test: EraserService = new EraserService(
             htmlElementStub,
             htmlElementStub,
             true,
-            interaction,
-            colorPick,
+            INTERACTION,
+            COLOR_PICK,
             rdStub,
             htmlElementStub,
             htmlElementStub);
@@ -142,41 +144,41 @@ describe('EraserService', () => {
     });
 
     it('should erase an element', () => {
-        const dummyElement: Element = document.createElement('g');
+        const DUMMY_ELEMENT: Element = document.createElement('g');
         service.render.removeChild = jasmine.createSpy('removeChild', service.render.removeChild);
         service.selected = true;
-        service.erase(dummyElement);
+        service.erase(DUMMY_ELEMENT);
         expect(service.render.removeChild).toHaveBeenCalled();
     });
 
     it('should unhighlight an element', () => {
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        childDummyElement.className = 'clone';
-        dummyElement.appendChild(childDummyElement);
+        const DUMMY_ELEMENT: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        CHILD_DUMMY_ELEMENT.className = 'clone';
+        DUMMY_ELEMENT.appendChild(CHILD_DUMMY_ELEMENT);
         const SPY = spyOn(service.render, 'removeChild');
-        service.unhighlight(dummyElement);
+        service.unhighlight(DUMMY_ELEMENT);
         expect(SPY).toHaveBeenCalled();
     });
 
     it('should append a clone element of the highlighted element', () => {
         service.selected = true;
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        dummyElement.appendChild(childDummyElement);
+        const DUMMY_ELEMENT: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        DUMMY_ELEMENT.appendChild(CHILD_DUMMY_ELEMENT);
         const SPY = spyOn(service.render, 'insertBefore');
-        service.highlight(dummyElement);
+        service.highlight(DUMMY_ELEMENT);
         expect(SPY).toHaveBeenCalled();
 
     });
 
     it('should not append a clone element of the highlighted element', () => {
         service.selected = false;
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        dummyElement.appendChild(childDummyElement);
+        const DUMMY_ELEMENT: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        DUMMY_ELEMENT.appendChild(CHILD_DUMMY_ELEMENT);
         const SPY = spyOn(service.render, 'insertBefore');
-        service.highlight(dummyElement);
+        service.highlight(DUMMY_ELEMENT);
         expect(SPY).not.toHaveBeenCalled();
 
     });
@@ -201,44 +203,44 @@ describe('EraserService', () => {
     it('should set the attribute (stroke color, stroke width and class) of the clone to highlight', () => {
         service.selected = true;
         const NB_CALLS = 3;
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        childDummyElement.setAttribute('stroke', '#ff00000');
-        childDummyElement.setAttribute('fill', '#f000000');
-        dummyElement.appendChild(childDummyElement);
+        const DUMMY_ELEMENT: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        CHILD_DUMMY_ELEMENT.setAttribute('stroke', '#ff00000');
+        CHILD_DUMMY_ELEMENT.setAttribute('fill', '#f000000');
+        DUMMY_ELEMENT.appendChild(CHILD_DUMMY_ELEMENT);
         const SPY = spyOn(service.render, 'setAttribute');
-        service.highlight(dummyElement);
+        service.highlight(DUMMY_ELEMENT);
         expect(SPY).toHaveBeenCalledTimes(NB_CALLS);
     });
 
     it('should get the attribute (stroke color, stroke width and class) of the original item to highlight', () => {
         service.selected = true;
         const NB_CALLS = 3;
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        dummyElement.appendChild(childDummyElement);
-        const SPY = spyOn(childDummyElement, 'getAttribute');
-        service.highlight(dummyElement);
+        const DUMMY_ELEMENT: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        DUMMY_ELEMENT.appendChild(CHILD_DUMMY_ELEMENT);
+        const SPY = spyOn(CHILD_DUMMY_ELEMENT, 'getAttribute');
+        service.highlight(DUMMY_ELEMENT);
         expect(SPY).toHaveBeenCalledTimes(NB_CALLS);
     });
 
     it('should check if the first child element contains a class name clone', () => {
         service.selected = true;
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        dummyElement.appendChild(childDummyElement);
-        const SPY = spyOn(childDummyElement.classList, 'contains');
-        service.highlight(dummyElement);
+        const DUMMY_ELEMENT: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        DUMMY_ELEMENT.appendChild(CHILD_DUMMY_ELEMENT);
+        const SPY = spyOn(CHILD_DUMMY_ELEMENT.classList, 'contains');
+        service.highlight(DUMMY_ELEMENT);
         expect(SPY).toHaveBeenCalled();
     });
 
     it('should check if the first child element contains a class name clone', () => {
         service.selected = true;
-        const dummyElement: Element = document.createElement('g');
-        const childDummyElement: Element = document.createElement('g');
-        dummyElement.appendChild(childDummyElement);
-        const SPY = spyOn(childDummyElement.classList, 'contains');
-        service.unhighlight(dummyElement);
+        const DUMMY_ELEMENT: Element = document.createElement('g');
+        const CHILD_DUMMY_ELEMENT: Element = document.createElement('g');
+        DUMMY_ELEMENT.appendChild(CHILD_DUMMY_ELEMENT);
+        const SPY = spyOn(CHILD_DUMMY_ELEMENT.classList, 'contains');
+        service.unhighlight(DUMMY_ELEMENT);
         expect(SPY).toHaveBeenCalled();
     });
 
@@ -250,11 +252,11 @@ describe('EraserService', () => {
     });
 
     it('should remove the first element of the current path and return it while the length of the current path is above 3', () => {
-        const SPY = spyOn(service.currentPath, 'shift');
-        service.checkIfTouching = jasmine.createSpy();
-        const Y = 3;
         service.currentPath = [new Point(1, 0), new Point(1, 2), new Point(1, 1)];
-        service.move(new Point(2, Y));
+
+        const SPY = spyOn(service.currentPath, 'shift').and.callThrough();
+        service.checkIfTouching = jasmine.createSpy();
+        service.move(new Point(0, 0));
         expect(SPY).toHaveBeenCalled();
     });
 
@@ -401,10 +403,17 @@ describe('EraserService', () => {
         const RET = service.createPath(POINTS_CONTAINER);
         expect(RET).toContain(EXPECTED_CONTAIN);
     });
-    it('should empty the cyrrent path container', () => {
+    it('should empty the current path container', () => {
         service.currentPath = [new Point(1, 1)];
         service.goingOutsideCanvas();
         expect(service.currentPath).toEqual([]);
     });
-// tslint:disable-next-line: max-file-line-count
+
+    it('should have the signatures of the inherited methods', () => { // coverage purposes
+        expect(service.updateDown(new KeyboardHandlerService())).toBeUndefined();
+        expect(service.updateUp(0)).toBeUndefined();
+        expect(service.goingOutsideCanvas()).toBeUndefined();
+        expect(service.doubleClick(new Point(0, 0))).toBeUndefined();
+    });
+    // tslint:disable-next-line: max-file-line-count
 });

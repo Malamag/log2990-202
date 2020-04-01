@@ -21,7 +21,7 @@ describe('SelectionService', () => {
     beforeEach(() => {
         firstChild = {
             getBoundingClientRect: () => 0,
-            getAttribute: () => 0
+            getAttribute: () => 'false'
         };
         select = {
             children: [firstChild, firstChild],
@@ -47,6 +47,7 @@ describe('SelectionService', () => {
         service.selectedItems = [false, false, false];
         service.drawing = select;
         service.inProgress = select;
+        service.foundAnItem = false;
     });
 
     it('should be created', () => {

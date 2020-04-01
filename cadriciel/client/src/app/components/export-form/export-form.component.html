@@ -1,4 +1,4 @@
-<div class="form-container">
+<div class="form-container"  (keydown)="blockEvent($event)">
     <div>
         <h1>Exporter un dessin</h1>
         <form [formGroup]="exportForm" (submit)="onSubmit()">

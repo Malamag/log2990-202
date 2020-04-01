@@ -36,7 +36,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         private doodleFetch: DoodleFetchService,
         private expService: ExportService,
         private imgFilter: ImageFilterService,
-    ) {}
+    ) { }
 
     exportForm: FormGroup;
     doodle: Node;
@@ -86,5 +86,9 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     applyFilter(event: number): void {
         this.selectedFilter = event;
         this.imgFilter.toggleFilter(this.doodle, this.selectedFilter);
+    }
+
+    blockEvent(ev: KeyboardEvent): void {
+        ev.stopPropagation();
     }
 }

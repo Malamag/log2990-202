@@ -110,15 +110,15 @@ export class ColorEditorService extends DrawingTool {
         if (this.selected) {
             // iterate on every component of the element
             for (let i = 0; i < el.childElementCount; i++) {
-                const itemComponent = el.children[i];
+                const ITEM_COMPONENT = el.children[i];
                 // ignore componenent that do not have a color to change
-                if (itemComponent.tagName === 'filter') {
+                if (ITEM_COMPONENT.tagName === 'filter') {
                     continue;
                 }
                 if (this.isRightClick) {
-                    this.changeBorder(itemComponent as HTMLElement);
+                    this.changeBorder(ITEM_COMPONENT as HTMLElement);
                 } else {
-                    this.changeFill(itemComponent as HTMLElement);
+                    this.changeFill(ITEM_COMPONENT as HTMLElement);
                 }
             }
         }
@@ -172,64 +172,64 @@ export class ColorEditorService extends DrawingTool {
     checkIfTouching(): void {
         // get the canvas offset
         const DIV = 10;
-        const canvasBox = this.canvas ? this.canvas.getBoundingClientRect() : null;
-        const canvOffsetX = canvasBox ? canvasBox.left : 0;
-        const canvOffsetY = canvasBox ? canvasBox.top : 0;
+        const CANVAS_BOX = this.canvas ? this.canvas.getBoundingClientRect() : null;
+        const CANV_OFFSET_X = CANVAS_BOX ? CANVAS_BOX.left : 0;
+        const CANV_OFFSET_Y = CANVAS_BOX ? CANVAS_BOX.top : 0;
 
         // compute the color-editor brush dimension
-        const w = Math.max(
+        const W = Math.max(
             this.attr.lineThickness,
             Math.abs(this.currentPath[this.currentPath.length - 1].x - this.currentPath[0].x)
         );
-        const h = Math.max(
+        const H = Math.max(
             this.attr.lineThickness,
             Math.abs(this.currentPath[this.currentPath.length - 1].y - this.currentPath[0].y)
         );
 
         // it's a square
-        const dim = Math.max(w, h);
+        const dim = Math.max(W, H);
 
-        const topLeft = new Point(
+        const TOP_LEFT = new Point(
             this.currentPath[this.currentPath.length - 1].x - dim / 2,
             this.currentPath[this.currentPath.length - 1].y - dim / 2,
         );
-        const bottomRight = new Point(topLeft.x + dim, topLeft.y + dim);
+        const BOTTOM_RIGHT = new Point(TOP_LEFT.x + dim, TOP_LEFT.y + dim);
 
         // iterate every item
         for (let i = this.drawing.childElementCount - 1; i >= 0; i--) {
 
             let touching = false;
             // pencil-stroke, line-segments, etc.
-            const fullItem = this.drawing.children[i];
+            const FULL_ITEM = this.drawing.children[i];
             // item bounding box
             const POS = 3;
-            const itemBox = CanvasInteraction.getPreciseBorder(fullItem);
-            const itemTopLeft: Point = new Point(itemBox[0][0] - canvOffsetX, itemBox[2][0] - canvOffsetY);
-            const itemBottomRight: Point = new Point(itemBox[1][0] - canvOffsetX, itemBox[POS][0] - canvOffsetY);
+            const itemBox = CanvasInteraction.getPreciseBorder(FULL_ITEM);
+            const ITEM_TOP_LEFT: Point = new Point(itemBox[0][0] - CANV_OFFSET_X, itemBox[2][0] - CANV_OFFSET_Y);
+            const ITEM_BOTTOM_RIGHT: Point = new Point(itemBox[1][0] - CANV_OFFSET_X, itemBox[POS][0] - CANV_OFFSET_Y);
             // if the bounding boxes do not overlap, no need for edge detection
-            if (!Point.rectOverlap(topLeft, bottomRight, itemTopLeft, itemBottomRight)) {
+            if (!Point.rectOverlap(TOP_LEFT, BOTTOM_RIGHT, ITEM_TOP_LEFT, ITEM_BOTTOM_RIGHT)) {
                 continue;
             }
 
             // the offset of the current item
-            const objOffset: Point = ElementInfo.translate(fullItem);
+            const objOffset: Point = ElementInfo.translate(FULL_ITEM);
 
             // iterate on every component of the current item for edge detection
-            for (let j = 0; j < fullItem.childElementCount; j++) {
-                const itemComponent = fullItem.children[j];
+            for (let j = 0; j < FULL_ITEM.childElementCount; j++) {
+                const ITEM_COMPONENT = FULL_ITEM.children[j];
                 // ignore useless or non-shape components
-                if (itemComponent.classList.contains('aerosolPoints')) { break; }
+                if (ITEM_COMPONENT.classList.contains('aerosolPoints')) { break; }
                 if (
-                    itemComponent.classList.contains('clone') ||
-                    itemComponent.classList.contains('noHighlights') ||
-                    itemComponent.tagName === 'filter'
+                    ITEM_COMPONENT.classList.contains('clone') ||
+                    ITEM_COMPONENT.classList.contains('noHighlights') ||
+                    ITEM_COMPONENT.tagName === 'filter'
                 ) {
                     continue;
                 }
                 // check the intersection between the color-editor and the item component
                 if (this.inProgress.firstElementChild && this.inProgress.firstElementChild.firstElementChild) {
-                    const colorEditorElement = this.inProgress.firstElementChild.firstElementChild;
-                    touching = this.checkIfPathIntersection(colorEditorElement, itemComponent, dim / DIV, objOffset, touching);
+                    const COLOR_EDITOR_ELEMENT = this.inProgress.firstElementChild.firstElementChild;
+                    touching = this.checkIfPathIntersection(COLOR_EDITOR_ELEMENT, ITEM_COMPONENT, dim / DIV, objOffset, touching);
 
                 }
             }
@@ -237,7 +237,7 @@ export class ColorEditorService extends DrawingTool {
             // if there is a match
             if (touching) {
                 if (this.isDown) {
-                    this.changeColor(fullItem);
+                    this.changeColor(FULL_ITEM);
                 }
                 break;
             }
@@ -252,13 +252,13 @@ export class ColorEditorService extends DrawingTool {
         objOffset: Point,
         touching: boolean): boolean {
 
-        const colorEditorBrush = colorEditorElement as SVGGeometryElement;
-        const colorEditorPerimeter = colorEditorBrush.getTotalLength();
+        const COLOR_EDITOR_BRUSH = colorEditorElement as SVGGeometryElement;
+        const COLOR_EDITOR_PERIMETER = COLOR_EDITOR_BRUSH.getTotalLength();
 
         const candidate = candidateElement as SVGGeometryElement;
 
-        for (let v = 0; v < colorEditorPerimeter; v += precision) {
-            const testPoint = colorEditorBrush.getPointAtLength(v);
+        for (let v = 0; v < COLOR_EDITOR_PERIMETER; v += precision) {
+            const testPoint = COLOR_EDITOR_BRUSH.getPointAtLength(v);
             testPoint.x -= objOffset.x;
             testPoint.y -= objOffset.y;
             if (
@@ -289,10 +289,10 @@ export class ColorEditorService extends DrawingTool {
         // create a divider
         s = '<g style="transform: translate(0px, 0px);" name = "colorEditor-brush">';
         const WIDTH = 10;
-        const w = Math.max(WIDTH, Math.abs(p[p.length - 1].x - p[0].x));
-        const h = Math.max(WIDTH, Math.abs(p[p.length - 1].y - p[0].y));
+        const W = Math.max(WIDTH, Math.abs(p[p.length - 1].x - p[0].x));
+        const H = Math.max(WIDTH, Math.abs(p[p.length - 1].y - p[0].y));
 
-        const dim = Math.max(w, h);
+        const dim = Math.max(W, H);
 
         s += `<rect x="${p[p.length - 1].x - dim / 2}" y="${p[p.length - 1].y - dim / 2}"`;
         s += `width="${dim}" height="${dim}"`;

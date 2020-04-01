@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Z } from '@angular/cdk/keycodes';
+import { F12, Z } from '@angular/cdk/keycodes';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import {
@@ -120,6 +120,13 @@ describe('ToolBoxComponent', () => {
         component.interactionService.emitEnableDisable(DISABLED_BTNS);
         expect(component.disableUndo).toBeTruthy();
         expect(component.disableRedo).toBeFalsy();
+    });
+
+    it('should not prevent default if F12 is pressed (to open the console)', () => {
+        const SPY = spyOn(kbEventStub, 'preventDefault');
+        kbEventStub.keyCode = F12;
+        component.updateBoard(kbEventStub);
+        expect(SPY).not.toHaveBeenCalled();
     });
 
 });

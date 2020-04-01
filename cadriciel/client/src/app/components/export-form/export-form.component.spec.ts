@@ -66,12 +66,6 @@ describe('ExportFormComponent', () => {
         expect(SPY).toHaveBeenCalled();
     });
 
-    /* it('should ask for doodle on initialisation', () => {
-        const spy = spyOn(dFetchStub, 'askForDoodle');
-        component.ngOnInit();
-        expect(spy).toHaveBeenCalled();
-    });*/
-
     it('should create an export form with formbuilder', () => {
         component.initForm();
         expect(component.initForm).toBeDefined();
@@ -131,6 +125,13 @@ describe('ExportFormComponent', () => {
         const FILTER_NUM = 1;
         const SPY = spyOn(imgFilterService, 'toggleFilter');
         component.applyFilter(FILTER_NUM);
+        expect(SPY).toHaveBeenCalled();
+    });
+
+    it('should stop event propagation when export form is open', () => {
+        const KEY_EVENT = new KeyboardEvent('keydown', { code: 'Key1' });
+        const SPY = spyOn(KEY_EVENT, 'stopPropagation');
+        component.blockEvent(KEY_EVENT);
         expect(SPY).toHaveBeenCalled();
     });
 });
