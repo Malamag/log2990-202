@@ -2,6 +2,7 @@ import { Renderer2 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ColorConvertingService } from '../colorPicker/color-converting.service';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
+import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { ElementInfo } from './element-info.service';
 import { EraserService } from './eraser.service';
@@ -21,7 +22,7 @@ describe('EraserService', () => {
     let fakeChild: any;
     beforeEach(() => {
         fakeChild = {
-            getTotalLength : () => 1,
+            getTotalLength: () => 1,
             getPointAtLength: (v: number) => new Point(1, 1),
             isPointInStroke: (p: Point) => false,
             isPointInFill: (p: Point) => false,
@@ -30,7 +31,7 @@ describe('EraserService', () => {
         };
         firstChild = {
             firstElementChild: firstChild,
-            getTotalLength : () => 1,
+            getTotalLength: () => 1,
             getPointAtLength: (v: number) => new Point(1, 1),
             isPointInStroke: (p: Point) => true,
             isPointInFill: (p: Point) => true,
@@ -60,6 +61,7 @@ describe('EraserService', () => {
             ],
         });
         service = TestBed.get(EraserService);
+        service.currentPath = [];
     });
 
     it('should be created', () => {
@@ -250,11 +252,11 @@ describe('EraserService', () => {
     });
 
     it('should remove the first element of the current path and return it while the length of the current path is above 3', () => {
-        const SPY = spyOn(service.currentPath, 'shift');
-        service.checkIfTouching = jasmine.createSpy();
-        const Y = 3;
         service.currentPath = [new Point(1, 0), new Point(1, 2), new Point(1, 1)];
-        service.move(new Point(2, Y));
+
+        const SPY = spyOn(service.currentPath, 'shift').and.callThrough();
+        service.checkIfTouching = jasmine.createSpy();
+        service.move(new Point(0, 0));
         expect(SPY).toHaveBeenCalled();
     });
 
@@ -406,5 +408,12 @@ describe('EraserService', () => {
         service.goingOutsideCanvas();
         expect(service.currentPath).toEqual([]);
     });
-// tslint:disable-next-line: max-file-line-count
+
+    it('should have the signatures of the inherited methods', () => { // coverage purposes
+        expect(service.updateDown(new KeyboardHandlerService())).toBeUndefined();
+        expect(service.updateUp(0)).toBeUndefined();
+        expect(service.goingOutsideCanvas()).toBeUndefined();
+        expect(service.doubleClick(new Point(0, 0))).toBeUndefined();
+    });
+    // tslint:disable-next-line: max-file-line-count
 });

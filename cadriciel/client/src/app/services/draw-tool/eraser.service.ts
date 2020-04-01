@@ -270,7 +270,7 @@ export class EraserService extends DrawingTool {
             }
         }
     }
-    loopAction(fullItem: Element, touching: boolean, dim: number ): boolean {
+    loopAction(fullItem: Element, touching: boolean, dim: number): boolean {
         // the offset of the current item
         const OBJ_OFFSET: Point = ElementInfo.translate(fullItem);
 
@@ -287,7 +287,6 @@ export class EraserService extends DrawingTool {
             ) {
                 continue;
             }
-
             // check the intersection between the eraser and the item component
             if (this.inProgress.firstElementChild && this.inProgress.firstElementChild.firstElementChild) {
                 const eraserElement = this.inProgress.firstElementChild.firstElementChild;
@@ -298,8 +297,9 @@ export class EraserService extends DrawingTool {
         return touching;
     }
     // iterate on points that compose the eraser perimeter and check if they appear in the fill or stroke of the candidate
-    checkIfPathIntersection(eraserElement: Element, candidateElement: Element, precision: number,
-                            objOffset: Point, touching: boolean): boolean {
+    checkIfPathIntersection(
+        eraserElement: Element, candidateElement: Element, precision: number,
+        objOffset: Point, touching: boolean): boolean {
 
         const ERASER_BRUSH = eraserElement as SVGGeometryElement;
         const ERASER_PERIMETER = ERASER_BRUSH.getTotalLength();
