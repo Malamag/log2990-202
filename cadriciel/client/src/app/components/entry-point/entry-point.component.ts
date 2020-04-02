@@ -17,12 +17,35 @@ export class EntryPointComponent implements OnInit {
 
   menuItems: object = {};
   winService: ModalWindowService;
-
+  drawingExist: boolean;
   constructor(private snackBar: MatSnackBar, private dialog: MatDialog , private drawing: ContinueDrawingService) {
     this.winService = new ModalWindowService(this.dialog);
     this.menuItems = menuItems;
+    this.getDrawingExist();
   }
-
+  getDrawingExist(): void {
+    const MAX = 6;
+    let heightExist = false;
+    let widthExist = false;
+    let bgColorExist = false;
+    let htmlElementExist = true;
+    // check if all the elements exist
+    if (localStorage.getItem('height') !== null) {
+      heightExist = true;
+    }
+    if (localStorage.getItem('width') !== null) {
+      widthExist = true;
+    }
+    if (localStorage.getItem('color') !== null) {
+      bgColorExist = true;
+    }
+    for (let i = 0; i < MAX; ++i) {
+      if (localStorage.getItem('htmlElem') + i.toString() === null) {
+        htmlElementExist = false;
+      }
+    }
+    this.drawingExist = heightExist && widthExist && bgColorExist && htmlElementExist;
+  }
   ngOnInit(): void {
     this.onOpen(); // opens snackbar at the bottom of the page
   }

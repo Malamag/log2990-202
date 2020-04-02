@@ -49,7 +49,7 @@ export class ContinueDrawingService {
   }
 
   getSVGData(): SVGData {
-    const MAX = 10;
+    const MAX = 6;
     let w = '';
     let h = '';
     let backColor = '#ffffff';
