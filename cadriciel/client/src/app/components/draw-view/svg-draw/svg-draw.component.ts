@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Canvas } from 'src/app/models/canvas.model';
 import { ChoosenColors } from 'src/app/models/choosen-colors.model';
 import { AutoSaveService } from 'src/app/services/auto-save/auto-save.service';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
+import { ContinueDrawingService } from 'src/app/services/continue-drawing/continue-drawing.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
 import { InputObserver } from 'src/app/services/draw-tool/input-observer';
@@ -29,6 +30,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         public doodleFetch: DoodleFetchService,
         private render: Renderer2,
         private gridService: GridRenderService,
+        private continueDrawing: ContinueDrawingService,
     ) {
         this.showGrid = false;
     }
@@ -53,6 +55,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     @ViewChild('container', { static: false }) cntRef: ElementRef;
     workingSpace: HTMLElement;
 
+    @HostListener('window: load', ['$event'])
+    continueSavedImage(): void {
+        this.continueDrawing.continueAutoSaved();
+    }
     ngOnInit(): void {
         this.initCanvas();
     }

@@ -21,19 +21,11 @@ export class AutoSaveService {
     this.newSave();
   }
   clearLocal(data: SVGData): void {
-    if (localStorage.getItem(this.width)) {
-      localStorage.removeItem(this.width);
-    }
-    if (localStorage.getItem(this.height)) {
-      localStorage.removeItem(this.height);
-    }
-    if (localStorage.getItem(this.bgColor)) {
-      localStorage.removeItem(this.bgColor);
-    }
+    localStorage.removeItem(this.width);
+    localStorage.removeItem(this.height);
+    localStorage.removeItem(this.bgColor);
     for (let i = 0; i < data.innerHTML.length; ++i) {
-      if (localStorage.getItem(this.innerHTML + i.toString())) {
-        localStorage.removeItem(this.innerHTML + i.toString());
-      }
+      localStorage.removeItem(this.innerHTML + i.toString());
     }
   }
   saveLocal(data: SVGData): void {

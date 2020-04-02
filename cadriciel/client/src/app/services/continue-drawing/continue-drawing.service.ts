@@ -54,9 +54,9 @@ export class ContinueDrawingService {
     let h = '';
     let backColor = '#ffffff';
     const INNER: string[] = [];
-    w = localStorage.getItem(WIDTH) as string;
-    h = localStorage.getItem(HEIGHT) as string;
-    backColor = localStorage.getItem(BG_COLOR) as string;
+    if (localStorage.getItem(WIDTH) !== null) {w = localStorage.getItem(WIDTH) as string; }
+    if (localStorage.getItem(HEIGHT) !== null) {h = localStorage.getItem(HEIGHT) as string; }
+    if(localStorage.getItem(BG_COLOR) !== null) {backColor = '#' + localStorage.getItem(BG_COLOR) as string; }
     for (let i = 0; i < MAX; ++i) {
       if (localStorage.getItem(INNER_HTML + i.toString())) {
         const ELEM: string = localStorage.getItem(INNER_HTML + i.toString()) as string;
