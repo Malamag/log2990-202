@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Point } from '../point';
-import { PixelData } from './pixel-data';
 
 @Injectable({
   providedIn: 'root'
