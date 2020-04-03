@@ -6,62 +6,83 @@ import { Point } from '../point';
 })
 export class FloodFillService {
 
-  ctx: CanvasRenderingContext2D;
-  colorBelow: number[];
   tolerance: number;
+  ctx: CanvasRenderingContext2D;
 
-  imageMap: Map<Point, number[]>;
-  private readonly basis: number = 255;
+  floodFill(startPoint: Point, color: number[], targetColor: number[], canvasWidth: number, canvasHeight: number): void {
+    const NEXT_INDEX = 4;
+    const IMG_DATA: ImageData = this.ctx.getImageData(startPoint.x, startPoint.y, 0, 0);
 
-  constructor() {
-    this.imageMap = new Map();
-  }
+    const PIXEL_STACK: Point[] = [];
+    PIXEL_STACK.push(startPoint);
 
-  floodFill(point: Point, color: number[], targetColor: number[]): void {
-    this.colorBelow = this.checkColorDataAtPoint(point);
+    while (PIXEL_STACK.length) {
+      const nextPixel: Point | undefined = PIXEL_STACK.pop();
+      if (!nextPixel) { return; }
 
-    if (this.respectsTolerance() && this.isColor(color)) {
-      return;
+      let goLeft: boolean;
+      let goRight: boolean;
+
+      // RGBA has a length of 4. We need to invrement 4 times to get the next pixel's position in the image data array
+      let pixelPosition = (nextPixel.y * canvasWidth + nextPixel.x) * NEXT_INDEX;
+
+      while (nextPixel.y-- >= 0 && this.matchesTolerance(IMG_DATA, pixelPosition, this.tolerance, targetColor)) {
+        pixelPosition -= canvasWidth * NEXT_INDEX;
+      }
+
+      pixelPosition += canvasWidth * NEXT_INDEX;
+      ++nextPixel.y;
+      goLeft = false;
+      goRight = false;
+
+      while (nextPixel.y++ < canvasHeight - 1 && this.matchesTolerance(IMG_DATA, pixelPosition, this.tolerance, targetColor)) {
+        console.log('Coloring ' + pixelPosition);
+        if (nextPixel.x > 0) {
+          if (this.matchesTolerance(IMG_DATA, pixelPosition - NEXT_INDEX, this.tolerance, targetColor)) {
+            if (!goLeft) {
+              PIXEL_STACK.push(new Point(nextPixel.x - 1, nextPixel.y));
+              goLeft = true;
+            }
+
+          } else if (goLeft) {
+            goLeft = false;
+          }
+        }
+
+        if (nextPixel.x < canvasWidth - 1) {
+          if (this.matchesTolerance(IMG_DATA, pixelPosition, this.tolerance, targetColor)) {
+            if (!goRight) {
+              PIXEL_STACK.push(new Point(nextPixel.x + 1, nextPixel.y));
+              goRight = true;
+            }
+
+          } else if (goRight) {
+            goRight = false;
+          }
+        }
+
+        pixelPosition += canvasWidth * NEXT_INDEX;
+
+      }
     }
-
-    if (!this.isColor(targetColor)) {
-      return;
-    }
-
-    this.imageMap.set(point, color);
-
-    this.floodFill(new Point(point.x + 1, point.y), color, targetColor);
-    this.floodFill(new Point(point.x - 1, point.y), color, targetColor);
-    this.floodFill(new Point(point.x, point.y - 1), color, targetColor);
-    this.floodFill(new Point(point.x, point.y + 1), color, targetColor);
   }
 
   fillRegion(): void {
     /* Fills the determined region with some svg stuff*/
   }
 
-  checkColorDataAtPoint(position: Point): number[] {
-    const COLOR_NUMS: number[] = [];
-    const COLOR_ARR = this.ctx.getImageData(position.x, position.y, 1, 1).data;
-    COLOR_ARR.forEach((colorNum: number) => {
-      COLOR_NUMS.push(colorNum);
-    });
+  matchesTolerance(IMG_DATA: ImageData, position: number, tolerance: number, targetColor: number[]): boolean {
+    const R = IMG_DATA.data[position];
+    const G = IMG_DATA.data[position + 1];
+    const B = IMG_DATA.data[position + 2];
+    const BASIS = 255;
 
-    return COLOR_NUMS;
-  }
+    const R_MATCHES = Math.abs(R - targetColor[0]) / BASIS <= tolerance;
+    const G_MATCHES = Math.abs(G - targetColor[1]) / BASIS <= tolerance;
+    const B_MATCHES = Math.abs(B - targetColor[2]) / BASIS <= tolerance;
 
-  respectsTolerance(): boolean {
-    return (
-      this.colorBelow[0] / this.basis < this.tolerance &&
-      this.colorBelow[1] / this.basis < this.tolerance &&
-      this.colorBelow[2] / this.basis < this.tolerance);
-  }
+    return R_MATCHES && G_MATCHES && B_MATCHES;
 
-  isColor(color: number[]): boolean {
-    return (
-      this.colorBelow[0] === color[0] &&
-      this.colorBelow[1] === color[1] &&
-      this.colorBelow[2] === color[2]);
   }
 
 }
