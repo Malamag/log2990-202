@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ColorPickingService } from '../../colorPicker/color-picking.service';
-import { CanvasBuilderService } from '../../new-doodle/canvas-builder.service';
 import { InteractionService } from '../../service-interaction/interaction.service';
 import { DrawingTool } from '../drawing-tool';
 import { Point } from '../point';
@@ -19,15 +18,13 @@ export class BucketToolService extends DrawingTool {
     selected: boolean,
     interaction: InteractionService,
     colorPick: ColorPickingService,
-    private floodFill: FloodFillService,
-    private canvasBuild: CanvasBuilderService) {
+    private floodFill: FloodFillService) {
 
     super(inProgress, drawing, selected, interaction, colorPick);
+    const TEST_DIM = 2000;
+    this.surfaceWidth = TEST_DIM;
+    this.surfaceHeight = TEST_DIM;
 
-    this.canvasBuild.canvSubject.subscribe((canvas) => {
-      this.surfaceWidth = canvas.canvasWidth;
-      this.surfaceHeight = canvas.canvasHeight;
-    });
     interaction.$canvasContext.subscribe((context: CanvasRenderingContext2D) => {
       this.canvasContext = context;
     });

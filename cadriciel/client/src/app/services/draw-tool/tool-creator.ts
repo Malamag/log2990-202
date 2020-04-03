@@ -7,6 +7,8 @@ import { ColorEditorService } from './color-editor.service';
 import { EllipseService } from './ellipse.service';
 import { EraserService } from './eraser.service';
 import { LineService } from './line.service';
+import { BucketToolService } from './paint-bucket/bucket-tool.service';
+import { FloodFillService } from './paint-bucket/flood-fill.service';
 import { PencilService } from './pencil.service';
 import { PipetteService } from './pipette.service';
 import { PolygonService } from './polygon.service';
@@ -92,5 +94,14 @@ export class ToolCreator {
         colorPick: ColorPickingService,
     ): PipetteService {
         return new PipetteService(selected, interaction, colorPick);
+    }
+
+    CreateBucket(
+        selected: boolean,
+        interaction: InteractionService,
+        colorPick: ColorPickingService,
+        floodFill: FloodFillService
+    ): BucketToolService {
+        return new BucketToolService(this.inProgress, this.drawing, selected, interaction, colorPick, floodFill);
     }
 }
