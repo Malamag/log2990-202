@@ -1,4 +1,4 @@
-<div class="form-container"  (keydown)="blockEvent($event)">
+<div class="form-container" (keydown)="blockEvent($event)">
     <div>
         <h1>Exporter un dessin</h1>
         <form [formGroup]="exportForm" (submit)="onSubmit()">
@@ -14,6 +14,13 @@
                         {{ format.view }}
                     </mat-option>
                 </mat-select>
+            </mat-form-field>
+            <br />
+            <mat-checkbox (change)="emailExportStatus($event)">Exporter par email</mat-checkbox>
+            <br />
+            <mat-form-field id='emailForm' style="display: none;">
+                <mat-label for="mailAddr">Email</mat-label>
+                <input matInput type="text" formControlName="mailAddr" />
             </mat-form-field>
         </form>
 
@@ -31,7 +38,8 @@
             <app-preview-box [draw]="doodle" [svgW]="cWidth" [svgH]="cHeigth"></app-preview-box>
         </div>
 
-        <button mat-raised-button id="submit-btn" color="primary" type="submit" (click)="onSubmit()" [disabled]="exportForm.invalid">
+        <button mat-raised-button id="submit-btn" color="primary" type="submit" (click)="onSubmit()"
+            [disabled]="exportForm.invalid">
             Exporter
         </button>
         <button mat-button id="quitButton" (click)="closeForm()">Cancel</button>

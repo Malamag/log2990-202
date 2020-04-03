@@ -2,15 +2,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 /*import material*/
-import { MatAutocompleteModule, MatButtonModule,
-     MatButtonToggleModule, MatCardModule,
-      MatChipsModule, MatDialogModule,
-       MatFormFieldModule, MatIconModule,
-        MatInputModule, MatProgressSpinnerModule,
-         MatRadioModule, MatSelectModule,
-          MatSidenavModule, MatSliderModule,
-           MatSlideToggleModule, MatSnackBarModule,
-            MatToolbarModule, MatTooltipModule } from '@angular/material';
+import {
+    MatAutocompleteModule, MatButtonModule,
+    MatButtonToggleModule, MatCardModule,
+    MatChipsModule, MatDialogModule,
+    MatFormFieldModule, MatIconModule,
+    MatInputModule, MatProgressSpinnerModule,
+    MatRadioModule, MatSelectModule,
+    MatSidenavModule, MatSliderModule,
+    MatSlideToggleModule, MatSnackBarModule,
+    MatToolbarModule, MatTooltipModule
+} from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -36,6 +38,7 @@ import { ColorPickingService } from './services/colorPicker/color-picking.servic
 import { ExportService } from './services/exportation/export.service';
 import { CanvasBuilderService } from './services/new-doodle/canvas-builder.service';
 import { ModalWindowService } from './services/window-handler/modal-window.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
     declarations: [
@@ -82,6 +85,7 @@ import { ModalWindowService } from './services/window-handler/modal-window.servi
         MatChipsModule,
         MatAutocompleteModule,
         MatProgressSpinnerModule,
+        MatCheckboxModule,
     ],
     providers: [CanvasBuilderService, ModalWindowService, ColorConvertingService, ColorPickingService, ExportService],
 

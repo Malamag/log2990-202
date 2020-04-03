@@ -5,6 +5,7 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
 import { ExportService } from 'src/app/services/exportation/export.service';
 import { ImageFilterService } from 'src/app/services/exportation/image-filter/image-filter.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
+import { MatCheckbox } from '@angular/material';
 
 @Component({
     selector: 'app-export-form',
@@ -57,6 +58,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         this.exportForm = this.formBuilder.group({
             doodleName: ['Dessin sans titre', Validators.required],
             formatSel: [null, Validators.required],
+            mailAddr: ['xxxx@yyyy.zzz', Validators.required],
         });
     }
 
@@ -90,5 +92,15 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
 
     blockEvent(ev: KeyboardEvent): void {
         ev.stopPropagation();
+    }
+
+    emailExportStatus(event: MatCheckbox) {
+        let emailForm = document.getElementById('emailForm') as HTMLElement;
+        if (event.checked) {
+            emailForm.style.display = 'inline';
+        }
+        else {
+            emailForm.style.display = 'none';
+        }
     }
 }
