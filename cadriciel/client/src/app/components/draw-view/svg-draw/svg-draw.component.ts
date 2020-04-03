@@ -151,6 +151,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
         const PIPETTE = TC.CreatePipette(false, this.interaction, this.colorPick);
         const BUCKET = TC.CreateBucket(false, this.interaction, this.colorPick, new FloodFillService());
+
         this.toolsContainer.set('Rectangle', RECT);
         this.toolsContainer.set('Ligne', LINE);
         this.toolsContainer.set('Pinceau', BRUSH);

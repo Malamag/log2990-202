@@ -38,42 +38,18 @@ export class BucketToolService extends DrawingTool {
     if (this.canvasContext) {
       this.floodFill.floodFill(this.canvasContext, position, [TEST, TEST, TEST], [0, 0, 0], this.surfaceWidth, this.surfaceHeight, 1);
     }
-
+    this.updateDrawing();
   }
 
   move(position: Point): void {
     /* on move */
   }
 
-  updateDown(): void {
-    // throw new Error('Method not implemented.');
-  }
-
-  updateUp(): void {
-    // throw new Error('Method not implemented.');
-  }
-
-  cancel(): void {
-    // throw new Error('Method not implemented.');
-  }
-
   up(): void {
     // throw new Error('Method not implemented.');
   }
 
-  doubleClick(): void {
-    // throw new Error('Method not implemented.');
-  }
-
-  goingOutsideCanvas(): void {
-    // throw new Error('Method not implemented.');
-  }
-
-  goingInsideCanvas(): void {
-    // throw new Error('Method not implemented.');
-  }
-
-  createPath(path: Point[], doubleClickCheck?: boolean | undefined, removePerimeter?: boolean | undefined): void {
+  createPath(path: Point[], doubleClickCheck?: boolean | undefined, removePerimeter?: boolean | undefined): string {
     // throw new Error("Method not implemented.");
 
     // create a divider
@@ -97,6 +73,50 @@ export class BucketToolService extends DrawingTool {
     sPath += ` stroke="${this.chosenColor.primColor}"`;
     sPath += ` fill="${this.chosenColor.primColor}" /> </g>`;
 
+    return sPath;
+
+  }
+
+// add the progress to the main drawing
+updateDrawing(endIt?: boolean): void {
+
+  // create the final svg element
+  let d = '';
+  d += this.createPath(this.currentPath, endIt);
+
+  // add it to the main drawing
+  this.drawing.innerHTML += d;
+
+  const EVENT = new Event('newDrawing');
+  window.dispatchEvent(EVENT);
+
+  this.interaction.emitDrawingDone();
+
+  this.currentPath = [];
+}
+
+  updateDown(): void {
+    // throw new Error('Method not implemented.');
+  }
+
+  updateUp(): void {
+    // throw new Error('Method not implemented.');
+  }
+
+  cancel(): void {
+    // throw new Error('Method not implemented.');
+  }
+
+  doubleClick(): void {
+    // throw new Error('Method not implemented.');
+  }
+
+  goingOutsideCanvas(): void {
+    // throw new Error('Method not implemented.');
+  }
+
+  goingInsideCanvas(): void {
+    // throw new Error('Method not implemented.');
   }
 
   updateAttributes(): void {

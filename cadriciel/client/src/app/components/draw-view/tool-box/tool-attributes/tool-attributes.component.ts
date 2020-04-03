@@ -31,6 +31,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
             'Aérosol',
             'ApplicateurCouleur',
             'Efface',
+            'Sceau',
         ];
         const DEF_THICK = 5;
         const DEF_TEXTURE = 0;
