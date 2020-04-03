@@ -75,7 +75,30 @@ export class BucketToolService extends DrawingTool {
 
   createPath(path: Point[], doubleClickCheck?: boolean | undefined, removePerimeter?: boolean | undefined): void {
     // throw new Error("Method not implemented.");
+
+    // create a divider
+    let sPath = '<g name = "bucket" style="transform: translate(0px, 0px);" >';
+
+    // Initialize the d string attribute of the path
+    let dString = '';
+
+    // blabla
+    let points: Point[];
+    points = new Array();
+
+    // Put every points in a string
+    for (const POINT of points) {
+        dString += ` ${POINT.x}, ${POINT.y}`;
+    }
+
+    // Create the polyline
+    sPath += ' <polyline ';
+    sPath += ` d="${dString}"`;
+    sPath += ` stroke="${this.chosenColor.primColor}"`;
+    sPath += ` fill="${this.chosenColor.primColor}" /> </g>`;
+
   }
+
   updateAttributes(): void {
     // throw new Error("Method not implemented.");
   }
