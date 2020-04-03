@@ -53,7 +53,8 @@ export const menuItems = [
         name: 'Exporter un dessin',
         shortcutName: 'Exporter',
         shortDescription: `Permet dexporter un dessin localement selon 3 différents formats: SVG, PNG ou JPG.
-         Aussi, elle vous permet d'appliquer des filtres sur le dessin que vous voulez exporter.`,
+         Aussi, elle vous permet d'appliquer des filtres sur le dessin que vous voulez exporter. En plus cette fonctionnalité vous donne la possibilité d'envoyer
+         un dessin par courriel en entrant le courriel de la personne recevante.`,
         description: `Pour ouvrir la fenêtre d'exportation, vous pouvez appuyer appuyer sur l'icône appropriée de la barre des options,
         comme vous pouvez l'ouvrir en faisant la touche 'ctrl+E' de votre clavier`,
         icon: 'cloud_download',
@@ -215,5 +216,55 @@ export const toolsItems = [
             `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
             ou en appuyant sur la touche 'ctrl+shift+z' de votre clavier.`,
         icon: 'redo',
+    },
+    {
+        name: 'Copier',
+        shortcutName: 'Copier',
+        shortDescription:
+            'Cette fonctionnalité vous permet de copier une sélection.',
+        description:
+            `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
+            ou en appuyant sur la touche 'ctrl+C' de votre clavier.`,
+        icon: 'copy',
+    },
+    {
+        name: 'Couper',
+        shortcutName: 'Couper',
+        shortDescription:
+            'Cette fonctionnalité vous permet de couper une sélection pour la placer ailleur sur la surface de dessin.',
+        description:
+            `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
+            ou en appuyant sur la touche 'ctrl+X' de votre clavier.`,
+        icon: 'cut',
+    },
+    {
+        name: 'Coller',
+        shortcutName: 'Coller',
+        shortDescription:
+            'Cette fonctionnalité vous permet de coller un objet qui a été copié ou coller auparavant.',
+        description:
+            `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
+            ou en appuyant sur la touche 'ctrl+V' de votre clavier.`,
+        icon: 'paste',
+    },
+    {
+        name: 'Supprimer',
+        shortcutName: 'Supprimer',
+        shortDescription:
+            'Cette fonctionnalité vous permet de supprimer une sélection de la surface de dessin.',
+        description:
+            `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
+            ou en appuyant sur la touche 'DELETE' de votre clavier.`,
+        icon: 'delete',
+    },
+    {
+        name: 'Dupliquer',
+        shortcutName: 'Dupliquer',
+        shortDescription:
+            'Cette fonctionnalité vous permet de dupliquer une sélection dans un autre endroit sur la surface de dessin.',
+        description:
+            `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
+            ou en appuyant sur la touche 'ctrl+D' de votre clavier.`,
+        icon: 'duplicate',
     },
 ];
