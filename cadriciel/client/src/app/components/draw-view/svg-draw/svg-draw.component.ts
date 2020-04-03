@@ -44,7 +44,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     toolsContainer = new Map();
     // tslint:disable-next-line: typedef
     interactionToolsContainer = new Map();
-
+    @ViewChild('filter', {static: false}) filterRef: ElementRef;
     @ViewChild('inPrgress', { static: false }) inProgress: ElementRef;
     @ViewChild('canvas', { static: false }) svg: ElementRef;
 
@@ -98,6 +98,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.colorPick.emitColors();
             if (canvas.wipeAll === true || canvas.wipeAll === undefined) { // if no attribute is specified, the doodle will be w
                 this.canvBuilder.wipeDraw(this.frameRef);
+                this.canvBuilder.wipeDraw(this.filterRef);
             }
 
             if (this.gridService.grid) {
