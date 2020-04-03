@@ -16,7 +16,6 @@ export class AutoSaveService {
     this.height = 'height';
     this.bgColor = 'color';
     this.innerHTML = 'htmlElem';
-    this.doodle.askForDoodle();
     this.editingSave();
     this.newSave();
   }
@@ -29,6 +28,9 @@ export class AutoSaveService {
     }
   }
   saveLocal(data: SVGData): void {
+    console.log(data.height);
+    console.log(data.width);
+    console.log(data.bgColor);
     this.clearLocal(data);
     localStorage.setItem(this.width, data.width);
     localStorage.setItem(this.height, data.height);
@@ -42,6 +44,7 @@ export class AutoSaveService {
       if (!sig) {
         return;
       }
+      this.doodle.askForDoodle();
       const SVG_DATA = this.doodle.getDrawingDataNoGrid();
       this.saveLocal(SVG_DATA);
     });
@@ -52,6 +55,7 @@ export class AutoSaveService {
       if (!sig) {
         return;
       }
+      this.doodle.askForDoodle();
       const SVG_DATA = this.doodle.getDrawingDataNoGrid();
       this.saveLocal(SVG_DATA);
     });
