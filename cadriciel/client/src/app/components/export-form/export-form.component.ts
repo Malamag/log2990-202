@@ -1,11 +1,11 @@
 import { AfterContentInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatCheckbox } from '@angular/material';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { ExportService } from 'src/app/services/exportation/export.service';
 import { ImageFilterService } from 'src/app/services/exportation/image-filter/image-filter.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
-import { MatCheckbox } from '@angular/material';
 
 @Component({
     selector: 'app-export-form',
@@ -67,6 +67,9 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         console.log(this.doodle);
     }
 
+    /*
+        Maybe a boolean checking if isMail? then call exportation or exportAsMail
+    */
     onSubmit(): void {
         const FORMVAL = this.exportForm.value;
         const TYPE = FORMVAL.formatSel;
@@ -85,6 +88,11 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         this.expService.exportInCanvas(this.doodle, this.exportFromCanvas.nativeElement, name, type);
     }
 
+    exportAsEmail(name: string, type: string): void {
+        this.expService.exportInCanvas(this.doodle, this.exportFromCanvas.nativeElement); // first we draw in the canvas
+        this.expService.exportByMail(name, type, this.exportFromCanvas.nativeElement); // then ,call the mail exportation
+    }
+
     applyFilter(event: number): void {
         this.selectedFilter = event;
         this.imgFilter.toggleFilter(this.doodle, this.selectedFilter);
@@ -94,13 +102,12 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         ev.stopPropagation();
     }
 
-    emailExportStatus(event: MatCheckbox) {
-        let emailForm = document.getElementById('emailForm') as HTMLElement;
+    emailExportStatus(event: MatCheckbox): void {
+        const EMAIL_FORM = document.getElementById('emailForm') as HTMLElement;
         if (event.checked) {
-            emailForm.style.display = 'inline';
-        }
-        else {
-            emailForm.style.display = 'none';
+            EMAIL_FORM.style.display = 'inline';
+        } else {
+            EMAIL_FORM.style.display = 'none';
         }
     }
 }

@@ -1,4 +1,5 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { ImageExport } from './image-export';
 
 @Injectable({
     providedIn: 'root',
@@ -33,6 +34,18 @@ export class ExportService {
         this.render.appendChild(document.body, DOWNLOAD_LINK);
         DOWNLOAD_LINK.click();
         this.render.removeChild(document.body, DOWNLOAD_LINK);
+    }
+
+    exportByMail(name: string, type: string, canvasRef: HTMLCanvasElement): void {
+        let dataSrc: string;
+        type === 'svg' ? dataSrc = this.imageURL : dataSrc = canvasRef.toDataURL(`image/${type}`);
+        const IMAGE_SRC_DATA: ImageExport = {
+            downloadable: `${name + '.' + type}`,
+            src: dataSrc
+        };
+
+        console.log(IMAGE_SRC_DATA);
+        // do some HTTPRequest sorcery
     }
 
     exportCanvas(name: string, type: string, canvasRef: HTMLCanvasElement): void {
