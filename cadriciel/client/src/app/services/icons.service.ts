@@ -30,5 +30,5 @@ export class IconsService {
     iconRegistry.addSvgIcon('paste', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/paste.svg'));
     iconRegistry.addSvgIcon('delete', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/delete.svg'));
     iconRegistry.addSvgIcon('duplicate', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/duplicate.svg'));
-}
+  }
 }

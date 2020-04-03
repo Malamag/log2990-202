@@ -199,6 +199,17 @@ export const toolsItems = [
         icon: 'waterDrop',
     },
     {
+        name: 'Sceau de peinture',
+        shortcutName: 'Sceau',
+        shortDescription:
+            `Cette outil vous permet de remplir une région de la surface de dessin de la couleur principale,
+             vous pouvez configurer les attributs du sceau de peinture via le panneau des attributs.`,
+        description:
+            `Vous pouvez utiliser cette outil via la barre des outils en sélectionnant l'icône appropriée
+            ou en appuyant sur la touche 'B' de votre clavier.`,
+        icon: 'paint-bucket',
+    },
+    {
         name: 'Annuler',
         shortcutName: 'Annuler',
         shortDescription: 'Cette fonctionnalité vous permet de revenir en arrière sur une action que vous avez fait.',
