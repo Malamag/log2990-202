@@ -6,14 +6,19 @@ import { Point } from '../point';
 })
 export class FloodFillService {
 
-  ctx: CanvasRenderingContext2D;
-
   /* TODO: APA6e
     https://jamesonyu.wordpress.com/2015/05/01/flood-fill-algorithm-javascript/
   */
-  floodFill(startPoint: Point, color: number[], targetColor: number[], canvasWidth: number, canvasHeight: number, tolerance: number): void {
+  floodFill(
+    ctx: CanvasRenderingContext2D,
+    startPoint: Point,
+    color: number[],
+    targetColor: number[],
+    canvasWidth: number,
+    canvasHeight: number,
+    tolerance: number): void {
     const NEXT_INDEX = 4;
-    const IMG_DATA: ImageData = this.ctx.getImageData(startPoint.x, startPoint.y, 0, 0);
+    const IMG_DATA: ImageData = ctx.getImageData(startPoint.x, startPoint.y, 0, 0);
 
     const PIXEL_STACK: Point[] = [];
     PIXEL_STACK.push(startPoint);
@@ -39,6 +44,8 @@ export class FloodFillService {
 
       while (nextPixel.y++ < canvasHeight - 1 && this.matchesTolerance(IMG_DATA, pixelPosition, tolerance, targetColor)) {
         console.log('Coloring ' + pixelPosition);
+        this.colorPixels(IMG_DATA, pixelPosition, color);
+
         if (nextPixel.x > 0) {
           if (this.matchesTolerance(IMG_DATA, pixelPosition - NEXT_INDEX, tolerance, targetColor)) {
             if (!goLeft) {
@@ -67,16 +74,17 @@ export class FloodFillService {
 
       }
     }
+    ctx.putImageData(IMG_DATA, 0, 0); // instead of this, we will need to create a svg element with fillRegion()
   }
 
   fillRegion(): void {
     /* Fills the determined region with some svg stuff*/
   }
 
-  matchesTolerance(IMG_DATA: ImageData, position: number, tolerance: number, targetColor: number[]): boolean {
-    const R = IMG_DATA.data[position];
-    const G = IMG_DATA.data[position + 1];
-    const B = IMG_DATA.data[position + 2];
+  matchesTolerance(imgData: ImageData, position: number, tolerance: number, targetColor: number[]): boolean {
+    const R = imgData.data[position];
+    const G = imgData.data[position + 1];
+    const B = imgData.data[position + 2];
     const BASIS = 255;
 
     const R_MATCHES = Math.abs(R - targetColor[0]) / BASIS <= tolerance;
@@ -85,6 +93,12 @@ export class FloodFillService {
 
     return R_MATCHES && G_MATCHES && B_MATCHES;
 
+  }
+
+  colorPixels(imgData: ImageData, position: number, fillColor: number[]): void {
+    imgData.data[position] = fillColor[0];
+    imgData.data[position + 1] = fillColor[1];
+    imgData.data[position + 2] = fillColor[2];
   }
 
 }
