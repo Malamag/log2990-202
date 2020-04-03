@@ -6,10 +6,12 @@ import { Point } from '../point';
 })
 export class FloodFillService {
 
-  tolerance: number;
   ctx: CanvasRenderingContext2D;
 
-  floodFill(startPoint: Point, color: number[], targetColor: number[], canvasWidth: number, canvasHeight: number): void {
+  /* TODO: APA6e
+    https://jamesonyu.wordpress.com/2015/05/01/flood-fill-algorithm-javascript/
+  */
+  floodFill(startPoint: Point, color: number[], targetColor: number[], canvasWidth: number, canvasHeight: number, tolerance: number): void {
     const NEXT_INDEX = 4;
     const IMG_DATA: ImageData = this.ctx.getImageData(startPoint.x, startPoint.y, 0, 0);
 
@@ -26,7 +28,7 @@ export class FloodFillService {
       // RGBA has a length of 4. We need to invrement 4 times to get the next pixel's position in the image data array
       let pixelPosition = (nextPixel.y * canvasWidth + nextPixel.x) * NEXT_INDEX;
 
-      while (nextPixel.y-- >= 0 && this.matchesTolerance(IMG_DATA, pixelPosition, this.tolerance, targetColor)) {
+      while (nextPixel.y-- >= 0 && this.matchesTolerance(IMG_DATA, pixelPosition, tolerance, targetColor)) {
         pixelPosition -= canvasWidth * NEXT_INDEX;
       }
 
@@ -35,10 +37,10 @@ export class FloodFillService {
       goLeft = false;
       goRight = false;
 
-      while (nextPixel.y++ < canvasHeight - 1 && this.matchesTolerance(IMG_DATA, pixelPosition, this.tolerance, targetColor)) {
+      while (nextPixel.y++ < canvasHeight - 1 && this.matchesTolerance(IMG_DATA, pixelPosition, tolerance, targetColor)) {
         console.log('Coloring ' + pixelPosition);
         if (nextPixel.x > 0) {
-          if (this.matchesTolerance(IMG_DATA, pixelPosition - NEXT_INDEX, this.tolerance, targetColor)) {
+          if (this.matchesTolerance(IMG_DATA, pixelPosition - NEXT_INDEX, tolerance, targetColor)) {
             if (!goLeft) {
               PIXEL_STACK.push(new Point(nextPixel.x - 1, nextPixel.y));
               goLeft = true;
@@ -50,7 +52,7 @@ export class FloodFillService {
         }
 
         if (nextPixel.x < canvasWidth - 1) {
-          if (this.matchesTolerance(IMG_DATA, pixelPosition, this.tolerance, targetColor)) {
+          if (this.matchesTolerance(IMG_DATA, pixelPosition, tolerance, targetColor)) {
             if (!goRight) {
               PIXEL_STACK.push(new Point(nextPixel.x + 1, nextPixel.y));
               goRight = true;
