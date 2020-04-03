@@ -5,6 +5,7 @@ import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
 import { InputObserver } from 'src/app/services/draw-tool/input-observer';
+import { FloodFillService } from 'src/app/services/draw-tool/paint-bucket/flood-fill.service';
 import { ToolCreator } from 'src/app/services/draw-tool/tool-creator';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.service';
@@ -149,6 +150,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         );
 
         const PIPETTE = TC.CreatePipette(false, this.interaction, this.colorPick);
+        const BUCKET = TC.CreateBucket(false, this.interaction, this.colorPick, new FloodFillService());
         this.toolsContainer.set('Rectangle', RECT);
         this.toolsContainer.set('Ligne', LINE);
         this.toolsContainer.set('Pinceau', BRUSH);
@@ -160,6 +162,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Efface', ERASER);
         this.toolsContainer.set('Applicateur de couleur', COLOR_EDITOR);
         this.toolsContainer.set('Pipette', PIPETTE);
+        this.toolsContainer.set('Sceau', BUCKET);
 
     }
     ngAfterViewInit(): void {

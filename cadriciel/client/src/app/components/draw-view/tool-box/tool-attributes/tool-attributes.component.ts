@@ -64,7 +64,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
             if (toolExist) {
                 this.selectedTool = tool;
             }
-            const CALL_CONVERSION: boolean = tool === 'Pipette';
+            const CALL_CONVERSION: boolean = tool === 'Pipette' || tool === 'Sceau';
             this.interaction.emitSvgCanvasConversion(CALL_CONVERSION);
         });
 
@@ -99,13 +99,15 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
     updateTools(): void {
         this.interaction.emitToolsAttributes({
             lineThickness: this.lineThickness,
-            texture: this.texture });
+            texture: this.texture
+        });
     }
 
     updateAerosol(): void {
         this.interaction.emitAerosolAttributes({
             emissionPerSecond: this.emissionPerSecond,
-            diameter: this.diameter });
+            diameter: this.diameter
+        });
     }
 
     resize(): void {
