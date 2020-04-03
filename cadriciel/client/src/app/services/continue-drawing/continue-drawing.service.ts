@@ -54,13 +54,15 @@ export class ContinueDrawingService {
     let h = '';
     let backColor = '';
     const INNER: string[] = [];
-    if (localStorage.getItem(WIDTH) !== null) {w = localStorage.getItem(WIDTH) as string; }
-    if (localStorage.getItem(HEIGHT) !== null) {h = localStorage.getItem(HEIGHT) as string; }
-    if (localStorage.getItem(BG_COLOR) !== null) {backColor = localStorage.getItem(BG_COLOR) as string; }
+    if (localStorage.getItem(WIDTH) !== null) {w = localStorage.getItem(WIDTH) as string; } else {w = '1438'; }
+    if (localStorage.getItem(HEIGHT) !== null) {h = localStorage.getItem(HEIGHT) as string; } else {h = '775'; }
+    if (localStorage.getItem(BG_COLOR) !== null) {backColor = localStorage.getItem(BG_COLOR) as string; } else {backColor = 'ffffff'; }
     for (let i = 0; i < MAX; ++i) {
       if (localStorage.getItem(INNER_HTML + i.toString())) {
         const ELEM: string = localStorage.getItem(INNER_HTML + i.toString()) as string;
         INNER.push(ELEM);
+      } else {
+        INNER.push('');
       }
     }
     const RET_DATA: SVGData = {height: h, width: w, bgColor: backColor, innerHTML: INNER};

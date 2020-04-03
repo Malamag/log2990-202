@@ -28,9 +28,6 @@ export class AutoSaveService {
     }
   }
   saveLocal(data: SVGData): void {
-    console.log(data.height);
-    console.log(data.width);
-    console.log(data.bgColor);
     this.clearLocal(data);
     localStorage.setItem(this.width, data.width);
     localStorage.setItem(this.height, data.height);

@@ -5,11 +5,13 @@
         <div *ngFor="let items of menuItems">
             <div *ngIf="items.shortcutName != 'Exporter' && items.shortcutName != 'sauvegarde'">
                 <div *ngIf= "items.shortcutName == 'Continuer'; else elseBlock">
-                    <button [disabled] = "!drawingExist" (click)="execute(items.shortcutName)"mat-button>
-                        <mat-icon>{{items.icon}}</mat-icon>
-                            <br>
-                        <span class="buttonText">{{items.name}}</span>
-                    </button>    
+                    <div *ngIf = "drawingExist">
+                        <button (click)="execute(items.shortcutName)"mat-button>
+                            <mat-icon>{{items.icon}}</mat-icon>
+                                <br>
+                            <span class="buttonText">{{items.name}}</span>
+                        </button>
+                    </div>    
                 </div>
                 <ng-template #elseBlock>
                     <button (click)="execute(items.shortcutName)"mat-button>
