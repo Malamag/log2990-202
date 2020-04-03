@@ -18,12 +18,14 @@ export class FloodFillService {
     canvasHeight: number,
     tolerance: number): void {
     const NEXT_INDEX = 4;
-    const IMG_DATA: ImageData = ctx.getImageData(startPoint.x, startPoint.y, 0, 0);
+
+    const IMG_DATA: ImageData = ctx.getImageData(startPoint.x, startPoint.y, canvasWidth, canvasHeight);
 
     const PIXEL_STACK: Point[] = [];
     PIXEL_STACK.push(startPoint);
 
     while (PIXEL_STACK.length) {
+
       const nextPixel: Point | undefined = PIXEL_STACK.pop();
       if (!nextPixel) { return; }
 
@@ -43,12 +45,13 @@ export class FloodFillService {
       goRight = false;
 
       while (nextPixel.y++ < canvasHeight - 1 && this.matchesTolerance(IMG_DATA, pixelPosition, tolerance, targetColor)) {
-        console.log('Coloring ' + pixelPosition);
+
         this.colorPixels(IMG_DATA, pixelPosition, color);
 
         if (nextPixel.x > 0) {
           if (this.matchesTolerance(IMG_DATA, pixelPosition - NEXT_INDEX, tolerance, targetColor)) {
             if (!goLeft) {
+              console.log('Coloring ');
               PIXEL_STACK.push(new Point(nextPixel.x - 1, nextPixel.y));
               goLeft = true;
             }

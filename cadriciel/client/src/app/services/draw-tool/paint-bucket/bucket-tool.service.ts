@@ -12,6 +12,8 @@ export class BucketToolService extends DrawingTool {
   canvasContext: CanvasRenderingContext2D | null;
   surfaceWidth: number;
   surfaceHeight: number;
+
+  interact: InteractionService;
   constructor(
     inProgress: HTMLElement,
     drawing: HTMLElement,
@@ -24,8 +26,8 @@ export class BucketToolService extends DrawingTool {
     const TEST_DIM = 2000;
     this.surfaceWidth = TEST_DIM;
     this.surfaceHeight = TEST_DIM;
-
-    interaction.$canvasContext.subscribe((context: CanvasRenderingContext2D) => {
+    this.interact = interaction;
+    this.interact.$canvasContext.subscribe((context: CanvasRenderingContext2D) => {
       this.canvasContext = context;
     });
   }
