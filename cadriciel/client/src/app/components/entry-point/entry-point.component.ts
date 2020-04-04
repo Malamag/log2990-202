@@ -58,18 +58,13 @@ export class EntryPointComponent implements OnInit {
     this.snackBar.open('Bienvenue !', undefined, CONFIG);
   }
   checkInitValues(): boolean {
-    const MAX = 6;
     let initValues = false;
     let isEmpty = false;
     if (localStorage.getItem('height') === '775'
       && localStorage.getItem('width') === '1438'
       && localStorage.getItem('color') === 'ffffff') {
-      for (let i = 0; i < MAX; ++i) {
-        if (localStorage.getItem('htmlElem' + i.toString()) === '') {
-          isEmpty = true;
-        } else {isEmpty = false; }
-      }
-      if(isEmpty) {initValues = true; }
+      if (localStorage.getItem('htmlElem3') === '') {isEmpty = true;}
+      if (isEmpty) {initValues = true; }
     }
     return initValues;
   }
