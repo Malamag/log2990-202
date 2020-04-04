@@ -1,5 +1,13 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
-import { ImageExport } from './image-export';
+import { ImageExport } from '../../../../../image-export';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+const HTTP_OPTIONS = {
+    headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+    }),
+};
 
 @Injectable({
     providedIn: 'root',
@@ -8,7 +16,7 @@ export class ExportService {
     imageURL: string;
     render: Renderer2;
     xmlSerializer: XMLSerializer;
-    constructor(rendererFact: RendererFactory2) {
+    constructor(rendererFact: RendererFactory2, public http: HttpClient) {
         this.render = rendererFact.createRenderer(null, null);
         this.xmlSerializer = new XMLSerializer();
     }
@@ -36,16 +44,24 @@ export class ExportService {
         this.render.removeChild(document.body, DOWNLOAD_LINK);
     }
 
-    exportByMail(name: string, type: string, canvasRef: HTMLCanvasElement): void {
+    exportByMail(name: string, type: string, canvasRef: HTMLCanvasElement, email: string): void {
         let dataSrc: string;
         type === 'svg' ? dataSrc = this.imageURL : dataSrc = canvasRef.toDataURL(`image/${type}`);
         const IMAGE_SRC_DATA: ImageExport = {
             downloadable: `${name + '.' + type}`,
-            src: dataSrc
+            src: dataSrc,
+            email: email
         };
 
         console.log(IMAGE_SRC_DATA);
         // do some HTTPRequest sorcery
+        const URL = 'http://localhost:3000/mail/export';
+        this.http.post(URL, IMAGE_SRC_DATA, HTTP_OPTIONS).subscribe(
+            (error) => {
+                console.log(error);
+            }
+
+        );
     }
 
     exportCanvas(name: string, type: string, canvasRef: HTMLCanvasElement): void {

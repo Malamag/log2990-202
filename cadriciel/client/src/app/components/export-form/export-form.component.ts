@@ -42,6 +42,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     exportForm: FormGroup;
     doodle: Node;
 
+    exportMode: number;
     cWidth: number; // attributes to get the correct export size
     cHeigth: number;
 
@@ -52,13 +53,14 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         this.doodleFetch.askForDoodle();
         this.cWidth = this.doodleFetch.widthAttr;
         this.cHeigth = this.doodleFetch.heightAttr;
+        this.exportMode = 0;
     }
 
     initForm(): void {
         this.exportForm = this.formBuilder.group({
             doodleName: ['Dessin sans titre', Validators.required],
             formatSel: [null, Validators.required],
-            mailAddr: ['xxxx@yyyy.zzz', Validators.required],
+            email: ['xxxx@yyyy.zzz', Validators.required],
         });
     }
 
@@ -75,7 +77,12 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         const TYPE = FORMVAL.formatSel;
         const NAME = FORMVAL.doodleName;
 
-        this.exportation(NAME, TYPE);
+        switch (this.exportMode) {
+            case 0: this.exportation(NAME, TYPE);
+                break;
+            case 1: this.exportAsEmail(NAME, TYPE, FORMVAL.email);
+                break;
+        }
 
         this.closeForm();
     }
@@ -88,9 +95,9 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         this.expService.exportInCanvas(this.doodle, this.exportFromCanvas.nativeElement, name, type);
     }
 
-    exportAsEmail(name: string, type: string): void {
+    exportAsEmail(name: string, type: string, email: string): void {
         this.expService.exportInCanvas(this.doodle, this.exportFromCanvas.nativeElement); // first we draw in the canvas
-        this.expService.exportByMail(name, type, this.exportFromCanvas.nativeElement); // then ,call the mail exportation
+        this.expService.exportByMail(name, type, this.exportFromCanvas.nativeElement, email); // then ,call the mail exportation
     }
 
     applyFilter(event: number): void {
@@ -106,8 +113,10 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         const EMAIL_FORM = document.getElementById('emailForm') as HTMLElement;
         if (event.checked) {
             EMAIL_FORM.style.display = 'inline';
+            this.exportMode = 1;
         } else {
             EMAIL_FORM.style.display = 'none';
+            this.exportMode = 0;
         }
     }
 }
