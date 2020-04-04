@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { menuItems } from '../../functionality';
+import { ContinueDrawingService } from '../../services/continue-drawing/continue-drawing.service';
 import { ModalWindowService } from '../../services/window-handler/modal-window.service';
 import { GalleryComponent } from '../gallery/gallery.component';
 import { NewDrawComponent } from '../new-draw/new-draw.component';
@@ -16,12 +17,35 @@ export class EntryPointComponent implements OnInit {
 
   menuItems: object = {};
   winService: ModalWindowService;
-
-  constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {
+  drawingExist: boolean;
+  constructor(private snackBar: MatSnackBar, private dialog: MatDialog , private drawing: ContinueDrawingService) {
     this.winService = new ModalWindowService(this.dialog);
     this.menuItems = menuItems;
+    this.getDrawingExist();
   }
-
+  getDrawingExist(): void {
+    const MAX = 6;
+    let heightExist = false;
+    let widthExist = false;
+    let bgColorExist = false;
+    let htmlElementExist = true;
+    // check if all the elements exist
+    if (localStorage.getItem('height') !== null) {
+      heightExist = true;
+    }
+    if (localStorage.getItem('width') !== null) {
+      widthExist = true;
+    }
+    if (localStorage.getItem('color') !== null) {
+      bgColorExist = true;
+    }
+    for (let i = 0; i < MAX; ++i) {
+      if (localStorage.getItem('htmlElem') + i.toString() === null) {
+        htmlElementExist = false;
+      }
+    }
+    this.drawingExist = heightExist && widthExist && bgColorExist && htmlElementExist;
+  }
   ngOnInit(): void {
     this.onOpen(); // opens snackbar at the bottom of the page
   }
@@ -46,6 +70,9 @@ export class EntryPointComponent implements OnInit {
     this.winService.openWindow(GalleryComponent);
   }
 
+  continue(): void {
+    this.drawing.continueAutoSaved();
+  }
   execute(shortcutName: string): void {
     switch (shortcutName) {
       case 'Créer': {
@@ -62,12 +89,11 @@ export class EntryPointComponent implements OnInit {
         break;
       }
       case 'Continuer': {
-        // statements;
-        console.log(shortcutName);
+        this.continue();
         break;
       }
       default: {
-        // statements;
+       // statements;
         break;
       }
     }

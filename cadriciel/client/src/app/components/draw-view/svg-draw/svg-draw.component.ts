@@ -1,7 +1,9 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Canvas } from 'src/app/models/canvas.model';
 import { ChoosenColors } from 'src/app/models/choosen-colors.model';
+import { AutoSaveService } from 'src/app/services/auto-save/auto-save.service';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
+import { ContinueDrawingService } from 'src/app/services/continue-drawing/continue-drawing.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
 import { InputObserver } from 'src/app/services/draw-tool/input-observer';
@@ -21,7 +23,7 @@ import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handl
 })
 export class SvgDrawComponent implements OnInit, AfterViewInit {
     showGrid: boolean;
-
+    save: AutoSaveService;
     constructor(
         private canvBuilder: CanvasBuilderService,
         public interaction: InteractionService,
@@ -29,6 +31,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         public doodleFetch: DoodleFetchService,
         private render: Renderer2,
         private gridService: GridRenderService,
+        private continueDrawing: ContinueDrawingService,
     ) {
         this.showGrid = false;
     }
@@ -42,7 +45,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     toolsContainer = new Map();
     // tslint:disable-next-line: typedef
     interactionToolsContainer = new Map();
-
+    @ViewChild('filter', { static: false }) filterRef: ElementRef;
     @ViewChild('inPrgress', { static: false }) inProgress: ElementRef;
     @ViewChild('canvas', { static: false }) svg: ElementRef;
 
@@ -53,6 +56,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     @ViewChild('container', { static: false }) cntRef: ElementRef;
     workingSpace: HTMLElement;
 
+    @HostListener('window: load', ['$event'])
+    continueSavedImage(): void {
+        this.continueDrawing.continueAutoSaved();
+    }
     ngOnInit(): void {
         this.initCanvas();
     }
@@ -66,7 +73,6 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     bgroundChangeSubscription(): void {
         this.colorPick.colorSubject.subscribe((choosenColors: ChoosenColors) => {
-
             if (choosenColors) {
                 this.backColor = choosenColors.backColor;
                 this.colorPick.cData.primaryColor = choosenColors.primColor;
@@ -80,7 +86,6 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     initCanvas(): void {
         this.canvBuilder.canvSubject.subscribe((canvas: Canvas) => {
-
             if (canvas === undefined || canvas === null) {
                 canvas = this.canvBuilder.getDefCanvas();
             }
@@ -94,6 +99,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             this.colorPick.emitColors();
             if (canvas.wipeAll === true || canvas.wipeAll === undefined) { // if no attribute is specified, the doodle will be w
                 this.canvBuilder.wipeDraw(this.frameRef);
+                this.canvBuilder.wipeDraw(this.filterRef);
             }
 
             if (this.gridService.grid) {
@@ -241,7 +247,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         });
 
         this.bgroundChangeSubscription();
-        // const save = new AutoSaveService(this.interaction, this.doodleFetch);
+        this.save = new AutoSaveService(this.interaction, this.doodleFetch);
     }
 
     reinitGridFromSub(): void {

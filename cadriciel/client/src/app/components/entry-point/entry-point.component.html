@@ -4,11 +4,22 @@
     <div id="buttonContainer">
         <div *ngFor="let items of menuItems">
             <div *ngIf="items.shortcutName != 'Exporter' && items.shortcutName != 'sauvegarde'">
-                <button (click)="execute(items.shortcutName)"mat-button>
-                <mat-icon>{{items.icon}}</mat-icon>
-                    <br>
-                <span class="buttonText">{{items.name}}</span>
-                </button>
+                <div *ngIf= "items.shortcutName == 'Continuer'; else elseBlock">
+                    <div *ngIf = "drawingExist">
+                        <button (click)="execute(items.shortcutName)"mat-button>
+                            <mat-icon>{{items.icon}}</mat-icon>
+                                <br>
+                            <span class="buttonText">{{items.name}}</span>
+                        </button>
+                    </div>    
+                </div>
+                <ng-template #elseBlock>
+                    <button (click)="execute(items.shortcutName)"mat-button>
+                        <mat-icon>{{items.icon}}</mat-icon>
+                            <br>
+                        <span class="buttonText">{{items.name}}</span>
+                    </button>
+                </ng-template>
             </div>
         </div>
         

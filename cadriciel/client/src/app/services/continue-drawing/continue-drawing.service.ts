@@ -5,6 +5,12 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
 import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { SVGData } from '../../../../../svg-data';
+
+const WIDTH = 'width';
+const HEIGHT = 'height';
+const BG_COLOR = 'color';
+const INNER_HTML = 'htmlElem';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -40,5 +46,31 @@ export class ContinueDrawingService {
       this.canvasBuilder.emitCanvas();
       window.dispatchEvent(new Event('resize'));
     }, LOAD_TIME); // waits for the canvas to be created
+  }
+
+  getSVGData(): SVGData {
+    const MAX = 6;
+    let w = '';
+    let h = '';
+    let backColor = '';
+    const INNER: string[] = [];
+    if (localStorage.getItem(WIDTH) !== null) { w = localStorage.getItem(WIDTH) as string; } else { w = '1438'; }
+    if (localStorage.getItem(HEIGHT) !== null) { h = localStorage.getItem(HEIGHT) as string; } else { h = '775'; }
+    if (localStorage.getItem(BG_COLOR) !== null) { backColor = localStorage.getItem(BG_COLOR) as string; } else { backColor = 'ffffff'; }
+    for (let i = 0; i < MAX; ++i) {
+      if (localStorage.getItem(INNER_HTML + i.toString())) {
+        const ELEM: string = localStorage.getItem(INNER_HTML + i.toString()) as string;
+        INNER.push(ELEM);
+      } else {
+        INNER.push('');
+      }
+    }
+    const RET_DATA: SVGData = { height: h, width: w, bgColor: backColor, innerHTML: INNER };
+    return RET_DATA;
+  }
+
+  continueAutoSaved(): void {
+    const DATA = this.getSVGData();
+    this.continueDrawing(DATA);
   }
 }

@@ -25,5 +25,10 @@ export class IconsService {
     iconRegistry.addSvgIcon('undo', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/undo.svg'));
     iconRegistry.addSvgIcon('paint-bucket', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/paint-bucket.svg'));
     iconRegistry.addSvgIcon('waterDrop', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/water.svg'));
-}
+    iconRegistry.addSvgIcon('copy', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/copy.svg'));
+    iconRegistry.addSvgIcon('cut', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/cut.svg'));
+    iconRegistry.addSvgIcon('paste', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/paste.svg'));
+    iconRegistry.addSvgIcon('delete', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/delete.svg'));
+    iconRegistry.addSvgIcon('duplicate', sanitizer.bypassSecurityTrustResourceUrl('../../../assets/images/duplicate.svg'));
+  }
 }

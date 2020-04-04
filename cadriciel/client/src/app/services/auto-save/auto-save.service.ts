@@ -16,11 +16,19 @@ export class AutoSaveService {
     this.height = 'height';
     this.bgColor = 'color';
     this.innerHTML = 'htmlElem';
-    this.doodle.askForDoodle();
     this.editingSave();
     this.newSave();
   }
+  clearLocal(data: SVGData): void {
+    localStorage.removeItem(this.width);
+    localStorage.removeItem(this.height);
+    localStorage.removeItem(this.bgColor);
+    for (let i = 0; i < data.innerHTML.length; ++i) {
+      localStorage.removeItem(this.innerHTML + i.toString());
+    }
+  }
   saveLocal(data: SVGData): void {
+    this.clearLocal(data);
     localStorage.setItem(this.width, data.width);
     localStorage.setItem(this.height, data.height);
     localStorage.setItem(this.bgColor, data.bgColor);
@@ -30,10 +38,10 @@ export class AutoSaveService {
   }
   editingSave(): void {
     this.interact.$drawingDone.subscribe((sig) => {
-      console.log('editing');
       if (!sig) {
         return;
       }
+      this.doodle.askForDoodle();
       const SVG_DATA = this.doodle.getDrawingDataNoGrid();
       this.saveLocal(SVG_DATA);
     });
@@ -44,9 +52,9 @@ export class AutoSaveService {
       if (!sig) {
         return;
       }
+      this.doodle.askForDoodle();
       const SVG_DATA = this.doodle.getDrawingDataNoGrid();
       this.saveLocal(SVG_DATA);
-      console.log('new');
     });
   }
 }
