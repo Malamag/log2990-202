@@ -45,34 +45,34 @@ describe('ContinueDrawingService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
-  it('should ask for doodle and affect the children', async (done: DoneFn) => {
-    const LOAD_TIME = 15;
+  it('should ask for doodle and affect the children', () => {
     const ASK_SPY = spyOn(service.doodle, 'askForDoodle');
 
     service.doodle.currentDraw = elementStub;
 
     render.appendChild(service.doodle.currentDraw.nativeElement, childElemStub);
     const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello', 'hello'] };
-    service.continueDrawing(SVG_DATA);
-    setTimeout(() => {
-      expect(childElemStub.innerHTML).toEqual('hello');
-      expect(ASK_SPY).toHaveBeenCalled();
-      done();
-    }, LOAD_TIME);
+    service.continueDrawingNoTimeOut(SVG_DATA);
+    expect(childElemStub.innerHTML).toEqual('hello');
+    expect(ASK_SPY).toHaveBeenCalled();
   });
-
-  it('should affect empty innerhtml for undefined data', async (done: DoneFn) => {
-    const LOAD_TIME = 15;
+  it('should affect empty innerhtml for undefined data', () => {
     service.doodle.currentDraw = elementStub;
 
     render.appendChild(service.doodle.currentDraw.nativeElement, childElemStub);
     const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: [] };
+    service.continueDrawingNoTimeOut(SVG_DATA);
+    expect(childElemStub.innerHTML).toEqual('');
+  });
+  it('should continue the drawing', async (done: DoneFn) => {
+    service.doodle.currentDraw = elementStub;
+    const LOAD_TIME = 15;
+    const CONTINUE_SPY = spyOn(service, 'continueDrawingNoTimeOut');
+    const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: [] };
     service.continueDrawing(SVG_DATA);
     setTimeout(() => {
-      expect(childElemStub.innerHTML).toEqual('');
+      expect(CONTINUE_SPY).toHaveBeenCalled();
       done();
     }, LOAD_TIME);
   });
-
 });

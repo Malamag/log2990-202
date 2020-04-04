@@ -71,7 +71,7 @@ export class EntryPointComponent implements OnInit {
   }
 
   continue(): void {
-    this.drawing.continueAutoSaved();
+    this.drawing.continueAutoSavedFromEntryPoint();
   }
   execute(shortcutName: string): void {
     switch (shortcutName) {
