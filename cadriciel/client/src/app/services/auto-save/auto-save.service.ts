@@ -7,10 +7,10 @@ import { InteractionService } from '../service-interaction/interaction.service';
   providedIn: 'root'
 })
 export class AutoSaveService {
-  width: string;
-  height: string;
-  bgColor: string;
-  innerHTML: string;
+  private width: string;
+  private height: string;
+  private bgColor: string;
+  private innerHTML: string;
   constructor(private interact: InteractionService, private doodle: DoodleFetchService) {
     this.width = 'width';
     this.height = 'height';
@@ -19,16 +19,8 @@ export class AutoSaveService {
     this.editingSave();
     this.newSave();
   }
-  clearLocal(data: SVGData): void {
-    localStorage.removeItem(this.width);
-    localStorage.removeItem(this.height);
-    localStorage.removeItem(this.bgColor);
-    for (let i = 0; i < data.innerHTML.length; ++i) {
-      localStorage.removeItem(this.innerHTML + i.toString());
-    }
-  }
   saveLocal(data: SVGData): void {
-    this.clearLocal(data);
+    localStorage.clear();
     localStorage.setItem(this.width, data.width);
     localStorage.setItem(this.height, data.height);
     localStorage.setItem(this.bgColor, data.bgColor);

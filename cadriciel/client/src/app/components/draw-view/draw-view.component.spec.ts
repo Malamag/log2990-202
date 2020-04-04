@@ -2,16 +2,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-    MatButtonModule,
-    MatDialog,
-    MatFormFieldModule,
-    MatIconModule,
-    MatRadioModule,
-    MatSliderModule,
-    MatToolbarModule,
-    MatTooltipModule,
-} from '@angular/material';
+import { MatButtonModule, MatDialog,
+     MatFormFieldModule, MatIconModule,
+      MatRadioModule, MatSliderModule, MatToolbarModule,
+       MatTooltipModule } from '@angular/material';
+import { RouterTestingModule } from '@angular/router/testing';
 import { menuItems, toolsItems, welcomeItem } from '../../functionality';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { DrawViewComponent } from './draw-view.component';
@@ -46,6 +41,7 @@ describe('DrawViewComponent', () => {
                 ReactiveFormsModule,
                 MatRadioModule,
                 HttpClientModule,
+                RouterTestingModule,
             ],
             schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
         }).compileComponents();
