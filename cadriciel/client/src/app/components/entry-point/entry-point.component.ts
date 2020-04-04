@@ -44,7 +44,8 @@ export class EntryPointComponent implements OnInit {
         htmlElementExist = false;
       }
     }
-    this.drawingExist = heightExist && widthExist && bgColorExist && htmlElementExist;
+    const INIT_VALUES = this.checkInitValues();
+    this.drawingExist = heightExist && widthExist && bgColorExist && htmlElementExist && !INIT_VALUES;
   }
   ngOnInit(): void {
     this.onOpen(); // opens snackbar at the bottom of the page
@@ -56,7 +57,22 @@ export class EntryPointComponent implements OnInit {
     CONFIG.duration = DURATION; // temps de visibilité de la barre de bienvenue (ms)
     this.snackBar.open('Bienvenue !', undefined, CONFIG);
   }
-
+  checkInitValues(): boolean {
+    const MAX = 6;
+    let initValues = false;
+    let isEmpty = false;
+    if (localStorage.getItem('height') === '775'
+      && localStorage.getItem('width') === '1438'
+      && localStorage.getItem('color') === 'ffffff') {
+      for (let i = 0; i < MAX; ++i) {
+        if (localStorage.getItem('htmlElem' + i.toString()) === '') {
+          isEmpty = true;
+        } else {isEmpty = false; }
+      }
+      if(isEmpty) {initValues = true; }
+    }
+    return initValues;
+  }
   openUserManual(): void {
 
     this.winService.openWindow(UserManualComponent);
