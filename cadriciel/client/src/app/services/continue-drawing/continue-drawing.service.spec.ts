@@ -90,7 +90,7 @@ describe('ContinueDrawingService', () => {
     localStorage.setItem('height', HEIGHT);
     localStorage.setItem('width', WIDTH);
     localStorage.setItem('color', BACK_COLOR);
-    for (let i = 0; i < HTML_ELEM.length; ++i){
+    for (let i = 0; i < HTML_ELEM.length; ++i) {
       localStorage.setItem('htmlElem' + i.toString(), HTML_ELEM[i]);
     }
     const RESULT = service.getSVGData();
