@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Point } from '../point';
+import { Pixel } from './pixel';
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +25,12 @@ export class FloodFillService {
 
     const IMG_DATA: ImageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-    const PIXEL_STACK: Point[] = [];
+    const PIXEL_STACK: Pixel[] = [];
     PIXEL_STACK.push(startPoint);
 
     while (PIXEL_STACK.length) {
 
-      const nextPixel: Point | undefined = PIXEL_STACK.pop();
+      const nextPixel: Pixel | undefined = PIXEL_STACK.pop();
       if (!nextPixel) { return; }
 
       let goUp = true;
@@ -45,31 +46,31 @@ export class FloodFillService {
       }
 
       while (goDown && nextPixel.y < CANVAS_HEIGHT) {
-        console.log('coloring' + nextPixel.x.toString() + ', ' + nextPixel.y.toString());
+
         this.colorPixels(IMG_DATA, nextPixel, color);
         if (nextPixel.x - 1 >= 0 &&
-          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, new Point(nextPixel.x - 1, nextPixel.y)), tolerance, color)) {
+          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x - 1, y: nextPixel.y }), tolerance, color)) {
 
           if (!goLeft) {
             goLeft = true;
-            PIXEL_STACK.push(new Point(nextPixel.x - 1, nextPixel.y));
+            PIXEL_STACK.push({ x: nextPixel.x - 1, y: nextPixel.y });
           }
         } else {
           goLeft = false;
         }
 
         if (nextPixel.x + 1 < CANVAS_WIDTH &&
-          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, new Point(nextPixel.x + 1, nextPixel.y)), tolerance, color)) {
+          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x + 1, y: nextPixel.y }), tolerance, color)) {
 
           if (!goRight) {
-            PIXEL_STACK.push(new Point(nextPixel.x + 1, nextPixel.y));
+            PIXEL_STACK.push({ x: nextPixel.x + 1, y: nextPixel.y });
             goRight = true;
           }
         } else {
           goRight = false;
         }
         nextPixel.y++;
-        goDown = this.matchesTolerance(this.getColorAtPixel(IMG_DATA, new Point(nextPixel.x, nextPixel.y)), tolerance, color);
+        goDown = this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x, y: nextPixel.y }), tolerance, color);
         if (nextPixel.y === CANVAS_HEIGHT) {
           goDown = false;
         }
@@ -98,7 +99,7 @@ export class FloodFillService {
 
   }
 
-  getColorAtPixel(imgData: ImageData, pixel: Point): number[] {
+  getColorAtPixel(imgData: ImageData, pixel: Pixel): number[] {
     const NEXT_INDEX = 4;
     const R = imgData.data[NEXT_INDEX * (imgData.width * pixel.y + pixel.x)];
     const G = imgData.data[NEXT_INDEX * (imgData.width * pixel.y + pixel.x) + 1];
@@ -106,7 +107,7 @@ export class FloodFillService {
     return [R, G, B];
   }
 
-  colorPixels(imgData: ImageData, pixel: Point, fillColor: number[]): void {
+  colorPixels(imgData: ImageData, pixel: Pixel, fillColor: number[]): void {
     const NEXT_INDEX = 4;
     imgData.data[NEXT_INDEX * (imgData.width * pixel.y + pixel.x)] = fillColor[0];
     imgData.data[NEXT_INDEX * (imgData.width * pixel.y + pixel.x) + 1] = fillColor[1];

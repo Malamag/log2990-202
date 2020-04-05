@@ -36,7 +36,10 @@ export class BucketToolService extends DrawingTool {
     /* on click: what happens */
     const TEST = 255;
     if (this.canvasContext) {
-      this.floodFill.floodFill(this.canvasContext, position, [0, 0, 0], [TEST, TEST, TEST], 0.5);
+      const t0 = performance.now();
+      this.floodFill.floodFill(this.canvasContext, position, [0, 0, 0], [TEST, TEST, TEST], 1);
+      const t1 = performance.now();
+      console.log('Flood-fill exectuted in ' + (t1 - t0) + ' ms');
     }
     this.updateDrawing();
   }
