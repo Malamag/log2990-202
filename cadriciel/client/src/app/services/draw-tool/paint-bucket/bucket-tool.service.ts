@@ -23,7 +23,7 @@ export class BucketToolService extends DrawingTool {
     private floodFill: FloodFillService) {
 
     super(inProgress, drawing, selected, interaction, colorPick);
-    const TEST_DIM = 2000;
+    const TEST_DIM = 10;
     this.surfaceWidth = TEST_DIM;
     this.surfaceHeight = TEST_DIM;
     this.interact = interaction;
@@ -36,7 +36,7 @@ export class BucketToolService extends DrawingTool {
     /* on click: what happens */
     const TEST = 255;
     if (this.canvasContext) {
-      this.floodFill.floodFill(this.canvasContext, position, [TEST, TEST, TEST], [0, 0, 0], this.surfaceWidth, this.surfaceHeight, 1);
+      this.floodFill.floodFill(this.canvasContext, position, [0, 0, 0], [TEST, TEST, TEST], 0.5);
     }
     this.updateDrawing();
   }
@@ -64,7 +64,7 @@ export class BucketToolService extends DrawingTool {
 
     // Put every points in a string
     for (const POINT of points) {
-        dString += ` ${POINT.x}, ${POINT.y}`;
+      dString += ` ${POINT.x}, ${POINT.y}`;
     }
 
     // Create the polyline
@@ -77,23 +77,23 @@ export class BucketToolService extends DrawingTool {
 
   }
 
-// add the progress to the main drawing
-updateDrawing(endIt?: boolean): void {
+  // add the progress to the main drawing
+  updateDrawing(endIt?: boolean): void {
 
-  // create the final svg element
-  let d = '';
-  d += this.createPath(this.currentPath, endIt);
+    // create the final svg element
+    let d = '';
+    d += this.createPath(this.currentPath, endIt);
 
-  // add it to the main drawing
-  this.drawing.innerHTML += d;
+    // add it to the main drawing
+    this.drawing.innerHTML += d;
 
-  const EVENT = new Event('newDrawing');
-  window.dispatchEvent(EVENT);
+    const EVENT = new Event('newDrawing');
+    window.dispatchEvent(EVENT);
 
-  this.interaction.emitDrawingDone();
+    this.interaction.emitDrawingDone();
 
-  this.currentPath = [];
-}
+    this.currentPath = [];
+  }
 
   updateDown(): void {
     // throw new Error('Method not implemented.');

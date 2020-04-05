@@ -67,6 +67,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
             }
             const CALL_CONVERSION: boolean = tool === 'Pipette' || tool === 'Sceau';
             this.interaction.emitSvgCanvasConversion(CALL_CONVERSION);
+            console.log(tool);
         });
 
         this.interaction.$previewColor.subscribe((color: string) => {
