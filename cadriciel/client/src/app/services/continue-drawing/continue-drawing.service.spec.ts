@@ -75,4 +75,38 @@ describe('ContinueDrawingService', () => {
       done();
     }, LOAD_TIME);
   });
+  it('should return an svg data with initial values', () => {
+    localStorage.clear();
+    const EXPECTED_RESULT: SVGData = {height: '775', width: '1438', bgColor: 'ffffff', innerHTML: ['', '', '', '', '', '']};
+    const RESULT = service.getSVGData();
+    expect(RESULT).toEqual(EXPECTED_RESULT);
+  });
+  it('should return an svg with the content of the local storage', () => {
+    const HEIGHT = '1400';
+    const WIDTH = '1500';
+    const BACK_COLOR = 'ff00ff';
+    const HTML_ELEM = ['hello', 'world', 'yes', 'indeed', 'hi', 'sir'];
+    const EXPECTED_RET: SVGData = {height: HEIGHT, width: WIDTH, bgColor: BACK_COLOR, innerHTML: HTML_ELEM};
+    localStorage.setItem('height', HEIGHT);
+    localStorage.setItem('width', WIDTH);
+    localStorage.setItem('color', BACK_COLOR);
+    for (let i = 0; i < HTML_ELEM.length; ++i){
+      localStorage.setItem('htmlElem' + i.toString(), HTML_ELEM[i]);
+    }
+    const RESULT = service.getSVGData();
+    expect(RESULT).toEqual(EXPECTED_RET);
+    localStorage.clear();
+  });
+  it('should get the data and continue the drawing', () => {
+    const GET_SPY = spyOn(service, 'getSVGData');
+    const CONTINUE_SPY = spyOn(service, 'continueDrawing');
+    service.continueAutoSavedFromEntryPoint();
+    expect(GET_SPY).toHaveBeenCalled();
+    expect(CONTINUE_SPY).toHaveBeenCalled();
+  });
+  it('should call continue drawing no time out', () => {
+    const CONTINUE_SPY = spyOn(service, 'continueDrawingNoTimeOut');
+    service.continueAutoSavedFromDrawVue();
+    expect(CONTINUE_SPY).toHaveBeenCalled();
+  });
 });
