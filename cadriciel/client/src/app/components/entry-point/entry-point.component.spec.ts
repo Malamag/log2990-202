@@ -7,7 +7,7 @@ import { NewDrawComponent } from '../new-draw/new-draw.component';
 import { UserManualComponent } from '../user-manual/user-manual.component';
 import { EntryPointComponent } from './entry-point.component';
 
-describe('EntryPointComponent', () => {
+fdescribe('EntryPointComponent', () => {
   let component: EntryPointComponent;
   let fixture: ComponentFixture<EntryPointComponent>;
 
@@ -93,13 +93,16 @@ describe('EntryPointComponent', () => {
     component.openGallery();
     expect(SPY).toHaveBeenCalledWith(GalleryComponent);
   });
-
-  /* This test is only a placeholder for further methods implemented in the execute func */
   it('should call the statements on continuing a doodle', () => {
-    const SPY = spyOn(console, 'log');
+    const SPY = spyOn(component, 'continue');
     const NAME = 'Continuer';
     component.execute(NAME);
-    expect(SPY).toHaveBeenCalledWith(NAME);
+    expect(SPY).toHaveBeenCalled();
   });
-
+  it('should call continue auto save of continue drawing', () => {
+    // tslint:disable-next-line: no-string-literal
+    const SPY = spyOn(component['drawing'], 'continueAutoSavedFromEntryPoint');
+    component.continue();
+    expect(SPY).toHaveBeenCalled();
+  });
 });

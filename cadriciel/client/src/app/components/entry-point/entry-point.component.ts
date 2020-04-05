@@ -63,7 +63,7 @@ export class EntryPointComponent implements OnInit {
     if (localStorage.getItem('height') === '775'
       && localStorage.getItem('width') === '1438'
       && localStorage.getItem('color') === 'ffffff') {
-      if (localStorage.getItem('htmlElem3') === '') {isEmpty = true;}
+      if (localStorage.getItem('htmlElem3') === '') {isEmpty = true; }
       if (isEmpty) {initValues = true; }
     }
     return initValues;
