@@ -49,7 +49,8 @@ describe('SvgDrawComponent', () => {
         gridServiceStub = {
             initGrid: () => 0,
             removeGrid: () => 0,
-            updateColor: () => 0
+            updateColor: () => 0,
+            renderBack: () => 0,
         };
 
         TestBed.configureTestingModule({
@@ -226,5 +227,11 @@ describe('SvgDrawComponent', () => {
         component.interaction.emitGridAttributes(CANVAS);
         expect(REM_SPY).toHaveBeenCalled();
         expect(INIT_SPY).toHaveBeenCalled();
+    });
+    it('should call continue auto saved of continue drawing', () => {
+        // tslint:disable-next-line: no-string-literal
+        const SPY = spyOn(component['continueDrawing'], 'continueAutoSavedFromDrawVue');
+        component.continueSavedImage();
+        expect(SPY).toHaveBeenCalled();
     });
 });
