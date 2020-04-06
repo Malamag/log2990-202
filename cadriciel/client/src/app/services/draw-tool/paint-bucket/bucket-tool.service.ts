@@ -37,10 +37,10 @@ export class BucketToolService extends DrawingTool {
     const TEST = 255;
     if (this.canvasContext) {
       const t0 = performance.now();
-      const PTS = this.floodFill.floodFill(this.canvasContext, position, [0, 0, 0], [TEST, TEST, TEST], 1);
+      this.currentPath = this.floodFill.floodFill(this.canvasContext, position, [0, 0, 0], [TEST, TEST, TEST], 0.9);
       const t1 = performance.now();
       console.log('Flood-fill exectuted in ' + (t1 - t0) + ' ms');
-      console.log(PTS);
+      console.log(this.currentPath);
     }
     this.updateDrawing();
   }
@@ -53,7 +53,7 @@ export class BucketToolService extends DrawingTool {
     // throw new Error('Method not implemented.');
   }
 
-  createPath(path: Point[], doubleClickCheck?: boolean | undefined, removePerimeter?: boolean | undefined): string {
+  /*createPath(path: Point[], doubleClickCheck?: boolean | undefined, removePerimeter?: boolean | undefined): string {
     // throw new Error("Method not implemented.");
 
     // create a divider
@@ -62,23 +62,53 @@ export class BucketToolService extends DrawingTool {
     // Initialize the d string attribute of the path
     let dString = '';
 
-    // blabla
-    let points: Point[];
-    points = new Array();
+
 
     // Put every points in a string
-    for (const POINT of points) {
+    for (const POINT of path) {
       dString += ` ${POINT.x}, ${POINT.y}`;
     }
 
     // Create the polyline
     sPath += ' <polyline ';
-    sPath += ` d="${dString}"`;
+    sPath += ` points="${dString}"`;
     sPath += ` stroke="${this.chosenColor.primColor}"`;
     sPath += ` fill="${this.chosenColor.primColor}" /> </g>`;
 
     return sPath;
 
+  }*/
+  createPath(p: Point[]): string {
+    let s = '';
+
+    // We need at least 2 points
+    if (p.length < 2) {
+      return s;
+    }
+
+    // create a divider
+    s = '<g style="transform: translate(0px, 0px);" name = "bucket-tool">';
+
+    // start the path
+    s += '<path d="';
+    // move to first point
+    s += `M${p[0].x} ${p[0].y} `;
+    // for each succeding point, connect it with a line
+    for (let i = 1; i < p.length; i++) {
+      s += `L${p[i].x} ${p[i].y} `;
+    }
+    // set render attributes
+    s += 'Z ';
+    s += `\" stroke="#00aa00" `;
+    s += `stroke-width="${2}"`;
+    s += 'fill="#00aa00"';
+    s += 'stroke-linecap="round"';
+    s += 'stroke-linejoin="round"/>';
+    // end the path
+
+    // end the divider
+    s += '</g>';
+    return s;
   }
 
   // add the progress to the main drawing
@@ -86,7 +116,7 @@ export class BucketToolService extends DrawingTool {
 
     // create the final svg element
     let d = '';
-    d += this.createPath(this.currentPath, endIt);
+    d += this.createPath(this.currentPath);
 
     // add it to the main drawing
     this.drawing.innerHTML += d;

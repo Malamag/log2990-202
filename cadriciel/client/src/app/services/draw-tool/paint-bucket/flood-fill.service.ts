@@ -15,7 +15,7 @@ export class FloodFillService {
     startPoint: Point,
     color: number[],
     targetColor: number[],
-    tolerance: number): Point[] | undefined {
+    tolerance: number): Point[] {
 
     const CANVAS_WIDTH = ctx.canvas.width;
     const CANVAS_HEIGHT = ctx.canvas.height;
@@ -31,7 +31,7 @@ export class FloodFillService {
     while (PIXEL_STACK.length) {
 
       const nextPixel: Pixel | undefined = PIXEL_STACK.pop();
-      if (!nextPixel) { return; }
+      if (!nextPixel) { return EXTREME_POINTS; }
 
       let goUp = true;
       let goDown = true;
