@@ -79,36 +79,27 @@ export class BucketToolService extends DrawingTool {
 
   }*/
   createPath(p: Point[]): string {
-    let s = '';
-
-    // We need at least 2 points
-    if (p.length < 2) {
-      return s;
+    let dString = '';
+    let path = '';
+    // For each generated point, move to the point and put a tiny line that looks like a point
+    for (const POINT of p) {
+      dString += ` M ${POINT.x} ${POINT.y}`;
+      dString += ` L ${POINT.x} ${POINT.y}`;
     }
 
-    // create a divider
-    s = '<g style="transform: translate(0px, 0px);" name = "bucket-tool">';
+    // Create a radius dependent of the diameter -> 1/100 of the diameter
+    const DIVIDER = 100;
+    const POINT_RADIUS = 200 / DIVIDER;
+    // Create the path of points
+    path += ' <path';
+    path += ` d="${dString}"`;
+    path += ` stroke="#00aa00ff"`;
+    path += ' stroke-linecap="round"';
+    path += ' stroke-linejoin="round"';
+    path += ` stroke-width="${POINT_RADIUS}"`;
+    path += ' fill="none" /> </g>';
 
-    // start the path
-    s += '<path d="';
-    // move to first point
-    s += `M${p[0].x} ${p[0].y} `;
-    // for each succeding point, connect it with a line
-    for (let i = 1; i < p.length; i++) {
-      s += `L${p[i].x} ${p[i].y} `;
-    }
-    // set render attributes
-    s += 'Z ';
-    s += `\" stroke="#00aa00" `;
-    s += `stroke-width="${2}"`;
-    s += 'fill="#00aa00"';
-    s += 'stroke-linecap="round"';
-    s += 'stroke-linejoin="round"/>';
-    // end the path
-
-    // end the divider
-    s += '</g>';
-    return s;
+    return path;
   }
 
   // add the progress to the main drawing

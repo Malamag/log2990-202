@@ -46,7 +46,7 @@ export class FloodFillService {
       }
 
       while (goDown && nextPixel.y < CANVAS_HEIGHT) {
-
+        EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
         this.colorPixels(IMG_DATA, nextPixel, color);
         if (nextPixel.x - 1 >= 0 &&
           this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x - 1, y: nextPixel.y }), tolerance, color)) {
@@ -55,7 +55,7 @@ export class FloodFillService {
             goLeft = true;
             const NEXT_PIX: Pixel = { x: nextPixel.x - 1, y: nextPixel.y };
             PIXEL_STACK.push(NEXT_PIX);
-            EXTREME_POINTS.push(new Point(NEXT_PIX.x, NEXT_PIX.y));
+            // EXTREME_POINTS.push(new Point(NEXT_PIX.x, NEXT_PIX.y));
           }
         } else {
           goLeft = false;
@@ -67,7 +67,7 @@ export class FloodFillService {
           if (!goRight) {
             const NEXT_PIX: Pixel = { x: nextPixel.x + 1, y: nextPixel.y };
             PIXEL_STACK.push(NEXT_PIX);
-            EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
+            // EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
             goRight = true;
           }
         } else {
@@ -80,7 +80,7 @@ export class FloodFillService {
         }
 
         if (!goDown) {
-          EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
+          // EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
         }
       }
     }
