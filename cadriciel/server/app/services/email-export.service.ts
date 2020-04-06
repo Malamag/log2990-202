@@ -1,17 +1,18 @@
 //import fs from 'fs';
 import { injectable } from 'inversify';
 import { ImageExport } from '../../../image-export';
-import http from 'http';
+//import https from 'https';
+import request from 'request';
 
 @injectable()
 export class EmailExportService {
 
     async export(data: ImageExport) {
+        const URL = 'https://log2990.step.polymtl.ca/email?address_validation=false&quick_return=false&dry_run=false';
         console.log('email reached server');
-        const OPTIONS = {
+        const OPTIONS: request.CoreOptions = {
             'method': 'POST',
-            'port': '3000',
-            'url': 'https://log2990.step.polytmtl.ca/email?address_validation=false&quick_return=false&dry_run=false',
+            'port': 443,
             'headers': {
                 'X-Team-Key': '20eae8ab-5040-4b1c-8d00-76e1208ecd13'
             },
@@ -27,10 +28,10 @@ export class EmailExportService {
             }
         };
         console.log('before request');
-        let req = http.request(OPTIONS, (res) => {
-            console.log('message : ' + res.read());
+        request(URL, OPTIONS, (res) => {
+            console.log('message : ' + res);
         });
-        req.end();
+        //req.end();
         console.log('after request');
     }
 }

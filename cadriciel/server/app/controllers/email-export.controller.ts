@@ -19,7 +19,6 @@ export class EmailExportController {
         this.router = Router();
 
         this.router.post('/export', async (req: Request, res: Response, next: NextFunction) => {
-            console.log(req.body)
             this.emailExportService.export(req.body)
                 .then(() => {
                     res.sendStatus(Httpstatus.OK);
