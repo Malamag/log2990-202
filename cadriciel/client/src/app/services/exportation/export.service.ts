@@ -1,6 +1,6 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { ImageExport } from '../../../../../image-export';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const HTTP_OPTIONS = {
     headers: new HttpHeaders({
@@ -45,12 +45,15 @@ export class ExportService {
     }
 
     exportByMail(name: string, type: string, canvasRef: HTMLCanvasElement, email: string): void {
+
         let dataSrc: string;
         type === 'svg' ? dataSrc = this.imageURL : dataSrc = canvasRef.toDataURL(`image/${type}`);
         const IMAGE_SRC_DATA: ImageExport = {
             downloadable: `${name + '.' + type}`,
-            src: dataSrc,
-            email: email
+            src: `<svg xmlns="http://www.w3.org/2000/svg"  width="400" height="110">
+            <rect width="300" height="100" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
+          </svg>`,
+            email
         };
 
         console.log(IMAGE_SRC_DATA);
