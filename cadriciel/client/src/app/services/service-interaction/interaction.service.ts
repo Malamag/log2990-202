@@ -4,6 +4,7 @@ import { Canvas } from 'src/app/models/canvas.model';
 import { AerosolAttributes } from '../attributes/aerosol-attribute';
 import { FormsAttribute } from '../attributes/attribute-form';
 import { LineAttributes } from '../attributes/line-attributes';
+import { TextAttributes } from '../attributes/text-attribute';
 import { ToolsAttributes } from '../attributes/tools-attribute';
 
 @Injectable({
@@ -30,6 +31,9 @@ export class InteractionService {
 
     aerosolAttributes: Subject<AerosolAttributes> = new Subject<AerosolAttributes>();
     $aerosolAttributes: Observable<AerosolAttributes> = this.aerosolAttributes.asObservable();
+
+    textAttributes: Subject<TextAttributes> = new Subject<TextAttributes>();
+    $textAttributes: Observable<TextAttributes> = this.textAttributes.asObservable();
 
     cancelTools: Subject<boolean> = new Subject<boolean>();
     $cancelToolsObs: Observable<boolean> = this.cancelTools.asObservable();
@@ -78,6 +82,10 @@ export class InteractionService {
 
     emitAerosolAttributes(attr: AerosolAttributes | undefined): void {
         this.aerosolAttributes.next(attr);
+    }
+
+    emitTextAttributes(attr: TextAttributes | undefined): void {
+        this.textAttributes.next(attr);
     }
 
     emitCancel(sig: boolean): void {

@@ -114,44 +114,44 @@
         <mat-slider thumbLabel type="range" min="3" max="50" [(ngModel)]="lineThickness"></mat-slider> <br />
     </div>
     <!-- for the text -->
-    <div *ngSwitchCase="'Texte'">
+    <div *ngSwitchCase="'Texte'" (mouseleave)="updateText()">
         <label> Police de texte </label>
-        <select>
+        <select [(ngModel)]="fontFamily">
             <option>arial</option>
-            <option> times new Roman</option>
+            <option>times new Roman</option>
         </select>
-        <br />
-        <label> taille de la police</label>
-        <input type="text" valeur="10" />
+        <br><br>
+        <label> Taille de la police</label>
+        <mat-slider thumbLabel type="range" min="3" max="50" [(ngModel)]="fontSize"></mat-slider> <br />
         <br />
         <label> Mutateur</label> <br />
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/google"
              title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button>
-            <img src="../../../assets/images/bold.png" />
+        <button (click)="mutate(0)">
+            <img src="../../../assets/images/bold.svg" width="30px" height="30px"/>
         </button>
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" 
             title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button>
-            <img src="../../../assets/images/italics.png" />
+        <button (click)="mutate(1)">
+            <img src="../../../assets/images/italic.svg" width="30px" height="30px"/>
         </button>
-        <br />
+        <br><br>
         <label> Alignement</label> <br />
         <!-- Replace the text with the images-->
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" 
             title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button>
-            <img src="../../../assets/images/left-align.png" />
+        <button (click)="alignement('L')">
+            <img src="../../../assets/images/left-align.svg" width="30px" height="30px"/>
         </button>
         <!--source: Icons made by <a href="https://www.flaticon.com/authors/bqlqn"
              title="bqlqn">bqlqn</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button>
-            <img src="../../../assets/images/align-center.png" />
+        <button (click)="alignement('C')">
+            <img src="../../../assets/images/center-align.svg" width="30px" height="30px"/>
         </button>
         <!--source: Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" 
             title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button>
-            <img src="../../../assets/images/right-align.png" />
+        <button (click)="alignement('R')">
+            <img src="../../../assets/images/right-align.svg" width="30px" height="30px"/>
         </button>
     </div>
 
@@ -163,4 +163,5 @@
         <label> type d'étampe</label>
         <!-- here goes a list of stamps -->
     </div>
+
 </div>

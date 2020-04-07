@@ -15,6 +15,13 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
     diameter: number;
     junction: boolean;
     junctionRadius: number;
+
+    fontSize: number;
+    fontFamily: string;
+    alignment: string;
+    isBold: boolean;
+    isItalic: boolean;
+
     selectedTool: string;
     tools: string[] = [];
 
@@ -31,6 +38,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
             'Aérosol',
             'ApplicateurCouleur',
             'Efface',
+            'Texte'
         ];
         const DEF_THICK = 5;
         const DEF_TEXTURE = 0;
@@ -39,6 +47,8 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
         const DEF_DIAMETER = 50;
         const DEF_PLOTTYPE = 2;
         const DEF_JUNCTION_RAD = 6;
+        const DEF_FONT_FAMILY = 'arial';
+        const DEF_ALIGNEMENT = 'L';
         this.lineThickness = DEF_THICK; // 5px thick line
         this.texture = DEF_TEXTURE; // blur texture
 
@@ -46,6 +56,12 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
 
         this.emissionPerSecond = DEF_EMISSIONS;
         this.diameter = DEF_DIAMETER;
+
+        this.fontSize = DEF_THICK;
+        this.fontFamily = DEF_FONT_FAMILY;
+        this.alignment = DEF_ALIGNEMENT;
+        this.isBold = false;
+        this.isItalic = false;
 
         this.plotType = DEF_PLOTTYPE; // type 2 --> filled with border
         this.junction = true; // with junction dots of 6 px size
@@ -106,6 +122,33 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
         this.interaction.emitAerosolAttributes({
             emissionPerSecond: this.emissionPerSecond,
             diameter: this.diameter });
+    }
+
+    updateText(): void {
+        this.interaction.emitTextAttributes({
+            fontSize: this.fontSize,
+            fontFamily: this.fontFamily,
+            alignment: this.alignment,
+            isBold: this.isBold,
+            isItalic: this.isItalic,
+        });
+    }
+
+    mutate(type: boolean): void {
+        switch (type) {
+            case false: {
+              this.isBold = !this.isBold;
+              return;
+            }
+            case true: {
+                this.isItalic = !this.isItalic;
+                return;
+            }
+        }
+    }
+
+    alignement(type: string): void {
+        this.alignment = type;
     }
 
     resize(): void {

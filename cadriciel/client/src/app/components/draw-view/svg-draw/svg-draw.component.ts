@@ -127,6 +127,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         const AEROSOL = TC.CreateAerosol(false, this.interaction, this.colorPick);
         const ELLIPSE = TC.CreateEllipse(false, this.interaction, this.colorPick);
         const POLYGON = TC.CreatePolygon(false, this.interaction, this.colorPick);
+        const TEXT = TC.CreateText(true, this.interaction, this.colorPick);
         const SELECT = TC.CreateSelection(
             false,
             this.interaction,
@@ -166,6 +167,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Efface', ERASER);
         this.toolsContainer.set('Applicateur de couleur', COLOR_EDITOR);
         this.toolsContainer.set('Pipette', PIPETTE);
+        this.toolsContainer.set('Texte', TEXT);
 
     }
     ngAfterViewInit(): void {
