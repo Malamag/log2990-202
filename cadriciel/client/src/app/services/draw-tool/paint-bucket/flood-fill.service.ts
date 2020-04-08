@@ -14,7 +14,7 @@ export class FloodFillService {
     ctx: CanvasRenderingContext2D,
     startPoint: Point,
     color: number[],
-    targetColor: number[],
+    choosenColor: number[],
     tolerance: number): Point[] {
 
     const CANVAS_WIDTH = ctx.canvas.width;
@@ -22,7 +22,7 @@ export class FloodFillService {
 
     startPoint.x = Math.round(startPoint.x) - 1;
     startPoint.y = Math.round(startPoint.y) - 1;
-    const EXTREME_POINTS: Point[] = [];
+    const POINTS_TO_COLOR: Point[] = [];
     const IMG_DATA: ImageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     const PIXEL_STACK: Pixel[] = [];
@@ -31,7 +31,7 @@ export class FloodFillService {
     while (PIXEL_STACK.length) {
 
       const nextPixel: Pixel | undefined = PIXEL_STACK.pop();
-      if (!nextPixel) { return EXTREME_POINTS; }
+      if (!nextPixel) { return POINTS_TO_COLOR; }
 
       let goUp = true;
       let goDown = true;
@@ -42,14 +42,15 @@ export class FloodFillService {
 
       while (goUp && nextPixel.y > 0) {
         nextPixel.y--;
-        goUp = this.matchesTolerance(this.getColorAtPixel(IMG_DATA, nextPixel), tolerance, color);
+        goUp = this.matchesTolerance(this.getColorAtPixel(IMG_DATA, nextPixel), tolerance, color, choosenColor);
       }
 
       while (goDown && nextPixel.y < CANVAS_HEIGHT) {
-        EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
-        this.colorPixels(IMG_DATA, nextPixel, color);
+        // EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
+        this.colorPixels(IMG_DATA, nextPixel, choosenColor);
+        POINTS_TO_COLOR.push(new Point(nextPixel.x, nextPixel.y));
         if (nextPixel.x - 1 >= 0 &&
-          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x - 1, y: nextPixel.y }), tolerance, color)) {
+          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x - 1, y: nextPixel.y }), tolerance, color, choosenColor)) {
 
           if (!goLeft) {
             goLeft = true;
@@ -62,7 +63,7 @@ export class FloodFillService {
         }
 
         if (nextPixel.x + 1 < CANVAS_WIDTH &&
-          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x + 1, y: nextPixel.y }), tolerance, color)) {
+          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x + 1, y: nextPixel.y }), tolerance, color, choosenColor)) {
 
           if (!goRight) {
             const NEXT_PIX: Pixel = { x: nextPixel.x + 1, y: nextPixel.y };
@@ -74,7 +75,7 @@ export class FloodFillService {
           goRight = false;
         }
         nextPixel.y++;
-        goDown = this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x, y: nextPixel.y }), tolerance, color);
+        goDown = this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x, y: nextPixel.y }), tolerance, color, choosenColor);
         if (nextPixel.y === CANVAS_HEIGHT) {
           goDown = false;
         }
@@ -84,27 +85,30 @@ export class FloodFillService {
         }
       }
     }
-    return EXTREME_POINTS;
+    return POINTS_TO_COLOR;
   }
 
   fillRegion(): void {
     /* Fills the determined region with some svg stuff*/
   }
 
-  matchesTolerance(clickedColor: number[], tolerance: number, targetColor: number[]): boolean {
+  matchesTolerance(clickedColor: number[], tolerance: number, targetColor: number[], choosenColor: number[]): boolean {
     if (
-      clickedColor[0] === targetColor[0] &&
-      clickedColor[1] === targetColor[1] &&
-      clickedColor[2] === targetColor[2]) {
+      choosenColor[0] === clickedColor[0] &&
+      choosenColor[1] === clickedColor[1] &&
+      choosenColor[2] === clickedColor[2]) {
       return false;
     }
 
     const BASIS = 255;
-    const R_MATCHES = Math.abs(clickedColor[0] - targetColor[0]) / BASIS >= tolerance;
-    const G_MATCHES = Math.abs(clickedColor[1] - targetColor[1]) / BASIS >= tolerance;
-    const B_MATCHES = Math.abs(clickedColor[2] - targetColor[2]) / BASIS >= tolerance;
+    const A = Math.abs((clickedColor[0] - targetColor[0]) / BASIS);
+    const B = Math.abs((clickedColor[1] - targetColor[1]) / BASIS);
+    const C = Math.abs((clickedColor[2] - targetColor[2]) / BASIS);
+    const R_MATCHES = A <= tolerance;
+    const G_MATCHES = B <= tolerance;
+    const B_MATCHES = C <= tolerance;
 
-    return R_MATCHES && G_MATCHES && B_MATCHES;
+    return (R_MATCHES && G_MATCHES && B_MATCHES);
 
   }
 

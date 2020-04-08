@@ -35,10 +35,13 @@ export class BucketToolService extends DrawingTool {
 
   down(position: Point, insideWorkspace?: boolean | undefined, isRightClick?: boolean): void {
     /* on click: what happens */
-    const TEST = 255;
+    // const TEST = 255;
+    const CHOOSEN_COLOR = this.colorPick.colorConvert.hexToRgba(this.chosenColor.primColor);
     if (this.canvasContext) {
       const t0 = performance.now();
-      this.currentPath = this.floodFill.floodFill(this.canvasContext, position, [0, 0, 0], [TEST, TEST, TEST], this.tolerance);
+      const CLICK = this.canvasContext.getImageData(position.x, position.y, 1, 1).data;
+      this.currentPath = this.floodFill.floodFill(this.canvasContext, position,
+        [CLICK[0], CLICK[1], CLICK[2]], CHOOSEN_COLOR, this.tolerance);
       const t1 = performance.now();
       console.log('Flood-fill exectuted in ' + (t1 - t0) + ' ms');
       console.log(this.currentPath);
@@ -50,6 +53,7 @@ export class BucketToolService extends DrawingTool {
     const PERCENT = 100;
     this.interaction.toleranceValue.subscribe((toleranceValue: number) => {
       this.tolerance = toleranceValue / PERCENT;
+      console.log(this.tolerance);
     });
   }
 
