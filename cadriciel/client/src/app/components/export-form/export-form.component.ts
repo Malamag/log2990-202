@@ -30,14 +30,16 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     ];
 
     @ViewChild('imgConvert', { static: false }) exportFromCanvas: ElementRef; // has an eye on the <canvas> element
-
+    checked: boolean;
     constructor(
         private formBuilder: FormBuilder,
         private winService: ModalWindowService,
         private doodleFetch: DoodleFetchService,
         private expService: ExportService,
         private imgFilter: ImageFilterService,
-    ) { }
+    ) {
+        this.checked = false;
+    }
 
     exportForm: FormGroup;
     doodle: Node;
@@ -78,9 +80,11 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         const NAME = FORMVAL.doodleName;
 
         switch (this.exportMode) {
-            case 0: this.exportation(NAME, TYPE);
+            case 0:
+                this.exportation(NAME, TYPE);
                 break;
-            case 1: this.exportAsEmail(NAME, TYPE, FORMVAL.email);
+            case 1:
+                this.exportAsEmail(NAME, TYPE, FORMVAL.email);
                 break;
         }
 
@@ -110,12 +114,11 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     }
 
     emailExportStatus(event: MatCheckbox): void {
-        const EMAIL_FORM = document.getElementById('emailForm') as HTMLElement;
         if (event.checked) {
-            EMAIL_FORM.style.display = 'inline';
+            this.checked = true;
             this.exportMode = 1;
         } else {
-            EMAIL_FORM.style.display = 'none';
+            this.checked = false;
             this.exportMode = 0;
         }
     }
