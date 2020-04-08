@@ -10,10 +10,9 @@ import { FloodFillService } from './flood-fill.service';
 })
 export class BucketToolService extends DrawingTool {
   canvasContext: CanvasRenderingContext2D | null;
-  surfaceWidth: number;
-  surfaceHeight: number;
-
   interact: InteractionService;
+
+  tolerance: number;
   constructor(
     inProgress: HTMLElement,
     drawing: HTMLElement,
@@ -23,13 +22,15 @@ export class BucketToolService extends DrawingTool {
     private floodFill: FloodFillService) {
 
     super(inProgress, drawing, selected, interaction, colorPick);
-    const TEST_DIM = 10;
-    this.surfaceWidth = TEST_DIM;
-    this.surfaceHeight = TEST_DIM;
+
     this.interact = interaction;
+
     this.interact.$canvasContext.subscribe((context: CanvasRenderingContext2D) => {
       this.canvasContext = context;
     });
+
+    this.updateColors();
+    this.updateAttributes();
   }
 
   down(position: Point, insideWorkspace?: boolean | undefined, isRightClick?: boolean): void {
@@ -37,12 +38,19 @@ export class BucketToolService extends DrawingTool {
     const TEST = 255;
     if (this.canvasContext) {
       const t0 = performance.now();
-      this.currentPath = this.floodFill.floodFill(this.canvasContext, position, [0, 0, 0], [TEST, TEST, TEST], 0.9);
+      this.currentPath = this.floodFill.floodFill(this.canvasContext, position, [0, 0, 0], [TEST, TEST, TEST], this.tolerance);
       const t1 = performance.now();
       console.log('Flood-fill exectuted in ' + (t1 - t0) + ' ms');
       console.log(this.currentPath);
     }
     this.updateDrawing();
+  }
+
+  updateAttributes(): void {
+    const PERCENT = 100;
+    this.interaction.toleranceValue.subscribe((toleranceValue: number) => {
+      this.tolerance = toleranceValue / PERCENT;
+    });
   }
 
   move(position: Point): void {
@@ -61,8 +69,6 @@ export class BucketToolService extends DrawingTool {
 
     // Initialize the d string attribute of the path
     let dString = '';
-
-
 
     // Put every points in a string
     for (const POINT of path) {
@@ -88,12 +94,12 @@ export class BucketToolService extends DrawingTool {
     }
 
     // Create a radius dependent of the diameter -> 1/100 of the diameter
-    const DIVIDER = 100;
-    const POINT_RADIUS = 200 / DIVIDER;
+
+    const POINT_RADIUS = 2;
     // Create the path of points
     path += ' <path';
     path += ` d="${dString}"`;
-    path += ` stroke="#00aa00ff"`;
+    path += ` stroke="${this.chosenColor.primColor}"`;
     path += ' stroke-linecap="round"';
     path += ' stroke-linejoin="round"';
     path += ` stroke-width="${POINT_RADIUS}"`;
@@ -144,7 +150,4 @@ export class BucketToolService extends DrawingTool {
     // throw new Error('Method not implemented.');
   }
 
-  updateAttributes(): void {
-    // throw new Error("Method not implemented.");
-  }
 }

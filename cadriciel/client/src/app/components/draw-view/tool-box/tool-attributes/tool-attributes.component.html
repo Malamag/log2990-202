@@ -163,4 +163,11 @@
         <label> type d'étampe</label>
         <!-- here goes a list of stamps -->
     </div>
+
+    <div *ngSwitchCase="'Sceau de peinture'" (mouseleave)="updateBucket()">
+        <label>Tolérance: {{ tolerance }}%</label>
+        <mat-slider thumbLabel type="range" min="0" max="100" value="50" [(ngModel)]="tolerance"></mat-slider>
+
+        <!-- here goes a list of stamps -->
+    </div>
 </div>

@@ -37,7 +37,7 @@ export class ToolBoxComponent implements OnInit {
         this.selectingToolsMap.set('s', 'Sélectionner');
         this.selectingToolsMap.set('e', 'Efface');
         this.selectingToolsMap.set('i', 'Pipette');
-        this.selectingToolsMap.set('b', 'Sceau');
+        this.selectingToolsMap.set('b', 'Sceau de peinture');
         this.disableUndo = true;
         this.disableRedo = true;
     }

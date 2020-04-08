@@ -16,6 +16,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
     junction: boolean;
     junctionRadius: number;
     selectedTool: string;
+    tolerance: number;
     tools: string[] = [];
 
     pipettePreviewFill: string;
@@ -31,7 +32,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
             'Aérosol',
             'ApplicateurCouleur',
             'Efface',
-            'Sceau',
+            'Sceau de peinture',
         ];
         const DEF_THICK = 5;
         const DEF_TEXTURE = 0;
@@ -40,6 +41,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
         const DEF_DIAMETER = 50;
         const DEF_PLOTTYPE = 2;
         const DEF_JUNCTION_RAD = 6;
+        const DEF_TOLERANCE = 50;
         this.lineThickness = DEF_THICK; // 5px thick line
         this.texture = DEF_TEXTURE; // blur texture
 
@@ -51,6 +53,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
         this.plotType = DEF_PLOTTYPE; // type 2 --> filled with border
         this.junction = true; // with junction dots of 6 px size
         this.junctionRadius = DEF_JUNCTION_RAD;
+        this.tolerance = DEF_TOLERANCE;
         this.selectedTool = 'Crayon';
     }
 
@@ -64,10 +67,11 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
             });
             if (toolExist) {
                 this.selectedTool = tool;
+                console.log(tool);
             }
-            const CALL_CONVERSION: boolean = tool === 'Pipette' || tool === 'Sceau';
+            const CALL_CONVERSION: boolean = tool === 'Pipette' || tool === 'Sceau de peinture';
             this.interaction.emitSvgCanvasConversion(CALL_CONVERSION);
-            console.log(tool);
+
         });
 
         this.interaction.$previewColor.subscribe((color: string) => {
@@ -110,6 +114,10 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
             emissionPerSecond: this.emissionPerSecond,
             diameter: this.diameter
         });
+    }
+
+    updateBucket(): void {
+        this.interaction.emitToleranceValue(this.tolerance);
     }
 
     resize(): void {

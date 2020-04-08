@@ -169,7 +169,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Efface', ERASER);
         this.toolsContainer.set('Applicateur de couleur', COLOR_EDITOR);
         this.toolsContainer.set('Pipette', PIPETTE);
-        this.toolsContainer.set('Sceau', BUCKET);
+        this.toolsContainer.set('Sceau de peinture', BUCKET);
 
     }
     ngAfterViewInit(): void {
