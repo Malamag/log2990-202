@@ -93,14 +93,12 @@ export class BucketToolService extends DrawingTool {
     let dString = '';
     let path = '';
     // For each generated point, move to the point and put a tiny line that looks like a point
-    dString += `M ${this.startPoint.x} ${this.startPoint.y}`;
-    for (let i = 0; i < p.length - 1; i++) {
-      if (p[i].x !== p[i + 1].x || p[i].y !== p[i + 1].y) {
+    dString += `M ${p[0].x} ${p[0].y}`;
+    for (let i = 1; i < p.length - 1; i++) {
+      if (p[i].x !== p[i + 1].x) {
         dString += ` L ${p[i].x} ${p[i].y}`;
-        dString += ` M ${p[i].x} ${p[i].y}`;
+        dString += ` M ${p[i + 1].x} ${p[i + 1].y}`;
       }
-
-
     }
 
     // Create a radius dependent of the diameter -> 1/100 of the diameter
