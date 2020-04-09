@@ -70,7 +70,7 @@ export class BucketToolService extends DrawingTool {
   createPath(p: Point[]): string {
     let dString = '';
     let path = '';
-
+    path += '<g name = "bucket-fill">';
     dString += `M ${p[0].x} ${p[0].y}`;
     for (let i = 1; i < p.length - 1; i++) {
       if (p[i].x !== p[i + 1].x) {
