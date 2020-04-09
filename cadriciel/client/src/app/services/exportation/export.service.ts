@@ -1,14 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
-import { ImageExport } from '../../../../../image-export';
-
-const HTTP_OPTIONS = {
-    headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'my-auth-token',
-    }),
-};
-
 @Injectable({
     providedIn: 'root',
 })
@@ -16,7 +6,7 @@ export class ExportService {
     imageURL: string;
     render: Renderer2;
     xmlSerializer: XMLSerializer;
-    constructor(rendererFact: RendererFactory2, public http: HttpClient) {
+    constructor(rendererFact: RendererFactory2) {
         this.render = rendererFact.createRenderer(null, null);
         this.xmlSerializer = new XMLSerializer();
     }
