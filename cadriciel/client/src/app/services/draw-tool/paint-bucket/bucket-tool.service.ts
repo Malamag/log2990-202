@@ -11,7 +11,7 @@ import { FloodFillService } from './flood-fill.service';
 export class BucketToolService extends DrawingTool {
   canvasContext: CanvasRenderingContext2D | null;
   interact: InteractionService;
-
+  startPoint: Point;
   tolerance: number;
   constructor(
     inProgress: HTMLElement,
@@ -36,6 +36,7 @@ export class BucketToolService extends DrawingTool {
   down(position: Point, insideWorkspace?: boolean | undefined, isRightClick?: boolean): void {
     /* on click: what happens */
     // const TEST = 255;
+    this.startPoint = position;
     const CHOOSEN_COLOR = this.colorPick.colorConvert.hexToRgba(this.chosenColor.primColor);
     if (this.canvasContext) {
       const t0 = performance.now();
@@ -92,9 +93,14 @@ export class BucketToolService extends DrawingTool {
     let dString = '';
     let path = '';
     // For each generated point, move to the point and put a tiny line that looks like a point
-    for (const POINT of p) {
-      dString += ` M ${POINT.x} ${POINT.y}`;
-      dString += ` L ${POINT.x} ${POINT.y}`;
+    dString += `M ${this.startPoint.x} ${this.startPoint.y}`;
+    for (let i = 0; i < p.length - 1; i++) {
+      if (p[i].x !== p[i + 1].x || p[i].y !== p[i + 1].y) {
+        dString += ` L ${p[i].x} ${p[i].y}`;
+        dString += ` M ${p[i].x} ${p[i].y}`;
+      }
+
+
     }
 
     // Create a radius dependent of the diameter -> 1/100 of the diameter
@@ -104,11 +110,11 @@ export class BucketToolService extends DrawingTool {
     path += ' <path';
     path += ` d="${dString}"`;
     path += ` stroke="${this.chosenColor.primColor}"`;
-    path += ' stroke-linecap="round"';
-    path += ' stroke-linejoin="round"';
+    path += ' stroke-linecap="square"';
+    path += ' stroke-linejoin="square"';
     path += ` stroke-width="${POINT_RADIUS}"`;
     path += ' fill="none" /> </g>';
-
+    console.log(path)
     return path;
   }
 
