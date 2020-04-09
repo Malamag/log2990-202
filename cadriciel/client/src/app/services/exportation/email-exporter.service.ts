@@ -1,0 +1,84 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { ImageExport } from '../../../../../image-export';
+
+const HTTP_OPTIONS = {
+  headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'my-auth-token',
+  }),
+};
+@Injectable({
+  providedIn: 'root'
+})
+export class EmailExporterService {
+  imageURL: string;
+  render: Renderer2;
+  xmlSerializer: XMLSerializer;
+  constructor(rendererFact: RendererFactory2, private http: HttpClient) {
+    this.render = rendererFact.createRenderer(null, null);
+    this.xmlSerializer = new XMLSerializer();
+  }
+  svgToURL(svgElement: Node): string {
+    const DATA = this.xmlSerializer.serializeToString(svgElement);
+    const BLOB = new Blob([DATA], { type: 'image/svg+xml' });
+    const DOMURL = window.URL;
+    const URL = DOMURL.createObjectURL(BLOB);
+    return URL;
+  }
+  send(name: string, format: string, dataSrc: string, mail: string): void {
+    //console.log(dataSrc);
+    const IMG_SEND: ImageExport = {
+      downloadable: `${name + '.' + format}`,
+      src: `<img src = ${dataSrc}/>`,
+      email: mail,
+    };
+    const URL = 'http://localhost:3000/mail/export';
+    this.http.post(URL, IMG_SEND, HTTP_OPTIONS).subscribe(
+      (error) => {
+        console.log(error);
+      }
+
+    );
+  }
+  exportByMail(svgElem: Node, name: string, canvasRef: HTMLCanvasElement, type: string, mail: string): void {
+    const CTX: CanvasRenderingContext2D | null = canvasRef.getContext('2d');
+    if (CTX) {
+    const IMG = new Image();
+    this.imageURL = this.svgToURL(svgElem);
+    this.loadImageInCanvas(mail, IMG, CTX, canvasRef, name, type);
+    }
+  }
+  exportCanvas(name: string, type: string, canvasRef: HTMLCanvasElement, mail: string): void {
+    /* The method to transformthe file in png/jpg is inspired by:
+        Communauté StackOverflow (2015). "HTML5 Canvas to PNG File"
+        [en ligne] URL:
+        https://stackoverflow.com/questions/12796513/html5-canvas-to-png-file
+    */
+    if (type === 'svg') {
+        this.send(name, type, this.imageURL, mail);
+    } else {
+      //const src = window.btoa(canvasRef.toDataURL(`image/${type}`));
+      this.send(name, type, canvasRef.toDataURL(`image/${type}`), mail); // else, use canvas conversion
+    }
+  }
+
+  loadImageInCanvas(
+    mail: string,
+    image: HTMLImageElement,
+    ctx: CanvasRenderingContext2D,
+    canvasRef: HTMLCanvasElement,
+    imgName?: string,
+    imgType?: string,
+  ): void {
+    image.onload = () => {
+      ctx.drawImage(image, 0, 0);
+      if (imgName && imgType) {
+          // will proceed to download if defined name and type
+
+          this.exportCanvas(imgName, imgType, canvasRef, mail);
+      }
+    };
+    image.src = this.imageURL;
+  }
+}

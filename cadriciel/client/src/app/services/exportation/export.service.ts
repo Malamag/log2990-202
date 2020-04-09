@@ -44,29 +44,6 @@ export class ExportService {
         this.render.removeChild(document.body, DOWNLOAD_LINK);
     }
 
-    exportByMail(name: string, type: string, canvasRef: HTMLCanvasElement, email: string): void {
-
-        let dataSrc: string;
-        type === 'svg' ? dataSrc = this.imageURL : dataSrc = canvasRef.toDataURL(`image/${type}`);
-        const IMAGE_SRC_DATA: ImageExport = {
-            downloadable: `${name + '.' + type}`,
-            src: `<svg xmlns="http://www.w3.org/2000/svg"  width="400" height="110">
-            <rect width="300" height="100" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
-          </svg>`,
-            email
-        };
-
-        console.log(IMAGE_SRC_DATA);
-        // do some HTTPRequest sorcery
-        const URL = 'http://localhost:3000/mail/export';
-        this.http.post(URL, IMAGE_SRC_DATA, HTTP_OPTIONS).subscribe(
-            (error) => {
-                console.log(error);
-            }
-
-        );
-    }
-
     exportCanvas(name: string, type: string, canvasRef: HTMLCanvasElement): void {
         /* The method to transformthe file in png/jpg is inspired by:
             Communauté StackOverflow (2015). "HTML5 Canvas to PNG File"

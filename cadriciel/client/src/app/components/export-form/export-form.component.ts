@@ -6,6 +6,7 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
 import { ExportService } from 'src/app/services/exportation/export.service';
 import { ImageFilterService } from 'src/app/services/exportation/image-filter/image-filter.service';
 import { ModalWindowService } from 'src/app/services/window-handler/modal-window.service';
+import { EmailExporterService } from 'src/app/services/exportation/email-exporter.service';
 
 @Component({
     selector: 'app-export-form',
@@ -37,6 +38,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         private doodleFetch: DoodleFetchService,
         private expService: ExportService,
         private imgFilter: ImageFilterService,
+        private mailExport: EmailExporterService,
     ) {
         this.checked = false;
     }
@@ -100,8 +102,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
     }
 
     exportAsEmail(name: string, type: string, email: string): void {
-        this.expService.exportInCanvas(this.doodle, this.exportFromCanvas.nativeElement); // first we draw in the canvas
-        this.expService.exportByMail(name, type, this.exportFromCanvas.nativeElement, email); // then ,call the mail exportation
+        this.mailExport.exportByMail(this.doodle, name, this.exportFromCanvas.nativeElement, type, email);
     }
 
     applyFilter(event: number): void {
