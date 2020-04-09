@@ -5,6 +5,7 @@ import { DrawingTool } from '../drawing-tool';
 import { Point } from '../point';
 import { FloodFillService } from './flood-fill.service';
 
+const DEFAULT_TOLERANCE = 0.5;
 @Injectable({
   providedIn: 'root'
 })
@@ -21,7 +22,7 @@ export class BucketToolService extends DrawingTool {
     private floodFill: FloodFillService) {
 
     super(inProgress, drawing, selected, interaction, colorPick);
-
+    this.tolerance = DEFAULT_TOLERANCE;
     this.interact = interaction;
 
     this.interact.$canvasContext.subscribe((context: CanvasRenderingContext2D) => {
@@ -66,33 +67,10 @@ export class BucketToolService extends DrawingTool {
     // throw new Error('Method not implemented.');
   }
 
-  /*createPath(path: Point[], doubleClickCheck?: boolean | undefined, removePerimeter?: boolean | undefined): string {
-    // throw new Error("Method not implemented.");
-
-    // create a divider
-    let sPath = '<g name = "bucket" style="transform: translate(0px, 0px);" >';
-
-    // Initialize the d string attribute of the path
-    let dString = '';
-
-    // Put every points in a string
-    for (const POINT of path) {
-      dString += ` ${POINT.x}, ${POINT.y}`;
-    }
-
-    // Create the polyline
-    sPath += ' <polyline ';
-    sPath += ` points="${dString}"`;
-    sPath += ` stroke="${this.chosenColor.primColor}"`;
-    sPath += ` fill="${this.chosenColor.primColor}" /> </g>`;
-
-    return sPath;
-
-  }*/
   createPath(p: Point[]): string {
     let dString = '';
     let path = '';
-    // For each generated point, move to the point and put a tiny line that looks like a point
+
     dString += `M ${p[0].x} ${p[0].y}`;
     for (let i = 1; i < p.length - 1; i++) {
       if (p[i].x !== p[i + 1].x) {

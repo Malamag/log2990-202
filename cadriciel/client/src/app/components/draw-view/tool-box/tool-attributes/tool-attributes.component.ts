@@ -84,6 +84,8 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
         this.updateForms(); // emit all after init
         this.updateLine();
         this.updateTools();
+        this.updateBucket();
+        this.updateAerosol();
     }
 
     updateForms(): void {
