@@ -11,7 +11,6 @@ import { FloodFillService } from './flood-fill.service';
 export class BucketToolService extends DrawingTool {
   canvasContext: CanvasRenderingContext2D | null;
   interact: InteractionService;
-  startPoint: Point;
   tolerance: number;
   constructor(
     inProgress: HTMLElement,
@@ -34,16 +33,17 @@ export class BucketToolService extends DrawingTool {
   }
 
   down(position: Point, insideWorkspace?: boolean | undefined, isRightClick?: boolean): void {
-    /* on click: what happens */
-    // const TEST = 255;
-    this.startPoint = position;
+
     const CHOOSEN_COLOR = this.colorPick.colorConvert.hexToRgba(this.chosenColor.primColor);
     if (this.canvasContext) {
+
       const t0 = performance.now();
+
       const CLICK = this.canvasContext.getImageData(position.x, position.y, 1, 1).data;
       this.currentPath = this.floodFill.floodFill(this.canvasContext, position,
         [CLICK[0], CLICK[1], CLICK[2]], CHOOSEN_COLOR, this.tolerance);
       const t1 = performance.now();
+
       console.log('Flood-fill exectuted in ' + (t1 - t0) + ' ms');
       console.log(this.currentPath);
     }
@@ -112,7 +112,7 @@ export class BucketToolService extends DrawingTool {
     path += ' stroke-linejoin="square"';
     path += ` stroke-width="${POINT_RADIUS}"`;
     path += ' fill="none" /> </g>';
-    console.log(path)
+    // console.log(path);
     return path;
   }
 

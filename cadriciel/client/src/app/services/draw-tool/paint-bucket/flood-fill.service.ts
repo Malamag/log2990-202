@@ -22,7 +22,7 @@ export class FloodFillService {
 
     startPoint.x = Math.round(startPoint.x) - 1;
     startPoint.y = Math.round(startPoint.y) - 1;
-    const POINTS_TO_COLOR: Point[] = [];
+    const POINTS_TO_COLOR: Pixel[] = [];
     const IMG_DATA: ImageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     const PIXEL_STACK: Pixel[] = [];
@@ -48,7 +48,8 @@ export class FloodFillService {
       while (goDown && nextPixel.y < CANVAS_HEIGHT) {
         // EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
         this.colorPixels(IMG_DATA, nextPixel, choosenColor);
-        POINTS_TO_COLOR.push(new Point(nextPixel.x, nextPixel.y));
+        POINTS_TO_COLOR.push({ x: nextPixel.x, y: nextPixel.y });
+
         if (nextPixel.x - 1 >= 0 &&
           this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x - 1, y: nextPixel.y }), tolerance, color, choosenColor)) {
 
@@ -80,9 +81,9 @@ export class FloodFillService {
           goDown = false;
         }
 
-        if (!goDown) {
-          // EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
-        }
+        /* if (!goDown) {
+           // EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
+         }*/
       }
     }
     return POINTS_TO_COLOR;
