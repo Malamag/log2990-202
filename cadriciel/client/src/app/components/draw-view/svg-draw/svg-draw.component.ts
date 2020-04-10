@@ -14,6 +14,7 @@ import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboa
 import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
+import { ClipboardService } from 'src/app/services/draw-tool/clipboard.service';
 
 @Component({
     selector: 'app-svg-draw',
@@ -177,7 +178,11 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         // create all the tools
         this.createTools();
         const UNDO_REDO: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
+
+        const CLIPBOARD: ClipboardService = new ClipboardService(this.toolsContainer.get('Sélectionner'),this.interaction, this.frameRef.nativeElement, this.render);
+
         this.interactionToolsContainer.set('AnnulerRefaire', UNDO_REDO);
+        this.interactionToolsContainer.set('ClipBoard', CLIPBOARD);
         this.interaction.$cancelToolsObs.subscribe((sig: boolean) => {
             if (sig) {
                 this.closeTools(this.toolsContainer);
@@ -187,7 +192,11 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.interaction.$selectedTool.subscribe((toolName: string) => {
             if (toolName === 'Annuler' || toolName === 'Refaire') {
                 this.interactionToolsContainer.get('AnnulerRefaire').apply(toolName);
-            } else if (this.toolsContainer.get(toolName) && !this.toolsContainer.get(toolName).selected) {
+            } 
+            else if(toolName === 'Copier' || toolName === 'Coller' || toolName ==='Couper' || toolName ==='Dupliquer' || toolName ==='Supprimer'){
+                this.interactionToolsContainer.get('ClipBoard').apply(toolName);
+            }
+            else if (this.toolsContainer.get(toolName) && !this.toolsContainer.get(toolName).selected) {
                 const event = new Event('toolChange');
                 window.dispatchEvent(event);
                 this.closeTools(this.toolsContainer);

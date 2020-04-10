@@ -13,6 +13,7 @@ import { PolygonService } from './polygon.service';
 import { RectangleService } from './rectangle.service';
 import { SelectionService } from './selection.service';
 
+
 @Injectable({
     providedIn: 'root',
 })
@@ -93,4 +94,5 @@ export class ToolCreator {
     ): PipetteService {
         return new PipetteService(selected, interaction, colorPick);
     }
+
 }

@@ -249,6 +249,7 @@ export class SelectionService extends ShapeService {
         // clear selection rectangle
         this.currentPath = [];
         this.inProgress.innerHTML = '';
+        
     }
 
     move(position: Point): void {

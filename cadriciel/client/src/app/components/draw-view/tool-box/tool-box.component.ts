@@ -38,15 +38,42 @@ export class ToolBoxComponent implements OnInit {
         this.selectingToolsMap.set('e', 'Efface');
         this.selectingToolsMap.set('r', 'Applicateur de couleur');
         this.selectingToolsMap.set('i', 'Pipette');
+        this.selectingToolsMap.set('ctrl+c', 'Copier');
+        this.selectingToolsMap.set('ctrl+v', 'Coller');
+        this.selectingToolsMap.set('ctrl+d', 'Dupliquer');
+        this.selectingToolsMap.set('delete', 'Supprimer');
+        this.selectingToolsMap.set('ctrl+x', 'Couper');
         this.disableUndo = true;
         this.disableRedo = true;
     }
     @HostListener('document: keydown', ['$event'])
     updateBoard(event: KeyboardEvent): void {
+        
         // tslint:disable-next-line: deprecation
         if (event.keyCode !== F12) {
             event.preventDefault();
         }
+
+        if (event.ctrlKey && event.keyCode === 67) {
+            this.buttonAction(this.selectingToolsMap.get('ctrl+c'));
+        } 
+
+        if (event.ctrlKey && event.keyCode === 86) {
+            this.buttonAction(this.selectingToolsMap.get('ctrl+v'));
+        } 
+
+        if (event.ctrlKey && event.keyCode === 68) {
+            this.buttonAction(this.selectingToolsMap.get('ctrl+d'));
+        } 
+
+        if (event.ctrlKey && event.keyCode === 88) {
+            this.buttonAction(this.selectingToolsMap.get('ctrl+x'));
+        } 
+
+        if (event.keyCode === 46) {
+            this.buttonAction(this.selectingToolsMap.get('delete'));
+        } 
+
         // keyCode 90 for z
         // tslint:disable-next-line: deprecation
         if (event.ctrlKey && event.keyCode === Z_KEY_CODE) {
@@ -55,7 +82,8 @@ export class ToolBoxComponent implements OnInit {
             } else {
                 this.buttonAction(this.selectingToolsMap.get('ctrl+z'));
             }
-        } else if (this.selectingToolsMap.has(event.key) && !event.ctrlKey) {
+        } 
+        else if (this.selectingToolsMap.has(event.key) && !event.ctrlKey) {
             this.buttonAction(this.selectingToolsMap.get(event.key));
         }
     }
@@ -69,7 +97,9 @@ export class ToolBoxComponent implements OnInit {
 
     buttonAction(name: string): void {
         // on click, emit the selected tool name
+        
         this.interactionService.emitSelectedTool(name);
+        if(name != "Annuler" && name != "Refaire" && name != "Copier" && name != "Coller" && name != "Couper" && name != "Supprimer" && name != "Dupliquer")
         this.activeButton = name;
     }
 }
