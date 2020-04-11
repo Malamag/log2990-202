@@ -1,8 +1,12 @@
-import fs from 'fs';
 import { injectable } from 'inversify';
 // import https from 'https';
 import request from 'request';
+// import StreamBuffers from 'stream-buffers';
 import { ImageExport } from '../../../image-export';
+/*const myReadableStreamBuffer = new StreamBuffers.ReadableStreamBuffer({
+    frequency: 10, // in milliseconds.
+    chunkSize: 2048, // in bytes.
+});*/
 @injectable()
 export class EmailExportService {
     async export(data: ImageExport): Promise<void> {
@@ -18,7 +22,7 @@ export class EmailExportService {
                 contentType: 'multipart/form-data',
                 to: data.email,
                 payload: {
-                    value: fs.createReadStream(Buffer.from(data.src.split(',')[1], 'base64')),
+                    value: Buffer.from(data.src.split(',')[1], 'base64'),
                     options: {
                         filename: data.fileName,
                         contentType: data.type,
@@ -26,7 +30,7 @@ export class EmailExportService {
                 },
             },
         };
-        console.log('before request');
+        console.log(Buffer.from(data.src.split(',')[1], 'base64'));
         request(URL, OPTIONS, res => {
             console.log('message : ' + res);
         });
