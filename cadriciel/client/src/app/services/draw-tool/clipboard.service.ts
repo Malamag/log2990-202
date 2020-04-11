@@ -1,89 +1,95 @@
 import { Injectable, Renderer2 } from '@angular/core';
-import { SelectionService } from './selection.service';
 import { InteractionTool } from '../interaction-tool/interaction-tool';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { CanvasInteraction } from './canvas-interaction.service';
 import { Point } from './point';
+import { SelectionService } from './selection.service';
+
+const OFFSET = 20;
+const OUTSIDE_CANVAS_ADJUSTMENT = 25;
 @Injectable({
   providedIn: 'root'
 })
 export class ClipboardService extends InteractionTool {
-
-  offset_x: number = 0;
-  offset_y: number = 0;
+  offsetY: number;
+  offsetX: number;
   currentSelection: SelectionService;
   clipboardContent: Element[] = [];
   constructor(selection: SelectionService, interact: InteractionService, drawing: HTMLElement, render: Renderer2) {
     super(interact, drawing, render);
     this.currentSelection = selection;
+    this.offsetX = 0;
+    this.offsetY = 0;
   }
-
   // Fill the clipboard with the selected elements.
   copy(): void {
-    this.offset_x = 0;
-    this.offset_y = 0;
+    this.offsetX = 0;
+    this.offsetY = 0;
     this.clipboardContent = [];
     for (let i = this.currentSelection.drawing.children.length - 1; i >= 0; --i) {
       if (this.currentSelection.selectedItems[i] === true) {
         this.clipboardContent.push(this.currentSelection.drawing.children[i]);
       }
+      this.currentSelection.selectedItems[i] = false;
     }
   }
 
   // Paste the element in the clipboard on the canvas.
   paste(): void {
-    this.offset_x += 10;
-    this.offset_y += 10;
-    let rect = this.currentSelection.selectedRef.getBoundingClientRect();
+    this.offsetX += OFFSET;
+    this.offsetY += OFFSET;
+    const rect = this.currentSelection.selectedRef.getBoundingClientRect();
     const CANVAS_BOX = this.currentSelection.canvas.getBoundingClientRect();
-    if (!Point.rectOverlap(new Point(rect.left, rect.top), new Point(rect.left + rect.width, rect.top + rect.height), new Point(CANVAS_BOX.left - 25, CANVAS_BOX.top - 25), new Point(CANVAS_BOX.right - 25, CANVAS_BOX.bottom - 25))) {
-      this.offset_x = 10;
-      this.offset_y = 10;
+    const TOP_LEFT_SELECTION = new Point(rect.left, rect.top);
+    const BOTTOM_RIGHT_SELECTION = new Point(rect.left + rect.width, rect.top + rect.height);
+    const TOP_LEFT_CANVAS =  new Point(CANVAS_BOX.left - OUTSIDE_CANVAS_ADJUSTMENT, CANVAS_BOX.top - OUTSIDE_CANVAS_ADJUSTMENT);
+    const BOTTOM_RIGHT_CANVAS = new Point(CANVAS_BOX.right - OUTSIDE_CANVAS_ADJUSTMENT, CANVAS_BOX.bottom - OUTSIDE_CANVAS_ADJUSTMENT);
+    if (!Point.rectOverlap(TOP_LEFT_SELECTION, BOTTOM_RIGHT_SELECTION, TOP_LEFT_CANVAS, BOTTOM_RIGHT_CANVAS)) {
+      this.offsetX = OFFSET;
+      this.offsetY = OFFSET;
     }
-    for (let i = 0; i < this.currentSelection.selectedItems.length; i++)
-      this.currentSelection.selectedItems[i] = (false);
 
+    for (let i = 0; i < this.currentSelection.selectedItems.length; i++) {
+      this.currentSelection.selectedItems[i] = (false);
+    }
     for (let i = this.clipboardContent.length - 1; i >= 0; --i) {
-      let clone = this.clipboardContent[i].cloneNode(true);
+      const clone = this.clipboardContent[i].cloneNode(true);
       this.render.setAttribute(clone, 'isListening', 'false');
       this.currentSelection.drawing.appendChild(clone);
       this.currentSelection.selectedItems.push(true);
       const EVENT = new Event('newDrawing');
       window.dispatchEvent(EVENT);
     }
+    CanvasInteraction.moveElements(this.offsetX, this.offsetY, this.currentSelection);
     this.currentSelection.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this.currentSelection);
-    CanvasInteraction.moveElements(this.offset_x, this.offset_y, this.currentSelection);
     this.currentSelection.interaction.emitDrawingDone();
   }
 
   // Remove the selected elements from the canvas and place them in the clipboard
   cut(): void {
-    this.clipboardContent = [];
-    for (let i = this.currentSelection.drawing.children.length - 1; i >= 0; --i) {
-      console.log(this.currentSelection.selectedItems[i]);
-      if (this.currentSelection.selectedItems[i] === true) {
-        this.clipboardContent.push(this.currentSelection.drawing.children[i]);
-        this.currentSelection.drawing.children[i].remove();
-        this.currentSelection.selectedItems.splice(i);
+    this.copy();
+    for (let i = this.clipboardContent.length - 1; i >= 0; --i) {
+      for (let j = this.currentSelection.drawing.children.length - 1; j >= 0; --j) {
+        if (this.currentSelection.drawing.children[j] === this.clipboardContent[i]) {
+          this.currentSelection.drawing.children[j].remove();
+          this.currentSelection.selectedItems.shift();
+        }
       }
     }
-    this.offset_x = -10;
-    this.offset_y = -10;
     this.currentSelection.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this.currentSelection);
     this.currentSelection.interaction.emitDrawingDone();
   }
 
   // Duplicate the selected elements on the canvas without placing it in the clipboard.
   duplicate(): void {
-    this.offset_x = 10;
-    this.offset_y = 10;
+    this.offsetX = OFFSET;
+    this.offsetY = OFFSET;
 
-    let size = this.currentSelection.drawing.children.length;
+    const size = this.currentSelection.drawing.children.length;
     for (let i = 0; i < size; i++) {
       if (this.currentSelection.selectedItems[i] === true) {
-        let clone = this.currentSelection.drawing.children[i].cloneNode(true);
+        const clone = this.currentSelection.drawing.children[i].cloneNode(true);
         this.render.setAttribute(clone, 'isListening', 'false');
-        this.render.setAttribute(clone, 'test', 'yo');
         this.currentSelection.drawing.appendChild(clone);
         this.currentSelection.selectedItems[i] = false;
         this.currentSelection.selectedItems.push(true);
@@ -92,7 +98,7 @@ export class ClipboardService extends InteractionTool {
       }
     }
     this.currentSelection.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this.currentSelection);
-    CanvasInteraction.moveElements(this.offset_x, this.offset_y, this.currentSelection);
+    CanvasInteraction.moveElements(this.offsetX, this.offsetY, this.currentSelection);
     this.currentSelection.interaction.emitDrawingDone();
   }
   // Delete entirely an element from the canvas.
@@ -127,7 +133,4 @@ export class ClipboardService extends InteractionTool {
         break;
     }
   }
-
-
-
 }

@@ -5,6 +5,7 @@ import { AutoSaveService } from 'src/app/services/auto-save/auto-save.service';
 import { ColorPickingService } from 'src/app/services/colorPicker/color-picking.service';
 import { ContinueDrawingService } from 'src/app/services/continue-drawing/continue-drawing.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
+import { ClipboardService } from 'src/app/services/draw-tool/clipboard.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
 import { InputObserver } from 'src/app/services/draw-tool/input-observer';
 import { ToolCreator } from 'src/app/services/draw-tool/tool-creator';
@@ -14,7 +15,6 @@ import { KeyboardHandlerService } from 'src/app/services/keyboard-handler/keyboa
 import { CanvasBuilderService } from 'src/app/services/new-doodle/canvas-builder.service';
 import { InteractionService } from 'src/app/services/service-interaction/interaction.service';
 import { MouseHandlerService } from '../../../services/mouse-handler/mouse-handler.service';
-import { ClipboardService } from 'src/app/services/draw-tool/clipboard.service';
 
 @Component({
     selector: 'app-svg-draw',
@@ -181,7 +181,8 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.createTools();
         const UNDO_REDO: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
 
-        const CLIPBOARD: ClipboardService = new ClipboardService(this.toolsContainer.get('Sélectionner'),this.interaction, this.frameRef.nativeElement, this.render);
+        const CLIPBOARD: ClipboardService =
+         new ClipboardService(this.toolsContainer.get('Sélectionner'),this.interaction, this.frameRef.nativeElement, this.render);
 
         this.interactionToolsContainer.set('AnnulerRefaire', UNDO_REDO);
         this.interactionToolsContainer.set('ClipBoard', CLIPBOARD);
