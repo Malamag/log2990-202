@@ -46,16 +46,16 @@ export class BucketToolService extends DrawingTool {
       const t1 = performance.now();
 
       console.log('Flood-fill exectuted in ' + (t1 - t0) + ' ms');
-      console.log(this.currentPath);
+
     }
     this.updateDrawing();
   }
 
   updateAttributes(): void {
+
     const PERCENT = 100;
     this.interaction.toleranceValue.subscribe((toleranceValue: number) => {
       this.tolerance = toleranceValue / PERCENT;
-      console.log(this.tolerance);
     });
   }
 
@@ -70,8 +70,10 @@ export class BucketToolService extends DrawingTool {
   createPath(p: Point[]): string {
     let dString = '';
     let path = '';
+
     path += '<g name = "bucket-fill">';
     dString += `M ${p[0].x} ${p[0].y}`;
+
     for (let i = 1; i < p.length - 1; i++) {
       if (p[i].x !== p[i + 1].x) {
         dString += ` L ${p[i].x} ${p[i].y}`;

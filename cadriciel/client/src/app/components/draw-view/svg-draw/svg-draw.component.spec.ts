@@ -2,6 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CanvasSwitchDirective } from 'src/app/directives/canvas-switch.directive';
 import { Canvas } from 'src/app/models/canvas.model';
+import { ContinueDrawingService } from 'src/app/services/continue-drawing/continue-drawing.service';
 import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.service';
 import { PencilService } from 'src/app/services/draw-tool/pencil.service';
 import { RectangleService } from 'src/app/services/draw-tool/rectangle.service';
@@ -28,6 +29,8 @@ describe('SvgDrawComponent', () => {
     // tslint:disable-next-line: no-any
     let gridServiceStub: any;
     let dFetch: DoodleFetchService;
+    // tslint:disable-next-line: no-any
+    let continueDrawingStub: any;
 
     beforeEach(async(() => {
         rendererStub = {};
@@ -48,6 +51,7 @@ describe('SvgDrawComponent', () => {
             removeGrid: () => 0,
             updateColor: () => 0
         };
+        continueDrawingStub = {};
 
         TestBed.configureTestingModule({
             declarations: [SvgDrawComponent, CanvasSwitchDirective],
@@ -57,6 +61,7 @@ describe('SvgDrawComponent', () => {
 
                 { provide: Renderer2, useValue: rendererStub },
                 { provide: GridRenderService, useValue: gridServiceStub },
+                { provide: ContinueDrawingService, useValue: continueDrawingStub }
             ],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
         }).compileComponents();
@@ -112,6 +117,7 @@ describe('SvgDrawComponent', () => {
             dFetch,
             rendererStub,
             gridServiceStub,
+            continueDrawingStub
         );
         componentStub.initCanvas();
         expect(componentStub.width).toBe(CANVAS.canvasWidth);
