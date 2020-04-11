@@ -5,7 +5,7 @@ import { ImageExport } from '../../../../../image-export';
 const HTTP_OPTIONS = {
     headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        Authorization: 'my-auth-token',
+        'Authorization': 'my-auth-token',
     }),
 };
 @Injectable({

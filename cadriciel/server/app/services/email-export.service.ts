@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import { injectable } from 'inversify';
 // import https from 'https';
 import request from 'request';
@@ -9,6 +10,9 @@ import { ImageExport } from '../../../image-export';
 });*/
 @injectable()
 export class EmailExportService {
+    constructor() {
+        dotenv.config();
+    }
     async export(data: ImageExport): Promise<void> {
         const URL = 'https://log2990.step.polymtl.ca/email?address_validation=false&quick_return=false&dry_run=false';
         console.log('email reached server');
@@ -31,7 +35,7 @@ export class EmailExportService {
             },
         };
         console.log(Buffer.from(data.src.split(',')[1], 'base64'));
-        request(URL, OPTIONS, res => {
+        request(URL, OPTIONS, (res) => {
             console.log('message : ' + res);
         });
         // req.end();
