@@ -1,6 +1,7 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { EmailExporterService } from './email-exporter.service';
+import { of } from 'rxjs';
 
 fdescribe('EmailExporterService', () => {
   let service: EmailExporterService;
@@ -49,15 +50,20 @@ fdescribe('EmailExporterService', () => {
     const URL = service.svgToURL(elementStub);
     expect(URL).toBeDefined();
   });
-  /*
+
   it('should post the request', () => {
     const NAME = 'hello';
     const FORMAT = '.jep';
     const DATA_SRC = 'www.';
+    const ERROR = new Error('hello');
     const MAIL = 'xxxxx@yyy.zz';
+    httpSpy.post.and.returnValue(of([ERROR]));
+    const SPY = spyOn(console, 'log');
     service.send(NAME, FORMAT, DATA_SRC, MAIL);
-    expect(httpSpy.post.calls.count).toEqual(1);
-  });*/
+    of([ERROR]).subscribe(() => {
+      expect(SPY).toHaveBeenCalled();
+    });
+  });
   it('should load the image in the canvas', async() => {
     const NAME = 'hello';
     const FORMAT = '.jep';
