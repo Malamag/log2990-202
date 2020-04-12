@@ -25,10 +25,6 @@ export class BucketToolService extends DrawingTool {
     this.tolerance = DEFAULT_TOLERANCE;
     this.interact = interaction;
 
-    this.interact.$canvasContext.subscribe((context: CanvasRenderingContext2D) => {
-      this.canvasContext = context;
-    });
-
     this.updateColors();
     this.updateAttributes();
   }
@@ -38,14 +34,9 @@ export class BucketToolService extends DrawingTool {
     const CHOOSEN_COLOR = this.colorPick.colorConvert.hexToRgba(this.chosenColor.primColor);
     if (this.canvasContext) {
 
-      const t0 = performance.now();
-
       const CLICK = this.canvasContext.getImageData(position.x, position.y, 1, 1).data;
       this.currentPath = this.floodFill.floodFill(this.canvasContext, position,
         [CLICK[0], CLICK[1], CLICK[2]], CHOOSEN_COLOR, this.tolerance);
-      const t1 = performance.now();
-
-      console.log('Flood-fill exectuted in ' + (t1 - t0) + ' ms');
 
     }
     this.updateDrawing();
@@ -57,6 +48,11 @@ export class BucketToolService extends DrawingTool {
     this.interaction.toleranceValue.subscribe((toleranceValue: number) => {
       this.tolerance = toleranceValue / PERCENT;
     });
+
+    this.interact.$canvasContext.subscribe((context: CanvasRenderingContext2D) => {
+      this.canvasContext = context;
+    });
+
   }
 
   move(position: Point): void {

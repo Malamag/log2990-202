@@ -9,8 +9,14 @@ fdescribe('BucketToolService', () => {
   let canvasContextStub: any;
   // tslint:disable-next-line: no-any
   let fakeData: any;
+  // tslint:disable-next-line: no-any
+  let canvasStub: any;
   let service: BucketToolService;
   beforeEach(() => {
+    canvasStub = {
+      getContext: () => canvasContextStub
+    };
+
     fakeData = {
       data: [0, 0, 0, 0],
     };
@@ -21,7 +27,7 @@ fdescribe('BucketToolService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-
+        { provide: HTMLCanvasElement, useValue: canvasStub },
         { provide: HTMLElement, useValue: {} },
         { provide: Boolean, useValue: false },
         { provide: Number, useValue: 0 },
@@ -71,4 +77,48 @@ fdescribe('BucketToolService', () => {
     // tslint:disable-next-line: no-string-literal
     expect(service['floodFill'].floodFill).toHaveBeenCalledWith(canvasContextStub, START_PT, RGB, TEST_RGBA, TEST_TOLERANCE);
   });
+
+  it('should get the tolerace percentage and divide by 100 on subscription activation', () => {
+    const TEST_TOLERANCE = 75;
+    const PERCENT = 100;
+    service.updateAttributes();
+    service.interaction.emitToleranceValue(TEST_TOLERANCE);
+    expect(service.tolerance).toEqual(TEST_TOLERANCE / PERCENT);
+  });
+
+  it('should recieve a canvas context on subscription activation', () => {
+    service.updateAttributes();
+    service.interaction.emitCanvasContext(canvasStub);
+    expect(service.canvasContext).toEqual(canvasContextStub);
+  });
+
+  it('should create a valid path', () => {
+
+  });
+
+  it('should return a path having the named bucket-fill', () => {
+
+  });
+
+  it('should give the path the default and selected attribute', () => {
+
+  });
+
+  it('should skip the path concatenation on contiguous x pixels', () => {
+
+  });
+
+  it('should move the path point on uncontiguous x pixels', () => { })
+
+  it('should contain the unimplemented methods signatures', () => { // running unimplemented methods - coverage purposes
+    expect(service.up()).toBe();
+    expect(service.move(new Point(0, 0))).toBe();
+    expect(service.updateDown()).toBe();
+    expect(service.updateUp()).toBe();
+    expect(service.cancel()).toBe();
+    expect(service.doubleClick()).toBe();
+    expect(service.goingOutsideCanvas()).toBe();
+    expect(service.goingInsideCanvas()).toBe();
+  });
+
 });
