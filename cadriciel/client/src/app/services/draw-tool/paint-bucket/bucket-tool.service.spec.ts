@@ -92,23 +92,42 @@ fdescribe('BucketToolService', () => {
     expect(service.canvasContext).toEqual(canvasContextStub);
   });
 
-  it('should create a valid path', () => {
-
+  it('should create a valid SVG path', () => {
+    const TEST_STR = service.createPath(PATH);
+    expect(TEST_STR).toContain('<path');
+    expect(TEST_STR).toContain(' />');
+    expect(TEST_STR).toContain('d');
   });
 
   it('should return a path having the named bucket-fill', () => {
-
+    const TEST_STR = service.createPath(PATH);
+    expect(TEST_STR).toContain('<g name = "bucket-fill">');
+    expect(TEST_STR).toContain('</g>');
   });
 
   it('should give the path the default and selected attribute', () => {
+    const CHOSEN_COLOR = '#ffffffff';
+    service.chosenColor.primColor = CHOSEN_COLOR;
+    const PT_RAD = '2';
+    const STROKE = 'square';
+    const TEST_STR = service.createPath(PATH);
+    expect(TEST_STR).toContain(CHOSEN_COLOR);
+    expect(TEST_STR).toContain(PT_RAD);
+    expect(TEST_STR).toContain(STROKE);
+  });
+
+  it('should skip the line drawing (L) path concatenation on contiguous successive points', () => {
+    const ALL_CONTIG = [new Point(0, 0), new Point(0, 1), new Point(0, 2)];
+    const TEST_STR = service.createPath(ALL_CONTIG);
+    expect(TEST_STR).not.toContain('L');
 
   });
 
-  it('should skip the path concatenation on contiguous x pixels', () => {
-
+  it('should move the path point on uncontiguous successive points', () => {
+    const ALL_CONTIG = [new Point(0, 0), new Point(1, 1), new Point(2, 2)];
+    const TEST_STR = service.createPath(ALL_CONTIG);
+    expect(TEST_STR).toContain('L');
   });
-
-  it('should move the path point on uncontiguous x pixels', () => { })
 
   it('should contain the unimplemented methods signatures', () => { // running unimplemented methods - coverage purposes
     expect(service.up()).toBe();

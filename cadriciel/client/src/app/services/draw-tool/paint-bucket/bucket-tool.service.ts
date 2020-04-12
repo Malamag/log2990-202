@@ -70,9 +70,16 @@ export class BucketToolService extends DrawingTool {
     path += '<g name = "bucket-fill">';
     dString += `M ${p[0].x} ${p[0].y}`;
 
+    /**
+     * The flood-fill algorithm will always return a point array made of
+     * successive x values (fills vertically until tolerance doesnt matches,
+     * fill the pixel line at its right and left, etc.).
+     * Instead of filling point-per-point, we only trace some lines from min X to max X matching the tolerance.
+     * Then, we repeat for the pixel line below it until all points have been checked.
+     */
     for (let i = 1; i < p.length - 1; i++) {
       if (p[i].x !== p[i + 1].x) {
-        dString += ` L ${p[i].x} ${p[i].y}`;
+        dString += ` L ${p[i].x} ${p[i].y}`; // draw the line, then move to the next point
         dString += ` M ${p[i + 1].x} ${p[i + 1].y}`;
       }
     }
@@ -88,26 +95,8 @@ export class BucketToolService extends DrawingTool {
     path += ' stroke-linejoin="square"';
     path += ` stroke-width="${POINT_RADIUS}"`;
     path += ' fill="none" /> </g>';
-    // console.log(path);
+
     return path;
-  }
-
-  // add the progress to the main drawing
-  updateDrawing(endIt?: boolean): void {
-
-    // create the final svg element
-    let d = '';
-    d += this.createPath(this.currentPath);
-
-    // add it to the main drawing
-    this.drawing.innerHTML += d;
-
-    const EVENT = new Event('newDrawing');
-    window.dispatchEvent(EVENT);
-
-    this.interaction.emitDrawingDone();
-
-    this.currentPath = [];
   }
 
   updateDown(): void {
