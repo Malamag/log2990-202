@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 import { GalleryComponent } from '../gallery/gallery.component';
 import { NewDrawComponent } from '../new-draw/new-draw.component';
 import { UserManualComponent } from '../user-manual/user-manual.component';
@@ -20,7 +20,8 @@ describe('EntryPointComponent', () => {
           MatSnackBarModule,
           BrowserAnimationsModule,
           MatButtonModule,
-          MatDialogModule
+          MatDialogModule,
+          RouterTestingModule,
         ],
 
     })
@@ -92,13 +93,59 @@ describe('EntryPointComponent', () => {
     component.openGallery();
     expect(SPY).toHaveBeenCalledWith(GalleryComponent);
   });
-
-  /* This test is only a placeholder for further methods implemented in the execute func */
   it('should call the statements on continuing a doodle', () => {
-    const SPY = spyOn(console, 'log');
+    const SPY = spyOn(component, 'continue');
     const NAME = 'Continuer';
     component.execute(NAME);
-    expect(SPY).toHaveBeenCalledWith(NAME);
+    expect(SPY).toHaveBeenCalled();
   });
-
+  it('should call continue auto save of continue drawing', () => {
+    // tslint:disable-next-line: no-string-literal
+    const SPY = spyOn(component['drawing'], 'continueAutoSavedFromEntryPoint');
+    component.continue();
+    expect(SPY).toHaveBeenCalled();
+  });
+  it('should set the drawing exist attribute to false', () => {
+    localStorage.clear();
+    component.getDrawingExist();
+    expect(component.drawingExist).toBeFalsy();
+  });
+  it('should set the drawing exist attribute to true because all the elements exist', () => {
+    const MAX = 6;
+    localStorage.clear();
+    localStorage.setItem('height', '780');
+    localStorage.setItem('width', '1500');
+    localStorage.setItem('color', 'ff00ff');
+    for (let i = 0; i < MAX; ++i) {
+      localStorage.setItem('htmElem' + i.toString(), 'hello');
+    }
+    component.getDrawingExist();
+    expect(component.drawingExist).toBeTruthy();
+    localStorage.clear();
+  });
+  it('should return true because the elemets in the local storage are the init values', () => {
+    const MAX = 6;
+    localStorage.clear();
+    localStorage.setItem('height', '775');
+    localStorage.setItem('width', '1438');
+    localStorage.setItem('color', 'ffffff');
+    for (let i = 0; i < MAX; ++i) {
+      localStorage.setItem('htmlElem' + i.toString(), '');
+    }
+    expect(component.checkInitValues()).toBeTruthy();
+    localStorage.clear();
+  });
+  it('should return false because the drawing is not empty', () => {
+    localStorage.clear();
+    localStorage.setItem('height', '775');
+    localStorage.setItem('width', '1438');
+    localStorage.setItem('color', 'ffffff');
+    localStorage.setItem('htmlElem3', 'hello');
+    expect(component.checkInitValues()).toBeFalsy();
+    localStorage.clear();
+  });
+  it('should return false because the local storage is empty', () => {
+    localStorage.clear();
+    expect(component.checkInitValues()).toBeFalsy();
+  });
 });

@@ -57,7 +57,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
     @HostListener('window: load', ['$event'])
     continueSavedImage(): void {
-        this.continueDrawing.continueAutoSaved();
+        this.continueDrawing.continueAutoSavedFromDrawVue();
     }
     ngOnInit(): void {
         this.initCanvas();
