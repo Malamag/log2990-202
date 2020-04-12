@@ -4,6 +4,9 @@ import { Point } from './point';
 import { SelectionService } from './selection.service';
 export class CanvasInteraction {
   static moveElements(xoff: number, yoff: number, selectionTool: SelectionService): void {
+
+    //this.rotateElements(3 * Math.sign(xoff), selectionTool,);
+    //return;
     // if there is at least 1 item selected
     if (!selectionTool.selectedItems.includes(true)) {
       return;
@@ -18,8 +21,75 @@ export class CanvasInteraction {
       const NEW_X = ElementInfo.translate(selectionTool.drawing.children[i]).x + xoff;
       const NEW_Y = ElementInfo.translate(selectionTool.drawing.children[i]).y + yoff;
 
+      // keep the CURRENT item's rotate
+      let CURRENT_A = ElementInfo.rotate(selectionTool.drawing.children[i]);
+
       // set the new values
-      selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform', `translate(${NEW_X}px,${NEW_Y}px)`);
+      selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform', `translate(${NEW_X}px,${NEW_Y}px) rotate(${CURRENT_A}deg)`);
+    }
+  }
+
+  static rotateElements(angle: number, selectionTool:SelectionService, average : boolean){
+    // if there is at least 1 item selected
+    if (!selectionTool.selectedItems.includes(true)) {
+      return;
+    }
+
+    const CANVAS_BOX = selectionTool.canvas ? selectionTool.canvas.getBoundingClientRect() : null;
+
+    let averageX = 0;
+    let averageY = 0;
+    let selectedCount = 0;
+
+    //average center point of all selected items
+    for (let i = 0; i < Math.min(selectionTool.selectedItems.length, selectionTool.drawing.childElementCount); i++) {
+
+      // ignore those who aren't selected
+      if (!selectionTool.selectedItems[i]) { continue; }
+
+      selectedCount++;
+
+      // keep the item's translate
+      const SAVED_X = ElementInfo.translate(selectionTool.drawing.children[i]).x;
+      const SAVED_Y = ElementInfo.translate(selectionTool.drawing.children[i]).y;
+
+      // get the CURRENT item's rotate and add the angle
+      const SAVED_A = ElementInfo.rotate(selectionTool.drawing.children[i]);
+
+      selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform', `translate(${0}px,${0}px) rotate(${0}deg)`);
+
+      averageX += ElementInfo.center(selectionTool.drawing.children[i] as Element, CANVAS_BOX).x;
+      averageY += ElementInfo.center(selectionTool.drawing.children[i] as Element, CANVAS_BOX).y;
+
+      selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform', `translate(${SAVED_X}px,${SAVED_Y}px) rotate(${SAVED_A}deg)`);
+    }
+
+    let averageCenter = new Point(averageX/selectedCount, averageY/selectedCount);
+
+    // iterate through all ITEMS
+    for (let i = 0; i < Math.min(selectionTool.selectedItems.length, selectionTool.drawing.childElementCount); i++) {
+
+      // ignore those who aren't selected
+      if (!selectionTool.selectedItems[i]) { continue; }
+
+      // keep the CURRENT item's translate
+      const CURRENT_X = ElementInfo.translate(selectionTool.drawing.children[i]).x;
+      const CURRENT_Y = ElementInfo.translate(selectionTool.drawing.children[i]).y;
+
+      // get the CURRENT item's rotate and add the angle
+      const NEW_A = ElementInfo.rotate(selectionTool.drawing.children[i]) + angle;
+
+      selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform', `translate(${0}px,${0}px) rotate(${0}deg)`);
+
+      let center = ElementInfo.center(selectionTool.drawing.children[i] as Element, CANVAS_BOX);
+
+      if(average){
+        center = averageCenter;
+      }
+
+      // set the new values
+      selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform-origin', `${center.x}px ${center.y}px`);
+      selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform', `translate(${CURRENT_X}px,${CURRENT_Y}px) rotate(${NEW_A}deg)`);
     }
   }
 

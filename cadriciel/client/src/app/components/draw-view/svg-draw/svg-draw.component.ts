@@ -221,6 +221,9 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         window.addEventListener('mouseup', (e: MouseEvent) => {
             MOUSE_HANDLER.up(e);
         });
+        window.addEventListener('wheel', (e: WheelEvent) => {
+            MOUSE_HANDLER.wheel(e);
+        });
 
         // Prevent right-click menu
         window.addEventListener('contextmenu', (e: MouseEvent) => {

@@ -165,6 +165,12 @@ export class SelectionService extends ShapeService {
         }
     }
 
+    wheelMove(average : boolean, precise : boolean, clockwise:boolean) : void{
+        CanvasInteraction.rotateElements((precise? 1 : 15) * (clockwise? 1 : -1), this, average);
+        this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
+        this.interaction.emitDrawingDone();
+    }
+
     down(position: Point, insideWorkspace: boolean, isRightClick: boolean): void {
         // in case we changed tool while the mouse was down
         this.ignoreNextUp = false;
