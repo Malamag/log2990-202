@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Point } from '../point';
 import { BucketToolService } from './bucket-tool.service';
 
-fdescribe('BucketToolService', () => {
+describe('BucketToolService', () => {
   const PATH = [new Point(0, 0), new Point(1, 0), new Point(2, 0), new Point(1, 1), new Point(1, 2)];
   const TEST_RGBA = [0, 0, 0, 0];
   // tslint:disable-next-line: no-any
