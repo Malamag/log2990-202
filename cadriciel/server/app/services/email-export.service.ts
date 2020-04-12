@@ -28,8 +28,8 @@ export class EmailExportService {
                 payload: {
                     value: Buffer.from(data.src.split(',')[1], 'base64'),
                     options: {
-                        filename: data.fileName,
-                        contentType: data.type,
+                        filename: data.downloadable,
+                        contentType: null,
                     },
                 },
             },
