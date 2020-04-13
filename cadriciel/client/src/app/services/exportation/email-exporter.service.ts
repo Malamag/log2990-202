@@ -1,8 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { ImageExport } from '../../../../../image-export';
-import { utf8Encode } from '@angular/compiler/src/util';
-import { toBase64String } from '@angular/compiler/src/output/source_map';
 
 const HTTP_OPTIONS = {
     headers: new HttpHeaders({
