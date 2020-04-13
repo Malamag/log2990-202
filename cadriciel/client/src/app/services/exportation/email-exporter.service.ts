@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { ImageExport } from '../../../../../image-export';
+import { utf8Encode } from '@angular/compiler/src/util';
+import { toBase64String } from '@angular/compiler/src/output/source_map';
 
 const HTTP_OPTIONS = {
     headers: new HttpHeaders({
@@ -21,10 +23,7 @@ export class EmailExporterService {
     }
     svgToURL(svgElement: Node): string {
         const DATA = this.xmlSerializer.serializeToString(svgElement);
-        const BLOB = new Blob([DATA], { type: 'image/svg+xml' });
-        const DOMURL = window.URL;
-        const URL = DOMURL.createObjectURL(BLOB);
-        return URL;
+        return 'data:image/svg+xml;base64,' + btoa(DATA);
     }
     send(name: string, format: string, dataSrc: string, mail: string): void {
         const IMG_SEND: ImageExport = {
