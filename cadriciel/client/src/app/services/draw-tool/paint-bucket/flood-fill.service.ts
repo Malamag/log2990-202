@@ -8,6 +8,7 @@ import { Pixel } from './pixel';
 export class FloodFillService {
 
   /* TODO: APA6e
+    https://codepen.io/Geeyoam/pen/vLGZzG
     https://jamesonyu.wordpress.com/2015/05/01/flood-fill-algorithm-javascript/
   */
   floodFill(
@@ -25,7 +26,9 @@ export class FloodFillService {
     const POINTS_TO_COLOR: Pixel[] = [];
     const IMG_DATA: ImageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
+    // we use an interface to save memory - we dont need a full Point() object...
     const PIXEL_STACK: Pixel[] = [];
+
     PIXEL_STACK.push(startPoint);
 
     while (PIXEL_STACK.length) {
@@ -38,15 +41,12 @@ export class FloodFillService {
       let goLeft = false;
       let goRight = false;
 
-      // RGBA has a length of 4. We need to invrement 4 times to get the next pixel's position in the image data array
-
       while (goUp && nextPixel.y > 0) {
         nextPixel.y--;
         goUp = this.matchesTolerance(this.getColorAtPixel(IMG_DATA, nextPixel), tolerance, color, choosenColor);
       }
 
       while (goDown && nextPixel.y < CANVAS_HEIGHT) {
-        // EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
         this.colorPixels(IMG_DATA, nextPixel, choosenColor);
         POINTS_TO_COLOR.push({ x: nextPixel.x, y: nextPixel.y });
 
@@ -57,7 +57,6 @@ export class FloodFillService {
             goLeft = true;
             const NEXT_PIX: Pixel = { x: nextPixel.x - 1, y: nextPixel.y };
             PIXEL_STACK.push(NEXT_PIX);
-            // EXTREME_POINTS.push(new Point(NEXT_PIX.x, NEXT_PIX.y));
           }
         } else {
           goLeft = false;
@@ -69,7 +68,6 @@ export class FloodFillService {
           if (!goRight) {
             const NEXT_PIX: Pixel = { x: nextPixel.x + 1, y: nextPixel.y };
             PIXEL_STACK.push(NEXT_PIX);
-            // EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
             goRight = true;
           }
         } else {
@@ -80,20 +78,12 @@ export class FloodFillService {
         if (nextPixel.y === CANVAS_HEIGHT) {
           goDown = false;
         }
-
-        /* if (!goDown) {
-           // EXTREME_POINTS.push(new Point(nextPixel.x, nextPixel.y));
-         }*/
       }
     }
     return POINTS_TO_COLOR;
   }
 
-  fillRegion(): void {
-    /* Fills the determined region with some svg stuff*/
-  }
-
-  matchesTolerance(clickedColor: number[], tolerance: number, targetColor: number[], choosenColor: number[]): boolean {
+  matchesTolerance(clickedColor: number[], tolerance: number, colorAtPixel: number[], choosenColor: number[]): boolean {
     if (
       choosenColor[0] === clickedColor[0] &&
       choosenColor[1] === clickedColor[1] &&
@@ -102,12 +92,10 @@ export class FloodFillService {
     }
 
     const BASIS = 255;
-    const A = Math.abs((clickedColor[0] - targetColor[0]) / BASIS);
-    const B = Math.abs((clickedColor[1] - targetColor[1]) / BASIS);
-    const C = Math.abs((clickedColor[2] - targetColor[2]) / BASIS);
-    const R_MATCHES = A <= tolerance;
-    const G_MATCHES = B <= tolerance;
-    const B_MATCHES = C <= tolerance;
+
+    const R_MATCHES = Math.abs((clickedColor[0] - colorAtPixel[0]) / BASIS) <= tolerance;
+    const G_MATCHES = Math.abs((clickedColor[1] - colorAtPixel[1]) / BASIS) <= tolerance;
+    const B_MATCHES = Math.abs((clickedColor[2] - colorAtPixel[2]) / BASIS) <= tolerance;
 
     return (R_MATCHES && G_MATCHES && B_MATCHES);
 
