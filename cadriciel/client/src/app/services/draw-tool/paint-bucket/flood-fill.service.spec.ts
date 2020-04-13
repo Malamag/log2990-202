@@ -63,5 +63,16 @@ fdescribe('FloodFillService', () => {
 
   });
 
-  it
+  it('should return true on 50% tolerance on two close colors', () => {
+    const PIXEL_COLOR_VALUE = 50;
+    const CLICKD_COLOR_VALUE = 60;
+
+    const FILL_COLOR = [0, 0, 0];
+    const PIXEL_COLOR = [PIXEL_COLOR_VALUE, PIXEL_COLOR_VALUE, PIXEL_COLOR_VALUE];
+    const CLICKD_COLOR = [CLICKD_COLOR_VALUE, CLICKD_COLOR_VALUE, CLICKD_COLOR_VALUE];
+    const TOLERANCE = 0.5;
+    const TEST_MATCH = service.matchesTolerance(CLICKD_COLOR, TOLERANCE, PIXEL_COLOR, FILL_COLOR);
+
+    expect(TEST_MATCH).toBe(true);
+  });
 });
