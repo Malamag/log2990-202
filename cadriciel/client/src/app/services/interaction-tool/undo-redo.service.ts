@@ -75,7 +75,7 @@ export class UndoRedoService extends InteractionTool {
     updateButtons(): void {
         let disableUndo = true;
         let disableRedo = true;
-        this.done.length ? (disableUndo = false) : (disableUndo = true);
+        this.done.length && this.done.length !== 1 ? (disableUndo = false) : (disableUndo = true);
         this.undone.length ? (disableRedo = false) : (disableRedo = true);
         this.interact.emitEnableDisable([disableUndo, disableRedo]);
     }

@@ -79,13 +79,14 @@ export class ToolBoxComponent implements OnInit {
                     }
                     break;
             }
-        }
-        else if (this.selectingToolsMap.has(event.key) && !event.ctrlKey) {
+        } else if (this.selectingToolsMap.has(event.key) && !event.ctrlKey) {
             this.buttonAction(this.selectingToolsMap.get(event.key));
         }
     }
 
     ngOnInit(): void {
+        this.disableUndo = true;
+        this.disableRedo = true;
         this.interactionService.$enableDisableButtons.subscribe((disableContainer) => {
             this.disableUndo = disableContainer[0];
             this.disableRedo = disableContainer[1];
