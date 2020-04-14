@@ -40,7 +40,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
             'Efface',
             'Texte'
         ];
-        const DEF_THICK = 5;
+        const DEF_THICK = 20;
         const DEF_TEXTURE = 0;
         const DEF_POLYGONE_CORNERS = 3;
         const DEF_EMISSIONS = 50;

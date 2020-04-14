@@ -6,7 +6,7 @@ import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
-const DEFAULT_FONT_SIZE = 12;
+const DEFAULT_FONT_SIZE = 20;
 const DEFAULT_FONT_FAMILY = 'arial';
 const DEFAULT_ALIGNMENT = 'L';
 
@@ -105,6 +105,36 @@ export class TextService extends DrawingTool {
     this.updateDrawing();
   }
 
+  getFontWeight(): string {
+    if (this.attr.isBold) {
+      return 'bold';
+    } else {
+      return 'normal';
+    }
+  }
+
+  getFontStyle(): string {
+    if (this.attr.isItalic) {
+      return 'italic';
+    } else {
+      return 'normal';
+    }
+  }
+
+  getTextAlignement(): string {
+    switch (this.attr.alignment) {
+      case 'C' : {
+        return 'center';
+      }
+      case 'R' : {
+        return 'right';
+      }
+      default : {
+        return 'left';
+      }
+    }
+  }
+
   // Creates an svg path that connects every points of currentPath with the pencil attributes
   createPath(p: Point[]): string {
     let s = '';
@@ -118,18 +148,22 @@ export class TextService extends DrawingTool {
     s = '<g name = "text" style="transform: translate(0px, 0px);" >';
 
     // start the path
-
+/*
     s += `
       <foreignObject x="20" y="0" width="50" height="50">
-        <p style="cursor: text" contenteditable="true" >Yeet!</p>
+        <p contenteditable style="cursor: text" >Yeet!</p>
       </foreignObject>
     `;
-
-/*
-s += `
-   <text x="0" y="15">This is SVG</text>
-`
 */
+
+    s += `<text x="${p[0].x}" y="${p[0].y}" `;
+    s += `color="${this.chosenColor.primColor}" `;
+    s += `font-family="${this.attr.fontFamily}" `;
+    s += `font-size="${this.attr.fontSize}" `;
+    s += `font-weight="${this.getFontWeight()}" `;
+    s += `font-style="${this.getFontStyle()}" `;
+    s += `text-align="${this.getTextAlignement()}" `;
+    s += '>Yeet! </text>';
     // end the divider
     s += ' </g>';
     return s;
