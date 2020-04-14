@@ -11,18 +11,14 @@ export class FloodFillService {
     https://codepen.io/Geeyoam/pen/vLGZzG
     https://jamesonyu.wordpress.com/2015/05/01/flood-fill-algorithm-javascript/
   */
-  floodFill(
-    ctx: CanvasRenderingContext2D,
-    startPoint: Point,
-    color: number[],
-    choosenColor: number[],
-    tolerance: number): Point[] {
+  floodFill(ctx: CanvasRenderingContext2D, startPoint: Point, color: number[], choosenColor: number[], tolerance: number): Point[] {
 
     const CANVAS_WIDTH = ctx.canvas.width;
     const CANVAS_HEIGHT = ctx.canvas.height;
 
     startPoint.x = Math.round(startPoint.x) - 1;
     startPoint.y = Math.round(startPoint.y) - 1;
+
     const POINTS_TO_COLOR: Pixel[] = [];
     const IMG_DATA: ImageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
@@ -33,49 +29,54 @@ export class FloodFillService {
 
     while (PIXEL_STACK.length) {
 
-      const nextPixel: Pixel | undefined = PIXEL_STACK.pop();
-      if (!nextPixel) { return POINTS_TO_COLOR; }
+      const CURR_PIXEL: Pixel | undefined = PIXEL_STACK.pop();
+      if (!CURR_PIXEL) { return POINTS_TO_COLOR; }
 
       let goUp = true;
       let goDown = true;
       let goLeft = false;
       let goRight = false;
 
-      while (goUp && nextPixel.y > 0) {
-        nextPixel.y--;
-        goUp = this.matchesTolerance(this.getColorAtPixel(IMG_DATA, nextPixel), tolerance, color, choosenColor);
+      while (goUp && CURR_PIXEL.y > 0) {
+        CURR_PIXEL.y--;
+        goUp = this.matchesTolerance(this.getColorAtPixel(IMG_DATA, CURR_PIXEL), tolerance, color, choosenColor);
       }
 
-      while (goDown && nextPixel.y < CANVAS_HEIGHT) {
-        this.colorPixels(IMG_DATA, nextPixel, choosenColor);
-        POINTS_TO_COLOR.push({ x: nextPixel.x, y: nextPixel.y });
+      while (goDown && CURR_PIXEL.y < CANVAS_HEIGHT) {
+        this.colorPixels(IMG_DATA, CURR_PIXEL, choosenColor);
+        POINTS_TO_COLOR.push({ x: CURR_PIXEL.x, y: CURR_PIXEL.y });
 
-        if (nextPixel.x - 1 >= 0 &&
-          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x - 1, y: nextPixel.y }), tolerance, color, choosenColor)) {
+        if (CURR_PIXEL.x - 1 >= 0 &&
+          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: CURR_PIXEL.x - 1, y: CURR_PIXEL.y }), tolerance, color, choosenColor)) {
 
           if (!goLeft) {
             goLeft = true;
-            const NEXT_PIX: Pixel = { x: nextPixel.x - 1, y: nextPixel.y };
+            const NEXT_PIX: Pixel = { x: CURR_PIXEL.x - 1, y: CURR_PIXEL.y };
             PIXEL_STACK.push(NEXT_PIX);
           }
         } else {
           goLeft = false;
         }
 
-        if (nextPixel.x + 1 < CANVAS_WIDTH &&
-          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x + 1, y: nextPixel.y }), tolerance, color, choosenColor)) {
+        if (CURR_PIXEL.x + 1 < CANVAS_WIDTH &&
+          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: CURR_PIXEL.x + 1, y: CURR_PIXEL.y }), tolerance, color, choosenColor)) {
 
           if (!goRight) {
-            const NEXT_PIX: Pixel = { x: nextPixel.x + 1, y: nextPixel.y };
+            const NEXT_PIX: Pixel = { x: CURR_PIXEL.x + 1, y: CURR_PIXEL.y };
             PIXEL_STACK.push(NEXT_PIX);
             goRight = true;
           }
         } else {
           goRight = false;
         }
-        nextPixel.y++;
-        goDown = this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: nextPixel.x, y: nextPixel.y }), tolerance, color, choosenColor);
-        if (nextPixel.y === CANVAS_HEIGHT) {
+        CURR_PIXEL.y++;
+        goDown = this.matchesTolerance(
+          this.getColorAtPixel(IMG_DATA, { x: CURR_PIXEL.x, y: CURR_PIXEL.y }),
+          tolerance,
+          color,
+          choosenColor);
+
+        if (CURR_PIXEL.y === CANVAS_HEIGHT) {
           goDown = false;
         }
       }
