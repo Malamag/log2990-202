@@ -1,7 +1,8 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { EmailExporterService } from './email-exporter.service';
+import { MatSnackBarModule } from '@angular/material';
 import { of } from 'rxjs';
+import { EmailExporterService } from './email-exporter.service';
 
 fdescribe('EmailExporterService', () => {
   let service: EmailExporterService;
@@ -12,16 +13,8 @@ fdescribe('EmailExporterService', () => {
   // tslint:disable-next-line: no-any
   let ctxStub: any;
   // tslint:disable-next-line: no-any
-  //let httpStub: any;
   let httpSpy: jasmine.SpyObj<HttpClient>;
   beforeEach(() => {
-    /*httpStub = {
-      post:
-      {
-        //value: () => 0,
-        subscribe: () => 0,
-      }
-    }*/
     httpSpy = jasmine.createSpyObj('HttpClient', ['post']);
     ctxStub = {
       drawImage: (img: CanvasImageSource, dx: number, dy: number) => 1,
@@ -37,6 +30,7 @@ fdescribe('EmailExporterService', () => {
     providers: [{provide: HttpClient, useValue: httpSpy}],
     imports: [
       HttpClientModule,
+      MatSnackBarModule,
     ]
     });
     service = TestBed.get(EmailExporterService);

@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { ImageExport } from '../../../../../image-export';
 
 const HTTP_OPTIONS = {
@@ -15,7 +16,7 @@ export class EmailExporterService {
     imageURL: string;
     render: Renderer2;
     xmlSerializer: XMLSerializer;
-    constructor(rendererFact: RendererFactory2, private http: HttpClient) {
+    constructor(rendererFact: RendererFactory2, private http: HttpClient, private snackBar: MatSnackBar) {
         this.render = rendererFact.createRenderer(null, null);
         this.xmlSerializer = new XMLSerializer();
     }
@@ -32,8 +33,8 @@ export class EmailExporterService {
             email: mail,
         };
         const URL = 'http://localhost:3000/mail/export';
-        this.http.post(URL, IMG_SEND, HTTP_OPTIONS).subscribe(error => {
-            console.log(error);
+        this.http.post(URL, IMG_SEND, HTTP_OPTIONS).subscribe((data) => {
+            this.displayFeedback();
         });
     }
     exportByMail(svgElem: Node, name: string, canvasRef: HTMLCanvasElement, type: string, mail: string): void {
@@ -53,7 +54,8 @@ export class EmailExporterService {
         if (type === 'svg') {
             this.send(name, type, this.imageURL, mail);
         } else {
-            this.send(name, type, canvasRef.toDataURL(`image/${type}`, 0.1), mail); // else, use canvas conversion
+            const SIZE = 0.1;
+            this.send(name, type, canvasRef.toDataURL(`image/${type}`, SIZE), mail); // else, use canvas conversion
         }
     }
 
@@ -74,5 +76,12 @@ export class EmailExporterService {
             }
         };
         image.src = this.imageURL;
+    }
+    displayFeedback(): void {
+        const MESSAGE = 'vous allez recevoir votre image par courriel si votre courriel existe';
+        const DURATION = 2500;
+        const CONFIG = new MatSnackBarConfig();
+        CONFIG.duration = DURATION;
+        this.snackBar.open(MESSAGE, undefined, CONFIG);
     }
 }
