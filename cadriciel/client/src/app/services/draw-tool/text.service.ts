@@ -150,20 +150,21 @@ export class TextService extends DrawingTool {
     // start the path
 /*
     s += `
-      <foreignObject x="20" y="0" width="50" height="50">
+      <foreignObject x="${p[0].x}" y="${p[0].y}" width="100" height="100">
         <p contenteditable style="cursor: text" >Yeet!</p>
       </foreignObject>
     `;
 */
 
     s += `<text x="${p[0].x}" y="${p[0].y}" `;
-    s += `color="${this.chosenColor.primColor}" `;
+    s += `fill="${this.chosenColor.primColor}" `;
     s += `font-family="${this.attr.fontFamily}" `;
     s += `font-size="${this.attr.fontSize}" `;
     s += `font-weight="${this.getFontWeight()}" `;
     s += `font-style="${this.getFontStyle()}" `;
     s += `text-align="${this.getTextAlignement()}" `;
     s += '>Yeet! </text>';
+
     // end the divider
     s += ' </g>';
     return s;

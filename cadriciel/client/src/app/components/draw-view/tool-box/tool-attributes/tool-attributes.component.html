@@ -117,12 +117,25 @@
     <div *ngSwitchCase="'Texte'" (mouseleave)="updateText()">
         <label> Police de texte </label>
         <select [(ngModel)]="fontFamily">
-            <option>arial</option>
-            <option>times new Roman</option>
+            <option value="arial" selected>Arial</option>
+            <option>Arial Black</option>
+            <option>Comic Sans MS</option>
+            <option>Courier</option>
+            <option>Georgia</option>
+            <option>Helvetica</option>
+            <option>Impact</option>
+            <option>Lucida Console</option>
+            <option>Lucida Sans Unicode</option>
+            <option>Monospace</option>
+            <option>Roboto</option>
+            <option>Tahoma</option>
+            <option>Times new Roman</option>
+            <option>Trebuchet MS</option>
+            <option>Verdana</option>
         </select>
         <br><br>
         <label> Taille de la police</label>
-        <mat-slider thumbLabel type="range" min="10" max="50" value="20" [(ngModel)]="fontSize"></mat-slider> <br />
+        <mat-slider thumbLabel type="range" min="10" max="200" value="20" [(ngModel)]="fontSize"></mat-slider> <br />
         <br />
         <label> Mutateur</label> <br />
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/google"
