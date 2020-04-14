@@ -1,21 +1,35 @@
 import { Injectable } from '@angular/core';
-import { ToolsAttributes } from '../attributes/tools-attribute';
+import { TextAttributes } from '../attributes/text-attribute';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
 import { InteractionService } from '../service-interaction/interaction.service';
 import { DrawingTool } from './drawing-tool';
 import { Point } from './point';
 
-const DEFAULT_LINE_THICKNESS = 5;
-const DEFAULT_TEXTURE = 0;
+const DEFAULT_FONT_SIZE = 12;
+const DEFAULT_FONT_FAMILY = 'arial';
+const DEFAULT_ALIGNMENT = 'L';
+
+// const LEFT_ARROW = 37;
+// const UP_ARROW = 38;
+// const RIGHT_ARROW = 39;
+// const DOWN_ARROW = 40;
+
+// const BACKSPACE = 8;
+// const ENTER = 13;
 
 @Injectable({
   providedIn: 'root'
 })
 export class TextService extends DrawingTool {
-  attr: ToolsAttributes;
+  attr: TextAttributes;
 
-  private textNumber: number;
+  // private textString: string;
+
+  // private cursorPosition: number;
+  // private lineNumber: number;
+
+  // private keyDown: boolean;
 
   constructor(
     inProgess: HTMLElement,
@@ -25,38 +39,50 @@ export class TextService extends DrawingTool {
     colorPick: ColorPickingService,
   ) {
     super(inProgess, drawing, selected, interaction, colorPick);
-    this.attr = { lineThickness: DEFAULT_LINE_THICKNESS, texture: DEFAULT_TEXTURE };
+    this.attr = { fontSize: DEFAULT_FONT_SIZE,
+                  fontFamily: DEFAULT_FONT_FAMILY,
+                  alignment : DEFAULT_ALIGNMENT,
+                  isBold : false,
+                  isItalic: false };
     this.updateColors();
     this.updateAttributes();
-
-    this.textNumber = 0;
+    // this.textString = '';
+    // this.cursorPosition = 0;
+    // this.keyDown = false;
   }
+
   updateAttributes(): void {
-    this.interaction.$toolsAttributes.subscribe((obj: ToolsAttributes) => {
+    this.interaction.$textAttributes.subscribe((obj: TextAttributes) => {
       if (obj) {
-        this.attr = { lineThickness: obj.lineThickness, texture: obj.texture };
+        this.attr = { fontSize: obj.fontSize,
+                      fontFamily: obj.fontFamily,
+                      alignment : obj.alignment,
+                      isBold : obj.isBold,
+                      isItalic: obj.isItalic };
       }
     });
     this.colorPick.emitColors();
   }
+
   // updating on key change
   updateDown(keyboard: KeyboardHandlerService): void {
-    // keyboard has no effect on pencil
+    // move cursor TODO
   }
 
   // updating on key up
   updateUp(keyCode: number): void {
-    // nothing happens for pencil tool
+    //
   }
 
   // mouse up with pencil in hand
   up(position: Point, insideWorkspace: boolean): void {
     // nothing happens
+    this.isDown = false;
   }
 
   // mouse move with pencil in hand
   move(position: Point): void {
-    // nothing happens
+    this.isDown = false;
   }
 
   // mouse doubleClick with pencil in hand
@@ -77,8 +103,6 @@ export class TextService extends DrawingTool {
     this.currentPath.push(position);
 
     this.updateDrawing();
-
-    this.textNumber++;
   }
 
   // Creates an svg path that connects every points of currentPath with the pencil attributes
@@ -94,29 +118,118 @@ export class TextService extends DrawingTool {
     s = '<g name = "text" style="transform: translate(0px, 0px);" >';
 
     // start the path
-    s += `<defs> <path id="textPath${this.drawing.childElementCount}" fill: rgb(170, 170, 170) d="`;
-    // move to first point
-    s += `M ${p[0].x} ${p[0].y} `;
-    s += `L ${p[0].x + 50} ${p[0].y}" /> </defs>`;
 
-    s += ` <text> <textPath xlink:href="#textPath${this.drawing.childElementCount}"`;
-    s += ` stroke="${this.chosenColor.primColor}" >`;
-    s += ' yeet!';
-    s += ' </textPath> </text>';
-    // for each succeding point, connect it with a line
-    // for (let i = 1; i < p.length; i++) {
-    //  s += `L ${p[i].x} ${p[i].y} `;
-    // }
-    // set render attributes
-    // s += `\" stroke="${this.chosenColor.primColor}"`;
-    // s += `stroke-width="${this.attr.lineThickness}"`;
-    // s += 'fill="none"';
-    // s += 'stroke-linecap="round"';
-    // s += 'stroke-linejoin="round"/>';
-    // end the path
+    s += `
+      <foreignObject x="20" y="0" width="50" height="50">
+        <p style="cursor: text" contenteditable="true" >Yeet!</p>
+      </foreignObject>
+    `;
 
+/*
+s += `
+   <text x="0" y="15">This is SVG</text>
+`
+*/
     // end the divider
     s += ' </g>';
     return s;
   }
 }
+
+/*
+
+// Creates an svg path that connects every points of currentPath with the pencil attributes
+  createPath(p: Point[]): string {
+    let s = '';
+
+    // We need at least 2 points
+    if (p.length < 2) {
+      return s;
+    }
+
+    // create a divider
+    s = '<g name = "text" style="transform: translate(0px, 0px);" >';
+
+    // start the path
+    s += `<defs> <path id="textPath${this.drawing.childElementCount}" fill: rgb(170, 170, 170) d="`;
+    // move to first point
+    let longestLine = 0;
+    for (const TEXT_S of this.textString) {
+      if(TEXT_S.length > longestLine) {
+        longestLine = TEXT_S.length;
+      }
+    }
+
+    const X_TEXT_SIZE = this.attr.fontSize * longestLine;
+    const Y_TEXT_SIZE = this.attr.fontSize * this.textString.length;
+
+    s += `M ${p[0].x} ${p[0].y} `;
+    s += `L ${p[0].x + X_TEXT_SIZE} ${p[0].y}" /> </defs>`;
+
+    for (const TEXT_LINE of this.textString) {
+      s += ` <text> <textPath xlink:href="#textPath${this.drawing.childElementCount}"`;
+      s += ` stroke="${this.chosenColor.primColor}" >`;
+      s += ` ${TEXT_LINE}"`;
+      s += ' </textPath> </text>';
+    }
+
+    // end the divider
+    s += ' </g>';
+    return s;
+  }
+
+  // updating on key change
+  updateDown(keyboard: KeyboardHandlerService): void {
+    // move cursor TODO
+    if (this.keyDown === true) {
+      return;
+    }
+    this.keyDown = true;
+    if (keyboard.keyCode === UP_ARROW) {
+      if (this.lineNumber > 0) {
+        --this.lineNumber;
+      }
+      return;
+    }
+    if (keyboard.keyCode === DOWN_ARROW) {
+      if (this.lineNumber < this.textString.length) {
+        ++this.lineNumber;
+      }
+      return;
+    }
+    if (keyboard.keyCode === LEFT_ARROW) {
+      if (this.cursorPosition > 0) {
+        --this.cursorPosition;
+      }
+      return;
+    }
+    if (keyboard.keyCode === RIGHT_ARROW) {
+      if (this.cursorPosition < this.textString.length) {
+        ++this.cursorPosition;
+      }
+      return;
+    }
+    if (keyboard.keyCode === BACKSPACE) {
+      if (this.cursorPosition > 0) {
+      this.textString[this.lineNumber] = this.textString[this.lineNumber].slice(0, this.cursorPosition) +
+                        this.textString[this.lineNumber].slice(this.cursorPosition + 1, this.textString.length);
+      --this.cursorPosition;
+      } else if (this.lineNumber > 0) {
+        // remove textString[this.lineNumber];
+      }
+      return;
+    }
+    if (keyboard.keyCode === ENTER) {
+      this.textString[this.lineNumber] = this.textString[this.lineNumber].slice(0, this.cursorPosition) +
+                        this.textString[this.lineNumber].slice(this.cursorPosition + 1, this.textString.length);
+      ++this.lineNumber;
+      return;
+    }
+    // else
+    this.textString[this.lineNumber] += this.textString[this.lineNumber].slice(0, this.cursorPosition) +
+                                        String.fromCharCode(keyboard.keyCode) +
+                                        this.textString[this.lineNumber].slice(this.cursorPosition + 1, this.textString.length);
+    return;
+  }
+
+*/
