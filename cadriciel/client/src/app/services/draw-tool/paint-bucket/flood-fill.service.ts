@@ -16,7 +16,7 @@ export class FloodFillService {
    2. YU, Jameson. (Mai 2015). "Flood fill algorithm (Javascript)". [En ligne]:
       https://jamesonyu.wordpress.com/2015/05/01/flood-fill-algorithm-javascript/
   */
-  floodFill(ctx: CanvasRenderingContext2D, startPoint: Point, color: number[], choosenColor: number[], tolerance: number): Point[] {
+  floodFill(ctx: CanvasRenderingContext2D, startPoint: Point, color: number[], chosenColor: number[], tolerance: number): Point[] {
 
     const CANVAS_WIDTH = ctx.canvas.width;
     const CANVAS_HEIGHT = ctx.canvas.height;
@@ -49,15 +49,15 @@ export class FloodFillService {
 
       while (goUp && CURR_PIXEL.y > 0) { // go up as far as possible depending on dimensions and tolerance match
         CURR_PIXEL.y--;
-        goUp = this.shouldFill(IMG_DATA, CURR_PIXEL, tolerance, color, choosenColor);
+        goUp = this.shouldFill(IMG_DATA, CURR_PIXEL, tolerance, color, chosenColor);
       }
 
       while (goDown && CURR_PIXEL.y < CANVAS_HEIGHT) {
 
-        this.colorPixels(IMG_DATA, CURR_PIXEL, choosenColor); // going down - add the pixel and modifiy the values
+        this.colorPixels(IMG_DATA, CURR_PIXEL, chosenColor); // going down - add the pixel and modifiy the values
         POINTS_TO_COLOR.push({ x: CURR_PIXEL.x, y: CURR_PIXEL.y });
 
-        if (CURR_PIXEL.x - 1 >= 0 && this.shouldFill(IMG_DATA, { x: CURR_PIXEL.x - 1, y: CURR_PIXEL.y }, tolerance, color, choosenColor)) {
+        if (CURR_PIXEL.x - 1 >= 0 && this.shouldFill(IMG_DATA, { x: CURR_PIXEL.x - 1, y: CURR_PIXEL.y }, tolerance, color, chosenColor)) {
 
           if (!goLeft) {
             // cant go left anymore (limit reached). Add the pixel to the array to check its contiguous pixels
@@ -70,7 +70,7 @@ export class FloodFillService {
         }
 
         if (CURR_PIXEL.x + 1 < CANVAS_WIDTH &&
-          this.shouldFill(IMG_DATA, { x: CURR_PIXEL.x + 1, y: CURR_PIXEL.y }, tolerance, color, choosenColor)) {
+          this.shouldFill(IMG_DATA, { x: CURR_PIXEL.x + 1, y: CURR_PIXEL.y }, tolerance, color, chosenColor)) {
 
           if (!goRight) { // cant go right anymore - add this pixel in the array
             const NEXT_PIX: Pixel = { x: CURR_PIXEL.x + 1, y: CURR_PIXEL.y };
@@ -84,19 +84,19 @@ export class FloodFillService {
 
         CURR_PIXEL.y++;
 
-        goDown = this.shouldFill(IMG_DATA, CURR_PIXEL, tolerance, color, choosenColor);
+        goDown = this.shouldFill(IMG_DATA, CURR_PIXEL, tolerance, color, chosenColor);
 
       }
     }
     return POINTS_TO_COLOR;
   }
 
-  matchesTolerance(clickedColor: number[], tolerance: number, colorAtPixel: number[], choosenColor: number[]): boolean {
+  matchesTolerance(clickedColor: number[], tolerance: number, colorAtPixel: number[], chosenColor: number[]): boolean {
     // the algorith
     if (
-      choosenColor[0] === clickedColor[0] &&
-      choosenColor[1] === clickedColor[1] &&
-      choosenColor[2] === clickedColor[2]) {
+      chosenColor[0] === clickedColor[0] &&
+      chosenColor[1] === clickedColor[1] &&
+      chosenColor[2] === clickedColor[2]) {
       return false;
     }
 
@@ -115,8 +115,8 @@ export class FloodFillService {
     pixel: Pixel,
     tolerance: number,
     colorAtPixel: number[],
-    choosenColor: number[]): boolean {
-    return this.matchesTolerance(this.getColorAtPixel(imgData, pixel), tolerance, colorAtPixel, choosenColor);
+    chosenColor: number[]): boolean {
+    return this.matchesTolerance(this.getColorAtPixel(imgData, pixel), tolerance, colorAtPixel, chosenColor);
   }
 
   /**

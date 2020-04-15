@@ -156,4 +156,17 @@ fdescribe('FloodFillService', () => {
     const TEST_PTS = service.floodFill(ctxStub, START, FILL_COLOR, CLICKED_COLOR, TOL);
     expect(TEST_PTS).toEqual([]);
   });
+
+  it('should getColor at a pixel and check for tolerance match', () => {
+    const SPY_MATCH = spyOn(service, 'matchesTolerance');
+    const SPY_COLOR = spyOn(service, 'getColorAtPixel');
+    const TEST_PIXEL: Pixel = { x: 0, y: 0 };
+    const TOL = 0.9;
+    const COLOR_AT_PIXEL = [0, 0, 0];
+    const CHOSEN_COLOR = [HALF, HALF, HALF];
+
+    service.shouldFill(fakeData, TEST_PIXEL, TOL, COLOR_AT_PIXEL, CHOSEN_COLOR);
+    expect(SPY_MATCH).toHaveBeenCalled();
+    expect(SPY_COLOR).toHaveBeenCalled();
+  });
 });
