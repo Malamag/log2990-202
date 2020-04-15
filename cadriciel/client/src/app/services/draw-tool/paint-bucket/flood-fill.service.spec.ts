@@ -2,15 +2,28 @@ import { TestBed } from '@angular/core/testing';
 
 import { FloodFillService } from './flood-fill.service';
 import { Pixel } from './pixel';
+import { Point } from '../point';
 
 fdescribe('FloodFillService', () => {
   let service: FloodFillService;
   // tslint:disable-next-line: no-any
   let fakeData: any;
+  // tslint:disable-next-line: no-any
+  let ctxStub: any;
+  // tslint:disable-next-line: no-any
+  let canvasStub: any;
   const FULL = 255;
   const HALF = 128;
   beforeEach(() => {
+    canvasStub = {
+      width: 2,
+      height: 2
+    };
 
+    ctxStub = {
+      canvas: canvasStub,
+      getImageData: () => fakeData
+    };
     /**
      * Represents the image data of a 2x2 pixels square
      * Replaces the Uint8ClampedArray and shows R, G, B & Alpha
@@ -25,7 +38,9 @@ fdescribe('FloodFillService', () => {
       height: 2
     };
     TestBed.configureTestingModule({
-      providers: [{ provide: ImageData, useValue: fakeData }]
+      providers: [
+        { provide: ImageData, useValue: fakeData },
+        { provide: CanvasRenderingContext2D, useValue: ctxStub }]
     });
 
     service = TestBed.get(FloodFillService);
@@ -74,5 +89,27 @@ fdescribe('FloodFillService', () => {
     const TEST_MATCH = service.matchesTolerance(CLICKD_COLOR, TOLERANCE, PIXEL_COLOR, FILL_COLOR);
 
     expect(TEST_MATCH).toBe(true);
+  });
+
+  it('should return the current points to color on undefined current pixel', () => {
+    const TEST_PTS: Pixel[] = service.floodFill(ctxStub, new Point(0, 0), [0, 0, 0], [0, 0, 0], 1);
+    const EXP_PIXEL: Pixel = { x: -1, y: -1 };
+    expect(TEST_PTS).toEqual([EXP_PIXEL]);
+  });
+
+  it('should flood-fill all the points on 100% tolerance', () => {
+    const FULL = 255;
+    const CLICKED_COLOR = [FULL, FULL, FULL];
+    const FILL_COLOR = [0, 0, 0];
+    const TOL = 1;
+    const START = new Point(1, 1); // smallest start value, top left corner
+    const TEST_PTS = service.floodFill(ctxStub, START, CLICKED_COLOR, FILL_COLOR, TOL);
+    const EXP_PTS: Pixel[] = [
+      { x: 0, y: 0 },
+      { x: 0, y: 1 },
+      { x: 1, y: 0 },
+      { x: 1, y: 1 }
+    ];
+    expect(TEST_PTS).toEqual(EXP_PTS);
   });
 });

@@ -22,7 +22,7 @@ export class FloodFillService {
     const POINTS_TO_COLOR: Pixel[] = [];
     const IMG_DATA: ImageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-    // we use an interface to save memory - we dont need a full Point() object...
+    // we use an interface to save memory - we dont need a full new Point(x, y) object...
     const PIXEL_STACK: Pixel[] = [];
 
     PIXEL_STACK.push(startPoint);
@@ -39,7 +39,7 @@ export class FloodFillService {
 
       while (goUp && CURR_PIXEL.y > 0) {
         CURR_PIXEL.y--;
-        goUp = this.matchesTolerance(this.getColorAtPixel(IMG_DATA, CURR_PIXEL), tolerance, color, choosenColor);
+        goUp = this.shouldFill(IMG_DATA, CURR_PIXEL, tolerance, color, choosenColor);
       }
 
       while (goDown && CURR_PIXEL.y < CANVAS_HEIGHT) {
@@ -47,7 +47,7 @@ export class FloodFillService {
         POINTS_TO_COLOR.push({ x: CURR_PIXEL.x, y: CURR_PIXEL.y });
 
         if (CURR_PIXEL.x - 1 >= 0 &&
-          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: CURR_PIXEL.x - 1, y: CURR_PIXEL.y }), tolerance, color, choosenColor)) {
+          this.shouldFill(IMG_DATA, { x: CURR_PIXEL.x - 1, y: CURR_PIXEL.y }, tolerance, color, choosenColor)) {
 
           if (!goLeft) {
             goLeft = true;
@@ -59,7 +59,7 @@ export class FloodFillService {
         }
 
         if (CURR_PIXEL.x + 1 < CANVAS_WIDTH &&
-          this.matchesTolerance(this.getColorAtPixel(IMG_DATA, { x: CURR_PIXEL.x + 1, y: CURR_PIXEL.y }), tolerance, color, choosenColor)) {
+          this.shouldFill(IMG_DATA, { x: CURR_PIXEL.x + 1, y: CURR_PIXEL.y }, tolerance, color, choosenColor)) {
 
           if (!goRight) {
             const NEXT_PIX: Pixel = { x: CURR_PIXEL.x + 1, y: CURR_PIXEL.y };
@@ -100,6 +100,15 @@ export class FloodFillService {
 
     return (R_MATCHES && G_MATCHES && B_MATCHES);
 
+  }
+
+  shouldFill(
+    imgData: ImageData,
+    pixel: Pixel,
+    tolerance: number,
+    colorAtPixel: number[],
+    choosenColor: number[]): boolean {
+    return this.matchesTolerance(this.getColorAtPixel(imgData, pixel), tolerance, colorAtPixel, choosenColor);
   }
 
   getColorAtPixel(imgData: ImageData, pixel: Pixel): number[] {
