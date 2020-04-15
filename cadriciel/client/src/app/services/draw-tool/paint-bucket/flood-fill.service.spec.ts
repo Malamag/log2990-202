@@ -145,18 +145,11 @@ fdescribe('FloodFillService', () => {
   });
 
   it('should return the current POINTS_TO_COLOR array if the popped pixel is undefined', () => {
-    // tslint:disable-next-line: no-any
-
     const START = new Point(1, 1);
-    const NEW_DIM = 3;
 
-    // pop method will return undefine
+    // pop method will return undefined
     spyOn(Array.prototype, 'pop').and.returnValue(undefined);
 
-    fakeData.width = NEW_DIM;
-    fakeData.height = NEW_DIM;
-    canvasStub.width = NEW_DIM;
-    canvasStub.height = NEW_DIM;
     const CLICKED_COLOR = [FULL, FULL, FULL];
     const FILL_COLOR = [0, 0, 0];
     const TOL = 1;
