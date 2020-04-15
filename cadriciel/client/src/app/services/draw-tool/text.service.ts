@@ -53,13 +53,11 @@ export class TextService extends DrawingTool {
 
   updateAttributes(): void {
     this.interaction.$textAttributes.subscribe((obj: TextAttributes) => {
-      if (obj) {
         this.attr = { fontSize: obj.fontSize,
                       fontFamily: obj.fontFamily,
                       alignment : obj.alignment,
                       isBold : obj.isBold,
                       isItalic: obj.isItalic };
-      }
     });
     this.colorPick.emitColors();
   }
@@ -138,11 +136,6 @@ export class TextService extends DrawingTool {
   // Creates an svg path that connects every points of currentPath with the pencil attributes
   createPath(p: Point[]): string {
     let s = '';
-
-    // We need at least 2 points
-    if (p.length < 2) {
-      return s;
-    }
 
     // create a divider
     s = '<g name = "text" style="transform: translate(0px, 0px);" >';
