@@ -5,8 +5,8 @@ import { SelectionService } from './selection.service';
 export class CanvasInteraction {
   static moveElements(xoff: number, yoff: number, selectionTool: SelectionService): void {
 
-    //this.rotateElements(3 * Math.sign(xoff), selectionTool,);
-    //return;
+    // this.rotateElements(3 * Math.sign(xoff), selectionTool,);
+    // return;
     // if there is at least 1 item selected
     if (!selectionTool.selectedItems.includes(true)) {
       return;
@@ -22,14 +22,15 @@ export class CanvasInteraction {
       const NEW_Y = ElementInfo.translate(selectionTool.drawing.children[i]).y + yoff;
 
       // keep the CURRENT item's rotate
-      let CURRENT_A = ElementInfo.rotate(selectionTool.drawing.children[i]);
+      const CURRENT_A = ElementInfo.rotate(selectionTool.drawing.children[i]);
 
       // set the new values
-      selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform', `translate(${NEW_X}px,${NEW_Y}px) rotate(${CURRENT_A}deg)`);
+      selectionTool.render.setStyle(selectionTool.drawing.children[i],
+         'transform', `translate(${NEW_X}px,${NEW_Y}px) rotate(${CURRENT_A}deg)`);
     }
   }
 
-  static rotateElements(angle: number, selectionTool:SelectionService, average : boolean){
+  static rotateElements(angle: number, selectionTool: SelectionService, average: boolean): void {
     // if there is at least 1 item selected
     if (!selectionTool.selectedItems.includes(true)) {
       return;
@@ -41,7 +42,7 @@ export class CanvasInteraction {
     let averageY = 0;
     let selectedCount = 0;
 
-    //average center point of all selected items
+    // average center point of all selected items
     for (let i = 0; i < Math.min(selectionTool.selectedItems.length, selectionTool.drawing.childElementCount); i++) {
 
       // ignore those who aren't selected
@@ -61,10 +62,11 @@ export class CanvasInteraction {
       averageX += ElementInfo.center(selectionTool.drawing.children[i] as Element, CANVAS_BOX).x;
       averageY += ElementInfo.center(selectionTool.drawing.children[i] as Element, CANVAS_BOX).y;
 
-      selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform', `translate(${SAVED_X}px,${SAVED_Y}px) rotate(${SAVED_A}deg)`);
+      selectionTool.render.setStyle(selectionTool.drawing.children[i],
+         'transform', `translate(${SAVED_X}px,${SAVED_Y}px) rotate(${SAVED_A}deg)`);
     }
 
-    let averageCenter = new Point(averageX/selectedCount, averageY/selectedCount);
+    const AVERAGE_CENTER = new Point(averageX / selectedCount, averageY / selectedCount);
 
     // iterate through all ITEMS
     for (let i = 0; i < Math.min(selectionTool.selectedItems.length, selectionTool.drawing.childElementCount); i++) {
@@ -83,13 +85,14 @@ export class CanvasInteraction {
 
       let center = ElementInfo.center(selectionTool.drawing.children[i] as Element, CANVAS_BOX);
 
-      if(average){
-        center = averageCenter;
+      if (average) {
+        center = AVERAGE_CENTER;
       }
 
       // set the new values
       selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform-origin', `${center.x}px ${center.y}px`);
-      selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform', `translate(${CURRENT_X}px,${CURRENT_Y}px) rotate(${NEW_A}deg)`);
+      selectionTool.render.setStyle(selectionTool.drawing.children[i],
+         'transform', `translate(${CURRENT_X}px,${CURRENT_Y}px) rotate(${NEW_A}deg)`);
     }
   }
 
