@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
 import { TextAttributes } from '../attributes/text-attribute';
 import { ColorPickingService } from '../colorPicker/color-picking.service';
 import { KeyboardHandlerService } from '../keyboard-handler/keyboard-handler.service';
@@ -24,6 +24,12 @@ const DEFAULT_ALIGNMENT = 'L';
 export class TextService extends DrawingTool {
   attr: TextAttributes;
 
+  render: Renderer2;
+
+  itemUnderMouse: number | null;
+
+  foundAnItem: boolean;
+
   // private textString: string;
 
   // private cursorPosition: number;
@@ -37,6 +43,7 @@ export class TextService extends DrawingTool {
     selected: boolean,
     interaction: InteractionService,
     colorPick: ColorPickingService,
+    render: Renderer2
   ) {
     super(inProgess, drawing, selected, interaction, colorPick);
     this.attr = { fontSize: DEFAULT_FONT_SIZE,
@@ -46,9 +53,35 @@ export class TextService extends DrawingTool {
                   isItalic: false };
     this.updateColors();
     this.updateAttributes();
+    this.render = render;
     // this.textString = '';
     // this.cursorPosition = 0;
     // this.keyDown = false;
+
+    // whenever a new item is added, link it to a mousedown event to handle single click
+    window.addEventListener('newDrawing', (e: Event) => {
+      for (let i = 0; i < this.drawing.childElementCount; i++) {
+          const EL: Element = this.drawing.children[i];
+          let status: string | null;
+
+          try { // in case the getAttribute method is not implemented for the selected item
+              status = EL.getAttribute('isListening');
+          } catch (err) {
+              status = null;
+          }
+
+          if (status !== 'true') {
+              this.render.listen(EL, 'mousedown', () => {
+                  this.render.setAttribute(EL, 'isListening', 'true');
+                  if (!this.foundAnItem) {
+                      this.itemUnderMouse = i;
+                      this.foundAnItem = true;
+                  }
+              });
+          }
+      }
+  });
+
   }
 
   updateAttributes(): void {
@@ -76,6 +109,7 @@ export class TextService extends DrawingTool {
   up(position: Point, insideWorkspace: boolean): void {
     // nothing happens
     this.isDown = false;
+    this.foundAnItem = false;
   }
 
   // mouse move with pencil in hand
@@ -88,8 +122,23 @@ export class TextService extends DrawingTool {
     // since its down -> up -> down -> up -> doubleClick, nothing more happens for the pencil
   }
 
+  isItemUnderMouseText(): boolean {
+    if (this.foundAnItem && this.itemUnderMouse !== null) {
+      if (this.drawing.children[this.itemUnderMouse].children[0].tagName === 'text') {
+          return true;
+      }
+    }
+    return false;
+  }
+
   // mouse down with pencil in hand
   down(position: Point): void {
+
+    // We don't create another text element if a text is being selected
+    if (this.isItemUnderMouseText()) {
+      return;
+    }
+
     // in case we changed tool while the mouse was down
     this.ignoreNextUp = false;
 
@@ -101,6 +150,7 @@ export class TextService extends DrawingTool {
     this.currentPath.push(position);
 
     this.updateDrawing();
+
   }
 
   getFontWeight(): string {
@@ -149,7 +199,7 @@ export class TextService extends DrawingTool {
     `;
 */
 
-    s += `<text x="${p[0].x}" y="${p[0].y}" `;
+    s += `<text name="text" x="${p[0].x}" y="${p[0].y}" `;
     s += `fill="${this.chosenColor.primColor}" `;
     s += `font-family="${this.attr.fontFamily}" `;
     s += `font-size="${this.attr.fontSize}" `;
