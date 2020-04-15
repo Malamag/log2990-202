@@ -26,7 +26,10 @@ export class MoveWithArrows {
     if (selectionTool.selectedItems.length > 0) {
       CanvasInteraction.moveElements(xoff, yoff, selectionTool);
 
-      selectionTool.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(selectionTool);
+      CanvasInteraction.createBoundingBox(selectionTool);
+        if(left || up || right || down){
+          CanvasInteraction.updateBoxCenter(selectionTool);
+        }
     }
   }
 
@@ -52,7 +55,8 @@ export class MoveWithArrows {
       if (selectionTool.selectedItems.length > 0) {
         CanvasInteraction.moveElements(xoff, yoff, selectionTool);
 
-        selectionTool.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(selectionTool);
+        CanvasInteraction.createBoundingBox(selectionTool);
+        CanvasInteraction.updateBoxCenter(selectionTool);
       }
     }
     setTimeout(() => {

@@ -7,6 +7,7 @@ import { HtmlSvgFactory } from './html-svg-factory.service';
 import { MoveWithArrows } from './move-with-arrows.service';
 import { Point } from './point';
 import { ShapeService } from './shape.service';
+import { ElementInfo } from './element-info.service';
 
 const OUTLINE_COLOR = '0, 102, 204, 0.9';
 const FILL_COLOR = '0, 102, 204, 0.3';
@@ -29,6 +30,8 @@ const INIT_VALUE = -1;
 export class SelectionService extends ShapeService {
     render: Renderer2;
     selectedRef: HTMLElement;
+
+    boxCenter: Point = new Point(250,250);
 
     itemUnderMouse: number | null;
     canMoveSelection: boolean;
@@ -106,7 +109,7 @@ export class SelectionService extends ShapeService {
         window.addEventListener('toolChange', (e: Event) => {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
                 this.selectedItems = [];
-                this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
+                CanvasInteraction.createBoundingBox(this);
             }
             this.selectedItems = [];
             this.invertedItems = [];
@@ -125,7 +128,8 @@ export class SelectionService extends ShapeService {
             for (let i = 0; i < this.drawing.children.length; i++) {
                 this.selectedItems[i] = true;
             }
-            this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
+            CanvasInteraction.createBoundingBox(this);
+            CanvasInteraction.updateBoxCenter(this);
         }
 
         // only if a key has not been released
@@ -166,9 +170,12 @@ export class SelectionService extends ShapeService {
     }
 
     wheelMove(average : boolean, precise : boolean, clockwise:boolean) : void{
-        CanvasInteraction.rotateElements((precise? 1 : 15) * (clockwise? 1 : -1), this, average);
-        this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
-        this.interaction.emitDrawingDone();
+        // 1deg = 0.0175rad -> *15 = 0.2625rad
+        if(!this.isDown){
+            CanvasInteraction.rotateElements((precise? 0.0175 : 0.2625) * (clockwise? 1 : -1), this, average);
+            CanvasInteraction.createBoundingBox(this);
+            this.interaction.emitDrawingDone();
+        }
     }
 
     down(position: Point, insideWorkspace: boolean, isRightClick: boolean): void {
@@ -240,7 +247,8 @@ export class SelectionService extends ShapeService {
         this.itemUnderMouse = null;
         this.foundAnItem = false;
 
-        this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
+        CanvasInteraction.createBoundingBox(this);
+        CanvasInteraction.updateBoxCenter(this);  
 
         // if we moved a selection, emit the drawing for undo-redo
         if (this.selectedItems.includes(true) && this.movingSelection && this.movedSelectionOnce) {
@@ -262,7 +270,6 @@ export class SelectionService extends ShapeService {
         if (!this.isDown) {
             return;
         }
-
         // if we want to move the selection
         if (this.movingSelection) {
             // used for undo-redo
@@ -293,7 +300,7 @@ export class SelectionService extends ShapeService {
             this.updateProgress();
         }
 
-        this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
+        CanvasInteraction.createBoundingBox(this);
     }
 
     // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
@@ -344,7 +351,6 @@ export class SelectionService extends ShapeService {
         if (W === 0 || H === 0) {
             s = '';
         }
-
         return s;
     }
 }

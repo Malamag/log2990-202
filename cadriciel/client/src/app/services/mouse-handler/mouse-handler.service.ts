@@ -123,7 +123,7 @@ export class MouseHandlerService {
     wheel(e:WheelEvent):void{
         let average = !e.shiftKey;
         let precise = e.altKey;
-        let clockwise = e.deltaY >= 0
+        let clockwise = e.deltaY >= 0;
         this.callObserverWheel(average, precise, clockwise);
     }
 
