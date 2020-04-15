@@ -7,7 +7,7 @@ import { Pixel } from './pixel';
 })
 export class FloodFillService {
 
-  /* 
+  /*
     This flood-fill algorithm and its methods are based on the following sources:
 
    1. Utilisateur Geeyoam. (Sans date). "Flood fill implementation". [En ligne]:
@@ -21,10 +21,11 @@ export class FloodFillService {
     const CANVAS_WIDTH = ctx.canvas.width;
     const CANVAS_HEIGHT = ctx.canvas.height;
 
-    startPoint.x = Math.round(startPoint.x) - 1;
+    startPoint.x = Math.round(startPoint.x) - 1; // top-left starts at (1, 1) for the click
     startPoint.y = Math.round(startPoint.y) - 1;
 
     const POINTS_TO_COLOR: Pixel[] = [];
+
     const IMG_DATA: ImageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     // we use an interface to save memory - we dont need a full new Point(x, y) object...
@@ -118,6 +119,12 @@ export class FloodFillService {
     return this.matchesTolerance(this.getColorAtPixel(imgData, pixel), tolerance, colorAtPixel, choosenColor);
   }
 
+  /**
+   * Gets the color at a chosen pixel. Since the data array is unidimensional,
+   * accessing sequencial pixels (with R, G, B, A values) is done by multiplying
+   * the number of values for an individual pixel and the width times the y coordinate,
+   * plus the x coordinate.
+   */
   getColorAtPixel(imgData: ImageData, pixel: Pixel): number[] {
     const NEXT_INDEX = 4;
     const R = imgData.data[NEXT_INDEX * (imgData.width * pixel.y + pixel.x)];
@@ -126,6 +133,9 @@ export class FloodFillService {
     return [R, G, B];
   }
 
+  /**
+   * Sets the selected color in the ImageData.data array
+   */
   colorPixels(imgData: ImageData, pixel: Pixel, fillColor: number[]): void {
     const NEXT_INDEX = 4;
     imgData.data[NEXT_INDEX * (imgData.width * pixel.y + pixel.x)] = fillColor[0];
