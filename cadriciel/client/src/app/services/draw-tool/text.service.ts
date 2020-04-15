@@ -80,7 +80,7 @@ export class TextService extends DrawingTool {
               });
           }
       }
-  });
+    });
 
   }
 
@@ -199,15 +199,16 @@ export class TextService extends DrawingTool {
     `;
 */
 
-    s += `<text name="text" x="${p[0].x}" y="${p[0].y}" `;
+    s += `<text style="cursor: text" x="${p[0].x}" y="${p[0].y}" `;
     s += `fill="${this.chosenColor.primColor}" `;
     s += `font-family="${this.attr.fontFamily}" `;
     s += `font-size="${this.attr.fontSize}" `;
     s += `font-weight="${this.getFontWeight()}" `;
     s += `font-style="${this.getFontStyle()}" `;
     s += `text-align="${this.getTextAlignement()}" `;
-    s += '>Yeet! </text>';
-
+    s += `><tspan x="${p[0].x}" dy="1.4em"> Yeet! </tspan>`;
+    s += `<tspan x="${p[0].x}" dy="1.4em"> Yeet! </tspan>`;
+    s += '</text>';
     // end the divider
     s += ' </g>';
     return s;

@@ -1,5 +1,6 @@
-import { TestBed } from '@angular/core/testing';
 
+import { Renderer2 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { Point } from './point';
 import { TextService } from './text.service';
 
@@ -8,9 +9,11 @@ describe('TextService', () => {
   let ptA: Point;
   let ptArr: Point[];
   let ptB: Point;
+  // tslint:disable-next-line: prefer-const
+  let render: Renderer2;
 
   beforeEach(() => {
-    ptA = new Point(0, 0); // using a point to test position functions
+    ptA = new Point(1, 1); // using a point to test position functions
     ptArr = [ptA, ptA];
     ptB = new Point(1, 2);
 
@@ -22,6 +25,7 @@ describe('TextService', () => {
             { provide: Number, useValue: 0 },
             { provide: String, useValue: '' },
             { provide: Boolean, useValue: true },
+            { provide: Renderer2, useValue: render }
             // { provide: InteractionService, useClass: FakeInteractionService },
             // { provide: KeyboardHandlerService, useValue: kbServiceStub },
         ],
@@ -139,6 +143,14 @@ describe('TextService', () => {
     service.down(ptA); // pressing the mouse
     service.move(ptB);
     expect(service.isDown).toBeFalsy();
+  });
+
+  it('should not create a text element on another text element', () => {
+    const SPY = spyOn(service, 'createPath');
+    service.down(ptA); // pressing the mouse
+    service.up(ptA, true);
+    service.down(ptA); // pressing again at the same position
+    expect(SPY).toHaveBeenCalledTimes(1);
   });
 
 });
