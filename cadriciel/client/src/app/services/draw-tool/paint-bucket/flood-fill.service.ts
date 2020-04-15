@@ -21,7 +21,7 @@ export class FloodFillService {
 
     const POINTS_TO_COLOR: Pixel[] = [];
     const IMG_DATA: ImageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
+    console.log(IMG_DATA.data);
     // we use an interface to save memory - we dont need a full new Point(x, y) object...
     const PIXEL_STACK: Pixel[] = [];
 
@@ -53,6 +53,7 @@ export class FloodFillService {
             goLeft = true;
             const NEXT_PIX: Pixel = { x: CURR_PIXEL.x - 1, y: CURR_PIXEL.y };
             PIXEL_STACK.push(NEXT_PIX);
+
           }
         } else {
           goLeft = false;

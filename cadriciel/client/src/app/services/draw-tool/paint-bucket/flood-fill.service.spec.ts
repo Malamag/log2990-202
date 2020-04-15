@@ -110,4 +110,37 @@ fdescribe('FloodFillService', () => {
     ];
     expect(TEST_PTS).toEqual(EXP_PTS);
   });
+
+  it('should flood-fill the central pixels of an area', () => {
+    const DATA_3X3 = [ // we need to build a 3x3 image data to have 1 central pixel
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 0,
+      HALF, 0, 0, 0,
+      HALF, HALF, HALF, HALF,
+      FULL, FULL, 0, 0,
+      HALF, HALF, FULL, FULL,
+      0, 0, 0, 0];
+
+    const NEW_DIM = 3;
+    fakeData.data = DATA_3X3;
+    fakeData.width = NEW_DIM;
+    fakeData.height = NEW_DIM;
+    canvasStub.width = NEW_DIM;
+    canvasStub.height = NEW_DIM;
+
+    const CLICKED_COLOR = [FULL, FULL, FULL];
+    const FILL_COLOR = [0, 0, 0];
+    const TOL = 1;
+    const START = new Point(2, 2); // central point of a 3 x 3 matrix
+    const EXP_PTS: Pixel[] = [
+      { x: 1, y: 0 }, { x: 1, y: 1 }, { x: 1, y: 2 },
+      { x: 2, y: 0 }, { x: 2, y: 1 }, { x: 2, y: 2 },
+      { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 }
+    ];
+    const TEST_PTS = service.floodFill(ctxStub, START, FILL_COLOR, CLICKED_COLOR, TOL);
+
+    expect(TEST_PTS).toEqual(EXP_PTS);
+  });
 });
