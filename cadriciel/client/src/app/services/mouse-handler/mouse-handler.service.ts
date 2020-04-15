@@ -120,17 +120,17 @@ export class MouseHandlerService {
         }
     }
 
-    wheel(e:WheelEvent):void{
-        let average = !e.shiftKey;
-        let precise = e.altKey;
-        let clockwise = e.deltaY >= 0
-        this.callObserverWheel(average, precise, clockwise);
+    wheel(e: WheelEvent): void {
+        const AVERAGE = !e.shiftKey;
+        const PRECISE = e.altKey;
+        const CLOCK_WISE = e.deltaY >= 0;
+        this.callObserverWheel(AVERAGE, PRECISE, CLOCK_WISE);
     }
 
-    callObserverWheel(average : boolean, precise : boolean, clockwise : boolean){
+    callObserverWheel(average: boolean, precise: boolean, clockwise: boolean): void {
         this.observers.forEach((element: InputObserver) => {
             if (element.selected) {
-                element.wheelMove(average, precise,clockwise);
+                element.wheelMove(average, precise, clockwise);
             }
         });
     }
