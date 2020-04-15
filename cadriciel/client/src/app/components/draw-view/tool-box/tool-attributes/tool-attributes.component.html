@@ -140,13 +140,13 @@
         <label> Mutateur</label> <br />
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/google"
              title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button (click)="mutate(0)">
-            <img src="../../../assets/images/bold.svg" width="30px" height="30px"/>
+        <button (click)="mutate(false)">
+            <img [ngClass]="!isBold ? 'notSelected':''" src="../../../assets/images/bold.svg" width="30px" height="30px"/>
         </button>
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" 
             title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button (click)="mutate(1)">
-            <img src="../../../assets/images/italic.svg" width="30px" height="30px"/>
+        <button (click)="mutate(true)">
+            <img [ngClass]="!isItalic ? 'notSelected':''" src="../../../assets/images/italic.svg" width="30px" height="30px"/>
         </button>
         <br><br>
         <label> Alignement</label> <br />
@@ -154,17 +154,17 @@
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" 
             title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
         <button (click)="alignement('L')">
-            <img src="../../../assets/images/left-align.svg" width="30px" height="30px"/>
+            <img [ngClass]="alignment !== 'L' ? 'notSelected':''" src="../../../assets/images/left-align.svg" width="30px" height="30px"/>
         </button>
         <!--source: Icons made by <a href="https://www.flaticon.com/authors/bqlqn"
              title="bqlqn">bqlqn</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
         <button (click)="alignement('C')">
-            <img src="../../../assets/images/center-align.svg" width="30px" height="30px"/>
+            <img [ngClass]="alignment !== 'C' ? 'notSelected':''" src="../../../assets/images/center-align.svg" width="30px" height="30px"/>
         </button>
         <!--source: Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" 
             title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
         <button (click)="alignement('R')">
-            <img src="../../../assets/images/right-align.svg" width="30px" height="30px"/>
+            <img [ngClass]="alignment !== 'R' ? 'notSelected':''" src="../../../assets/images/right-align.svg" width="30px" height="30px"/>
         </button>
     </div>
 

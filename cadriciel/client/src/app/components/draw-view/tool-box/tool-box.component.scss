@@ -14,6 +14,9 @@
 .selected {
   color: #ff4081;
 }
+.notSelected{
+  color:white;
+}
 .toolIcon {
   height: 3vh;
   width: 3vh;
@@ -23,9 +26,6 @@
    left:50%;
   transform: translate(-50%, -50%);
   filter: invert(100%); // inversion des couleurs afin d'obtenir des icônes blancs
-}
-.notSelected{
-  color:white;
 }
 /*.toolBtn:focus { // le bouton vire au rose après avoir été cliqué
   background-color: rgb(255, 34, 107); 
