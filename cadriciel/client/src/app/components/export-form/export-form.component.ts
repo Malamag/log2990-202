@@ -63,7 +63,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
         this.exportForm = this.formBuilder.group({
             doodleName: ['Dessin sans titre', Validators.required],
             formatSel: [null, Validators.required],
-            email: ['xxxx@yyyy.zzz', [Validators.required, Validators.email]],
+            email: ['xxxx@yyyy.zzz', [Validators.required, Validators.pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)]],
         });
     }
 

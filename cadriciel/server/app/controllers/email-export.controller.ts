@@ -16,7 +16,9 @@ export class EmailExportController {
         this.router = Router();
 
         this.router.post('/export', async (req: Request, res: Response, next: NextFunction) => {
-            this.emailExportService.export(req.body);
+            this.emailExportService.export(req.body).catch((error) => {
+                console.log(error);
+            });
         });
     }
 }
