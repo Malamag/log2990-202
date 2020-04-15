@@ -1,13 +1,7 @@
 import dotenv from 'dotenv';
 import { injectable } from 'inversify';
-// import https from 'https';
 import request from 'request';
-// import StreamBuffers from 'stream-buffers';
 import { ImageExport } from '../../../image-export';
-/*const myReadableStreamBuffer = new StreamBuffers.ReadableStreamBuffer({
-    frequency: 10, // in milliseconds.
-    chunkSize: 2048, // in bytes.
-});*/
 @injectable()
 export class EmailExportService {
     constructor() {
@@ -34,7 +28,6 @@ export class EmailExportService {
                 },
             },
         };
-        console.log(Buffer.from(data.src.split(',')[1], 'base64'));
         request(URL, OPTIONS, (res) => {
             console.log('message : ' + res);
         });
