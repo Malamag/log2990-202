@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ClipboardService } from './clipboard.service';
 
-fdescribe('ClipboardService', () => {
+describe('ClipboardService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {

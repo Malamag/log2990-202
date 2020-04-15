@@ -143,6 +143,7 @@ describe('OptionBarComponent', () => {
 
     it('should call grid toggle when G is pressed', () => {
         fakeKbEvent.keyCode = G;
+        fakeKbEvent.ctrlKey = false;
         const SPY = spyOn(component, 'toggleGrid');
         component.setShortcutEvent(fakeKbEvent);
         expect(SPY).toHaveBeenCalled();

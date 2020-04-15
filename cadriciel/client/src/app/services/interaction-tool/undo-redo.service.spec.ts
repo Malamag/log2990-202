@@ -128,6 +128,7 @@ describe('UndoRedoService', () => {
     });
     it('should emit enable buttoms', () => {
         service.done.push('hello');
+        service.done.push('back');
         service.undone.push('world');
         const EMIT_SPY = spyOn(service.interact, 'emitEnableDisable');
         service.updateButtons();

@@ -1,10 +1,11 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarConfig, MatSnackBarModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { EmailExporterService } from './email-exporter.service';
 
-fdescribe('EmailExporterService', () => {
+describe('EmailExporterService', () => {
   let service: EmailExporterService;
   // tslint:disable-next-line: no-any
   let elementStub: any;
@@ -31,9 +32,11 @@ fdescribe('EmailExporterService', () => {
     imports: [
       HttpClientModule,
       MatSnackBarModule,
+      BrowserAnimationsModule,
     ]
     });
     service = TestBed.get(EmailExporterService);
+    httpSpy.post.and.returnValue(of([]));
   });
 
   it('should be created', () => {
@@ -45,20 +48,33 @@ fdescribe('EmailExporterService', () => {
     expect(URL).toBeDefined();
   });
 
-  it('should post the request', () => {
+  it('should post the request and catch the error with a display', () => {
     const NAME = 'hello';
     const FORMAT = '.jep';
     const DATA_SRC = 'www.';
     const ERROR = new Error('hello');
     const MAIL = 'xxxxx@yyy.zz';
     httpSpy.post.and.returnValue(of([ERROR]));
-    const SPY = spyOn(console, 'log');
+    const SPY = spyOn(service, 'displayFeedback');
     service.send(NAME, FORMAT, DATA_SRC, MAIL);
     of([ERROR]).subscribe(() => {
       expect(SPY).toHaveBeenCalled();
     });
   });
-  it('should load the image in the canvas', async() => {
+  it('should display a success message after post', () => {
+    const NAME = 'hello';
+    const FORMAT = '.jep';
+    const DATA_SRC = 'www.';
+    const MAIL = 'xxxxx@yyy.zz';
+    const MESSAGE = 'envoie avec succès';
+    httpSpy.post.and.returnValue(of([]));
+    const SPY = spyOn(service, 'displayFeedback');
+    service.send(NAME, FORMAT, DATA_SRC, MAIL);
+    of([]).subscribe(() => {
+      expect(SPY).toHaveBeenCalledWith(MESSAGE);
+    });
+  });
+  it('should load the image in the canvas', async () => {
     const NAME = 'hello';
     const FORMAT = '.jep';
     const MAIL = 'xxxxx@yyy.zz';
@@ -85,5 +101,15 @@ fdescribe('EmailExporterService', () => {
 
     service.exportCanvas(NAME, TYPE, nativeElemStub, MAIL);
     expect(SPY).toHaveBeenCalledWith(NAME, TYPE, '0', MAIL);
+  });
+  it('should open the snack bar with the message', () => {
+    const MESSAGE = 'hello';
+    // tslint:disable-next-line: no-string-literal
+    const OPEN_SPY = spyOn(service['snackBar'], 'open');
+    const DURATION = 2500;
+    const CONFIG = new MatSnackBarConfig();
+    CONFIG.duration = DURATION;
+    service.displayFeedback(MESSAGE);
+    expect(OPEN_SPY).toHaveBeenCalledWith(MESSAGE, undefined, CONFIG);
   });
 });

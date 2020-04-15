@@ -64,7 +64,6 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
             doodleName: ['Dessin sans titre', Validators.required],
             formatSel: [null, Validators.required],
             email: ['xxxx@yyyy.zzz', [Validators.required, Validators.email]],
-            //email:['xxxx@yyyy.zzz', Validators.email]
         });
     }
 

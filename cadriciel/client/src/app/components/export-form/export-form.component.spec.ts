@@ -1,7 +1,10 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule } from '@angular/material';
+import { MatButtonModule, MatDialogModule, MatFormFieldModule,
+     MatInputModule, MatOptionModule,
+      MatSelectModule, MatSnackBarModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CanvasSwitchDirective } from 'src/app/directives/canvas-switch.directive';
@@ -40,6 +43,8 @@ describe('ExportFormComponent', () => {
                 MatDialogModule,
                 MatOptionModule,
                 MatSelectModule,
+                HttpClientTestingModule,
+                MatSnackBarModule,
             ],
             providers: [{ provide: DoodleFetchService, useValue: dFetchStub }, ExportService, ImageFilterService, ModalWindowService],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -83,7 +88,12 @@ describe('ExportFormComponent', () => {
         component.onSubmit();
         expect(SPY).toHaveBeenCalled();
     });
-
+    it('should call the exportation by mail on sbmission', () => {
+        component.exportMode = 1;
+        const SPY = spyOn(component, 'exportAsEmail');
+        component.onSubmit();
+        expect(SPY).toHaveBeenCalled();
+    });
     it('should close the form after submission', () => {
         const SPY = spyOn(component, 'closeForm');
         component.exportation = () => 0;
@@ -133,5 +143,32 @@ describe('ExportFormComponent', () => {
         const SPY = spyOn(KEY_EVENT, 'stopPropagation');
         component.blockEvent(KEY_EVENT);
         expect(SPY).toHaveBeenCalled();
+    });
+    it('should call export by mail of mail export', () => {
+        const NAME = 'hello';
+        const TYPE = '.jpeg';
+        const MAIL = 'xxxx@yyy.zz';
+        // tslint:disable-next-line: no-string-literal
+        const SPY = spyOn(component['mailExport'], 'exportByMail');
+        component.exportAsEmail(NAME, TYPE, MAIL);
+        expect(SPY).toHaveBeenCalled();
+    });
+    it('should set the checked attribute to true and the export mode to one', () => {
+        // tslint:disable-next-line: no-any
+        const MAT_EVENT_STUB: any = {
+            checked: true,
+        };
+        component.emailExportStatus(MAT_EVENT_STUB);
+        expect(component.checked).toBeTruthy();
+        expect(component.exportMode).toEqual(1);
+    });
+    it('should et the checked attribute to false and the export mode to zero', () => {
+        // tslint:disable-next-line: no-any
+        const MAT_EVENT_STUB: any = {
+            checked: false,
+        };
+        component.emailExportStatus(MAT_EVENT_STUB);
+        expect(component.checked).toBeFalsy();
+        expect(component.exportMode).toEqual(0);
     });
 });

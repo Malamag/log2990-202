@@ -34,7 +34,10 @@ export class EmailExporterService {
         };
         const URL = 'http://localhost:3000/mail/export';
         this.http.post(URL, IMG_SEND, HTTP_OPTIONS).subscribe((data) => {
-            this.displayFeedback();
+            this.displayFeedback('envoie avec succès');
+        },
+        (error) => {
+            this.displayFeedback('votre dessin ne peut pas être exporté car il est trop lourd');
         });
     }
     exportByMail(svgElem: Node, name: string, canvasRef: HTMLCanvasElement, type: string, mail: string): void {
@@ -77,11 +80,10 @@ export class EmailExporterService {
         };
         image.src = this.imageURL;
     }
-    displayFeedback(): void {
-        const MESSAGE = 'vous allez recevoir votre image par courriel si votre courriel existe';
+    displayFeedback(message: string): void {
         const DURATION = 2500;
         const CONFIG = new MatSnackBarConfig();
         CONFIG.duration = DURATION;
-        this.snackBar.open(MESSAGE, undefined, CONFIG);
+        this.snackBar.open(message, undefined, CONFIG);
     }
 }
