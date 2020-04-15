@@ -6,5 +6,7 @@ export default {
     IndexService: Symbol('IndexService'),
     DateService: Symbol('DateService'),
     DatabaseController: Symbol('DatabaseController'),
-    DatabaseService: Symbol('DatabaseService')
+    DatabaseService: Symbol('DatabaseService'),
+    EmailExportService: Symbol('EmailExportService'),
+    EmailExportController: Symbol('EmailExportController')
 };
