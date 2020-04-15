@@ -52,14 +52,16 @@ export class CanvasInteraction {
       let CURRENT_Y = ElementInfo.translate(selectionTool.drawing.children[i]).y;
 
       // get the CURRENT item's rotate and add the angle
-      let NEW_A = ElementInfo.rotate(selectionTool.drawing.children[i]);
+      let NEW_A = ElementInfo.rotate(selectionTool.drawing.children[i]) + angle;
       
-      if(NEW_A + angle > 2*Math.PI && !average){
+      /*
+      if(NEW_A + angle > 2*Math.PI){
         angle = 2*Math.PI;
         NEW_A = 0;
       }else{
         NEW_A += angle;
       }
+      */
 
       selectionTool.render.setStyle(selectionTool.drawing.children[i], 'transform', `translate(${CURRENT_X}px,${CURRENT_Y}px) rotate(${0}rad)`);
 

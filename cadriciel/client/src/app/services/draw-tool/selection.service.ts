@@ -7,7 +7,6 @@ import { HtmlSvgFactory } from './html-svg-factory.service';
 import { MoveWithArrows } from './move-with-arrows.service';
 import { Point } from './point';
 import { ShapeService } from './shape.service';
-import { ElementInfo } from './element-info.service';
 
 const OUTLINE_COLOR = '0, 102, 204, 0.9';
 const FILL_COLOR = '0, 102, 204, 0.3';
@@ -104,7 +103,6 @@ export class SelectionService extends ShapeService {
                 }
             }
         });
-
         // reset on tool change
         window.addEventListener('toolChange', (e: Event) => {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
@@ -131,7 +129,6 @@ export class SelectionService extends ShapeService {
             CanvasInteraction.createBoundingBox(this);
             CanvasInteraction.updateBoxCenter(this);
         }
-
         // only if a key has not been released
         if (!keyboard.released) {
             for (let i = 0; i < this.ARROW_KEY_CODES.length; i++) {
@@ -158,7 +155,6 @@ export class SelectionService extends ShapeService {
                 this.singleUseArrows[i] = false;
             }
         }
-
         // can only move selection if there is at least one arrow pressed
         this.canMoveSelection = this.arrows.includes(true);
 
@@ -236,7 +232,6 @@ export class SelectionService extends ShapeService {
                     this.invertedItems[i] = !this.selectedItems[i];
                 }
             }
-
             // adjust the focused item's selection status
             if (this.itemUnderMouse != null) {
                 this.selectedItems[this.itemUnderMouse] = this.inverted ? !this.selectedItems[this.itemUnderMouse] : true;
@@ -254,7 +249,6 @@ export class SelectionService extends ShapeService {
         if (this.selectedItems.includes(true) && this.movingSelection && this.movedSelectionOnce) {
             this.interaction.emitDrawingDone();
         }
-
         // reset mouse offset status
         this.movedSelectionOnce = false;
         this.movedMouseOnce = false;
@@ -280,7 +274,6 @@ export class SelectionService extends ShapeService {
 
             CanvasInteraction.moveElements(OFFSET.x, OFFSET.y, this);
         }
-
         // save mouse position
         this.currentPath.push(position);
 

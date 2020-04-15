@@ -23,13 +23,16 @@ export class ElementInfo {
     return ROTATE_VALUE;
   }
 
-  static center(el : Element, box : any): Point{
+  static center(el : Element, box : ClientRect | null): Point{
 
     let htmlel = el as HTMLElement;
 
     let bla = htmlel.getBoundingClientRect();
 
-    const CENTER = new Point((bla.left - box.left) + bla.width/2, (bla.top - box.top) + bla.height/2);
+    let leftOffset = box? box.left : 0;
+    let topOffset = box? box.top : 0;
+
+    const CENTER = new Point((bla.left - leftOffset) + bla.width/2, (bla.top - topOffset) + bla.height/2);
 
     return CENTER;
   }
