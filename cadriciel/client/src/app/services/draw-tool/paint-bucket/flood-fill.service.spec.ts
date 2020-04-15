@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-
+import { Point } from '../point';
 import { FloodFillService } from './flood-fill.service';
 import { Pixel } from './pixel';
-import { Point } from '../point';
 
 fdescribe('FloodFillService', () => {
   let service: FloodFillService;
@@ -98,7 +97,6 @@ fdescribe('FloodFillService', () => {
   });
 
   it('should flood-fill all the points on 100% tolerance', () => {
-    const FULL = 255;
     const CLICKED_COLOR = [FULL, FULL, FULL];
     const FILL_COLOR = [0, 0, 0];
     const TOL = 1;
