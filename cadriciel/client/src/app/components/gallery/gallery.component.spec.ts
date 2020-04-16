@@ -198,6 +198,27 @@ describe('GalleryComponent', () => {
             expect(SPY).toHaveBeenCalled();
         });
     });
+    it('should add the image one time', () => {
+        component.tags = ['hello', 'new'];
+        const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'word'] };
+        const DATA: ImageData = { id: '570', svgElement: SVG_DATA, name: 'welcome', tags: ['hello', 'new'] };
+        component.connect.getImagesByTags = jasmine.createSpy().and.returnValues(of([DATA, DATA]));
+        component.getImagesByTags();
+        of([DATA, DATA]).subscribe(() => {
+            expect(component.shownDrawings.length).toEqual(1);
+        });
+    });
+    it('should add the two images', () => {
+        component.tags = ['hello', 'new'];
+        const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'word'] };
+        const FIRST_DATA: ImageData = { id: '570', svgElement: SVG_DATA, name: 'welcome', tags: ['hello', 'new'] };
+        const SECOND_DATA: ImageData = {id: '630', svgElement: SVG_DATA, name: 'hello', tags: ['hi', 'hello']};
+        component.connect.getImagesByTags = jasmine.createSpy().and.returnValues(of([FIRST_DATA, SECOND_DATA]));
+        component.getImagesByTags();
+        of([FIRST_DATA, SECOND_DATA]).subscribe(() => {
+            expect(component.shownDrawings.length).toEqual(2);
+        });
+    });
     it('possible tags length should be greater than zero', () => {
         component.possibleTags = [];
         const SVG_DATA: SVGData = { height: '2500', width: '1080', bgColor: 'white', innerHTML: ['hello', 'hello'] };
