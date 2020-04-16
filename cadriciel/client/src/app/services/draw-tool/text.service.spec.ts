@@ -49,7 +49,7 @@ describe('TextService', () => {
     const PATH = service.createPath(ptArr);
 
     // tslint:disable-next-line: no-string-literal
-    expect(PATH).toContain('text-align="right"');
+    expect(PATH).toContain('text-anchor="end"');
   });
 
   it('should return the text alignment', () => {
@@ -58,7 +58,7 @@ describe('TextService', () => {
     const FUNCTION = service.getTextAlignement();
 
     // tslint:disable-next-line: no-string-literal
-    expect(FUNCTION).toBe('center');
+    expect(FUNCTION).toBe('middle');
   });
 
   it('should change the text to bold', () => {

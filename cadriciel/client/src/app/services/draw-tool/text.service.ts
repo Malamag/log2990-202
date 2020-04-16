@@ -172,13 +172,13 @@ export class TextService extends DrawingTool {
   getTextAlignement(): string {
     switch (this.attr.alignment) {
       case 'C' : {
-        return 'center';
+        return 'middle';
       }
       case 'R' : {
-        return 'right';
+        return 'end';
       }
       default : {
-        return 'left';
+        return 'start';
       }
     }
   }
@@ -198,16 +198,14 @@ export class TextService extends DrawingTool {
       </foreignObject>
     `;
 */
-
-    s += `<text style="cursor: text" x="${p[0].x}" y="${p[0].y}" `;
+    s += `<text style="cursor: text" x="${p[0].x}" y="${p[0].y}" dy="0.5em" `;
     s += `fill="${this.chosenColor.primColor}" `;
     s += `font-family="${this.attr.fontFamily}" `;
     s += `font-size="${this.attr.fontSize}" `;
     s += `font-weight="${this.getFontWeight()}" `;
     s += `font-style="${this.getFontStyle()}" `;
-    s += `text-align="${this.getTextAlignement()}" `;
-    s += `><tspan x="${p[0].x}" dy="1.4em"> Yeet! </tspan>`;
-    s += `<tspan x="${p[0].x}" dy="1.4em"> Yeet! </tspan>`;
+    s += `text-anchor="${this.getTextAlignement()}" `;
+    s += '><tspan>- Enter Text Here </tspan>';
     s += '</text>';
     // end the divider
     s += ' </g>';
