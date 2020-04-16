@@ -39,6 +39,7 @@ describe('CanvasInteractionService', () => {
     };
     select = {
       children: [firstChild, firstChild],
+      firstElementChild: firstChild,
       style: {
         pointerEvents: 'none',
       },
@@ -275,11 +276,19 @@ describe('CanvasInteractionService', () => {
   it('should set the style of the element', () => {
     const ANGLE = 2;
     const AVERAGE = true;
-    service.selectedItems = [true, false];
+    service.boxCenter = new Point(1, 2);
+    service.selectedItems = [true, true, false];
     spyOn(service.canvas, 'getBoundingClientRect').and.returnValue(fakeDomRECT);
     spyOn(ElementInfo, 'center').and.returnValue(new Point(0, 0));
     spyOn(ElementInfo, 'rotate').and.returnValue(2);
     CanvasInteraction.rotateElements(ANGLE, service, AVERAGE);
     expect(render.setStyle).toHaveBeenCalled();
+  });
+  it('should call the center of element info class', () => {
+    service.selectedRef = select;
+    spyOn(service.canvas, 'getBoundingClientRect').and.returnValue(fakeDomRECT);
+    const SPY = spyOn(ElementInfo, 'center');
+    CanvasInteraction.updateBoxCenter(service);
+    expect(SPY).toHaveBeenCalled();
   });
 });

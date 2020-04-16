@@ -23,6 +23,7 @@ const UP_ARROW = 38;
 const RIGHT_ARROW = 39;
 const DOWN_ARROW = 40;
 const INIT_VALUE = -1;
+const INIT_BOX_CENTER = 250;
 @Injectable({
     providedIn: 'root',
 })
@@ -30,7 +31,7 @@ export class SelectionService extends ShapeService {
     render: Renderer2;
     selectedRef: HTMLElement;
 
-    boxCenter: Point = new Point(250,250);
+    boxCenter: Point = new Point(INIT_BOX_CENTER, INIT_BOX_CENTER);
 
     itemUnderMouse: number | null;
     canMoveSelection: boolean;
@@ -165,13 +166,18 @@ export class SelectionService extends ShapeService {
         }
     }
 
-    wheelMove(average : boolean, precise : boolean, clockwise:boolean) : void{
+    wheelMove(average: boolean, precise: boolean, clockwise: boolean): void {
         // 1deg = 0.0175rad -> *15 = 0.2625rad
-        if(!this.isDown){
-            CanvasInteraction.rotateElements((precise? 0.0175 : 0.2625) * (clockwise? 1 : -1), this, average);
-            CanvasInteraction.createBoundingBox(this);
-            this.interaction.emitDrawingDone();
+        if (this.isDown) {
+            return;
         }
+        const WITH_PRECISION = 0.0175;
+        const WITHOUT_PRECISION = 0.2625;
+        const NEGATIVE_CLOCK_WISE = -1;
+        CanvasInteraction.rotateElements((precise ? WITH_PRECISION : WITHOUT_PRECISION) * (clockwise ? 1 : NEGATIVE_CLOCK_WISE),
+            this, average);
+        CanvasInteraction.createBoundingBox(this);
+        this.interaction.emitDrawingDone();
     }
 
     down(position: Point, insideWorkspace: boolean, isRightClick: boolean): void {
