@@ -210,4 +210,10 @@ describe('SelectionService', () => {
         expect(ROTATE_SPY).toHaveBeenCalledBefore(CREATE_SPY);
         expect(CREATE_SPY).toHaveBeenCalledBefore(EMIT_SPY);
     });
+    it('should not rotate the elements', () => {
+        service.isDown = true;
+        const ROTATE_SPY = spyOn(CanvasInteraction, 'rotateElements');
+        service.wheelMove(false, false, false);
+        expect(ROTATE_SPY).not.toHaveBeenCalled();
+    })
 });

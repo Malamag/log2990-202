@@ -168,15 +168,16 @@ export class SelectionService extends ShapeService {
 
     wheelMove(average: boolean, precise: boolean, clockwise: boolean): void {
         // 1deg = 0.0175rad -> *15 = 0.2625rad
-        if (!this.isDown) {
-            const WITH_PRECISION = 0.0175;
-            const WITHOUT_PRECISION = 0.2625;
-            const NEGATIVE_CLOCK_WISE = -1;
-            CanvasInteraction.rotateElements((precise ? WITH_PRECISION : WITHOUT_PRECISION) * (clockwise ? 1 : NEGATIVE_CLOCK_WISE),
-             this, average);
-            CanvasInteraction.createBoundingBox(this);
-            this.interaction.emitDrawingDone();
+        if (this.isDown) {
+            return;
         }
+        const WITH_PRECISION = 0.0175;
+        const WITHOUT_PRECISION = 0.2625;
+        const NEGATIVE_CLOCK_WISE = -1;
+        CanvasInteraction.rotateElements((precise ? WITH_PRECISION : WITHOUT_PRECISION) * (clockwise ? 1 : NEGATIVE_CLOCK_WISE),
+            this, average);
+        CanvasInteraction.createBoundingBox(this);
+        this.interaction.emitDrawingDone();
     }
 
     down(position: Point, insideWorkspace: boolean, isRightClick: boolean): void {
