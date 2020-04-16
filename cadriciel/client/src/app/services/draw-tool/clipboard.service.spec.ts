@@ -104,10 +104,7 @@ describe('ClipboardService', () => {
 
   it('should emit drawing done when all clipboard functions called', () => {
     const NB_FUNC_CALLED = 4;
-    
     spyOn(firstChild, 'remove').and.returnValue(0);
-    
-    
     const SPY = spyOn(service.interact, 'emitDrawingDone');
     service.apply('Couper');
     service.apply('Supprimer');

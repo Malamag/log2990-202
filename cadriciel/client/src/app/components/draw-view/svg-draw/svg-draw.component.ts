@@ -195,11 +195,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.interaction.$selectedTool.subscribe((toolName: string) => {
             if (toolName === 'Annuler' || toolName === 'Refaire') {
                 this.interactionToolsContainer.get('AnnulerRefaire').apply(toolName);
-            } 
-            else if(toolName === 'Copier' || toolName === 'Coller' || toolName ==='Couper' || toolName ==='Dupliquer' || toolName ==='Supprimer'){
+            } else if (toolName === 'Copier' || toolName === 'Coller'
+            || toolName === 'Couper' || toolName ==='Dupliquer' || toolName === 'Supprimer') {
                 this.interactionToolsContainer.get('ClipBoard').apply(toolName);
-            }
-            else if (this.toolsContainer.get(toolName) && !this.toolsContainer.get(toolName).selected) {
+            } else if (this.toolsContainer.get(toolName) && !this.toolsContainer.get(toolName).selected) {
                 const event = new Event('toolChange');
                 window.dispatchEvent(event);
                 this.closeTools(this.toolsContainer);

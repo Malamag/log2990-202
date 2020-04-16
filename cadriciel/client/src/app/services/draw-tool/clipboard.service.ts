@@ -65,7 +65,7 @@ export class ClipboardService extends InteractionTool {
       window.dispatchEvent(EVENT);
     }
     CanvasInteraction.moveElements(this.pasteOffsetX, this.pasteOffsetY, this.currentSelection);
-    this.currentSelection.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this.currentSelection);
+    CanvasInteraction.createBoundingBox(this.currentSelection);
     this.currentSelection.interaction.emitDrawingDone();
   }
 
@@ -106,7 +106,7 @@ export class ClipboardService extends InteractionTool {
       this.dupOffsetY = 0;
     }
     CanvasInteraction.moveElements(this.dupOffsetX, this.dupOffsetY, this.currentSelection);
-    this.currentSelection.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this.currentSelection);
+    CanvasInteraction.createBoundingBox(this.currentSelection);
     this.currentSelection.interaction.emitDrawingDone();
   }
   // Delete entirely an element from the canvas.
@@ -119,7 +119,7 @@ export class ClipboardService extends InteractionTool {
         window.dispatchEvent(EVENT);
       }
     }
-    this.currentSelection.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this.currentSelection);
+    CanvasInteraction.createBoundingBox(this.currentSelection);
     this.currentSelection.interaction.emitDrawingDone();
   }
 
