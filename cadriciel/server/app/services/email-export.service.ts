@@ -11,7 +11,7 @@ export class EmailExportService {
         dotenv.config();
     }
     async export(data: ImageExport): Promise<void> {
-        if( this.validateEmail(data.email) ) {
+        if ( this.validateEmail(data.email) ) {
             const URL = 'https://log2990.step.polymtl.ca/email?address_validation=false&quick_return=false&dry_run=false';
             console.log('email reached server');
             const OPTIONS: request.CoreOptions = {
@@ -32,18 +32,15 @@ export class EmailExportService {
                     },
                 },
             };
-            //console.log(Buffer.from(data.src.split(',')[1], 'base64'));
             request(URL, OPTIONS, (res) => {
                 console.log('message : ' + res);
             });
-            // req.end();
             console.log('after request');
-        }
-        else {
+        } else {
             throw new Error('Invalide email');
         }
     }
-    validateEmail(email : string) : boolean{
+    validateEmail(email: string): boolean {
         const format = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
         return format.test(email);
     }
