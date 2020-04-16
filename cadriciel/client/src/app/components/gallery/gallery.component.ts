@@ -168,7 +168,7 @@ export class GalleryComponent implements AfterViewInit {
                     };
                     let exist = false;
                     this.shownDrawings.forEach((image) => {
-                        if (image === SHOWN_DATA_TEMP) {
+                        if (image.id === SHOWN_DATA_TEMP.id) {
                             exist = true;
                         }
                     });
