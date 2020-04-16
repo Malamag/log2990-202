@@ -17,12 +17,21 @@
         </ng-template>
     </div>
     <ng-template #elseBlock>
-        <div>
-            <button class="toolBtn" mat-icon-button color="primary" matTooltip={{func.name}} matTooltipPosition="after"
-                (click)="buttonAction(func.name)">
-                <mat-icon [ngClass]="(activeButton === func.name)? 'selected':'notSelected'" svgIcon={{func.icon}}></mat-icon>
-               
-            </button>
+        <div *ngIf="func.name === 'Copier' || func.name === 'Coller' || func.name === 'Dupliquer' || func.name === 'Supprimer' || func.name === 'Couper' ; else block">
+            <div *ngIf="activeButton === 'Sélectionner'">
+                <button class=" toolBtn" mat-icon-button color="primary" matTooltip={{func.name}}
+                    matTooltipPosition="after" (click)="buttonAction(func.name)">
+                    <mat-icon [ngClass]="(activeButton === func.name)? 'selected':'notSelected'" svgIcon={{func.icon}}>
+                    </mat-icon>
+                </button>
+            </div>
         </div>
+        <ng-template #block>
+            <button class=" toolBtn" mat-icon-button color="primary" matTooltip={{func.name}} matTooltipPosition="after"
+                (click)="buttonAction(func.name)">
+                <mat-icon [ngClass]="(activeButton === func.name)? 'selected':'notSelected'" svgIcon={{func.icon}}>
+                </mat-icon>
+            </button>
+        </ng-template>
     </ng-template>
 </div>
