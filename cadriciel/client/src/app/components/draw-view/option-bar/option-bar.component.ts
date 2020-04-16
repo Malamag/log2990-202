@@ -91,7 +91,7 @@ export class OptionBarComponent {
 
     private setGridKeyBind(): void {
         const G_KEY = 71;
-        if (this.kbHandler.keyCode === G_KEY) {
+        if (this.kbHandler.keyCode === G_KEY && !this.kbHandler.ctrlDown) {
             this.toggleGrid();
         }
     }

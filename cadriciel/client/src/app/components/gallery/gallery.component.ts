@@ -157,7 +157,7 @@ export class GalleryComponent implements AfterViewInit {
             } else {
                 data.forEach((im: ImageData) => {
                     const svg = this.createSVG(im.svgElement);
-                    this.shownDrawings.push({
+                    const SHOWN_DATA_TEMP = {
                         id: im.id,
                         svgElement: svg,
                         name: im.name,
@@ -165,7 +165,14 @@ export class GalleryComponent implements AfterViewInit {
                         data: im.svgElement,
                         width: +im.svgElement.width,
                         height: +im.svgElement.height,
+                    };
+                    let exist = false;
+                    this.shownDrawings.forEach((image) => {
+                        if (image.id === SHOWN_DATA_TEMP.id) {
+                            exist = true;
+                        }
                     });
+                    if (!exist) {this.shownDrawings.push(SHOWN_DATA_TEMP); }
                 });
             }
         });
