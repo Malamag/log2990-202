@@ -33,6 +33,10 @@ img {
     padding-top: 5vh;
 }
 
+.notSelected {
+    filter: invert(50%);
+}
+
 @media only screen and (max-height: 800px) {
     .btn-container {
         gap: 0%;

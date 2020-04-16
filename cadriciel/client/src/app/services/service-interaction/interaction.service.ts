@@ -60,6 +60,9 @@ export class InteractionService {
     drawingContinued: Subject<boolean> = new Subject<boolean>();
     $drawingContinued: Observable<boolean> = this.drawingContinued.asObservable();
 
+    toleranceValue: Subject<number> = new Subject<number>();
+    $toleranceValue: Observable<number> = this.toleranceValue.asObservable();
+
     constructor() {
         this.isCanvas = false;
     }
@@ -130,5 +133,9 @@ export class InteractionService {
 
     emitContinueDrawing(): void {
         this.drawingContinued.next(true);
+    }
+
+    emitToleranceValue(value: number): void {
+        this.toleranceValue.next(value);
     }
 }

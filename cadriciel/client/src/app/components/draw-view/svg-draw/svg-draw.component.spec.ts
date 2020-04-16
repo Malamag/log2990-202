@@ -61,6 +61,7 @@ describe('SvgDrawComponent', () => {
 
                 { provide: Renderer2, useValue: rendererStub },
                 { provide: GridRenderService, useValue: gridServiceStub },
+
             ],
             imports: [
                 RouterTestingModule,

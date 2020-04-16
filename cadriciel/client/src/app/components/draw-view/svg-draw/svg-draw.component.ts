@@ -8,6 +8,7 @@ import { DoodleFetchService } from 'src/app/services/doodle-fetch/doodle-fetch.s
 import { ClipboardService } from 'src/app/services/draw-tool/clipboard.service';
 import { DrawingTool } from 'src/app/services/draw-tool/drawing-tool';
 import { InputObserver } from 'src/app/services/draw-tool/input-observer';
+import { FloodFillService } from 'src/app/services/draw-tool/paint-bucket/flood-fill.service';
 import { ToolCreator } from 'src/app/services/draw-tool/tool-creator';
 import { GridRenderService } from 'src/app/services/grid/grid-render.service';
 import { UndoRedoService } from 'src/app/services/interaction-tool/undo-redo.service';
@@ -45,7 +46,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
     toolsContainer = new Map();
     // tslint:disable-next-line: typedef
     interactionToolsContainer = new Map();
-    @ViewChild('filter', {static: false}) filterRef: ElementRef;
+    @ViewChild('filter', { static: false }) filterRef: ElementRef;
     @ViewChild('inPrgress', { static: false }) inProgress: ElementRef;
     @ViewChild('canvas', { static: false }) svg: ElementRef;
 
@@ -100,6 +101,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             if (canvas.wipeAll === true || canvas.wipeAll === undefined) { // if no attribute is specified, the doodle will be w
                 this.canvBuilder.wipeDraw(this.frameRef);
                 this.canvBuilder.wipeDraw(this.filterRef);
+                this.canvBuilder.wipeDraw(this.selectedItems);
             }
 
             if (this.gridService.grid) {
@@ -128,7 +130,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         const AEROSOL = TC.CreateAerosol(false, this.interaction, this.colorPick);
         const ELLIPSE = TC.CreateEllipse(false, this.interaction, this.colorPick);
         const POLYGON = TC.CreatePolygon(false, this.interaction, this.colorPick);
-        const TEXT = TC.CreateText(false, this.interaction, this.colorPick);
+        const TEXT = TC.CreateText(false, this.interaction, this.colorPick, this.render);
         const SELECT = TC.CreateSelection(
             false,
             this.interaction,
@@ -157,6 +159,8 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         );
 
         const PIPETTE = TC.CreatePipette(false, this.interaction, this.colorPick);
+        const BUCKET = TC.CreateBucket(false, this.interaction, this.colorPick, new FloodFillService());
+
         this.toolsContainer.set('Rectangle', RECT);
         this.toolsContainer.set('Ligne', LINE);
         this.toolsContainer.set('Pinceau', BRUSH);
@@ -169,6 +173,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.toolsContainer.set('Applicateur de couleur', COLOR_EDITOR);
         this.toolsContainer.set('Pipette', PIPETTE);
         this.toolsContainer.set('Texte', TEXT);
+        this.toolsContainer.set('Sceau de peinture', BUCKET);
 
     }
     ngAfterViewInit(): void {
@@ -182,7 +187,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         const UNDO_REDO: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
 
         const CLIPBOARD: ClipboardService =
-         new ClipboardService(this.toolsContainer.get('Sélectionner'),this.interaction, this.frameRef.nativeElement, this.render);
+            new ClipboardService(this.toolsContainer.get('Sélectionner'), this.interaction, this.frameRef.nativeElement, this.render);
 
         this.interactionToolsContainer.set('AnnulerRefaire', UNDO_REDO);
         this.interactionToolsContainer.set('ClipBoard', CLIPBOARD);
@@ -195,11 +200,10 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         this.interaction.$selectedTool.subscribe((toolName: string) => {
             if (toolName === 'Annuler' || toolName === 'Refaire') {
                 this.interactionToolsContainer.get('AnnulerRefaire').apply(toolName);
-            } 
-            else if(toolName === 'Copier' || toolName === 'Coller' || toolName ==='Couper' || toolName ==='Dupliquer' || toolName ==='Supprimer'){
+            } else if (toolName === 'Copier' || toolName === 'Coller'
+                || toolName === 'Couper' || toolName === 'Dupliquer' || toolName === 'Supprimer') {
                 this.interactionToolsContainer.get('ClipBoard').apply(toolName);
-            }
-            else if (this.toolsContainer.get(toolName) && !this.toolsContainer.get(toolName).selected) {
+            } else if (this.toolsContainer.get(toolName) && !this.toolsContainer.get(toolName).selected) {
                 const event = new Event('toolChange');
                 window.dispatchEvent(event);
                 this.closeTools(this.toolsContainer);
@@ -230,6 +234,9 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
 
         window.addEventListener('mouseup', (e: MouseEvent) => {
             MOUSE_HANDLER.up(e);
+        });
+        window.addEventListener('wheel', (e: WheelEvent) => {
+            MOUSE_HANDLER.wheel(e);
         });
 
         // Prevent right-click menu

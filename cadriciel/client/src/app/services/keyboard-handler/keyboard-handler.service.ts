@@ -73,7 +73,7 @@ export class KeyboardHandlerService {
         const SHIFT_CODE = 16;
         const CTRL_CODE = 17;
 
-        this.updateDownToolObservers();
+        // this.updateDownToolObservers();
 
         // tslint:disable-next-line: deprecation
         if (e.keyCode === CTRL_CODE) {

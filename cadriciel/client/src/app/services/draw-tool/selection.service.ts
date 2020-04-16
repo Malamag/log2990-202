@@ -23,12 +23,15 @@ const UP_ARROW = 38;
 const RIGHT_ARROW = 39;
 const DOWN_ARROW = 40;
 const INIT_VALUE = -1;
+const INIT_BOX_CENTER = 250;
 @Injectable({
     providedIn: 'root',
 })
 export class SelectionService extends ShapeService {
     render: Renderer2;
     selectedRef: HTMLElement;
+
+    boxCenter: Point = new Point(INIT_BOX_CENTER, INIT_BOX_CENTER);
 
     itemUnderMouse: number | null;
     canMoveSelection: boolean;
@@ -94,19 +97,24 @@ export class SelectionService extends ShapeService {
                     this.render.listen(EL, 'mousedown', () => {
                         this.render.setAttribute(EL, 'isListening', 'true');
                         if (!this.foundAnItem) {
-                            this.itemUnderMouse = i;
+                            let index = 0;
+                            let currentChild = EL;
+                            while ( currentChild != null ) {
+                                currentChild = currentChild.previousSibling as Element;
+                                index++;
+                            }
+                            this.itemUnderMouse = index - 1;
                             this.foundAnItem = true;
                         }
                     });
                 }
             }
         });
-
         // reset on tool change
         window.addEventListener('toolChange', (e: Event) => {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
                 this.selectedItems = [];
-                this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
+                CanvasInteraction.createBoundingBox(this);
             }
             this.selectedItems = [];
             this.invertedItems = [];
@@ -125,9 +133,9 @@ export class SelectionService extends ShapeService {
             for (let i = 0; i < this.drawing.children.length; i++) {
                 this.selectedItems[i] = true;
             }
-            this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
+            CanvasInteraction.createBoundingBox(this);
+            CanvasInteraction.updateBoxCenter(this);
         }
-
         // only if a key has not been released
         if (!keyboard.released) {
             for (let i = 0; i < this.ARROW_KEY_CODES.length; i++) {
@@ -154,10 +162,8 @@ export class SelectionService extends ShapeService {
                 this.singleUseArrows[i] = false;
             }
         }
-
         // can only move selection if there is at least one arrow pressed
         this.canMoveSelection = this.arrows.includes(true);
-
         // save current state for undo-redo if we are done moving the selection
         if (this.movedSelectionWithArrowsOnce && !this.arrows.includes(true)) {
             this.movedSelectionWithArrowsOnce = false;
@@ -165,30 +171,38 @@ export class SelectionService extends ShapeService {
         }
     }
 
+    wheelMove(average: boolean, precise: boolean, clockwise: boolean): void {
+        // 1deg = 0.0175rad -> *15 = 0.2625rad
+        if (this.isDown) {
+            return;
+        }
+        const WITH_PRECISION = 0.0175;
+        const WITHOUT_PRECISION = 0.2625;
+        const NEGATIVE_CLOCK_WISE = -1;
+        CanvasInteraction.rotateElements((precise ? WITH_PRECISION : WITHOUT_PRECISION) * (clockwise ? 1 : NEGATIVE_CLOCK_WISE),
+            this, average);
+        CanvasInteraction.createBoundingBox(this);
+        this.interaction.emitDrawingDone();
+    }
+
     down(position: Point, insideWorkspace: boolean, isRightClick: boolean): void {
         // in case we changed tool while the mouse was down
         this.ignoreNextUp = false;
-
         // the rectangleTool should affect the canvas
         this.isDown = true;
-
         // add the same point twice in case the mouse doesnt move
         this.currentPath.push(position);
         this.currentPath.push(position);
-
         // inverting selection with right-click
         this.inverted = isRightClick;
-
         // we need to know if we clicked in the bounding box to make sure we can move it accordingly
         this.movingSelection = !this.inverted && Point.insideRectangle(position, this.wrapperDimensions[0], this.wrapperDimensions[1]);
-
         // on right-click, save the inverted selection state of each item
         if (this.inverted) {
             for (let i = 0; i < this.selectedItems.length; i++) {
                 this.invertedItems[i] = !this.selectedItems[i];
             }
         }
-
         // if there is an object under the click that is not already selected
         if (this.itemUnderMouse != null && !this.selectedItems[this.itemUnderMouse] && !this.inverted) {
             // unselect all items
@@ -198,7 +212,6 @@ export class SelectionService extends ShapeService {
             // enable moving
             this.movingSelection = true;
         }
-
         this.updateProgress();
     }
 
@@ -210,7 +223,6 @@ export class SelectionService extends ShapeService {
         }
         // the selection should not affect the canvas
         this.isDown = false;
-
         // check for small offset to make single item selection more permissive
         if (Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length - 1]) < NO_MOUSE_MOVEMENT_TOLERANCE) {
             if (!this.inverted) {
@@ -223,55 +235,43 @@ export class SelectionService extends ShapeService {
                     this.invertedItems[i] = !this.selectedItems[i];
                 }
             }
-
             // adjust the focused item's selection status
             if (this.itemUnderMouse != null) {
                 this.selectedItems[this.itemUnderMouse] = this.inverted ? !this.selectedItems[this.itemUnderMouse] : true;
             }
         }
-
         // reset focused item
         this.itemUnderMouse = null;
         this.foundAnItem = false;
-
-        this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
-
+        CanvasInteraction.createBoundingBox(this);
+        CanvasInteraction.updateBoxCenter(this);
         // if we moved a selection, emit the drawing for undo-redo
         if (this.selectedItems.includes(true) && this.movingSelection && this.movedSelectionOnce) {
             this.interaction.emitDrawingDone();
         }
-
         // reset mouse offset status
         this.movedSelectionOnce = false;
         this.movedMouseOnce = false;
         this.movingSelection = false;
-
         // clear selection rectangle
         this.currentPath = [];
         this.inProgress.innerHTML = '';
-        
     }
-
     move(position: Point): void {
         // only if the selectionTool is currently affecting the canvas
         if (!this.isDown) {
             return;
         }
-
         // if we want to move the selection
         if (this.movingSelection) {
             // used for undo-redo
             this.movedSelectionOnce = true;
-
             const PREVIOUS_MOUSE_POSITION = this.currentPath[this.currentPath.length - 1];
             const OFFSET = new Point(position.x - PREVIOUS_MOUSE_POSITION.x, position.y - PREVIOUS_MOUSE_POSITION.y);
-
             CanvasInteraction.moveElements(OFFSET.x, OFFSET.y, this);
         }
-
         // save mouse position
         this.currentPath.push(position);
-
         // if we're not trying to move an existing selection, we want to make a selection rectangle
         if (!this.movingSelection) {
             // check for small offset to make single item selection more permissive
@@ -284,11 +284,9 @@ export class SelectionService extends ShapeService {
                 // get every item that intersects with the selection rectangle
                 CanvasInteraction.retrieveItemsInRect(this.inProgress, this.drawing, this.selectedItems, this.invertedItems, this.inverted);
             }
-
             this.updateProgress();
         }
-
-        this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
+        CanvasInteraction.createBoundingBox(this);
     }
 
     // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
@@ -339,7 +337,6 @@ export class SelectionService extends ShapeService {
         if (W === 0 || H === 0) {
             s = '';
         }
-
         return s;
     }
 }

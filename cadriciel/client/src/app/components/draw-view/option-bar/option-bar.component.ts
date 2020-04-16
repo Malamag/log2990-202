@@ -22,6 +22,7 @@ export class OptionBarComponent {
     canvasSub: Subscription;
     currentCanvas: Canvas;
     gridSelected: boolean;
+    textSelected: boolean;
     stepVal: number;
     alphaVal: number;
     readonly maxStepVal: number = 90;
@@ -35,11 +36,21 @@ export class OptionBarComponent {
     ) {
         this.funcMenu = menuItems;
         this.gridSelected = false;
-
+        this.textSelected = false;
         const DEF_GRID_ALPHA = 100;
         this.alphaVal = DEF_GRID_ALPHA;
 
         this.stepVal = this.gridService.defSteps;
+
+        this.interaction.selectedTool.subscribe((tool: string) => {
+            {
+                if (tool === 'Texte') {
+                    this.textSelected = true;
+                } else {
+                    this.textSelected = false;
+                }
+            }
+        });
     }
 
     @HostListener('document: keydown', ['$event'])
@@ -91,7 +102,7 @@ export class OptionBarComponent {
 
     private setGridKeyBind(): void {
         const G_KEY = 71;
-        if (this.kbHandler.keyCode === G_KEY && !this.kbHandler.ctrlDown) {
+        if (this.kbHandler.keyCode === G_KEY && !this.kbHandler.ctrlDown && !this.textSelected) {
             this.toggleGrid();
         }
     }
@@ -99,7 +110,8 @@ export class OptionBarComponent {
     private setGridIncreaseKeyBind(step: number): void {
         const EQUAL = 187; // plus sign located on the equal key (shift-equal)
         const NUMPAD_PLUS = 107;
-        if (this.kbHandler.keyCode === NUMPAD_PLUS || (this.kbHandler.shiftDown && this.kbHandler.keyCode === EQUAL)) {
+        if (this.kbHandler.keyCode === NUMPAD_PLUS || (this.kbHandler.shiftDown && this.kbHandler.keyCode === EQUAL)
+            && !this.textSelected) {
             if (this.stepVal < this.maxStepVal) {
                 this.stepVal += step;
                 this.gridService.updateSpacing(this.stepVal);
@@ -110,7 +122,7 @@ export class OptionBarComponent {
     private setGridDecreaseKeyBind(step: number): void {
         const NUMPAD_MINUS = 109;
         const DASH = 189; // minus sign
-        if (this.kbHandler.keyCode === NUMPAD_MINUS || this.kbHandler.keyCode === DASH) {
+        if (this.kbHandler.keyCode === NUMPAD_MINUS || this.kbHandler.keyCode === DASH && !this.textSelected) {
             if (this.stepVal > this.minStepVal) {
                 this.stepVal -= step;
                 this.gridService.updateSpacing(this.stepVal);

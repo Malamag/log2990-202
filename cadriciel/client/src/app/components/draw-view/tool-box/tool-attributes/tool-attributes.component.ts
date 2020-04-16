@@ -23,6 +23,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
     isItalic: boolean;
 
     selectedTool: string;
+    tolerance: number;
     tools: string[] = [];
 
     pipettePreviewFill: string;
@@ -38,9 +39,10 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
             'Aérosol',
             'ApplicateurCouleur',
             'Efface',
-            'Texte'
+            'Texte',
+            'Sceau de peinture',
         ];
-        const DEF_THICK = 5;
+        const DEF_THICK = 20;
         const DEF_TEXTURE = 0;
         const DEF_POLYGONE_CORNERS = 3;
         const DEF_EMISSIONS = 50;
@@ -49,6 +51,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
         const DEF_JUNCTION_RAD = 6;
         const DEF_FONT_FAMILY = 'arial';
         const DEF_ALIGNEMENT = 'L';
+        const DEF_TOLERANCE = 50;
         this.lineThickness = DEF_THICK; // 5px thick line
         this.texture = DEF_TEXTURE; // blur texture
 
@@ -66,6 +69,7 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
         this.plotType = DEF_PLOTTYPE; // type 2 --> filled with border
         this.junction = true; // with junction dots of 6 px size
         this.junctionRadius = DEF_JUNCTION_RAD;
+        this.tolerance = DEF_TOLERANCE;
         this.selectedTool = 'Crayon';
     }
 
@@ -79,9 +83,11 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
             });
             if (toolExist) {
                 this.selectedTool = tool;
+                console.log(tool);
             }
-            const CALL_CONVERSION: boolean = tool === 'Pipette';
+            const CALL_CONVERSION: boolean = tool === 'Pipette' || tool === 'Sceau de peinture';
             this.interaction.emitSvgCanvasConversion(CALL_CONVERSION);
+
         });
 
         this.interaction.$previewColor.subscribe((color: string) => {
@@ -94,6 +100,8 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
         this.updateForms(); // emit all after init
         this.updateLine();
         this.updateTools();
+        this.updateBucket();
+        this.updateAerosol();
     }
 
     updateForms(): void {
@@ -115,13 +123,19 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
     updateTools(): void {
         this.interaction.emitToolsAttributes({
             lineThickness: this.lineThickness,
-            texture: this.texture });
+            texture: this.texture
+        });
     }
 
     updateAerosol(): void {
         this.interaction.emitAerosolAttributes({
             emissionPerSecond: this.emissionPerSecond,
-            diameter: this.diameter });
+            diameter: this.diameter
+        });
+    }
+
+    updateBucket(): void {
+        this.interaction.emitToleranceValue(this.tolerance);
     }
 
     updateText(): void {
@@ -137,8 +151,8 @@ export class ToolAttributesComponent implements OnInit, AfterViewInit {
     mutate(type: boolean): void {
         switch (type) {
             case false: {
-              this.isBold = !this.isBold;
-              return;
+                this.isBold = !this.isBold;
+                return;
             }
             case true: {
                 this.isItalic = !this.isItalic;

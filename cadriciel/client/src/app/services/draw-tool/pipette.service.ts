@@ -99,4 +99,8 @@ export class PipetteService extends InputObserver {
     goingInsideCanvas(): void {
         // throw new Error('Method not implemented.');
     }
+
+    wheelMove(): void {
+        // nothing happens for pipette
+    }
 }

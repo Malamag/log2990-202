@@ -120,6 +120,21 @@ export class MouseHandlerService {
         }
     }
 
+    wheel(e: WheelEvent): void {
+        const AVERAGE = !e.shiftKey;
+        const PRECISE = e.altKey;
+        const CLOCK_WISE = e.deltaY >= 0;
+        this.callObserverWheel(AVERAGE, PRECISE, CLOCK_WISE);
+    }
+
+    callObserverWheel(average: boolean, precise: boolean, clockwise: boolean): void {
+        this.observers.forEach((element: InputObserver) => {
+            if (element.selected) {
+                element.wheelMove(average, precise, clockwise);
+            }
+        });
+    }
+
     callObserverMove(): void {
         // console.log("MOVING");
         this.observers.forEach((element: InputObserver) => {

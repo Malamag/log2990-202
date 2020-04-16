@@ -117,41 +117,54 @@
     <div *ngSwitchCase="'Texte'" (mouseleave)="updateText()">
         <label> Police de texte </label>
         <select [(ngModel)]="fontFamily">
-            <option>arial</option>
-            <option>times new Roman</option>
+            <option value="arial" selected>Arial</option>
+            <option>Arial Black</option>
+            <option>Comic Sans MS</option>
+            <option>Courier</option>
+            <option>Georgia</option>
+            <option>Helvetica</option>
+            <option>Impact</option>
+            <option>Lucida Console</option>
+            <option>Lucida Sans Unicode</option>
+            <option>Monospace</option>
+            <option>Roboto</option>
+            <option>Tahoma</option>
+            <option>Times new Roman</option>
+            <option>Trebuchet MS</option>
+            <option>Verdana</option>
         </select>
-        <br><br>
+        <br /><br />
         <label> Taille de la police</label>
-        <mat-slider thumbLabel type="range" min="3" max="50" [(ngModel)]="fontSize"></mat-slider> <br />
+        <mat-slider thumbLabel type="range" min="10" max="200" value="20" [(ngModel)]="fontSize"></mat-slider> <br />
         <br />
         <label> Mutateur</label> <br />
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/google"
              title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button (click)="mutate(0)">
-            <img src="../../../assets/images/bold.svg" width="30px" height="30px"/>
+        <button (click)="mutate(false)">
+            <img [ngClass]="!isBold ? 'notSelected':''" src="../../../assets/images/bold.svg" width="30px" height="30px"/>
         </button>
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" 
             title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
-        <button (click)="mutate(1)">
-            <img src="../../../assets/images/italic.svg" width="30px" height="30px"/>
+        <button (click)="mutate(true)">
+            <img [ngClass]="!isItalic ? 'notSelected':''" src="../../../assets/images/italic.svg" width="30px" height="30px"/>
         </button>
-        <br><br>
+        <br /><br />
         <label> Alignement</label> <br />
         <!-- Replace the text with the images-->
         <!-- source: Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" 
             title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
         <button (click)="alignement('L')">
-            <img src="../../../assets/images/left-align.svg" width="30px" height="30px"/>
+            <img [ngClass]="alignment !== 'L' ? 'notSelected':''" src="../../../assets/images/left-align.svg" width="30px" height="30px"/>
         </button>
         <!--source: Icons made by <a href="https://www.flaticon.com/authors/bqlqn"
              title="bqlqn">bqlqn</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
         <button (click)="alignement('C')">
-            <img src="../../../assets/images/center-align.svg" width="30px" height="30px"/>
+            <img [ngClass]="alignment !== 'C' ? 'notSelected':''" src="../../../assets/images/center-align.svg" width="30px" height="30px"/>
         </button>
         <!--source: Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" 
             title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>-->
         <button (click)="alignement('R')">
-            <img src="../../../assets/images/right-align.svg" width="30px" height="30px"/>
+            <img [ngClass]="alignment !== 'R' ? 'notSelected':''" src="../../../assets/images/right-align.svg" width="30px" height="30px"/>
         </button>
     </div>
 
@@ -164,4 +177,8 @@
         <!-- here goes a list of stamps -->
     </div>
 
+    <div *ngSwitchCase="'Sceau de peinture'" (mouseleave)="updateBucket()">
+        <label>Tolérance: {{ tolerance }}%</label>
+        <mat-slider thumbLabel type="range" min="0" max="100" value="50" [(ngModel)]="tolerance"></mat-slider>
+    </div>
 </div>
