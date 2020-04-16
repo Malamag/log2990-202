@@ -3,7 +3,7 @@
     <h1 id="title">PolyDessin 🖉</h1>
     <div id="buttonContainer">
         <div *ngFor="let items of menuItems">
-            <div *ngIf="items.shortcutName != 'Exporter' && items.shortcutName != 'sauvegarde'">
+            <div *ngIf="items.shortcutName != 'Exporter' && items.shortcutName != 'Sauvegarde' && items.shortcutName != 'Grille'">
                 <div *ngIf= "items.shortcutName == 'Continuer'; else elseBlock">
                     <div *ngIf = "drawingExist">
                         <button (click)="execute(items.shortcutName)"mat-button>

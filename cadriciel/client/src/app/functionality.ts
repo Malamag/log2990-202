@@ -84,7 +84,7 @@ export const menuItems = [
         shortcutName: 'Grille',
         shortDescription: '',
         description: '',
-        icon: ''
+        icon: 'grid_on'
     }
 ];
 
