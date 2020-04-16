@@ -28,12 +28,12 @@ export class ContinueDrawingService {
 
     const childs: HTMLCollection = el.children;
     for (let i = 0; i < childs.length; ++i) {
-        if (data.innerHTML[i] === undefined) {
-          childs[i].innerHTML = '';
-        } else {
-          childs[i].innerHTML = data.innerHTML[i];
-        }
+      if (data.innerHTML[i] === undefined) {
+        childs[i].innerHTML = '';
+      } else {
+        childs[i].innerHTML = data.innerHTML[i];
       }
+    }
 
     const CANVAS_ATTRS: Canvas = { canvasWidth: +data.width, canvasHeight: +data.height, canvasColor: data.bgColor };
     this.interact.emitGridAttributes(CANVAS_ATTRS);
@@ -64,7 +64,7 @@ export class ContinueDrawingService {
         INNER.push('');
       }
     }
-    const RET_DATA: SVGData = {height: H, width: W, bgColor: BACK_COLOR, innerHTML: INNER};
+    const RET_DATA: SVGData = { height: H, width: W, bgColor: BACK_COLOR, innerHTML: INNER };
     return RET_DATA;
   }
 

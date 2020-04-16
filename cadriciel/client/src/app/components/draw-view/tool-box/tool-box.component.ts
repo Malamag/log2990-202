@@ -40,7 +40,6 @@ export class ToolBoxComponent implements OnInit {
         this.selectingToolsMap.set('ctrl+shift+z', 'Refaire');
         this.selectingToolsMap.set('s', 'Sélectionner');
         this.selectingToolsMap.set('e', 'Efface');
-        this.selectingToolsMap.set('r', 'Applicateur de couleur');
         this.selectingToolsMap.set('i', 'Pipette');
         this.selectingToolsMap.set('t', 'Texte');
         this.selectingToolsMap.set('ctrl+c', 'Copier');
@@ -48,6 +47,7 @@ export class ToolBoxComponent implements OnInit {
         this.selectingToolsMap.set('ctrl+d', 'Dupliquer');
         this.selectingToolsMap.set('Delete', 'Supprimer');
         this.selectingToolsMap.set('ctrl+x', 'Couper');
+        this.selectingToolsMap.set('b', 'Sceau de peinture');
         this.disableUndo = true;
         this.disableRedo = true;
     }
