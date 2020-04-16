@@ -56,8 +56,8 @@ export class ToolCreator {
         return new PolygonService(this.inProgress, this.drawing, selected, interaction, colorPick);
     }
 
-    CreateText(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService): TextService {
-        return new TextService(this.inProgress, this.drawing, selected, interaction, colorPick);
+    CreateText(selected: boolean, interaction: InteractionService, colorPick: ColorPickingService, render: Renderer2): TextService {
+        return new TextService(this.inProgress, this.drawing, selected, interaction, colorPick, render);
     }
 
     CreateSelection(

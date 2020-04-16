@@ -53,6 +53,9 @@ export class ToolBoxComponent implements OnInit {
     }
     @HostListener('document: keydown', ['$event'])
     updateBoard(event: KeyboardEvent): void {
+        // We don't prevent default if the selected tool is Text nor we change tools
+        if (this.activeButton === 'Texte') { return; }
+
         // tslint:disable-next-line: deprecation
         if (event.keyCode !== F12) {
             event.preventDefault();
