@@ -192,17 +192,22 @@ describe('SelectionService', () => {
         const POINT_CONTAINER = [new Point(0, 0), new Point(NUM, 0)];
         expect(service.createPath(POINT_CONTAINER)).toEqual('');
     });
-
-    /*it('should construct', () => {
-        const NEW_SEL_SERVICE = new SelectionService(
-            select,
-            select,
-            true,
-            new InteractionService(),
-            new ColorPickingService(new ColorConvertingService()),
-            render,
-            select,
-            select);
-        expect(NEW_SEL_SERVICE).toBeTruthy();
-    });*/
+    it('should rotate the element without precision and with a negative clock wise', () => {
+        const NEGATIVE_CLOCK_WISE = -1;
+        const WITHOUT_PRECISION = 0.2625;
+        const ROTATE_SPY = spyOn(CanvasInteraction, 'rotateElements');
+        service.wheelMove(false, false, false);
+        expect(ROTATE_SPY).toHaveBeenCalledWith(WITHOUT_PRECISION * NEGATIVE_CLOCK_WISE, service, false);
+    });
+    it(`should createBoundingBox before emitting that the drawing is done
+    and rotate the element with prescision and with a positive clockWisee`, () => {
+        const WITH_PRECISION = 0.0175;
+        const ROTATE_SPY = spyOn(CanvasInteraction, 'rotateElements');
+        const CREATE_SPY = spyOn(CanvasInteraction, 'createBoundingBox');
+        const EMIT_SPY = spyOn(service.interaction, 'emitDrawingDone');
+        service.wheelMove(false, true, true);
+        expect(ROTATE_SPY).toHaveBeenCalledWith(WITH_PRECISION, service, false);
+        expect(ROTATE_SPY).toHaveBeenCalledBefore(CREATE_SPY);
+        expect(CREATE_SPY).toHaveBeenCalledBefore(EMIT_SPY);
+    });
 });

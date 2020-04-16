@@ -1,7 +1,7 @@
 import { ElementInfo } from './element-info.service';
 import { Point } from './point';
 
-fdescribe('ElementInfo', () => {
+describe('ElementInfo', () => {
   // tslint:disable-next-line: no-any
   let elem: any;
   // tslint:disable-next-line: no-any
