@@ -110,7 +110,8 @@ export class OptionBarComponent {
     private setGridIncreaseKeyBind(step: number): void {
         const EQUAL = 187; // plus sign located on the equal key (shift-equal)
         const NUMPAD_PLUS = 107;
-        if (this.kbHandler.keyCode === NUMPAD_PLUS || (this.kbHandler.shiftDown && this.kbHandler.keyCode === EQUAL)) {
+        if (this.kbHandler.keyCode === NUMPAD_PLUS || (this.kbHandler.shiftDown && this.kbHandler.keyCode === EQUAL)
+            && !this.textSelected) {
             if (this.stepVal < this.maxStepVal) {
                 this.stepVal += step;
                 this.gridService.updateSpacing(this.stepVal);
@@ -121,7 +122,7 @@ export class OptionBarComponent {
     private setGridDecreaseKeyBind(step: number): void {
         const NUMPAD_MINUS = 109;
         const DASH = 189; // minus sign
-        if (this.kbHandler.keyCode === NUMPAD_MINUS || this.kbHandler.keyCode === DASH) {
+        if (this.kbHandler.keyCode === NUMPAD_MINUS || this.kbHandler.keyCode === DASH && !this.textSelected) {
             if (this.stepVal > this.minStepVal) {
                 this.stepVal -= step;
                 this.gridService.updateSpacing(this.stepVal);
