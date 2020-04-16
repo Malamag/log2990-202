@@ -10,7 +10,7 @@ const WIDTH = 'width';
 const HEIGHT = 'height';
 const BG_COLOR = 'color';
 const INNER_HTML = 'htmlElem';
-
+const SELECTED_ITEMS_INDEX = 4;
 @Injectable({
   providedIn: 'root'
 })
@@ -28,7 +28,7 @@ export class ContinueDrawingService {
 
     const childs: HTMLCollection = el.children;
     for (let i = 0; i < childs.length; ++i) {
-        if (data.innerHTML[i] === undefined) {
+        if (data.innerHTML[i] === undefined || i === SELECTED_ITEMS_INDEX) {
           childs[i].innerHTML = '';
         } else {
           childs[i].innerHTML = data.innerHTML[i];
