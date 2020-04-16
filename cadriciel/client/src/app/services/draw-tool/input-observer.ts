@@ -13,7 +13,7 @@ export abstract class InputObserver {
     abstract cancel(): void;
 
     // Mouse
-    abstract wheelMove(average:boolean, precise:boolean, clockwise:boolean) : void;
+    abstract wheelMove(average: boolean, precise: boolean, clockwise: boolean): void;
     abstract down(position: Point, insideWorkspace?: boolean, isRightClick?: boolean): void;
     abstract up(position: Point, insideWorkspace?: boolean): void;
     abstract move(position: Point): void;

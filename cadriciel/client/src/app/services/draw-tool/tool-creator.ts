@@ -14,7 +14,6 @@ import { RectangleService } from './rectangle.service';
 import { SelectionService } from './selection.service';
 import { TextService } from './text.service';
 
-
 @Injectable({
     providedIn: 'root',
 })

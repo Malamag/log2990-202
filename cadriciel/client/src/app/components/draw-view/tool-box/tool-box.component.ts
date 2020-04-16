@@ -58,6 +58,7 @@ export class ToolBoxComponent implements OnInit {
             event.preventDefault();
         }
         if (event.ctrlKey) {
+            // tslint:disable-next-line: deprecation
             switch (event.keyCode) {
                 case C_KEY_CODE:
                     this.buttonAction(this.selectingToolsMap.get('ctrl+c'));

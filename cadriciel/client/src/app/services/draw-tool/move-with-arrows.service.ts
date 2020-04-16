@@ -27,9 +27,9 @@ export class MoveWithArrows {
       CanvasInteraction.moveElements(xoff, yoff, selectionTool);
 
       CanvasInteraction.createBoundingBox(selectionTool);
-        if(left || up || right || down){
-          CanvasInteraction.updateBoxCenter(selectionTool);
-        }
+      if (left || up || right || down) {
+        CanvasInteraction.updateBoxCenter(selectionTool);
+      }
     }
   }
 

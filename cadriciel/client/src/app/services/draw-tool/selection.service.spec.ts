@@ -215,5 +215,5 @@ describe('SelectionService', () => {
         const ROTATE_SPY = spyOn(CanvasInteraction, 'rotateElements');
         service.wheelMove(false, false, false);
         expect(ROTATE_SPY).not.toHaveBeenCalled();
-    })
+    });
 });

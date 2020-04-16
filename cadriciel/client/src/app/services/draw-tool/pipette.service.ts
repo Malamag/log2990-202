@@ -100,7 +100,7 @@ export class PipetteService extends InputObserver {
         // throw new Error('Method not implemented.');
     }
 
-    wheelMove():void{
+    wheelMove(): void {
         // nothing happens for pipette
     }
 }

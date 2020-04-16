@@ -182,7 +182,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
         const UNDO_REDO: UndoRedoService = new UndoRedoService(this.interaction, this.frameRef.nativeElement, this.render);
 
         const CLIPBOARD: ClipboardService =
-         new ClipboardService(this.toolsContainer.get('Sélectionner'),this.interaction, this.frameRef.nativeElement, this.render);
+         new ClipboardService(this.toolsContainer.get('Sélectionner'), this.interaction, this.frameRef.nativeElement, this.render);
 
         this.interactionToolsContainer.set('AnnulerRefaire', UNDO_REDO);
         this.interactionToolsContainer.set('ClipBoard', CLIPBOARD);
@@ -196,7 +196,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             if (toolName === 'Annuler' || toolName === 'Refaire') {
                 this.interactionToolsContainer.get('AnnulerRefaire').apply(toolName);
             } else if (toolName === 'Copier' || toolName === 'Coller'
-            || toolName === 'Couper' || toolName ==='Dupliquer' || toolName === 'Supprimer') {
+            || toolName === 'Couper' || toolName === 'Dupliquer' || toolName === 'Supprimer') {
                 this.interactionToolsContainer.get('ClipBoard').apply(toolName);
             } else if (this.toolsContainer.get(toolName) && !this.toolsContainer.get(toolName).selected) {
                 const event = new Event('toolChange');

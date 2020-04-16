@@ -127,8 +127,8 @@ export abstract class DrawingTool extends InputObserver {
     }
   }
 
-  wheelMove(average:boolean, precise:boolean, clockwise:boolean){
-    //Nothing happens for most of the tools
+  wheelMove(average: boolean, precise: boolean, clockwise: boolean): void {
+    // Nothing happens for most of the tools
   }
 
 }

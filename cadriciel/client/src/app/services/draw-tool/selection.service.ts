@@ -86,7 +86,7 @@ export class SelectionService extends ShapeService {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
                 const EL: Element = this.drawing.children[i];
                 let status: string | null;
-                
+
                 try { // in case the getAttribute method is not implemented for the selected item
                     status = EL.getAttribute('isListening');
                 } catch (err) {
@@ -99,10 +99,10 @@ export class SelectionService extends ShapeService {
                         if (!this.foundAnItem) {
                             let index = 0;
                             let currentChild = EL;
-                            while( currentChild != null ){
+                            while ( currentChild != null ) {
                                 currentChild = currentChild.previousSibling as Element;
                                 index++;
-                            } 
+                            }
                             this.itemUnderMouse = index - 1;
                             this.foundAnItem = true;
                         }
@@ -243,10 +243,8 @@ export class SelectionService extends ShapeService {
         // reset focused item
         this.itemUnderMouse = null;
         this.foundAnItem = false;
-
         CanvasInteraction.createBoundingBox(this);
-        CanvasInteraction.updateBoxCenter(this);  
-
+        CanvasInteraction.updateBoxCenter(this);
         // if we moved a selection, emit the drawing for undo-redo
         if (this.selectedItems.includes(true) && this.movingSelection && this.movedSelectionOnce) {
             this.interaction.emitDrawingDone();
@@ -259,7 +257,6 @@ export class SelectionService extends ShapeService {
         this.currentPath = [];
         this.inProgress.innerHTML = '';
     }
-
     move(position: Point): void {
         // only if the selectionTool is currently affecting the canvas
         if (!this.isDown) {
@@ -269,15 +266,12 @@ export class SelectionService extends ShapeService {
         if (this.movingSelection) {
             // used for undo-redo
             this.movedSelectionOnce = true;
-
             const PREVIOUS_MOUSE_POSITION = this.currentPath[this.currentPath.length - 1];
             const OFFSET = new Point(position.x - PREVIOUS_MOUSE_POSITION.x, position.y - PREVIOUS_MOUSE_POSITION.y);
-
             CanvasInteraction.moveElements(OFFSET.x, OFFSET.y, this);
         }
         // save mouse position
         this.currentPath.push(position);
-
         // if we're not trying to move an existing selection, we want to make a selection rectangle
         if (!this.movingSelection) {
             // check for small offset to make single item selection more permissive
@@ -290,10 +284,8 @@ export class SelectionService extends ShapeService {
                 // get every item that intersects with the selection rectangle
                 CanvasInteraction.retrieveItemsInRect(this.inProgress, this.drawing, this.selectedItems, this.invertedItems, this.inverted);
             }
-
             this.updateProgress();
         }
-
         CanvasInteraction.createBoundingBox(this);
     }
 
