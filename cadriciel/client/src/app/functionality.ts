@@ -71,7 +71,7 @@ export const menuItems = [
     },
     {
         name: 'Sauvegarder dessin',
-        shortcutName: 'sauvegarde',
+        shortcutName: 'Sauvegarde',
         shortDescription: `Permet de sauvegarder un dessin sur la base de données de l'application. Lors de la sauvegarde, vous devez entrer un nom non vide
         à votre dessin, comme vous pouvez y mettre des étiquettes permettant d'identifier plus facilement votre dessin.`,
         description: `Pour ouvrir la fenêtre de sauvegarde, vous pouvez appuyer appuyer sur l'icône appropriée de la barre des options,
@@ -79,6 +79,13 @@ export const menuItems = [
         et, en option, des étiquettes qui vous permettront de retrouver le dessin en question sur la gallerie via l'option de filtrage.`,
         icon: 'save',
     },
+    {
+        name: 'Grille',
+        shortcutName: 'Grille',
+        shortDescription: '',
+        description: '',
+        icon: ''
+    }
 ];
 
 export const toolsItems = [
@@ -137,7 +144,7 @@ export const toolsItems = [
         shortDescription:
             'Cet outil vous permet de créer des lignes droites. Il suffit de cliquer à un endroit sur le canevas, puis de cliquer à un autre endroit ensuite pour voir apparaître une ligne droite entre ces deux points. En cliquant de nouveau, une ligne se créera entre les deux derniers points et ainsi de suite.',
         description:
-            `Pour forcer des angles précis, la touche shift peut être appuyée afin de créer des lignes ayant des angles
+            `L'outil est sélectionnable entres autres via la touche 'L' du clavier. Pour forcer des angles précis, la touche shift peut être appuyée afin de créer des lignes ayant des angles
             faisant des bonds de 45 degrés ; soit des angles de 0, 45, 90, 135, etc. De plus, si la touche retour arrière (Backspace) est appuyé,
             le dernier point sera supprimé. Aussi, la touche d’échappement (Escape) vous permet de supprimer la dernière ligne créée. Enfin, il est possible
             de doter la ligne de points de jonction de diamètre modifiable.`,
@@ -148,7 +155,8 @@ export const toolsItems = [
         shortcutName: 'Rectangle',
         shortDescription:
             'En faisant un clic gauche, vous définissez un premier coin du rectangle. En vous déplaçant, un aperçu de la taille du rectangle est disponible et vous pouvez confirmer la création de l’objet en relâchant le clic de souris. De plus, en maintenant la touche Shift, il vous est possible d’uniformiser les côtés de votre rectangle afin de créer un carré.',
-        description: 'Le type de tracé et l’épaisseur du trait de contour sont configurable dans le panneau d’attribut.',
+        description: `Le type de tracé et l’épaisseur du trait de contour sont configurable dans le panneau d’attribut. La touche '1' du clavier permet de sélectionner
+        l'outil. `,
         icon: 'rectangle',
     },
     {
@@ -177,7 +185,8 @@ export const toolsItems = [
         shortDescription:
             'La pipette est utilisé afin de retrouver facilement une couleur ayant déjà été utilisé dans le dessin. Effectivement, en sélectionnant une couleur sur le canvas, celle-ci remplacera la couleur que vous utilisez présentement.',
         description: `Vous pouvez utiliser cette outils en sélectionnant l'icône approprié de la barre des outils
-        ou en appuyant sur la touche 'I' de votre clavier.`,
+        ou en appuyant sur la touche 'I' de votre clavier. Une fenêtre de prévisualisation de la couleur sous le curseur apparaîtra. Un clic gauche modifiera la couleur primaire de l'outil de couleur,
+        tandis qu'un clic droit changera la couleur secondaire.`,
         icon: 'pipette',
     },
 
@@ -195,12 +204,13 @@ export const toolsItems = [
         name: 'Applicateur de couleur',
         shortcutName: 'App. de couleur',
         shortDescription:
-            `Cette outil vous permet de changer la couleur secondaire et primaire d'un objet déjà créé,
-             Pour changer la couleur primaire en faisant un clic gauche de votre souris.
-             Par contre, si vous voulez changer la couleur secondaire c'est en faisant un clic droit de votre souris.`,
+            `Cette outil vous permet de changer la couleur secondaire et primaire d'un objet déjà créé.
+             Pour changer la couleur primaire, effectuez un clic gauche avec votre souris.
+             Le changement de couleur secondaire, quant à lui, s'effectue avec un clic droit.`,
         description:
             `Vous pouvez utiliser cette outil via la barre des outils en sélectionnant l'icône appropriée
-            ou en appuyant sur la touche 'R' de votre clavier.`,
+            ou en appuyant sur la touche 'R' de votre clavier. Lorsque l'outil est activé, un curseur apparaîtra, ayant en son centre la couleur
+            primaire et, comme contour, la couleur secondaire déterminés par l'outil de couleur.`,
         icon: 'waterDrop',
     },
     {
@@ -208,10 +218,12 @@ export const toolsItems = [
         shortcutName: 'Sceau',
         shortDescription:
             `Cette outil vous permet de remplir une région de la surface de dessin de la couleur principale,
-             vous pouvez configurer les attributs du sceau de peinture via le panneau des attributs.`,
+             vous pouvez configurer l'attribut du sceau de peinture via le panneau latéral.`,
         description:
             `Vous pouvez utiliser cette outil via la barre des outils en sélectionnant l'icône appropriée
-            ou en appuyant sur la touche 'B' de votre clavier.`,
+            ou en appuyant sur la touche 'B' de votre clavier. Il est possible de modifier un attribut de tolérance du remplissage,
+            qui s'exprime par l'écart entre la couleur sous le curseur et celle des pixels contigus. Une fois le remplissage complété, l'objet
+            vectoriel en résultant sera manipulable et modifiable.`,
         icon: 'paint-bucket',
     },
     {
@@ -219,7 +231,7 @@ export const toolsItems = [
         shortcutName: 'Annuler',
         shortDescription: 'Cette fonctionnalité vous permet de revenir en arrière sur une action que vous avez fait.',
         description: `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
-        ou en faisant la touche 'ctrl+Z' de votre clavier.`,
+        ou en faisant la touche 'ctrl+Z' de votre clavier. S'il n'est pas possible d'effectuer l'action, le bouton apparaîtra comme inactif.`,
         icon: 'undo',
     },
     {
@@ -230,7 +242,7 @@ export const toolsItems = [
              Par contre, aucune action annulée ne peut être refaite si vous avez fait une autre action sauf refaire après l'annulation.`,
         description:
             `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
-            ou en appuyant sur la touche 'ctrl+shift+z' de votre clavier.`,
+            ou en appuyant sur la touche 'ctrl+shift+z' de votre clavier. S'il n'est pas possible d'effectuer l'action, le bouton apparaîtra comme inactif.`,
         icon: 'redo',
     },
     {
@@ -240,24 +252,26 @@ export const toolsItems = [
             'Cette fonctionnalité vous permet de copier une sélection.',
         description:
             `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
-            ou en appuyant sur la touche 'ctrl+C' de votre clavier.`,
+            ou en appuyant sur la touche 'ctrl+C' de votre clavier. Elle vous permettra ensuite de coller ou dupliquer l'item. Afin d'utiliser cette action,
+            l'outil de sélection doit être actif au préalable et une sélection, présente.`,
         icon: 'copy',
     },
     {
         name: 'Couper',
         shortcutName: 'Couper',
         shortDescription:
-            'Cette fonctionnalité vous permet de couper une sélection pour la placer ailleur sur la surface de dessin.',
+            'Cette fonctionnalité vous permet de couper une sélection pour la placer ailleurs sur la surface de dessin.',
         description:
             `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
-            ou en appuyant sur la touche 'ctrl+X' de votre clavier.`,
+            ou en appuyant sur la touche 'ctrl+X' de votre clavier. Un item ou des items coupés ne seront plus visibles à ce moment, mais pourront
+            être mis ailleurs sur la survace de dessin à l'aide de l'option 'Coller'. Pour utiliser cette fonctionnalité, une sélection doit être présente et l'outil, activé.`,
         icon: 'cut',
     },
     {
         name: 'Coller',
         shortcutName: 'Coller',
         shortDescription:
-            'Cette fonctionnalité vous permet de coller un objet qui a été copié ou coller auparavant.',
+            'Cette fonctionnalité vous permet de coller un objet qui a été copié ou coupé auparavant.',
         description:
             `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
             ou en appuyant sur la touche 'ctrl+V' de votre clavier.`,
@@ -270,7 +284,7 @@ export const toolsItems = [
             'Cette fonctionnalité vous permet de supprimer une sélection de la surface de dessin.',
         description:
             `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
-            ou en appuyant sur la touche 'DELETE' de votre clavier.`,
+            ou en appuyant sur la touche 'DELETE' de votre clavier. Pour ce faire, une sélection doit être existante.`,
         icon: 'delete',
     },
     {
@@ -280,7 +294,7 @@ export const toolsItems = [
             'Cette fonctionnalité vous permet de dupliquer une sélection dans un autre endroit sur la surface de dessin.',
         description:
             `Vous pouvez utiliser cette fonctionnalité via le panneau des outils en sélectionnant l'icône appropriée
-            ou en appuyant sur la touche 'ctrl+D' de votre clavier.`,
+            ou en appuyant sur la touche 'ctrl+D' de votre clavier. Pour ce faire, une sélection doit être existante.`,
         icon: 'duplicate',
     },
 ];
