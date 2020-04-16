@@ -96,14 +96,6 @@ export const toolsItems = [
         icon: 'brush',
     },
     {
-        name: 'Plume',
-        shortcutName: 'Plume',
-        shortDescription:
-            'La plume vous permet de tracer avec une texture similaire au crayon, mais avec une largeur variable par rapport à l’angle d’application.',
-        description: 'Disponible sous peu!',
-        icon: 'calligraphie',
-    },
-    {
         name: 'Aérosol',
         shortcutName: 'Aérosol',
         shortDescription:
@@ -177,15 +169,6 @@ export const toolsItems = [
         icon: 'text',
     },
 
-    {
-        name: 'Étampe',
-        shortcutName: 'Étampe',
-        shortDescription: 'Disponible sous peu!',
-        description: ' ',
-        /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"
-        title="Flaticon"> www.flaticon.com</a>*/
-        icon: 'stamp',
-    },
     {
         name: 'Applicateur de couleur',
         shortcutName: 'App. de couleur',
