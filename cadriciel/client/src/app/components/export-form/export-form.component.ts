@@ -88,7 +88,7 @@ export class ExportFormComponent implements OnInit, AfterContentInit {
                 this.exportAsEmail(NAME, TYPE, FORMVAL.email);
                 break;
         }
-
+        console.log('submit done')
         this.closeForm();
     }
 

@@ -33,9 +33,12 @@ export class EmailExportService {
                 },
             };
             //console.log(Buffer.from(data.src.split(',')[1], 'base64'));
-            request(URL, OPTIONS, (res) => {
+            request
+            .post(URL, OPTIONS, (res) => {
                 console.log('message : ' + res);
-            });
+                //process.exit(0);
+                
+            })
             // req.end();
             console.log('after request');
         }

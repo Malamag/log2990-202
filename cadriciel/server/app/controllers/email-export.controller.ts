@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
 import { EmailExportService } from '../services/email-export.service';
+import * as Httpstatus from 'http-status-codes';
 
 import Types from '../types';
 
@@ -16,7 +17,11 @@ export class EmailExportController {
         this.router = Router();
 
         this.router.post('/export', async (req: Request, res: Response, next: NextFunction) => {
-            this.emailExportService.export(req.body).catch((error) => {
+            await this.emailExportService.export(req.body)
+            .then(() => {
+                res.sendStatus(Httpstatus.OK);
+            })
+            .catch((error) => {
                 console.log(error);
             });
         });
