@@ -28,6 +28,7 @@ describe('MouseHandlerService', () => {
             goingInsideCanvas: (ptI: Point) => 0,
             up: (ptU: Point) => 0,
             doubleClick: () => 0,
+            wheelMove: (av: boolean, prec: boolean, clockWise: boolean) => 0,
         };
 
         clientRectStub = {
@@ -295,6 +296,33 @@ describe('MouseHandlerService', () => {
         service.observers = [iObserverStub, iObserverStub, iObserverStub];
         const SPY = spyOn(iObserverStub, 'doubleClick');
         service.down(mouseEventStub);
+        expect(SPY).not.toHaveBeenCalled();
+    });
+    it('should update the wheel observers', () => {
+        const WHEEL_EVENT = new WheelEvent('whell');
+        const SPY = spyOn(service, 'callObserverWheel');
+        service.wheel(WHEEL_EVENT);
+        expect(SPY).toHaveBeenCalledWith(!WHEEL_EVENT.shiftKey, WHEEL_EVENT.altKey, WHEEL_EVENT.deltaY >= 0);
+    });
+    it('should call the wheel move of every observer', () => {
+        iObserverStub.selected = true;
+        const AV = true;
+        const PR = false;
+        const CW = true;
+        const NB_CALLS = 3;
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'wheelMove');
+        service.callObserverWheel(AV, PR, CW);
+        expect(SPY).toHaveBeenCalledTimes(NB_CALLS);
+    });
+    it('should not update the observers with wheel move', () => {
+        iObserverStub.selected = false;
+        const AV = true;
+        const PR = false;
+        const CW = true;
+        service.observers = [iObserverStub, iObserverStub, iObserverStub];
+        const SPY = spyOn(iObserverStub, 'wheelMove');
+        service.callObserverWheel(AV, PR, CW);
         expect(SPY).not.toHaveBeenCalled();
     });
 });

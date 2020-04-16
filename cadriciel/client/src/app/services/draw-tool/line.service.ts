@@ -50,6 +50,7 @@ export class LineService extends DrawingTool {
     }
     // updating on key change
     updateDown(keyboard: KeyboardHandlerService): void {
+
         // only if the lineTool is currently affecting the canvas
         if (this.isDown) {
             // lines are fixed at 45 degrees angle when shift is pressed

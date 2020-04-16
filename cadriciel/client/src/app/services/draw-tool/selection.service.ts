@@ -23,12 +23,15 @@ const UP_ARROW = 38;
 const RIGHT_ARROW = 39;
 const DOWN_ARROW = 40;
 const INIT_VALUE = -1;
+const INIT_BOX_CENTER = 250;
 @Injectable({
     providedIn: 'root',
 })
 export class SelectionService extends ShapeService {
     render: Renderer2;
     selectedRef: HTMLElement;
+
+    boxCenter: Point = new Point(INIT_BOX_CENTER, INIT_BOX_CENTER);
 
     itemUnderMouse: number | null;
     canMoveSelection: boolean;
@@ -101,12 +104,11 @@ export class SelectionService extends ShapeService {
                 }
             }
         });
-
         // reset on tool change
         window.addEventListener('toolChange', (e: Event) => {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
                 this.selectedItems = [];
-                this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
+                CanvasInteraction.createBoundingBox(this);
             }
             this.selectedItems = [];
             this.invertedItems = [];
@@ -125,9 +127,9 @@ export class SelectionService extends ShapeService {
             for (let i = 0; i < this.drawing.children.length; i++) {
                 this.selectedItems[i] = true;
             }
-            this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
+            CanvasInteraction.createBoundingBox(this);
+            CanvasInteraction.updateBoxCenter(this);
         }
-
         // only if a key has not been released
         if (!keyboard.released) {
             for (let i = 0; i < this.ARROW_KEY_CODES.length; i++) {
@@ -154,7 +156,6 @@ export class SelectionService extends ShapeService {
                 this.singleUseArrows[i] = false;
             }
         }
-
         // can only move selection if there is at least one arrow pressed
         this.canMoveSelection = this.arrows.includes(true);
 
@@ -163,6 +164,20 @@ export class SelectionService extends ShapeService {
             this.movedSelectionWithArrowsOnce = false;
             this.interaction.emitDrawingDone();
         }
+    }
+
+    wheelMove(average: boolean, precise: boolean, clockwise: boolean): void {
+        // 1deg = 0.0175rad -> *15 = 0.2625rad
+        if (this.isDown) {
+            return;
+        }
+        const WITH_PRECISION = 0.0175;
+        const WITHOUT_PRECISION = 0.2625;
+        const NEGATIVE_CLOCK_WISE = -1;
+        CanvasInteraction.rotateElements((precise ? WITH_PRECISION : WITHOUT_PRECISION) * (clockwise ? 1 : NEGATIVE_CLOCK_WISE),
+            this, average);
+        CanvasInteraction.createBoundingBox(this);
+        this.interaction.emitDrawingDone();
     }
 
     down(position: Point, insideWorkspace: boolean, isRightClick: boolean): void {
@@ -223,7 +238,6 @@ export class SelectionService extends ShapeService {
                     this.invertedItems[i] = !this.selectedItems[i];
                 }
             }
-
             // adjust the focused item's selection status
             if (this.itemUnderMouse != null) {
                 this.selectedItems[this.itemUnderMouse] = this.inverted ? !this.selectedItems[this.itemUnderMouse] : true;
@@ -234,13 +248,13 @@ export class SelectionService extends ShapeService {
         this.itemUnderMouse = null;
         this.foundAnItem = false;
 
-        this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
+        CanvasInteraction.createBoundingBox(this);
+        CanvasInteraction.updateBoxCenter(this);  
 
         // if we moved a selection, emit the drawing for undo-redo
         if (this.selectedItems.includes(true) && this.movingSelection && this.movedSelectionOnce) {
             this.interaction.emitDrawingDone();
         }
-
         // reset mouse offset status
         this.movedSelectionOnce = false;
         this.movedMouseOnce = false;
@@ -257,7 +271,6 @@ export class SelectionService extends ShapeService {
         if (!this.isDown) {
             return;
         }
-
         // if we want to move the selection
         if (this.movingSelection) {
             // used for undo-redo
@@ -268,7 +281,6 @@ export class SelectionService extends ShapeService {
 
             CanvasInteraction.moveElements(OFFSET.x, OFFSET.y, this);
         }
-
         // save mouse position
         this.currentPath.push(position);
 
@@ -288,7 +300,7 @@ export class SelectionService extends ShapeService {
             this.updateProgress();
         }
 
-        this.selectedRef.innerHTML = CanvasInteraction.createBoundingBox(this);
+        CanvasInteraction.createBoundingBox(this);
     }
 
     // Creates an svg rect that connects the first and last points of currentPath with the rectangle attributes
@@ -339,7 +351,6 @@ export class SelectionService extends ShapeService {
         if (W === 0 || H === 0) {
             s = '';
         }
-
         return s;
     }
 }

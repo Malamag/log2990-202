@@ -31,17 +31,23 @@ describe('CanvasInteractionService', () => {
       getBoundingClientRect: () => 0,
       x: 2,
       y: 2,
-      tagName: 'filter'
+      tagName: 'filter',
+      transform: {
+        translate: (x: number, y: number) => 0,
+        rotate: (x: number, y: number) => 0,
+      },
     };
     select = {
       children: [firstChild, firstChild],
+      firstElementChild: firstChild,
       style: {
         pointerEvents: 'none',
       },
       childElementCount: 2,
       innerHTML: 'test',
       getBoundingClientRect: () => fakeDomRECT,
-      lastElementChild: firstChild
+      lastElementChild: firstChild,
+      transform: 2,
     };
     TestBed.configureTestingModule({
       providers: [
@@ -65,7 +71,7 @@ describe('CanvasInteractionService', () => {
   it('should move the selected items', () => {
     service.selectedItems = [true, false];
     const OFFSET = 5;
-
+    spyOn(ElementInfo, 'rotate').and.returnValue(2);
     service.drawing = select;
     CanvasInteraction.moveElements(OFFSET, OFFSET, service);
     expect(ElementInfo.translate).toHaveBeenCalled();
@@ -259,5 +265,30 @@ describe('CanvasInteractionService', () => {
     expect(SPY).toHaveBeenCalledWith(FIRST_POINT, SECOND_POINT, THIRD_POINT, FOURTH_POINT);
     CanvasInteraction.getPreciseBorder = OLD_METHOD;
   });
-
+  it('should not translate the elements on rotate function', () => {
+    const ANGLE = 2;
+    const AVERAGE = false;
+    service.selectedItems = [false, false];
+    const TRANSLATE_SPY = spyOn(service.canvas, 'getBoundingClientRect');
+    CanvasInteraction.rotateElements(ANGLE, service, AVERAGE);
+    expect(TRANSLATE_SPY).not.toHaveBeenCalled();
+  });
+  it('should set the style of the element', () => {
+    const ANGLE = 2;
+    const AVERAGE = true;
+    service.boxCenter = new Point(1, 2);
+    service.selectedItems = [true, true, false];
+    spyOn(service.canvas, 'getBoundingClientRect').and.returnValue(fakeDomRECT);
+    spyOn(ElementInfo, 'center').and.returnValue(new Point(0, 0));
+    spyOn(ElementInfo, 'rotate').and.returnValue(2);
+    CanvasInteraction.rotateElements(ANGLE, service, AVERAGE);
+    expect(render.setStyle).toHaveBeenCalled();
+  });
+  it('should call the center of element info class', () => {
+    service.selectedRef = select;
+    spyOn(service.canvas, 'getBoundingClientRect').and.returnValue(fakeDomRECT);
+    const SPY = spyOn(ElementInfo, 'center');
+    CanvasInteraction.updateBoxCenter(service);
+    expect(SPY).toHaveBeenCalled();
+  });
 });
