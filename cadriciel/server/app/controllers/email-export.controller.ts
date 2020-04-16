@@ -22,7 +22,7 @@ export class EmailExportController {
                 res.sendStatus(Httpstatus.OK);
             })
             .catch((error) => {
-                console.log(error);
+                res.status(Httpstatus.NOT_FOUND).send(error.message);
             });
         });
     }

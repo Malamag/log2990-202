@@ -32,6 +32,7 @@ export class EmailExporterService {
             src: dataSrc,
             email: mail,
         };
+        console.log(IMG_SEND.src);
         const URL = 'http://localhost:3000/mail/export';
         this.http.post(URL, IMG_SEND, HTTP_OPTIONS).subscribe((data) => {
             this.displayFeedback('envoie avec succès');
