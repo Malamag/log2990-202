@@ -100,6 +100,7 @@ export class SvgDrawComponent implements OnInit, AfterViewInit {
             if (canvas.wipeAll === true || canvas.wipeAll === undefined) { // if no attribute is specified, the doodle will be w
                 this.canvBuilder.wipeDraw(this.frameRef);
                 this.canvBuilder.wipeDraw(this.filterRef);
+                this.canvBuilder.wipeDraw(this.selectedItems);
             }
 
             if (this.gridService.grid) {
