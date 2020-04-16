@@ -82,8 +82,11 @@ export const menuItems = [
     {
         name: 'Grille',
         shortcutName: 'Grille',
-        shortDescription: '',
-        description: '',
+        shortDescription: `
+        La grille sert à vous guider lorsque vous dessinez! Il est possible de modifier sa transparence et son espacement via la barre d'options, lorsque celle-ci est activée.`,
+        description: `La grille s'affiche sous forme de lignes verticales et horizontales espacées d'au moins 5 pixels. Cet espacement est modifiable en cliquant sur
+        les touches '+' pour augmenter et '-' pour diminuer cer espace, et ce par bonds de 5 pixels. La valeur de transparence de la grille est aussi modifiable via le curseur visible
+        lorsque la grille est activée. De plus, celle-ci changera de couleur si la couleur de fond du dessin est trop foncée, afin de toujours en assurer la visibilité.`,
         icon: 'grid_on'
     }
 ];
