@@ -86,7 +86,7 @@ export class SelectionService extends ShapeService {
             for (let i = 0; i < this.drawing.childElementCount; i++) {
                 const EL: Element = this.drawing.children[i];
                 let status: string | null;
-
+                
                 try { // in case the getAttribute method is not implemented for the selected item
                     status = EL.getAttribute('isListening');
                 } catch (err) {
@@ -97,7 +97,13 @@ export class SelectionService extends ShapeService {
                     this.render.listen(EL, 'mousedown', () => {
                         this.render.setAttribute(EL, 'isListening', 'true');
                         if (!this.foundAnItem) {
-                            this.itemUnderMouse = i;
+                            let index = 0;
+                            let currentChild = EL;
+                            while( currentChild != null ){
+                                currentChild = currentChild.previousSibling as Element;
+                                index++;
+                            } 
+                            this.itemUnderMouse = index - 1;
                             this.foundAnItem = true;
                         }
                     });
@@ -158,7 +164,6 @@ export class SelectionService extends ShapeService {
         }
         // can only move selection if there is at least one arrow pressed
         this.canMoveSelection = this.arrows.includes(true);
-
         // save current state for undo-redo if we are done moving the selection
         if (this.movedSelectionWithArrowsOnce && !this.arrows.includes(true)) {
             this.movedSelectionWithArrowsOnce = false;
@@ -183,27 +188,21 @@ export class SelectionService extends ShapeService {
     down(position: Point, insideWorkspace: boolean, isRightClick: boolean): void {
         // in case we changed tool while the mouse was down
         this.ignoreNextUp = false;
-
         // the rectangleTool should affect the canvas
         this.isDown = true;
-
         // add the same point twice in case the mouse doesnt move
         this.currentPath.push(position);
         this.currentPath.push(position);
-
         // inverting selection with right-click
         this.inverted = isRightClick;
-
         // we need to know if we clicked in the bounding box to make sure we can move it accordingly
         this.movingSelection = !this.inverted && Point.insideRectangle(position, this.wrapperDimensions[0], this.wrapperDimensions[1]);
-
         // on right-click, save the inverted selection state of each item
         if (this.inverted) {
             for (let i = 0; i < this.selectedItems.length; i++) {
                 this.invertedItems[i] = !this.selectedItems[i];
             }
         }
-
         // if there is an object under the click that is not already selected
         if (this.itemUnderMouse != null && !this.selectedItems[this.itemUnderMouse] && !this.inverted) {
             // unselect all items
@@ -213,7 +212,6 @@ export class SelectionService extends ShapeService {
             // enable moving
             this.movingSelection = true;
         }
-
         this.updateProgress();
     }
 
@@ -225,7 +223,6 @@ export class SelectionService extends ShapeService {
         }
         // the selection should not affect the canvas
         this.isDown = false;
-
         // check for small offset to make single item selection more permissive
         if (Point.distance(this.currentPath[0], this.currentPath[this.currentPath.length - 1]) < NO_MOUSE_MOVEMENT_TOLERANCE) {
             if (!this.inverted) {
@@ -243,7 +240,6 @@ export class SelectionService extends ShapeService {
                 this.selectedItems[this.itemUnderMouse] = this.inverted ? !this.selectedItems[this.itemUnderMouse] : true;
             }
         }
-
         // reset focused item
         this.itemUnderMouse = null;
         this.foundAnItem = false;
@@ -259,11 +255,9 @@ export class SelectionService extends ShapeService {
         this.movedSelectionOnce = false;
         this.movedMouseOnce = false;
         this.movingSelection = false;
-
         // clear selection rectangle
         this.currentPath = [];
         this.inProgress.innerHTML = '';
-        
     }
 
     move(position: Point): void {
