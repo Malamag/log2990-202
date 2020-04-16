@@ -10,32 +10,17 @@ const DEFAULT_FONT_SIZE = 20;
 const DEFAULT_FONT_FAMILY = 'arial';
 const DEFAULT_ALIGNMENT = 'L';
 
-// const LEFT_ARROW = 37;
-// const UP_ARROW = 38;
-// const RIGHT_ARROW = 39;
-// const DOWN_ARROW = 40;
-
-// const BACKSPACE = 8;
-// const ENTER = 13;
-
 @Injectable({
   providedIn: 'root'
 })
 export class TextService extends DrawingTool {
-  attr: TextAttributes;
 
-  render: Renderer2;
-
-  itemUnderMouse: number | null;
-
-  foundAnItem: boolean;
-
-  // private textString: string;
-
-  // private cursorPosition: number;
-  // private lineNumber: number;
-
-  // private keyDown: boolean;
+  private attr: TextAttributes;
+  private render: Renderer2;
+  // Indicates the location of the element under the mouse in the drawing.children array
+  private itemUnderMouse: number | null;
+  // Indicates true if an item is under the mouse
+  private foundAnItem: boolean;
 
   constructor(
     inProgess: HTMLElement,
@@ -54,9 +39,6 @@ export class TextService extends DrawingTool {
     this.updateColors();
     this.updateAttributes();
     this.render = render;
-    // this.textString = '';
-    // this.cursorPosition = 0;
-    // this.keyDown = false;
 
     // whenever a new item is added, link it to a mousedown event to handle single click
     window.addEventListener('newDrawing', (e: Event) => {
@@ -64,7 +46,7 @@ export class TextService extends DrawingTool {
           const EL: Element = this.drawing.children[i];
           let status: string | null;
 
-          try { // in case the getAttribute method is not implemented for the selected item
+          try { // in case the getAttribute method is not implemented for the item
               status = EL.getAttribute('isListening');
           } catch (err) {
               status = null;
@@ -84,7 +66,7 @@ export class TextService extends DrawingTool {
 
   }
 
-  updateAttributes(): void {
+  updateAttributes(): void {  // Subscribe the text attributes and colors
     this.interaction.$textAttributes.subscribe((obj: TextAttributes) => {
         this.attr = { fontSize: obj.fontSize,
                       fontFamily: obj.fontFamily,
@@ -97,17 +79,16 @@ export class TextService extends DrawingTool {
 
   // updating on key change
   updateDown(keyboard: KeyboardHandlerService): void {
-    // move cursor TODO
+    // Nothing happens
   }
 
   // updating on key up
   updateUp(keyCode: number): void {
-    //
+    // Nothing happens
   }
 
   // mouse up with pencil in hand
   up(position: Point, insideWorkspace: boolean): void {
-    // nothing happens
     this.isDown = false;
     this.foundAnItem = false;
   }
@@ -119,30 +100,31 @@ export class TextService extends DrawingTool {
 
   // mouse doubleClick with pencil in hand
   doubleClick(position: Point): void {
-    // since its down -> up -> down -> up -> doubleClick, nothing more happens for the pencil
+    // since its down -> up -> down -> up -> doubleClick, nothing more happens for the text
   }
 
-  isItemUnderMouseText(): boolean {
+  // Returns true if the element under the mouse is text
+  isMouseClickingText(): boolean {
     if (this.foundAnItem && this.itemUnderMouse !== null) {
       if (this.drawing.children[this.itemUnderMouse].children[0].tagName === 'text') {
-          return true;
+        return true;
       }
     }
     return false;
   }
 
-  // mouse down with pencil in hand
+  // mouse down with text in hand
   down(position: Point): void {
 
-    // We don't create another text element if a text is being selected
-    if (this.isItemUnderMouseText()) {
+    // We don't create another text element if a text element is being selected
+    if (this.isMouseClickingText()) {
       return;
     }
 
     // in case we changed tool while the mouse was down
     this.ignoreNextUp = false;
 
-    // the pencil should affect the canvas
+    // the text should affect the canvas
     this.isDown = true;
 
     // add the same point twice in case the mouse doesnt move
@@ -153,6 +135,7 @@ export class TextService extends DrawingTool {
 
   }
 
+  // Returns the string to put in the font-weight attribute of the text
   getFontWeight(): string {
     if (this.attr.isBold) {
       return 'bold';
@@ -161,6 +144,7 @@ export class TextService extends DrawingTool {
     }
   }
 
+  // Returns the string to put in the font-style attribute of the text
   getFontStyle(): string {
     if (this.attr.isItalic) {
       return 'italic';
@@ -169,6 +153,7 @@ export class TextService extends DrawingTool {
     }
   }
 
+  // Returns the string to put in the text-anchor attribute of the text
   getTextAlignement(): string {
     switch (this.attr.alignment) {
       case 'C' : {
@@ -190,14 +175,6 @@ export class TextService extends DrawingTool {
     // create a divider
     s = '<g name = "text" style="transform: translate(0px, 0px);" >';
 
-    // start the path
-/*
-    s += `
-      <foreignObject x="${p[0].x}" y="${p[0].y}" width="100" height="100">
-        <p contenteditable style="cursor: text" >Yeet!</p>
-      </foreignObject>
-    `;
-*/
     s += `<text style="cursor: text" x="${p[0].x}" y="${p[0].y}" dy="0.5em" `;
     s += `fill="${this.chosenColor.primColor}" `;
     s += `font-family="${this.attr.fontFamily}" `;
@@ -205,108 +182,13 @@ export class TextService extends DrawingTool {
     s += `font-weight="${this.getFontWeight()}" `;
     s += `font-style="${this.getFontStyle()}" `;
     s += `text-anchor="${this.getTextAlignement()}" `;
+
     s += '><tspan>- Enter Text Here </tspan>';
     s += '</text>';
+
     // end the divider
     s += ' </g>';
     return s;
   }
+
 }
-
-/*
-
-// Creates an svg path that connects every points of currentPath with the pencil attributes
-  createPath(p: Point[]): string {
-    let s = '';
-
-    // We need at least 2 points
-    if (p.length < 2) {
-      return s;
-    }
-
-    // create a divider
-    s = '<g name = "text" style="transform: translate(0px, 0px);" >';
-
-    // start the path
-    s += `<defs> <path id="textPath${this.drawing.childElementCount}" fill: rgb(170, 170, 170) d="`;
-    // move to first point
-    let longestLine = 0;
-    for (const TEXT_S of this.textString) {
-      if(TEXT_S.length > longestLine) {
-        longestLine = TEXT_S.length;
-      }
-    }
-
-    const X_TEXT_SIZE = this.attr.fontSize * longestLine;
-    const Y_TEXT_SIZE = this.attr.fontSize * this.textString.length;
-
-    s += `M ${p[0].x} ${p[0].y} `;
-    s += `L ${p[0].x + X_TEXT_SIZE} ${p[0].y}" /> </defs>`;
-
-    for (const TEXT_LINE of this.textString) {
-      s += ` <text> <textPath xlink:href="#textPath${this.drawing.childElementCount}"`;
-      s += ` stroke="${this.chosenColor.primColor}" >`;
-      s += ` ${TEXT_LINE}"`;
-      s += ' </textPath> </text>';
-    }
-
-    // end the divider
-    s += ' </g>';
-    return s;
-  }
-
-  // updating on key change
-  updateDown(keyboard: KeyboardHandlerService): void {
-    // move cursor TODO
-    if (this.keyDown === true) {
-      return;
-    }
-    this.keyDown = true;
-    if (keyboard.keyCode === UP_ARROW) {
-      if (this.lineNumber > 0) {
-        --this.lineNumber;
-      }
-      return;
-    }
-    if (keyboard.keyCode === DOWN_ARROW) {
-      if (this.lineNumber < this.textString.length) {
-        ++this.lineNumber;
-      }
-      return;
-    }
-    if (keyboard.keyCode === LEFT_ARROW) {
-      if (this.cursorPosition > 0) {
-        --this.cursorPosition;
-      }
-      return;
-    }
-    if (keyboard.keyCode === RIGHT_ARROW) {
-      if (this.cursorPosition < this.textString.length) {
-        ++this.cursorPosition;
-      }
-      return;
-    }
-    if (keyboard.keyCode === BACKSPACE) {
-      if (this.cursorPosition > 0) {
-      this.textString[this.lineNumber] = this.textString[this.lineNumber].slice(0, this.cursorPosition) +
-                        this.textString[this.lineNumber].slice(this.cursorPosition + 1, this.textString.length);
-      --this.cursorPosition;
-      } else if (this.lineNumber > 0) {
-        // remove textString[this.lineNumber];
-      }
-      return;
-    }
-    if (keyboard.keyCode === ENTER) {
-      this.textString[this.lineNumber] = this.textString[this.lineNumber].slice(0, this.cursorPosition) +
-                        this.textString[this.lineNumber].slice(this.cursorPosition + 1, this.textString.length);
-      ++this.lineNumber;
-      return;
-    }
-    // else
-    this.textString[this.lineNumber] += this.textString[this.lineNumber].slice(0, this.cursorPosition) +
-                                        String.fromCharCode(keyboard.keyCode) +
-                                        this.textString[this.lineNumber].slice(this.cursorPosition + 1, this.textString.length);
-    return;
-  }
-
-*/

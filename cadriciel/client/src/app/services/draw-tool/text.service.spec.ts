@@ -45,7 +45,8 @@ describe('TextService', () => {
 
   it('should change the text alignment', () => {
     const ALIGNMENT = 'R';
-    service.attr.alignment = ALIGNMENT;
+    // tslint:disable-next-line: no-string-literal
+    service['attr'].alignment = ALIGNMENT;
     const PATH = service.createPath(ptArr);
 
     // tslint:disable-next-line: no-string-literal
@@ -54,7 +55,8 @@ describe('TextService', () => {
 
   it('should return the text alignment', () => {
     const ALIGNMENT = 'C';
-    service.attr.alignment = ALIGNMENT;
+    // tslint:disable-next-line: no-string-literal
+    service['attr'].alignment = ALIGNMENT;
     const FUNCTION = service.getTextAlignement();
 
     // tslint:disable-next-line: no-string-literal
@@ -63,7 +65,8 @@ describe('TextService', () => {
 
   it('should change the text to bold', () => {
     const BOLD = true;
-    service.attr.isBold = BOLD;
+    // tslint:disable-next-line: no-string-literal
+    service['attr'].isBold = BOLD;
     const PATH = service.createPath(ptArr);
 
     // tslint:disable-next-line: no-string-literal
@@ -72,7 +75,8 @@ describe('TextService', () => {
 
   it('should return the font weight', () => {
     const BOLD = true;
-    service.attr.isBold = BOLD;
+    // tslint:disable-next-line: no-string-literal
+    service['attr'].isBold = BOLD;
     const FUNCTION = service.getFontWeight();
 
     // tslint:disable-next-line: no-string-literal
@@ -81,7 +85,8 @@ describe('TextService', () => {
 
   it('should change the font size', () => {
     const FONT_SIZE = 50;
-    service.attr.fontSize = FONT_SIZE;
+    // tslint:disable-next-line: no-string-literal
+    service['attr'].fontSize = FONT_SIZE;
     const PATH = service.createPath(ptArr);
 
     // tslint:disable-next-line: no-string-literal
@@ -90,7 +95,8 @@ describe('TextService', () => {
 
   it('should change the text to italic', () => {
     const ITALIC = true;
-    service.attr.isItalic = ITALIC;
+    // tslint:disable-next-line: no-string-literal
+    service['attr'].isItalic = ITALIC;
     const PATH = service.createPath(ptArr);
 
     // tslint:disable-next-line: no-string-literal
@@ -99,7 +105,8 @@ describe('TextService', () => {
 
   it('should return the font style', () => {
     const ITALIC = true;
-    service.attr.isItalic = ITALIC;
+    // tslint:disable-next-line: no-string-literal
+    service['attr'].isItalic = ITALIC;
     const FUNCTION = service.getFontStyle();
 
     // tslint:disable-next-line: no-string-literal
@@ -108,7 +115,8 @@ describe('TextService', () => {
 
   it('should change the font family', () => {
     const FONT_FAMILY = 'Courier';
-    service.attr.fontFamily = FONT_FAMILY;
+    // tslint:disable-next-line: no-string-literal
+    service['attr'].fontFamily = FONT_FAMILY;
     const PATH = service.createPath(ptArr);
 
     // tslint:disable-next-line: no-string-literal
@@ -129,7 +137,8 @@ describe('TextService', () => {
     const SPY_INTERACTION = spyOn(service.interaction.$textAttributes, 'subscribe');
     service.updateAttributes();
     expect(SPY_INTERACTION).toHaveBeenCalled();
-    expect(service.attr).toBeDefined();
+    // tslint:disable-next-line: no-string-literal
+    expect(service['attr']).toBeDefined();
   });
 
   it('should update the isDown attribute on mouse up', () => {
@@ -139,6 +148,7 @@ describe('TextService', () => {
   });
 
   // This helps not having multiple text spawned on mouse drag
+  // Likely to occur when exiting and entering again the canvas.
   it('should update the isDown attribute on mouse move', () => {
     service.down(ptA); // pressing the mouse
     service.move(ptB);
@@ -147,9 +157,14 @@ describe('TextService', () => {
 
   it('should not create a text element on another text element', () => {
     const SPY = spyOn(service, 'createPath');
-    service.down(ptA); // pressing the mouse
+    service.down(ptA); // mouse click
     service.up(ptA, true);
-    service.down(ptA); // pressing again at the same position
+
+    // Indicate that we are clicking on text
+    spyOn(service, 'isMouseClickingText').and.returnValue(true);
+    service.down(ptA); // mouse click
+
+    // We expect only the first serice.down to have created a text element
     expect(SPY).toHaveBeenCalledTimes(1);
   });
 

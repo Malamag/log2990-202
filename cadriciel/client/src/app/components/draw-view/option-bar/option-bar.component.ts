@@ -22,6 +22,7 @@ export class OptionBarComponent {
     canvasSub: Subscription;
     currentCanvas: Canvas;
     gridSelected: boolean;
+    textSelected: boolean;
     stepVal: number;
     alphaVal: number;
     readonly maxStepVal: number = 90;
@@ -35,11 +36,21 @@ export class OptionBarComponent {
     ) {
         this.funcMenu = menuItems;
         this.gridSelected = false;
-
+        this.textSelected = false;
         const DEF_GRID_ALPHA = 100;
         this.alphaVal = DEF_GRID_ALPHA;
 
         this.stepVal = this.gridService.defSteps;
+
+        this.interaction.selectedTool.subscribe((tool: string) => {
+            {
+                if (tool === 'Texte') {
+                    this.textSelected = true;
+                } else {
+                    this.textSelected = false;
+                }
+            }
+        });
     }
 
     @HostListener('document: keydown', ['$event'])
@@ -91,7 +102,7 @@ export class OptionBarComponent {
 
     private setGridKeyBind(): void {
         const G_KEY = 71;
-        if (this.kbHandler.keyCode === G_KEY) {
+        if (this.kbHandler.keyCode === G_KEY && !this.textSelected) {
             this.toggleGrid();
         }
     }
