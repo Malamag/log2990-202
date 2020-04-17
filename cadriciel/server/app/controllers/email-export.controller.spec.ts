@@ -1,17 +1,17 @@
-import * as inversify from 'inversify';
-import fs from 'fs'
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import fs from 'fs';
 import * as Httpstatus from 'http-status-codes';
+import * as inversify from 'inversify';
 import 'mocha';
 
+import { ImageExport } from '../../../image-export';
 import { Application } from '../app';
+import { DatabaseService } from '../services/database.service';
 import { EmailExportService } from '../services/email-export.service';
 import Types from '../types';
-import { EmailExportController } from './email-export.controller';
 import { DatabaseController } from './database.controller';
-import { DatabaseService } from '../services/database.service';
-import { ImageExport } from '../../../image-export';
+import { EmailExportController } from './email-export.controller';
 
 chai.use(chaiHttp);
 
@@ -24,7 +24,7 @@ describe('Database service', () => {
     let dbController: DatabaseController;
     let containerSer: inversify.Container;
     let app: Application;
-    
+
     beforeEach(async () => {
         containerSer = new inversify.Container();
         containerSer.bind(Types.DatabaseService).to(DatabaseService);
@@ -39,10 +39,10 @@ describe('Database service', () => {
     });
     // Post
     it('should return OK status if Post was call successfully', async () => {
-        let file = fs.readFileSync('../exportTest2.json');
-        let fileData = JSON.parse(file.toString());
+        const file = fs.readFileSync('../exportTest2.json');
+        const fileData = JSON.parse(file.toString());
         const SRC = fileData.image;
-        const data : ImageExport = {type: 'svg', fileName: 'test', downloadable: 'test.svg', src: SRC, email: 'maxym.lamothe@polymtl.ca'};
+        const data: ImageExport = {type: 'svg', fileName: 'test', downloadable: 'test.svg', src: SRC, email: 'maxym.lamothe@polymtl.ca'};
         return await chai.request(app.app).post('/mail/export')
             .send(data)
             .then((res) => {
@@ -51,10 +51,10 @@ describe('Database service', () => {
 
     }).timeout(TIME);
     it('should return NO_FOUND status if Post was call unsuccessfully', async () => {
-        let file = fs.readFileSync('../exportTest.json');
-        let fileData = JSON.parse(file.toString());
+        const file = fs.readFileSync('../exportTest.json');
+        const fileData = JSON.parse(file.toString());
         const SRC = fileData.image;
-        const data : ImageExport = {type: 'svg', fileName: 'test', downloadable: 'test.svg', src: SRC, email: 'maxym.lamothe@polymtl.ca'};
+        const data: ImageExport = {type: 'svg', fileName: 'test', downloadable: 'test.svg', src: SRC, email: 'maxym.lamothe@polymtl.ca'};
         return await chai.request(app.app).post('/mail/export')
             .send(data)
             .then((res) => {
@@ -62,12 +62,12 @@ describe('Database service', () => {
             });
     });
     it('should return an error  if email is invalide', async () => {
-        const data : ImageExport = {type: 'svg', fileName: 'test', downloadable: 'test.svg', src: '', email: '@@@.@'};
+        const data: ImageExport = {type: 'svg', fileName: 'test', downloadable: 'test.svg', src: '', email: '@@@.@'};
         return await chai.request(app.app).post('/mail/export')
             .send(data)
             .then((res) => {
                 chai.expect(res.text).to.eql('Invalide email');
             });
     }).timeout(TIME);
-    
+
 });

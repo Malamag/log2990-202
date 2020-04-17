@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
+import * as Httpstatus from 'http-status-codes';
 import { inject, injectable } from 'inversify';
 import { EmailExportService } from '../services/email-export.service';
-import * as Httpstatus from 'http-status-codes';
 
 import Types from '../types';
 

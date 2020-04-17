@@ -16,8 +16,8 @@ import { MetaData } from '../metadata';
 import { DatabaseService } from '../services/database.service';
 import { EmailExportService } from '../services/email-export.service';
 import Types from '../types';
-import { EmailExportController } from './email-export.controller';
 import { DatabaseController } from './database.controller';
+import { EmailExportController } from './email-export.controller';
 
 chai.use(chaiHttp);
 const IMG_NUM = 10;
@@ -32,7 +32,6 @@ describe('Database service', () => {
     const server = new MMS();
     let app: Application;
     let db: Db;
-
 
     beforeEach(async () => {
         containerSer = new inversify.Container();
