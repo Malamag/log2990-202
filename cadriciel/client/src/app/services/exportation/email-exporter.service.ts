@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { ImageExport } from '../../../../../image-export';
@@ -37,8 +37,14 @@ export class EmailExporterService {
         this.http.post(URL, IMG_SEND, HTTP_OPTIONS).subscribe((data) => {
             this.displayFeedback('envoie avec succès');
         },
-            (error) => {
-                this.displayFeedback('votre dessin ne peut pas être exporté car il est trop lourd');
+            (error: HttpErrorResponse) => {
+
+                if (error.statusText !== 'OK') {
+                    this.displayFeedback('Votre dessin ne peut pas être exporté car il est trop lourd');
+                } else {
+                    this.displayFeedback('Envoi effectué avec succès!');
+                }
+
             });
     }
     exportByMail(svgElem: Node, name: string, canvasRef: HTMLCanvasElement, type: string, mail: string): void {
