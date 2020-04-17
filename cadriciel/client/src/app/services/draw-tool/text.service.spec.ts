@@ -11,8 +11,18 @@ describe('TextService', () => {
   let ptB: Point;
   // tslint:disable-next-line: prefer-const
   let render: Renderer2;
-
+  // tslint:disable-next-line: no-any
+  let elem: any;
+  // tslint:disable-next-line: no-any
+  let fakeChild: any;
   beforeEach(() => {
+    fakeChild = {
+      tagName: 'text',
+      children: [fakeChild]
+    };
+    elem = {
+      children: [fakeChild, fakeChild],
+    };
     ptA = new Point(1, 1); // using a point to test position functions
     ptArr = [ptA, ptA];
     ptB = new Point(1, 2);
@@ -21,7 +31,7 @@ describe('TextService', () => {
         providers: [
             TextService,
             // {provide: Point},
-            { provide: HTMLElement, useValue: {} },
+            { provide: HTMLElement, useValue: elem },
             { provide: Number, useValue: 0 },
             { provide: String, useValue: '' },
             { provide: Boolean, useValue: true },
@@ -42,7 +52,14 @@ describe('TextService', () => {
     const PATH = service.createPath(ptArr);
     expect(PATH).toContain('<text');
   });
-
+  it('should return true', () => {
+    // tslint:disable-next-line: no-string-literal
+    service['foundAnItem'] = true;
+    // tslint:disable-next-line: no-string-literal
+    service['itemUnderMouse'] = 1;
+    service.drawing = elem;
+    expect(service.isMouseClickingText()).toBeTruthy();
+  });
   it('should change the text alignment', () => {
     const ALIGNMENT = 'R';
     // tslint:disable-next-line: no-string-literal
@@ -53,7 +70,7 @@ describe('TextService', () => {
     expect(PATH).toContain('text-anchor="end"');
   });
 
-  it('should return the text alignment', () => {
+  it('should return the text alignment as middle', () => {
     const ALIGNMENT = 'C';
     // tslint:disable-next-line: no-string-literal
     service['attr'].alignment = ALIGNMENT;
@@ -62,7 +79,16 @@ describe('TextService', () => {
     // tslint:disable-next-line: no-string-literal
     expect(FUNCTION).toBe('middle');
   });
-
+  it('should return the text alignment as end', () => {
+    // tslint:disable-next-line: no-string-literal
+    service['attr'].alignment = 'R';
+    expect(service.getTextAlignement()).toEqual('end');
+  });
+  it('should return the text alignment as start', () => {
+    // tslint:disable-next-line: no-string-literal
+    service['attr'].alignment = 'L';
+    expect(service.getTextAlignement()).toEqual('start');
+  });
   it('should change the text to bold', () => {
     const BOLD = true;
     // tslint:disable-next-line: no-string-literal
@@ -73,7 +99,7 @@ describe('TextService', () => {
     expect(PATH).toContain('font-weight="bold"');
   });
 
-  it('should return the font weight', () => {
+  it('should return the bold font weight', () => {
     const BOLD = true;
     // tslint:disable-next-line: no-string-literal
     service['attr'].isBold = BOLD;
@@ -81,6 +107,10 @@ describe('TextService', () => {
 
     // tslint:disable-next-line: no-string-literal
     expect(FUNCTION).toBe('bold');
+  });
+  it('should return the normal font weight', () => {
+    service['attr'].isBold = false;
+    expect(service.getFontWeight()).toEqual('normal');
   });
 
   it('should change the font size', () => {
@@ -103,7 +133,7 @@ describe('TextService', () => {
     expect(PATH).toContain('font-style="italic"');
   });
 
-  it('should return the font style', () => {
+  it('should return an italic style', () => {
     const ITALIC = true;
     // tslint:disable-next-line: no-string-literal
     service['attr'].isItalic = ITALIC;
@@ -111,6 +141,11 @@ describe('TextService', () => {
 
     // tslint:disable-next-line: no-string-literal
     expect(FUNCTION).toBe('italic');
+  });
+  it('should get a normal font style', () => {
+    // tslint:disable-next-line: no-string-literal
+    service['attr'].isItalic = false;
+    expect(service.getFontStyle()).toBe('normal');
   });
 
   it('should change the font family', () => {

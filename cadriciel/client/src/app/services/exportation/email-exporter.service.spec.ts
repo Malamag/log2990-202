@@ -2,7 +2,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarConfig, MatSnackBarModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { EmailExporterService } from './email-exporter.service';
 
 describe('EmailExporterService', () => {
@@ -54,7 +54,7 @@ describe('EmailExporterService', () => {
     const DATA_SRC = 'www.';
     const ERROR = new Error('hello');
     const MAIL = 'xxxxx@yyy.zz';
-    httpSpy.post.and.returnValue(of([ERROR]));
+    httpSpy.post.and.returnValue(throwError('hello'));
     const SPY = spyOn(service, 'displayFeedback');
     service.send(NAME, FORMAT, DATA_SRC, MAIL);
     of([ERROR]).subscribe(() => {
@@ -82,6 +82,16 @@ describe('EmailExporterService', () => {
     service.svgToURL = () => '../../assets/images/bruit1.png';
     service.exportByMail(elementStub, NAME, nativeElemStub, FORMAT, MAIL);
     expect(SPY).toHaveBeenCalled();
+  });
+  it('should load the image in the canvas', async () => {
+    const NAME = 'hello';
+    const FORMAT = '.jep';
+    const MAIL = 'xxxxx@yyy.zz';
+    spyOn(nativeElemStub, 'getContext').and.returnValue(null);
+    const SPY = spyOn(service, 'loadImageInCanvas').and.callThrough();
+    service.svgToURL = () => '../../assets/images/bruit1.png';
+    service.exportByMail(elementStub, NAME, nativeElemStub, FORMAT, MAIL);
+    expect(SPY).not.toHaveBeenCalled();
   });
   it('should export canvas in svg from image url', () => {
     const TYPE = 'svg';
