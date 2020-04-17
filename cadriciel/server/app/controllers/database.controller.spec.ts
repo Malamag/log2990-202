@@ -14,8 +14,10 @@ import { SVGData } from '../../../svg-data';
 import { Application } from '../app';
 import { MetaData } from '../metadata';
 import { DatabaseService } from '../services/database.service';
+import { EmailExportService } from '../services/email-export.service';
 import Types from '../types';
 import { DatabaseController } from './database.controller';
+import { EmailExportController } from './email-export.controller';
 
 chai.use(chaiHttp);
 const IMG_NUM = 10;
@@ -24,16 +26,23 @@ describe('Database service', () => {
     let dbService: DatabaseService;
     let dbController: DatabaseController;
     let containerSer: inversify.Container;
+    let exportService: EmailExportService;
+    let exportController: EmailExportController;
+    let containerEx: inversify.Container;
     const server = new MMS();
     let app: Application;
     let db: Db;
+
     beforeEach(async () => {
         containerSer = new inversify.Container();
         containerSer.bind(Types.DatabaseService).to(DatabaseService);
         dbService = containerSer.get<DatabaseService>(Types.DatabaseService);
         dbController = new DatabaseController(dbService);
-        app = new Application(dbController);
-
+        containerEx = new inversify.Container();
+        containerEx.bind(Types.EmailExportService).to(EmailExportService);
+        exportService = containerEx.get<EmailExportService>(Types.EmailExportService);
+        exportController = new EmailExportController(exportService);
+        app = new Application(dbController, exportController);
     });
     // tslint:disable-next-line: only-arrow-functions - for tests purposes
     async function initDB(): Promise<void> {

@@ -109,6 +109,7 @@ describe('TextService', () => {
     expect(FUNCTION).toBe('bold');
   });
   it('should return the normal font weight', () => {
+    // tslint:disable-next-line: no-string-literal
     service['attr'].isBold = false;
     expect(service.getFontWeight()).toEqual('normal');
   });

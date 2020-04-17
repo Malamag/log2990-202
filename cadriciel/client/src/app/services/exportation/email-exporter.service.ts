@@ -32,13 +32,14 @@ export class EmailExporterService {
             src: dataSrc,
             email: mail,
         };
+        console.log(IMG_SEND.src);
         const URL = 'http://localhost:3000/mail/export';
         this.http.post(URL, IMG_SEND, HTTP_OPTIONS).subscribe((data) => {
             this.displayFeedback('envoie avec succès');
         },
-        (error) => {
-            this.displayFeedback('votre dessin ne peut pas être exporté car il est trop lourd');
-        });
+            (error) => {
+                this.displayFeedback('votre dessin ne peut pas être exporté car il est trop lourd');
+            });
     }
     exportByMail(svgElem: Node, name: string, canvasRef: HTMLCanvasElement, type: string, mail: string): void {
         const CTX: CanvasRenderingContext2D | null = canvasRef.getContext('2d');
@@ -67,19 +68,18 @@ export class EmailExporterService {
         image: HTMLImageElement,
         ctx: CanvasRenderingContext2D,
         canvasRef: HTMLCanvasElement,
-        imgName?: string,
-        imgType?: string,
+        imgName: string,
+        imgType: string,
     ): void {
         image.onload = () => {
             ctx.drawImage(image, 0, 0);
-            if (imgName && imgType) {
-                // will proceed to download if defined name and type
 
-                this.exportCanvas(imgName, imgType, canvasRef, mail);
-            }
+            this.exportCanvas(imgName, imgType, canvasRef, mail);
+
         };
         image.src = this.imageURL;
     }
+
     displayFeedback(message: string): void {
         const DURATION = 2500;
         const CONFIG = new MatSnackBarConfig();

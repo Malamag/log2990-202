@@ -28,12 +28,12 @@ describe('EmailExporterService', () => {
       nativeElement: nativeElemStub,
     };
     TestBed.configureTestingModule({
-    providers: [{provide: HttpClient, useValue: httpSpy}],
-    imports: [
-      HttpClientModule,
-      MatSnackBarModule,
-      BrowserAnimationsModule,
-    ]
+      providers: [{ provide: HttpClient, useValue: httpSpy }],
+      imports: [
+        HttpClientModule,
+        MatSnackBarModule,
+        BrowserAnimationsModule,
+      ]
     });
     service = TestBed.get(EmailExporterService);
     httpSpy.post.and.returnValue(of([]));
@@ -121,5 +121,15 @@ describe('EmailExporterService', () => {
     CONFIG.duration = DURATION;
     service.displayFeedback(MESSAGE);
     expect(OPEN_SPY).toHaveBeenCalledWith(MESSAGE, undefined, CONFIG);
+  });
+
+  it('should draw the image in the context', () => {
+
+    const SPY_LOAD = spyOn(service, 'loadImageInCanvas').and.callThrough();
+    service.svgToURL = () => '../../assets/images/bruit1.png';
+
+    service.exportByMail(elementStub, 'someName', nativeElemStub, 'someType', 'someAdress');
+    expect(SPY_LOAD).toHaveBeenCalled();
+
   });
 });

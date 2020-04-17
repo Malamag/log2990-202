@@ -12,7 +12,7 @@ import { MetaData } from '../metadata';
 import { DatabaseService } from './database.service';
 
 describe('Database service', () => {
-    const TIME = 30000;
+    const TIME = 300000;
     let dbService: DatabaseService;
     let container: inversify.Container;
     const server = new MMS();
@@ -137,10 +137,9 @@ describe('Database service', () => {
     });
     it('should throw an error if fail to delete image', async () => {
         await initDB();
-        const ERROR = new Error("Imposible de supprimer l'image");
+        const ERROR_TEXT = "Imposible de supprimer l'image";
         return await dbService.deleteImageById('1101').catch((err) => {
-            // return Promise.reject(err);
-            expect(err).to.equal(ERROR);
+            expect(err.message).to.equal(ERROR_TEXT);
         });
     });
     // test saveImage()
@@ -155,11 +154,11 @@ describe('Database service', () => {
     });
     it('should throw an error if image to save is invalide', async () => {
         await initDB();
-        const ERROR = new Error('Empty name');
+        const ERROR_TEXT = 'Empty name';
         const svg: SVGData = { height: '0', width: '0', innerHTML: [''], bgColor: '' };
         const imageData: ImageData = { id: '0', svgElement: svg, name: '', tags: [''] };
         return dbService.saveImage(imageData).catch((err) => {
-            return expect(err).to.equal(ERROR);
+            return expect(err.message).to.equal(ERROR_TEXT);
         });
     });
     // test save()
@@ -187,20 +186,20 @@ describe('Database service', () => {
     }).timeout(TIME);
     it('should not accept an invalide name', async () => {
         await initDB();
-        const ERROR = new Error('Empty name');
+        const ERROR_TEXT = 'Empty name';
         const svg: SVGData = { height: '0', width: '0', innerHTML: [''], bgColor: '' };
         const imageData: ImageData = { id: '0', svgElement: svg, name: '', tags: [''] };
         return dbService.saveImage(imageData).catch((err) => {
-            return expect(err).to.equal(ERROR);
+            return expect(err.message).to.equal(ERROR_TEXT);
         });
     });
     it('should not accept an invalide tag', async () => {
         await initDB();
-        const ERROR = new Error('Invalide tags');
+        const ERROR_TEXT = 'Invalide tags';
         const svg: SVGData = { height: '0', width: '0', innerHTML: [''], bgColor: '' };
         const imageData: ImageData = { id: '0', svgElement: svg, name: 'ok', tags: ['@#$%'] };
         return dbService.saveImage(imageData).catch((err) => {
-            return expect(err).to.equal(ERROR);
+            return expect(err.message).to.equal(ERROR_TEXT);
         });
     });
     it('should accept a valide image', async () => {
