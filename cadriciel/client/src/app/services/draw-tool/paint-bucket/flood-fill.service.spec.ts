@@ -3,7 +3,7 @@ import { Point } from '../point';
 import { FloodFillService } from './flood-fill.service';
 import { Pixel } from './pixel';
 
-fdescribe('FloodFillService', () => {
+describe('FloodFillService', () => {
   let service: FloodFillService;
   // tslint:disable-next-line: no-any
   let fakeData: any;
