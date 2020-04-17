@@ -102,7 +102,7 @@ export const toolsItems = [
         ou encore en sélectionner plusieurs en effectuant un clic gauche et en faisant glisser la souris pour utiliser le rectangle de sélection, puis en relâchant le bouton de la souris pour sélectionner les items. À l'inverse,
         un clic droit avec cette option crée un rectangle de sélection qui applique un traitement inverse. Il vous sera alors possible de déselectionner les objets déjà sélectionnés ou de sélectionner ceux ne l'étant pas.
         Une fois la sélection complétée, une boîte englobant tous les objets pris en compte apparaîtra. Il sera ensuite possible de déplacer cette sélection avec les flèches du clavier ou avec la souris et de faire tourner cette sélection.
-        Si la touche 'shift' est pressée, chaque objet tournera autour de son propre centre.
+        Pour faire tourner la sélection active, utilisez la roue de la souris pour appliquer une rotation de 15 degrés par cran ou de 1 degré, si la touche 'alt' est pressée. Appuyer sur 'shift' lors de la rotation fera tourner tous les objets sélectionnés autour de leur propre centre. 
         Enfin, appuyer sur 'ctrl+A' sélectionnera tous les objets`,
         icon: 'cursor',
     },
@@ -196,10 +196,12 @@ export const toolsItems = [
     {
         name: 'Texte',
         shortcutName: 'Texte',
-        shortDescription: 'Disponible sous peu!',
-        description: ' ',
-        /* source: Icons made by <a href="https://www.flaticon.com/authors/freepik"
-         title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>*/
+        shortDescription: `L'outil texte vous permet de taper ce que bon
+        vous semble sur la planche de dessin. Vous pouvez sélectionner l'outil via la touche 'T' du clavier. `,
+        description:
+            `L'option vous laisse le choix entre 15 polices de caractères différentes. Tout comme avec un éditeur de texte, vous pouvez choisir
+        de mettre le texte en gras, en italique et de choisir l'alignement. Notez que les raccourcis vers les autres outils seront bloqués lorsque
+        vous écrivez. `,
         icon: 'text',
     },
 

@@ -20,6 +20,8 @@ export class EmailExportService {
                 method: 'POST',
                 port: 443,
                 headers: {
+                    /* The team key needs to be located in the .env file.
+                       Please put this file in the root of the server directory: ./server/.env */
                     'X-Team-Key': process.env.X_TEAM_KEY,
                 },
                 formData: {
@@ -43,7 +45,7 @@ export class EmailExportService {
         }
     }
     validateEmail(email: string): boolean {
-        const format = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
-        return format.test(email);
+        const FORMAT = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+        return FORMAT.test(email);
     }
 }
