@@ -7,13 +7,14 @@ import { ImageExport } from '../../../image-export';
 
 @injectable()
 export class EmailExportService {
-    url : string = 'https://log2990.step.polymtl.ca/email?address_validation=false&quick_return=false&dry_run=false';
+    url: string;
     constructor() {
         dotenv.config();
+        this.url = 'https://log2990.step.polymtl.ca/email?address_validation=false&quick_return=false&dry_run=false';
     }
     async export(data: ImageExport): Promise<void> {
-        if ( this.validateEmail(data.email) ) {
-            
+        if (this.validateEmail(data.email)) {
+
             console.log('email reached server');
             const OPTIONS: request.CoreOptions = {
                 method: 'POST',
@@ -34,7 +35,7 @@ export class EmailExportService {
                 },
             };
             request(this.url, OPTIONS, (res) => {
-                console.log('message : ' + res); 
+                console.log('message : ' + res);
             });
             console.log('after request');
         } else {

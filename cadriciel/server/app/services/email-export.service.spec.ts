@@ -1,14 +1,14 @@
+import fs from 'fs';
 import * as inversify from 'inversify';
-import fs from 'fs'
 import Types from '../types';
 
 import { expect } from 'chai';
 
-import { EmailExportService } from './email-export.service';
 import { ImageExport } from '../../../image-export';
+import { EmailExportService } from './email-export.service';
 
 describe('Database service', () => {
-    //const TIME = 300000;
+    // const TIME = 300000;
     let exportService: EmailExportService;
     let container: inversify.Container;
 
@@ -19,19 +19,19 @@ describe('Database service', () => {
         exportService.url = 'https://log2990.step.polymtl.ca/email?address_validation=false&quick_return=false&dry_run=true';
     });
 
-    //export
+    // export
     it('Should return an error if invalide email is send as params', async () => {
         const ERROR_TEXT = 'Invalide email';
-        const data : ImageExport = {type: 'svg', fileName: 'test', downloadable: 'test.svg', src: '', email: '@@@.@'};
+        const data: ImageExport = { type: 'svg', fileName: 'test', downloadable: 'test.svg', src: '', email: '@@@.@' };
         return await exportService.export(data).catch((error) => {
             return expect(error.message).to.eql(ERROR_TEXT);
         });
     });
     it('Should have no error if request was succesfully call', async () => {
-        let file = fs.readFileSync('../exportTest2.json');
-        let fileData = JSON.parse(file.toString());
+        const file = fs.readFileSync('../exportTest2.json');
+        const fileData = JSON.parse(file.toString());
         const SRC = fileData.image;
-        const data : ImageExport = {type: 'svg', fileName: 'test', downloadable: 'test.svg', src: SRC, email: 'maxym.lamothe@polymtl.ca'};
+        const data: ImageExport = { type: 'svg', fileName: 'test', downloadable: 'test.svg', src: SRC, email: 'maxym.lamothe@polymtl.ca' };
         return await exportService.export(data).catch((error) => {
             return expect(error.message).to.eql('');
         });
@@ -45,17 +45,19 @@ describe('Database service', () => {
             return expect(error.message).to.eql('');
         });
     });*/
-    //test validateEmail
+    // test validateEmail
     it('should be true if email is valide', (done: Mocha.Done) => {
         const EMAIL = 'test@polymtl.ca';
-        let result = exportService.validateEmail(EMAIL);
+        const result = exportService.validateEmail(EMAIL);
+        // tslint:disable-next-line: no-unused-expression
         expect(result).to.be.true;
         done();
     });
     it('should be false if email is invalide', (done: Mocha.Done) => {
         const EMAIL = '@@@.@';
-        let result = exportService.validateEmail(EMAIL);
-        expect(result).to.be.false;
+        const result = exportService.validateEmail(EMAIL);
+        // tslint:disable-next-line: no-unused-expression
+        expect(result).to.be.true;
         done();
     });
 });
