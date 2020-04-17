@@ -1,19 +1,34 @@
-p,h2{
-  color : black;
+p,
+h2 {
+    color: black;
 }
 
-#previousButton{
-  float: left;
+#previousButton {
+    float: left;
 }
 
-#nextButton{
-  float: right;
+#nextButton {
+    float: right;
 }
 
-.hiddenButton{
-  display: none;
+.hiddenButton {
+    display: none;
 }
 
-.shownButton{
-  display: block;
+.shownButton {
+    display: block;
+}
+
+#shortDescription {
+    font-weight: 900;
+}
+
+#shortDescription,
+#description {
+    line-height: 1.8;
+    font-size: large;
+}
+
+#title {
+    font-size: xx-large;
 }
